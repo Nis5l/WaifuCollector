@@ -1,9 +1,12 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var database = require('./database');
-var app = express();
-app.use(bodyParser.json())
-var port = 80
+const express = require('express');
+const bodyParser = require('body-parser');
+const database = require('./database');
+const app = express();
+const jwt = require('jsonWebToken');
+const port = 80;
+const jwtSecret = "yCSgVxmL9I";
+
+app.use(bodyParser.json());
 
 app.get('/', function (req, res)
 {
@@ -16,12 +19,17 @@ app.post('/', (req, res) =>
     var password = req.body.password;
     var log = database.login(username, password);
     console.log("Login:%s;%s-%s", username, password, log);
-    var key = "-1";
+    
+    var toeknV = "";
+    var statusV = 1;
+    var messageV = "Denied";
     if(log)
     {
-        //generate key
+        toeknV = jwt.sign({username: username}, jwtSecret);
+        statusV = 0;
+        var messageV = "Welcome";
     }
-    res.send(key);
+    res.send({token: toeknV, status: statusV, message: messageV});
 })
 
 var server = app.listen(port)
