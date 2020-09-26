@@ -1,6 +1,7 @@
 var express = require('express');
-const { response } = require('express');
+var bodyParser = require('body-parser');
 var app = express();
+app.use(bodyParser.json())
 var port = 80
 
 app.get('/', function (req, res) {
