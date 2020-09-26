@@ -1,4 +1,4 @@
-//var sql = require('mysql')
+var sql = require('mysql')
 module.exports = {
 
     login: function login(username , password)
