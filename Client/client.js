@@ -1,4 +1,5 @@
 var request = require('request');
+var token = "";
 
 function login(user, pass)
 {
@@ -9,6 +10,8 @@ function login(user, pass)
         {
             if (!error && response.statusCode == 200) {
                 console.log(body);
+                token = body.token;
+                //console.log(body.token);
             }
         }
     );
