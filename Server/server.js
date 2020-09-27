@@ -14,7 +14,7 @@ const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
 
-var packCooldown = 60;
+var packCooldown = 10;
 
 var clients = {};
 
@@ -152,14 +152,18 @@ function packCallBack(userID, res)
         if(clients[userID] == null)
         {
             clients[userID].packTime = date.valueOf();
-            res.send({packTime: "0", message:"OK", ids: [10,12,13]});
+            database.getRandomCard((cardID) => {
+                res.send({packTime: "0", message:"OK", id: cardID});
+            });
             return;
         }
         
         if(nowDate.isAfter(packDate))
         {
             clients[userID].packTime = date.valueOf();
-            res.send({packTime: "0", message:"OK", ids: [10,12,13]});
+            database.getRandomCard((card) => {
+                res.send({packTime: "0", message:"OK", card: card});
+            });
             return;
         }
 
