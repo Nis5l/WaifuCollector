@@ -1,5 +1,7 @@
 const express = require('express');
 
+require("./LessManager.js");
+
 const app = express();
 
 app.set('view engine', 'ejs');
