@@ -32,7 +32,7 @@
 
             text-align: center;
 
-            border: 2px solid $cardBg1;
+            border: 2px solid rgba(0, 255, 0, 0.25);
 
             width: 280px;
             outline: none;
@@ -50,6 +50,27 @@
             }
 
         }
+
+        input[type="submit"]{
+
+            color: black;
+            padding: 10px 30px;
+
+            border: 2px solid $inputBorder;
+            background-color: $inputBorder;
+
+            border-radius: 25px;
+
+        }
+
+        input[type="submit"]:hover{
+
+            color: $inputColor;
+
+            background-color: rgba(0, 0, 0, 0);
+
+        }
+
 
     }
 
