@@ -7,3 +7,10 @@
     height: 80%;
     margin: 5%;
     background-color: #25282f; }
+    .content .card2 #username {
+      font-size: 3em;
+      font-family: 'Oswald';
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-left: 20px;
+      margin-top: 20px; }
