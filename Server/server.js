@@ -81,13 +81,13 @@ app.post('/pack', (req, res) =>
     {
         if(clients[decoded.id].packTime != null)
         {
-            packCallBack(decoded.id, clients[decoded.id].packTime, res);
+            packCallBack(decoded.id, res);
             return;
         }
         else
         {
             createCash(decoded.id);
-            packCallBack(decoded.id, clients[decoded.id].packTime, res);
+            packCallBack(decoded.id, res);
             return;
         }
     }
@@ -129,7 +129,7 @@ function registerCallback(b, message, res)
     res.send({status: b ? 0:1, message: message});
 }
 
-function packCallBack(userID, time, res)
+function packCallBack(userID, res)
 {
     if(clients[userID] == undefined)
     {
@@ -141,28 +141,32 @@ function packCallBack(userID, time, res)
 
     function run(userID)
     {
-        let date = new Date().addSeconds(packCooldown);
-
-        if(time == null)
+        var nowDate = moment();
+        var date = moment(nowDate).add(packCooldown, 'seconds');
+        var packDate = moment(parseInt(clients[userID].packTime));
+        //console.log(nowDate);
+        //console.log(packDate);
+        //console.log(date);
+        //console.log(date.isAfter(nowDate));
+        
+        if(clients[userID] == null)
         {
-            clients[userID].packTime = date;
+            clients[userID].packTime = date.valueOf();
             res.send({packTime: "0", message:"OK", ids: [10,12,13]});
             return;
         }
-        var nowDate = new Date();
-        var packDate = new Date(time);
+        
         if(nowDate.isAfter(packDate))
         {
-            clients[userID].packTime = date;
+            clients[userID].packTime = date.valueOf();
             res.send({packTime: "0", message:"OK", ids: [10,12,13]});
             return;
-        }else
-        {
-            res.send({packTime: "time", message:"WAIT", ids: [10,12,13]});
-            return;
         }
+
+        res.send({packTime: packDate.diff(nowDate).seconds(), message:"WAIT", ids: []});
+        return;
     }   
-}
+}       
 
 function createCash(userIDV, callback)
 {
