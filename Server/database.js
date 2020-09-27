@@ -1,6 +1,6 @@
 const sql = require('mysql')
 const bcrypt = require('bcrypt');
-
+const packTime = "PACKTIME";
 
 var con = sql.createConnection({
     host: "localhost",
@@ -30,11 +30,11 @@ module.exports = {
         con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
             if(result.length == 0)
             {
-                callback(1, "login failed", username, res);
+                callback(1, "login failed", username, -1, res);
                 return;
             }
             bcrypt.compare(password, result[0].password, function(err, resp) {
-                callback(resp, resp ? "logged in":"login failed", username, res);
+                callback(resp, resp ? "logged in":"login failed", username, result[0].id, res);
             });
         });
     },
@@ -58,16 +58,33 @@ module.exports = {
                 callback(false, "error: user already exists",  res);
             }
         });
+    },
+
+        
+    getPackTime: function getPackTime(userID, res, callback)
+    {
+        con.query("SELECT * FROM data WHERE userID = " + userID + " AND key = \"" + packTime + "\"", function (err, result, fields) {
+            if(result.length == 0)
+            {
+                callback(userID, null, res);
+                return;
+            }
+            callback(userID, result[0].value, res);
+        });
+    },
+
+    setPackTime: function setPackTime(userID, time)
+    {
+        con.query("INSERT INTO data(userID, key, value) VALUES(" + userID + ",\"" + packTime + "\",\"" + time + "\")", function (err, result, fields) {
+        });
+    },
+    
+    userexists: function userexists(username, callback)
+    {
+        con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() + "\"", function (err, result, fields) {
+            callback(result.length > 0);
+        });
     }
 }
-//------------------------------------
-//              TODO
-//  get net weil di querys async san
-//------------------------------------
 
-function userexists(username, callback)
-{
-    con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() + "\"", function (err, result, fields) {
-        callback(result.length > 0);
-    });
-}
+

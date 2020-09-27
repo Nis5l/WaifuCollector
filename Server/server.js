@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const database = require('./database');
 const app = express();
 const jwt = require('jsonWebToken');
+var Date = require('datejs');
 const port = 80;
 const jwtSecret = "yCSgVxmL9I";
 
@@ -10,6 +11,8 @@ const userLen = [4,20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
+
+var packCooldown = 60;
 
 app.use(bodyParser.json());
 
@@ -30,12 +33,7 @@ app.post('/register', (req, res) =>
 {
     var username = req.body.username;
     var password = req.body.password;
-    var password2 = req.body.password2;
-    if(password != password2)
-    {
-        registerCallback(false, "error: passwords dont match", res);
-        return;
-    }
+
     switch(checkUser(username))
     {
         case 1:
@@ -62,6 +60,13 @@ app.post('/register', (req, res) =>
     database.register(username, password, registerCallback, res);
 });
 
+app.post('/pack', (req, res) => 
+{
+    var tokenV = req.body.token;
+    var decoded = jwt.verify(tokenV, jwtSecret);
+    database.getPackTime(decoded.id, res, packCallBack);
+});
+
 function checkUser(username)
 {
     if(username.length < userLen[0] || username.length > userLen[1]) return 1;
@@ -76,10 +81,10 @@ function checkPass(password)
     return 0;
 }
 
-function loginCallback(b, messageV, usernameV, res)
+function loginCallback(b, messageV, usernameV, userIDV, res)
 {
     var tokenV = "";
-    if(b) tokenV = jwt.sign({username: usernameV}, jwtSecret);
+    if(b) tokenV = jwt.sign({username: usernameV, id: userIDV}, jwtSecret);
     res.send({status: b ? 0:1, token: tokenV, message: messageV});
 }
 
@@ -87,6 +92,17 @@ function registerCallback(b, message, res)
 {
     //console.log(b ? "Worked":"Failed");
     res.send({status: b ? 0:1, message: message});
+}
+
+function packCallBack(userID, time, res)
+{
+    let date = moment();
+    if(time == null)
+    {
+        date.
+        database.setPackTime(userID, packCooldown);
+    }
+    let date = new Date();
 }
 
 console.log("Initializing DataBase")
