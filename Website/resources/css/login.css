@@ -29,7 +29,8 @@
       padding: 10px 30px;
       border: 2px solid #00ff00;
       background-color: #00ff00;
-      border-radius: 25px; }
+      border-radius: 25px;
+      transition: background 0.2s ease-in-out; }
     .content .card input[type="submit"]:hover {
       color: #fff;
       background-color: rgba(0, 0, 0, 0); }
