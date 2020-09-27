@@ -6,6 +6,11 @@ const jwt = require('jsonWebToken');
 const port = 80;
 const jwtSecret = "yCSgVxmL9I";
 
+const userLen = [4,20];
+const userRegex = /^[a-zA-Z0-9_]*}$/;
+//const userLen = [4,20];
+//const userRegex = /^[a-zA-Z0-9_]*}$/;
+
 app.use(bodyParser.json());
 
 app.get('/', function (req, res)
@@ -18,13 +23,21 @@ app.post('/login', (req, res) =>
     var username = req.body.username;
     var password = req.body.password;
     console.log("Login " + username + " " + password);
-    if(/^[a-zA-Z0-9_]*}$/.test(username)) 
-    {
-        loginCallback(false, "the user can only contain letters, numbers and _", username, res);
-        return;
-    }
     database.login(username, password, username, res, loginCallback);
 });
+
+function checkUser(username)
+{
+    if(username.length < userLen[0] || username.length > userLen[1]) return 1;
+    console.log(username);
+    if(/^[a-zA-Z0-9_]*}$/.test(username)) return 2;
+    return 0;
+}
+
+function checkPass()
+{
+
+}
 
 function loginCallback(b, messageV, usernameV, res)
 {
@@ -42,6 +55,19 @@ app.post('/register', (req, res) =>
     {
         registerCallback(false, "error: passwords dont match", res);
         return;
+    }
+    switch(checkUser(username))
+    {
+        case 1:
+            {
+                registerCallback(false, "the username length must be between 4 and 20", res);
+                return;
+            }
+        case 2:
+            {
+                registerCallback(false, "the user can only contain letters, numbers and _", res);
+                return;
+            }
     }
     console.log("Register " + username + " " + password + " " + password2);
     database.register(username, password, registerCallback, res);

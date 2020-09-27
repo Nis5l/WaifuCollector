@@ -1,4 +1,5 @@
 var request = require('request');
+var io = require('console-read-write');
 var token = "";
 
 function login(user, pass)
@@ -10,7 +11,6 @@ function login(user, pass)
         {
             if (!error && response.statusCode == 200) {
                 console.log(body);
-                console.log(body.token);
             }
         }
     );
@@ -30,5 +30,23 @@ function register(user, pass, pass2)
         }
     );
 }
-register("Nissl" , "123", "123")
-login("Nissl", "123");
+
+async function main()
+{
+    console.log("GO");
+    register("Nissl" , "123", "123");
+    await io.read()
+    register("Nissl" , "123", "1234");
+    await io.read();
+    register("Nis" , "123", "123");
+    await io.read();
+    register("Niasds<" , "123", "123");
+    await io.read();
+    register("Nisasdasdasdasdasdasdasdasdasdasd" , "123", "123");
+    await io.read();
+    login("Nissl", "123");
+    await io.read();
+    login("Nissl", "1234");
+}
+
+main();
