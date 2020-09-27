@@ -4,6 +4,7 @@ const database = require('./database');
 const app = express();
 const jwt = require('jsonWebToken');
 require('datejs');
+const Client = require('./cash');
 const port = 100;
 const jwtSecret = "yCSgVxmL9I";
 
@@ -13,6 +14,8 @@ const passLen = [8, 30];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
 
 var packCooldown = 60;
+
+var clients = {};
 
 app.use(bodyParser.json());
 
@@ -64,6 +67,11 @@ app.post('/pack', (req, res) =>
 {
     var tokenV = req.body.token;
     var decoded = jwt.verify(tokenV, jwtSecret);
+    if(clients[decoded.id].packTime != null)
+    {
+        packCallBack(decoded.id, clients[decoded.id].packTime, res);
+        return;
+    }
     database.getPackTime(decoded.id, res, packCallBack);
 });
 
@@ -86,6 +94,11 @@ function loginCallback(b, messageV, usernameV, userIDV, res)
     var tokenV = "";
     if(b) tokenV = jwt.sign({username: usernameV, id: userIDV}, jwtSecret);
     res.send({status: b ? 0:1, token: tokenV, message: messageV});
+    if(b)
+    {
+        if(!clients[userIDV])
+            clients[userIDV] = new Client(userIDV, null);
+    }
 }
 
 function registerCallback(b, message, res)
@@ -100,14 +113,19 @@ function packCallBack(userID, time, res)
 
     if(time == null)
     {
-        database.setPackTime(userID, date);
+        console.log("NULL");
+        //database.setPackTime(userID, date);
+        console.log(clients[userID].packTime);
+        clients[userID].packTime = date;
+        console.log(clients[userID].packTime);
         res.send({packTime: "0", message:"OK", ids: [10,12,13]});
         return;
     }
-    console.log(new Date(time));
+    console.log(new Date() + "    " + new Date(time));
     if(new Date().isAfter(new Date(time)))
     {
-        database.setPackTime(userID, date);
+        //database.setPackTime(userID, date);
+        clients[userID].packTime = date;
         res.send({packTime: "0", message:"OK", ids: [10,12,13]});
         return;
     }else
