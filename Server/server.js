@@ -5,20 +5,23 @@ const app = express();
 const jwt = require('jsonWebToken');
 require('datejs');
 const Client = require('./cash');
-const port = 100;
 const jwtSecret = "yCSgVxmL9I";
 const moment = require('moment')
+const utils = require('./utils');
+
+const port = 100;
 
 const userLen = [4,20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
 
-var packCooldown = 10;
 
 var clients = {};
 
 var cashTime = 10000;
+var packCooldown = 10;
+var qualityrange = [0,7];
 
 app.use(bodyParser.json());
 
@@ -152,8 +155,10 @@ function packCallBack(userID, res)
         if(clients[userID] == null)
         {
             clients[userID].packTime = date.valueOf();
-            database.getRandomCard((cardID) => {
-                res.send({packTime: "0", message:"OK", id: cardID});
+            database.getRandomCard((card) => {
+                var quality = qualityrange
+                database.addCard(userID, card.id, )
+                res.send({packTime: "0", message:"OK", id: card});
             });
             return;
         }
