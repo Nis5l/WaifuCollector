@@ -26,27 +26,6 @@ app.post('/login', (req, res) =>
     database.login(username, password, username, res, loginCallback);
 });
 
-function checkUser(username)
-{
-    if(username.length < userLen[0] || username.length > userLen[1]) return 1;
-    if(!userRegex.test(username)) return 2;
-    return 0;
-}
-
-function checkPass(password)
-{
-    if(password.length < userLen[0] || password.length > userLen[1]) return 1;
-    //if(!passRegex.test(password)) return 2;
-    return 0;
-}
-
-function loginCallback(b, messageV, usernameV, res)
-{
-    var tokenV = "";
-    if(b) tokenV = jwt.sign({username: usernameV}, jwtSecret);
-    res.send({status: b ? 0:1, token: tokenV, message: messageV});
-}
-
 app.post('/register', (req, res) =>
 {
     var username = req.body.username;
@@ -75,13 +54,34 @@ app.post('/register', (req, res) =>
     {
         case 1:
             {
-                registerCallback(false, "the username length must be between " + passLen[0] + " and " + passLen[1], res);
+                registerCallback(false, "the password length must be between " + passLen[0] + " and " + passLen[1], res);
                 return;
             }
     }
     console.log("Register " + username + " " + password + " " + password2);
     database.register(username, password, registerCallback, res);
 });
+
+function checkUser(username)
+{
+    if(username.length < userLen[0] || username.length > userLen[1]) return 1;
+    if(!userRegex.test(username)) return 2;
+    return 0;
+}
+
+function checkPass(password)
+{
+    if(password.length < userLen[0] || password.length > userLen[1]) return 1;
+    //if(!passRegex.test(password)) return 2;
+    return 0;
+}
+
+function loginCallback(b, messageV, usernameV, res)
+{
+    var tokenV = "";
+    if(b) tokenV = jwt.sign({username: usernameV}, jwtSecret);
+    res.send({status: b ? 0:1, token: tokenV, message: messageV});
+}
 
 function registerCallback(b, message, res)
 {

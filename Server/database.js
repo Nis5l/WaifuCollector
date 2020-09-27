@@ -27,7 +27,7 @@ module.exports = {
     login: function login(username , password, username, res, callback)
     {
         //SQL INJECTION
-        con.query("SELECT * FROM user WHERE username = \"" + username +  "\"", function (err, result, fields) {
+        con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
             if(result.length == 0)
             {
                 callback(1, "login failed", username, res);
@@ -67,7 +67,7 @@ module.exports = {
 
 function userexists(username, callback)
 {
-    con.query("SELECT * FROM user WHERE username = \"" + username + "\"", function (err, result, fields) {
+    con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() + "\"", function (err, result, fields) {
         callback(result.length > 0);
     });
 }

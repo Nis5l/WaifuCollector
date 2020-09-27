@@ -34,21 +34,25 @@ function register(user, pass, pass2)
 async function main()
 {
     console.log("GO");
-    register("Nissl" , "123", "123");
+    register("Nissl" , "123456789", "123456789");
     await io.read()
-    register("TestUser" , "123asdasasdas", "123asdasasdas");
-    await io.read()
-    register("Nissl" , "123", "1234");
+    register("nissl" , "123456789", "123456789");
+    // await io.read()
+    // register("TestUser" , "123asdasasdas", "123asdasasdas");
+    // await io.read()
+    // register("Nissl" , "123", "1234");
+    // await io.read();
+    // register("Nis" , "123", "123");
+    // await io.read();
+    // register("Niasds<§" , "123", "123");
+    // await io.read();
+    // register("Nisasdasdasdasdasdasdasdasdasdasd" , "123", "123");
+    // await io.read();
+    // login("Nissl", "123456789");
+    // await io.read();
+    login("nissl", "123456789");
     await io.read();
-    register("Nis" , "123", "123");
-    await io.read();
-    register("Niasds<§" , "123", "123");
-    await io.read();
-    register("Nisasdasdasdasdasdasdasdasdasdasd" , "123", "123");
-    await io.read();
-    login("Nissl", "123");
-    await io.read();
-    login("Nissl", "1234");
+    login("Nissl", "123456789");
 }
 
 main();
