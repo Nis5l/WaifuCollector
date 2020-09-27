@@ -36,11 +36,13 @@ async function main()
     console.log("GO");
     register("Nissl" , "123", "123");
     await io.read()
+    register("TestUser" , "123asdasasdas", "123asdasasdas");
+    await io.read()
     register("Nissl" , "123", "1234");
     await io.read();
     register("Nis" , "123", "123");
     await io.read();
-    register("Niasds<" , "123", "123");
+    register("Niasds<§" , "123", "123");
     await io.read();
     register("Nisasdasdasdasdasdasdasdasdasdasd" , "123", "123");
     await io.read();

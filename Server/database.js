@@ -1,4 +1,6 @@
-var sql = require('mysql')
+const sql = require('mysql')
+const bcrypt = require('bcrypt');
+
 
 var con = sql.createConnection({
     host: "localhost",
@@ -25,9 +27,15 @@ module.exports = {
     login: function login(username , password, username, res, callback)
     {
         //SQL INJECTION
-        con.query("SELECT * FROM user WHERE username = \"" + username +  "\" AND password = \"" + password + "\"", function (err, result, fields) {
-            var b = result.length > 0;
-            callback(b, b ? "logged in":"login failed", username, res);
+        con.query("SELECT * FROM user WHERE username = \"" + username +  "\"", function (err, result, fields) {
+            if(result.length == 0)
+            {
+                callback(1, "login failed", username, res);
+                return;
+            }
+            bcrypt.compare(password, result[0].password, function(err, resp) {
+                callback(resp, resp ? "logged in":"login failed", username, res);
+            });
         });
     },
 
@@ -37,11 +45,12 @@ module.exports = {
         {
             if(!b)
             {
-                //SQL INJECTION
-                con.query("INSERT INTO user (username, password, rank) VALUES ('" + username + "', '" + password + "', 0)",
-                function (err, result, fields)
-                {
-                    callback(true, "registered", res);
+                bcrypt.hash(password,  10, (err, hash) => {
+                    con.query("INSERT INTO user (username, password, rank) VALUES ('" + username + "', '" + hash + "', 0)",
+                    function (err, result, fields)
+                    {
+                        callback(true, "registered", res);
+                    });
                 });
             }
             else

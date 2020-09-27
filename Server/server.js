@@ -7,9 +7,9 @@ const port = 80;
 const jwtSecret = "yCSgVxmL9I";
 
 const userLen = [4,20];
-const userRegex = /^[a-zA-Z0-9_]*}$/;
-//const userLen = [4,20];
-//const userRegex = /^[a-zA-Z0-9_]*}$/;
+const userRegex = /^[a-zA-Z0-9_]+$/;
+const passLen = [8, 30];
+//const passRegex = /^[a-zA-Z0-9_]*}$/;
 
 app.use(bodyParser.json());
 
@@ -29,14 +29,15 @@ app.post('/login', (req, res) =>
 function checkUser(username)
 {
     if(username.length < userLen[0] || username.length > userLen[1]) return 1;
-    console.log(username);
-    if(/^[a-zA-Z0-9_]*}$/.test(username)) return 2;
+    if(!userRegex.test(username)) return 2;
     return 0;
 }
 
-function checkPass()
+function checkPass(password)
 {
-
+    if(password.length < userLen[0] || password.length > userLen[1]) return 1;
+    //if(!passRegex.test(password)) return 2;
+    return 0;
 }
 
 function loginCallback(b, messageV, usernameV, res)
@@ -60,12 +61,21 @@ app.post('/register', (req, res) =>
     {
         case 1:
             {
-                registerCallback(false, "the username length must be between 4 and 20", res);
+                registerCallback(false, "the username length must be between " + userLen[0] + " and " + userLen[1], res);
                 return;
             }
         case 2:
             {
                 registerCallback(false, "the user can only contain letters, numbers and _", res);
+                return;
+            }
+    }
+
+    switch(checkPass(password))
+    {
+        case 1:
+            {
+                registerCallback(false, "the username length must be between " + passLen[0] + " and " + passLen[1], res);
                 return;
             }
     }
@@ -75,7 +85,7 @@ app.post('/register', (req, res) =>
 
 function registerCallback(b, message, res)
 {
-    console.log(b ? "Worked":"Failed");
+    //console.log(b ? "Worked":"Failed");
     res.send({status: b ? 0:1, message: message});
 }
 

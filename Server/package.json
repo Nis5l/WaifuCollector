@@ -13,6 +13,7 @@
   "author": "Nissl",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "console-read-write": "^0.1.1",
     "express": "^4.17.1",
