@@ -205,7 +205,7 @@ app.post("/register", redirectDashboard, function(req, res){
 
 app.get("/dashboard", redirectLogin, function(req, res){
 
-    res.render('dashboard', { userID: req.session.userID });
+    res.render('dashboard', { userID: req.session.userID, username: "SmallCode"});
 
 });
 
