@@ -5,6 +5,7 @@ var con = sql.createConnection({
     user: "root",
     password: ""
 });
+
 module.exports = {
 
     init: function init()
@@ -13,11 +14,11 @@ module.exports = {
         {
             con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector");
             con.query("USE WaifuCollector");
-            con.query("CREATE TABLE IF NOT EXISTS user ( `UserID` INT NOT NULL AUTO_INCREMENT , `Username` TEXT NOT NULL , `Password` TEXT NOT NULL , `Rank` INT NOT NULL , PRIMARY KEY (`UserID`)) ENGINE = InnoDB;");
-            con.query("CREATE TABLE IF NOT EXISTS card ( `CardID` INT NOT NULL AUTO_INCREMENT , `CardName` TEXT NOT NULL , `CardTypeID` INT NOT NULL , `CardDescription` LONGTEXT NOT NULL , `CardImage` TEXT NOT NULL, PRIMARY KEY (`CardID`)) ENGINE = InnoDB;");
-            con.query("CREATE TABLE IF NOT EXISTS cardtype ( `CardTypeID` INT NOT NULL AUTO_INCREMENT , `CardTypeSeries` TEXT NOT NULL , PRIMARY KEY (`CardTypeID`)) ENGINE = InnoDB;");
-            con.query("CREATE TABLE IF NOT EXISTS unlocked ( `UnlockedID` INT NOT NULL AUTO_INCREMENT , `UnlockedUserID` INT NOT NULL , `UnlockedCardID` INT NOT NULL , `UnlockedCardQuality` INT NOT NULL , PRIMARY KEY (`UnlockedID`)) ENGINE = InnoDB;");
-            con.query("CREATE TABLE IF NOT EXISTS userdata ( `UserDataUserID` INT NOT NULL , `UserDataPackTime` BIGINT NOT NULL , PRIMARY KEY (`UserDataUserID`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS user ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `rank` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS card ( `id` INT NOT NULL AUTO_INCREMENT , `cardName` TEXT NOT NULL , `typeID` INT NOT NULL , `cardDescription` LONGTEXT NOT NULL , `cardImage` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS cardtype ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS unlocked ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `cardID` INT NOT NULL , `quality` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS data ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `key` TEXT NOT NULL , `value` LONGTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
         });
     },
 
@@ -54,7 +55,15 @@ module.exports = {
 
 function userexists(username, callback)
 {
+<<<<<<< HEAD
     con.query("SELECT * FROM user WHERE Username = \"" + username + "\"", function (err, result, fields) {
         callback(result.length > 0);
+=======
+    //escape
+    con.query("SELECT * FROM user WHERE username = \"" + username + "\"", function (err, result, fields) {
+        console.log("len: " + result.length);
+        console.log(result.length > 0);
+        return result.length > 0;
+>>>>>>> 36fcdae199d01ba94d7be123f2b0621aa8a0646c
     });
 }
