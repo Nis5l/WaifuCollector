@@ -74,13 +74,30 @@ module.exports = {
         });
     },
 
+    getPackTime: function getPackTime(userID, callback)
+    {
+        con.query("SELECT * FROM data WHERE `userID` = " + userID + " AND `key` = \"" + packTime +"\"", function (err, result, fields) {
+            console.log(result);
+            if(result == undefined || result.length == 0)
+            {
+                callback(null);
+                return;
+            }
+            callback(result[0].value);
+        });
+    },
+
     setPackTime: function setPackTime(userID, time)
     {
         //if exists just write value
-        con.query("INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" + userID + ", '" + packTime + "', '" + time + "')", function (err, result, fields) {
+        con.query("UPDATE `data` SET `value` = '" + time + "' WHERE `data`.`userID` = " + userID + " AND `data`.`key` = \"" + packTime +"\"", function (err, result, fields) {
+            if(err)
+            {
+                con.query("INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" + userID + ", '" + packTime + "', '" + time + "')", function (err, result, fields) {
+                });
+            }
         });
     },
-    
 }
 
 function userexists(username, callback)
