@@ -88,7 +88,6 @@ module.exports = {
 
     setPackTime: function setPackTime(userID, time)
     {
-        //if exists just write value
         con.query("UPDATE `data` SET `value` = '" + time + "' WHERE `data`.`userID` = " + userID + " AND `data`.`key` = \"" + packTime +"\"", function (err, result, fields) {
             if(result.affectedRows == 0)
             {
@@ -99,6 +98,15 @@ module.exports = {
             }
         });
     },
+
+    getRandomCard: function getRandomCard(callback)
+    {
+        con.query("SELECT * FROM `card` ORDER BY RAND() LIMIT 1", function (err, result, fields)
+        {   
+            callback(result[0]);
+        });
+    }
+
 }
 
 function userexists(username, callback)
