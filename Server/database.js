@@ -105,6 +105,26 @@ module.exports = {
         {   
             callback(result[0]);
         });
+    },
+
+    getUserName: function getUserName(userID, callback){
+
+        con.query("SELECT username FROM `user` WHERE id=" + userID, function(err, result, fields){
+
+            if(err)
+                console.log(err);
+
+            if(result != undefined && result[0] != undefined && result[0].username != undefined){
+
+                callback(result[0].username);   
+                return;
+
+            }
+
+            callback("null");
+
+        });
+
     }
 
 }

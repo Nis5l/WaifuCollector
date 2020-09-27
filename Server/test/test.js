@@ -49,7 +49,7 @@ function openPack()
 async function main()
 {
     console.log("GO");
-    login("Nissl", "123456789");
+    login("SmallCode", "Test123");
     await io.read();
     openPack();
 }

@@ -69,6 +69,31 @@ app.post('/register', (req, res) =>
     database.register(username, password, registerCallback, res);
 });
 
+app.get('/getname/:userID', (req, res) => {
+
+    var userID = req.params.userID;
+
+    console.log(userID);
+
+    database.getUserName(userID, (username) =>{
+
+        console.log(username);
+
+        if(username == "null"){
+
+            res.send({status: 1, message: "User with userID " + userID + " not found!"});
+            return;
+
+        }
+
+        res.send({status: 0, name: username});
+
+    });
+
+    return;
+
+});
+
 app.post('/pack', (req, res) => 
 {
     var tokenV = req.body.token;
