@@ -16,7 +16,7 @@ const port = 8000;
 const{
 
     API_HOST = 'localhost',
-    API_PORT = '80',
+    API_PORT = '100',
 
     SESS_NAME = 'sid',
     SESS_SECRET = 'jgashjdftzuasgHJFASDHgkjas',

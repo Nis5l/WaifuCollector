@@ -4,7 +4,7 @@ const database = require('./database');
 const app = express();
 const jwt = require('jsonWebToken');
 require('datejs');
-const port = 80;
+const port = 100;
 const jwtSecret = "yCSgVxmL9I";
 
 const userLen = [4,20];
