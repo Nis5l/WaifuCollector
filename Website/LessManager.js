@@ -22,30 +22,46 @@ watcher.on('change', function(){
 
 function updateFiles(){
 
-  getDirectories(scssDir, function (err, files) {
-    if (err) {
-      console.log('Error', err);
-    } else {
+  try{
+
+    getDirectories(scssDir, function (err, files) {
+      if (err) {
+        console.error('Error', err);
+      } else {
+        
+        files.forEach(element => {
+
+          if(element.endsWith(".scss")){
+
+            sass.render({file: element}, function(err, result){
+
+                if(err){
+
+                    console.log(err);
+
+                }else{
+
+                  fs.writeFile(cssDir + "/" + path.basename(element).replace("scss", "css"), result.css.toString(), function (err) {
+                    if (err) return console.error(err);
+                    
+                    console.log("Updated " + element + "!");
       
-      files.forEach(element => {
+                  });
 
-        if(element.endsWith(".scss")){
+                }
 
-          var result = sass.renderSync({file: element});
+            });
 
-          fs.writeFile(cssDir + "/" + path.basename(element).replace("scss", "css"), result.css.toString(), function (err) {
-            if (err) return console.log(err);
-            
-            console.log("Updated " + element + "!");
+          }
 
-          });
+        });
 
-        }
+      }
+    });
 
-      });
-
-    }
-  });
+  }catch (ex) {
+    
+  }
 
 }
 

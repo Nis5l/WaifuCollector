@@ -10,7 +10,9 @@
   .nav .logo {
     float: left;
     margin-left: 30px;
-    margin-top: 40px; }
+    margin-top: 40px;
+    color: white;
+    text-decoration: none; }
   .nav .nav-list {
     float: right;
     list-style-type: none;
