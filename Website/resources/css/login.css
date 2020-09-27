@@ -16,11 +16,20 @@
       display: block;
       margin: 20px auto;
       text-align: center;
-      border: 2px solid #25282f;
+      border: 2px solid rgba(0, 255, 0, 0.25);
       width: 280px;
       outline: none;
       padding: 10px 4px;
       border-radius: 25px;
       transition: border 0.2s ease-in-out; }
       .content .card input[type="text"]:hover, .content .card input[type="password"]:hover {
-        border-color: #00FF00; }
+        border-color: #00ff00; }
+    .content .card input[type="submit"] {
+      color: black;
+      padding: 10px 30px;
+      border: 2px solid #00ff00;
+      background-color: #00ff00;
+      border-radius: 25px; }
+    .content .card input[type="submit"]:hover {
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0); }
