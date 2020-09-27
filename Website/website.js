@@ -79,13 +79,13 @@ app.use(bodyParser.urlencoded({
 
 app.get("/", function(req, res){
 
-    res.render("home");
+    res.render("home", { userID: req.session.userID });
 
 });
 
 app.get("/login", redirectDashboard,  function(req, res){
 
-    res.render("login");
+    res.render("login", { userID: req.session.userID });
 
 });
 
@@ -145,7 +145,7 @@ app.post("/login", redirectDashboard, function(req, res){
 
 app.get("/register", redirectDashboard, function(req, res){
 
-    res.render("register");
+    res.render("register", { userID: req.session.userID });
 
 });
 
@@ -198,7 +198,7 @@ app.post("/register", redirectDashboard, function(req, res){
 
 app.get("/dashboard", redirectLogin, function(req, res){
 
-    res.render('dashboard');
+    res.render('dashboard', { userID: req.session.userID });
 
 });
 

@@ -8,8 +8,16 @@
 
     <ul class="nav-list">
 
-        <li><a href="./login">Login</a></li>
-        <li><a href="./register">Register</a></li>
+        <%if (userID) { %>
+
+        <li><a href="./dashboard">Dashboard</a></li>
+
+        <% }else{ %>
+
+            <li><a href="./login">Login</a></li>
+            <li><a href="./register">Register</a></li>
+
+        <% } %>
 
     </ul>
 
