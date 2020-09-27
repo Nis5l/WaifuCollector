@@ -76,7 +76,6 @@ module.exports = {
     getPackTime: function getPackTime(userID, callback)
     {
         con.query("SELECT * FROM data WHERE `userID` = " + userID + " AND `key` = \"" + packTime +"\"", function (err, result, fields) {
-            console.log("res: " + result);
             if(result == undefined || result.length == 0)
             {
                 callback(null);
@@ -125,6 +124,13 @@ module.exports = {
 
         });
 
+    },
+
+    addCard: function addCard(userID, cardID, quality)
+    {
+        con.query("INSERT INTO `unlocked` (`id`, `userID`, `cardID`, `quality`) VALUES (NULL, " + userID + ", " + cardID + ", " + quality + ");", function (err, result, fields)
+        {
+        });
     }
 
 }
