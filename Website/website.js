@@ -83,6 +83,13 @@ app.get("/", function(req, res){
 
 });
 
+app.get("/logout", redirectLogin, function(req, res){
+
+    req.session.destroy();
+    res.redirect("/login");
+
+});
+
 app.get("/login", redirectDashboard,  function(req, res){
 
     res.render("login", { userID: req.session.userID });
