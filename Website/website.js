@@ -2,11 +2,13 @@ const express = require('express');
 
 const app = express();
 
+app.set('view engine', 'ejs');
+
 const port = 8000;
 
 app.get("/", function(req, res){
 
-    res.send("Hello!");
+    res.render("home");
 
 });
 
