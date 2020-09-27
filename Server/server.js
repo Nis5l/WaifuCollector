@@ -81,7 +81,7 @@ app.post('/register', (req, res) =>
     }
     console.log("Register " + username + " " + password + " " + password2);
     database.register(username, password, registerCallback, res);
-})
+});
 
 function registerCallback(b, message, res)
 {
