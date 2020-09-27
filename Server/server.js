@@ -56,7 +56,7 @@ app.post('/register', (req, res) =>
                 return;
             }
     }
-    console.log("Register " + username + " " + password + " " + password2);
+    console.log("Register " + username + " " + password);
     database.register(username, password, registerCallback, res);
 });
 
