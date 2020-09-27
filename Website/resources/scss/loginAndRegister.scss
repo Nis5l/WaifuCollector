@@ -59,6 +59,12 @@
 
         }
 
+        .wrong{
+
+            border-color: $inputWrong !important;
+
+        }
+
         input[type="submit"]{
 
             color: black;
@@ -69,12 +75,23 @@
 
             border-radius: 25px;
 
-            &:hover{
+            &:enabled{
 
-                color: $inputColor;
-                background-color: rgba(0, 0, 0, 0);
+                &:hover{
 
-                transition: background 0.2s ease-in-out;
+                    color: $inputColor;
+                    background-color: rgba(0, 0, 0, 0);
+
+                    transition: background 0.2s ease-in-out;
+
+                }
+
+            }
+
+            &:disabled{
+
+                background-color: $inputBorderDisabled;
+                border-color: $inputBorderDisabled;
 
             }
 

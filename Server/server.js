@@ -102,7 +102,7 @@ function packCallBack(userID, time, res)
         date.
         database.setPackTime(userID, packCooldown);
     }
-    let date = new Date();
+    date = new Date();
 }
 
 console.log("Initializing DataBase")
