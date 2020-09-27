@@ -79,12 +79,13 @@ module.exports = {
         });
     },
     
-    userexists: function userexists(username, callback)
-    {
-        con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() + "\"", function (err, result, fields) {
-            callback(result.length > 0);
-        });
-    }
+}
+
+function userexists(username, callback)
+{
+    con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() + "\"", function (err, result, fields) {
+        callback(result.length > 0);
+    });
 }
 
 
