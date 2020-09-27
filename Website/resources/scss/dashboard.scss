@@ -1,0 +1,21 @@
+@import "base.scss";
+
+.content{
+    
+    width: 100%;
+    height: calc(100vh - 120px/* -120px header -80px box*/);
+
+    margin-top: 120px;
+
+    .card2{
+
+        width: 90%;
+        height: 80%;
+
+        margin: 5%;
+
+        background-color: $cardBg2;
+
+    }
+
+}

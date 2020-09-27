@@ -110,7 +110,12 @@ function loginCallback(b, messageV, usernameV, userIDV, res)
 {
     var tokenV = "";
     if(b) tokenV = jwt.sign({username: usernameV, id: userIDV}, jwtSecret);
+
+    if(b)
+        res.send({status: b ? 0:1, token: tokenV, userID: userIDV, message: messageV});
+    else
     res.send({status: b ? 0:1, token: tokenV, message: messageV});
+
     if(b)
     {
         createCash(userIDV, ()=>{});

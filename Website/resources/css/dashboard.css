@@ -1,0 +1,9 @@
+.content {
+  width: 100%;
+  height: calc(100vh - 120px);
+  margin-top: 120px; }
+  .content .card2 {
+    width: 90%;
+    height: 80%;
+    margin: 5%;
+    background-color: #25282f; }
