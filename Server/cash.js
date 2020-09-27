@@ -6,15 +6,15 @@ class Client
     {
         this.id = id;
         this.packTime = -1;
-        database.getPackTime(id, (time) => {
+        database.getPackTime(this.id, (time) => {
             this.packTime = time;
-            loadedCallback(id);
+            loadedCallback(this.id);
         });
     }
 
     save()
     {
-        database.setPackTime(this.packTime);
+        database.setPackTime(this.id, this.packTime);
     }
 
     startDecay(time, callback)

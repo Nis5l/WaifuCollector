@@ -64,7 +64,6 @@ module.exports = {
     getPackTime: function getPackTime(userID, res, callback)
     {
         con.query("SELECT * FROM data WHERE `userID` = " + userID + " AND `key` = \"" + packTime +"\"", function (err, result, fields) {
-            console.log(result);
             if(result == undefined || result.length == 0)
             {
                 callback(userID, null, res);
@@ -77,7 +76,7 @@ module.exports = {
     getPackTime: function getPackTime(userID, callback)
     {
         con.query("SELECT * FROM data WHERE `userID` = " + userID + " AND `key` = \"" + packTime +"\"", function (err, result, fields) {
-            console.log(result);
+            console.log("res: " + result);
             if(result == undefined || result.length == 0)
             {
                 callback(null);
@@ -91,10 +90,12 @@ module.exports = {
     {
         //if exists just write value
         con.query("UPDATE `data` SET `value` = '" + time + "' WHERE `data`.`userID` = " + userID + " AND `data`.`key` = \"" + packTime +"\"", function (err, result, fields) {
-            if(err)
+            if(result.affectedRows == 0)
             {
                 con.query("INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" + userID + ", '" + packTime + "', '" + time + "')", function (err, result, fields) {
                 });
+            }else
+            {
             }
         });
     },
