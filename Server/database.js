@@ -21,24 +21,30 @@ module.exports = {
         });
     },
 
-    login: function login(username , password)
+    login: function login(username , password, callback)
     {
         con.query("SELECT * FROM user", function (err, result, fields) {
-            //console.log(result);
+            //callback()
         });
-        return true;
     },
 
-    register: function register(username , password)
+    register: function register(username , password, callback, res)
     {
-        if(userexists(username)) return false;
-        
-        console.log("end")
-
-        con.query("INSERT INTO user (Username, Password, Rank) VALUES ('" + username + "', '" + password + "', 0)", function (err, result, fields) {
-            //console.log(result);
+        userexists(username, (b) => 
+        {
+            if(!b)
+            {
+                con.query("INSERT INTO user (Username, Password, Rank) VALUES ('" + username + "', '" + password + "', 0)",
+                function (err, result, fields)
+                {
+                    callback(true, "registered", res);
+                });
+            }
+            else
+            {
+                callback(false, "error: user already exists",  res);
+            }
         });
-        return true;
     }
 }
 //------------------------------------
@@ -46,12 +52,9 @@ module.exports = {
 //  get net weil di querys async san
 //------------------------------------
 
-function userexists(username)
+function userexists(username, callback)
 {
-    //escape
     con.query("SELECT * FROM user WHERE Username = \"" + username + "\"", function (err, result, fields) {
-        console.log("len: " + result.length);
-        console.log(result.length > 0);
-        return result.length > 0;
+        callback(result.length > 0);
     });
 }

@@ -17,39 +17,35 @@ app.post('/login', (req, res) =>
 {
     var username = req.body.username;
     var password = req.body.password;
-    var log = database.login(username, password);
-    console.log("Login:%s;%s-%s", username, password, log);
-    
-    var toeknV = "";
-    var statusV = 1;
-    var messageV = "Denied";
-    if(log)
-    {
-        toeknV = jwt.sign({username: username}, jwtSecret);
-        statusV = 0;
-        var messageV = "Welcome";
-    }
-    res.send({token: toeknV, status: statusV, message: messageV});
+    console.log("Login " + username + " " + password);
+    database.login(username, password, loginCallback);
 })
+
+function loginCallback(b, message, res)
+{
+    tokenV = jwt.sign({username: username}, jwtSecret);
+    res.send({token: tokenV, status: statusV, message: messageV});
+}
 
 app.post('/register', (req, res) =>
 {
     var username = req.body.username;
     var password = req.body.password;
     var password2 = req.body.password2;
-    var log = database.register(username, password);
-    console.log("Register:%s;%s-%s", username, password, log);
-    
-    var statusV = 1;
-    var messageV = "Error";
-    if(log)
+    if(password != password2)
     {
-        toeknV = jwt.sign({username: username}, jwtSecret);
-        statusV = 0;
-        var messageV = "Registered";
+        registerCallback(false, "error: passwords dont match", res);
+        return;
     }
-    res.send({status: statusV, message: messageV});
+    console.log("Register " + username + " " + password + " " + password2);
+    database.register(username, password, registerCallback, res);
 })
+
+function registerCallback(b, message, res)
+{
+    console.log(b ? "Worked":"Failed");
+    res.send({status: b ? 0:1, message: message});
+}
 
 console.log("Initializing DataBase")
 database.init();
