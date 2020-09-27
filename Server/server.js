@@ -156,13 +156,22 @@ function packCallBack(userID, res)
         {
             clients[userID].packTime = date.valueOf();
             database.getRandomCard((card) => {
-                var quality = qualityrange
-                database.addCard(userID, card.id, )
+                //var quality = qualityrange
+                //database.addCard(userID, card.id, )
                 res.send({packTime: "0", message:"OK", id: card});
             });
             return;
         }
-        
+
+        if(clients[userID].packTime == "null")
+        {
+            clients[userID].packTime = date.valueOf();
+            database.getRandomCard((card) => {
+                res.send({packTime: "0", message:"OK", id: card});
+            });
+            return;
+        }
+
         if(nowDate.isAfter(packDate))
         {
             clients[userID].packTime = date.valueOf();
