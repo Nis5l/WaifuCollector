@@ -22,6 +22,12 @@ app.get("/login", function(req, res){
 
 });
 
+app.get("/register", function(req, res){
+
+    res.render("register");
+
+});
+
 var server = app.listen(port, function(){
 
     console.log("Server started at port %s", port);

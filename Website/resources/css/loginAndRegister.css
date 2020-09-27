@@ -10,15 +10,19 @@
     background-color: #25282f;
     padding: 40px;
     text-align: center; }
+    .content .card a {
+      margin-top: 20px;
+      color: white;
+      display: block; }
     .content .card input[type="text"], .content .card input[type="password"] {
       color: #fff;
       background: none;
       display: block;
-      margin: 20px auto;
       text-align: center;
       border: 2px solid rgba(0, 255, 0, 0.25);
       width: 280px;
       outline: none;
+      margin: 20px auto;
       padding: 10px 4px;
       border-radius: 25px; }
       .content .card input[type="text"]:hover, .content .card input[type="password"]:hover {

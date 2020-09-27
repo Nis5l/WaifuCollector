@@ -21,14 +21,21 @@
 
         text-align: center;
 
+        a{
+
+            margin-top: 20px;
+
+            color: white;
+            display: block;
+
+        }
+
         input[type="text"], input[type="password"]{
 
             color: $inputColor;
 
             background: $inputBg;
             display: block;
-
-            margin: 20px auto;
 
             text-align: center;
 
@@ -37,15 +44,16 @@
             width: 280px;
             outline: none;
 
+            margin: 20px auto;
             padding: 10px 4px;
 
             border-radius: 25px;
 
-            transition: border 0.2s ease-in-out;
-
             &:hover{
 
                 border-color: $inputBorder;
+
+                transition: border 0.2s ease-in-out;
 
             }
 
@@ -61,15 +69,14 @@
 
             border-radius: 25px;
 
-            transition: background 0.2s ease-in-out;
+            &:hover{
 
-        }
+                color: $inputColor;
+                background-color: rgba(0, 0, 0, 0);
 
-        input[type="submit"]:hover{
+                transition: background 0.2s ease-in-out;
 
-            color: $inputColor;
-
-            background-color: rgba(0, 0, 0, 0);
+            }
 
         }
 
