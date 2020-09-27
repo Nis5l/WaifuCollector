@@ -21,7 +21,7 @@ var clients = {};
 
 var cashTime = 10000;
 var packCooldown = 10;
-var qualityrange = [0,7];
+var qualityrange = [1,7];
 
 app.use(bodyParser.json());
 
@@ -152,37 +152,20 @@ function packCallBack(userID, res)
         //console.log(date);
         //console.log(date.isAfter(nowDate));
         
-        if(clients[userID] == null)
+        if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate))
         {
             clients[userID].packTime = date.valueOf();
             database.getRandomCard((card) => {
-                //var quality = qualityrange
-                //database.addCard(userID, card.id, )
-                res.send({packTime: "0", message:"OK", id: card});
-            });
-            return;
-        }
-
-        if(clients[userID].packTime == "null")
-        {
-            clients[userID].packTime = date.valueOf();
-            database.getRandomCard((card) => {
-                res.send({packTime: "0", message:"OK", id: card});
-            });
-            return;
-        }
-
-        if(nowDate.isAfter(packDate))
-        {
-            clients[userID].packTime = date.valueOf();
-            database.getRandomCard((card) => {
-                res.send({packTime: "0", message:"OK", card: card});
+                var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
+                database.addCard(userID, card.id, quality);
+                res.send({packTime: "0", message:"OK", id: card, quality: quality});
             });
             return;
         }
 
         res.send({packTime: packDate.diff(nowDate).seconds(), message:"WAIT", ids: []});
         return;
+
     }   
 }       
 

@@ -104,6 +104,13 @@ module.exports = {
         {   
             callback(result[0]);
         });
+    },
+
+    addCard: function addCard(userID, cardID, quality)
+    {
+        con.query("INSERT INTO `unlocked` (`id`, `userID`, `cardID`, `quality`) VALUES (NULL, " + userID + ", " + cardID + ", " + quality + ");", function (err, result, fields)
+        {
+        });
     }
 
 }
