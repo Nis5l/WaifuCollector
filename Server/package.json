@@ -19,6 +19,7 @@
     "datejs": "^1.0.0-rc3",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.0",
     "mysql": "^2.18.1",
     "request": "^2.88.2",
     "requests": "^0.3.0"

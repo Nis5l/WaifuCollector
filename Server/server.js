@@ -7,6 +7,7 @@ require('datejs');
 const Client = require('./cash');
 const port = 100;
 const jwtSecret = "yCSgVxmL9I";
+const moment = require('moment')
 
 const userLen = [4,20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
@@ -144,24 +145,14 @@ function packCallBack(userID, time, res)
 
         if(time == null)
         {
-            console.log("NULL");
-            //database.setPackTime(userID, date);
-            console.log(clients[userID].packTime);
             clients[userID].packTime = date;
-            console.log(clients[userID].packTime);
             res.send({packTime: "0", message:"OK", ids: [10,12,13]});
             return;
         }
-        console.log(new Date() + "    " + new Date(time));
-        if(new Date().isAfter(new Date(time)))
+        var nowDate = new Date();
+        var packDate = new Date(time);
+        if(nowDate.isAfter(packDate))
         {
-            if(!decoded.id in clients)
-            {
-                createCash(userID);
-                res.send({packTime: "time", message:"ERROR", ids: []});
-                return;
-            }
-        
             clients[userID].packTime = date;
             res.send({packTime: "0", message:"OK", ids: [10,12,13]});
             return;
@@ -175,10 +166,8 @@ function packCallBack(userID, time, res)
 
 function createCash(userIDV, callback)
 {
-    console.log("checking cash of " + userIDV);
     if(!clients[userIDV])
     {
-        console.log("creating cash for " + userIDV);
         clients[userIDV] = new Client(userIDV, callback);
         clients[userIDV].startDecay(cashTime, clearCash);
     }
@@ -186,7 +175,6 @@ function createCash(userIDV, callback)
 
 function clearCash(userID)
 {
-    console.log("cleared " + userID);
     clients[userID].save();
     delete clients[userID];
 }
