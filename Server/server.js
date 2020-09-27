@@ -97,16 +97,22 @@ function registerCallback(b, message, res)
 function packCallBack(userID, time, res)
 {
     let date = new Date().addSeconds(packCooldown);
+
     if(time == null)
     {
         database.setPackTime(userID, date);
-        res.send({time: "0", message:"OK", ids: [10,12,13]});
+        res.send({packTime: "0", message:"OK", ids: [10,12,13]});
         return;
     }
+    console.log(new Date(time));
     if(new Date().isAfter(new Date(time)))
     {
         database.setPackTime(userID, date);
-        res.send({time: "time", message:"Wait", ids: [10,12,13]});
+        res.send({packTime: "0", message:"OK", ids: [10,12,13]});
+        return;
+    }else
+    {
+        res.send({packTime: "time", message:"WAIT", ids: [10,12,13]});
         return;
     }
 }
