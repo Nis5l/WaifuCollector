@@ -5,7 +5,7 @@ var tokenV = "";
 function login(user, pass)
 {
     request.post(
-        'http://127.0.0.1/login',
+        'http://127.0.0.1:100/login',
         { json: { username: user, password: pass } },
         (error, response, body) => 
         {
@@ -20,7 +20,7 @@ function login(user, pass)
 function register(user, pass)
 {
     request.post(
-        'http://127.0.0.1/register',
+        'http://127.0.0.1:100/register',
         { json: { username: user, password: pass} },
         (error, response, body) => 
         {
@@ -34,7 +34,7 @@ function register(user, pass)
 function openPack()
 {
     request.post(
-        'http://127.0.0.1/pack',
+        'http://127.0.0.1:100/pack',
         { json: { token: tokenV} },
         (error, response, body) => 
         {
