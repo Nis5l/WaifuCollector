@@ -24,7 +24,7 @@ const{
 
 } = process.env;
 
-app.use(session({
+var sess = {
 
     name: SESS_NAME,
     resave: false,
@@ -33,13 +33,21 @@ app.use(session({
     cookie: {
         maxAge: SESS_LIFETIME,
         sameSite: true,
-        secure: 'production'
+        secure: false
     }
-}));
+
+};
+
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1);
+    sess.cookie.secure = true;
+}
+
+app.use(session(sess));
 
 const redirectLogin = (req, res, next) => {
 
-    if(!req.session.userId){
+    if(!req.session.userID){
 
         res.redirect('/login');
 
@@ -53,7 +61,7 @@ const redirectLogin = (req, res, next) => {
 
 const redirectDashboard = (req, res, next) => {
 
-    if(req.session.userId){
+    if(req.session.userID){
 
         res.redirect('/dashboard');
 
@@ -84,9 +92,54 @@ app.get("/login", redirectDashboard,  function(req, res){
 app.post("/login", redirectDashboard, function(req, res){
 
     const { username, password } = req.body;
+    
+    if(username && password){
 
-    console.log(username);
-    console.log(password);
+        request.post(
+            'http://' + API_HOST + ":" + API_PORT + "/login",
+            { json: { username: username, password: password} },
+            (error, response, body) => 
+            {
+
+                if (!error && response.statusCode == 200) {
+                    
+                    if(body.status == 0){
+
+                        token = body.token;
+
+                        userID = body.userID;
+
+                        req.session.userID = userID;
+                        req.session.token = token;
+
+                        req.session.save((err) => {
+
+                            if(err)
+                                console.log(err);
+
+                        });
+
+                        res.redirect("/dashboard");
+
+                    }else{
+
+                        res.redirect("/login?errorCode=" + body.status + "&errorMessage=" + body.message);
+
+                    }
+
+                }else{
+
+                    res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+
+                }
+            }
+        );
+
+    }else{
+
+        res.redirect("/login?errorCode=2&errorMessage=Username or password are empty");
+
+    }
 
 });
 
@@ -117,8 +170,6 @@ app.post("/register", redirectDashboard, function(req, res){
 
                 if (!error && response.statusCode == 200) {
 
-                    console.log(body);
-
                     if(body.status == 0){
 
                         res.redirect("/login");
@@ -142,8 +193,6 @@ app.post("/register", redirectDashboard, function(req, res){
         res.redirect("/register?errorCode=2&errorMessage=Username or password are empty");
 
     }
-
-    console.log(username);
 
 });
 
