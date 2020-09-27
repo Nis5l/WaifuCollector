@@ -35,7 +35,7 @@ module.exports = {
         {
             if(!b)
             {
-                con.query("INSERT INTO user (Username, Password, Rank) VALUES ('" + username + "', '" + password + "', 0)",
+                con.query("INSERT INTO user (username, password, rank) VALUES ('" + username + "', '" + password + "', 0)",
                 function (err, result, fields)
                 {
                     callback(true, "registered", res);
