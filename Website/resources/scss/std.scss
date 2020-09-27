@@ -1,3 +1,9 @@
+@import "base.scss";
+
+//Fonts
+
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@500;600;700&display=swap');
+
 *{
     
     margin: 0;
@@ -11,7 +17,7 @@ body{
 
     height: auto;
     
-    background-color: #15171b;
+    background-color: $bg;
     color: white;
 
 }

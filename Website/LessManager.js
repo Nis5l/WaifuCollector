@@ -41,12 +41,16 @@ function updateFiles(){
 
                 }else{
 
-                  fs.writeFile(cssDir + "/" + path.basename(element).replace("scss", "css"), result.css.toString(), function (err) {
-                    if (err) return console.error(err);
-                    
-                    console.log("Updated " + element + "!");
-      
-                  });
+                  if(result.css.toString().trim()){
+
+                    fs.writeFile(cssDir + "/" + path.basename(element).replace("scss", "css"), result.css.toString(), function (err) {
+                      if (err) return console.error(err);
+                      
+                      //console.log("Updated " + element + "!");
+        
+                    });
+
+                  }
 
                 }
 
