@@ -64,7 +64,7 @@ module.exports = {
     getPackTime: function getPackTime(userID, res, callback)
     {
         con.query("SELECT * FROM data WHERE userID = " + userID + " AND key = \"" + packTime + "\"", function (err, result, fields) {
-            if(result.length == 0)
+            if(result == undefined || result.length == 0)
             {
                 callback(userID, null, res);
                 return;

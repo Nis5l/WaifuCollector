@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const database = require('./database');
 const app = express();
 const jwt = require('jsonWebToken');
-var Date = require('datejs');
+require('datejs');
 const port = 80;
 const jwtSecret = "yCSgVxmL9I";
 
@@ -96,13 +96,19 @@ function registerCallback(b, message, res)
 
 function packCallBack(userID, time, res)
 {
-    let date = moment();
+    let date = new Date().addSeconds(packCooldown);
     if(time == null)
     {
-        date.
-        database.setPackTime(userID, packCooldown);
+        database.setPackTime(userID, date);
+        res.send({time: "0", message:"OK", ids: [10,12,13]});
+        return;
     }
-    date = new Date();
+    if(new Date().isAfter(new Date(time)))
+    {
+        database.setPackTime(userID, date);
+        res.send({time: "time", message:"Wait", ids: [10,12,13]});
+        return;
+    }
 }
 
 console.log("Initializing DataBase")
