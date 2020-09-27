@@ -22,10 +22,12 @@ module.exports = {
         });
     },
 
-    login: function login(username , password, callback)
+    login: function login(username , password, username, res, callback)
     {
-        con.query("SELECT * FROM user", function (err, result, fields) {
-            //callback()
+        //SQL INJECTION
+        con.query("SELECT * FROM user WHERE username = \"" + username +  "\" AND password = \"" + password + "\"", function (err, result, fields) {
+            var b = result.length > 0;
+            callback(b, b ? "logged in":"login failed", username, res);
         });
     },
 
@@ -35,6 +37,7 @@ module.exports = {
         {
             if(!b)
             {
+                //SQL INJECTION
                 con.query("INSERT INTO user (username, password, rank) VALUES ('" + username + "', '" + password + "', 0)",
                 function (err, result, fields)
                 {
@@ -55,15 +58,7 @@ module.exports = {
 
 function userexists(username, callback)
 {
-<<<<<<< HEAD
-    con.query("SELECT * FROM user WHERE Username = \"" + username + "\"", function (err, result, fields) {
-        callback(result.length > 0);
-=======
-    //escape
     con.query("SELECT * FROM user WHERE username = \"" + username + "\"", function (err, result, fields) {
-        console.log("len: " + result.length);
-        console.log(result.length > 0);
-        return result.length > 0;
->>>>>>> 36fcdae199d01ba94d7be123f2b0621aa8a0646c
+        callback(result.length > 0);
     });
 }

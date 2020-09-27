@@ -9,7 +9,7 @@ function login(user, pass)
         (error, response, body) => 
         {
             if (!error && response.statusCode == 200) {
-                token = body.token;
+                console.log(body);
                 console.log(body.token);
             }
         }
@@ -31,4 +31,4 @@ function register(user, pass, pass2)
     );
 }
 register("Nissl" , "123", "123")
-//login("Nissl", "123");
+login("Nissl", "123");

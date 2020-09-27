@@ -18,13 +18,19 @@ app.post('/login', (req, res) =>
     var username = req.body.username;
     var password = req.body.password;
     console.log("Login " + username + " " + password);
-    database.login(username, password, loginCallback);
-})
+    if(/^[a-zA-Z0-9_]*}$/.test(username)) 
+    {
+        loginCallback(false, "the user can only contain letters, numbers and _", username, res);
+        return;
+    }
+    database.login(username, password, username, res, loginCallback);
+});
 
-function loginCallback(b, message, res)
+function loginCallback(b, messageV, usernameV, res)
 {
-    tokenV = jwt.sign({username: username}, jwtSecret);
-    res.send({token: tokenV, status: statusV, message: messageV});
+    var tokenV = "";
+    if(b) tokenV = jwt.sign({username: usernameV}, jwtSecret);
+    res.send({status: b ? 0:1, token: tokenV, message: messageV});
 }
 
 app.post('/register', (req, res) =>
