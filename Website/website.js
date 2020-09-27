@@ -198,7 +198,7 @@ app.post("/register", redirectDashboard, function(req, res){
 
 app.get("/dashboard", redirectLogin, function(req, res){
 
-    res.render('home');
+    res.render('dashboard');
 
 });
 
