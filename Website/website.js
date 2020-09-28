@@ -109,8 +109,6 @@ app.post("/login", redirectDashboard, function(req, res){
             {
 
                 if (!error && response.statusCode == 200) {
-                    
-                    console.log(body);
 
                     if(body.status == 0){
 

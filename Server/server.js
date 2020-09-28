@@ -95,11 +95,7 @@ app.get('/getname/:userID', (req, res) => {
 
     var userID = req.params.userID;
 
-    console.log(userID);
-
     database.getUserName(userID, (username) =>{
-
-        console.log(username);
 
         if(username == "null"){
 
@@ -228,72 +224,6 @@ function checkPass(password)
     return 0;
 }
 
-<<<<<<< HEAD
-function loginCallback(b, messageV, usernameV, userIDV, res)
-{
-    var tokenV = "";
-
-    if(b) tokenV = jwt.sign({username: usernameV, id: userIDV}, jwtSecret);
-
-    if(b)
-        res.send({status: b ? 0 : 1, token: tokenV, userID: userIDV, message: messageV});
-    else
-        res.send({status: b ? 0 : 1, message: messageV});
-
-    if(b)
-    {
-        createCash(userIDV, ()=>{});
-    }
-}
-
-function registerCallback(b, message, res)
-{
-    //console.log(b ? "Worked":"Failed");
-    res.send({status: b ? 0:1, message: message});
-}
-
-function packCallBack(userID, res)
-{
-    if(clients[userID] == undefined)
-    {
-        createCash(userID, run);
-    }else
-    {
-        run(userID);
-    }
-
-    function run(userID)
-    {
-        var nowDate = moment();
-        var date = moment(nowDate).add(packCooldown, 'seconds');
-        var packDate = moment(parseInt(clients[userID].packTime));
-
-        //console.log(clients[userID].packTime);
-        //console.log(nowDate);
-        //console.log(packDate);
-        //console.log(date);
-        //console.log(date.isAfter(nowDate));
-        
-        if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate) || !packDate.isValid())
-        {
-            clients[userID].packTime = date.valueOf();
-            database.getRandomCard((card) => {
-                var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
-                database.addCard(userID, card.id, quality);
-                card.cardImage = imageBase + card.cardImage;
-                res.send({packTime: "0", message:"OK", id: card, quality: quality});
-            });
-            return;
-        }
-
-        res.send({packTime: packDate.diff(nowDate).seconds(), message:"WAIT", ids: []});
-        return;
-
-    }   
-}       
-
-=======
->>>>>>> 5ad3c78619c4d2c70416f23f03e9e697ff209453
 function createCash(userIDV, callback)
 {
     if(!clients[userIDV])

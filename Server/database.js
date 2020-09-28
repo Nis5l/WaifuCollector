@@ -30,7 +30,7 @@ module.exports = {
         con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
             if(result.length == 0)
             {
-                callback(1, "login failed", -1);
+                callback(0, "login failed", -1);
                 return;
 
             }
