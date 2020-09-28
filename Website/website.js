@@ -110,6 +110,8 @@ app.post("/login", redirectDashboard, function(req, res){
 
                 if (!error && response.statusCode == 200) {
                     
+                    console.log(body);
+
                     if(body.status == 0){
 
                         token = body.token;
@@ -207,6 +209,9 @@ app.get("/dashboard", redirectLogin, function(req, res){
 
     request({ url: 'http://' + API_HOST + ":" + API_PORT + "/getName/" + req.session.userID, method: 'GET'}, function(err, response, body){
 
+        if(err)
+            res.send(err);
+
         let json = JSON.parse(body);
 
         if(json['status'] == 0){
@@ -220,8 +225,6 @@ app.get("/dashboard", redirectLogin, function(req, res){
         }
 
     });
-
-    //res.render('dashboard', { userID: req.session.userID, username: username});
 
 });
 

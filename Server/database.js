@@ -26,17 +26,32 @@ module.exports = {
 
     login: function login(username , password, username, res, callback)
     {
-        //SQL INJECTION
-        con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
-            if(result.length == 0)
-            {
-                callback(1, "login failed", username, -1, res);
+
+        if(userexists(username, (b) =>{
+
+            if(b){
+
+                //SQL INJECTION
+                con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
+                    if(result.length == 0)
+                    {
+                        callback(1, "login failed", username, -1, res);
+                        return;
+                    }
+                    bcrypt.compare(password, result[0].password, function(err, resp) {
+                        callback(resp, resp ? "logged in":"login failed", username, result[0].id, res);
+                    });
+                });
+
+            }else{
+
+                callback(0, "login failed", username, -1, res);
                 return;
+
             }
-            bcrypt.compare(password, result[0].password, function(err, resp) {
-                callback(resp, resp ? "logged in":"login failed", username, result[0].id, res);
-            });
-        });
+
+        }));
+
     },
 
     register: function register(username , password, callback, res)
