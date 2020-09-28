@@ -24,37 +24,23 @@ module.exports = {
         });
     },
 
-    login: function login(username , password, username, res, callback)
+    login: function login(username , password, callback)
     {
-
-        if(userexists(username, (b) =>{
-
-            if(b){
-
-                //SQL INJECTION
-                con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
-                    if(result.length == 0)
-                    {
-                        callback(1, "login failed", username, -1, res);
-                        return;
-                    }
-                    bcrypt.compare(password, result[0].password, function(err, resp) {
-                        callback(resp, resp ? "logged in":"login failed", username, result[0].id, res);
-                    });
-                });
-
-            }else{
-
-                callback(0, "login failed", username, -1, res);
+        //SQL INJECTION
+        con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
+            if(result.length == 0)
+            {
+                callback(1, "login failed", -1);
                 return;
 
             }
-
-        }));
-
+            bcrypt.compare(password, result[0].password, function(err, resp) {
+                callback(resp, resp ? "logged in":"login failed", result[0].id);
+            });
+        });
     },
 
-    register: function register(username , password, callback, res)
+    register: function register(username , password, callback)
     {
         userexists(username, (b) => 
         {
@@ -64,13 +50,13 @@ module.exports = {
                     con.query("INSERT INTO user (username, password, rank) VALUES ('" + username + "', '" + hash + "', 0)",
                     function (err, result, fields)
                     {
-                        callback(true, "registered", res);
+                        callback(true, "registered");
                     });
                 });
             }
             else
             {
-                callback(false, "error: user already exists",  res);
+                callback(false, "error: user already exists");
             }
         });
     },
@@ -145,6 +131,14 @@ module.exports = {
     {
         con.query("INSERT INTO `unlocked` (`id`, `userID`, `cardID`, `quality`) VALUES (NULL, " + userID + ", " + cardID + ", " + quality + ");", function (err, result, fields)
         {
+        });
+    },
+
+    changePass: function changePass(username, newPass)
+    {
+        bcrypt.hash(newPass,  10, (err, hash) => {
+            con.query("UPDATE `user` SET `password` = '" + hash + "' WHERE `user`.`username` = \"" + username + "\"", function (err, result, fields) {
+            });
         });
     }
 
