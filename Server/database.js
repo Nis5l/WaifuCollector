@@ -140,6 +140,23 @@ module.exports = {
             con.query("UPDATE `user` SET `password` = '" + hash + "' WHERE `user`.`username` = \"" + username + "\"", function (err, result, fields) {
             });
         });
+    },
+
+    getCardType: function getCardType(typeID, callback)
+    {
+        con.query("SELECT * FROM `cardtype` WHERE id=" + typeID, function(err, result, fields){
+
+            if(result != undefined && result[0] != undefined){
+
+                callback(result[0]);
+                return;
+
+            }
+
+            callback("null");
+
+        });
+
     }
 
 }

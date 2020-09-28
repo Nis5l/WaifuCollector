@@ -173,7 +173,10 @@ app.post('/pack', (req, res) =>
                         var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
                         database.addCard(userID, card.id, quality);
                         card.cardImage = imageBase + card.cardImage;
-                        res.send({packTime: "0", message:"OK", id: card, quality: quality});
+                        database.getCardType(card.typeID, (result) => {
+                            card.type = result;
+                            res.send({packTime: "0", message:"OK", id: card, quality: quality});
+                        });
                     });
                     return;
                 }

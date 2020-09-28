@@ -63,12 +63,11 @@ function changePass(user, pass, newpass)
 async function main()
 {
     console.log("GO");
-    register("SmallCode3", "Test123");
+    register("Test123", "Test1234");
     await io.read();
-    login("SmallCode3", "Test123");
+    login("Test123", "Test1234");
     await io.read();
-    changePass("SmallCode3", "Test123", "Test1234");
-    await io.read();
+    changePass("Test123", "Test123", "Test1234");
     openPack();
 }
 
