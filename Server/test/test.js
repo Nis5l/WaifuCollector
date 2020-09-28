@@ -46,12 +46,28 @@ function openPack()
     );
 }
 
+function changePass(user, pass, newpass)
+{
+    request.post(
+        'http://127.0.0.1:100/passchange',
+        { json: { username: user, password: pass, passwordnew: newpass} },
+        (error, response, body) => 
+        {
+            if (!error && response.statusCode == 200) {
+                console.log(body);
+            }
+        }
+    );
+}
+
 async function main()
 {
     console.log("GO");
-    register("SmallCode", "Test123");
+    register("SmallCode3", "Test123");
     await io.read();
-    login("SmallCode", "Test123");
+    login("SmallCode3", "Test123");
+    await io.read();
+    changePass("SmallCode3", "Test123", "Test1234");
     await io.read();
     openPack();
 }
