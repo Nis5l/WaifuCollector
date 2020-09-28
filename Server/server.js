@@ -120,7 +120,7 @@ app.post('/pack', (req, res) =>
         var decoded = jwt.verify(tokenV, jwtSecret);
     }catch(JsonWebTokenError)
     {
-        res.send("\"TF you doing here nigga, identify yourself, who tf are you\"");
+        res.send({status : 0, message: "\"TF you doing here nigga, identify yourself, who tf are you\""});
         return;
     }
     if(clients[decoded.id] == undefined)
@@ -212,14 +212,14 @@ app.post('/passchange', (req, res) => {
 
 function checkUser(username)
 {
-    if(username.length < userLen[0] || username.length > userLen[1]) return 1;
+    if(username == undefined || username.length < userLen[0] || username.length > userLen[1]) return 1;
     if(!userRegex.test(username)) return 2;
     return 0;
 }
 
 function checkPass(password)
 {
-    if(password.length < userLen[0] || password.length > userLen[1]) return 1;
+    if(password == undefined || password.length < userLen[0] || password.length > userLen[1]) return 1;
     //if(!passRegex.test(password)) return 2;
     return 0;
 }
