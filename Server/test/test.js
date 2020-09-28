@@ -50,7 +50,7 @@ function changePass(user, pass, newpass)
 {
     request.post(
         'http://127.0.0.1:100/passchange',
-        { json: { username: user, password: pass, passwordnew: newpass} },
+        { json: { username: user, password: pass, newpassword: newpass} },
         (error, response, body) => 
         {
             if (!error && response.statusCode == 200) {
