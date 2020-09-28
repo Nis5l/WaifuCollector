@@ -4,7 +4,7 @@ const database = require('./database');
 const app = express();
 const jwt = require('jsonWebToken');
 require('datejs');
-const Client = require('./cash');
+const Client = require('./cache');
 const jwtSecret = "yCSgVxmL9I";
 const moment = require('moment')
 const utils = require('./utils');
@@ -21,7 +21,7 @@ const passLen = [8, 30];
 
 var clients = {};
 
-var cashTime = 10000;
+var cacheTime = 10000;
 var packCooldown = 10;
 var qualityrange = [1,7];
 
@@ -48,7 +48,7 @@ app.post('/login', (req, res) =>
 
         if(b)
         {
-            createCash(userIDV, ()=>{});
+            createCache(userIDV, ()=>{});
         }
     });
 });
@@ -125,7 +125,7 @@ app.post('/pack', (req, res) =>
     }
     if(clients[decoded.id] == undefined)
     {
-        createCash(decoded.id, run);
+        createCache(decoded.id, run);
     }else
     {
         run(decoded.id);
@@ -139,7 +139,7 @@ app.post('/pack', (req, res) =>
         }
         else
         {
-            createCash(decoded.id);
+            createCache(decoded.id);
             packCallBack(decoded.id);
             return;
         }
@@ -148,7 +148,7 @@ app.post('/pack', (req, res) =>
         {
             if(clients[userID] == undefined)
             {
-                createCash(userID, run);
+                createCache(userID, run);
             }else
             {
                 run(userID);
@@ -227,16 +227,16 @@ function checkPass(password)
     return 0;
 }
 
-function createCash(userIDV, callback)
+function createCache(userIDV, callback)
 {
     if(!clients[userIDV])
     {
         clients[userIDV] = new Client(userIDV, callback);
-        clients[userIDV].startDecay(cashTime, clearCash);
+        clients[userIDV].startDecay(cacheTime, clearCache);
     }
 }
 
-function clearCash(userID)
+function clearCache(userID)
 {
     clients[userID].save();
     delete clients[userID];
