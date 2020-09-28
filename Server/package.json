@@ -18,6 +18,7 @@
     "console-read-write": "^0.1.1",
     "datejs": "^1.0.0-rc3",
     "express": "^4.17.1",
+    "google-search-results-nodejs": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.0",
     "mysql": "^2.18.1",

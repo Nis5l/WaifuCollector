@@ -67,7 +67,6 @@ async function main()
     await io.read();
     login("Test123", "Test1234");
     await io.read();
-    changePass("Test123", "Test123", "Test1234");
     openPack();
 }
 
