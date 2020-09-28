@@ -205,7 +205,23 @@ app.post("/register", redirectDashboard, function(req, res){
 
 app.get("/dashboard", redirectLogin, function(req, res){
 
-    res.render('dashboard', { userID: req.session.userID, username: "SmallCode"});
+    request({ url: 'http://' + API_HOST + ":" + API_PORT + "/getName/" + req.session.userID, method: 'GET'}, function(err, response, body){
+
+        let json = JSON.parse(body);
+
+        if(json['status'] == 0){
+
+            res.render('dashboard', { userID: req.session.userID, username: json['name']})
+
+        }else{
+
+            res.render('dashboard', { userID: req.session.userID, username: json['message']})
+
+        }
+
+    });
+
+    //res.render('dashboard', { userID: req.session.userID, username: username});
 
 });
 
