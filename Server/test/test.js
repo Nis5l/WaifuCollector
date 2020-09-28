@@ -49,6 +49,8 @@ function openPack()
 async function main()
 {
     console.log("GO");
+    register("SmallCode", "Test123");
+    await io.read();
     login("SmallCode", "Test123");
     await io.read();
     openPack();

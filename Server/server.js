@@ -9,6 +9,9 @@ const jwtSecret = "yCSgVxmL9I";
 const moment = require('moment')
 const utils = require('./utils');
 
+app.use(express.static('Data'))
+const imageBase = "Card/";
+
 const port = 100;
 
 const userLen = [4,20];
@@ -172,17 +175,20 @@ function packCallBack(userID, res)
         var nowDate = moment();
         var date = moment(nowDate).add(packCooldown, 'seconds');
         var packDate = moment(parseInt(clients[userID].packTime));
+
+        //console.log(clients[userID].packTime);
         //console.log(nowDate);
         //console.log(packDate);
         //console.log(date);
         //console.log(date.isAfter(nowDate));
         
-        if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate))
+        if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate) || !packDate.isValid())
         {
             clients[userID].packTime = date.valueOf();
             database.getRandomCard((card) => {
                 var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
                 database.addCard(userID, card.id, quality);
+                card.cardImage = imageBase + card.cardImage;
                 res.send({packTime: "0", message:"OK", id: card, quality: quality});
             });
             return;
