@@ -3,9 +3,10 @@
 
     <head>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 
-        <title>WaifuCollector | Home</title>
+        <title>WaifuCollector | Dashboard</title>
 
         <link rel="stylesheet" href="resources/css/nav.css">
         <link rel="stylesheet" href="resources/css/std.css">
@@ -23,9 +24,15 @@
 
             <hr style="color: rgba(0, 0, 0, 0); border-color:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0);">
 
-            <div class="profile card2 bbox">
+            <div class="profile card2">
 
-                <h2 id="username"><%= username %></h2>
+                <div class="content bbox">
+
+                    <h2 id="username"><%= username %></h2>
+
+                    <a id="settings" href="/settings"><i class="fas fa-cog fa-2x"></i></a>
+
+                </div>
 
             </div>
 
