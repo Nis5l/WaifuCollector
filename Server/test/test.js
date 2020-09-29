@@ -40,6 +40,8 @@ function openPack()
         {
             if (!error && response.statusCode == 200) {
                 console.log(body);
+                //console.log(body.cards[0].card);
+                //console.log(response);
                 token = body.token;
             }
         }

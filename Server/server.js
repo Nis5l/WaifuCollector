@@ -17,6 +17,7 @@ const port = 100;
 const userLen = [4,20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
+const packSize = 1;
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
 
 var clients = {};
@@ -161,28 +162,30 @@ app.post('/pack', (req, res) =>
                 var date = moment(nowDate).add(packCooldown, 'seconds');
                 var packDate = moment(parseInt(clients[userID].packTime));
         
-                //console.log(clients[userID].packTime);
-                //console.log(nowDate);
-                //console.log(packDate);
-                //console.log(date);
-                //console.log(date.isAfter(nowDate));
-                
                 if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate) || !packDate.isValid())
                 {
                     clients[userID].packTime = date.valueOf();
-                    database.getRandomCard((card) => {
-                        var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
-                        database.addCard(userID, card.id, quality);
-                        card.cardImage = imageBase + card.cardImage;
-                        database.getCardType(card.typeID, (result) => {
-                            card.type = result;
-                            res.send({packTime: "0", message:"OK", id: card, quality: quality});
+                    var cards = [];
+                    for(var i = 0; i < packSize; i++)
+                    {
+                        database.getRandomCard((card) => {
+                            var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
+                            database.addCard(userID, card.id, quality);
+                            card.cardImage = imageBase + card.cardImage;
+                            database.getCardType(card.typeID, (result) => {
+                                card.type = result;
+                                cards.push({card: card, quality: quality});
+                                if(i == packSize)
+                                {
+                                    res.send({packTime: "0", message:"OK", cards: cards});
+                                }
+                            });
                         });
-                    });
+                    }
                     return;
                 }
         
-                res.send({packTime: packDate.diff(nowDate).seconds(), message:"WAIT", ids: []});
+                res.send({packTime: packDate.diff(nowDate).seconds(), message:"WAIT", cards: []});
                 return;
         
             }   
