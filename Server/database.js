@@ -1,6 +1,8 @@
 const sql = require('mysql')
 const bcrypt = require('bcrypt');
+
 const packTime = "PACKTIME";
+const friend = "FRIEND";
 
 var con = sql.createConnection({
     host: "localhost",
@@ -21,6 +23,8 @@ module.exports = {
             con.query("CREATE TABLE IF NOT EXISTS cardtype ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
             con.query("CREATE TABLE IF NOT EXISTS unlocked ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `cardID` INT NOT NULL , `quality` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
             con.query("CREATE TABLE IF NOT EXISTS data ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `key` TEXT NOT NULL , `value` LONGTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            //cardTypes();
+            //cards();
         });
     },
 
@@ -89,7 +93,7 @@ module.exports = {
     setPackTime: function setPackTime(userID, time)
     {
         con.query("UPDATE `data` SET `value` = '" + time + "' WHERE `data`.`userID` = " + userID + " AND `data`.`key` = \"" + packTime +"\"", function (err, result, fields) {
-            if(result.affectedRows == 0)
+            if(result == undefined || result.affectedRows == 0)
             {
                 con.query("INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" + userID + ", '" + packTime + "', '" + time + "')", function (err, result, fields) {
                 });
@@ -157,6 +161,24 @@ module.exports = {
 
         });
 
+    },
+
+    addFriend: function addFriend(userID, friendID)
+    {
+        con.query("INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" + userID + ", '" + friend + "', '" + friendID + "')", function (err, result, fields) {
+        });
+    },
+
+    getFriends: function getFriends(userID, callback)
+    {
+        con.query("SELECT * FROM data WHERE `userID` = " + userID + " AND `key` = \"" + friend +"\"", function (err, result, fields) {
+            if(result == undefined || result.length == 0)
+            {
+                callback(null);
+                return;
+            }
+            callback(result);
+        });
     }
 
 }
@@ -251,7 +273,7 @@ function cardTypes()
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('13', 'Food Wars!')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('14', 'Naruto')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('15', 'My Hero Academia')");
-        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('16', 'Heaven's Lost Property')");
+        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('16', 'Heavens Lost Property')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('17', 'Sakurasou no Pet na Kanojo')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('18', 'Plastic Memories')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('19', 'Angel Beats!')");

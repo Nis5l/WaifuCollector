@@ -60,12 +60,29 @@ function changePass(user, pass, newpass)
     );
 }
 
+function getfriends()
+{
+    request.post(
+        'http://127.0.0.1:100/getfriends',
+        { json: { token: tokenV} },
+        (error, response, body) => 
+        {
+            if (!error && response.statusCode == 200) {
+                console.log(body);
+                token = body.token;
+            }
+        }
+    );
+}
+
 async function main()
 {
     console.log("GO");
     register("Test123", "Test1234");
     await io.read();
     login("Test123", "Test1234");
+    await io.read();
+    getfriends();
     await io.read();
     openPack();
 }

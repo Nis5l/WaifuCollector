@@ -48,7 +48,7 @@ app.post('/login', (req, res) =>
 
         if(b)
         {
-            createCache(userIDV, ()=>{});
+            createCache(userIDV, username, ()=>{});
         }
     });
 });
@@ -120,12 +120,12 @@ app.post('/pack', (req, res) =>
         var decoded = jwt.verify(tokenV, jwtSecret);
     }catch(JsonWebTokenError)
     {
-        res.send({status : 0, message: "\"TF you doing here nigga, identify yourself, who tf are you\""});
+        res.send({status : 1, message: "\"TF you doing here nigga, identify yourself, who tf are you\""});
         return;
     }
     if(clients[decoded.id] == undefined)
     {
-        createCache(decoded.id, run);
+        createCache(decoded.id, decoded.username, run);
     }else
     {
         run(decoded.id);
@@ -139,8 +139,9 @@ app.post('/pack', (req, res) =>
         }
         else
         {
-            createCache(decoded.id);
-            packCallBack(decoded.id);
+            createCache(decoded.id, decoded.username, () => {
+                packCallBack(decoded.id);
+            }); 
             return;
         }
 
@@ -148,7 +149,7 @@ app.post('/pack', (req, res) =>
         {
             if(clients[userID] == undefined)
             {
-                createCache(userID, run);
+                createCache(userID, decoded.username, run);
             }else
             {
                 run(userID);
@@ -213,6 +214,62 @@ app.post('/passchange', (req, res) => {
     });
 });
 
+app.post('/getfriends', (req, res) => {
+    var tokenV = req.body.token;
+    try
+    {
+        var decoded = jwt.verify(tokenV, jwtSecret);
+    }catch(JsonWebTokenError)
+    {
+        res.send({status : 1, message: "\"TF you doing here nigga, identify yourself, who tf are you\""});
+        return;
+    }
+
+    if(clients[decoded.id] == undefined)
+    {
+        createCache(decoded.id, decoded.username, run);
+    }else
+    {
+        run(decoded.id);
+    }
+
+    function run(userID)
+    {
+        var friendIDs = clients[userID].getFriends();
+        var friends = [];
+        for(var i = 0; i < friendIDs.length; i++)
+        {
+            var id = friendIDs[i];
+            if(clients[id] != undefined)
+            {
+                friends.push({userID: id, username: clients[id].username});
+
+                if(i == friendIDs.length)
+                {
+                    res.send({status: 0, friends: friends});
+                }
+
+            }else
+            {
+                database.getUserName(id, (username) => {
+                    if(username != null)
+                    {
+                        createCache(id, username, ()=>
+                        {
+                            friends.push({userID: id, username: clients[id].username});
+                            if(i == friendIDs.length)
+                            {
+                                res.send({status: 0, friends: friends});
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        
+    }
+});
+
 function checkUser(username)
 {
     if(username == undefined || username.length < userLen[0] || username.length > userLen[1]) return 1;
@@ -227,11 +284,11 @@ function checkPass(password)
     return 0;
 }
 
-function createCache(userIDV, callback)
+function createCache(userIDV, username, callback)
 {
     if(!clients[userIDV])
     {
-        clients[userIDV] = new Client(userIDV, callback);
+        clients[userIDV] = new Client(userIDV, username, callback);
         clients[userIDV].startDecay(cacheTime, clearCache);
     }
 }
