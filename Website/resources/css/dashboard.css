@@ -10,25 +10,29 @@
     margin: 5%;
     padding: 20px;
     background-color: #25282f; }
-    .wrapper .dashboard.card2 #username {
-      position: relative;
-      float: left;
-      font-size: 3em;
-      font-family: 'Oswald';
-      font-weight: 700;
-      text-transform: uppercase; }
-    .wrapper .dashboard.card2 #settings {
-      position: relative;
-      float: right;
-      color: #979CA7;
-      transition: transform 1s; }
-      .wrapper .dashboard.card2 #settings:hover {
-        color: #fff;
-        -webkit-animation: rotating 5s linear infinite;
-        -moz-animation: rotating 5s linear infinite;
-        -ms-animation: rotating 5s linear infinite;
-        -o-animation: rotating 5s linear infinite;
-        animation: rotating 5s linear infinite; }
+    .wrapper .dashboard.card2 .menu {
+      height: auto;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+      .wrapper .dashboard.card2 .menu #username {
+        display: inline-block;
+        font-size: 3em;
+        font-family: 'Oswald';
+        font-weight: 700;
+        text-transform: uppercase; }
+      .wrapper .dashboard.card2 .menu #settings {
+        position: relative;
+        float: right;
+        color: #979CA7;
+        transition: transform 1s;
+        margin-top: 10px;
+        margin-right: 10px; }
+        .wrapper .dashboard.card2 .menu #settings:hover {
+          color: #fff;
+          -webkit-animation: rotating 5s linear infinite;
+          -moz-animation: rotating 5s linear infinite;
+          -ms-animation: rotating 5s linear infinite;
+          -o-animation: rotating 5s linear infinite;
+          animation: rotating 5s linear infinite; }
 
 @-webkit-keyframes rotating /* Safari and Chrome */ {
   from {
