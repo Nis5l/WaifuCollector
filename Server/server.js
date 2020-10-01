@@ -194,8 +194,16 @@ app.post('/pack', (req, res) =>
 });
 
 app.post('/passchange', (req, res) => {
-    var username = req.body.username;
-    var password = req.body.password;
+    var tokenV = req.body.token;
+    try
+    {
+        var decoded = jwt.verify(tokenV, jwtSecret);
+    }catch(JsonWebTokenError)
+    {
+        res.send({status : 1, message: "\"TF you doing here nigga, identify yourself, who tf are you\""});
+        return;
+    }
+    var username = decoded.username;
     var newpassword = req.body.newpassword;
     switch(checkPass(newpassword))
     {
@@ -205,7 +213,7 @@ app.post('/passchange', (req, res) => {
                 return;
             }
     }
-    database.login(username, password, (b, messageV, userIDV) => {
+    database.userexists(username, (b) => {
         if(b)
         {
             database.changePass(username, newpassword);

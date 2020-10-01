@@ -32,7 +32,7 @@ module.exports = {
     {
         //SQL INJECTION
         con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() +  "\"", function (err, result, fields) {
-            if(result.length == 0)
+            if(result == undefined || result.length == 0)
             {
                 callback(0, "login failed", -1);
                 return;
@@ -179,8 +179,14 @@ module.exports = {
             }
             callback(result);
         });
-    }
+    },
 
+    userexists: function userexists(username, callback)
+    {
+        con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() + "\"", function (err, result, fields) {
+            callback(result != null && result.length > 0);
+        });
+    }
 }
 
 function cards()
@@ -315,7 +321,7 @@ function cardTypes()
 function userexists(username, callback)
 {
     con.query("SELECT * FROM user WHERE UPPER(username) = \"" + username.toUpperCase() + "\"", function (err, result, fields) {
-        callback(result.length > 0);
+        callback(result != null && result.length > 0);
     });
 }
 

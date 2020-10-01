@@ -1,0 +1,36 @@
+.wrapper {
+  padding: 150px 0px 0px 30px; }
+  .wrapper .pass_change {
+    padding: 0px 0px 2% 0px;
+    margin: 0px 60% 0px 0px;
+    background-color: #1b1c1f;
+    box-shadow: 0px 2px 10px #b047ca; }
+    .wrapper .pass_change .pass_change_top {
+      padding: 0px 0px 15px 0px;
+      box-shadow: 0px 2px 10px #b047ca; }
+      .wrapper .pass_change .pass_change_top .pass_change_text {
+        padding: 20px 0px 0px 25%; }
+    .wrapper .pass_change .pass_change_input1, .wrapper .pass_change .pass_change_input2 {
+      background-color: #1f2022;
+      color: #fff;
+      margin: 5% 0px 0px 10%;
+      width: 79%;
+      height: 40px;
+      font-size: 18pt;
+      text-align: center;
+      outline: none; }
+      .wrapper .pass_change .pass_change_input1:hover, .wrapper .pass_change .pass_change_input2:hover {
+        border-color: #b047ca; }
+    .wrapper .pass_change .pass_change_button {
+      background-color: #1f2022;
+      color: #fff;
+      margin: 5% 0px 0px 35%;
+      width: 30%;
+      height: 45px;
+      font-size: 18pt;
+      text-align: left center;
+      outline: none; }
+      .wrapper .pass_change .pass_change_button:hover {
+        border-color: #b047ca; }
+      .wrapper .pass_change .pass_change_button:focus {
+        border-color: #b047ca; }

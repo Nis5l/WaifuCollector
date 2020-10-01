@@ -1,0 +1,64 @@
+@import "base.scss";
+
+.wrapper
+{
+    padding: 150px 0px 0px 30px;
+    .pass_change
+    {
+        padding: 0px 0px 2% 0px;
+        margin: 0px 60% 0px 0px;
+
+        background-color: $settingsFields;
+        box-shadow: 0px 2px 10px $settingsShadow;
+        .pass_change_top
+        {
+            padding: 0px 0px 15px 0px;
+            box-shadow: 0px 2px 10px $settingsShadow;
+            .pass_change_text
+            {
+                //font-size: 24pt;
+                padding: 20px 0px 0px 25%;
+            }
+        }
+
+        .pass_change_input1, .pass_change_input2
+        {
+            background-color: $settingsInput;
+            color: $settingsInputColor;
+            margin: 5% 0px 0px 10%;
+            width: 79%;
+            height: 40px;
+            font-size: 18pt;
+            text-align: center;
+            outline: none;
+            &:hover{
+
+                border-color: $settingsShadow;
+            }
+        }
+
+        .pass_change_button
+        {
+            background-color: $settingsInput;
+            color: $settingsInputColor;
+            margin: 5% 0px 0px 35%;
+            width: 30%;
+            height: 45px;
+            font-size: 18pt;
+            text-align: left center;
+            outline: none;
+            &:hover{
+
+                border-color: $settingsShadow;
+
+            }
+
+            &:focus
+            {
+                
+                border-color: $settingsShadow;
+            }
+        }
+
+    }
+}
