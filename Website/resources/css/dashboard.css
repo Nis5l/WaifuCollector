@@ -57,3 +57,12 @@
     -webkit-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg); } }
+    .wrapper .dashboard.card2 .stats {
+      border-right: 1px solid rgba(255, 255, 255, 0.5); }
+      .wrapper .dashboard.card2 .stats .content {
+        margin: 25px;
+        text-align: center; }
+        .wrapper .dashboard.card2 .stats .content p:not(:last-child) {
+          margin-bottom: 15px; }
+    .wrapper .dashboard.card2 .collection .content {
+      margin: 25px; }

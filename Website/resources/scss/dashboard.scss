@@ -26,7 +26,7 @@
 
           height: auto;
 
-          border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+          border-bottom: 1px solid $sectionBorder;
 
           #username{
           
@@ -105,6 +105,36 @@
               }
 
           }
+
+      }
+
+      .stats{
+
+        border-right: 1px solid $sectionBorder;
+
+        .content{
+
+          margin: 25px;
+
+          text-align: center;
+
+          p:not(:last-child){
+
+            margin-bottom: 15px;
+
+          }
+
+        }
+
+      }
+
+      .collection{
+
+        .content{
+
+          margin: 25px;
+
+        }
 
       }
 
