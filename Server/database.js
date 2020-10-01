@@ -251,6 +251,15 @@ function cards()
         con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Papi', '39', 'Card_Papi.png')");
         con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rachnera Arachnera', '39', 'Card_RachneraArachnera.png')");
         con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Asia Argento', '30', 'Card_AsiaArgento.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Irina Jelavic', '40', 'Card_IrinaJelavic.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Boa Hancock', '21', 'Card_BoaHancock.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Historia Reiss', '6', 'Card_HistoriaReiss.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hanabi Hyuga', '14', 'Card_HanabiHyuga.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kaori Miyazono', '41', 'Card_KaoriMiyazono.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kurumu Kurono', '23', 'Card_KurumuKurono.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Lisesharte Atismata', '42', 'Card_LisesharteAtismata.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Moka Akashiya', '23', 'Card_MokaAkashiya.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ririka Momobami', '34', 'Card_RirikaMomobami.png')");
     });
 }
 
@@ -297,6 +306,9 @@ function cardTypes()
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('37', 'Code Geass')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('38', 'Seven deadly sins')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('39', 'Daily Life With A Monster Girl')");
+        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('40', 'Assassination Classroom')");
+        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('41', 'Your Lie in April')");
+        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('41', 'Undefeated Bahamut Chronicle')");
     });
 }
 

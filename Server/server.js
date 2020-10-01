@@ -302,7 +302,7 @@ function clearCache(userID)
     delete clients[userID];
 }
 
-console.log("Initializing DataBase")
+console.log("Initializing DataBase");
 database.init();
-var server = app.listen(port)
-console.log("Started on port %s", port)
+var server = app.listen(port);
+console.log("Started on port %s", port);
