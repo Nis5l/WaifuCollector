@@ -22,82 +22,121 @@
 
         background-color: $cardBg2;
 
-        #username{
+        .menu{
 
-            position: relative;
+          height: auto;
 
-            float: left;
+          border-bottom: 1px solid $sectionBorder;
+
+          #username{
+          
+              display: inline-block;
+
+              font-size: 3em;
+              font-family: 'Oswald';
+              font-weight: 700;
+          
+              text-transform: uppercase;
+          
+          }
         
-            font-size: 3em;
-            font-family: 'Oswald';
-            font-weight: 700;
-        
-            text-transform: uppercase;
-        
+          #settings{
+
+              position: relative;
+          
+              float: right;
+          
+              color: $settingsGearColor;
+                  
+              transition: transform 1s;
+
+              margin-top: 10px;
+              margin-right: 10px;
+          
+              &:hover{
+          
+                  color: $settingsGearColorHover;
+          
+                  -webkit-animation: rotating 5s linear infinite;
+                  -moz-animation: rotating 5s linear infinite;
+                  -ms-animation: rotating 5s linear infinite;
+                  -o-animation: rotating 5s linear infinite;
+                  animation: rotating 5s linear infinite;
+
+                  @-webkit-keyframes rotating /* Safari and Chrome */ {
+
+                      from {
+                        -webkit-transform: rotate(0deg);
+                        -o-transform: rotate(0deg);
+                        transform: rotate(0deg);
+                      }
+                  
+                      to {
+                        -webkit-transform: rotate(360deg);
+                        -o-transform: rotate(360deg);
+                        transform: rotate(360deg);
+                      }
+                  
+                  }
+                  
+                    @keyframes rotating {
+                  
+                      from {
+                  
+                        -ms-transform: rotate(0deg);
+                        -moz-transform: rotate(0deg);
+                        -webkit-transform: rotate(0deg);
+                        -o-transform: rotate(0deg);
+                        transform: rotate(0deg);
+                  
+                      }
+                  
+                      to {
+                  
+                        -ms-transform: rotate(360deg);
+                        -moz-transform: rotate(360deg);
+                        -webkit-transform: rotate(360deg);
+                        -o-transform: rotate(360deg);
+                        transform: rotate(360deg);
+                  
+                      }
+                  
+                  }   
+              }
+
+          }
+
+      }
+
+      .stats{
+
+        border-right: 1px solid $sectionBorder;
+
+        .content{
+
+          margin: 25px;
+
+          text-align: center;
+
+          p:not(:last-child){
+
+            margin-bottom: 15px;
+
+          }
+
         }
-        
-        #settings{
 
-            position: relative;
-        
-            float: right;
-        
-            color: $settingsGearColor;
-                
-            transition: transform 1s;
-        
-            &:hover{
-        
-                color: $settingsGearColorHover;
-        
-                -webkit-animation: rotating 5s linear infinite;
-                -moz-animation: rotating 5s linear infinite;
-                -ms-animation: rotating 5s linear infinite;
-                -o-animation: rotating 5s linear infinite;
-                animation: rotating 5s linear infinite;
+      }
 
-                @-webkit-keyframes rotating /* Safari and Chrome */ {
+      .collection{
 
-                    from {
-                      -webkit-transform: rotate(0deg);
-                      -o-transform: rotate(0deg);
-                      transform: rotate(0deg);
-                    }
-                
-                    to {
-                      -webkit-transform: rotate(360deg);
-                      -o-transform: rotate(360deg);
-                      transform: rotate(360deg);
-                    }
-                
-                }
-                
-                  @keyframes rotating {
-                
-                    from {
-                
-                      -ms-transform: rotate(0deg);
-                      -moz-transform: rotate(0deg);
-                      -webkit-transform: rotate(0deg);
-                      -o-transform: rotate(0deg);
-                      transform: rotate(0deg);
-                
-                    }
-                
-                    to {
-                
-                      -ms-transform: rotate(360deg);
-                      -moz-transform: rotate(360deg);
-                      -webkit-transform: rotate(360deg);
-                      -o-transform: rotate(360deg);
-                      transform: rotate(360deg);
-                
-                    }
-                
-                }   
-            }
+        .content{
+
+          margin: 25px;
 
         }
+
+      }
 
     }
 
