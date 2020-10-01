@@ -226,6 +226,12 @@ app.get("/dashboard", redirectLogin, function(req, res){
 
 });
 
+app.get("/settings", redirectLogin, function(req, res){
+
+    res.render("settings");
+
+});
+
 app.listen(port, function(){
 
     console.log("Server started at port %s", port);
