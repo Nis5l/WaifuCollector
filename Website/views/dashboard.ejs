@@ -40,24 +40,6 @@
                         <p>Cards unlocked: 16 / 67</p>
                         <p>Friends: 0</p>
                         <p>Friends online: 0</p>
-                        <p>Cards unlocked: 16 / 67</p>
-                        <p>Friends: 0</p>
-                        <p>Friends online: 0</p>
-                        <p>Cards unlocked: 16 / 67</p>
-                        <p>Friends: 0</p>
-                        <p>Friends online: 0</p>
-                        <p>Cards unlocked: 16 / 67</p>
-                        <p>Friends: 0</p>
-                        <p>Friends online: 0</p>
-                        <p>Cards unlocked: 16 / 67</p>
-                        <p>Friends: 0</p>
-                        <p>Friends online: 0</p>
-                        <p>Cards unlocked: 16 / 67</p>
-                        <p>Friends: 0</p>
-                        <p>Friends online: 0</p>
-                        <p>Cards unlocked: 16 / 67</p>
-                        <p>Friends: 0</p>
-                        <p>Friends online: 0</p>
 
                     </div>
 
@@ -66,7 +48,7 @@
                 <div class="grid_9 collection">
 
                     <div class="pack">
-                        <progress-ring name="progress" stroke="4" radius="130" progress="10"></progress-ring>
+                        <progress-ring name="progress" stroke="4" radius="130" progress=100 - (<%= time %> / <%= fulltime %> * 100) time=<%= time == 0 ? "Open": time %>></progress-ring>
                     </div>
                     <div class="inventory">
                     </div>
@@ -82,23 +64,68 @@
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous"></script>
 
-        <script>
+            <% if (time != undefined && fulltime != undefined) { %>
+                <script>
+                    const el = document.querySelector('progress-ring');
+                    var time = <%= time %>;
+                    var fulltime = <%= fulltime %>;
 
-            function sectionHeights() {
-                var height = $('.dashboard').outerHeight() - $('.dashboard .menu').outerHeight() -35;
-                $('.stats, .collection').css('min-height', height);
-            }
+                    const interval = setInterval(() => {
+                        time--;
+                        var perc = 100 - (time / fulltime * 100);
+                    
+                        if(perc > 100)
+                        {
+                            perc = 100;
+                            var timein = "Open";
+                        }else
+                        {
+                            var timein = time;
+                        }
+                            
+                        el.setAttribute('progress', perc);
+                        el.setAttribute('time', timein);
+                        if (perc === 100)
+                            clearInterval(interval);
+                    }, 1000);
+                </script>
+            <% } %>
 
-            $(document).ready(sectionHeights);
+                <script>
+                    
+                    window.onmousedown = function(e) {
+                        const el = document.querySelector('progress-ring');
+                        x = e.pageX;
+                        y = e.pageY;
 
-            $(window).on('resize', function(){
+                        if (el.isClicked(x,y)) {
+                            //console.log("test");
+                        }
+                    }
+                </script>
 
-                sectionHeights();
+            <script>
+                //el.setProgress(50);
+                
+                //const time = this.getAttribute('time');
+                //const time = ${time};
+                //const fulltime = this.getAttribute('fulltime');
 
-            });
+                function sectionHeights() {
+                    var height = $('.dashboard').outerHeight() - $('.dashboard .menu').outerHeight() -35;
+                    $('.stats, .collection').css('height', height);
+                }
 
-        </script>
+                $(document).ready(sectionHeights);
 
+                $(window).on('resize', function(){
+
+                    sectionHeights();
+
+                });
+
+            </script>
+            
         <script src="../resources/components.js"></script>
 
     </body>

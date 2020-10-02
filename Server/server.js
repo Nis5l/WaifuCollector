@@ -92,13 +92,31 @@ app.post('/register', (req, res) =>
 
 });
 
-app.get('/getname/:userID', (req, res) => {
+app.post('/getName', (req, res) => {
 
-    var userID = req.params.userID;
+    var token = req.body.token;
+    try
+    {
+        var decoded = jwt.verify(token, jwtSecret);
+    }catch(JsonWebTokenError)
+    {
+        res.send({status : 1, message: "Identification Please"});
+        return;
+    }
 
-    database.getUserName(userID, (username) =>{
+    if(clients[decoded.id] == undefined)
+    {
+        createCache(decoded.id, decoded.username, run);
+    }else
+    {
+        run(decoded.id);
+    }
 
-        if(username == "null"){
+    function run(userID)
+    {
+        username = clients[userID].username;
+
+        if(!username || username == "null" || username == null){
 
             res.send({status: 1, message: "User with userID " + userID + " not found!"});
             return;
@@ -106,9 +124,7 @@ app.get('/getname/:userID', (req, res) => {
         }
 
         res.send({status: 0, name: username});
-
-    });
-
+    }
     return;
 
 });
@@ -121,7 +137,7 @@ app.post('/pack', (req, res) =>
         var decoded = jwt.verify(tokenV, jwtSecret);
     }catch(JsonWebTokenError)
     {
-        res.send({status : 1, message: "\"TF you doing here nigga, identify yourself, who tf are you\""});
+        res.send({status : 1, message: "Identification Please"});
         return;
     }
     if(clients[decoded.id] == undefined)
@@ -200,7 +216,7 @@ app.post('/passchange', (req, res) => {
         var decoded = jwt.verify(tokenV, jwtSecret);
     }catch(JsonWebTokenError)
     {
-        res.send({status : 1, message: "\"TF you doing here nigga, identify yourself, who tf are you\""});
+        res.send({status : 1, message: "Identification Please"});
         return;
     }
     var username = decoded.username;
@@ -280,6 +296,46 @@ app.post('/getfriends', (req, res) => {
         }
         
     }
+});
+
+app.post('/getPackTime', (req, res) => {
+
+    var token = req.body.token;
+    try
+    {
+        var decoded = jwt.verify(token, jwtSecret);
+    }catch(JsonWebTokenError)
+    {
+        res.send({status : 1, message: "Identification Please"});
+        return;
+    }
+
+    if(clients[decoded.id] == undefined)
+    {
+        createCache(decoded.id, decoded.username, run);
+    }else
+    {
+        run(decoded.id);
+    }
+
+    function run(userID)
+    {
+        username = clients[userID].packTime;
+
+        var nowDate = moment();
+        var packDate = moment(parseInt(clients[userID].packTime));
+
+        if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate) || !packDate.isValid())
+        {
+            res.send({status: 0, packTime: 0, fullTime: packCooldown});
+            return;
+        }else
+        {
+            res.send({status: 1, packTime: packDate.diff(nowDate).seconds(), fullTime: packCooldown});
+        }
+    }
+    return;
+
 });
 
 function checkUser(username)
