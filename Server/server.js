@@ -205,6 +205,7 @@ app.post('/passchange', (req, res) => {
     }
     var username = decoded.username;
     var newpassword = req.body.newpassword;
+    console.log("Passchange: " + username + " " + newpassword);
     switch(checkPass(newpassword))
     {
         case 1:

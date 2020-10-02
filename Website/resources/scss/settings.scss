@@ -21,7 +21,7 @@
             }
         }
 
-        .pass_change_input1, .pass_change_input2
+        input[type="password"]
         {
             color: $inputColor;
 
@@ -49,7 +49,7 @@
             }
         }
 
-        .pass_change_button
+        input[name="submit"]
         {
             color: black;
             padding: 10px 30px;
@@ -79,7 +79,7 @@
             {
                 border-color: #ffffff;
             }
-            
+
             &:disabled{
 
                 background-color: $inputBorderDisabled;
