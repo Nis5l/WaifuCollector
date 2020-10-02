@@ -67,20 +67,18 @@
     .wrapper .dashboard.card2 .collection .pack {
       float: left;
       width: 40%;
-      height: 88%;
-      border-right: 1px solid rgba(255, 255, 255, 0.5);
-      margin-left: 0.8%;
-      padding-top: 6%; }
+      height: 100%;
+      border-right: 1px solid rgba(255, 255, 255, 0.5); }
       .wrapper .dashboard.card2 .collection .pack .progress {
         fill: transparent;
         stroke-width: 4;
-        stroke: white;
+        stroke: red;
         transition: 0.35s stroke-dashoffset;
         transform: rotate(-90deg);
         transform-origin: 50% 50%; }
-    .wrapper .dashboard.card2 .collection .time {
-      font-size: 100pt; }
-    .wrapper .dashboard.card2 .collection .inventory {
-      float: right;
-      height: 60%;
-      width: 50%; }
+      .wrapper .dashboard.card2 .collection .pack .time {
+        font-size: 100pt; }
+      .wrapper .dashboard.card2 .collection .pack .inventory {
+        float: right;
+        height: 60%;
+        width: 50%; }
