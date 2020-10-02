@@ -68,6 +68,55 @@ function updateFiles(){
     
   }
 
+  setTimeout(combineCSSFiles, 1000);
+
+}
+
+function combineCSSFiles(){
+
+ fs.open(cssDir + "/all.css", 'w', (err, file) => {
+
+    if (err) {
+        throw err;
+    }
+
+    getDirectories(cssDir, function (err, files) {
+
+      if (err) {
+  
+        console.error('Error', err);
+  
+      } else {
+  
+        files.forEach(element => {
+
+            if(element.endsWith(".css") && element != "all.css"){
+  
+              fs.readFile(element, (err, data) => {
+                if(err) {
+                    throw err;
+                }
+  
+                fs.write(file, data.toString(), function(err){
+  
+                  console.log(element);
+
+                  if (err) return console.error(err);
+  
+                });
+  
+            });
+  
+            }
+  
+        });
+  
+      }
+  
+    });
+
+  });
+
 }
 
 updateFiles();
