@@ -2,7 +2,6 @@ const request = require('request');
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-
 require("./LessManager.js");
 
 const app = express();
