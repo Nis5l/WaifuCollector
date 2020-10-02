@@ -9,6 +9,7 @@ class ProgressRing extends HTMLElement {
     this._root = this.attachShadow({mode: 'open'});
     this._root.innerHTML = `
       <svg
+
         height="${radius * 2}"
         width="${radius * 2}"
        >
@@ -22,8 +23,9 @@ class ProgressRing extends HTMLElement {
            cx="${radius}"
            cy="${radius}"
         />
+        <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">30:10</text>
       </svg>
-
+      
       <style>
         circle {
           transition: stroke-dashoffset 0.35s;

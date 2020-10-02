@@ -67,8 +67,10 @@
     .wrapper .dashboard.card2 .collection .pack {
       float: left;
       width: 40%;
-      height: 100%;
-      border-right: 1px solid rgba(255, 255, 255, 0.5); }
+      height: 88%;
+      border-right: 1px solid rgba(255, 255, 255, 0.5);
+      margin-left: 0.8%;
+      padding-top: 6%; }
       .wrapper .dashboard.card2 .collection .pack .progress {
         fill: transparent;
         stroke-width: 4;
