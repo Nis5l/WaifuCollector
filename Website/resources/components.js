@@ -12,6 +12,10 @@ class ProgressRing extends HTMLElement {
         height="${radius * 2}"
         width="${radius * 2}"
        >
+         <style>
+          margin: auto;
+          padding: auto;
+         </style>
          <circle
            stroke="white"
            stroke-dasharray="${this._circumference} ${this._circumference}"
@@ -19,12 +23,19 @@ class ProgressRing extends HTMLElement {
            stroke-width="${stroke}"
            fill="transparent"
            r="${normalizedRadius}"
-           cx="${radius}"
-           cy="${radius}"
+           cx= 50%
+           cy= 50%
         />
+        <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">30:10</text>
       </svg>
-
+      
       <style>
+        svg
+        {
+          width: 100%;
+          height: 100%;
+          position: relative;
+        }
         circle {
           transition: stroke-dashoffset 0.35s;
           transform: rotate(-90deg);

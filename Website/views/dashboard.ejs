@@ -9,7 +9,7 @@
         <title>WaifuCollector | Dashboard</title>
 
         <link rel="stylesheet" href="resources/css/all.css">
-
+		
     </head>
 
     <body>
@@ -62,18 +62,10 @@
 
                 <div class="grid_9 collection">
 
-                    <svg class="pack">
-                        <circle
-                            class="progress"
-                            r="40%"
-                            cx="50%"
-                            cy="50%"/>
-                            <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".3em">30:10</text>
-                    </svg>
+                    <div class="pack">
+                        <progress-ring name="progress" stroke="4" radius="130" progress="10"></progress-ring>
+                    </div>
                     <div class="inventory">
-
-                        
-
                     </div>
 
                 </div>
@@ -103,6 +95,8 @@
             });
 
         </script>
+
+        <script src="../resources/components.js"></script>
 
     </body>
 
