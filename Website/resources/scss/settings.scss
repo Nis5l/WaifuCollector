@@ -23,41 +23,70 @@
 
         .pass_change_input1, .pass_change_input2
         {
-            background-color: $settingsInput;
-            color: $settingsInputColor;
-            margin: 5% 0px 0px 10%;
-            width: 79%;
-            height: 40px;
-            font-size: 18pt;
-            text-align: center;
-            outline: none;
-            &:hover{
+            color: $inputColor;
 
-                border-color: $settingsShadow;
+            background: $inputBg;
+            display: block;
+
+            text-align: center;
+
+            border: 2px solid $settingsShadow;
+
+            width: 70%;
+            outline: none;
+
+            margin: 20px auto;
+            padding: 10px 4px;
+
+            border-radius: 25px;
+
+            &:focus{
+
+                border-color: $settingsInputColor;
+
+                transition: border 0.2s ease-in-out;
+
             }
         }
 
         .pass_change_button
         {
-            background-color: $settingsInput;
-            color: $settingsInputColor;
-            margin: 5% 0px 0px 35%;
-            width: 30%;
-            height: 45px;
-            font-size: 18pt;
-            text-align: left center;
+            color: black;
+            padding: 10px 30px;
+            margin: 0px 0px 0px 29%;
+            width: 40%;
+
             outline: none;
-            &:hover{
+            border: 2px solid $settingsShadow;
+            background-color: $settingsShadow;
 
-                border-color: $settingsShadow;
+            border-radius: 25px;
+            
+            &:enabled{
+
+                &:hover{
+
+                    color: $inputColor;
+                    background-color: rgba(0, 0, 0, 0);
+
+                    transition: background 0.2s ease-in-out;
+
+                }
 
             }
 
-            &:focus
+            &:active
             {
-                
-                border-color: $settingsShadow;
+                border-color: #ffffff;
             }
+            
+            &:disabled{
+
+                background-color: $inputBorderDisabled;
+                border-color: $inputBorderDisabled;
+
+            }
+
         }
 
     }
