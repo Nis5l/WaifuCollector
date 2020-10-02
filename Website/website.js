@@ -2,7 +2,6 @@ const request = require('request');
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-
 require("./LessManager.js");
 
 const app = express();
@@ -12,6 +11,8 @@ app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
 
 const port = 8000;
+
+var token;
 
 const{
 
@@ -97,7 +98,6 @@ app.get("/login", redirectDashboard,  function(req, res){
 });
 
 app.post("/login", redirectDashboard, function(req, res){
-
     const { username, password } = req.body;
     
     if(username && password){
@@ -145,6 +145,35 @@ app.post("/login", redirectDashboard, function(req, res){
     }else{
 
         res.redirect("/login?errorCode=2&errorMessage=Username or password are empty");
+
+    }
+
+});
+
+app.post("/passchange", function(req, res){
+
+    const { password, password2 } = req.body;
+    console.log(password + " " + password2);
+    if(password && password2 && password == password2 && token){
+
+        request.post(
+            'http://' + API_HOST + ":" + API_PORT + "/passchange",
+            { json: { token: token, newpassword: password} },
+            (error, response, body) => 
+            {
+                if (!error && response.statusCode == 200) {
+
+                    if(body.status == 0){
+                        res.redirect("/dashboard");
+                        //alert("Password Changed");
+                    }
+                }
+            }
+        );
+
+    }else{
+
+        res.redirect("/settings?errorCode=2&errorMessage=password empty or dont match");
 
     }
 
