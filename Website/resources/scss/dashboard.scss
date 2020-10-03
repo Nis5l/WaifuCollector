@@ -1,29 +1,29 @@
 @import "___base.scss";
 
+html, body {margin: 0; height: 100%; overflow: hidden}
+
 .wrapper{
 
     position: relative;
     
     width: 100%;
     min-height: calc(100vh - 120px/* -120px header -80px box*/);
-
-    margin-top: 120px;
-
+    overflow: hidden;
+    //margin-top: 120px;
+    //padding-top: 0px;
     .dashboard.card2{
-
         position: relative;
 
         width: calc(90% - 40px);
         min-height: calc(70vh - 40px);
 
-        margin: 5%;
+        margin: 0 5% 5% 5%;
 
         padding: 20px;
 
         background-color: $cardBg2;
 
         .menu{
-
           border-bottom: 1px solid $sectionBorder;
 
           #username{
@@ -112,7 +112,7 @@
 
         .content{
 
-          margin: 25px;
+          margin-top: 25px;
 
           text-align: center;
 

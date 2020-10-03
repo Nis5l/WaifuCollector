@@ -1,13 +1,18 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden; }
+
 .wrapper {
   position: relative;
   width: 100%;
   min-height: calc(100vh - 120px);
-  margin-top: 120px; }
+  overflow: hidden; }
   .wrapper .dashboard.card2 {
     position: relative;
     width: calc(90% - 40px);
     min-height: calc(70vh - 40px);
-    margin: 5%;
+    margin: 0 5% 5% 5%;
     padding: 20px;
     background-color: #25282f; }
     .wrapper .dashboard.card2 .menu {
@@ -59,7 +64,7 @@
     .wrapper .dashboard.card2 .stats {
       border-right: 1px solid rgba(255, 255, 255, 0.5); }
       .wrapper .dashboard.card2 .stats .content {
-        margin: 25px;
+        margin-top: 25px;
         text-align: center; }
         .wrapper .dashboard.card2 .stats .content p:not(:last-child) {
           margin-bottom: 15px; }
