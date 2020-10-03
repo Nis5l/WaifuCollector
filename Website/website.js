@@ -290,6 +290,10 @@ app.get("/settings", redirectLogin, function(req, res){
 
 });
 
+app.get("/pack", redirectLogin, function(req, res){
+    res.render("pack");
+})
+
 app.listen(port, function(){
 
     console.log("Server started at port %s", port);

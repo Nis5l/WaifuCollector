@@ -10,6 +10,34 @@ body {
   height: 100%;
   background-color: #15171b;
   color: white; }
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: #1b1c1f;
+  box-shadow: 0px 2px 10px #00ff00;
+  z-index: 100; }
+  .nav .logo {
+    float: left;
+    margin-left: 30px;
+    margin-top: 40px;
+    color: white;
+    text-decoration: none; }
+  .nav .nav-list {
+    float: right;
+    list-style-type: none;
+    margin-top: 40px;
+    margin-right: 30px; }
+  .nav .nav-list li {
+    display: inline; }
+    .nav .nav-list li a {
+      color: white;
+      text-decoration: none;
+      padding: 40px 15px; }
+      .nav .nav-list li a:hover {
+        background-color: rgba(0, 0, 0, 0.2); }
 .wrapper {
   position: relative;
   width: 100%;
@@ -83,16 +111,16 @@ body {
       .wrapper .dashboard.card2 .collection .pack .progress {
         fill: transparent;
         stroke-width: 4;
-        stroke: white;
+        stroke: red;
         transition: 0.35s stroke-dashoffset;
         transform: rotate(-90deg);
         transform-origin: 50% 50%; }
-    .wrapper .dashboard.card2 .collection .time {
-      font-size: 100pt; }
-    .wrapper .dashboard.card2 .collection .inventory {
-      float: right;
-      height: 60%;
-      width: 50%; }
+      .wrapper .dashboard.card2 .collection .pack .time {
+        font-size: 100pt; }
+      .wrapper .dashboard.card2 .collection .pack .inventory {
+        float: right;
+        height: 60%;
+        width: 50%; }
 .home {
   height: 100vh;
   width: 100%; }
@@ -133,34 +161,47 @@ body {
 
 .section:hover .title {
   background-size: 100px 1px; }
-.nav {
+.open {
+  overflow: hidden;
+  padding-top: 100px;
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100px;
-  background-color: #1b1c1f;
-  box-shadow: 0px 2px 10px #00ff00;
-  z-index: 100; }
-  .nav .logo {
+  height: 100%;
+  /* Slide the second panel in */ }
+  .open .openBox {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    opacity: 0; }
+  .open .left {
     float: left;
-    margin-left: 30px;
-    margin-top: 40px;
-    color: white;
-    text-decoration: none; }
-  .nav .nav-list {
+    height: 100%;
+    width: 49.9%;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 1s ease-out; }
+    .open .left .info {
+      margin-top: 43%;
+      margin-left: 88.5%; }
+  .open .right {
     float: right;
-    list-style-type: none;
-    margin-top: 40px;
-    margin-right: 30px; }
-  .nav .nav-list li {
-    display: inline; }
-    .nav .nav-list li a {
-      color: white;
-      text-decoration: none;
-      padding: 40px 15px; }
-      .nav .nav-list li a:hover {
-        background-color: rgba(0, 0, 0, 0.2); }
+    margin-top: 0px;
+    height: 100%;
+    width: 49.9%;
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 1s ease-out; }
+    .open .right .info {
+      margin-left: 0.5%;
+      margin-top: 43%; }
+  .open .openBox:checked ~ .left {
+    transform: translateX(0); }
+  .open .openBox:checked ~ .right {
+    transform: translateX(0); }
+  .open .left {
+    transform: translateX(-100%); }
+  .open .right {
+    transform: translateX(100%); }
 .content {
   width: 100%;
   height: 100vh; }
@@ -204,50 +245,6 @@ body {
         background-color: rgba(0, 0, 0, 0);
         transition: background 0.2s ease-in-out; }
       .content .card input[type="submit"]:disabled {
-        background-color: #202320;
-        border-color: #202320; }
-.wrapper {
-  padding: 150px 0px 0px 30px; }
-  .wrapper .pass_change {
-    padding: 0px 0px 2% 0px;
-    margin: 0px 60% 0px 0px;
-    background-color: #1b1c1f;
-    box-shadow: 0px 2px 10px #b047ca; }
-    .wrapper .pass_change .pass_change_top {
-      padding: 0px 0px 15px 0px;
-      box-shadow: 0px 2px 10px #b047ca; }
-      .wrapper .pass_change .pass_change_top .pass_change_text {
-        padding: 20px 0px 0px 25%; }
-    .wrapper .pass_change input[type="password"] {
-      color: #fff;
-      background: none;
-      display: block;
-      text-align: center;
-      border: 2px solid #b047ca;
-      width: 70%;
-      outline: none;
-      margin: 20px auto;
-      padding: 10px 4px;
-      border-radius: 25px; }
-      .wrapper .pass_change input[type="password"]:focus {
-        border-color: #fff;
-        transition: border 0.2s ease-in-out; }
-    .wrapper .pass_change input[name="submit"] {
-      color: black;
-      padding: 10px 30px;
-      margin: 0px 0px 0px 29%;
-      width: 40%;
-      outline: none;
-      border: 2px solid #b047ca;
-      background-color: #b047ca;
-      border-radius: 25px; }
-      .wrapper .pass_change input[name="submit"]:enabled:hover {
-        color: #fff;
-        background-color: rgba(0, 0, 0, 0);
-        transition: background 0.2s ease-in-out; }
-      .wrapper .pass_change input[name="submit"]:active {
-        border-color: #ffffff; }
-      .wrapper .pass_change input[name="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }
 
@@ -993,4 +990,59 @@ body {
 		.fullsize {max-width:100%;}
 		.bbox {box-sizing:border-box;}
 		.prel {position:relative;}
-		.hide {display:none;}
+		.hide {display:none;}@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Epilogue'; }
+
+body {
+  height: 100%;
+  background-color: #15171b;
+  color: white; }
+.wrapper {
+  padding: 150px 0px 0px 30px; }
+  .wrapper .pass_change {
+    padding: 0px 0px 2% 0px;
+    margin: 0px 60% 0px 0px;
+    background-color: #1b1c1f;
+    box-shadow: 0px 2px 10px #b047ca; }
+    .wrapper .pass_change .pass_change_top {
+      padding: 0px 0px 15px 0px;
+      box-shadow: 0px 2px 10px #b047ca; }
+      .wrapper .pass_change .pass_change_top .pass_change_text {
+        padding: 20px 0px 0px 25%; }
+    .wrapper .pass_change input[type="password"] {
+      color: #fff;
+      background: none;
+      display: block;
+      text-align: center;
+      border: 2px solid #b047ca;
+      width: 70%;
+      outline: none;
+      margin: 20px auto;
+      padding: 10px 4px;
+      border-radius: 25px; }
+      .wrapper .pass_change input[type="password"]:focus {
+        border-color: #fff;
+        transition: border 0.2s ease-in-out; }
+    .wrapper .pass_change input[name="submit"] {
+      color: black;
+      padding: 10px 30px;
+      margin: 0px 0px 0px 29%;
+      width: 40%;
+      outline: none;
+      border: 2px solid #b047ca;
+      background-color: #b047ca;
+      border-radius: 25px; }
+      .wrapper .pass_change input[name="submit"]:enabled:hover {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0);
+        transition: background 0.2s ease-in-out; }
+      .wrapper .pass_change input[name="submit"]:active {
+        border-color: #ffffff; }
+      .wrapper .pass_change input[name="submit"]:disabled {
+        background-color: #202320;
+        border-color: #202320; }

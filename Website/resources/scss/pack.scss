@@ -1,0 +1,67 @@
+@import "___base.scss";
+
+.open
+{
+    overflow: hidden;
+    .openBox
+    {
+        position: absolute;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        opacity: 0;
+    }
+
+    padding-top: 100px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    //background-color: red;
+    .left
+    {
+        float: left;
+        height: 100%;
+        width: 49.9%;
+        border-right: 1px solid $sectionBorder;
+        transition: all 1s ease-out;
+        .info
+        {
+            margin-top: 43%;
+            margin-left: 88.5%;
+        }
+    }
+    .right
+    {
+        float: right;
+        //margin-left: 50%;
+        margin-top: 0px;
+        height: 100%;
+        width: 49.9%;
+        border-left: 1px solid $sectionBorder;
+        transition: all 1s ease-out;
+        .info
+        {
+            margin-left: 0.5%;
+            margin-top: 43%;
+        }
+    }
+
+    .openBox:checked ~ .left {
+        transform: translateX(0);
+    }
+            
+    /* Slide the second panel in */
+    .openBox:checked ~ .right {
+        transform: translateX(0);
+    }
+    
+    .left {
+        transform: translateX(-100%);
+    }
+      
+      .right {
+          transform: translateX(100%);
+    }
+
+}

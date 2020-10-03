@@ -1,0 +1,41 @@
+.open {
+  overflow: hidden;
+  padding-top: 100px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* Slide the second panel in */ }
+  .open .openBox {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    opacity: 0; }
+  .open .left {
+    float: left;
+    height: 100%;
+    width: 49.9%;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 1s ease-out; }
+    .open .left .info {
+      margin-top: 43%;
+      margin-left: 88.5%; }
+  .open .right {
+    float: right;
+    margin-top: 0px;
+    height: 100%;
+    width: 49.9%;
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 1s ease-out; }
+    .open .right .info {
+      margin-left: 0.5%;
+      margin-top: 43%; }
+  .open .openBox:checked ~ .left {
+    transform: translateX(0); }
+  .open .openBox:checked ~ .right {
+    transform: translateX(0); }
+  .open .left {
+    transform: translateX(-100%); }
+  .open .right {
+    transform: translateX(100%); }
