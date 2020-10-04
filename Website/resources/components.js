@@ -91,7 +91,7 @@ class ProgressRing extends HTMLElement {
 
   isClicked(x,y)
   {
-    if(this.time != 0)
+    if(this.time != 0 && this.time != "Open")
       return;
     const circle = this._root.querySelector('circle');
     const circleX = circle.getBoundingClientRect().right - (circle.getBoundingClientRect().right - circle.getBoundingClientRect().left)  / 2;
