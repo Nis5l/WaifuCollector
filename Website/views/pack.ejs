@@ -16,15 +16,21 @@
         <%- include('partials/nav.ejs') %>
 
         <div class="open">
-            <input class="openBox" type="checkbox" checked>
-            <div class="left">
-                <h1 class="info">Click</h1>
-            </div>
-            <div class="right">
-                <h1 class="info">to Open</h1>
-            </div>
+            <input class="openBox" type="button">
+            
         </div>
 
     </body>
-
+    <script>
+        document.querySelector(".openBox").onclick = () =>
+        {
+            // var form = document.createElement('form');
+            // document.body.appendChild(form);
+            // form.method = 'get';
+            // form.action = '/pack';
+            // form.submit();
+            // form.setAttribute()
+            
+        };
+    </script>
 </html>

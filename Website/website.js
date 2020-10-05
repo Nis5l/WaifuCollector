@@ -2,6 +2,7 @@ const request = require('request');
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const { cookie } = require('request');
 require("./CSSManager.js");
 
 const app = express();
@@ -128,10 +129,9 @@ app.post("/login", redirectDashboard, function(req, res){
 
                         res.redirect("/dashboard");
 
-                    }else{
-
+                    }else
+                    {
                         res.redirect("/login?errorCode=" + body.status + "&errorMessage=" + body.message);
-
                     }
 
                 }else{
@@ -195,7 +195,6 @@ app.get("/register", redirectDashboard, function(req, res){
 app.post("/register", redirectDashboard, function(req, res){
 
     const { username, password } = req.body;
-    
     if(username && password){
 
         request.post(
@@ -263,11 +262,13 @@ app.get("/dashboard", redirectLogin, function(req, res){
                     if (!error && response.statusCode == 200) {
         
                         if(body.status == 0){
-        
                             res.render('dashboard', { userID: req.session.userID, time: 0, username: username, fulltime: body.fullTime})
         
-                        }else{
-        
+                        }else if(body.status == 1)
+                        {
+                            res.render('dashboard', { userID: req.session.userID, time: body.packTime, username: username, fulltime: body.fullTime})
+                        }
+                        else{
                             res.redirect("/login?errorCode=" + body.status + "&errorMessage=" + body.message);
                         }
         
@@ -290,9 +291,33 @@ app.get("/settings", redirectLogin, function(req, res){
 
 });
 
-app.get("/pack", redirectLogin, function(req, res){
-    res.render("pack");
-})
+app.get("/pack", redirectLogin, function(req, res)
+{
+    request.post(
+        'http://' + API_HOST + ":" + API_PORT + "/pack",
+        { json: { token: token} },
+        (error, response, body) => 
+        {
+            console.log(body);
+            if (!error && response.statusCode == 200) {
+
+                
+                if(body.packTime == '0'){
+
+                    res.render('pack', {cards: body.cards});
+
+                }else{
+
+                    res.redirect("/dashboard?errorCode=" + body.message);
+                }
+
+            }else{
+                res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+            }
+        }
+    );
+
+});
 
 app.listen(port, function(){
 

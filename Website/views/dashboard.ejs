@@ -45,7 +45,7 @@
                 <div class="grid_9 collection">
 
                     <div class="pack">
-                        <progress-ring name="progress" stroke="4" radius="130" progress=100 - (<%= time %> / <%= fulltime %> * 100) time=<%= time == 0 ? "Open": time %>></progress-ring>
+                        <progress-ring name="progress" stroke="4" radius="130" progress=<%= 100 - time /  fulltime %>) time=<%=time <= 0 ? 0 : time %>></progress-ring>
                     </div>
                     <div class="inventory">
                     </div>
@@ -68,18 +68,16 @@
                     var fulltime = <%= fulltime %>;
 
                     const interval = setInterval(() => {
-                        time--;
+                        time -= 1000;
                         var perc = 100 - (time / fulltime * 100);
-                    
                         if(perc > 100)
                         {
                             perc = 100;
-                            var timein = "Open";
+                            var timein = 0;
                         }else
                         {
                             var timein = time;
                         }
-                            
                         el.setAttribute('progress', perc);
                         el.setAttribute('time', timein);
                         if (perc === 100)

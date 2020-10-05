@@ -327,11 +327,11 @@ app.post('/getPackTime', (req, res) => {
 
         if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate) || !packDate.isValid())
         {
-            res.send({status: 0, packTime: 0, fullTime: packCooldown});
+            res.send({status: 0, packTime: 0, fullTime: packCooldown * 1000});
             return;
         }else
         {
-            res.send({status: 1, packTime: packDate.diff(nowDate).seconds(), fullTime: packCooldown});
+            res.send({status: 1, packTime: packDate.diff(nowDate).seconds(), fullTime: packCooldown * 1000});
         }
     }
     return;
