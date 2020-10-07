@@ -15,22 +15,46 @@
 
         <%- include('partials/nav.ejs') %>
 
-        <div class="open">
-            <input class="openBox" type="button">
-            
+        <div class="open" id="Open">
         </div>
 
     </body>
-    <script>
-        document.querySelector(".openBox").onclick = () =>
-        {
-            // var form = document.createElement('form');
-            // document.body.appendChild(form);
-            // form.method = 'get';
-            // form.action = '/pack';
-            // form.submit();
-            // form.setAttribute()
+    <% if (cards != undefined) { %>
+        <script>
+            const cards = <%- JSON.stringify(cards) %>;
+            var opn = document.getElementById('Open');
             
-        };
+            var packdiv = opn.insertAdjacentHTML('beforeend', '')
+            var cardSize = 110;
+            var off = 235-(cards.length-1) / 2 * cardSize;
+            for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
+            {
+                var path = cards[i].card.cardImage;
+                var posX =  off;
+                console.log(off);
+
+                opn.insertAdjacentHTML('beforeend',
+                '<waifu-card id="card' + 0 + '\"img_path=\"' + path +
+                '\" frame-front= \"' + cards[0].frame_front + '\" frame-back= \"' +
+                cards[0].frame_back + '\" pos-x=' + posX + '></waifu-card');  
+            }
+        </script>
+    <% } %> 
+
+    <script>
+                    
+        window.onmousedown = function(e) {
+            const els = document.querySelectorAll('waifu-card');
+            x = e.pageX;
+            y = e.pageY;
+            for(var i = 0; i < els.length; i++)
+            {
+                if (els[i].isClicked(x,y)) {
+                    els[i].turn();
+                }
+            }
+        }
     </script>
+
+    <script src="../resources/components.js"></script> 
 </html>

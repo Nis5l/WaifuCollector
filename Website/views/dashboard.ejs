@@ -86,21 +86,21 @@
                 </script>
             <% } %>
 
-                <script>
-                    
-                    window.onmousedown = function(e) {
-                        const el = document.querySelector('progress-ring');
-                        x = e.pageX;
-                        y = e.pageY;
-                        if (el.isClicked(x,y)) {
-                            var form = document.createElement('form');
-                            document.body.appendChild(form);
-                            form.method = 'get';
-                            form.action = '/pack';
-                            form.submit();
-                        }
+            <script>
+                
+                window.onmousedown = function(e) {
+                    const el = document.querySelector('progress-ring');
+                    x = e.pageX;
+                    y = e.pageY;
+                    if (el.isClicked(x,y)) {
+                        var form = document.createElement('form');
+                        document.body.appendChild(form);
+                        form.method = 'get';
+                        form.action = '/pack';
+                        form.submit();
                     }
-                </script>
+                }
+            </script>
 
             <script>
                 //el.setProgress(50);
@@ -117,9 +117,7 @@
                 $(document).ready(sectionHeights);
 
                 $(window).on('resize', function(){
-
                     sectionHeights();
-
                 });
 
             </script>

@@ -108,4 +108,114 @@ class ProgressRing extends HTMLElement {
 
 }
 
+class Card extends HTMLElement {
+  constructor() {
+    super();
+    const img = this.getAttribute('img_path');
+    const frame_front = this.getAttribute('frame-front');
+    const frame_back = this.getAttribute('frame-back');
+    const posX = this.getAttribute('pos-x');
+    this.shadow = this.attachShadow({mode: 'open'});
+    //this._root.innerHTML =`
+    this.shadow.innerHTML = `
+    <div class="card" id=card> 
+      <div class="card-inner id=card-inner">
+      </div>  
+      <div class="waifu-card-back">
+      </div>
+      <div class="waifu-card">     
+      </div>
+    </div>
+
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@1,700&display=swap');
+
+      .card
+      {
+        float: left;
+        margin: 1%;
+        margin-top: 9%;
+        width: 253px;
+        height: 402px;
+        position: relative;
+        transform: translateX(${posX}%);
+      }
+
+      .card-inner
+      {
+        background-color: transparent;
+        background-image: url(${img});
+        background-size: 78%;
+        background-repeat: no-repeat;
+        background-position: 48% 36%;
+        transition-duration: 1s;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+      }
+
+      .waifu-card
+      {
+        background-color: transparent;
+        background-image: url(${frame_front});
+        background-size: 100% 94%;
+        background-repeat: no-repeat;
+        background-position: 0% 0%;
+        transition-duration: 1s;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+      }
+
+      .waifu-card-back
+      {
+        background-color: transparent;
+        background-image: url(${frame_back});
+        background-size: 100% 94%;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100%;
+        transition-duration: 1s;
+        backface-visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        /*transform: rotateY(360deg);*/
+      }
+      </style>
+    `
+  }
+  isClicked(x,y)
+  {
+    const card = this.shadow.querySelector('.card');
+    return x < card.getBoundingClientRect().right && x > card.getBoundingClientRect().left
+    && y < card.getBoundingClientRect().bottom && y > card.getBoundingClientRect().top;
+  }
+
+  //src="https://code.jquery.com/jquery-3.5.1.js"
+  //integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  //crossorigin="anonymous"
+
+  turn()
+  {
+    console.log("run");
+    $(this.shadow).find(".card-inner").css("transform","rotateY(0deg)");
+    $(this.shadow).find(".waifu-card").css("transform","rotateY(0deg)");
+    $(this.shadow).find(".waifu-card-back").css("transform","rotateY(180deg)");
+  }
+
+}
+
+var script = document.createElement('script');
+script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
+script.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(script);
+
 window.customElements.define('progress-ring', ProgressRing);
+window.customElements.define('waifu-card', Card);

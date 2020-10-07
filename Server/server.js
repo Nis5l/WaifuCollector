@@ -11,13 +11,14 @@ const utils = require('./utils');
 
 app.use(express.static('Data'))
 const imageBase = "Card/";
+const frameBase = "Frame/"
 
 const port = 100;
 
 const userLen = [4,20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
-const packSize = 1;
+const packSize = [1,3];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
 
 var clients = {};
@@ -182,7 +183,9 @@ app.post('/pack', (req, res) =>
                 {
                     clients[userID].packTime = date.valueOf();
                     var cards = [];
-                    for(var i = 0; i < packSize; i++)
+                    var iterations = utils.getRandomInt(packSize[0], packSize[1]);
+                    run2(0);
+                    function run2(iteration)
                     {
                         database.getRandomCard((card) => {
                             var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
@@ -190,10 +193,14 @@ app.post('/pack', (req, res) =>
                             card.cardImage = imageBase + card.cardImage;
                             database.getCardType(card.typeID, (result) => {
                                 card.type = result;
-                                cards.push({card: card, quality: quality});
-                                if(i == packSize)
+                                cards.push({card: card, quality: quality, frame_front: frameBase + "Frame_Silver_Front.png", frame_back: frameBase + "Frame_Silver_Back.png"});
+                                if(iteration == iterations - 1)
                                 {
                                     res.send({packTime: "0", message:"OK", cards: cards});
+                                    return;
+                                }else
+                                {
+                                    run2(iteration+1);
                                 }
                             });
                         });
