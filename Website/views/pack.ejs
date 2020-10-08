@@ -29,14 +29,14 @@
             var off = 235-(cards.length-1) / 2 * cardSize;
             for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
             {
-                var path = cards[i].card.cardImage;
+                var path = cards[i].cardImage;
                 var posX =  off;
                 console.log(off);
 
                 opn.insertAdjacentHTML('beforeend',
                 '<waifu-card id="card' + 0 + '\"img_path=\"' + path +
-                '\" frame-front= \"' + cards[0].frame_front + '\" frame-back= \"' +
-                cards[0].frame_back + '\" pos-x=' + posX + '></waifu-card');  
+                '\" frame-front= \"' + cards[0].frame.path_front + '\" frame-back= \"' +
+                cards[0].frame.path_back + '\" pos-x=' + posX + '></waifu-card');  
             }
         </script>
     <% } %> 

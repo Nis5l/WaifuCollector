@@ -19,12 +19,14 @@ module.exports = {
             con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector");
             con.query("USE WaifuCollector");
             con.query("CREATE TABLE IF NOT EXISTS user ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `rank` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
-            con.query("CREATE TABLE IF NOT EXISTS card ( `id` INT NOT NULL AUTO_INCREMENT , `cardName` TEXT NOT NULL , `typeID` INT NOT NULL , `cardDescription` LONGTEXT NOT NULL , `cardImage` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS card ( `id` INT NOT NULL AUTO_INCREMENT , `cardName` TEXT NOT NULL , `typeID` INT NOT NULL, `cardImage` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;");
             con.query("CREATE TABLE IF NOT EXISTS cardtype ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
-            con.query("CREATE TABLE IF NOT EXISTS unlocked ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `cardID` INT NOT NULL , `quality` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS unlocked ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `cardID` INT NOT NULL , `quality` INT NOT NULL , `level` INT NOT NULL DEFAULT '0' , `frameID` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
             con.query("CREATE TABLE IF NOT EXISTS data ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `key` TEXT NOT NULL , `value` LONGTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+            con.query("CREATE TABLE IF NOT EXISTS frame ( `id` INT NOT NULL , `name` TEXT NOT NULL , `path_front` TEXT NOT NULL, `path_back` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;")
             //cardTypes();
             //cards();
+            //frames();
         });
     },
 
@@ -103,11 +105,20 @@ module.exports = {
         });
     },
 
-    getRandomCard: function getRandomCard(callback)
+    getRandomCard: function getRandomCard(amount, callback)
     {
-        con.query("SELECT * FROM `card` ORDER BY RAND() LIMIT 1", function (err, result, fields)
+        con.query("SELECT * FROM `card` ORDER BY RAND() LIMIT " + amount, function (err, result, fields)
         {   
-            callback(result[0]);
+            //console.log(result);
+            callback(result);
+        });
+    },
+
+    getRandomFrame: function getRandomFrame(amount, callback)
+    {
+        con.query("SELECT * FROM `frame` ORDER BY RAND() LIMIT " + amount, function (err, result, fields)
+        {   
+            callback(result);
         });
     },
 
@@ -131,9 +142,9 @@ module.exports = {
 
     },
 
-    addCard: function addCard(userID, cardID, quality)
+    addCard: function addCard(userID, cardID, quality, frame)
     {
-        con.query("INSERT INTO `unlocked` (`id`, `userID`, `cardID`, `quality`) VALUES (NULL, " + userID + ", " + cardID + ", " + quality + ");", function (err, result, fields)
+        con.query("INSERT INTO `unlocked` (`id`, `userID`, `cardID`, `quality`, `frameID`) VALUES (NULL, " + userID + ", " + cardID + ", " + quality + ", " + frame + ");", function (err, result, fields)
         {
         });
     },
@@ -314,7 +325,15 @@ function cardTypes()
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('39', 'Daily Life With A Monster Girl')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('40', 'Assassination Classroom')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('41', 'Your Lie in April')");
-        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('41', 'Undefeated Bahamut Chronicle')");
+        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('42', 'Undefeated Bahamut Chronicle')");
+    });
+}
+
+function frames()
+{
+    con.connect(() =>
+    {
+        con.query("INSERT INTO `frame` (`id`, `name`, `path_front` , `path_back`) VALUES ('0', 'Silver', 'Frame_Silver_Front.png', 'Frame_Silver_Back.png')");
     });
 }
 

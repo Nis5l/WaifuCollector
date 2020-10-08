@@ -300,14 +300,12 @@ app.get("/pack", redirectLogin, function(req, res)
         {
             if (!error && response.statusCode == 200) {
 
-                
                 if(body.packTime == '0'){
-                    
                     for(var i = 0; i < body.cards.length; i++)
                     {
-                        body.cards[i].card.cardImage = "http://" + API_HOST + ":" + API_PORT + "/" + body.cards[i].card.cardImage;
-                        body.cards[i].frame_front = "http://" + API_HOST + ":" + API_PORT + "/" + body.cards[i].frame_front;
-                        body.cards[i].frame_back = "http://" + API_HOST + ":" + API_PORT + "/" + body.cards[i].frame_back;
+                        body.cards[i].cardImage = "http://" + API_HOST + ":" + API_PORT + "/" + body.cards[i].cardImage;
+                        body.cards[i].frame.path_front = "http://" + API_HOST + ":" + API_PORT + "/" + body.cards[i].frame.path_front;
+                        body.cards[i].frame.path_back = "http://" + API_HOST + ":" + API_PORT + "/" + body.cards[i].frame.path_back;
                     }
                     res.render('pack', {cards: body.cards});
 

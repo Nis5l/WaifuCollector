@@ -182,39 +182,58 @@ app.post('/pack', (req, res) =>
                 if(clients[userID] == null || clients[userID].packTime == "null" || nowDate.isAfter(packDate) || !packDate.isValid())
                 {
                     clients[userID].packTime = date.valueOf();
-                    var cards = [];
                     var iterations = utils.getRandomInt(packSize[0], packSize[1]);
-                    run2(0);
-                    function run2(iteration)
-                    {
-                        database.getRandomCard((card) => {
-                            var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
-                            database.addCard(userID, card.id, quality);
-                            card.cardImage = imageBase + card.cardImage;
-                            database.getCardType(card.typeID, (result) => {
-                                card.type = result;
-                                cards.push({card: card, quality: quality, frame_front: frameBase + "Frame_Silver_Front.png", frame_back: frameBase + "Frame_Silver_Back.png"});
-                                if(iteration == iterations - 1)
+                    console.log("GO");
+                        database.getRandomCard(iterations, (cards) => {
+                            for(var j = 0; j < cards.length; j++)
+                            {
+                                var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
+                                cards[j].cardImage = imageBase + cards[j].cardImage;
+                            }
+                            database.getRandomFrame(iterations, (frames) => {
+                                for(var j = 0; j < frames.length; j++)
                                 {
-                                    res.send({packTime: "0", message:"OK", cards: cards});
-                                    return;
-                                }else
+                                    frames[j].path_front = frameBase + frames[j].path_front;
+                                    frames[j].path_back = frameBase + frames[j].path_back;
+                                }
+
+                                for(var j = frames.length - 1; j < iterations; j++)
                                 {
-                                    run2(iteration+1);
+                                    frames[j] = frames[utils.getRandomInt(0,frames.length-1)];
+                                }
+                                for(var j = 0; j < cards.length; j++)
+                                {
+                                    cards[j].frame = frames[j];
+                                    database.addCard(userID, cards[j].id, quality, frames[j].id);
+                                }
+                                run2(0);
+                                function run2(iteration)
+                                {
+                                    database.getCardType(cards[iteration].typeID, (result) => {
+                                        cards[iteration].type = result;
+                                        if(iteration == iterations - 1)
+                                        {
+                                            res.send({packTime: "0", message:"OK", cards: cards});
+                                            return;
+                                        }else
+                                        {
+                                            run2(iteration+1);
+                                        }
+                                    });
                                 }
                             });
+
                         });
-                    }
+                    }else
+                    {
+                    res.send({packTime: packDate.diff(nowDate).seconds(), message:"WAIT", cards: []});
                     return;
+                    }
                 }
-        
-                res.send({packTime: packDate.diff(nowDate).seconds(), message:"WAIT", cards: []});
-                return;
         
             }   
         }    
-    }
-});
+    });
 
 app.post('/passchange', (req, res) => {
     var tokenV = req.body.token;
