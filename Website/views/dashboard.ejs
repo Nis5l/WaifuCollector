@@ -48,6 +48,9 @@
                         <progress-ring name="progress" stroke="4" radius="130" progress=<%= 100 - time /  fulltime %>) time=<%=time <= 0 ? 0 : time %>></progress-ring>
                     </div>
                     <div class="inventory">
+                        <div class="image">
+                            <div class="text">Inventory</div>
+                        </div>
                     </div>
 
                 </div>
@@ -104,12 +107,6 @@
             </script>
 
             <script>
-                //el.setProgress(50);
-                
-                //const time = this.getAttribute('time');
-                //const time = ${time};
-                //const fulltime = this.getAttribute('fulltime');
-
                 function sectionHeights() {
                     var height = $('.dashboard').outerHeight() - $('.dashboard .menu').outerHeight() -35;
                     $('.stats, .collection').css('height', height);
@@ -123,6 +120,12 @@
 
             </script>
             
+            <script>
+                //;
+                $(".inventory").click(()=>{
+                    $(".inventory").css("background-color", "rgba(255, 255, 255, 0.1)")
+                });
+            </script>
         <script src="../resources/components.js"></script>
 
     </body>

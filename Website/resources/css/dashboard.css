@@ -70,7 +70,7 @@ html, body {
           margin-bottom: 15px; }
     .wrapper .dashboard.card2 .collection .pack {
       float: left;
-      width: 40%;
+      width: 35%;
       height: 100%;
       border-right: 1px solid rgba(255, 255, 255, 0.5); }
       .wrapper .dashboard.card2 .collection .pack .progress {
@@ -82,7 +82,26 @@ html, body {
         transform-origin: 50% 50%; }
       .wrapper .dashboard.card2 .collection .pack .time {
         font-size: 100pt; }
-      .wrapper .dashboard.card2 .collection .pack .inventory {
-        float: right;
-        height: 60%;
-        width: 50%; }
+    .wrapper .dashboard.card2 .collection .inventory {
+      float: left;
+      height: 100%;
+      width: 33%;
+      border-right: 1px solid rgba(255, 255, 255, 0.5); }
+      .wrapper .dashboard.card2 .collection .inventory .image {
+        margin-top: 0%;
+        width: 100%;
+        height: 100%;
+        background-image: url("/assets/OpenSymbol.png");
+        background-repeat: no-repeat;
+        background-size: 70%;
+        background-position: center center; }
+        .wrapper .dashboard.card2 .collection .inventory .image .text {
+          font-size: 21pt;
+          text-align: center;
+          padding-top: 60%;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none; }

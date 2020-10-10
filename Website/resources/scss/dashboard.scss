@@ -130,7 +130,7 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 
         .pack{
           float: left;
-          width: 40%;
+          width: 35%;
           height: 100%;
           border-right: 1px solid $sectionBorder;
           .progress
@@ -148,11 +148,35 @@ html, body {margin: 0; height: 100%; overflow: hidden}
           {
             font-size: 100pt;
           }
-          .inventory{
-            float: right;
-            height: 60%;
-            width: 50%;
+        }
+        .inventory{
+          .image
+          {
+            margin-top: 0%;
+            width: 100%;
+            height: 100%;
+            background-image: url("/assets/OpenSymbol.png");
+            background-repeat: no-repeat;
+            background-size: 70%;
+            background-position: center center;
+            
+            .text
+            {
+              font-size: 21pt;
+              text-align: center;
+              padding-top: 60%;
+              -webkit-touch-callout: none;
+              -webkit-user-select: none;
+              -khtml-user-select: none;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+            }
           }
+          float: left;
+          height: 100%;
+          width: 33%;
+          border-right: 1px solid $sectionBorder;
         }
       }
 
