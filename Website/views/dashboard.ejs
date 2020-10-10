@@ -63,12 +63,13 @@
 
             <% if (time != undefined && fulltime != undefined) { %>
                 <script>
+                    const update = 10;
                     const el = document.querySelector('progress-ring');
                     var time = <%= time %>;
                     var fulltime = <%= fulltime %>;
 
                     const interval = setInterval(() => {
-                        time -= 1000;
+                        time -= update;
                         var perc = 100 - (time / fulltime * 100);
                         if(perc > 100)
                         {
@@ -82,7 +83,7 @@
                         el.setAttribute('time', timein);
                         if (perc === 100)
                             clearInterval(interval);
-                    }, 1000);
+                    }, update);
                 </script>
             <% } %>
 
