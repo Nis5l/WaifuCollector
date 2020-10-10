@@ -1,3 +1,8 @@
+html, body {
+  margin: auto;
+  height: auto;
+  overflow: auto; }
+
 .home {
   height: 100vh;
   width: 100%; }

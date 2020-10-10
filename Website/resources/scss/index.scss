@@ -1,5 +1,7 @@
 @import "___base.scss";
 
+html, body {margin:auto; height: auto; overflow: auto}
+
 .home{
     
     height: 100vh;
@@ -41,10 +43,8 @@
 }
 
 .about{
-
     width: 100%;
-
-    .title{ margin: 4% 0; }
+    .title{ margin: 4% 0;}
 
 }
 
