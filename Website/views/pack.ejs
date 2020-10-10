@@ -31,12 +31,13 @@
             {
                 var path = cards[i].cardImage;
                 var posX =  off;
-                console.log(off);
-
                 opn.insertAdjacentHTML('beforeend',
-                '<waifu-card id="card' + 0 + '\"img_path=\"' + path +
-                '\" frame-front= \"' + cards[0].frame.path_front + '\" frame-back= \"' +
-                cards[0].frame.path_back + '\" pos-x=' + posX + '></waifu-card');  
+                '<waifu-card id="card' + i + '\"img_path=\"' + path +
+                '\" frame-front= \"' + cards[i].frame.path_front + '\" frame-back= \"' +
+                cards[i].frame.path_back + '\" pos-x=' + posX + ' card-name=\"' + cards[i].cardName + '\" anime-name=\"' + cards[i].type.name + '\"></waifu-card');  
+                //const els = document.querySelector('#card' + i);
+                //console.log(els);
+                //els.fit();
             }
         </script>
     <% } %> 
@@ -50,6 +51,7 @@
             for(var i = 0; i < els.length; i++)
             {
                 if (els[i].isClicked(x,y)) {
+                    els[i].fit();
                     els[i].turn();
                 }
             }

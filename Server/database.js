@@ -277,6 +277,7 @@ function cards()
         con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Lisesharte Atismata', '42', 'Card_LisesharteAtismata.png')");
         con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Moka Akashiya', '23', 'Card_MokaAkashiya.png')");
         con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ririka Momobami', '34', 'Card_RirikaMomobami.png')");
+        con.query("INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Natsuki Mogi', '43', 'Card_NatsukiMogi.png')");
     });
 }
 
@@ -326,6 +327,7 @@ function cardTypes()
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('40', 'Assassination Classroom')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('41', 'Your Lie in April')");
         con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('42', 'Undefeated Bahamut Chronicle')");
+        con.query("INSERT INTO `cardtype` (`id`, `name`) VALUES ('43', 'Initial D')");
     });
 }
 

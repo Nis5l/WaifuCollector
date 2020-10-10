@@ -183,7 +183,6 @@ app.post('/pack', (req, res) =>
                 {
                     clients[userID].packTime = date.valueOf();
                     var iterations = utils.getRandomInt(packSize[0], packSize[1]);
-                    console.log("GO");
                         database.getRandomCard(iterations, (cards) => {
                             for(var j = 0; j < cards.length; j++)
                             {

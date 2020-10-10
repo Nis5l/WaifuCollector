@@ -114,6 +114,8 @@ class Card extends HTMLElement {
     const img = this.getAttribute('img_path');
     const frame_front = this.getAttribute('frame-front');
     const frame_back = this.getAttribute('frame-back');
+    const card_name = this.getAttribute('card-name');
+    const anime_name = this.getAttribute('anime-name');
     const posX = this.getAttribute('pos-x');
     this.shadow = this.attachShadow({mode: 'open'});
     //this._root.innerHTML =`
@@ -124,6 +126,12 @@ class Card extends HTMLElement {
       <div class="waifu-card-back">
       </div>
       <div class="waifu-card">     
+      </div>
+      <div class="card-name">
+        <div>${card_name}</div>
+      </div>
+      <div class="anime-name">
+        <div>${anime_name}</div>
       </div>
     </div>
 
@@ -188,6 +196,47 @@ class Card extends HTMLElement {
         left: 0;
         /*transform: rotateY(360deg);*/
       }
+
+      .card-name
+      {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        color: black;
+        position: absolute;
+        top: 2%;
+        left: 0;
+        width: 48%;
+        height: 7%;
+        transition: transform 1s;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+        margin-left: 23%;
+        line-height: 170%;
+        transform-origin: inherit;
+      }
+
+      .anime-name
+      {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        color: black;
+        position: absolute;
+        top: 85%;
+        left: 0;
+        width: 48%;
+        height: 7%;
+        transition: transform 1s;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+        margin-left: 33%;
+        line-height: 170%;
+        transform-origin: inherit;
+      }
+
       </style>
     `
   }
@@ -198,16 +247,29 @@ class Card extends HTMLElement {
     && y < card.getBoundingClientRect().bottom && y > card.getBoundingClientRect().top;
   }
 
+  fit()
+  {
+      while( $(this.shadow).find('.anime-name div').height() > $(this.shadow).find('.anime-name').height() ) {
+        $(this.shadow).find('.anime-name div').css('font-size', (parseInt($(this.shadow).find('.anime-name div').css('font-size')) - 1) + "px" );
+      }
+
+      while( $(this.shadow).find('.card-name div').height() > $(this.shadow).find('.card-name').height() ) {
+        $(this.shadow).find('.card-name div').css('font-size', (parseInt($(this.shadow).find('.card-name div').css('font-size')) - 1) + "px" );
+        console.log("outer: " + $(this.shadow).find('.card-name div').height());
+        console.log("inner: " + ($(this.shadow).find('.card-name').height()));
+      }
+  }
   //src="https://code.jquery.com/jquery-3.5.1.js"
   //integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
   //crossorigin="anonymous"
 
   turn()
   {
-    console.log("run");
     $(this.shadow).find(".card-inner").css("transform","rotateY(0deg)");
     $(this.shadow).find(".waifu-card").css("transform","rotateY(0deg)");
     $(this.shadow).find(".waifu-card-back").css("transform","rotateY(180deg)");
+    $(this.shadow).find(".card-name").css("transform","rotateY(0deg)");
+    $(this.shadow).find(".anime-name").css("transform","rotateY(0deg)");
   }
 
 }
