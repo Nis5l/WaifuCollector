@@ -124,6 +124,11 @@
                 //;
                 $(".inventory").click(()=>{
                     $(".inventory").css("background-color", "rgba(255, 255, 255, 0.1)")
+                    var form = document.createElement('form');
+                    document.body.appendChild(form);
+                    form.method = 'get';
+                    form.action = '/inventory';
+                    form.submit();
                 });
             </script>
         <script src="../resources/components.js"></script>
