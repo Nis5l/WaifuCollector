@@ -20,7 +20,7 @@ const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 const packSize = [1, 3];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
-const inventorySendAmount = 8;
+const inventorySendAmount = 20;
 
 var clients = {};
 
@@ -368,9 +368,35 @@ app.post("/inventory", (req, res) => {
   }
   function run(userID) {
     var inventory = clients[userID].getInventory(page, inventorySendAmount);
-    res.send({ status: 0, inventory: inventory });
+    if (inventory.length == 0) {
+      res.send({ status: 0, inventory: inventory });
+      return;
+    }
+    run2(0);
+    function run2(iteration) {
+      database.getCard(inventory[iteration].cardID, (result) => {
+        inventory[iteration].card = result;
+        inventory[iteration].card.cardImage =
+          imageBase + inventory[iteration].card.cardImage;
+        database.getCardType(inventory[iteration].card.typeID, (result2) => {
+          inventory[iteration].card.type = result2;
+          database.getFrame(inventory[iteration].frameID, (frame) => {
+            frame.path_front = frameBase + frame.path_front;
+            frame.path_back = frameBase + frame.path_back;
+            inventory[iteration].card.frame = frame;
+            if (iteration == inventory.length - 1) {
+              res.send({ status: 0, inventory: inventory });
+              return;
+            } else {
+              run2(iteration + 1);
+            }
+          });
+        });
+      });
+    }
   }
 });
+
 function checkUser(username) {
   if (
     username == undefined ||
@@ -409,4 +435,3 @@ console.log("Initializing DataBase");
 database.init();
 var server = app.listen(port);
 console.log("Started on port %s", port);
-

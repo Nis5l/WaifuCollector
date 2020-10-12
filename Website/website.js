@@ -290,8 +290,31 @@ app.get("/inventory", redirectLogin, function (req, res) {
     "http://" + API_HOST + ":" + API_PORT + "/inventory",
     { json: { token: token, page: page } },
     (error, response, body) => {
-      if (!error && response.statusCode == 200) {
-        res.render("inventory", { cards: body.cards });
+      if (!error && response.statusCode == 200 && body.status == 0) {
+        for (var i = 0; i < body.inventory.length; i++) {
+          body.inventory[i].card.cardImage =
+            "http://" +
+            API_HOST +
+            ":" +
+            API_PORT +
+            "/" +
+            body.inventory[i].card.cardImage;
+          body.inventory[i].card.frame.path_front =
+            "http://" +
+            API_HOST +
+            ":" +
+            API_PORT +
+            "/" +
+            body.inventory[i].card.frame.path_front;
+          body.inventory[i].card.frame.path_back =
+            "http://" +
+            API_HOST +
+            ":" +
+            API_PORT +
+            "/" +
+            body.inventory[i].card.frame.path_back;
+        }
+        res.render("inventory", { cards: body.inventory });
       } else {
         res.redirect("/login?errorCode=3&errorMessage=Wrong response");
       }

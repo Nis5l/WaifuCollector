@@ -272,6 +272,24 @@ module.exports = {
       }
     );
   },
+
+  getCard: function getCard(cardID, callback) {
+    con.query(
+      "SELECT * FROM card WHERE id=" + cardID,
+      (err, result, fields) => {
+        callback(result[0]);
+      }
+    );
+  },
+
+  getFrame: function getFrame(frameID, callback) {
+    con.query(
+      "SELECT * FROM frame WHERE id=" + frameID,
+      (err, result, fields) => {
+        callback(result[0]);
+      }
+    );
+  },
 };
 
 function cards() {
