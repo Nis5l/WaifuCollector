@@ -24,23 +24,24 @@
             var packdiv = opn.insertAdjacentHTML('beforeend', '')
             //var cardSize = 110;
             //var off = 235-(cards.length-1) / 2 * cardSize;
-            var off = 10;            
-tofit = [];
+            var off = 10;           
+            var tofit = [];
             for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
             {
+              console.log(cards[i]);
                 var path = cards[i].card.cardImage;
                 var posX =  off;
                 opn.insertAdjacentHTML('beforeend',
                 '<waifu-card id="card' + i + '\"img_path=\"' + path +
                 '\" frame-front= \"' + cards[i].card.frame.path_front + '\" frame-back= \"' +
-                cards[i].card.frame.path_back + '\" pos-x=' + posX + ' card-name=\"' + cards[i].card.cardName + '\" anime-name=\"' + cards[i].card.type.name + '\" turned=false></waifu-card');  
+                cards[i].card.frame.path_back + '\" pos-x=' + posX + ' card-name=\"' + cards[i].card.cardName + '\" anime-name=\"' + cards[i].card.type.name
+                  + '\" turned=false quality=' + cards[i].quality + '></waifu-card');  
                 var o = document.getElementById("card" + i);
                 tofit.push(o);
             }
             window.onload = function() {
               for(var i = 0; i < tofit.length; i++)
               {
-                console.log(typeof tofit[i]);
                 tofit[i].fit();
               }
             }

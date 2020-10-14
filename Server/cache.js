@@ -77,30 +77,28 @@ class Client {
       for (var i = 0; i < this.inventory.length - 1; i++) {
         if (this.inventory[i].level > this.inventory[i + 1].level) {
           sorted = false;
-          var t = this.inventory[i];
-          this.inventory[i] = this.inventory[i + 1];
-          this.inventory[i + 1] = t;
+          swap(this.inventory, i);
         } else if (this.inventory[i].level == this.inventory[i + 1].level) {
           if (this.inventory[i].quality > this.inventory[i + 1].quality) {
             sorted = false;
-            var t = this.inventory[i];
-            this.inventory[i] = this.inventory[i + 1];
-            this.inventory[i + 1] = t;
+            swap(this.inventory, i);
           } else if (
             this.inventory[i].quality == this.inventory[i + 1].quality
           ) {
             if (this.inventory[i].cardID > this.inventory[i + 1].cardID) {
               sorted = false;
-              var t = this.inventory[i];
-              this.inventory[i] = this.inventory[i + 1];
-              this.inventory[i + 1] = t;
+              swap(this.inventory, i);
             }
           }
         }
       }
       if (sorted) return;
     }
+    function swap(inventory, i) {
+      var t = inventory[i];
+      inventory[i] = inventory[i + 1];
+      inventory[i + 1] = t;
+    }
   }
 }
 module.exports = Client;
-

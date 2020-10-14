@@ -97,7 +97,6 @@ app.post("/register", (req, res) => {
   database.register(username, password, registerCallback);
 
   function registerCallback(b, message) {
-    //console.log(b ? "Worked":"Failed");
     res.send({ status: b ? 0 : 1, message: message });
   }
 });
@@ -183,6 +182,7 @@ app.post("/pack", (req, res) => {
                 qualityrange[0],
                 qualityrange[1]
               );
+              cards[j].quality = quality;
               cards[j].cardImage = imageBase + cards[j].cardImage;
             }
             database.getRandomFrame(iterations, (frames) => {

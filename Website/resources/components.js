@@ -119,6 +119,7 @@ class Card extends HTMLElement {
     const anime_name = this.getAttribute("anime-name");
     const posX = this.getAttribute("pos-x");
     const turned = this.getAttribute("turned") == "true";
+    const quality = this.getAttribute("quality");
     this.shadow = this.attachShadow({ mode: "open" });
     //this._root.innerHTML =`
     this.shadow.innerHTML = `
@@ -135,12 +136,13 @@ class Card extends HTMLElement {
       <div class="anime-name">
         <div>${anime_name}</div>
       </div>
+      <div class="quality">
+        <div>${quality}</div>
+      </div>
     </div>
-
-
+    <link href='https://fonts.googleapis.com/css?family=Allerta Stencil' rel='stylesheet'>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@1,700&display=swap');
-
       .card
       {
         float: left;
@@ -218,6 +220,12 @@ class Card extends HTMLElement {
         margin-left: 23%;
         line-height: 170%;
         transform-origin: inherit;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
 
       .anime-name
@@ -238,8 +246,43 @@ class Card extends HTMLElement {
         margin-left: 33%;
         line-height: 170%;
         transform-origin: inherit;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
 
+      .quality
+      {
+        font-size: 300%;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        color: #ffd600;
+        position: absolute;
+        top: 2%;
+        left: -1%;
+        width: 11%;
+        height: 7%;
+        transition: transform 1s;
+        backface-visibility: hidden;
+        transform: rotateY(${turned ? 180 : 0}deg);
+        margin-left: 0%;
+        line-height: 170%;
+        transform-origin: inherit;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font-family: 'Allerta Stencil', sans-serif;
+        -webkit-text-stroke-color: black;
+        -webkit-text-stroke-width: 1px;
+      }
       </style>
     `;
   }
@@ -280,8 +323,6 @@ class Card extends HTMLElement {
             1 +
             "px"
         );
-      console.log("outer: " + $(this.shadow).find(".card-name div").height());
-      console.log("inner: " + $(this.shadow).find(".card-name").height());
     }
   }
   //src="https://code.jquery.com/jquery-3.5.1.js"
