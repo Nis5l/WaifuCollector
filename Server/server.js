@@ -5,6 +5,7 @@ const app = express();
 const jwt = require("jsonWebToken");
 require("datejs");
 const Client = require("./cache");
+const cache = require("./serverCache");
 const jwtSecret = "yCSgVxmL9I";
 const moment = require("moment");
 const utils = require("./utils");
@@ -431,7 +432,14 @@ function clearCache(userID) {
   delete clients[userID];
 }
 
+var ids = cache.getIdsByString();
+console.log(ids);
+
 console.log("Initializing DataBase");
-database.init();
-var server = app.listen(port);
-console.log("Started on port %s", port);
+database.init(() => {
+  //todo: CLOCK
+  cache.refreshCards(() => {
+    var server = app.listen(port);
+    console.log("Started on port %s", port);
+  });
+});

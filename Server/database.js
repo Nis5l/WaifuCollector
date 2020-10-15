@@ -11,28 +11,57 @@ var con = sql.createConnection({
 });
 
 module.exports = {
-  init: function init() {
+  init: function init(callback) {
+    var i = 0;
+    var taskAmount = 8;
     con.connect(() => {
-      con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector");
-      con.query("USE WaifuCollector");
+      con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
+        ontaskfinish();
+      });
+      con.query("USE WaifuCollector", () => {
+        ontaskfinish();
+      });
       con.query(
-        "CREATE TABLE IF NOT EXISTS user ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `rank` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+        "CREATE TABLE IF NOT EXISTS user ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `rank` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+        () => {
+          ontaskfinish();
+        }
       );
       con.query(
-        "CREATE TABLE IF NOT EXISTS card ( `id` INT NOT NULL AUTO_INCREMENT , `cardName` TEXT NOT NULL , `typeID` INT NOT NULL, `cardImage` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+        "CREATE TABLE IF NOT EXISTS card ( `id` INT NOT NULL AUTO_INCREMENT , `cardName` TEXT NOT NULL , `typeID` INT NOT NULL, `cardImage` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+        () => {
+          ontaskfinish();
+        }
       );
       con.query(
-        "CREATE TABLE IF NOT EXISTS cardtype ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+        "CREATE TABLE IF NOT EXISTS cardtype ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+        () => {
+          ontaskfinish();
+        }
       );
       con.query(
-        "CREATE TABLE IF NOT EXISTS unlocked ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `cardID` INT NOT NULL , `quality` INT NOT NULL , `level` INT NOT NULL DEFAULT '0' , `frameID` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+        "CREATE TABLE IF NOT EXISTS unlocked ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `cardID` INT NOT NULL , `quality` INT NOT NULL , `level` INT NOT NULL DEFAULT '0' , `frameID` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+        () => {
+          ontaskfinish();
+        }
       );
       con.query(
-        "CREATE TABLE IF NOT EXISTS data ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `key` TEXT NOT NULL , `value` LONGTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+        "CREATE TABLE IF NOT EXISTS data ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `key` TEXT NOT NULL , `value` LONGTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+        () => {
+          ontaskfinish();
+        }
       );
       con.query(
-        "CREATE TABLE IF NOT EXISTS frame ( `id` INT NOT NULL , `name` TEXT NOT NULL , `path_front` TEXT NOT NULL, `path_back` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;"
+        "CREATE TABLE IF NOT EXISTS frame ( `id` INT NOT NULL , `name` TEXT NOT NULL , `path_front` TEXT NOT NULL, `path_back` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+        () => {
+          ontaskfinish();
+        }
       );
+
+      function ontaskfinish() {
+        i++;
+        if (i == taskAmount) callback();
+      }
       //cardTypes();
       //cards();
       //frames();
@@ -289,6 +318,12 @@ module.exports = {
         callback(result[0]);
       }
     );
+  },
+
+  getCards: function getCards(callback) {
+    con.query("SELECT * FROM card", (err, result, fields) => {
+      callback(result);
+    });
   },
 };
 

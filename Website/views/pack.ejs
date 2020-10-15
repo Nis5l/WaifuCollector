@@ -29,15 +29,10 @@
             var off = 235-(cards.length-1) / 2 * cardSize;
             for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
             {
-                var path = cards[i].cardImage;
-                var posX =  off;
-                opn.insertAdjacentHTML('beforeend',
-                '<waifu-card id="card' + i + '\"img_path=\"' + path +
-                '\" frame-front= \"' + cards[i].frame.path_front + '\" frame-back= \"' +
-                cards[i].frame.path_back + '\" pos-x=' + posX + ' card-name=\"' + cards[i].cardName + '\" anime-name=\"' + cards[i].type.name + '\" turned=true></waifu-card');  
-                //const els = document.querySelector('#card' + i);
-                //console.log(els);
-                //els.fit();
+              var path = cards[i].cardImage;
+              var posX =  off;
+              var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].frame.path_front} frame-back=${cards[i].frame.path_back} pos-x=${posX} card-name=\"${cards[i].cardName}\" anime-name=\"${cards[i].type.name}\" turned=true quality=${cards[i].quality} level=0></waifu-card>`;
+              opn.insertAdjacentHTML('beforeend', cardhtml);  
             }
         </script>
     <% } %> 

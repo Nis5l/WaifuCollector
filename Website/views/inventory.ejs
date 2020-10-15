@@ -12,6 +12,11 @@
     <body>
 
         <%- include('partials/nav.ejs') %>
+        
+        <form action="/inventory" method="post">
+            <input type="search" name="search" placeholder=""/>
+            <input type="submit" value="Change" name="submit"></input>
+        </form>
         <div id="inventory">
         </div>
     </body>
@@ -28,16 +33,15 @@
             var tofit = [];
             for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
             {
-              console.log(cards[i]);
-                var path = cards[i].card.cardImage;
-                var posX =  off;
-                opn.insertAdjacentHTML('beforeend',
-                '<waifu-card id="card' + i + '\"img_path=\"' + path +
-                '\" frame-front= \"' + cards[i].card.frame.path_front + '\" frame-back= \"' +
-                cards[i].card.frame.path_back + '\" pos-x=' + posX + ' card-name=\"' + cards[i].card.cardName + '\" anime-name=\"' + cards[i].card.type.name
-                  + '\" turned=false quality=' + cards[i].quality + '></waifu-card');  
-                var o = document.getElementById("card" + i);
-                tofit.push(o);
+                
+              var path = cards[i].card.cardImage;
+              var posX =  off;
+              var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back=${cards[i].card.frame.path_back} pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level}></waifu-card>`;
+              opn.insertAdjacentHTML('beforeend',
+              cardhtml);
+            
+              var o = document.getElementById(`card${i}`);
+              tofit.push(o);
             }
             window.onload = function() {
               for(var i = 0; i < tofit.length; i++)

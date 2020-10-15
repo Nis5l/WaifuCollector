@@ -18,6 +18,7 @@ var token;
 
 const {
   API_HOST = "localhost",
+  //API_HOST = "192.168.178.55",
   API_PORT = "100",
 
   SESS_NAME = "sid",

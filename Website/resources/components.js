@@ -120,6 +120,7 @@ class Card extends HTMLElement {
     const posX = this.getAttribute("pos-x");
     const turned = this.getAttribute("turned") == "true";
     const quality = this.getAttribute("quality");
+    const level = this.getAttribute("level");
     this.shadow = this.attachShadow({ mode: "open" });
     //this._root.innerHTML =`
     this.shadow.innerHTML = `
@@ -138,6 +139,9 @@ class Card extends HTMLElement {
       </div>
       <div class="quality">
         <div>${quality}</div>
+      </div>
+      <div class="level">
+        <div>${level}</div>
       </div>
     </div>
     <link href='https://fonts.googleapis.com/css?family=Allerta Stencil' rel='stylesheet'>
@@ -226,6 +230,7 @@ class Card extends HTMLElement {
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        font-family: 'Allerta Stencil', sans-serif;
       }
 
       .anime-name
@@ -252,6 +257,7 @@ class Card extends HTMLElement {
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        font-family: 'Allerta Stencil', sans-serif;
       }
 
       .quality
@@ -263,7 +269,7 @@ class Card extends HTMLElement {
         align-items: center;
         color: #ffd600;
         position: absolute;
-        top: 2%;
+        top: 0%;
         left: -1%;
         width: 11%;
         height: 7%;
@@ -282,6 +288,38 @@ class Card extends HTMLElement {
         font-family: 'Allerta Stencil', sans-serif;
         -webkit-text-stroke-color: black;
         -webkit-text-stroke-width: 1px;
+        transform-origin: top center;
+      }
+
+      .level
+      {
+        font-size: 300%;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        color: #dbdbdb;
+        position: absolute;
+        top: 3%;
+        left: 85%;
+        width: 11%;
+        height: 7%;
+        transition: transform 1s;
+        backface-visibility: hidden;
+        transform: rotateY(${turned ? 180 : 0}deg);
+        margin-left: 0%;
+        line-height: 170%;
+        transform-origin: inherit;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font-family: 'Allerta Stencil', sans-serif;
+        -webkit-text-stroke-color: black;
+        -webkit-text-stroke-width: 1px;
+        transform-origin: top center;
       }
       </style>
     `;
@@ -335,6 +373,8 @@ class Card extends HTMLElement {
     $(this.shadow).find(".waifu-card-back").css("transform", "rotateY(180deg)");
     $(this.shadow).find(".card-name").css("transform", "rotateY(0deg)");
     $(this.shadow).find(".anime-name").css("transform", "rotateY(0deg)");
+    $(this.shadow).find(".quality").css("transform", "rotateY(0deg)");
+    $(this.shadow).find(".level").css("transform", "rotateY(0deg)");
   }
 }
 
