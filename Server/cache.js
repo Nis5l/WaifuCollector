@@ -63,10 +63,15 @@ class Client {
     this.sortInv();
   }
 
-  getInventory(page, amount) {
+  getInventory(page, amount, ids) {
     var ret = [];
+    var newinv = [];
+    for (var obj in this.inventory) {
+      if (ids.includes(this.inventory[obj].cardID))
+        newinv.push(this.inventory[obj]);
+    }
     for (var i = page * amount; i < page * amount + amount; i++) {
-      if (i < this.inventory.length && i >= 0) ret.push(this.inventory[i]);
+      if (i < newinv.length && i >= 0) ret.push(newinv[i]);
     }
     return ret;
   }

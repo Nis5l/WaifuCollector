@@ -38,6 +38,7 @@ input[name="submit"] {
 div#inventory {
   margin: auto;
   overflow: auto;
+  max-height: none;
   align-items: center;
   justify-content: center;
   width: 100%;

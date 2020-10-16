@@ -13,7 +13,8 @@ module.exports = {
   getIdsByString: function getIdsByName(name) {
     ids = [];
     for (hash in nameToID) {
-      if (hash.includes(name)) ids.push(nameToID[hash]);
+      if (hash.toLowerCase().includes(name.toLowerCase()))
+        ids.push(nameToID[hash]);
     }
     return ids;
   },

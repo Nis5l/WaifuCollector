@@ -17,6 +17,7 @@ const port = 8000;
 var token;
 
 const {
+  //API_HOST = "89.107.111.246",
   API_HOST = "localhost",
   //API_HOST = "192.168.178.55",
   API_PORT = "100",
@@ -286,10 +287,12 @@ app.get("/pack", redirectLogin, function (req, res) {
 
 app.get("/inventory", redirectLogin, function (req, res) {
   var page = req.query.page;
+  var search = req.query.search;
+  if (search == undefined) search = "";
   if (page == undefined) page = 0;
   request.post(
     "http://" + API_HOST + ":" + API_PORT + "/inventory",
-    { json: { token: token, page: page } },
+    { json: { token: token, page: page, search: search } },
     (error, response, body) => {
       if (!error && response.statusCode == 200 && body.status == 0) {
         for (var i = 0; i < body.inventory.length; i++) {

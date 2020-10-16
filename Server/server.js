@@ -28,6 +28,7 @@ var clients = {};
 var cacheTime = 10000;
 var packCooldown = 10;
 var qualityrange = [1, 7];
+var cardCashInterval = 3600000;
 
 app.use(bodyParser.json());
 
@@ -356,6 +357,9 @@ app.post("/getPackTime", (req, res) => {
 app.post("/inventory", (req, res) => {
   var tokenV = req.body.token;
   var page = req.body.page;
+  var search = req.body.search;
+  if (page == undefined) page = 0;
+  if (search == undefined) search = "";
   try {
     var decoded = jwt.verify(tokenV, jwtSecret);
   } catch (JsonWebTokenError) {
@@ -368,7 +372,12 @@ app.post("/inventory", (req, res) => {
     run(decoded.id);
   }
   function run(userID) {
-    var inventory = clients[userID].getInventory(page, inventorySendAmount);
+    var ids = cache.getIdsByString(search);
+    var inventory = clients[userID].getInventory(
+      page,
+      inventorySendAmount,
+      ids
+    );
     if (inventory.length == 0) {
       res.send({ status: 0, inventory: inventory });
       return;
@@ -432,14 +441,13 @@ function clearCache(userID) {
   delete clients[userID];
 }
 
-var ids = cache.getIdsByString();
-console.log(ids);
-
 console.log("Initializing DataBase");
 database.init(() => {
-  //todo: CLOCK
   cache.refreshCards(() => {
     var server = app.listen(port);
     console.log("Started on port %s", port);
   });
 });
+setInterval(() => {
+  cache.refreshCards();
+}, cardCashInterval);

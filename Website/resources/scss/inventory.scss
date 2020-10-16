@@ -76,6 +76,8 @@ div#inventory
 {
     margin:auto;
     overflow: auto;
+    max-height: none;
+    //overflow-y: scroll;
     align-items: center;
     justify-content: center;
     //margin-top: 100px;
