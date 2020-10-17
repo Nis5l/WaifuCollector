@@ -151,7 +151,7 @@ class Card extends HTMLElement {
       {
         float: left;
         margin: 1%;
-        margin-top: 9%;
+        margin-top: 2%;
         width: 253px;
         height: 402px;
         position: relative;

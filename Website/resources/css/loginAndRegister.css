@@ -33,6 +33,7 @@
     .content .card input[type="submit"] {
       color: black;
       padding: 10px 30px;
+      margin: auto;
       border: 2px solid #00ff00;
       background-color: #00ff00;
       border-radius: 25px; }

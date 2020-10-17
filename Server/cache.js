@@ -6,7 +6,8 @@ class Client {
     this.packTime = -1;
     this.username = username;
     this.inventory = [];
-
+    this.lastids = undefined;
+    this.page = 0;
     var operations = 3;
     var operationsComplete = 0;
 
@@ -44,39 +45,68 @@ class Client {
   }
 
   startDecay(time, callback) {
-    setTimeout(() => {
+    this.time = time;
+    this.callback = callback;
+    if (this.timeout != undefined && this.timeout != null)
+      clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
       callback(this.id);
     }, time);
   }
 
   addFriend(friendID) {
+    this.startDecay(this.time, this.callback);
     this.friends[friends[i].userID] = friendID;
     database.addFriend(this.id, friendID);
   }
 
   getFriends() {
+    this.startDecay(this.time, this.callback);
     return this.friends;
   }
 
   addCard(card) {
+    this.startDecay(this.time, this.callback);
     this.inventory.push(card);
     this.sortInv();
   }
 
   getInventory(page, amount, ids) {
+    this.startDecay(this.time, this.callback);
+    this.lastids = ids;
     var ret = [];
     var newinv = [];
     for (var obj in this.inventory) {
-      if (ids.includes(this.inventory[obj].cardID))
+      if (ids == undefined || ids.includes(this.inventory[obj].cardID))
         newinv.push(this.inventory[obj]);
     }
+    this.pageamount = Math.ceil(newinv.length / amount);
+    if (page >= this.pageamount) page = this.pageamount - 1;
     for (var i = page * amount; i < page * amount + amount; i++) {
       if (i < newinv.length && i >= 0) ret.push(newinv[i]);
     }
+
+    this.page = page;
     return ret;
   }
 
+  getPageStats() {
+    return [this.page + 1, this.pageamount];
+  }
+
+  nextPage(amount) {
+    this.page++;
+    return this.getInventory(this.page, amount, this.lastids);
+  }
+
+  prevPage(amount) {
+    this.page--;
+    if (this.page < 0) this.page = 0;
+    return this.getInventory(this.page, amount, this.lastids);
+  }
+
   sortInv() {
+    this.startDecay(this.time, this.callback);
     while (true) {
       var sorted = true;
       for (var i = 0; i < this.inventory.length - 1; i++) {

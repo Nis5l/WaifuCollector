@@ -43,3 +43,59 @@ div#inventory {
   justify-content: center;
   width: 100%;
   height: auto; }
+
+.scrollable {
+  overflow: auto; }
+
+.next {
+  color: black;
+  padding: 10px 30px;
+  padding: 1%;
+  float: right;
+  width: 4%;
+  margin-right: 5%;
+  outline: none;
+  border: 2px solid #b047ca;
+  background-color: #b047ca;
+  border-radius: 25px; }
+  .next:enabled:hover {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background 0.2s ease-in-out; }
+  .next:active {
+    border-color: #ffffff; }
+  .next:disabled {
+    background-color: #202320;
+    border-color: #202320; }
+
+.previous {
+  color: black;
+  padding: 10px 30px;
+  margin-left: 5%;
+  padding: 1%;
+  float: left;
+  outline: none;
+  border: 2px solid #b047ca;
+  width: 4%;
+  background-color: #b047ca;
+  border-radius: 25px; }
+  .previous:enabled:hover {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background 0.2s ease-in-out; }
+  .previous:active {
+    border-color: #ffffff; }
+  .previous:disabled {
+    background-color: #202320;
+    border-color: #202320; }
+
+.page {
+  position: relative;
+  color: white;
+  float: left;
+  font-size: 300%;
+  margin: auto;
+  margin-top: 2%;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2%; }

@@ -17,7 +17,7 @@ const port = 8000;
 var token;
 
 const {
-  //API_HOST = "89.107.111.246",
+  //API_HOST = "31.177.118.39",
   API_HOST = "localhost",
   //API_HOST = "192.168.178.55",
   API_PORT = "100",
@@ -288,11 +288,15 @@ app.get("/pack", redirectLogin, function (req, res) {
 app.get("/inventory", redirectLogin, function (req, res) {
   var page = req.query.page;
   var search = req.query.search;
+  var next = req.query.next;
+  if (next == "0") next = 0;
+  else if (next == "1") next = 1;
+  if (next == undefined) next = 2;
   if (search == undefined) search = "";
   if (page == undefined) page = 0;
   request.post(
     "http://" + API_HOST + ":" + API_PORT + "/inventory",
-    { json: { token: token, page: page, search: search } },
+    { json: { token: token, page: page, search: search, next: next } },
     (error, response, body) => {
       if (!error && response.statusCode == 200 && body.status == 0) {
         for (var i = 0; i < body.inventory.length; i++) {
@@ -318,7 +322,11 @@ app.get("/inventory", redirectLogin, function (req, res) {
             "/" +
             body.inventory[i].card.frame.path_back;
         }
-        res.render("inventory", { cards: body.inventory });
+        res.render("inventory", {
+          cards: body.inventory,
+          page: body.page,
+          pagemax: body.pagemax,
+        });
       } else {
         res.redirect("/login?errorCode=3&errorMessage=Wrong response");
       }

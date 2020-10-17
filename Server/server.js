@@ -358,6 +358,8 @@ app.post("/inventory", (req, res) => {
   var tokenV = req.body.token;
   var page = req.body.page;
   var search = req.body.search;
+  var next = req.body.next;
+  if (next == undefined) next = -1;
   if (page == undefined) page = 0;
   if (search == undefined) search = "";
   try {
@@ -373,13 +375,24 @@ app.post("/inventory", (req, res) => {
   }
   function run(userID) {
     var ids = cache.getIdsByString(search);
-    var inventory = clients[userID].getInventory(
-      page,
-      inventorySendAmount,
-      ids
-    );
+    if (next == 0) {
+      var inventory = clients[userID].nextPage(inventorySendAmount);
+    } else if (next == 1) {
+      var inventory = clients[userID].prevPage(inventorySendAmount);
+    } else
+      var inventory = clients[userID].getInventory(
+        page,
+        inventorySendAmount,
+        ids
+      );
+    var pageStats = clients[userID].getPageStats();
     if (inventory.length == 0) {
-      res.send({ status: 0, inventory: inventory });
+      res.send({
+        status: 0,
+        inventory: inventory,
+        page: pageStats[0],
+        pagemax: pageStats[1],
+      });
       return;
     }
     run2(0);
@@ -395,7 +408,13 @@ app.post("/inventory", (req, res) => {
             frame.path_back = frameBase + frame.path_back;
             inventory[iteration].card.frame = frame;
             if (iteration == inventory.length - 1) {
-              res.send({ status: 0, inventory: inventory });
+              res.send({
+                status: 0,
+                inventory: inventory,
+                page: pageStats[0],
+                pagemax: pageStats[1],
+              });
+
               return;
             } else {
               run2(iteration + 1);
