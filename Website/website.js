@@ -334,6 +334,49 @@ app.get("/inventory", redirectLogin, function (req, res) {
   );
 });
 
+app.get("/card", redirectLogin, function (req, res) {
+  var uuid = req.query.uuid;
+  if (uuid == undefined) return;
+  request.post(
+    "http://" + API_HOST + ":" + API_PORT + "/card",
+    { json: { token: token, page: page, search: search, next: next } },
+    (error, response, body) => {
+      if (!error && response.statusCode == 200 && body.status == 0) {
+        for (var i = 0; i < body.inventory.length; i++) {
+          body.inventory[i].card.cardImage =
+            "http://" +
+            API_HOST +
+            ":" +
+            API_PORT +
+            "/" +
+            body.inventory[i].card.cardImage;
+          body.inventory[i].card.frame.path_front =
+            "http://" +
+            API_HOST +
+            ":" +
+            API_PORT +
+            "/" +
+            body.inventory[i].card.frame.path_front;
+          body.inventory[i].card.frame.path_back =
+            "http://" +
+            API_HOST +
+            ":" +
+            API_PORT +
+            "/" +
+            body.inventory[i].card.frame.path_back;
+        }
+        res.render("inventory", {
+          cards: body.inventory,
+          page: body.page,
+          pagemax: body.pagemax,
+        });
+      } else {
+        res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+      }
+    }
+  );
+});
+
 app.listen(port, function () {
   console.log("Server started at port %s", port);
 });

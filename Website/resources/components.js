@@ -121,6 +121,7 @@ class Card extends HTMLElement {
     const turned = this.getAttribute("turned") == "true";
     const quality = this.getAttribute("quality");
     const level = this.getAttribute("level");
+    this.uuid = this.getAttribute("uuid");
     this.shadow = this.attachShadow({ mode: "open" });
     //this._root.innerHTML =`
     this.shadow.innerHTML = `
@@ -332,6 +333,10 @@ class Card extends HTMLElement {
       y < card.getBoundingClientRect().bottom &&
       y > card.getBoundingClientRect().top
     );
+  }
+
+  getDiv() {
+    return $(".card");
   }
 
   fit() {

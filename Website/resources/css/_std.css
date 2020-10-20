@@ -10,3 +10,6 @@ body {
   height: 100%;
   background-color: #15171b;
   color: white; }
+
+.scrollable {
+  overflow: auto; }

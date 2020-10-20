@@ -29,6 +29,7 @@ var cacheTime = 10000;
 var packCooldown = 10;
 var qualityrange = [1, 7];
 var cardCashInterval = 3600000;
+//var cardCashInterval = 10000;
 
 app.use(bodyParser.json());
 
@@ -468,5 +469,5 @@ database.init(() => {
   });
 });
 setInterval(() => {
-  cache.refreshCards();
+  cache.refreshCards(() => {});
 }, cardCashInterval);
