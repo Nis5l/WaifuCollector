@@ -37,7 +37,7 @@
             {
               var path = cards[i].cardImage;
               var posX =  off;
-              var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].frame.path_front} frame-back=${cards[i].frame.path_back} pos-x=${posX} card-name=\"${cards[i].cardName}\" anime-name=\"${cards[i].type.name}\" turned=true quality=${cards[i].quality} level=0 uuid=${cards[i].id}></waifu-card>`;
+              var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].frame.path_front} frame-back=${cards[i].frame.path_back} pos-x=${posX} card-name=\"${cards[i].cardName}\" anime-name=\"${cards[i].type.name}\" turned=true quality=${cards[i].quality} level=0 uuid=${cards[i].id} cardID=${cards[i].cardID}></waifu-card>`;
               opn.insertAdjacentHTML('beforeend', cardhtml);  
             }
         </script>

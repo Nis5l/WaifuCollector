@@ -252,27 +252,7 @@ app.get("/pack", redirectLogin, function (req, res) {
       if (!error && response.statusCode == 200) {
         if (body.packTime == "0") {
           for (var i = 0; i < body.cards.length; i++) {
-            body.cards[i].cardImage =
-              "http://" +
-              API_HOST +
-              ":" +
-              API_PORT +
-              "/" +
-              body.cards[i].cardImage;
-            body.cards[i].frame.path_front =
-              "http://" +
-              API_HOST +
-              ":" +
-              API_PORT +
-              "/" +
-              body.cards[i].frame.path_front;
-            body.cards[i].frame.path_back =
-              "http://" +
-              API_HOST +
-              ":" +
-              API_PORT +
-              "/" +
-              body.cards[i].frame.path_back;
+            addPathCard(body.cards[i]);
           }
           res.render("pack", { cards: body.cards });
         } else {
@@ -300,27 +280,7 @@ app.get("/inventory", redirectLogin, function (req, res) {
     (error, response, body) => {
       if (!error && response.statusCode == 200 && body.status == 0) {
         for (var i = 0; i < body.inventory.length; i++) {
-          body.inventory[i].card.cardImage =
-            "http://" +
-            API_HOST +
-            ":" +
-            API_PORT +
-            "/" +
-            body.inventory[i].card.cardImage;
-          body.inventory[i].card.frame.path_front =
-            "http://" +
-            API_HOST +
-            ":" +
-            API_PORT +
-            "/" +
-            body.inventory[i].card.frame.path_front;
-          body.inventory[i].card.frame.path_back =
-            "http://" +
-            API_HOST +
-            ":" +
-            API_PORT +
-            "/" +
-            body.inventory[i].card.frame.path_back;
+          addPathCard(body.inventory[i].card);
         }
         res.render("inventory", {
           cards: body.inventory,
@@ -336,36 +296,21 @@ app.get("/inventory", redirectLogin, function (req, res) {
 
 app.get("/card", redirectLogin, function (req, res) {
   var uuid = req.query.uuid;
+  var lvl = req.query.lvl;
+  var cardID = req.query.cardID;
   if (uuid == undefined) return;
+  if (lvl == undefined) return;
+  if (cardID == undefined) return;
   request.post(
     "http://" + API_HOST + ":" + API_PORT + "/card",
-    { json: { token: token, page: page, search: search, next: next } },
+    { json: { token: token, uuid: uuid, cardID: cardID, lvl: lvl } },
     (error, response, body) => {
       if (!error && response.statusCode == 200 && body.status == 0) {
         for (var i = 0; i < body.inventory.length; i++) {
-          body.inventory[i].card.cardImage =
-            "http://" +
-            API_HOST +
-            ":" +
-            API_PORT +
-            "/" +
-            body.inventory[i].card.cardImage;
-          body.inventory[i].card.frame.path_front =
-            "http://" +
-            API_HOST +
-            ":" +
-            API_PORT +
-            "/" +
-            body.inventory[i].card.frame.path_front;
-          body.inventory[i].card.frame.path_back =
-            "http://" +
-            API_HOST +
-            ":" +
-            API_PORT +
-            "/" +
-            body.inventory[i].card.frame.path_back;
+          addPathCard(body.inventory[i].card);
         }
         res.render("inventory", {
+          card: body.card,
           cards: body.inventory,
           page: body.page,
           pagemax: body.pagemax,
@@ -376,6 +321,14 @@ app.get("/card", redirectLogin, function (req, res) {
     }
   );
 });
+
+function addPathCard(card) {
+  card.cardImage = "http://" + API_HOST + ":" + API_PORT + "/" + card.cardImage;
+  card.frame.path_front =
+    "http://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_front;
+  card.frame.path_back =
+    "http://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_back;
+}
 
 app.listen(port, function () {
   console.log("Server started at port %s", port);

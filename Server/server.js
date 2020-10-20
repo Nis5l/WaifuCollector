@@ -398,34 +398,133 @@ app.post("/inventory", (req, res) => {
     }
     run2(0);
     function run2(iteration) {
-      database.getCard(inventory[iteration].cardID, (result) => {
-        inventory[iteration].card = result;
-        inventory[iteration].card.cardImage =
-          imageBase + inventory[iteration].card.cardImage;
-        database.getCardType(inventory[iteration].card.typeID, (result2) => {
-          inventory[iteration].card.type = result2;
-          database.getFrame(inventory[iteration].frameID, (frame) => {
-            frame.path_front = frameBase + frame.path_front;
-            frame.path_back = frameBase + frame.path_back;
-            inventory[iteration].card.frame = frame;
-            if (iteration == inventory.length - 1) {
-              res.send({
-                status: 0,
-                inventory: inventory,
-                page: pageStats[0],
-                pagemax: pageStats[1],
-              });
+      getCard(
+        inventory[iteration].cardID,
+        inventory[iteration].frameID,
+        (card) => {
+          inventory[iteration].card = card;
+          if (iteration == inventory.length - 1) {
+            res.send({
+              status: 0,
+              inventory: inventory,
+              page: pageStats[0],
+              pagemax: pageStats[1],
+            });
 
-              return;
-            } else {
-              run2(iteration + 1);
-            }
-          });
-        });
-      });
+            return;
+          } else {
+            run2(iteration + 1);
+          }
+        }
+      );
     }
   }
 });
+
+app.post("/card", (req, res) => {
+  var tokenV = req.body.token;
+  var uuid = req.body.uuid;
+  var lvl = req.body.lvl;
+  var cardID = req.body.cardID;
+  var next = req.body.next;
+  var page = req.body.page;
+  if (page == undefined) page = 0;
+  if (next == undefined) next = -1;
+  if (uuid == undefined || lvl == undefined || cardID == undefined)
+    res.send({ status: 1, message: "Invalid data" });
+  cardID = parseInt(cardID);
+  if (cardID == NaN) res.send({ status: 1, message: "cardID not valid" });
+
+  try {
+    var decoded = jwt.verify(tokenV, jwtSecret);
+  } catch (JsonWebTokenError) {
+    res.send({ status: 1, message: "Identification Please" });
+    return;
+  }
+
+  if (clients[decoded.id] == undefined) {
+    createCache(decoded.id, decoded.username, run);
+  } else {
+    run(decoded.id);
+  }
+
+  function run(userID) {
+    var ids = [cardID];
+    if (next == 0) {
+      var inventory = clients[userID].nextPage(inventorySendAmount);
+    } else if (next == 1) {
+      var inventory = clients[userID].prevPage(inventorySendAmount);
+    } else
+      var inventory = clients[userID].getInventory(
+        page,
+        inventorySendAmount,
+        ids
+      );
+    var pageStats = clients[userID].getPageStats();
+    if (inventory.length == 0) {
+      res.send({
+        status: 0,
+        inventory: inventory,
+        page: pageStats[0],
+        pagemax: pageStats[1],
+      });
+      return;
+    }
+    var maincard;
+    database.getCardUUID(uuid, decoded.id, (result) => {
+      getCard(result.cardID, result.frameID, (_maincard) => {
+        maincard = _maincard;
+        if (result == undefined) {
+          res.send({
+            status: 1,
+            message: "Cant find card, or it isnt yours",
+          });
+          return;
+        }
+        run2(0);
+      });
+    });
+    function run2(iteration) {
+      getCard(
+        inventory[iteration].cardID,
+        inventory[iteration].frameID,
+        (card) => {
+          inventory[iteration].card = card;
+
+          if (iteration == inventory.length - 1) {
+            res.send({
+              status: 0,
+              inventory: inventory,
+              card: maincard,
+              page: pageStats[0],
+              pagemax: pageStats[1],
+            });
+            return;
+          } else {
+            run2(iteration + 1);
+          }
+        }
+      );
+    }
+  }
+});
+
+function getCard(cardID, frameID, callback) {
+  var card;
+  database.getCard(cardID, (result) => {
+    card = result;
+    card.cardImage = imageBase + card.cardImage;
+    database.getCardType(card.typeID, (result2) => {
+      card.type = result2;
+      database.getFrame(frameID, (frame) => {
+        frame.path_front = frameBase + frame.path_front;
+        frame.path_back = frameBase + frame.path_back;
+        card.frame = frame;
+        callback(card);
+      });
+    });
+  });
+}
 
 function checkUser(username) {
   if (

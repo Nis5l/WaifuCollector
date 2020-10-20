@@ -44,9 +44,6 @@ div#inventory {
   width: 100%;
   height: auto; }
 
-.scrollable {
-  overflow: auto; }
-
 .next {
   color: black;
   padding: 10px 30px;

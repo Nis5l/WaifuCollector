@@ -121,7 +121,9 @@ class Card extends HTMLElement {
     const turned = this.getAttribute("turned") == "true";
     const quality = this.getAttribute("quality");
     const level = this.getAttribute("level");
+    this.level = level;
     this.uuid = this.getAttribute("uuid");
+    this.cardID = this.getAttribute("cardID");
     this.shadow = this.attachShadow({ mode: "open" });
     //this._root.innerHTML =`
     this.shadow.innerHTML = `

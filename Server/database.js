@@ -325,6 +325,15 @@ module.exports = {
       callback(result);
     });
   },
+  getCardUUID: function getCardUUID(uuid, userID, callback) {
+    con.query(
+      "SELECT * FROM unlocked WHERE id=" + uuid + " AND userID=" + userID,
+      (err, result, fields) => {
+        if (result == undefined || result.length == 0) callback(undefined);
+        callback(result[0]);
+      }
+    );
+  },
 };
 
 function cards() {
