@@ -1,15 +1,15 @@
 class ProgressRing extends HTMLElement {
-  constructor() {
-    super();
-    const stroke = this.getAttribute("stroke");
-    const radius = this.getAttribute("radius");
-    this.radius = radius;
-    const normalizedRadius = radius - stroke * 2;
-    this.time = this.getAttribute("time");
-    this._circumference = normalizedRadius * 2 * Math.PI;
+	constructor() {
+		super();
+		const stroke = this.getAttribute("stroke");
+		const radius = this.getAttribute("radius");
+		this.radius = radius;
+		const normalizedRadius = radius - stroke * 2;
+		this.time = this.getAttribute("time");
+		this._circumference = normalizedRadius * 2 * Math.PI;
 
-    this._root = this.attachShadow({ mode: "open" });
-    this._root.innerHTML = `
+		this._root = this.attachShadow({ mode: "open" });
+		this._root.innerHTML = `
       <svg
         height="${radius * 2}"
         width="${radius * 2}"
@@ -56,77 +56,78 @@ class ProgressRing extends HTMLElement {
         }
       </style>
     `;
-  }
+	}
 
-  setProgress(percent) {
-    const offset = this._circumference - (percent / 100) * this._circumference;
-    const circle = this._root.querySelector("circle");
-    if (percent == 100) {
-      circle.style.fill = "rgba(214, 214, 214)";
-      circle.style.fillOpacity = "0.06";
-    }
-    circle.style.strokeDashoffset = offset;
-  }
+	setProgress(percent) {
+		const offset = this._circumference - (percent / 100) * this._circumference;
+		const circle = this._root.querySelector("circle");
+		if (percent == 100) {
+			circle.style.fill = "rgba(214, 214, 214)";
+			circle.style.fillOpacity = "0.06";
+		}
+		circle.style.strokeDashoffset = offset;
+	}
 
-  setTime(time) {
-    const text = this._root.querySelector("text");
-    if (time != 0) this.time = Math.floor(time / 1000) + "s";
-    else this.time = "Open";
-    text.innerHTML = this.time;
-  }
+	setTime(time) {
+		const text = this._root.querySelector("text");
+		if (time != 0) this.time = Math.floor(time / 1000) + "s";
+		else this.time = "Open";
+		text.innerHTML = this.time;
+	}
 
-  static get observedAttributes() {
-    return ["progress", "time"];
-  }
+	static get observedAttributes() {
+		return ["progress", "time"];
+	}
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === "progress") {
-      this.setProgress(newValue);
-    }
-    if (name === "time") {
-      this.setTime(newValue);
-    }
-  }
+	attributeChangedCallback(name, oldValue, newValue) {
+		if (name === "progress") {
+			this.setProgress(newValue);
+		}
+		if (name === "time") {
+			this.setTime(newValue);
+		}
+	}
 
-  isClicked(x, y) {
-    if (this.time != 0 && this.time != "Open") return;
-    const circle = this._root.querySelector("circle");
-    const circleX =
-      circle.getBoundingClientRect().right -
-      (circle.getBoundingClientRect().right -
-        circle.getBoundingClientRect().left) /
-        2;
-    const circleY =
-      circle.getBoundingClientRect().top -
-      (circle.getBoundingClientRect().top -
-        circle.getBoundingClientRect().bottom) /
-        2;
-    const ret =
-      Math.sqrt((circleX - x) * (circleX - x) + (circleY - y) * (circleY - y)) <
-      this.radius;
-    if (ret) circle.style.fillOpacity = "0.5";
-    if (ret) return ret;
-  }
+	isClicked(x, y) {
+		if (this.time != 0 && this.time != "Open") return;
+		const circle = this._root.querySelector("circle");
+		const circleX =
+			circle.getBoundingClientRect().right -
+			(circle.getBoundingClientRect().right -
+				circle.getBoundingClientRect().left) /
+				2;
+		const circleY =
+			circle.getBoundingClientRect().top -
+			(circle.getBoundingClientRect().top -
+				circle.getBoundingClientRect().bottom) /
+				2;
+		const ret =
+			Math.sqrt((circleX - x) * (circleX - x) + (circleY - y) * (circleY - y)) <
+			this.radius;
+		if (ret) circle.style.fillOpacity = "0.5";
+		if (ret) return ret;
+	}
 }
 
 class Card extends HTMLElement {
-  constructor() {
-    super();
-    const img = this.getAttribute("img_path");
-    const frame_front = this.getAttribute("frame-front");
-    const frame_back = this.getAttribute("frame-back");
-    const card_name = this.getAttribute("card-name");
-    const anime_name = this.getAttribute("anime-name");
-    const posX = this.getAttribute("pos-x");
-    const turned = this.getAttribute("turned") == "true";
-    const quality = this.getAttribute("quality");
-    const level = this.getAttribute("level");
-    this.level = level;
-    this.uuid = this.getAttribute("uuid");
-    this.cardID = this.getAttribute("cardID");
-    this.shadow = this.attachShadow({ mode: "open" });
-    //this._root.innerHTML =`
-    this.shadow.innerHTML = `
+	constructor() {
+		super();
+		const img = this.getAttribute("img_path");
+		const frame_front = this.getAttribute("frame-front");
+		const frame_back = this.getAttribute("frame-back");
+		const card_name = this.getAttribute("card-name");
+		const anime_name = this.getAttribute("anime-name");
+		const posX = this.getAttribute("pos-x");
+		const turned = this.getAttribute("turned") == "true";
+		const quality = this.getAttribute("quality");
+		const level = this.getAttribute("level");
+		const size = parseInt(this.getAttribute("card-size"));
+		this.level = level;
+		this.uuid = this.getAttribute("uuid");
+		this.cardID = this.getAttribute("cardID");
+		this.shadow = this.attachShadow({ mode: "open" });
+		//this._root.innerHTML =`
+		this.shadow.innerHTML = `
     <div class="card" id=card> 
       <div class="card-inner id=card-inner">
       </div>  
@@ -155,8 +156,8 @@ class Card extends HTMLElement {
         float: left;
         margin: 1%;
         margin-top: 2%;
-        width: 253px;
-        height: 402px;
+        width: ${253 * size}px;
+        height: ${402 * size}px;
         position: relative;
         transform: translateX(${posX}%);
       }
@@ -326,63 +327,63 @@ class Card extends HTMLElement {
       }
       </style>
     `;
-  }
-  isClicked(x, y) {
-    const card = this.shadow.querySelector(".card");
-    return (
-      x < card.getBoundingClientRect().right &&
-      x > card.getBoundingClientRect().left &&
-      y < card.getBoundingClientRect().bottom &&
-      y > card.getBoundingClientRect().top
-    );
-  }
+	}
+	isClicked(x, y) {
+		const card = this.shadow.querySelector(".card");
+		return (
+			x < card.getBoundingClientRect().right &&
+			x > card.getBoundingClientRect().left &&
+			y < card.getBoundingClientRect().bottom &&
+			y > card.getBoundingClientRect().top
+		);
+	}
 
-  getDiv() {
-    return $(".card");
-  }
+	getDiv() {
+		return $(".card");
+	}
 
-  fit() {
-    while (
-      $(this.shadow).find(".anime-name div").height() >
-      $(this.shadow).find(".anime-name").height()
-    ) {
-      $(this.shadow)
-        .find(".anime-name div")
-        .css(
-          "font-size",
-          parseInt($(this.shadow).find(".anime-name div").css("font-size")) -
-            1 +
-            "px"
-        );
-    }
+	fit() {
+		while (
+			$(this.shadow).find(".anime-name div").height() >
+			$(this.shadow).find(".anime-name").height()
+		) {
+			$(this.shadow)
+				.find(".anime-name div")
+				.css(
+					"font-size",
+					parseInt($(this.shadow).find(".anime-name div").css("font-size")) -
+						1 +
+						"px"
+				);
+		}
 
-    while (
-      $(this.shadow).find(".card-name div").height() >
-      $(this.shadow).find(".card-name").height()
-    ) {
-      $(this.shadow)
-        .find(".card-name div")
-        .css(
-          "font-size",
-          parseInt($(this.shadow).find(".card-name div").css("font-size")) -
-            1 +
-            "px"
-        );
-    }
-  }
-  //src="https://code.jquery.com/jquery-3.5.1.js"
-  //integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  //crossorigin="anonymous"
+		while (
+			$(this.shadow).find(".card-name div").height() >
+			$(this.shadow).find(".card-name").height()
+		) {
+			$(this.shadow)
+				.find(".card-name div")
+				.css(
+					"font-size",
+					parseInt($(this.shadow).find(".card-name div").css("font-size")) -
+						1 +
+						"px"
+				);
+		}
+	}
+	//src="https://code.jquery.com/jquery-3.5.1.js"
+	//integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+	//crossorigin="anonymous"
 
-  turn() {
-    $(this.shadow).find(".card-inner").css("transform", "rotateY(0deg)");
-    $(this.shadow).find(".waifu-card").css("transform", "rotateY(0deg)");
-    $(this.shadow).find(".waifu-card-back").css("transform", "rotateY(180deg)");
-    $(this.shadow).find(".card-name").css("transform", "rotateY(0deg)");
-    $(this.shadow).find(".anime-name").css("transform", "rotateY(0deg)");
-    $(this.shadow).find(".quality").css("transform", "rotateY(0deg)");
-    $(this.shadow).find(".level").css("transform", "rotateY(0deg)");
-  }
+	turn() {
+		$(this.shadow).find(".card-inner").css("transform", "rotateY(0deg)");
+		$(this.shadow).find(".waifu-card").css("transform", "rotateY(0deg)");
+		$(this.shadow).find(".waifu-card-back").css("transform", "rotateY(180deg)");
+		$(this.shadow).find(".card-name").css("transform", "rotateY(0deg)");
+		$(this.shadow).find(".anime-name").css("transform", "rotateY(0deg)");
+		$(this.shadow).find(".quality").css("transform", "rotateY(0deg)");
+		$(this.shadow).find(".level").css("transform", "rotateY(0deg)");
+	}
 }
 
 var script = document.createElement("script");

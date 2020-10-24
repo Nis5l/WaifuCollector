@@ -1,0 +1,23 @@
+@import "___base.scss";
+
+div[id="cards"] {
+	float: left;
+    margin:auto;
+    overflow: auto;
+    max-height: none;
+    //overflow-y: scroll;
+    align-items: center;
+    justify-content: center;
+	margin-top: 100px;
+    width: 60%;
+    height: auto;
+	border-right: 1px solid $sectionBorder;
+}
+div[id="maincard"]
+{
+	margin: auto;
+	margin-top: 100px;
+	width: 30%;
+	float: right;
+	height: auto;
+}

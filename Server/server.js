@@ -34,539 +34,542 @@ var cardCashInterval = 3600000;
 app.use(bodyParser.json());
 
 app.get("/", function (req, res) {
-  res.send("Hello World");
+	res.send("Hello World");
 });
 
 app.post("/login", (req, res) => {
-  var username = req.body.username;
-  var password = req.body.password;
-  console.log("Login " + username + " " + password);
-  database.login(username, password, (b, messageV, userIDV) => {
-    var tokenV = "";
-    if (b) tokenV = jwt.sign({ username: username, id: userIDV }, jwtSecret);
+	var username = req.body.username;
+	var password = req.body.password;
+	console.log("Login " + username + " " + password);
+	database.login(username, password, (b, messageV, userIDV) => {
+		var tokenV = "";
+		if (b) tokenV = jwt.sign({ username: username, id: userIDV }, jwtSecret);
 
-    if (b)
-      res.send({
-        status: b ? 0 : 1,
-        token: tokenV,
-        userID: userIDV,
-        message: messageV,
-      });
-    else res.send({ status: b ? 0 : 1, token: tokenV, message: messageV });
+		if (b)
+			res.send({
+				status: b ? 0 : 1,
+				token: tokenV,
+				userID: userIDV,
+				message: messageV,
+			});
+		else res.send({ status: b ? 0 : 1, token: tokenV, message: messageV });
 
-    if (b) {
-      createCache(userIDV, username, () => {});
-    }
-  });
+		if (b) {
+			createCache(userIDV, username, () => {});
+		}
+	});
 });
 
 app.post("/register", (req, res) => {
-  var username = req.body.username;
-  var password = req.body.password;
+	var username = req.body.username;
+	var password = req.body.password;
 
-  switch (checkUser(username)) {
-    case 1: {
-      registerCallback(
-        false,
-        "the username length must be between " +
-          userLen[0] +
-          " and " +
-          userLen[1]
-      );
-      return;
-    }
-    case 2: {
-      registerCallback(
-        false,
-        "the user can only contain letters, numbers and _"
-      );
-      return;
-    }
-  }
+	switch (checkUser(username)) {
+		case 1: {
+			registerCallback(
+				false,
+				"the username length must be between " +
+					userLen[0] +
+					" and " +
+					userLen[1]
+			);
+			return;
+		}
+		case 2: {
+			registerCallback(
+				false,
+				"the user can only contain letters, numbers and _"
+			);
+			return;
+		}
+	}
 
-  switch (checkPass(password)) {
-    case 1: {
-      registerCallback(
-        false,
-        "the password length must be between " +
-          passLen[0] +
-          " and " +
-          passLen[1]
-      );
-      return;
-    }
-  }
-  console.log("Register " + username + " " + password);
-  database.register(username, password, registerCallback);
+	switch (checkPass(password)) {
+		case 1: {
+			registerCallback(
+				false,
+				"the password length must be between " +
+					passLen[0] +
+					" and " +
+					passLen[1]
+			);
+			return;
+		}
+	}
+	console.log("Register " + username + " " + password);
+	database.register(username, password, registerCallback);
 
-  function registerCallback(b, message) {
-    res.send({ status: b ? 0 : 1, message: message });
-  }
+	function registerCallback(b, message) {
+		res.send({ status: b ? 0 : 1, message: message });
+	}
 });
 
 app.post("/getName", (req, res) => {
-  var token = req.body.token;
-  try {
-    var decoded = jwt.verify(token, jwtSecret);
-  } catch (JsonWebTokenError) {
-    res.send({ status: 1, message: "Identification Please" });
-    return;
-  }
+	var token = req.body.token;
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
 
-  if (clients[decoded.id] == undefined) {
-    createCache(decoded.id, decoded.username, run);
-  } else {
-    run(decoded.id);
-  }
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run(decoded.id);
+	}
 
-  function run(userID) {
-    username = clients[userID].username;
+	function run(userID) {
+		username = clients[userID].username;
 
-    if (!username || username == "null" || username == null) {
-      res.send({
-        status: 1,
-        message: "User with userID " + userID + " not found!",
-      });
-      return;
-    }
+		if (!username || username == "null" || username == null) {
+			res.send({
+				status: 1,
+				message: "User with userID " + userID + " not found!",
+			});
+			return;
+		}
 
-    res.send({ status: 0, name: username });
-  }
-  return;
+		res.send({ status: 0, name: username });
+	}
+	return;
 });
 
 app.post("/pack", (req, res) => {
-  var tokenV = req.body.token;
-  try {
-    var decoded = jwt.verify(tokenV, jwtSecret);
-  } catch (JsonWebTokenError) {
-    res.send({ status: 1, message: "Identification Please" });
-    return;
-  }
-  if (clients[decoded.id] == undefined) {
-    createCache(decoded.id, decoded.username, run);
-  } else {
-    run(decoded.id);
-  }
-  function run(userID) {
-    if (clients[decoded.id].packTime != null) {
-      packCallBack(decoded.id);
-      return;
-    } else {
-      createCache(decoded.id, decoded.username, () => {
-        packCallBack(decoded.id);
-      });
-      return;
-    }
+	var tokenV = req.body.token;
+	try {
+		var decoded = jwt.verify(tokenV, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run(decoded.id);
+	}
+	function run(userID) {
+		if (clients[decoded.id].packTime != null) {
+			packCallBack(decoded.id);
+			return;
+		} else {
+			createCache(decoded.id, decoded.username, () => {
+				packCallBack(decoded.id);
+			});
+			return;
+		}
 
-    function packCallBack(userID) {
-      if (clients[userID] == undefined) {
-        createCache(userID, decoded.username, run);
-      } else {
-        run(userID);
-      }
+		function packCallBack(userID) {
+			if (clients[userID] == undefined) {
+				createCache(userID, decoded.username, run);
+			} else {
+				run(userID);
+			}
 
-      function run(userID) {
-        var nowDate = moment();
-        var date = moment(nowDate).add(packCooldown, "seconds");
-        var packDate = moment(parseInt(clients[userID].packTime));
+			function run(userID) {
+				var nowDate = moment();
+				var date = moment(nowDate).add(packCooldown, "seconds");
+				var packDate = moment(parseInt(clients[userID].packTime));
 
-        if (
-          clients[userID] == null ||
-          clients[userID].packTime == "null" ||
-          nowDate.isAfter(packDate) ||
-          !packDate.isValid()
-        ) {
-          clients[userID].packTime = date.valueOf();
-          var iterations = utils.getRandomInt(packSize[0], packSize[1]);
-          database.getRandomCard(iterations, (cards) => {
-            for (var j = 0; j < cards.length; j++) {
-              var quality = utils.getRandomInt(
-                qualityrange[0],
-                qualityrange[1]
-              );
-              cards[j].quality = quality;
-              cards[j].cardImage = imageBase + cards[j].cardImage;
-            }
-            database.getRandomFrame(iterations, (frames) => {
-              for (var j = 0; j < frames.length; j++) {
-                frames[j].path_front = frameBase + frames[j].path_front;
-                frames[j].path_back = frameBase + frames[j].path_back;
-              }
+				if (
+					clients[userID] == null ||
+					clients[userID].packTime == "null" ||
+					nowDate.isAfter(packDate) ||
+					!packDate.isValid()
+				) {
+					clients[userID].packTime = date.valueOf();
+					var iterations = utils.getRandomInt(packSize[0], packSize[1]);
+					database.getRandomCard(iterations, (cards) => {
+						for (var j = 0; j < cards.length; j++) {
+							var quality = utils.getRandomInt(
+								qualityrange[0],
+								qualityrange[1]
+							);
+							cards[j].quality = quality;
+							cards[j].cardImage = imageBase + cards[j].cardImage;
+						}
+						database.getRandomFrame(iterations, (frames) => {
+							for (var j = 0; j < frames.length; j++) {
+								frames[j].path_front = frameBase + frames[j].path_front;
+								frames[j].path_back = frameBase + frames[j].path_back;
+							}
 
-              for (var j = frames.length - 1; j < iterations; j++) {
-                frames[j] = frames[utils.getRandomInt(0, frames.length - 1)];
-              }
-              for (var j = 0; j < cards.length; j++) {
-                cards[j].frame = frames[j];
-                database.addCard(userID, cards[j].id, quality, frames[j].id);
-                clients[userID].addCard({
-                  id: -1,
-                  userID: userID,
-                  cardID: cards[j].id,
-                  quality: quality,
-                  level: 0,
-                  frameID: frames[j].id,
-                });
-              }
-              run2(0);
-              function run2(iteration) {
-                database.getCardType(cards[iteration].typeID, (result) => {
-                  cards[iteration].type = result;
-                  if (iteration == iterations - 1) {
-                    res.send({ packTime: "0", message: "OK", cards: cards });
-                    return;
-                  } else {
-                    run2(iteration + 1);
-                  }
-                });
-              }
-            });
-          });
-        } else {
-          res.send({
-            packTime: packDate.diff(nowDate).seconds(),
-            message: "WAIT",
-            cards: [],
-          });
-          return;
-        }
-      }
-    }
-  }
+							for (var j = frames.length - 1; j < iterations; j++) {
+								frames[j] = frames[utils.getRandomInt(0, frames.length - 1)];
+							}
+							for (var j = 0; j < cards.length; j++) {
+								cards[j].frame = frames[j];
+								database.addCard(userID, cards[j].id, quality, frames[j].id);
+								clients[userID].addCard({
+									id: -1,
+									userID: userID,
+									cardID: cards[j].id,
+									quality: quality,
+									level: 0,
+									frameID: frames[j].id,
+								});
+							}
+							run2(0);
+							function run2(iteration) {
+								database.getCardType(cards[iteration].typeID, (result) => {
+									cards[iteration].type = result;
+									if (iteration == iterations - 1) {
+										res.send({ packTime: "0", message: "OK", cards: cards });
+										return;
+									} else {
+										run2(iteration + 1);
+									}
+								});
+							}
+						});
+					});
+				} else {
+					res.send({
+						packTime: packDate.diff(nowDate).seconds(),
+						message: "WAIT",
+						cards: [],
+					});
+					return;
+				}
+			}
+		}
+	}
 });
 
 app.post("/passchange", (req, res) => {
-  var tokenV = req.body.token;
-  try {
-    var decoded = jwt.verify(tokenV, jwtSecret);
-  } catch (JsonWebTokenError) {
-    res.send({ status: 1, message: "Identification Please" });
-    return;
-  }
-  var username = decoded.username;
-  var newpassword = req.body.newpassword;
-  console.log("Passchange: " + username + " " + newpassword);
-  switch (checkPass(newpassword)) {
-    case 1: {
-      res.send({
-        status: 1,
-        message:
-          "the password length must be between " +
-          passLen[0] +
-          " and " +
-          passLen[1],
-      });
-      return;
-    }
-  }
-  database.userexists(username, (b) => {
-    if (b) {
-      database.changePass(username, newpassword);
-      res.send({ status: 0, message: "Password changed" });
-    } else {
-      res.send({ status: 1, message: "Failed" });
-    }
-  });
+	var tokenV = req.body.token;
+	try {
+		var decoded = jwt.verify(tokenV, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+	var username = decoded.username;
+	var newpassword = req.body.newpassword;
+	console.log("Passchange: " + username + " " + newpassword);
+	switch (checkPass(newpassword)) {
+		case 1: {
+			res.send({
+				status: 1,
+				message:
+					"the password length must be between " +
+					passLen[0] +
+					" and " +
+					passLen[1],
+			});
+			return;
+		}
+	}
+	database.userexists(username, (b) => {
+		if (b) {
+			database.changePass(username, newpassword);
+			res.send({ status: 0, message: "Password changed" });
+		} else {
+			res.send({ status: 1, message: "Failed" });
+		}
+	});
 });
 
 app.post("/getfriends", (req, res) => {
-  var tokenV = req.body.token;
-  try {
-    var decoded = jwt.verify(tokenV, jwtSecret);
-  } catch (JsonWebTokenError) {
-    res.send({
-      status: 1,
-      message: '"TF you doing here nigga, identify yourself, who tf are you"',
-    });
-    return;
-  }
+	var tokenV = req.body.token;
+	try {
+		var decoded = jwt.verify(tokenV, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({
+			status: 1,
+			message: '"TF you doing here nigga, identify yourself, who tf are you"',
+		});
+		return;
+	}
 
-  if (clients[decoded.id] == undefined) {
-    createCache(decoded.id, decoded.username, run);
-  } else {
-    run(decoded.id);
-  }
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run(decoded.id);
+	}
 
-  function run(userID) {
-    var friendIDs = clients[userID].getFriends();
-    var friends = [];
-    for (var i = 0; i < friendIDs.length; i++) {
-      var id = friendIDs[i];
-      if (clients[id] != undefined) {
-        friends.push({ userID: id, username: clients[id].username });
+	function run(userID) {
+		var friendIDs = clients[userID].getFriends();
+		var friends = [];
+		for (var i = 0; i < friendIDs.length; i++) {
+			var id = friendIDs[i];
+			if (clients[id] != undefined) {
+				friends.push({ userID: id, username: clients[id].username });
 
-        if (i == friendIDs.length) {
-          res.send({ status: 0, friends: friends });
-        }
-      } else {
-        database.getUserName(id, (username) => {
-          if (username != null) {
-            createCache(id, username, () => {
-              friends.push({ userID: id, username: clients[id].username });
-              if (i == friendIDs.length) {
-                res.send({ status: 0, friends: friends });
-              }
-            });
-          }
-        });
-      }
-    }
-  }
+				if (i == friendIDs.length) {
+					res.send({ status: 0, friends: friends });
+				}
+			} else {
+				database.getUserName(id, (username) => {
+					if (username != null) {
+						createCache(id, username, () => {
+							friends.push({ userID: id, username: clients[id].username });
+							if (i == friendIDs.length) {
+								res.send({ status: 0, friends: friends });
+							}
+						});
+					}
+				});
+			}
+		}
+	}
 });
 
 app.post("/getPackTime", (req, res) => {
-  var token = req.body.token;
-  try {
-    var decoded = jwt.verify(token, jwtSecret);
-  } catch (JsonWebTokenError) {
-    res.send({ status: 1, message: "Identification Please" });
-    return;
-  }
+	var token = req.body.token;
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
 
-  if (clients[decoded.id] == undefined) {
-    createCache(decoded.id, decoded.username, run);
-  } else {
-    run(decoded.id);
-  }
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run(decoded.id);
+	}
 
-  function run(userID) {
-    username = clients[userID].packTime;
+	function run(userID) {
+		username = clients[userID].packTime;
 
-    var nowDate = moment();
-    var packDate = moment(parseInt(clients[userID].packTime));
+		var nowDate = moment();
+		var packDate = moment(parseInt(clients[userID].packTime));
 
-    if (
-      clients[userID] == null ||
-      clients[userID].packTime == "null" ||
-      nowDate.isAfter(packDate) ||
-      !packDate.isValid()
-    ) {
-      res.send({ status: 0, packTime: 0, fullTime: packCooldown * 1000 });
-      return;
-    } else {
-      res.send({
-        status: 1,
-        packTime: packDate.diff(nowDate).seconds(),
-        fullTime: packCooldown * 1000,
-      });
-    }
-  }
-  return;
+		if (
+			clients[userID] == null ||
+			clients[userID].packTime == "null" ||
+			nowDate.isAfter(packDate) ||
+			!packDate.isValid()
+		) {
+			res.send({ status: 0, packTime: 0, fullTime: packCooldown * 1000 });
+			return;
+		} else {
+			res.send({
+				status: 1,
+				packTime: packDate.diff(nowDate).seconds(),
+				fullTime: packCooldown * 1000,
+			});
+		}
+	}
+	return;
 });
 
 app.post("/inventory", (req, res) => {
-  var tokenV = req.body.token;
-  var page = req.body.page;
-  var search = req.body.search;
-  var next = req.body.next;
-  if (next == undefined) next = -1;
-  if (page == undefined) page = 0;
-  if (search == undefined) search = "";
-  try {
-    var decoded = jwt.verify(tokenV, jwtSecret);
-  } catch (JsonWebTokenError) {
-    res.send({ status: 1, message: "Identification Please" });
-    return;
-  }
-  if (clients[decoded.id] == undefined) {
-    createCache(decoded.id, decoded.username, run);
-  } else {
-    run(decoded.id);
-  }
-  function run(userID) {
-    var ids = cache.getIdsByString(search);
-    if (next == 0) {
-      var inventory = clients[userID].nextPage(inventorySendAmount);
-    } else if (next == 1) {
-      var inventory = clients[userID].prevPage(inventorySendAmount);
-    } else
-      var inventory = clients[userID].getInventory(
-        page,
-        inventorySendAmount,
-        ids
-      );
-    var pageStats = clients[userID].getPageStats();
-    if (inventory.length == 0) {
-      res.send({
-        status: 0,
-        inventory: inventory,
-        page: pageStats[0],
-        pagemax: pageStats[1],
-      });
-      return;
-    }
-    run2(0);
-    function run2(iteration) {
-      getCard(
-        inventory[iteration].cardID,
-        inventory[iteration].frameID,
-        (card) => {
-          inventory[iteration].card = card;
-          if (iteration == inventory.length - 1) {
-            res.send({
-              status: 0,
-              inventory: inventory,
-              page: pageStats[0],
-              pagemax: pageStats[1],
-            });
+	var tokenV = req.body.token;
+	var page = req.body.page;
+	var search = req.body.search;
+	var next = req.body.next;
+	if (next == undefined) next = -1;
+	if (page == undefined) page = 0;
+	if (search == undefined) search = "";
+	try {
+		var decoded = jwt.verify(tokenV, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run(decoded.id);
+	}
+	function run(userID) {
+		var ids = cache.getIdsByString(search);
+		if (next == 0) {
+			var inventory = clients[userID].nextPage(inventorySendAmount);
+		} else if (next == 1) {
+			var inventory = clients[userID].prevPage(inventorySendAmount);
+		} else
+			var inventory = clients[userID].getInventory(
+				page,
+				inventorySendAmount,
+				ids
+			);
+		var pageStats = clients[userID].getPageStats();
+		if (inventory.length == 0) {
+			res.send({
+				status: 0,
+				inventory: inventory,
+				page: pageStats[0],
+				pagemax: pageStats[1],
+			});
+			return;
+		}
+		run2(0);
+		function run2(iteration) {
+			getCard(
+				inventory[iteration].cardID,
+				inventory[iteration].frameID,
+				(card) => {
+					inventory[iteration].card = card;
+					if (iteration == inventory.length - 1) {
+						res.send({
+							status: 0,
+							inventory: inventory,
+							page: pageStats[0],
+							pagemax: pageStats[1],
+						});
 
-            return;
-          } else {
-            run2(iteration + 1);
-          }
-        }
-      );
-    }
-  }
+						return;
+					} else {
+						run2(iteration + 1);
+					}
+				}
+			);
+		}
+	}
 });
 
 app.post("/card", (req, res) => {
-  var tokenV = req.body.token;
-  var uuid = req.body.uuid;
-  var lvl = req.body.lvl;
-  var cardID = req.body.cardID;
-  var next = req.body.next;
-  var page = req.body.page;
-  if (page == undefined) page = 0;
-  if (next == undefined) next = -1;
-  if (uuid == undefined || lvl == undefined || cardID == undefined)
-    res.send({ status: 1, message: "Invalid data" });
-  cardID = parseInt(cardID);
-  if (cardID == NaN) res.send({ status: 1, message: "cardID not valid" });
+	var tokenV = req.body.token;
+	var uuid = req.body.uuid;
+	var lvl = req.body.lvl;
+	var cardID = req.body.cardID;
+	var next = req.body.next;
+	var page = req.body.page;
+	if (page == undefined) page = 0;
+	if (next == undefined) next = -1;
+	if (uuid == undefined || lvl == undefined || cardID == undefined)
+		res.send({ status: 1, message: "Invalid data" });
+	cardID = parseInt(cardID);
+	if (cardID == NaN) res.send({ status: 1, message: "cardID not valid" });
 
-  try {
-    var decoded = jwt.verify(tokenV, jwtSecret);
-  } catch (JsonWebTokenError) {
-    res.send({ status: 1, message: "Identification Please" });
-    return;
-  }
+	try {
+		var decoded = jwt.verify(tokenV, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
 
-  if (clients[decoded.id] == undefined) {
-    createCache(decoded.id, decoded.username, run);
-  } else {
-    run(decoded.id);
-  }
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run(decoded.id);
+	}
 
-  function run(userID) {
-    var ids = [cardID];
-    if (next == 0) {
-      var inventory = clients[userID].nextPage(inventorySendAmount);
-    } else if (next == 1) {
-      var inventory = clients[userID].prevPage(inventorySendAmount);
-    } else
-      var inventory = clients[userID].getInventory(
-        page,
-        inventorySendAmount,
-        ids
-      );
-    var pageStats = clients[userID].getPageStats();
-    if (inventory.length == 0) {
-      res.send({
-        status: 0,
-        inventory: inventory,
-        page: pageStats[0],
-        pagemax: pageStats[1],
-      });
-      return;
-    }
-    var maincard;
-    database.getCardUUID(uuid, decoded.id, (result) => {
-      getCard(result.cardID, result.frameID, (_maincard) => {
-        maincard = _maincard;
-        if (result == undefined) {
-          res.send({
-            status: 1,
-            message: "Cant find card, or it isnt yours",
-          });
-          return;
-        }
-        run2(0);
-      });
-    });
-    function run2(iteration) {
-      getCard(
-        inventory[iteration].cardID,
-        inventory[iteration].frameID,
-        (card) => {
-          inventory[iteration].card = card;
+	function run(userID) {
+		var ids = [cardID];
+		if (next == 0) {
+			var inventory = clients[userID].nextPage(inventorySendAmount);
+		} else if (next == 1) {
+			var inventory = clients[userID].prevPage(inventorySendAmount);
+		} else
+			var inventory = clients[userID].getInventory(
+				page,
+				inventorySendAmount,
+				ids,
+				uuid
+			);
+		var pageStats = clients[userID].getPageStats();
+		if (inventory.length == 0) {
+			res.send({
+				status: 0,
+				inventory: inventory,
+				page: pageStats[0],
+				pagemax: pageStats[1],
+			});
+			return;
+		}
+		var maincard;
+		database.getCardUUID(uuid, decoded.id, (result) => {
+			getCard(result.cardID, result.frameID, (_maincard) => {
+				maincard = _maincard;
+				maincard.level = result.level;
+				maincard.quality = result.quality;
+				if (result == undefined) {
+					res.send({
+						status: 1,
+						message: "Cant find card, or it isnt yours",
+					});
+					return;
+				}
+				run2(0);
+			});
+		});
+		function run2(iteration) {
+			getCard(
+				inventory[iteration].cardID,
+				inventory[iteration].frameID,
+				(card) => {
+					inventory[iteration].card = card;
 
-          if (iteration == inventory.length - 1) {
-            res.send({
-              status: 0,
-              inventory: inventory,
-              card: maincard,
-              page: pageStats[0],
-              pagemax: pageStats[1],
-            });
-            return;
-          } else {
-            run2(iteration + 1);
-          }
-        }
-      );
-    }
-  }
+					if (iteration == inventory.length - 1) {
+						res.send({
+							status: 0,
+							inventory: inventory,
+							card: maincard,
+							page: pageStats[0],
+							pagemax: pageStats[1],
+						});
+						return;
+					} else {
+						run2(iteration + 1);
+					}
+				}
+			);
+		}
+	}
 });
 
 function getCard(cardID, frameID, callback) {
-  var card;
-  database.getCard(cardID, (result) => {
-    card = result;
-    card.cardImage = imageBase + card.cardImage;
-    database.getCardType(card.typeID, (result2) => {
-      card.type = result2;
-      database.getFrame(frameID, (frame) => {
-        frame.path_front = frameBase + frame.path_front;
-        frame.path_back = frameBase + frame.path_back;
-        card.frame = frame;
-        callback(card);
-      });
-    });
-  });
+	var card;
+	database.getCard(cardID, (result) => {
+		card = result;
+		card.cardImage = imageBase + card.cardImage;
+		database.getCardType(card.typeID, (result2) => {
+			card.type = result2;
+			database.getFrame(frameID, (frame) => {
+				frame.path_front = frameBase + frame.path_front;
+				frame.path_back = frameBase + frame.path_back;
+				card.frame = frame;
+				callback(card);
+			});
+		});
+	});
 }
 
 function checkUser(username) {
-  if (
-    username == undefined ||
-    username.length < userLen[0] ||
-    username.length > userLen[1]
-  )
-    return 1;
-  if (!userRegex.test(username)) return 2;
-  return 0;
+	if (
+		username == undefined ||
+		username.length < userLen[0] ||
+		username.length > userLen[1]
+	)
+		return 1;
+	if (!userRegex.test(username)) return 2;
+	return 0;
 }
 
 function checkPass(password) {
-  if (
-    password == undefined ||
-    password.length < userLen[0] ||
-    password.length > userLen[1]
-  )
-    return 1;
-  //if(!passRegex.test(password)) return 2;
-  return 0;
+	if (
+		password == undefined ||
+		password.length < userLen[0] ||
+		password.length > userLen[1]
+	)
+		return 1;
+	//if(!passRegex.test(password)) return 2;
+	return 0;
 }
 
 function createCache(userIDV, username, callback) {
-  if (!clients[userIDV]) {
-    clients[userIDV] = new Client(userIDV, username, callback);
-    clients[userIDV].startDecay(cacheTime, clearCache);
-  }
+	if (!clients[userIDV]) {
+		clients[userIDV] = new Client(userIDV, username, callback);
+		clients[userIDV].startDecay(cacheTime, clearCache);
+	}
 }
 
 function clearCache(userID) {
-  clients[userID].save();
-  delete clients[userID];
+	clients[userID].save();
+	delete clients[userID];
 }
 
 console.log("Initializing DataBase");
 database.init(() => {
-  cache.refreshCards(() => {
-    var server = app.listen(port);
-    console.log("Started on port %s", port);
-  });
+	cache.refreshCards(() => {
+		var server = app.listen(port);
+		console.log("Started on port %s", port);
+	});
 });
 setInterval(() => {
-  cache.refreshCards(() => {});
+	cache.refreshCards(() => {});
 }, cardCashInterval);

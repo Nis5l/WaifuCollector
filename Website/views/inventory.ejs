@@ -68,7 +68,8 @@
             {
               var path = cards[i].card.cardImage;
               var posX =  off;
-              var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back=${cards[i].card.frame.path_back} pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].card.cardID}></waifu-card>`;
+				//console.log(cards[i].cardID + " " + cards[i].card.cardName);
+				var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back=${cards[i].card.frame.path_back} pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].cardID} card-size=1></waifu-card>`;
               opn.insertAdjacentHTML('beforeend',
               cardhtml);
             
@@ -89,12 +90,12 @@
         var f = document.querySelector(".cardForm");
          $(document).click(function(event) {
           var ele = $(event.target);
-
+		
           if(ele.is('waifu-card'))
           {
             f.uuid.value = ele[0].uuid;
-            f.lvl = ele[0].lvl;
-            f.cardID = ele[0].cardID;
+            f.lvl.value = ele[0].lvl;
+            f.cardID.value = ele[0].cardID;
             f.submit();
           }
         }); 
