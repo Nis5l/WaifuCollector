@@ -49,7 +49,7 @@ div#inventory {
   padding: 10px 30px;
   padding: 1%;
   float: right;
-  width: 4%;
+  width: 50px;
   margin-right: 5%;
   outline: none;
   border: 2px solid #b047ca;
@@ -73,7 +73,7 @@ div#inventory {
   float: left;
   outline: none;
   border: 2px solid #b047ca;
-  width: 4%;
+  width: 50px;
   background-color: #b047ca;
   border-radius: 25px; }
   .previous:enabled:hover {
@@ -96,3 +96,6 @@ div#inventory {
   width: 100%;
   text-align: center;
   margin-bottom: 2%; }
+  @media screen and (max-width: 1200px) {
+    .page {
+      font-size: 200%; } }

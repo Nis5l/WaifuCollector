@@ -10,8 +10,8 @@
 	</head>
 	<body class="scrollable">
 		<%- include('partials/nav.ejs') %>
-		<div id="cards"></div>
 		<div id="maincard"></div>
+		<div id="cards"></div>
 	</body>
 
 	<script
@@ -46,7 +46,7 @@
 		     	path = maincard.cardImage;
 		var posX =  off;
 console.log(maincard);
-		 	var cardhtml = `<waifu-card id=card-main img_path=${path} frame-front=${maincard.frame.path_front} frame-back=${maincard.frame.path_back} pos-x=${posX} card-name=\"${maincard.cardName}\" anime-name=\"${maincard.type.name}\" turned=false quality=${maincard.quality} level=${maincard.level} uuid=${maincard.id} cardID=${maincard.cardID} card-size=2></waifu-card>`;
+		 	var cardhtml = `<waifu-card id=card-main img_path=${path} frame-front=${maincard.frame.path_front} frame-back=${maincard.frame.path_back} pos-x=${posX} card-name=\"${maincard.cardName}\" anime-name=\"${maincard.type.name}\" turned=false quality=${maincard.quality} level=${maincard.level} uuid=${maincard.id} cardID=${maincard.cardID} card-size=1.3></waifu-card>`;
 		 	opn.insertAdjacentHTML('beforeend',cardhtml);
 
 		 	var mc = document.getElementById(`card-main`);

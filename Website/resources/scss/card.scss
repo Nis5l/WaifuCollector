@@ -11,13 +11,29 @@ div[id="cards"] {
 	margin-top: 100px;
     width: 60%;
     height: auto;
-	border-right: 1px solid $sectionBorder;
+	@media screen and (min-width: 1255px) {
+		border-right: 1px solid $sectionBorder;
+	}
+	@media screen and (max-width: 1255px) {
+		width: 100%;
+	}
 }
 div[id="maincard"]
 {
 	margin: auto;
 	margin-top: 100px;
-	width: 30%;
-	float: right;
+	width: 360px;
+	margin-right: 100px;
+
+	float: unset;
 	height: auto;
+	@media screen and (min-width: 1255px) {
+		float: right;
+	}
+	@media screen and (max-width: 1255px) {
+		margin-right: auto;
+		height: 600px;
+		border-bottom: 1px solid $sectionBorder;
+		transform: translateX(-20px);
+	}
 }

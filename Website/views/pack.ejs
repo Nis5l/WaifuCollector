@@ -15,7 +15,7 @@
 
         <%- include('partials/nav.ejs') %>
 
-		<div class="wrapper">
+		<div class="packwrapper">
 			<div id="Open">
 			</div>
         </div>
@@ -42,7 +42,6 @@
               var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].frame.path_front} frame-back=${cards[i].frame.path_back} pos-x=${posX} card-name=\"${cards[i].cardName}\" anime-name=\"${cards[i].type.name}\" turned=true quality=${cards[i].quality} level=0 uuid=${cards[i].id} cardID=${cards[i].cardID} card-size=1></waifu-card>`;
               opn.insertAdjacentHTML('beforeend', cardhtml);  
             }
-			console.log("go");
 			$('#Open').css('transform', `translateX(calc(50% - 254px * ${cards.length} / 2))`)
         </script>
     <% } %> 

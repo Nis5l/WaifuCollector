@@ -7,12 +7,27 @@ div[id="cards"] {
   justify-content: center;
   margin-top: 100px;
   width: 60%;
-  height: auto;
-  border-right: 1px solid rgba(255, 255, 255, 0.5); }
+  height: auto; }
+  @media screen and (min-width: 1255px) {
+    div[id="cards"] {
+      border-right: 1px solid rgba(255, 255, 255, 0.5); } }
+  @media screen and (max-width: 1255px) {
+    div[id="cards"] {
+      width: 100%; } }
 
 div[id="maincard"] {
   margin: auto;
   margin-top: 100px;
-  width: 30%;
-  float: right;
+  width: 360px;
+  margin-right: 100px;
+  float: unset;
   height: auto; }
+  @media screen and (min-width: 1255px) {
+    div[id="maincard"] {
+      float: right; } }
+  @media screen and (max-width: 1255px) {
+    div[id="maincard"] {
+      margin-right: auto;
+      height: 600px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      transform: translateX(-20px); } }

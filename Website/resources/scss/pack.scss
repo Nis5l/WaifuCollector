@@ -1,9 +1,20 @@
 @import "___base.scss";
 
+.packwrapper {
+	position: relative;
+	//min-width: 480px;
+	min-width: 200px;
+
+	width: 100%;
+	height: auto;
+	padding: 150px 0px 0px 0px;
+}
+
 div#Open {
 	align-items: center;
 	justify-content: center;
 	//width: calc(100% - (50% - 253px));
-	width: auto;
-	height: 100%;
+	margin: auto;
+	width: 255px;
+	height: 400px;
 }
