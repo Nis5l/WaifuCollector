@@ -33,7 +33,7 @@ div[id="maincard"] {
   height: auto; }
 html, body {
   margin: auto;
-  height: auto;
+  height: 100%;
   overflow: auto; }
 
 .home {
@@ -45,6 +45,9 @@ html, body {
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 3em; }
+    @media screen and (max-width: 430px) {
+      .home h1 {
+        font-size: 2em; } }
   .home:after {
     content: '';
     position: absolute;
@@ -220,50 +223,85 @@ div#inventory {
       .content .card input[type="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }
-.wrapper {
-  padding: 150px 0px 0px 30px; }
-  .wrapper .pass_change {
+.wrapper .settings {
+  min-width: 350px;
+  margin-left: 7%; }
+  .wrapper .settings .pass_change {
+    text-align: center;
     padding: 0px 0px 2% 0px;
-    margin: 0px 60% 0px 0px;
-    background-color: #1b1c1f;
-    box-shadow: 0px 2px 10px #b047ca; }
-    .wrapper .pass_change .pass_change_top {
-      padding: 0px 0px 15px 0px;
-      box-shadow: 0px 2px 10px #b047ca; }
-      .wrapper .pass_change .pass_change_top .pass_change_text {
-        padding: 20px 0px 0px 25%; }
-    .wrapper .pass_change input[type="password"] {
+    width: 300px;
+    background-color: #25282f; }
+    .wrapper .settings .pass_change .pass_change_top {
+      padding: 10px 0px 15px 0px; }
+      .wrapper .settings .pass_change .pass_change_top .pass_change_text {
+        font-size: 19pt;
+        padding: 2% 0px 0px 0%; }
+    .wrapper .settings .pass_change input[type="password"] {
       color: #fff;
+      margin: auto;
+      margin-top: 10px;
       background: none;
       display: block;
       text-align: center;
       border: 2px solid #b047ca;
       width: 70%;
       outline: none;
-      margin: 20px auto;
       padding: 10px 4px;
       border-radius: 25px; }
-      .wrapper .pass_change input[type="password"]:focus {
+      .wrapper .settings .pass_change input[type="password"]:focus {
         border-color: #fff;
         transition: border 0.2s ease-in-out; }
-    .wrapper .pass_change input[name="submit"] {
+    .wrapper .settings .pass_change input[name="submit"] {
       color: black;
       padding: 10px 30px;
-      margin: 0px 0px 0px 29%;
       width: 40%;
+      margin: auto;
+      margin-top: 10px;
       outline: none;
       border: 2px solid #b047ca;
       background-color: #b047ca;
       border-radius: 25px; }
-      .wrapper .pass_change input[name="submit"]:enabled:hover {
+      .wrapper .settings .pass_change input[name="submit"]:enabled:hover {
         color: #fff;
         background-color: rgba(0, 0, 0, 0);
         transition: background 0.2s ease-in-out; }
-      .wrapper .pass_change input[name="submit"]:active {
+      .wrapper .settings .pass_change input[name="submit"]:active {
         border-color: #ffffff; }
-      .wrapper .pass_change input[name="submit"]:disabled {
+      .wrapper .settings .pass_change input[name="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: #1b1c1f;
+  box-shadow: 0px 2px 10px #00ff00;
+  z-index: 100; }
+  .nav .logo {
+    float: left;
+    font-size: 14pt;
+    margin-left: 30px;
+    margin-top: 40px;
+    color: white;
+    text-decoration: none; }
+    @media screen and (max-width: 600px) {
+      .nav .logo {
+        font-size: 6pt; } }
+  .nav .nav-list {
+    float: right;
+    list-style-type: none;
+    margin-top: 40px;
+    margin-right: 30px; }
+  .nav .nav-list li {
+    display: inline; }
+    .nav .nav-list li a {
+      color: white;
+      text-decoration: none;
+      padding: 40px 15px; }
+      .nav .nav-list li a:hover {
+        background-color: rgba(0, 0, 0, 0.2); }
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
 @import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
@@ -276,39 +314,47 @@ body {
   height: 100%;
   background-color: #15171b;
   color: white; }
-html, body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden; }
+div#Open {
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 100%; }
+html {
+  height: 100%; }
 
 .wrapper {
   position: relative;
+  min-height: 1920px;
+  min-width: 200px;
   width: 100%;
-  min-height: calc(100vh - 120px);
-  overflow: hidden; }
-  .wrapper .dashboard.card2 {
-    position: relative;
-    width: calc(90% - 40px);
-    min-height: calc(70vh - 40px);
-    margin: 0 5% 5% 5%;
+  height: 100%;
+  padding: 150px 0px 0px 0px; }
+  .wrapper .dashboard {
+    height: 50%;
+    margin: auto;
+    width: 90%;
     padding: 20px;
     background-color: #25282f; }
-    .wrapper .dashboard.card2 .menu {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
-      .wrapper .dashboard.card2 .menu #username {
+    @media screen and (min-width: 1200px) {
+      .wrapper .dashboard {
+        height: 30%; } }
+    .wrapper .dashboard .menu {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      vertical-align: middle; }
+      .wrapper .dashboard .menu #username {
         display: inline-block;
         font-size: 3em;
-        font-family: 'Oswald';
+        font-family: "Oswald";
         font-weight: 700;
         text-transform: uppercase; }
-      .wrapper .dashboard.card2 .menu #settings {
+      .wrapper .dashboard .menu #settings {
         position: relative;
         float: right;
         color: #979CA7;
         transition: transform 1s;
         margin-top: 10px;
         margin-right: 10px; }
-        .wrapper .dashboard.card2 .menu #settings:hover {
+        .wrapper .dashboard .menu #settings:hover {
           color: #fff;
           -webkit-animation: rotating 5s linear infinite;
           -moz-animation: rotating 5s linear infinite;
@@ -316,7 +362,7 @@ html, body {
           -o-animation: rotating 5s linear infinite;
           animation: rotating 5s linear infinite; }
 
-@-webkit-keyframes rotating /* Safari and Chrome */ {
+@-webkit-keyframes rotating [> Safari and Chrome <] {
   from {
     -webkit-transform: rotate(0deg);
     -o-transform: rotate(0deg);
@@ -339,85 +385,108 @@ html, body {
     -webkit-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg); } }
-    .wrapper .dashboard.card2 .stats {
-      border-right: 1px solid rgba(255, 255, 255, 0.5); }
-      .wrapper .dashboard.card2 .stats .content {
+    .wrapper .dashboard .stats {
+      margin: 0px; }
+      @media screen and (min-width: 1200px) {
+        .wrapper .dashboard .stats {
+          height: 90%;
+          float: left;
+          width: 25%;
+          border-right: 1px solid rgba(255, 255, 255, 0.5); } }
+      @media screen and (max-width: 1200px) {
+        .wrapper .dashboard .stats {
+          height: 15%;
+          width: 100%;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+      .wrapper .dashboard .stats .content {
         margin-top: 25px;
+        height: 100%;
         text-align: center; }
-        .wrapper .dashboard.card2 .stats .content p:not(:last-child) {
+        .wrapper .dashboard .stats .content p:not(:last-child) {
           margin-bottom: 15px; }
-    .wrapper .dashboard.card2 .collection .pack {
-      float: left;
-      width: 35%;
-      height: 100%;
-      border-right: 1px solid rgba(255, 255, 255, 0.5); }
-      .wrapper .dashboard.card2 .collection .pack .progress {
+    @media screen and (min-width: 1200px) {
+      .wrapper .dashboard .collection {
+        height: 90%;
+        width: 25%;
+        float: left;
+        border-right: 1px solid rgba(255, 255, 255, 0.5); } }
+    @media screen and (max-width: 1200px) {
+      .wrapper .dashboard .collection {
+        height: 35%;
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+    .wrapper .dashboard .collection .pack {
+      width: 100%;
+      height: 100%; }
+      .wrapper .dashboard .collection .pack .progress {
         fill: transparent;
         stroke-width: 4;
         stroke: red;
         transition: 0.35s stroke-dashoffset;
         transform: rotate(-90deg);
         transform-origin: 50% 50%; }
-      .wrapper .dashboard.card2 .collection .pack .time {
+      .wrapper .dashboard .collection .pack .time {
         font-size: 100pt; }
-    .wrapper .dashboard.card2 .collection .inventory {
-      float: left;
-      height: 100%;
-      width: 33%;
-      border-right: 1px solid rgba(255, 255, 255, 0.5); }
-      .wrapper .dashboard.card2 .collection .inventory .image {
-        margin-top: 0%;
+    @media screen and (min-width: 1200px) {
+      .wrapper .dashboard .inventory {
+        height: 90%;
+        width: 25%;
+        float: left;
+        border-right: 1px solid rgba(255, 255, 255, 0.5); } }
+    @media screen and (max-width: 1200px) {
+      .wrapper .dashboard .inventory {
+        height: 35%;
         width: 100%;
-        height: 100%;
-        background-image: url("/assets/OpenSymbol.png");
-        background-repeat: no-repeat;
-        background-size: 70%;
-        background-position: center center; }
-        .wrapper .dashboard.card2 .collection .inventory .image .text {
-          font-size: 21pt;
-          text-align: center;
-          padding-top: 60%;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -khtml-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none; }
-.nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background-color: #1b1c1f;
-  box-shadow: 0px 2px 10px #00ff00;
-  z-index: 100; }
-  .nav .logo {
-    float: left;
-    font-size: 12pt;
-    margin-left: 30px;
-    margin-top: 40px;
-    color: white;
-    text-decoration: none; }
-  .nav .nav-list {
-    float: right;
-    list-style-type: none;
-    margin-top: 40px;
-    margin-right: 30px; }
-  .nav .nav-list li {
-    display: inline; }
-    .nav .nav-list li a {
-      color: white;
-      text-decoration: none;
-      padding: 40px 15px; }
-      .nav .nav-list li a:hover {
-        background-color: rgba(0, 0, 0, 0.2); }
-div#Open {
-  align-items: center;
-  justify-content: center;
-  margin-top: 17%;
-  width: 100%;
-  height: 100%; }
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+    .wrapper .dashboard .inventory .image {
+      margin-top: 0%;
+      width: 100%;
+      height: 100%;
+      background-image: url("/assets/OpenSymbol.png");
+      background-repeat: no-repeat;
+      background-size: 70%;
+      background-position: center center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      vertical-align: middle; }
+      @media screen and (max-width: 1200px) {
+        .wrapper .dashboard .inventory .image {
+          background-size: 19%; } }
+      @media screen and (max-width: 900px) {
+        .wrapper .dashboard .inventory .image {
+          background-size: 25%; } }
+      @media screen and (max-width: 700px) {
+        .wrapper .dashboard .inventory .image {
+          background-size: 30%; } }
+      @media screen and (max-width: 570px) {
+        .wrapper .dashboard .inventory .image {
+          background-size: 35%; } }
+      @media screen and (max-width: 470px) {
+        .wrapper .dashboard .inventory .image {
+          background-size: 43%; } }
+      @media screen and (max-width: 360px) {
+        .wrapper .dashboard .inventory .image {
+          background-size: 60%; } }
+      .wrapper .dashboard .inventory .image .text {
+        margin: auto;
+        font-size: 21pt;
+        text-align: center;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none; }
+        @media screen and (max-width: 700px) {
+          .wrapper .dashboard .inventory .image .text {
+            font-size: 18pt; } }
+        @media screen and (max-width: 570px) {
+          .wrapper .dashboard .inventory .image .text {
+            font-size: 18pt; } }
+        @media screen and (max-width: 470px) {
+          .wrapper .dashboard .inventory .image .text {
+            font-size: 14pt; } }
 
 .grid_1,.grid_2,.grid_3,.grid_4,.grid_5,.grid_6,.grid_7,.grid_8,.grid_9,.grid_10,.grid_11,.grid_12{ width:100%; box-sizing:border-box; float:left; position:relative; }
 .grid_right { float:right; }

@@ -12,15 +12,15 @@
 		
     </head>
 
-    <body>
+    <body class="scrollable">
 
         <%- include('partials/nav.ejs') %>
 
         <div class="wrapper">
 
-            <hr style="color: rgba(0, 0, 0, 0); border-color:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0);">
+		<hr style="color: rgba(0, 0, 0, 0); border-color:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0);">
 
-            <div class="dashboard card2">
+            <div class="dashboard">
 
                 <div class="menu">
 
@@ -30,7 +30,7 @@
 
                 </div>
 
-                <div class="grid_3 stats">
+                <div class="stats">
 
                     <div class="content">
 
@@ -41,19 +41,18 @@
                     </div>
 
                 </div>
-
-                <div class="grid_9 collection">
+                <div class="collection">
 
                     <div class="pack">
                         <progress-ring name="progress" stroke="4" radius="130" progress=<%= 100 - time /  fulltime %>) time=<%=time <= 0 ? 0 : time %>></progress-ring>
                     </div>
-                    <div class="inventory">
-                        <div class="image">
-                            <div class="text">Inventory</div>
-                        </div>
-                    </div>
 
                 </div>
+				<div class="inventory">
+					<div class="image">
+						<div class="text">Inventory</div>
+					</div>
+				</div>
 
             </div>
 
@@ -106,7 +105,7 @@
                 }
             </script>
 
-            <script>
+            <!--<script>
                 function sectionHeights() {
                     var height = $('.dashboard').outerHeight() - $('.dashboard .menu').outerHeight() -35;
                     $('.stats, .collection').css('height', height);
@@ -118,7 +117,7 @@
                     sectionHeights();
                 });
 
-            </script>
+			</script>-->
             
             <script>
                 //;

@@ -1,93 +1,80 @@
 @import "___base.scss";
 
-.wrapper
-{
-    padding: 150px 0px 0px 30px;
-  .pass_change
-  {
-      padding: 0px 0px 2% 0px;
-      margin: 0px 60% 0px 0px;
+.wrapper {
+	.settings {
+		min-width: 350px;
+		margin-left: 7%;
+		.pass_change {
+			text-align: center;
+			padding: 0px 0px 2% 0px;
+			width: 300px;
+			background-color: $cardBg2;
+			.pass_change_top {
+				padding: 10px 0px 15px 0px;
+				.pass_change_text {
+					font-size: 19pt;
+					padding: 2% 0px 0px 0%;
+				}
+			}
 
-      background-color: $settingsFields;
-      box-shadow: 0px 2px 10px $settingsShadow;
-      .pass_change_top
-      {
-          padding: 0px 0px 15px 0px;
-          box-shadow: 0px 2px 10px $settingsShadow;
-          .pass_change_text
-          {
-              //font-size: 24pt;
-              padding: 20px 0px 0px 25%;
-          }
-      }
+			input[type="password"] {
+				color: $inputColor;
 
-      input[type="password"]
-      {
-          color: $inputColor;
+				margin: auto;
+				margin-top: 10px;
 
-          background: $inputBg;
-          display: block;
+				background: $inputBg;
+				display: block;
 
-          text-align: center;
+				text-align: center;
 
-          border: 2px solid $settingsShadow;
+				border: 2px solid $settingsShadow;
 
-          width: 70%;
-          outline: none;
+				width: 70%;
+				outline: none;
 
-          margin: 20px auto;
-          padding: 10px 4px;
+				padding: 10px 4px;
 
-          border-radius: 25px;
+				border-radius: 25px;
 
-          &:focus{
+				&:focus {
+					border-color: $settingsInputColor;
 
-              border-color: $settingsInputColor;
+					transition: border 0.2s ease-in-out;
+				}
+			}
 
-              transition: border 0.2s ease-in-out;
+			input[name="submit"] {
+				color: black;
+				padding: 10px 30px;
+				width: 40%;
 
-          }
-      }
+				margin: auto;
+				margin-top: 10px;
+				outline: none;
+				border: 2px solid $settingsShadow;
+				background-color: $settingsShadow;
 
-      input[name="submit"]
-      {
-          color: black;
-          padding: 10px 30px;
-          margin: 0px 0px 0px 29%;
-          width: 40%;
+				border-radius: 25px;
 
-          outline: none;
-          border: 2px solid $settingsShadow;
-          background-color: $settingsShadow;
+				&:enabled {
+					&:hover {
+						color: $inputColor;
+						background-color: rgba(0, 0, 0, 0);
 
-          border-radius: 25px;
-          
-          &:enabled{
+						transition: background 0.2s ease-in-out;
+					}
+				}
 
-              &:hover{
+				&:active {
+					border-color: #ffffff;
+				}
 
-                  color: $inputColor;
-                  background-color: rgba(0, 0, 0, 0);
-
-                  transition: background 0.2s ease-in-out;
-
-              }
-
-          }
-
-          &:active
-          {
-              border-color: #ffffff;
-          }
-
-          &:disabled{
-
-              background-color: $inputBorderDisabled;
-              border-color: $inputBorderDisabled;
-
-          }
-
-      }
-
-    }
+				&:disabled {
+					background-color: $inputBorderDisabled;
+					border-color: $inputBorderDisabled;
+				}
+			}
+		}
+	}
 }

@@ -9,11 +9,14 @@
   z-index: 100; }
   .nav .logo {
     float: left;
-    font-size: 12pt;
+    font-size: 14pt;
     margin-left: 30px;
     margin-top: 40px;
     color: white;
     text-decoration: none; }
+    @media screen and (max-width: 600px) {
+      .nav .logo {
+        font-size: 6pt; } }
   .nav .nav-list {
     float: right;
     list-style-type: none;

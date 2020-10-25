@@ -1,185 +1,220 @@
 @import "___base.scss";
 
-html, body {margin: 0; height: 100%; overflow: hidden}
+html
+{
+	height: 100%;
+}
+.wrapper {
+	position: relative;
+	//min-width: 480px;
+	min-height: 1920px;
+	min-width: 200px;
 
-.wrapper{
+	width: 100%;
+	height: 100%;
+	padding: 150px 0px 0px 0px;
+	.dashboard {
+		//position: relative;
 
-    position: relative;
-    
-    width: 100%;
-    min-height: calc(100vh - 120px/* -120px header -80px box*/);
-    overflow: hidden;
-    //margin-top: 120px;
-    //padding-top: 0px;
-    .dashboard.card2{
-        position: relative;
+		height: 50%;
+		@media screen and (min-width: 1200px) {
+			height: 30%;
+		}
+		margin: auto;
+		width: 90%;
+		//align-items: center;
+		padding: 20px;
 
-        width: calc(90% - 40px);
-        min-height: calc(70vh - 40px);
+		background-color: $cardBg2;
 
-        margin: 0 5% 5% 5%;
+		.menu {
+		border-bottom: 1px solid $sectionBorder;
 
-        padding: 20px;
+		#username {
+		display: inline-block;
 
-        background-color: $cardBg2;
+		font-size: 3em;
+		font-family: "Oswald";
+		font-weight: 700;
 
-        .menu{
-          border-bottom: 1px solid $sectionBorder;
+		text-transform: uppercase;
+		}
 
-          #username{
-          
-              display: inline-block;
+		#settings {
+		position: relative;
 
-              font-size: 3em;
-              font-family: 'Oswald';
-              font-weight: 700;
-          
-              text-transform: uppercase;
-          
-          }
-        
-          #settings{
+		float: right;
 
-              position: relative;
-          
-              float: right;
-          
-              color: $settingsGearColor;
-                  
-              transition: transform 1s;
+		color: $settingsGearColor;
 
-              margin-top: 10px;
-              margin-right: 10px;
-          
-              &:hover{
-          
-                  color: $settingsGearColorHover;
-          
-                  -webkit-animation: rotating 5s linear infinite;
-                  -moz-animation: rotating 5s linear infinite;
-                  -ms-animation: rotating 5s linear infinite;
-                  -o-animation: rotating 5s linear infinite;
-                  animation: rotating 5s linear infinite;
+		transition: transform 1s;
 
-                  @-webkit-keyframes rotating /* Safari and Chrome */ {
+		margin-top: 10px;
+		margin-right: 10px;
 
-                      from {
-                        -webkit-transform: rotate(0deg);
-                        -o-transform: rotate(0deg);
-                        transform: rotate(0deg);
-                      }
-                  
-                      to {
-                        -webkit-transform: rotate(360deg);
-                        -o-transform: rotate(360deg);
-                        transform: rotate(360deg);
-                      }
-                  
-                  }
-                  
-                    @keyframes rotating {
-                  
-                      from {
-                  
-                        -ms-transform: rotate(0deg);
-                        -moz-transform: rotate(0deg);
-                        -webkit-transform: rotate(0deg);
-                        -o-transform: rotate(0deg);
-                        transform: rotate(0deg);
-                  
-                      }
-                  
-                      to {
-                  
-                        -ms-transform: rotate(360deg);
-                        -moz-transform: rotate(360deg);
-                        -webkit-transform: rotate(360deg);
-                        -o-transform: rotate(360deg);
-                        transform: rotate(360deg);
-                  
-                      }
-                  
-                  }   
-              }
+		&:hover {
+		color: $settingsGearColorHover;
 
-          }
+		-webkit-animation: rotating 5s linear infinite;
+		-moz-animation: rotating 5s linear infinite;
+		-ms-animation: rotating 5s linear infinite;
+		-o-animation: rotating 5s linear infinite;
+		animation: rotating 5s linear infinite;
 
-      }
+		@-webkit-keyframes rotating [> Safari and Chrome <] {
+		from {
+		-webkit-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+		}
 
-      .stats{
+		to {
+		-webkit-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+		}
+		}
 
-        border-right: 1px solid $sectionBorder;
+		@keyframes rotating {
+		from {
+		-ms-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+		}
 
-        .content{
+		to {
+		-ms-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+		}
+		}
+		}
+		}
+		vertical-align:middle;  }
 
-          margin-top: 25px;
+		.stats {
+			@media screen and (min-width: 1200px) {
+				height: 90%;
+				float: left;
+				width: 25%;
+				border-right: 1px solid $sectionBorder;
+			}
+			margin: 0px;
+			@media screen and (max-width: 1200px) {
+				height: 15%;
+				width: 100%;
+				border-bottom: 1px solid $sectionBorder;
+			}
+			.content {
+				margin-top: 25px;
+				height: 100%;
 
-          text-align: center;
+				text-align: center;
 
-          p:not(:last-child){
+				p:not(:last-child) {
+					margin-bottom: 15px;
+				}
+			}
+		}
 
-            margin-bottom: 15px;
+		.collection {
+			@media screen and (min-width: 1200px) {
+				height: 90%;
+				width: 25%;
+				float: left;
+				border-right: 1px solid $sectionBorder;
+			}
+			@media screen and (max-width: 1200px) {
+				height: 35%;
+				width: 100%;
+				border-bottom: 1px solid $sectionBorder;
+			}
+			.pack {
+				width: 100%;
+				height: 100%;
+				.progress {
+					fill: transparent;
+					stroke-width: 4;
+					stroke: rgb(255, 0, 0);
 
-          }
+					transition: 0.35s stroke-dashoffset;
+					transform: rotate(-90deg);
+					transform-origin: 50% 50%;
+				}
 
-        }
+				.time {
+					font-size: 100pt;
+				}
+			}
+		}
+		.inventory {
+			@media screen and (min-width: 1200px) {
+				height: 90%;
+				width: 25%;
+				float: left;
+				border-right: 1px solid $sectionBorder;
+			}
+			@media screen and (max-width: 1200px) {
+				height: 35%;
+				width: 100%;
+				border-bottom: 1px solid $sectionBorder;
+			}
+			.image {
+				margin-top: 0%;
+				width: 100%;
+				height: 100%;
+				background-image: url("/assets/OpenSymbol.png");
+				background-repeat: no-repeat;
+				background-size: 70%;
+				@media screen and (max-width: 1200px) {
+					background-size: 19%;
+				}
+				@media screen and (max-width: 900px) {
+					background-size: 25%;
+				}
+				@media screen and (max-width: 700px) {
+					background-size: 30%;
+				}
+				@media screen and (max-width: 570px) {
+					background-size: 35%;
+				}
+				@media screen and (max-width: 470px) {
+					background-size: 43%;
+				}
+				@media screen and (max-width: 360px) {
+					background-size: 60%;
+				}
+				background-position: center center;
 
-      }
-
-      .collection{
-
-        .pack{
-          float: left;
-          width: 35%;
-          height: 100%;
-          border-right: 1px solid $sectionBorder;
-          .progress
-          {
-              fill: transparent;
-              stroke-width: 4;
-              stroke: rgb(255, 0, 0);
-
-              transition: 0.35s stroke-dashoffset;
-              transform: rotate(-90deg);
-              transform-origin: 50% 50%;
-          }
-
-          .time
-          {
-            font-size: 100pt;
-          }
-        }
-        .inventory{
-          .image
-          {
-            margin-top: 0%;
-            width: 100%;
-            height: 100%;
-            background-image: url("/assets/OpenSymbol.png");
-            background-repeat: no-repeat;
-            background-size: 70%;
-            background-position: center center;
-            
-            .text
-            {
-              font-size: 21pt;
-              text-align: center;
-              padding-top: 60%;
-              -webkit-touch-callout: none;
-              -webkit-user-select: none;
-              -khtml-user-select: none;
-              -moz-user-select: none;
-              -ms-user-select: none;
-              user-select: none;
-            }
-          }
-          float: left;
-          height: 100%;
-          width: 33%;
-          border-right: 1px solid $sectionBorder;
-        }
-      }
-
-    }
-
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				vertical-align: middle;
+				.text {
+					margin: auto;
+					font-size: 21pt;
+					@media screen and (max-width: 700px) {
+						font-size: 18pt;
+					}
+					@media screen and (max-width: 570px) {
+						font-size: 18pt;
+					}
+					@media screen and (max-width: 470px) {
+						font-size: 14pt;
+					}
+					text-align: center;
+					-webkit-touch-callout: none;
+					-webkit-user-select: none;
+					-khtml-user-select: none;
+					-moz-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+				}
+			}
+		}
+	}
 }

@@ -19,7 +19,7 @@ const port = 100;
 const userLen = [4, 20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
-const packSize = [1, 3];
+const packSize = [1, 1];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
 const inventorySendAmount = 20;
 

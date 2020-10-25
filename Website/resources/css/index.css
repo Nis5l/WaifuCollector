@@ -1,6 +1,6 @@
 html, body {
   margin: auto;
-  height: auto;
+  height: 100%;
   overflow: auto; }
 
 .home {
@@ -12,6 +12,9 @@ html, body {
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 3em; }
+    @media screen and (max-width: 430px) {
+      .home h1 {
+        font-size: 2em; } }
   .home:after {
     content: '';
     position: absolute;

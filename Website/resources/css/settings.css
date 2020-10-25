@@ -1,44 +1,47 @@
-.wrapper {
-  padding: 150px 0px 0px 30px; }
-  .wrapper .pass_change {
+.wrapper .settings {
+  min-width: 350px;
+  margin-left: 7%; }
+  .wrapper .settings .pass_change {
+    text-align: center;
     padding: 0px 0px 2% 0px;
-    margin: 0px 60% 0px 0px;
-    background-color: #1b1c1f;
-    box-shadow: 0px 2px 10px #b047ca; }
-    .wrapper .pass_change .pass_change_top {
-      padding: 0px 0px 15px 0px;
-      box-shadow: 0px 2px 10px #b047ca; }
-      .wrapper .pass_change .pass_change_top .pass_change_text {
-        padding: 20px 0px 0px 25%; }
-    .wrapper .pass_change input[type="password"] {
+    width: 300px;
+    background-color: #25282f; }
+    .wrapper .settings .pass_change .pass_change_top {
+      padding: 10px 0px 15px 0px; }
+      .wrapper .settings .pass_change .pass_change_top .pass_change_text {
+        font-size: 19pt;
+        padding: 2% 0px 0px 0%; }
+    .wrapper .settings .pass_change input[type="password"] {
       color: #fff;
+      margin: auto;
+      margin-top: 10px;
       background: none;
       display: block;
       text-align: center;
       border: 2px solid #b047ca;
       width: 70%;
       outline: none;
-      margin: 20px auto;
       padding: 10px 4px;
       border-radius: 25px; }
-      .wrapper .pass_change input[type="password"]:focus {
+      .wrapper .settings .pass_change input[type="password"]:focus {
         border-color: #fff;
         transition: border 0.2s ease-in-out; }
-    .wrapper .pass_change input[name="submit"] {
+    .wrapper .settings .pass_change input[name="submit"] {
       color: black;
       padding: 10px 30px;
-      margin: 0px 0px 0px 29%;
       width: 40%;
+      margin: auto;
+      margin-top: 10px;
       outline: none;
       border: 2px solid #b047ca;
       background-color: #b047ca;
       border-radius: 25px; }
-      .wrapper .pass_change input[name="submit"]:enabled:hover {
+      .wrapper .settings .pass_change input[name="submit"]:enabled:hover {
         color: #fff;
         background-color: rgba(0, 0, 0, 0);
         transition: background 0.2s ease-in-out; }
-      .wrapper .pass_change input[name="submit"]:active {
+      .wrapper .settings .pass_change input[name="submit"]:active {
         border-color: #ffffff; }
-      .wrapper .pass_change input[name="submit"]:disabled {
+      .wrapper .settings .pass_change input[name="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }

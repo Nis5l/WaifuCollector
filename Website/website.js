@@ -20,7 +20,7 @@ if (1 == 2) {
 
 var token;
 const {
-	API_HOST = "185.127.213.198",
+	API_HOST = "89.107.108.30",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",

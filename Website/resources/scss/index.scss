@@ -1,6 +1,6 @@
 @import "___base.scss";
 
-html, body {margin:auto; height: auto; overflow: auto}
+html, body {margin:auto; height: 100%; overflow: auto}
 
 .home{
     
@@ -15,7 +15,10 @@ html, body {margin:auto; height: auto; overflow: auto}
         
         transform: translate(-50%, -50%);
         
-        font-size: 3em;
+		font-size: 3em;
+		@media screen and (max-width: 430px) {
+			font-size: 2em;
+		}
     
     }
 

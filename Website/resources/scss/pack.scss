@@ -1,11 +1,9 @@
 @import "___base.scss";
 
-div#Open
-{
-    align-items: center;
-    justify-content: center;
-    //margin-top: 100px;
-    margin-top: 17%;
-    width: 100%;
-    height: 100%;
+div#Open {
+	align-items: center;
+	justify-content: center;
+	//width: calc(100% - (50% - 253px));
+	width: auto;
+	height: 100%;
 }
