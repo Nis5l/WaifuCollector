@@ -346,9 +346,6 @@ app.get("/card", redirectLogin, function (req, res) {
 					addPathCard(body.inventory[i].card);
 				}
 
-				console.log(body.card);
-				addPathCard(body.card);
-
 				res.render("card", {
 					maincard: body.card,
 					cards: body.inventory,
