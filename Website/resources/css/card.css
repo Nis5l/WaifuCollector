@@ -5,7 +5,7 @@ div[id="cards"] {
   max-height: none;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 130px;
   width: 60%;
   height: auto; }
   @media screen and (min-width: 1255px) {
@@ -17,7 +17,7 @@ div[id="cards"] {
 
 div[id="maincard"] {
   margin: auto;
-  margin-top: 100px;
+  margin-top: 130px;
   width: 360px;
   margin-right: 100px;
   float: unset;

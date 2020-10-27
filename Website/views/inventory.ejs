@@ -33,8 +33,6 @@
 
         <form class="cardForm" action="/card" method="get">
             <input type="hidden" name="uuid" value="1"/>
-            <input type="hidden" name="lvl" value="1"/>
-            <input type="hidden" name="cardID" value="1"/>
         </form>
 
         <div id="inventory">
@@ -59,7 +57,6 @@
             const cards = <%- JSON.stringify(cards) %>;
             var opn = document.getElementById('inventory');
             
-            var packdiv = opn.insertAdjacentHTML('beforeend', '')
             //var cardSize = 110;
             //var off = 235-(cards.length-1) / 2 * cardSize;
             var off = 0;           
@@ -94,9 +91,7 @@
           if(ele.is('waifu-card'))
           {
             f.uuid.value = ele[0].uuid;
-            f.lvl.value = ele[0].lvl;
-            f.cardID.value = ele[0].cardID;
-            f.submit();
+			f.submit();
           }
         }); 
     </script>

@@ -21,7 +21,7 @@ const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 const packSize = [1, 1];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
-const inventorySendAmount = 20;
+const inventorySendAmount = 10;
 
 var clients = {};
 
@@ -146,9 +146,9 @@ app.post("/pack", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
-		run(decoded.id);
+		run();
 	}
-	function run(userID) {
+	function run() {
 		if (clients[decoded.id].packTime != null) {
 			packCallBack(decoded.id);
 			return;
@@ -197,19 +197,33 @@ app.post("/pack", (req, res) => {
 							for (var j = frames.length - 1; j < iterations; j++) {
 								frames[j] = frames[utils.getRandomInt(0, frames.length - 1)];
 							}
-							for (var j = 0; j < cards.length; j++) {
+							run3(0);
+							function run3(j) {
 								cards[j].frame = frames[j];
-								database.addCard(userID, cards[j].id, quality, frames[j].id);
-								clients[userID].addCard({
-									id: -1,
-									userID: userID,
-									cardID: cards[j].id,
-									quality: quality,
-									level: 0,
-									frameID: frames[j].id,
-								});
+								database.addCard(
+									userID,
+									cards[j].id,
+									quality,
+									0,
+									frames[j].id,
+									(insertID) => {
+										clients[userID].addCard({
+											id: insertID,
+											userID: userID,
+											cardID: cards[j].id,
+											quality: quality,
+											level: 0,
+											frameID: frames[j].id,
+										});
+										if (j == cards.length - 1) {
+											run2(0);
+											return;
+										} else {
+											run3(j + 1);
+										}
+									}
+								);
 							}
-							run2(0);
 							function run2(iteration) {
 								database.getCardType(cards[iteration].typeID, (result) => {
 									cards[iteration].type = result;
@@ -424,16 +438,17 @@ app.post("/inventory", (req, res) => {
 app.post("/card", (req, res) => {
 	var tokenV = req.body.token;
 	var uuid = req.body.uuid;
-	var lvl = req.body.lvl;
-	var cardID = req.body.cardID;
+	uuid = parseInt(uuid);
 	var next = req.body.next;
 	var page = req.body.page;
 	if (page == undefined) page = 0;
 	if (next == undefined) next = -1;
-	if (uuid == undefined || lvl == undefined || cardID == undefined)
-		res.send({ status: 1, message: "Invalid data" });
-	cardID = parseInt(cardID);
-	if (cardID == NaN) res.send({ status: 1, message: "cardID not valid" });
+	if (next == -1) {
+		if (uuid == undefined) {
+			res.send({ status: 1, message: "Invalid data" });
+			return;
+		}
+	}
 
 	try {
 		var decoded = jwt.verify(tokenV, jwtSecret);
@@ -445,72 +460,169 @@ app.post("/card", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
-		run(decoded.id);
+		run();
+	}
+	function run() {
+		getCardRequestData(decoded.id, uuid, next, page, (data) => {
+			res.send(data);
+		});
+	}
+});
+
+app.post("/upgrade", (req, res) => {
+	var tokenV = req.body.token;
+	var carduuid = req.body.carduuid;
+	var mainuuid = req.body.mainuuid;
+	if (carduuid == undefined && mainuuid == undefined) {
+		res.send({ status: 1, message: "Invalid data" });
+		return;
 	}
 
-	function run(userID) {
-		var ids = [cardID];
-		if (next == 0) {
-			var inventory = clients[userID].nextPage(inventorySendAmount);
-		} else if (next == 1) {
-			var inventory = clients[userID].prevPage(inventorySendAmount);
-		} else
-			var inventory = clients[userID].getInventory(
-				page,
-				inventorySendAmount,
-				ids,
-				uuid
-			);
-		var pageStats = clients[userID].getPageStats();
-		if (inventory.length == 0) {
-			res.send({
-				status: 0,
-				inventory: inventory,
-				page: pageStats[0],
-				pagemax: pageStats[1],
-			});
-			return;
-		}
-		var maincard;
-		database.getCardUUID(uuid, decoded.id, (result) => {
-			getCard(result.cardID, result.frameID, (_maincard) => {
-				maincard = _maincard;
-				maincard.level = result.level;
-				maincard.quality = result.quality;
-				if (result == undefined) {
+	try {
+		var decoded = jwt.verify(tokenV, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run();
+	}
+
+	function run() {
+		database.getCardUUID(mainuuid, decoded.id, (mainresult) => {
+			if (mainresult == undefined) {
+				res.send({
+					status: 1,
+					message: "Cant find card, or it isnt yours",
+				});
+				return;
+			}
+			database.getCardUUID(carduuid, decoded.id, (cardresult) => {
+				if (cardresult == undefined) {
 					res.send({
 						status: 1,
 						message: "Cant find card, or it isnt yours",
 					});
 					return;
 				}
-				run2(0);
+				if (
+					cardresult.cardID != mainresult.cardID ||
+					cardresult.level != mainresult.level
+				) {
+					res.send({
+						status: 1,
+						message: "Cant upgrade these cards",
+					});
+				}
+				var newquality = Math.round(
+					(cardresult.quality + mainresult.quality) / 2
+				);
+				var newlevel = cardresult.level + 1;
+				database.addCard(
+					decoded.id,
+					cardresult.cardID,
+					newquality,
+					newlevel,
+					mainresult.frameID,
+					(insertID) => {
+						clients[decoded.id].addCard({
+							id: insertID,
+							userID: decoded.id,
+							cardID: cardresult.cardID,
+							quality: newquality,
+							level: newlevel,
+							frameID: mainresult.frameID,
+						});
+						getCardRequestData(decoded.id, insertID, -1, 0, (data) => {
+							res.send(data);
+						});
+					}
+				);
 			});
 		});
-		function run2(iteration) {
-			getCard(
-				inventory[iteration].cardID,
-				inventory[iteration].frameID,
-				(card) => {
-					inventory[iteration].card = card;
-
-					if (iteration == inventory.length - 1) {
-						res.send({
-							status: 0,
-							inventory: inventory,
-							card: maincard,
-							page: pageStats[0],
-							pagemax: pageStats[1],
-						});
-						return;
-					} else {
-						run2(iteration + 1);
-					}
-				}
-			);
-		}
 	}
 });
+
+function getCardRequestData(userID, uuid, next, page, callback) {
+	var inventory;
+	var maincard;
+	var pageStats;
+	if (uuid == undefined) {
+		uuid = clients[userID].lastmain;
+		if (uuid == undefined) {
+			callback({ status: 1, message: "No main uuid" });
+			return;
+		}
+	} else {
+		clients[userID].lastmain = uuid;
+	}
+	database.getCardUUID(uuid, userID, (result) => {
+		if (result == undefined) {
+			callback({
+				status: 1,
+				message: "Cant find card, or it isnt yours",
+			});
+			return;
+		}
+		var ids = [result.cardID];
+		var uuids = [uuid];
+		if (next == 0) {
+			inventory = clients[userID].nextPage(inventorySendAmount);
+		} else if (next == 1) {
+			inventory = clients[userID].prevPage(inventorySendAmount);
+		} else
+			inventory = clients[userID].getInventory(
+				page,
+				inventorySendAmount,
+				ids,
+				uuids,
+				result.level
+			);
+		pageStats = clients[userID].getPageStats();
+		getCard(result.cardID, result.frameID, (_maincard) => {
+			maincard = _maincard;
+			maincard.level = result.level;
+			maincard.quality = result.quality;
+			maincard.uuid = parseInt(uuid);
+			run2(0);
+		});
+	});
+	function run2(iteration) {
+		if (inventory.length == 0) {
+			callback({
+				status: 0,
+				inventory: inventory,
+				card: maincard,
+				page: pageStats[0],
+				pagemax: pageStats[1],
+			});
+			return;
+		}
+		getCard(
+			inventory[iteration].cardID,
+			inventory[iteration].frameID,
+			(card) => {
+				inventory[iteration].card = card;
+
+				if (iteration == inventory.length - 1) {
+					callback({
+						status: 0,
+						inventory: inventory,
+						card: maincard,
+						page: pageStats[0],
+						pagemax: pageStats[1],
+					});
+					return;
+				} else {
+					run2(iteration + 1);
+				}
+			}
+		);
+	}
+}
 
 function getCard(cardID, frameID, callback) {
 	var card;

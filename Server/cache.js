@@ -8,6 +8,7 @@ class Client {
 		this.inventory = [];
 		this.lastids = undefined;
 		this.page = 0;
+		this.lastmain = undefined;
 		var operations = 3;
 		var operationsComplete = 0;
 
@@ -71,15 +72,19 @@ class Client {
 		this.sortInv();
 	}
 
-	getInventory(page, amount, ids, exclude) {
+	getInventory(page, amount, ids, exclude, level) {
 		this.startDecay(this.time, this.callback);
 		this.lastids = ids;
+		this.lastexclude = exclude;
+		this.lastlevel = level;
+
 		var ret = [];
 		var newinv = [];
 		for (var obj in this.inventory) {
 			if (ids == undefined || ids.includes(this.inventory[obj].cardID))
 				if (exclude == undefined || !exclude.includes(this.inventory[obj].id))
-					newinv.push(this.inventory[obj]);
+					if (level == undefined || this.inventory[obj].level == level)
+						newinv.push(this.inventory[obj]);
 		}
 		this.pageamount = Math.ceil(newinv.length / amount);
 		if (page >= this.pageamount) page = this.pageamount - 1;
@@ -97,13 +102,25 @@ class Client {
 
 	nextPage(amount) {
 		this.page++;
-		return this.getInventory(this.page, amount, this.lastids);
+		return this.getInventory(
+			this.page,
+			amount,
+			this.lastids,
+			this.lastexclude,
+			this.lastlevel
+		);
 	}
 
 	prevPage(amount) {
 		this.page--;
 		if (this.page < 0) this.page = 0;
-		return this.getInventory(this.page, amount, this.lastids);
+		return this.getInventory(
+			this.page,
+			amount,
+			this.lastids,
+			this.lastexclude,
+			this.lastlevel
+		);
 	}
 
 	sortInv() {
@@ -111,7 +128,7 @@ class Client {
 		while (true) {
 			var sorted = true;
 			for (var i = 0; i < this.inventory.length - 1; i++) {
-				if (this.inventory[i].level > this.inventory[i + 1].level) {
+				if (this.inventory[i].level < this.inventory[i + 1].level) {
 					sorted = false;
 					swap(this.inventory, i);
 				} else if (this.inventory[i].level == this.inventory[i + 1].level) {

@@ -14,13 +14,9 @@ app.use("/assets", express.static("assets"));
 
 const port = 8000;
 
-if (1 == 2) {
-	kk = 2;
-}
-
 var token;
 const {
-	API_HOST = "89.107.108.30",
+	API_HOST = "31.177.115.247",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
@@ -327,19 +323,57 @@ app.get("/inventory", redirectLogin, function (req, res) {
 
 app.get("/card", redirectLogin, function (req, res) {
 	var uuid = req.query.uuid;
-	var lvl = req.query.lvl;
-	var cardID = req.query.cardID;
-	if (uuid == undefined) return;
-	if (lvl == undefined) return;
-	if (cardID == undefined) return;
+	var page = req.query.page;
+	var next = req.query.next;
+	if (next == undefined) next = -1;
+	if (next == -1) {
+		if (uuid == undefined) return;
+	}
+	if (page == undefined) page = 0;
 	request.post(
 		"http://" + API_HOST + ":" + API_PORT + "/card",
 		{
 			json: {
 				token: token,
 				uuid: uuid,
-				cardID: cardID,
-				lvl: lvl,
+				page: page,
+				next: next,
+			},
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				for (var i = 0; i < body.inventory.length; i++) {
+					addPathCard(body.inventory[i].card);
+				}
+
+				console.log(body.card);
+				addPathCard(body.card);
+
+				res.render("card", {
+					maincard: body.card,
+					cards: body.inventory,
+					page: body.page,
+					pagemax: body.pagemax,
+				});
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
+app.get("/upgrade", redirectLogin, function (req, res) {
+	var mainuuid = req.query.mainuuid;
+	var carduuid = req.query.carduuid;
+	if (mainuuid == undefined) return;
+	if (carduuid == undefined) return;
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/upgrade",
+		{
+			json: {
+				token: token,
+				mainuuid: mainuuid,
+				carduuid: carduuid,
 			},
 		},
 		(error, response, body) => {
@@ -350,6 +384,7 @@ app.get("/card", redirectLogin, function (req, res) {
 
 				addPathCard(body.card);
 
+				console.log(body);
 				res.render("card", {
 					maincard: body.card,
 					cards: body.inventory,
