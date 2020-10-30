@@ -17,11 +17,20 @@
     @media screen and (max-width: 600px) {
       .nav .logo {
         font-size: 6pt; } }
+    @media screen and (max-width: 350px) {
+      .nav .logo {
+        font-size: 4pt; } }
   .nav .nav-list {
     float: right;
     list-style-type: none;
     margin-top: 40px;
-    margin-right: 30px; }
+    margin-right: 5px; }
+    @media screen and (min-width: 350px) {
+      .nav .nav-list {
+        margin-right: 30px; } }
+    @media screen and (max-width: 350px) {
+      .nav .nav-list {
+        font-size: 10pt; } }
   .nav .nav-list li {
     display: inline; }
     .nav .nav-list li a {

@@ -16,7 +16,7 @@ const port = 8000;
 
 var token;
 const {
-	API_HOST = "31.177.115.247",
+	API_HOST = "92.243.146.16",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
