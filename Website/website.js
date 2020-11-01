@@ -16,7 +16,7 @@ const port = 8000;
 
 var token;
 const {
-	API_HOST = "89.107.105.171",
+	API_HOST = "31.177.119.14",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
@@ -394,6 +394,10 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 			}
 		}
 	);
+});
+
+app.get("/friends", redirectLogin, function (req, res) {
+	res.render("friends", { page: 0, pagemax: 0 });
 });
 
 function addPathCard(card) {

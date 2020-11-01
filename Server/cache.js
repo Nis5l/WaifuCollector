@@ -9,21 +9,11 @@ class Client {
 		this.lastids = undefined;
 		this.page = 0;
 		this.lastmain = undefined;
-		var operations = 3;
+		var operations = 2;
 		var operationsComplete = 0;
 
 		database.getPackTime(this.id, (time) => {
 			this.packTime = time;
-			operationFinished();
-		});
-
-		database.getFriends(this.id, (friends) => {
-			this.friends = [];
-			if (friends != null) {
-				for (var i = 0; i < friends.length; i++) {
-					this.friends.push(parseInt(friends[i].value));
-				}
-			}
 			operationFinished();
 		});
 
@@ -53,17 +43,6 @@ class Client {
 		this.timeout = setTimeout(() => {
 			callback(this.id);
 		}, time);
-	}
-
-	addFriend(friendID) {
-		this.startDecay(this.time, this.callback);
-		this.friends[friends[i].userID] = friendID;
-		database.addFriend(this.id, friendID);
-	}
-
-	getFriends() {
-		this.startDecay(this.time, this.callback);
-		return this.friends;
 	}
 
 	addCard(card) {

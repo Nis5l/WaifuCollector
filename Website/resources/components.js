@@ -445,6 +445,94 @@ class Confirmation extends HTMLElement {
 		};
 	}
 }
+
+class AddFriend extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({ mode: "open" });
+		this.noCallback = undefined;
+		this.yesCallback = undefined;
+
+		this._root.innerHTML = `
+            <div class="card">
+                    <h1>Add Friend</h1>
+
+                    <input type="text" name="username" placeholder="Name">
+                    <input class=no type="submit" name="submit" value="Cancel">
+                    <input class=yes type="submit" name="submit" value="Yes">
+
+            </div>
+			<style>
+	.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    transform: translate(-50%, -50%);
+    background-color: #25282f;
+    padding: 40px;
+    text-align: center; }
+    .card h1 {
+      margin-top: 20px;
+      color: white;
+      display: block; }
+    .card .wrong {
+      border-color: red !important; }
+    .card input[type="submit"] {
+      color: black;
+      padding: 10px 30px;
+      margin: auto 10px;
+      border: 2px solid #00ff00;
+      background-color: #00ff00;
+      border-radius: 25px;
+	  width: 125px;
+	  }
+      .card input[type="submit"]:enabled:hover {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0);
+        transition: background 0.2s ease-in-out; }
+      .card input[type="submit"]:disabled {
+        background-color: #202320;
+        border-color: #202320; }
+      .card input[type="text"] {
+            color: #fff;
+
+            background: none;
+            display: block;
+
+            text-align: center;
+
+            border: 2px solid rgba(0, 255, 0, 0.25);
+
+            width: 280px;
+            outline: none;
+
+            margin: 20px auto;
+            padding: 10px 4px;
+
+            border-radius: 25px;
+        }
+      .card input[type="text"]:hover{
+
+                border-color: #00ff00;
+
+                transition: border 0.2s ease-in-out;
+
+		}
+	</style>
+    `;
+		var ele = this._root.querySelector(".no");
+		ele.onclick = () => {
+			if (this.noCallback != undefined) this.noCallback();
+		};
+
+		var ele = this._root.querySelector(".yes");
+		ele.onclick = () => {
+			if (this.yesCallback != undefined) this.yesCallback();
+		};
+	}
+}
 var script = document.createElement("script");
 script.src = "https://code.jquery.com/jquery-3.4.1.min.js";
 script.type = "text/javascript";
@@ -453,3 +541,4 @@ document.getElementsByTagName("head")[0].appendChild(script);
 window.customElements.define("progress-ring", ProgressRing);
 window.customElements.define("waifu-card", Card);
 window.customElements.define("card-confirmation", Confirmation);
+window.customElements.define("add-friend", AddFriend);

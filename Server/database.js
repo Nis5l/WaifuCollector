@@ -13,7 +13,7 @@ var con = sql.createConnection({
 module.exports = {
 	init: function init(callback) {
 		var i = 0;
-		var taskAmount = 8;
+		var taskAmount = 9;
 		con.connect(() => {
 			con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
 				ontaskfinish();
@@ -53,6 +53,12 @@ module.exports = {
 			);
 			con.query(
 				"CREATE TABLE IF NOT EXISTS frame ( `id` INT NOT NULL , `name` TEXT NOT NULL , `path_front` TEXT NOT NULL, `path_back` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+				() => {
+					ontaskfinish();
+				}
+			);
+			con.query(
+				"CREATE TABLE `waifucollector`.`friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `status` INT NOT NULL ) ENGINE = InnoDB;",
 				() => {
 					ontaskfinish();
 				}
@@ -254,36 +260,6 @@ module.exports = {
 
 			callback("null");
 		});
-	},
-
-	addFriend: function addFriend(userID, friendID) {
-		con.query(
-			"INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" +
-				userID +
-				", '" +
-				friend +
-				"', '" +
-				friendID +
-				"')",
-			function (err, result, fields) {}
-		);
-	},
-
-	getFriends: function getFriends(userID, callback) {
-		con.query(
-			"SELECT * FROM data WHERE `userID` = " +
-				userID +
-				' AND `key` = "' +
-				friend +
-				'"',
-			function (err, result, fields) {
-				if (result == undefined || result.length == 0) {
-					callback(null);
-					return;
-				}
-				callback(result);
-			}
-		);
 	},
 
 	userexists: function userexists(username, callback) {
