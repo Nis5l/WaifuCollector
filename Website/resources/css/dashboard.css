@@ -20,7 +20,7 @@ html {
     @media screen and (min-width: 1200px) {
       .wrapper .dashboard {
         height: 500px; } }
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 400px) {
       .wrapper .dashboard {
         padding: 10px; } }
     .wrapper .dashboard .menu {

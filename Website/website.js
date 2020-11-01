@@ -16,7 +16,7 @@ const port = 8000;
 
 var token;
 const {
-	API_HOST = "92.243.146.16",
+	API_HOST = "89.107.105.171",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
@@ -346,6 +346,8 @@ app.get("/card", redirectLogin, function (req, res) {
 					addPathCard(body.inventory[i].card);
 				}
 
+				addPathCard(body.card);
+
 				res.render("card", {
 					maincard: body.card,
 					cards: body.inventory,
@@ -381,7 +383,6 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 
 				addPathCard(body.card);
 
-				console.log(body);
 				res.render("card", {
 					maincard: body.card,
 					cards: body.inventory,

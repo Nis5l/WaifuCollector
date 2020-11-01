@@ -119,5 +119,21 @@
       });
     </script>
 
+	<script>
+		var inv = document.querySelector("#inventory");
+		resize();
+		window.onresize = function(event) {
+			resize();
+		};
+		function resize()
+		{
+			var amount = Math.floor(document.body.offsetWidth / 273);
+			if(amount <= 0)
+				amount = 1;
+			var size = amount * 273;
+			inv.style.width = size + "px";
+		}
+	</script>
+
     <script src="../resources/components.js"></script> 
 </html>

@@ -15,10 +15,13 @@ div[id="cards"] {
     div[id="cards"] {
       width: 100%; } }
 
+div[id="cardsinner"] {
+  margin: auto; }
+
 div[id="maincard"] {
   margin: auto;
   margin-top: 130px;
-  width: 360px;
+  width: min-content;
   margin-right: 100px;
   float: unset;
   height: auto; }
@@ -29,5 +32,4 @@ div[id="maincard"] {
     div[id="maincard"] {
       margin-right: auto;
       height: 600px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-      transform: translateX(-20px); } }
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
