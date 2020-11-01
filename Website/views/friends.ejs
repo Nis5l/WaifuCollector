@@ -55,12 +55,16 @@
 
 	<script>
 		var opn = document.getElementById('body');
+		var form = document.querySelector(".addfriendform");
 		$(".addfriend").click(()=>{
 			opn.insertAdjacentHTML('afterend',
 				`<add-friend> </add-friend>`);
 			isOpen = true;
 			var conf = document.querySelector("add-friend");
 			conf.yesCallback = () => {
+				form.name.value = conf.username.value;
+				form.submit();
+				conf.remove();
 				isOpen = false;
 			};
 			conf.noCallback = () => {conf.remove(); isOpen = false;};

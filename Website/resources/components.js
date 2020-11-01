@@ -458,7 +458,7 @@ class AddFriend extends HTMLElement {
             <div class="card">
                     <h1>Add Friend</h1>
 
-                    <input type="text" name="username" placeholder="Name">
+                    <input class=username type="text" name="username" placeholder="Name">
                     <input class=no type="submit" name="submit" value="Cancel">
                     <input class=yes type="submit" name="submit" value="Yes">
 
@@ -522,6 +522,7 @@ class AddFriend extends HTMLElement {
 		}
 	</style>
     `;
+		this.username = this._root.querySelector(".username");
 		var ele = this._root.querySelector(".no");
 		ele.onclick = () => {
 			if (this.noCallback != undefined) this.noCallback();

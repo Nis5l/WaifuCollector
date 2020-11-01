@@ -536,9 +536,7 @@ app.post("/upgrade", (req, res) => {
 							level: newlevel,
 							frameID: mainresult.frameID,
 						});
-						getCardRequestData(decoded.id, insertID, -1, 0, (data) => {
-							res.send(data);
-						});
+						res.send({ status: 0, uuid: insertID });
 					}
 				);
 			});

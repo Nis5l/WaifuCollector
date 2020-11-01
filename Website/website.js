@@ -377,18 +377,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				for (var i = 0; i < body.inventory.length; i++) {
-					addPathCard(body.inventory[i].card);
-				}
-
-				addPathCard(body.card);
-
-				res.render("card", {
-					maincard: body.card,
-					cards: body.inventory,
-					page: body.page,
-					pagemax: body.pagemax,
-				});
+				res.redirect("/card?uuid=" + body.uuid);
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}
