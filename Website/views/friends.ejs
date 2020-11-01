@@ -33,7 +33,7 @@
         </form>
 
         <form class="addfriendform" action="/addfriend" method="post">
-            <input type="hidden" name="name" value=""/>
+            <input type="hidden" name="username" value=""/>
         </form>
 
         <div id="inventory">
@@ -62,7 +62,7 @@
 			isOpen = true;
 			var conf = document.querySelector("add-friend");
 			conf.yesCallback = () => {
-				form.name.value = conf.username.value;
+				form.username.value = conf.username.value;
 				form.submit();
 				conf.remove();
 				isOpen = false;

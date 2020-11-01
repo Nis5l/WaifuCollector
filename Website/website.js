@@ -389,6 +389,27 @@ app.get("/friends", redirectLogin, function (req, res) {
 	res.render("friends", { page: 0, pagemax: 0 });
 });
 
+app.post("/addfriend", redirectDashboard, function (req, res) {
+	var username = req.query.username;
+	if (username == undefined) return;
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/addfriend",
+		{
+			json: {
+				token: token,
+				username: username,
+			},
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect("/friends");
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
 function addPathCard(card) {
 	card.cardImage = "http://" + API_HOST + ":" + API_PORT + "/" + card.cardImage;
 	card.frame.path_front =
