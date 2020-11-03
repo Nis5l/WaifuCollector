@@ -16,7 +16,7 @@ const port = 8000;
 
 var token;
 const {
-	API_HOST = "31.177.119.14",
+	API_HOST = "92.243.145.96",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
@@ -386,7 +386,22 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 });
 
 app.get("/friends", redirectLogin, function (req, res) {
-	res.render("friends", { page: 0, pagemax: 0 });
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/friends",
+		{
+			json: {
+				token: token,
+			},
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				console.log(body);
+				res.render("friends", { page: 0, pagemax: 0 });
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
 });
 
 app.post("/addfriend", redirectDashboard, function (req, res) {

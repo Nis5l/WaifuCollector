@@ -544,6 +544,49 @@ app.post("/upgrade", (req, res) => {
 	}
 });
 
+app.post("/friends", (req, res) => {
+	var token = req.body.token;
+
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run();
+	}
+
+	function run() {
+		var friends = clients[decoded.id].getFriends();
+		var data = [];
+		run2(0);
+		function run2(i) {
+			if (i == friends.length) res.send({ status: 0, friends: data });
+
+			var username = undefined;
+			if (clients[friends[i].userID] != undefined) {
+				username = clients[friends[i].userID].username;
+				insert();
+			} else
+				database.getUserName(friends[i].userID, (user) => {
+					username = user;
+					insert();
+				});
+			function insert() {
+				data.push({
+					userID: friends[i].userID,
+					status: friends[i].status,
+					username: username,
+				});
+				run2(i + 1);
+			}
+		}
+	}
+});
 function getCardRequestData(userID, uuid, next, page, callback) {
 	var inventory;
 	var maincard;

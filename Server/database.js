@@ -314,6 +314,19 @@ module.exports = {
 			}
 		);
 	},
+
+	getFriends: function getFriends(userID, callback) {
+		con.query(
+			"SELECT * FROM `friend` WHERE userone = " +
+				userID +
+				" OR usertwo = " +
+				userID,
+			(err, result, fields) => {
+				if (result == undefined || result.length == 0) callback(undefined);
+				callback(result);
+			}
+		);
+	},
 };
 
 function cards() {

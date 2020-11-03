@@ -6,10 +6,11 @@ class Client {
 		this.packTime = -1;
 		this.username = username;
 		this.inventory = [];
+		this.friends = [];
 		this.lastids = undefined;
 		this.page = 0;
 		this.lastmain = undefined;
-		var operations = 2;
+		var operations = 3;
 		var operationsComplete = 0;
 
 		database.getPackTime(this.id, (time) => {
@@ -20,6 +21,22 @@ class Client {
 		database.getInventory(this.id, (inventory) => {
 			this.inventory = inventory;
 			this.sortInv();
+			operationFinished();
+		});
+
+		database.getFriends(this.id, (friends) => {
+			for (var i in friends) {
+				if (this.id == friends[i].userone)
+					this.friends.push({
+						userID: friends[i].usertwo,
+						status: friends[i].status,
+					});
+				else
+					this.friends.push({
+						userID: friends[i].userone,
+						status: friends[i].status,
+					});
+			}
 			operationFinished();
 		});
 
@@ -49,6 +66,11 @@ class Client {
 		this.startDecay(this.time, this.callback);
 		this.inventory.push(card);
 		this.sortInv();
+	}
+
+	getFriends() {
+		this.startDecay(this.time, this.callback);
+		return this.friends;
 	}
 
 	getInventory(page, amount, ids, exclude, level) {
