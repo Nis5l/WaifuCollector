@@ -393,10 +393,11 @@ class Confirmation extends HTMLElement {
 		this._root = this.attachShadow({ mode: "open" });
 		this.noCallback = undefined;
 		this.yesCallback = undefined;
+		this.message = this.getAttribute("message");
 
 		this._root.innerHTML = `
             <div class="card">
-                    <h1>Combine?</h1>
+                    <h1>${this.message}</h1>
 
                     <input class=no type="submit" name="submit" value="No">
                     <input class=yes type="submit" name="submit" value="Yes">

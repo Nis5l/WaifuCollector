@@ -95,7 +95,7 @@
           if(ele.is('waifu-card') && !isOpen)
           {
 		    opn.insertAdjacentHTML('afterend',
-				`<card-confirmation> </card-confirmation>`);
+				`<card-confirmation message="Combine?"> </card-confirmation>`);
 			  isOpen = true;
 			var conf = document.querySelector("card-confirmation");
 			conf.yesCallback = () => {

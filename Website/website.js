@@ -407,15 +407,37 @@ app.get("/friends", redirectLogin, function (req, res) {
 app.post("/addfriend", redirectLogin, function (req, res) {
 	var username = req.body.username;
 	if (username == undefined) {
-		res.redirect("/dashboard");
+		res.redirect("/friends");
 	}
-	console.log(username);
 	request.post(
 		"http://" + API_HOST + ":" + API_PORT + "/addfriend",
 		{
 			json: {
 				token: token,
 				username: username,
+			},
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect("/friends");
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
+app.post("/acceptfriend", redirectLogin, function (req, res) {
+	var userID = req.body.userID;
+	if (userID == undefined) {
+		res.redirect("/friends");
+	}
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/acceptfriend",
+		{
+			json: {
+				token: token,
+				userID: userID,
 			},
 		},
 		(error, response, body) => {

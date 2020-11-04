@@ -597,8 +597,6 @@ app.post("/addfriend", (req, res) => {
 	var token = req.body.token;
 	var username = req.body.username;
 
-	console.log(username);
-
 	try {
 		var decoded = jwt.verify(token, jwtSecret);
 	} catch (JsonWebTokenError) {
@@ -614,7 +612,6 @@ app.post("/addfriend", (req, res) => {
 
 	function run() {
 		database.getUserID(username, (id) => {
-			console.log(id);
 			if (id == undefined) {
 				res.send({ status: 1, message: "cant find user" });
 				return;
@@ -631,6 +628,42 @@ app.post("/addfriend", (req, res) => {
 				res.send({ status: 0 });
 				return;
 			});
+		});
+	}
+});
+
+app.post("/acceptfriend", (req, res) => {
+	var token = req.body.token;
+	var userID = req.body.userID;
+	var userID = parseInt(userID);
+
+	if (isNaN(userID) || userID == undefined) {
+		res.send({ status: 1, message: "not a userID" });
+		return;
+	}
+
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run();
+	}
+
+	function run() {
+		if (!clients[decoded.id].acceptFriendRequest(userID)) {
+			console.log("error");
+			res.send({ status: 1, message: "user not found" });
+			return;
+		}
+		database.acceptFriendRequest(userID, decoded.id, () => {
+			res.send({ status: 0 });
+			return;
 		});
 	}
 });

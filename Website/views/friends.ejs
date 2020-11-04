@@ -23,6 +23,10 @@
             <input type="hidden" name="username" value=""/>
         </form>
 
+        <form class="acceptfriendform" action="/acceptfriend" method="post">
+            <input type="hidden" name="userID" value=""/>
+        </form>
+
         <div id="friends">
         </div>
         
@@ -36,7 +40,6 @@
 
 	<script>
         const friends = <%- JSON.stringify(friends) %>;
-		console.log(friends);
 		var opn = document.getElementById('friends');
 		for(var i = 0; i < friends.length; i++)
 		{
@@ -46,23 +49,48 @@
 	</script>
 
 	<script>
+		var isOpen = false;
 		var opn = document.getElementById('body');
 		var form = document.querySelector(".addfriendform");
 		$(".addfriend").click(()=>{
-			opn.insertAdjacentHTML('afterend',
-				`<add-friend> </add-friend>`);
-			isOpen = true;
-			var conf = document.querySelector("add-friend");
+			if(!isOpen)
+			{
+				opn.insertAdjacentHTML('afterend',
+					`<add-friend> </add-friend>`);
+				isOpen = true;
+				var conf = document.querySelector("add-friend");
+				conf.yesCallback = () => {
+					form.username.value = conf.username.value;
+					form.submit();
+					conf.remove();
+					isOpen = false;
+				};
+				conf.noCallback = () => {conf.remove(); isOpen = false;};
+			}
+		});
+	
+		
+		var acceptform = document.querySelector(".acceptfriendform");
+         $(document).click(function(event) {
+          var ele = $(event.target);
+		
+          if(ele.is('friend-card') && !isOpen && ele[0].status=="0")
+          {
+		    opn.insertAdjacentHTML('afterend',
+				`<card-confirmation message="Befriend?"> </card-confirmation>`);
+			  isOpen = true;
+			var conf = document.querySelector("card-confirmation");
 			conf.yesCallback = () => {
-				console.log(form);
-				form.username.value = conf.username.value;
-				form.submit();
+				acceptform.userID.value = ele[0].userID;
+				acceptform.submit();
 				conf.remove();
 				isOpen = false;
 			};
 			conf.noCallback = () => {conf.remove(); isOpen = false;};
+		  }
 		});
 	</script>
+	
 
 	<script>
 		var inv = document.querySelector("#friends");

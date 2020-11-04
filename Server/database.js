@@ -359,6 +359,21 @@ module.exports = {
 			}
 		);
 	},
+	acceptFriendRequest: function acceptFriendRequest(
+		userone,
+		usertwo,
+		callback
+	) {
+		con.query(
+			"UPDATE friend SET status = 2 WHERE userone=" +
+				userone +
+				" AND usertwo=" +
+				usertwo,
+			function (err, result, fields) {
+				callback();
+			}
+		);
+	},
 };
 
 function cards() {
