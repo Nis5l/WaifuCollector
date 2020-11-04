@@ -395,8 +395,7 @@ app.get("/friends", redirectLogin, function (req, res) {
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				console.log(body);
-				res.render("friends", { page: 0, pagemax: 0 });
+				res.render("friends", { friends: body.friends });
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}

@@ -309,7 +309,10 @@ module.exports = {
 		con.query(
 			"SELECT * FROM unlocked WHERE id=" + uuid + " AND userID=" + userID,
 			(err, result, fields) => {
-				if (result == undefined || result.length == 0) callback(undefined);
+				if (result == undefined || result.length == 0) {
+					callback(undefined);
+					return;
+				}
 				callback(result[0]);
 			}
 		);
@@ -322,7 +325,10 @@ module.exports = {
 				" OR usertwo = " +
 				userID,
 			(err, result, fields) => {
-				if (result == undefined || result.length == 0) callback(undefined);
+				if (result == undefined || result.length == 0) {
+					callback(undefined);
+					return;
+				}
 				callback(result);
 			}
 		);

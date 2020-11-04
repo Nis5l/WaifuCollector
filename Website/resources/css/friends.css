@@ -1,0 +1,9 @@
+div#friends {
+  margin: auto;
+  margin-top: 40px;
+  overflow: auto;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto; }

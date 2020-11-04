@@ -534,6 +534,49 @@ class AddFriend extends HTMLElement {
 		};
 	}
 }
+
+class Friend extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({ mode: "open" });
+		this.username = this.getAttribute("username");
+		this.userID = this.getAttribute("userID");
+		this.status = this.getAttribute("status");
+		this.statusMessage = this.status == "1" ? "Friend" : "Pending";
+
+		this._root.innerHTML = `
+            <div class="card">
+					<h1 class=status>${this.statusMessage}</h1>
+                    <h1 class=username>${this.username}</h1>
+            </div>
+		<link href='https://fonts.googleapis.com/css?family=Allerta Stencil' rel='stylesheet'>
+		<style>
+		  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@1,700&display=swap');
+		.card {
+		position: relative;
+		float: left;
+		margin: 10px;
+		width: 260px;
+		background-color: #25282f;
+		padding: 10px;
+		font-family: 'Allerta Stencil', sans-serif;
+		text-align: center; }
+		.card .username {
+		  margin-top: 12px;
+		  color: white;
+		  display: block; }
+		.card .status {
+		  font-size: 12pt;
+		  margin-top: 0px;
+		  text-align: left;
+		  color: white;
+		  display: block; }
+		</style>
+		`;
+	}
+}
+
 var script = document.createElement("script");
 script.src = "https://code.jquery.com/jquery-3.4.1.min.js";
 script.type = "text/javascript";
@@ -543,3 +586,4 @@ window.customElements.define("progress-ring", ProgressRing);
 window.customElements.define("waifu-card", Card);
 window.customElements.define("card-confirmation", Confirmation);
 window.customElements.define("add-friend", AddFriend);
+window.customElements.define("friend-card", Friend);

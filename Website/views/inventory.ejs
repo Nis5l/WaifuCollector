@@ -128,6 +128,8 @@
 		function resize()
 		{
 			var amount = Math.floor(document.body.offsetWidth / 273);
+			if(amount > cards.length)
+				amount = cards.length;
 			if(amount <= 0)
 				amount = 1;
 			var size = amount * 273;

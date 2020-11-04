@@ -22,6 +22,7 @@ const passLen = [8, 30];
 const packSize = [1, 1];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
 const inventorySendAmount = 10;
+const friendLimit = 50;
 
 var clients = {};
 
@@ -565,7 +566,10 @@ app.post("/friends", (req, res) => {
 		var data = [];
 		run2(0);
 		function run2(i) {
-			if (i == friends.length) res.send({ status: 0, friends: data });
+			if (i == friends.length) {
+				res.send({ status: 0, friends: data });
+				return;
+			}
 
 			var username = undefined;
 			if (clients[friends[i].userID] != undefined) {
@@ -591,7 +595,7 @@ function getCardRequestData(userID, uuid, next, page, callback) {
 	var inventory;
 	var maincard;
 	var pageStats;
-	if (uuid == undefined) {
+	if (uuid == undefined || isNaN(uuid) || uuid == null) {
 		uuid = clients[userID].lastmain;
 		if (uuid == undefined) {
 			callback({ status: 1, message: "No main uuid" });

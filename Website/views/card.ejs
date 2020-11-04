@@ -143,6 +143,8 @@
 		{
 			console.log();
 			var amount = Math.floor((parent.offsetWidth)/ 273);
+			if(amount > cards.length)
+				amount = cards.length;
 			if(amount <= 0)
 				amount = 1;
 			var size = amount * 273;
