@@ -54,6 +54,7 @@
 			isOpen = true;
 			var conf = document.querySelector("add-friend");
 			conf.yesCallback = () => {
+				console.log(form);
 				form.username.value = conf.username.value;
 				form.submit();
 				conf.remove();

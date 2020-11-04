@@ -16,7 +16,7 @@ const port = 8000;
 
 var token;
 const {
-	API_HOST = "92.243.145.96",
+	API_HOST = "89.107.111.109",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
@@ -364,8 +364,9 @@ app.get("/card", redirectLogin, function (req, res) {
 app.get("/upgrade", redirectLogin, function (req, res) {
 	var mainuuid = req.query.mainuuid;
 	var carduuid = req.query.carduuid;
-	if (mainuuid == undefined) return;
-	if (carduuid == undefined) return;
+	if (mainuuid == undefined || carduuid == undefined) {
+		res.redirect("/dashboard");
+	}
 	request.post(
 		"http://" + API_HOST + ":" + API_PORT + "/upgrade",
 		{
@@ -403,9 +404,12 @@ app.get("/friends", redirectLogin, function (req, res) {
 	);
 });
 
-app.post("/addfriend", redirectDashboard, function (req, res) {
-	var username = req.query.username;
-	if (username == undefined) return;
+app.post("/addfriend", redirectLogin, function (req, res) {
+	var username = req.body.username;
+	if (username == undefined) {
+		res.redirect("/dashboard");
+	}
+	console.log(username);
 	request.post(
 		"http://" + API_HOST + ":" + API_PORT + "/addfriend",
 		{

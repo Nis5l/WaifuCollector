@@ -97,6 +97,7 @@ app.post("/register", (req, res) => {
 			return;
 		}
 	}
+
 	console.log("Register " + username + " " + password);
 	database.register(username, password, registerCallback);
 
@@ -591,6 +592,49 @@ app.post("/friends", (req, res) => {
 		}
 	}
 });
+
+app.post("/addfriend", (req, res) => {
+	var token = req.body.token;
+	var username = req.body.username;
+
+	console.log(username);
+
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		run();
+	}
+
+	function run() {
+		database.getUserID(username, (id) => {
+			console.log(id);
+			if (id == undefined) {
+				res.send({ status: 1, message: "cant find user" });
+				return;
+			}
+			if (id == decoded.id) {
+				res.send({ status: 1, message: "cant add yourself" });
+				return;
+			}
+			if (clients[decoded.id].hasFriend(id)) {
+				res.send({ status: 1, message: "already added" });
+			}
+			clients[decoded.id].addFriendRequest(id);
+			database.addFriendRequest(decoded.id, id, () => {
+				res.send({ status: 0 });
+				return;
+			});
+		});
+	}
+});
+
 function getCardRequestData(userID, uuid, next, page, callback) {
 	var inventory;
 	var maincard;

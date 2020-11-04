@@ -543,7 +543,20 @@ class Friend extends HTMLElement {
 		this.username = this.getAttribute("username");
 		this.userID = this.getAttribute("userID");
 		this.status = this.getAttribute("status");
-		this.statusMessage = this.status == "1" ? "Friend" : "Pending";
+		switch (this.status) {
+			case "0": {
+				this.statusMessage = "Pending";
+				break;
+			}
+			case "1": {
+				this.statusMessage = "Sent";
+				break;
+			}
+			case "2": {
+				this.statusMessage = "Friend";
+				break;
+			}
+		}
 
 		this._root.innerHTML = `
             <div class="card">
@@ -558,12 +571,13 @@ class Friend extends HTMLElement {
 		float: left;
 		margin: 10px;
 		width: 260px;
+		height: 120px;
 		background-color: #25282f;
 		padding: 10px;
 		font-family: 'Allerta Stencil', sans-serif;
 		text-align: center; }
 		.card .username {
-		  margin-top: 12px;
+		  margin-top: 26px;
 		  color: white;
 		  display: block; }
 		.card .status {

@@ -333,6 +333,32 @@ module.exports = {
 			}
 		);
 	},
+	getUserID: function getUserID(username, callback) {
+		con.query(
+			"SELECT * FROM user WHERE UPPER(username) = ?",
+			[username.toUpperCase()],
+			function (err, result, fields) {
+				console.log(result);
+				if (result == undefined || result == null || result.length != 1) {
+					callback(undefined);
+					return;
+				}
+				callback(result[0].id);
+			}
+		);
+	},
+	addFriendRequest: function addFriendRequest(idone, idtwo, callback) {
+		con.query(
+			"INSERT INTO `friend` (`userone`, `usertwo`, `status`) VALUES ('" +
+				idone +
+				"', '" +
+				idtwo +
+				"', '0')",
+			function (err, result, fields) {
+				callback();
+			}
+		);
+	},
 };
 
 function cards() {

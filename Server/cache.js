@@ -27,10 +27,16 @@ class Client {
 		database.getFriends(this.id, (friends) => {
 			for (var i in friends) {
 				if (this.id == friends[i].userone)
-					this.friends.push({
-						userID: friends[i].usertwo,
-						status: friends[i].status,
-					});
+					if (friends[i].status == 0)
+						this.friends.push({
+							userID: friends[i].usertwo,
+							status: 1,
+						});
+					else
+						this.friends.push({
+							userID: friends[i].usertwo,
+							status: friends[i].status,
+						});
 				else
 					this.friends.push({
 						userID: friends[i].userone,
@@ -71,6 +77,18 @@ class Client {
 	getFriends() {
 		this.startDecay(this.time, this.callback);
 		return this.friends;
+	}
+
+	hasFriend(id) {
+		this.startDecay(this.time, this.callback);
+		for (var i = 0; i < this.friends.length; i++) {
+			if (this.friends[i].id == id) return true;
+		}
+		return false;
+	}
+
+	addFriendRequest(id) {
+		this.friends.push({ userID: id, status: 0 });
 	}
 
 	getInventory(page, amount, ids, exclude, level) {
