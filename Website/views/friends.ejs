@@ -12,25 +12,23 @@
     <body id="body" class="scrollable">
 
         <%- include('partials/nav.ejs') %>
-        
-        <form action="/friends" method="get">
-            <input type="search" name="search" placeholder=""/>
-            <input type="submit" value="Search" name="submit"></input>
-        </form>
-		<input class="addfriend" type="submit" value="Add Friend" name="submit"></input>
+       	<div class=friendbox> 
+			<input class="addfriend" type="submit" value="Add Friend" name="submit"></input>
 
-        <form class="addfriendform" action="/addfriend" method="post">
-            <input type="hidden" name="username" value=""/>
-        </form>
+			<form class="addfriendform" action="/addfriend" method="post">
+				<input type="hidden" name="username" value=""/>
+			</form>
 
-        <form class="acceptfriendform" action="/acceptfriend" method="post">
-            <input type="hidden" name="userID" value=""/>
-        </form>
+			<form class="acceptfriendform" action="/acceptfriend" method="post">
+				<input type="hidden" name="userID" value=""/>
+				<input type="hidden" name="accept" value=""/>
+			</form>
 
-        <div id="friends">
-        </div>
-        
-        <div class="bot"></div>
+			<div id="friends">
+			</div>
+			
+			<div class="bot"></div>
+		<div>
     </body>
 
     <script
@@ -82,11 +80,19 @@
 			var conf = document.querySelector("card-confirmation");
 			conf.yesCallback = () => {
 				acceptform.userID.value = ele[0].userID;
+				acceptform.accept.value = 0;
 				acceptform.submit();
 				conf.remove();
 				isOpen = false;
 			};
-			conf.noCallback = () => {conf.remove(); isOpen = false;};
+			  conf.noCallback = () =>
+			  {
+				acceptform.userID.value = ele[0].userID;
+				acceptform.accept.value = 1;
+				acceptform.submit();
+				conf.remove();
+				isOpen = false;
+			  };
 		  }
 		});
 	</script>

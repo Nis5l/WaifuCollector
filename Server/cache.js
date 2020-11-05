@@ -27,16 +27,19 @@ class Client {
 		database.getFriends(this.id, (friends) => {
 			for (var i in friends) {
 				if (this.id == friends[i].userone)
-					if (friends[i].status == 0)
+					if (friends[i].status == 0) {
+						console.log("added as 1");
 						this.friends.push({
 							userID: friends[i].usertwo,
 							status: 1,
 						});
-					else
+					} else {
+						console.log("added as 0");
 						this.friends.push({
 							userID: friends[i].usertwo,
 							status: friends[i].status,
 						});
+					}
 				else
 					this.friends.push({
 						userID: friends[i].userone,
@@ -92,7 +95,7 @@ class Client {
 	}
 
 	addFriendRequest(id) {
-		this.friends.push({ userID: id, status: 0 });
+		this.friends.push({ userID: id, status: 1 });
 	}
 
 	acceptFriendRequest(id) {
@@ -100,6 +103,17 @@ class Client {
 		for (var i = 0; i < this.friends.length; i++) {
 			if (this.friends[i].userID == id && this.friends[i].status == 0) {
 				this.friends[i].status = 2;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	deleteFriend(id) {
+		this.startDecay(this.time, this.callback);
+		for (var i = 0; i < this.friends.length; i++) {
+			if (this.friends[i].userID == id) {
+				this.friends.splice(i);
 				return true;
 			}
 		}

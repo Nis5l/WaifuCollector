@@ -413,7 +413,8 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 
 app.post("/acceptfriend", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
-	if (userID == undefined) {
+	var accept = parseInt(req.body.accept);
+	if (userID == undefined || accept == undefined || isNaN(accept)) {
 		res.redirect("/friends");
 	}
 	request.post(
@@ -422,6 +423,7 @@ app.post("/acceptfriend", redirectLogin, function (req, res) {
 			json: {
 				token: token,
 				userID: userID,
+				accept: accept,
 			},
 		},
 		(error, response, body) => {

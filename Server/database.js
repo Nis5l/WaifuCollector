@@ -374,6 +374,14 @@ module.exports = {
 			}
 		);
 	},
+	deleteFriend: function deleteFriend(userone, usertwo, callback) {
+		con.query(
+			"DELETE FROM friend WHERE userone=" + userone + " AND usertwo=" + usertwo,
+			function (err, result, fields) {
+				callback();
+			}
+		);
+	},
 };
 
 function cards() {

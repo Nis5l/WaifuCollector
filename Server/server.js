@@ -118,6 +118,7 @@ app.post("/getDashboard", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run(decoded.id);
 	}
 
@@ -334,6 +335,7 @@ app.post("/getfriends", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run(decoded.id);
 	}
 
@@ -381,6 +383,7 @@ app.post("/inventory", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run(decoded.id);
 	}
 	function run(userID) {
@@ -455,6 +458,7 @@ app.post("/card", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run();
 	}
 	function run() {
@@ -483,6 +487,7 @@ app.post("/upgrade", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run();
 	}
 
@@ -552,6 +557,7 @@ app.post("/friends", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run();
 	}
 
@@ -600,6 +606,7 @@ app.post("/addfriend", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run();
 	}
 
@@ -617,7 +624,7 @@ app.post("/addfriend", (req, res) => {
 				res.send({ status: 1, message: "already added" });
 				return;
 			}
-			if (clients[userID].getFriends().length == friendLimit) {
+			if (clients[decoded.id].getFriends().length == friendLimit) {
 				res.send({ status: 1, message: "reached max friend count" });
 				return;
 			}
@@ -634,10 +641,16 @@ app.post("/acceptfriend", (req, res) => {
 	var token = req.body.token;
 	var userID = req.body.userID;
 	var userID = parseInt(userID);
+	var accept = req.body.accept;
+	var accept = parseInt(accept);
 
-	if (isNaN(userID) || userID == undefined) {
+	if (isNaN(userID) || isNaN(accept)) {
 		res.send({ status: 1, message: "not a userID" });
 		return;
+	}
+
+	if (accept != 0 && accept != 1) {
+		res.send({ status: 1, message: "wrong data" });
 	}
 
 	try {
@@ -650,18 +663,30 @@ app.post("/acceptfriend", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run();
 	}
 
 	function run() {
-		if (!clients[decoded.id].acceptFriendRequest(userID)) {
-			res.send({ status: 1, message: "user not found" });
-			return;
+		if (accept == 0) {
+			if (!clients[decoded.id].acceptFriendRequest(userID)) {
+				res.send({ status: 1, message: "user not found" });
+				return;
+			}
+			database.acceptFriendRequest(userID, decoded.id, () => {
+				res.send({ status: 0 });
+				return;
+			});
+		} else if (accept == 1) {
+			if (!clients[decoded.id].deleteFriend(userID)) {
+				res.send({ status: 1, message: "user not found" });
+				return;
+			}
+			database.deleteFriend(userID, decoded.id, () => {
+				res.send({ status: 0 });
+				return;
+			});
 		}
-		database.acceptFriendRequest(userID, decoded.id, () => {
-			res.send({ status: 0 });
-			return;
-		});
 	}
 });
 
