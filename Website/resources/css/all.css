@@ -49,6 +49,63 @@ div[id="maincard"] {
       margin-right: auto;
       height: 600px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+div#friends {
+  margin: auto;
+  margin-top: 40px;
+  overflow: auto;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto; }
+html, body {
+  margin: auto;
+  height: 100%;
+  overflow: auto; }
+
+.home {
+  height: 100vh;
+  width: 100%; }
+  .home h1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em; }
+    @media screen and (max-width: 430px) {
+      .home h1 {
+        font-size: 2em; } }
+  .home:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-image: url("/assets/homeBackground.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 0.1;
+    width: 100%;
+    height: 100%; }
+
+.about {
+  width: 100%; }
+  .about .title {
+    margin: 4% 0; }
+
+.section .title {
+  position: relative;
+  font-size: 3em;
+  text-align: center;
+  background: linear-gradient(#fff, #fff);
+  background-repeat: no-repeat;
+  background-size: 0px 1px;
+  background-position: bottom center;
+  transition: background 0.2s ease-in-out; }
+
+.section:hover .title {
+  background-size: 100px 1px; }
 html {
   height: 100%; }
 
@@ -358,6 +415,48 @@ div#inventory {
   @media screen and (max-width: 1200px) {
     .page {
       font-size: 200%; } }
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: #1b1c1f;
+  box-shadow: 0px 2px 10px #00ff00;
+  z-index: 100;
+  font-family: 'Allerta Stencil', sans-serif; }
+  .nav .logo {
+    float: left;
+    font-size: 14pt;
+    margin-left: 30px;
+    margin-top: 40px;
+    color: white;
+    text-decoration: none; }
+    @media screen and (max-width: 600px) {
+      .nav .logo {
+        font-size: 6pt; } }
+    @media screen and (max-width: 350px) {
+      .nav .logo {
+        font-size: 4pt; } }
+  .nav .nav-list {
+    float: right;
+    list-style-type: none;
+    margin-top: 40px;
+    margin-right: 5px; }
+    @media screen and (min-width: 350px) {
+      .nav .nav-list {
+        margin-right: 30px; } }
+    @media screen and (max-width: 350px) {
+      .nav .nav-list {
+        font-size: 10pt; } }
+  .nav .nav-list li {
+    display: inline; }
+    .nav .nav-list li a {
+      color: white;
+      text-decoration: none;
+      padding: 40px 15px; }
+      .nav .nav-list li a:hover {
+        background-color: rgba(0, 0, 0, 0.2); }
 .content {
   width: 100%;
   height: 100vh; }
@@ -404,130 +503,6 @@ div#inventory {
       .content .card input[type="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }
-html, body {
-  margin: auto;
-  height: 100%;
-  overflow: auto; }
-
-.home {
-  height: 100vh;
-  width: 100%; }
-  .home h1 {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3em; }
-    @media screen and (max-width: 430px) {
-      .home h1 {
-        font-size: 2em; } }
-  .home:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-image: url("/assets/homeBackground.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    opacity: 0.1;
-    width: 100%;
-    height: 100%; }
-
-.about {
-  width: 100%; }
-  .about .title {
-    margin: 4% 0; }
-
-.section .title {
-  position: relative;
-  font-size: 3em;
-  text-align: center;
-  background: linear-gradient(#fff, #fff);
-  background-repeat: no-repeat;
-  background-size: 0px 1px;
-  background-position: bottom center;
-  transition: background 0.2s ease-in-out; }
-
-.section:hover .title {
-  background-size: 100px 1px; }
-div#friends {
-  margin: auto;
-  margin-top: 40px;
-  overflow: auto;
-  max-height: none;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto; }
-.nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background-color: #1b1c1f;
-  box-shadow: 0px 2px 10px #00ff00;
-  z-index: 100;
-  font-family: 'Allerta Stencil', sans-serif; }
-  .nav .logo {
-    float: left;
-    font-size: 14pt;
-    margin-left: 30px;
-    margin-top: 40px;
-    color: white;
-    text-decoration: none; }
-    @media screen and (max-width: 600px) {
-      .nav .logo {
-        font-size: 6pt; } }
-    @media screen and (max-width: 350px) {
-      .nav .logo {
-        font-size: 4pt; } }
-  .nav .nav-list {
-    float: right;
-    list-style-type: none;
-    margin-top: 40px;
-    margin-right: 5px; }
-    @media screen and (min-width: 350px) {
-      .nav .nav-list {
-        margin-right: 30px; } }
-    @media screen and (max-width: 350px) {
-      .nav .nav-list {
-        font-size: 10pt; } }
-  .nav .nav-list li {
-    display: inline; }
-    .nav .nav-list li a {
-      color: white;
-      text-decoration: none;
-      padding: 40px 15px; }
-      .nav .nav-list li a:hover {
-        background-color: rgba(0, 0, 0, 0.2); }
-.packwrapper {
-  position: relative;
-  min-width: 200px;
-  width: 100%;
-  height: auto;
-  padding: 150px 0px 0px 0px; }
-
-div#Open {
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-  width: 255px;
-  height: 400px; }
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
-* {
-  margin: 0;
-  padding: 0;
-  font-family: 'Epilogue'; }
-
-body {
-  height: 100%;
-  background-color: #15171b;
-  color: white; }
 .wrapper .settings {
   min-width: 350px;
   margin-left: 7%; }
@@ -575,6 +550,31 @@ body {
       .wrapper .settings .pass_change input[name="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }
+.packwrapper {
+  position: relative;
+  min-width: 200px;
+  width: 100%;
+  height: auto;
+  padding: 150px 0px 0px 0px; }
+
+div#Open {
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  width: 255px;
+  height: 400px; }
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Epilogue'; }
+
+body {
+  height: 100%;
+  background-color: #15171b;
+  color: white; }
 
 .grid_1,.grid_2,.grid_3,.grid_4,.grid_5,.grid_6,.grid_7,.grid_8,.grid_9,.grid_10,.grid_11,.grid_12{ width:100%; box-sizing:border-box; float:left; position:relative; }
 .grid_right { float:right; }

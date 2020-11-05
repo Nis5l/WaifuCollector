@@ -68,6 +68,10 @@ class Client {
 		}, time);
 	}
 
+	refresh() {
+		this.startDecay(this.time, this.callback);
+	}
+
 	addCard(card) {
 		this.startDecay(this.time, this.callback);
 		this.inventory.push(card);

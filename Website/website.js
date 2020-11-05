@@ -16,7 +16,7 @@ const port = 8000;
 
 var token;
 const {
-	API_HOST = "89.107.111.109",
+	API_HOST = "89.107.108.191",
 	//API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
@@ -203,57 +203,41 @@ app.post("/register", redirectDashboard, function (req, res) {
 
 app.get("/dashboard", redirectLogin, function (req, res) {
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/getName",
+		"http://" + API_HOST + ":" + API_PORT + "/getDashboard",
 		{ json: { token: token } },
 		(error, response, body) => {
 			if (!error && response.statusCode == 200) {
-				if (body.status == 0) {
+				if (body.status == 0 || body.status == 1) {
 					var username = body.name;
-					//res.render('dashboard', { userID: req.session.userID, username: })
 				} else {
 					var username = body.message;
-					//res.render('dashboard', { userID: req.session.userID, username: body.status.message})
 				}
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}
-
-			request.post(
-				"http://" + API_HOST + ":" + API_PORT + "/getPackTime",
-				{
-					json: {
-						token: token,
-					},
-				},
-				(error, response, body) => {
-					if (!error && response.statusCode == 200) {
-						if (body.status == 0) {
-							res.render("dashboard", {
-								userID: req.session.userID,
-								time: 0,
-								username: username,
-								fulltime: body.fullTime,
-							});
-						} else if (body.status == 1) {
-							res.render("dashboard", {
-								userID: req.session.userID,
-								time: body.packTime,
-								username: username,
-								fulltime: body.fullTime,
-							});
-						} else {
-							res.redirect(
-								"/login?errorCode=" +
-									body.status +
-									"&errorMessage=" +
-									body.message
-							);
-						}
-					} else {
-						res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-					}
-				}
-			);
+			if (body.status == 0) {
+				res.render("dashboard", {
+					userID: req.session.userID,
+					time: 0,
+					username: username,
+					fulltime: body.fullTime,
+					friends: body.friendcount,
+					maxfriends: body.maxfriendcount,
+				});
+			} else if (body.status == 1) {
+				res.render("dashboard", {
+					userID: req.session.userID,
+					time: body.packTime,
+					username: username,
+					fulltime: body.fullTime,
+					friends: body.friendcount,
+					maxfriends: body.maxfriendcount,
+				});
+			} else {
+				res.redirect(
+					"/login?errorCode=" + body.status + "&errorMessage=" + body.message
+				);
+			}
 		}
 	);
 });

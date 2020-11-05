@@ -106,12 +106,12 @@ app.post("/register", (req, res) => {
 	}
 });
 
-app.post("/getName", (req, res) => {
+app.post("/getDashboard", (req, res) => {
 	var token = req.body.token;
 	try {
 		var decoded = jwt.verify(token, jwtSecret);
 	} catch (JsonWebTokenError) {
-		res.send({ status: 1, message: "Identification Please" });
+		res.send({ status: 2, message: "Identification Please" });
 		return;
 	}
 
@@ -122,17 +122,49 @@ app.post("/getName", (req, res) => {
 	}
 
 	function run(userID) {
+		//username
 		username = clients[userID].username;
 
 		if (!username || username == "null" || username == null) {
 			res.send({
-				status: 1,
+				status: 2,
 				message: "User with userID " + userID + " not found!",
 			});
 			return;
 		}
+		//friends
+		var friendcount = clients[userID].getFriends().length;
+		var maxfriendcount = friendLimit;
 
-		res.send({ status: 0, name: username });
+		//packtime
+		var nowDate = moment();
+		var packDate = moment(parseInt(clients[userID].packTime));
+
+		if (
+			clients[userID] == null ||
+			clients[userID].packTime == "null" ||
+			nowDate.isAfter(packDate) ||
+			!packDate.isValid()
+		) {
+			res.send({
+				status: 0,
+				packTime: 0,
+				fullTime: packCooldown * 1000,
+				name: username,
+				friendcount: friendcount,
+				maxfriendcount: maxfriendcount,
+			});
+			return;
+		} else {
+			res.send({
+				status: 1,
+				packTime: packDate.diff(nowDate).seconds(),
+				fullTime: packCooldown * 1000,
+				name: username,
+				friendcount: friendcount,
+				maxfriendcount: maxfriendcount,
+			});
+		}
 	}
 	return;
 });
@@ -148,6 +180,7 @@ app.post("/pack", (req, res) => {
 	if (clients[decoded.id] == undefined) {
 		createCache(decoded.id, decoded.username, run);
 	} else {
+		clients[decoded.id].refresh();
 		run();
 	}
 	function run() {
@@ -329,46 +362,6 @@ app.post("/getfriends", (req, res) => {
 			}
 		}
 	}
-});
-
-app.post("/getPackTime", (req, res) => {
-	var token = req.body.token;
-	try {
-		var decoded = jwt.verify(token, jwtSecret);
-	} catch (JsonWebTokenError) {
-		res.send({ status: 1, message: "Identification Please" });
-		return;
-	}
-
-	if (clients[decoded.id] == undefined) {
-		createCache(decoded.id, decoded.username, run);
-	} else {
-		run(decoded.id);
-	}
-
-	function run(userID) {
-		username = clients[userID].packTime;
-
-		var nowDate = moment();
-		var packDate = moment(parseInt(clients[userID].packTime));
-
-		if (
-			clients[userID] == null ||
-			clients[userID].packTime == "null" ||
-			nowDate.isAfter(packDate) ||
-			!packDate.isValid()
-		) {
-			res.send({ status: 0, packTime: 0, fullTime: packCooldown * 1000 });
-			return;
-		} else {
-			res.send({
-				status: 1,
-				packTime: packDate.diff(nowDate).seconds(),
-				fullTime: packCooldown * 1000,
-			});
-		}
-	}
-	return;
 });
 
 app.post("/inventory", (req, res) => {
@@ -622,6 +615,11 @@ app.post("/addfriend", (req, res) => {
 			}
 			if (clients[decoded.id].hasFriend(id)) {
 				res.send({ status: 1, message: "already added" });
+				return;
+			}
+			if (clients[userID].getFriends().length == friendLimit) {
+				res.send({ status: 1, message: "reached max friend count" });
+				return;
 			}
 			clients[decoded.id].addFriendRequest(id);
 			database.addFriendRequest(decoded.id, id, () => {
@@ -657,7 +655,6 @@ app.post("/acceptfriend", (req, res) => {
 
 	function run() {
 		if (!clients[decoded.id].acceptFriendRequest(userID)) {
-			console.log("error");
 			res.send({ status: 1, message: "user not found" });
 			return;
 		}
