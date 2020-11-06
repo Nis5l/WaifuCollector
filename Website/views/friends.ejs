@@ -19,9 +19,9 @@
 				<input type="hidden" name="username" value=""/>
 			</form>
 
-			<form class="acceptfriendform" action="/acceptfriend" method="post">
+			<form class="managefriendform" action="/managefriend" method="post">
 				<input type="hidden" name="userID" value=""/>
-				<input type="hidden" name="accept" value=""/>
+				<input type="hidden" name="command" value=""/>
 			</form>
 
 			<div id="friends">
@@ -68,7 +68,7 @@
 		});
 	
 		
-		var acceptform = document.querySelector(".acceptfriendform");
+		var manageform = document.querySelector(".managefriendform");
          $(document).click(function(event) {
           var ele = $(event.target);
 		
@@ -81,17 +81,17 @@
 				  isOpen = true;
 				var conf = document.querySelector("card-confirmation");
 				conf.yesCallback = () => {
-					acceptform.userID.value = ele[0].userID;
-					acceptform.accept.value = 0;
-					acceptform.submit();
+					manageform.userID.value = ele[0].userID;
+					manageform.command.value = 0;
+					manageform.submit();
 					conf.remove();
 					isOpen = false;
 				};
 				  conf.noCallback = () =>
 				  {
-					acceptform.userID.value = ele[0].userID;
-					acceptform.accept.value = 1;
-					acceptform.submit();
+					manageform.userID.value = ele[0].userID;
+					manageform.command.value = 1;
+					manageform.submit();
 					conf.remove();
 					isOpen = false;
 				  };
@@ -101,6 +101,25 @@
 					`<friend-selection username="${ele[0].username}"> </friend-selection>`);
 				  isOpen = true;
 				var sel = document.querySelector("friend-selection");
+				  sel.deleteCallback = () => {
+					  sel.remove();
+					opn.insertAdjacentHTML('afterend',
+						`<card-confirmation message="Delete?"> </card-confirmation>`);
+					  isOpen = true;
+					var conf = document.querySelector("card-confirmation");
+					conf.yesCallback = () => {
+						manageform.userID.value = ele[0].userID;
+						manageform.command.value = 1;
+						manageform.submit();
+						conf.remove();
+						isOpen = false;
+					};
+				  conf.noCallback = () =>
+				  {
+					conf.remove();
+					isOpen = false;
+				  };
+				  };
 			  }
 		  }
 		});

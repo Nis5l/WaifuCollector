@@ -411,19 +411,19 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 	);
 });
 
-app.post("/acceptfriend", redirectLogin, function (req, res) {
+app.post("/managefriend", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
-	var accept = parseInt(req.body.accept);
-	if (userID == undefined || accept == undefined || isNaN(accept)) {
+	var command = parseInt(req.body.command);
+	if (userID == undefined || command == undefined || isNaN(command)) {
 		res.redirect("/friends");
 	}
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/acceptfriend",
+		"http://" + API_HOST + ":" + API_PORT + "/managefriend",
 		{
 			json: {
 				token: token,
 				userID: userID,
-				accept: accept,
+				command: command,
 			},
 		},
 		(error, response, body) => {

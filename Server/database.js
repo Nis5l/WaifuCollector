@@ -376,7 +376,15 @@ module.exports = {
 	},
 	deleteFriend: function deleteFriend(userone, usertwo, callback) {
 		con.query(
-			"DELETE FROM friend WHERE userone=" + userone + " AND usertwo=" + usertwo,
+			"DELETE FROM friend WHERE (userone=" +
+				userone +
+				" AND usertwo=" +
+				usertwo +
+				") OR (userone=" +
+				usertwo +
+				" AND usertwo=" +
+				userone +
+				")",
 			function (err, result, fields) {
 				callback();
 			}

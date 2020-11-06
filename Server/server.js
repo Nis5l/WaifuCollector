@@ -637,19 +637,19 @@ app.post("/addfriend", (req, res) => {
 	}
 });
 
-app.post("/acceptfriend", (req, res) => {
+app.post("/managefriend", (req, res) => {
 	var token = req.body.token;
 	var userID = req.body.userID;
 	var userID = parseInt(userID);
-	var accept = req.body.accept;
-	var accept = parseInt(accept);
+	var command = req.body.command;
+	var command = parseInt(command);
 
-	if (isNaN(userID) || isNaN(accept)) {
+	if (isNaN(userID) || isNaN(command)) {
 		res.send({ status: 1, message: "not a userID" });
 		return;
 	}
 
-	if (accept != 0 && accept != 1) {
+	if (command != 0 && command != 1) {
 		res.send({ status: 1, message: "wrong data" });
 	}
 
@@ -667,7 +667,7 @@ app.post("/acceptfriend", (req, res) => {
 		run();
 	}
 	function run() {
-		if (accept == 0) {
+		if (command == 0) {
 			if (!clients[decoded.id].acceptFriendRequest(userID)) {
 				res.send({ status: 1, message: "user not found" });
 				return;
@@ -676,7 +676,7 @@ app.post("/acceptfriend", (req, res) => {
 				res.send({ status: 0 });
 				return;
 			});
-		} else if (accept == 1) {
+		} else if (command == 1) {
 			if (!clients[decoded.id].deleteFriend(userID)) {
 				res.send({ status: 1, message: "user not found" });
 				return;
