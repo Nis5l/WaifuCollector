@@ -269,9 +269,9 @@ class Card extends HTMLElement {
         font-size: 300%;
         display: flex;
         text-align: center;
+        color: #dbdbdb;
         justify-content: center;
         align-items: center;
-        color: #ffd600;
         position: absolute;
         top: 0%;
         left: -1%;
@@ -302,7 +302,7 @@ class Card extends HTMLElement {
         text-align: center;
         justify-content: center;
         align-items: center;
-        color: #dbdbdb;
+        color: #ffd600;
         position: absolute;
         top: 3%;
         left: 85%;
