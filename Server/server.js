@@ -667,26 +667,24 @@ app.post("/acceptfriend", (req, res) => {
 		run();
 	}
 
-	function run() {
-		if (accept == 0) {
-			if (!clients[decoded.id].acceptFriendRequest(userID)) {
-				res.send({ status: 1, message: "user not found" });
-				return;
-			}
-			database.acceptFriendRequest(userID, decoded.id, () => {
-				res.send({ status: 0 });
-				return;
-			});
-		} else if (accept == 1) {
-			if (!clients[decoded.id].deleteFriend(userID)) {
-				res.send({ status: 1, message: "user not found" });
-				return;
-			}
-			database.deleteFriend(userID, decoded.id, () => {
-				res.send({ status: 0 });
-				return;
-			});
+	if (accept == 0) {
+		if (!clients[decoded.id].acceptFriendRequest(userID)) {
+			res.send({ status: 1, message: "user not found" });
+			return;
 		}
+		database.acceptFriendRequest(userID, decoded.id, () => {
+			res.send({ status: 0 });
+			return;
+		});
+	} else if (accept == 1) {
+		if (!clients[decoded.id].deleteFriend(userID)) {
+			res.send({ status: 1, message: "user not found" });
+			return;
+		}
+		database.deleteFriend(userID, decoded.id, () => {
+			res.send({ status: 0 });
+			return;
+		});
 	}
 });
 
