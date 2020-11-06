@@ -3,7 +3,7 @@ input[type="search"] {
   background: none;
   display: block;
   text-align: center;
-  border: 2px solid #b047ca;
+  border: 2px solid #00ff00;
   width: 70%;
   outline: none;
   margin-top: 150px;
@@ -22,8 +22,8 @@ input[name="submit"] {
   margin-left: 30%;
   width: 40%;
   outline: none;
-  border: 2px solid #b047ca;
-  background-color: #b047ca;
+  border: 2px solid #00ff00;
+  background-color: #00ff00;
   border-radius: 25px; }
   input[name="submit"]:enabled:hover {
     color: #fff;
@@ -52,8 +52,8 @@ div#inventory {
   width: 50px;
   margin-right: 5%;
   outline: none;
-  border: 2px solid #b047ca;
-  background-color: #b047ca;
+  border: 2px solid #00ff00;
+  background-color: #00ff00;
   border-radius: 25px; }
   .next:enabled:hover {
     color: #fff;
@@ -72,9 +72,9 @@ div#inventory {
   padding: 1%;
   float: left;
   outline: none;
-  border: 2px solid #b047ca;
+  border: 2px solid #00ff00;
   width: 50px;
-  background-color: #b047ca;
+  background-color: #00ff00;
   border-radius: 25px; }
   .previous:enabled:hover {
     color: #fff;

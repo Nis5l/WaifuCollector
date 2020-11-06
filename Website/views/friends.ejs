@@ -72,27 +72,36 @@
          $(document).click(function(event) {
           var ele = $(event.target);
 		
-          if(ele.is('friend-card') && !isOpen && ele[0].status=="0")
+          if(ele.is('friend-card') && !isOpen)
           {
-		    opn.insertAdjacentHTML('afterend',
-				`<card-confirmation message="Befriend?"> </card-confirmation>`);
-			  isOpen = true;
-			var conf = document.querySelector("card-confirmation");
-			conf.yesCallback = () => {
-				acceptform.userID.value = ele[0].userID;
-				acceptform.accept.value = 0;
-				acceptform.submit();
-				conf.remove();
-				isOpen = false;
-			};
-			  conf.noCallback = () =>
+			  if(ele[0].status=="0")
 			  {
-				acceptform.userID.value = ele[0].userID;
-				acceptform.accept.value = 1;
-				acceptform.submit();
-				conf.remove();
-				isOpen = false;
-			  };
+				opn.insertAdjacentHTML('afterend',
+					`<card-confirmation message="Befriend?"> </card-confirmation>`);
+				  isOpen = true;
+				var conf = document.querySelector("card-confirmation");
+				conf.yesCallback = () => {
+					acceptform.userID.value = ele[0].userID;
+					acceptform.accept.value = 0;
+					acceptform.submit();
+					conf.remove();
+					isOpen = false;
+				};
+				  conf.noCallback = () =>
+				  {
+					acceptform.userID.value = ele[0].userID;
+					acceptform.accept.value = 1;
+					acceptform.submit();
+					conf.remove();
+					isOpen = false;
+				  };
+			  }else if(ele[0].status == "2")
+			  {
+				opn.insertAdjacentHTML('afterend',
+					`<friend-selection username="${ele[0].username}"> </friend-selection>`);
+				  isOpen = true;
+				var sel = document.querySelector("friend-selection");
+			  }
 		  }
 		});
 	</script>

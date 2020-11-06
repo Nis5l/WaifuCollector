@@ -28,13 +28,11 @@ class Client {
 			for (var i in friends) {
 				if (this.id == friends[i].userone)
 					if (friends[i].status == 0) {
-						console.log("added as 1");
 						this.friends.push({
 							userID: friends[i].usertwo,
 							status: 1,
 						});
 					} else {
-						console.log("added as 0");
 						this.friends.push({
 							userID: friends[i].usertwo,
 							status: friends[i].status,

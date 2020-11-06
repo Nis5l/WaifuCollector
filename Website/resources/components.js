@@ -592,6 +592,78 @@ class Friend extends HTMLElement {
 	}
 }
 
+class FriendSelection extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({ mode: "open" });
+		this.username = this.getAttribute("username");
+		this.tradeCallback = undefined;
+		this.deleteCallback = undefined;
+
+		this._root.innerHTML = `
+            <div class="card">
+                    <h1>${this.username}</h1>
+					<div class="trade">Trade</div>
+					<div class="delete">Delete</div>
+            </div>
+			<style>
+	.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    transform: translate(-50%, -50%);
+    background-color: #25282f;
+    padding: 10px;
+	height: 350px;
+	z-index: 1000;
+    text-align: center; }
+    .card h1 {
+      color: white;
+	  margin-top: 25px;
+	  margin-bottom: 0px;
+      display: block;
+	  border-bottom: 1px solid #ffff;
+	  padding-bottom: 25px;
+	  }
+    .card .trade {
+	  margin: 0px;
+	  padding: 0px;
+      color: white;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  width: 300px;
+	  height: 190px;
+	  border-bottom: 1px solid #ffff;
+      font-size: 24pt;
+	  }
+    .card .delete {
+      color: white;
+      display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  vertical-align:middle;
+	  height: 80px;
+	  font-size: 16pt;
+	  }
+	</style>
+    `;
+		var ele1 = this._root.querySelector(".trade");
+		ele1.onclick = () => {
+			$(ele1).css("background-color", "rgba(255, 255, 255, 0.1)");
+			if (this.tradeCallback != undefined) this.tradeCallback();
+		};
+
+		var ele2 = this._root.querySelector(".delete");
+		ele2.onclick = () => {
+			$(ele2).css("background-color", "rgba(255, 255, 255, 0.1)");
+			if (this.deleteCallback != undefined) this.deleteCallback();
+		};
+	}
+}
+
 var script = document.createElement("script");
 script.src = "https://code.jquery.com/jquery-3.4.1.min.js";
 script.type = "text/javascript";
@@ -602,3 +674,4 @@ window.customElements.define("waifu-card", Card);
 window.customElements.define("card-confirmation", Confirmation);
 window.customElements.define("add-friend", AddFriend);
 window.customElements.define("friend-card", Friend);
+window.customElements.define("friend-selection", FriendSelection);
