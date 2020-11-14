@@ -1,0 +1,58 @@
+@import "___base.scss";
+
+.trade
+{
+	display: block;
+	text-align: center;
+	position: relative;
+	margin-top: 140px;
+	width: 100%;
+	height: auto;
+	.tradeself
+	{
+		position: relative;
+		float:left;
+		width: calc(50% - 1px);
+		height:auto;
+		border-right: 1px solid $sectionBorder;
+	}
+	.tradeother
+	{
+		position: relative;
+		float:right;
+		width: 50%;
+		height: auto;
+	}
+	.name
+	{
+		color: white;
+		font-size: 20pt;
+		text-align: center;
+	}
+	.addtrade
+	{
+		color: $inputColor;
+
+		background: $inputBg;
+		//display: block;
+
+		text-align: center;
+
+		border: 2px solid $settingsShadow;
+
+		width: 70%;
+		outline: none;
+
+		margin:auto;
+		margin-top: 8px;
+		padding: 10px 4px;
+
+		border-radius: 25px;
+
+		&:focus {
+			border-color: $settingsInputColor;
+
+			transition: border 0.2s ease-in-out;
+		}
+	}
+}

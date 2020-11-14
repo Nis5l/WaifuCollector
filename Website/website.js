@@ -16,8 +16,8 @@ const port = 8000;
 
 var token;
 const {
-	API_HOST = "89.107.108.191",
-	//API_HOST = "localhost",
+	//API_HOST = "92.243.146.164",
+	API_HOST = "localhost",
 	//API_HOST = "192.168.178.55",
 	API_PORT = "100",
 
@@ -429,6 +429,27 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
 				res.redirect("/friends");
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
+app.get("/trade", redirectLogin, function (req, res) {
+	var userID = req.query.userID;
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/trade",
+		{
+			json: {
+				token: token,
+				userID: userID,
+			},
+		},
+		(error, response, body) => {
+			console.log(body);
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.render("trade", {});
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}

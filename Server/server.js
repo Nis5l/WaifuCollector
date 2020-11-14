@@ -689,6 +689,50 @@ app.post("/managefriend", (req, res) => {
 	}
 });
 
+app.post("/trade", (req, res) => {
+	var token = req.body.token;
+	var userID = req.body.userID;
+	var userID = parseInt(userID);
+
+	if (isNaN(userID)) {
+		res.send({ status: 1, message: "not a userID" });
+		return;
+	}
+
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		clients[decoded.id].refresh();
+		run();
+	}
+	function run() {
+		if (!clients[decoded.id].hasFriendAdded(userID)) {
+			res.send({ status: 1, message: "not your friend" });
+			return;
+		}
+
+		var username = undefined;
+		if (clients[userID] != undefined) {
+			username = clients[userID].username;
+		} else
+			database.getUserName(userID, (user) => {
+				username = user;
+			});
+		database.getTrade(userID, (trades) => {
+			console.log(trades);
+			res.send({ status: 0 });
+			return;
+		});
+	}
+});
+
 function getCardRequestData(userID, uuid, next, page, callback) {
 	var inventory;
 	var maincard;

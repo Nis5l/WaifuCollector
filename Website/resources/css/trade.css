@@ -1,0 +1,36 @@
+.trade {
+  display: block;
+  text-align: center;
+  position: relative;
+  margin-top: 140px;
+  width: 100%;
+  height: auto; }
+  .trade .tradeself {
+    position: relative;
+    float: left;
+    width: calc(50% - 1px);
+    height: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.5); }
+  .trade .tradeother {
+    position: relative;
+    float: right;
+    width: 50%;
+    height: auto; }
+  .trade .name {
+    color: white;
+    font-size: 20pt;
+    text-align: center; }
+  .trade .addtrade {
+    color: #fff;
+    background: none;
+    text-align: center;
+    border: 2px solid #00ff00;
+    width: 70%;
+    outline: none;
+    margin: auto;
+    margin-top: 8px;
+    padding: 10px 4px;
+    border-radius: 25px; }
+    .trade .addtrade:focus {
+      border-color: #fff;
+      transition: border 0.2s ease-in-out; }

@@ -92,6 +92,15 @@ class Client {
 		return false;
 	}
 
+	hasFriendAdded(id) {
+		this.startDecay(this.time, this.callback);
+		for (var i = 0; i < this.friends.length; i++) {
+			if (this.friends[i].userID == id && this.friends[i].status == 2)
+				return true;
+		}
+		return false;
+	}
+
 	addFriendRequest(id) {
 		this.friends.push({ userID: id, status: 1 });
 	}

@@ -13,7 +13,7 @@ var con = sql.createConnection({
 module.exports = {
 	init: function init(callback) {
 		var i = 0;
-		var taskAmount = 9;
+		var taskAmount = 10;
 		con.connect(() => {
 			con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
 				ontaskfinish();
@@ -59,6 +59,13 @@ module.exports = {
 			);
 			con.query(
 				"CREATE TABLE `waifucollector`.`friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `status` INT NOT NULL ) ENGINE = InnoDB;",
+				() => {
+					ontaskfinish();
+				}
+			);
+
+			con.query(
+				"CREATE TABLE `waifucollector`.`trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 				() => {
 					ontaskfinish();
 				}
@@ -180,7 +187,6 @@ module.exports = {
 			result,
 			fields
 		) {
-			//console.log(result);
 			callback(result);
 		});
 	},
@@ -389,6 +395,15 @@ module.exports = {
 				callback();
 			}
 		);
+	},
+	getTrade: function getTrade(userID, callback) {
+		con.query("SELECT * FROM trade WERE userone=" + userID, function (
+			err,
+			result,
+			fields
+		) {
+			callback(result);
+		});
 	},
 };
 

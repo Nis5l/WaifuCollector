@@ -13,6 +13,9 @@
 
         <%- include('partials/nav.ejs') %>
        	<div class=friendbox> 
+            <form class="tradeform" action="/trade" method="get">
+				<input type="hidden" name="userID" value=""/>
+			</form>
 			<input class="addfriend" type="submit" value="Add Friend" name="submit"></input>
 
 			<form class="addfriendform" action="/addfriend" method="post">
@@ -50,13 +53,14 @@
 		var isOpen = false;
 		var opn = document.getElementById('body');
 		var form = document.querySelector(".addfriendform");
+		var conf = undefined;
 		$(".addfriend").click(()=>{
 			if(!isOpen)
 			{
 				opn.insertAdjacentHTML('afterend',
 					`<add-friend> </add-friend>`);
 				isOpen = true;
-				var conf = document.querySelector("add-friend");
+				conf = document.querySelector("add-friend");
 				conf.yesCallback = () => {
 					form.username.value = conf.username.value;
 					form.submit();
@@ -79,7 +83,7 @@
 				opn.insertAdjacentHTML('afterend',
 					`<card-confirmation message="Befriend?"> </card-confirmation>`);
 				  isOpen = true;
-				var conf = document.querySelector("card-confirmation");
+				conf = document.querySelector("card-confirmation");
 				conf.yesCallback = () => {
 					manageform.userID.value = ele[0].userID;
 					manageform.command.value = 0;
@@ -100,13 +104,13 @@
 				opn.insertAdjacentHTML('afterend',
 					`<friend-selection username="${ele[0].username}"> </friend-selection>`);
 				  isOpen = true;
-				var sel = document.querySelector("friend-selection");
-				  sel.deleteCallback = () => {
-					  sel.remove();
+				  conf = document.querySelector("friend-selection");
+				  conf.deleteCallback = () => {
+					  conf.remove();
 					opn.insertAdjacentHTML('afterend',
 						`<card-confirmation message="Delete?"> </card-confirmation>`);
 					  isOpen = true;
-					var conf = document.querySelector("card-confirmation");
+					conf = document.querySelector("card-confirmation");
 					conf.yesCallback = () => {
 						manageform.userID.value = ele[0].userID;
 						manageform.command.value = 1;
@@ -114,13 +118,22 @@
 						conf.remove();
 						isOpen = false;
 					};
-				  conf.noCallback = () =>
-				  {
-					conf.remove();
-					isOpen = false;
+					  conf.noCallback = () =>
+					  {
+						conf.remove();
+						isOpen = false;
+					  };
 				  };
-				  };
+				  conf.tradeCallback = () => {
+					var f = document.querySelector(".tradeform");
+					f.userID.value = ele[0].userID;
+					f.submit();
+				  }
 			  }
+		  }else if(!ele.is('friend-selection') && !ele.is('card-confirmation') && isOpen)
+		  {
+			isOpen = false;
+			conf.remove();
 		  }
 		});
 	</script>

@@ -1,0 +1,38 @@
+<DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+        <title>WaifuCollector | Settings</title>
+
+        <link rel="stylesheet" href="resources/css/all.css">
+
+    </head>
+
+    <body>
+
+        <%- include('partials/nav.ejs') %>
+
+        <div class="trade">
+			<div class="tradeself">
+				<div class="name">You</div>
+			</div>
+			<div class="tradeother">
+				<div class="name">other</div>
+			</div>
+			<input type="button" class="addtrade" value="Add Card"></input>
+        </div>
+        <form class="addtradeform" action="/addtrade" method="get">
+            <input type="hidden" name="userID" value=""/>
+        </form>
+    </body>
+	
+	<script>
+      $(".addtrade").click(()=>{
+        var ele = document.querySelector(".addtradeform");
+        ele.submit();
+      });
+	</script>
+</html>
