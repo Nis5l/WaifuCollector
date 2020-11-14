@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+        <title>WaifuCollector | Pack</title>
+
+        <link rel="stylesheet" href="resources/css/all.css">
+    </head>
+    <body class="scrollable">
+
+        <%- include('partials/nav.ejs') %>
+        
+        <form action="/tradeinventory" method="get">
+            <input type="search" name="search" placeholder=""/>
+            <input type="submit" value="Search" name="submit"></input>
+			<input type="hidden" name="userID" value="<%-`${userID}`%>"/>
+        </form>
+        <div class="page">
+          <input type="button" class="previous" value="<"></input>
+		  <%- `${page}/${pagemax}` %>
+          <input type="button" class="next" value=">"></input>
+        </div>
+
+        <form class="nextForm" action="/tradeinventory" method="get">
+			<input type="hidden" name="userID" value="<%-`${userID}`%>"/>
+            <input type="hidden" name="next" value="0"/>
+        </form>
+
+        <form class="prevForm" action="/tradeinventory" method="get">
+			<input type="hidden" name="userID" value="<%-`${userID}`%>"/>
+            <input type="hidden" name="next" value="1"/>
+        </form>
+
+        <form class="addForm" action="/addtrade" method="post">
+			<input type="hidden" name="userID" value="<%-userID%>"/>
+			<input type="hidden" name="cardID" value=""/>
+        </form>
+
+        <div id="inventory">
+        </div>
+        
+
+        <div class="page">
+          <input type="button" class="previous" value="<"></input>
+            <%- `${page}/${pagemax}` %>
+          <input type="button" class="next" value=">"></input>
+        </div>
+        <div class="bot"></div>
+    </body>
+
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+    crossorigin="anonymous"></script>
+
+    <% if (cards != undefined) { %>
+        <script>
+            const cards = <%- JSON.stringify(cards) %>;
+            var opn = document.getElementById('inventory');
+            
+            //var cardSize = 110;
+            //var off = 235-(cards.length-1) / 2 * cardSize;
+            var off = 0;           
+            var tofit = [];
+            for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
+            {
+              var path = cards[i].card.cardImage;
+              var posX =  off;
+				//console.log(cards[i].cardID + " " + cards[i].card.cardName);
+				var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back=${cards[i].card.frame.path_back} pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].cardID} card-size=1></waifu-card>`;
+              opn.insertAdjacentHTML('beforeend',
+              cardhtml);
+            
+              var o = document.getElementById(`card${i}`);
+              tofit.push(o);
+            }
+            window.onload = function() {
+              for(var i = 0; i < tofit.length; i++)
+              {
+                tofit[i].fit();
+              }
+            }
+        </script>
+    <% } %> 
+
+
+    <script>
+        var f = document.querySelector(".addForm");
+         $(document).click(function(event) {
+          var ele = $(event.target);
+		
+          if(ele.is('waifu-card'))
+          {
+			opn.insertAdjacentHTML('afterend',
+				`<card-confirmation message="Add Card?"> </card-confirmation>`);
+			  isOpen = true;
+			conf = document.querySelector("card-confirmation");
+			conf.yesCallback = () => {
+				f.cardID.value = ele[0].uuid;
+				f.submit();
+				conf.remove();
+				isOpen = false;
+			};
+			  conf.noCallback = () =>
+			  {
+				conf.remove();
+				isOpen = false;
+			  };
+          }
+        }); 
+    </script>
+
+    
+    <script>
+      $(".next").click(()=>{
+        var ele = document.querySelector(".nextForm");
+        ele.submit();
+      });
+
+      $(".previous").click(()=>{
+        var ele = document.querySelector(".prevForm");
+        ele.submit();
+      });
+      
+      $(".next2").click(()=>{
+        var ele = document.querySelector(".nextForm");
+        ele.submit();
+      });
+
+      $(".previous2").click(()=>{
+        var ele = document.querySelector(".prevForm");
+        ele.submit();
+      });
+    </script>
+
+	<script>
+		var inv = document.querySelector("#inventory");
+		resize();
+		window.onresize = function(event) {
+			resize();
+		};
+		function resize()
+		{
+			var amount = Math.floor(document.body.offsetWidth / 273);
+			if(amount > cards.length)
+				amount = cards.length;
+			if(amount <= 0)
+				amount = 1;
+			var size = amount * 273;
+			inv.style.width = size + "px";
+}
+	</script>
+
+    <script src="../resources/components.js"></script> 
+</html>
