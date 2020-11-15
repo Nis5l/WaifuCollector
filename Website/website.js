@@ -449,7 +449,79 @@ app.get("/trade", redirectLogin, function (req, res) {
 		(error, response, body) => {
 			console.log(body);
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.render("trade", {});
+				for (var i = 0; i < body.data.selfcards.length; i++) {
+					addPathCard(body.data.selfcards[i]);
+				}
+				for (var i = 0; i < body.data.friendcards.length; i++) {
+					addPathCard(body.data.friendcards[i]);
+				}
+				res.render("trade", { userID: userID, data: body.data });
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
+app.post("/addTrade", redirectLogin, function (req, res) {
+	var userID = req.body.userID;
+	var cardID = req.body.cardID;
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/addTrade",
+		{
+			json: {
+				token: token,
+				userID: userID,
+				cardID: cardID,
+			},
+		},
+		(error, response, body) => {
+			console.log(body);
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect("/trade?userID=" + userID);
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
+app.get("/tradeinventory", redirectLogin, function (req, res) {
+	console.log(req.query);
+	var userID = req.query.userID;
+	var page = req.query.page;
+	var search = req.query.search;
+	var next = req.query.next;
+	if (userID == undefined || isNaN(userID)) {
+		res.redirect("/dashboard");
+		return;
+	}
+	if (next == "0") next = 0;
+	else if (next == "1") next = 1;
+	if (next == undefined) next = 2;
+	if (search == undefined) search = "";
+	if (page == undefined) page = 0;
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/inventory",
+		{
+			json: {
+				token: token,
+				page: page,
+				search: search,
+				next: next,
+			},
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				for (var i = 0; i < body.inventory.length; i++) {
+					addPathCard(body.inventory[i].card);
+				}
+				res.render("tradeinventory", {
+					userID: userID,
+					cards: body.inventory,
+					page: body.page,
+					pagemax: body.pagemax,
+				});
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}

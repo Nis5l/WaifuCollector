@@ -8,7 +8,7 @@
 	margin-top: 140px;
 	width: 100%;
 	height: auto;
-	.tradeself
+	#tradeself
 	{
 		position: relative;
 		float:left;
@@ -16,7 +16,7 @@
 		height:auto;
 		border-right: 1px solid $sectionBorder;
 	}
-	.tradeother
+	#tradeother
 	{
 		position: relative;
 		float:right;

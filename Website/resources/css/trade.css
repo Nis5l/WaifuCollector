@@ -5,13 +5,13 @@
   margin-top: 140px;
   width: 100%;
   height: auto; }
-  .trade .tradeself {
+  .trade #tradeself {
     position: relative;
     float: left;
     width: calc(50% - 1px);
     height: auto;
     border-right: 1px solid rgba(255, 255, 255, 0.5); }
-  .trade .tradeother {
+  .trade #tradeother {
     position: relative;
     float: right;
     width: 50%;

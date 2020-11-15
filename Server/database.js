@@ -396,14 +396,30 @@ module.exports = {
 			}
 		);
 	},
-	getTrade: function getTrade(userID, callback) {
-		con.query("SELECT * FROM trade WERE userone=" + userID, function (
-			err,
-			result,
-			fields
-		) {
-			callback(result);
-		});
+	getTrade: function getTrade(userone, usertwo, callback) {
+		con.query(
+			"SELECT * FROM trade WHERE userone=" +
+				userone +
+				" AND usertwo=" +
+				usertwo,
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
+	},
+	addTrade: function addTrade(userone, usertwo, cardID, callback) {
+		con.query(
+			"INSERT INTO `trade` (`userone`, `usertwo`, `card`) VALUES ('" +
+				userone +
+				"', '" +
+				usertwo +
+				"', '" +
+				cardID +
+				"')",
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
 	},
 };
 

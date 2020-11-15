@@ -725,11 +725,105 @@ app.post("/trade", (req, res) => {
 			database.getUserName(userID, (user) => {
 				username = user;
 			});
-		database.getTrade(userID, (trades) => {
-			console.log(trades);
-			res.send({ status: 0 });
-			return;
+		data = {};
+		database.getTrade(decoded.id, userID, (trades) => {
+			data.selfcards = [];
+			run2(0);
+			function run2(i) {
+				if (i != trades.length) {
+					database.getCardUUID(trades[i].card, decoded.id, (result) => {
+						if (result == undefined) {
+							res.send({ status: 1, message: "error" });
+							return;
+						}
+
+						getCard(result.cardID, result.frameID, (_card) => {
+							card = _card;
+							card.level = result.level;
+							card.quality = result.quality;
+							card.uuid = parseInt(trades[i].card);
+							data.selfcards.push(card);
+							run2(i + 1);
+						});
+					});
+				} else {
+					database.getTrade(userID, decoded.id, (trades) => {
+						data.friendcards = [];
+						run3(0);
+						function run3(i) {
+							if (i != trades.length) {
+								database.getCardUUID(trades[i].card, userID, (result) => {
+									if (result == undefined) {
+										res.send({ status: 1, message: "error" });
+										return;
+									}
+
+									getCard(result.cardID, result.frameID, (_card) => {
+										card = _card;
+										card.level = result.level;
+										card.quality = result.quality;
+										card.uuid = parseInt(trades[i].card);
+										data.selfcards.push(card);
+										run3(i + 1);
+									});
+								});
+							} else {
+								res.send({ status: 0, data: data });
+							}
+						}
+					});
+				}
+			}
 		});
+	}
+});
+
+app.post("/addtrade", (req, res) => {
+	var token = req.body.token;
+	var userID = req.body.userID;
+	var userID = parseInt(userID);
+	var cardID = req.body.cardID;
+	var cardID = parseInt(cardID);
+
+	if (isNaN(userID) || isNaN(cardID)) {
+		res.send({ status: 1, message: "not a userID" });
+		return;
+	}
+
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		clients[decoded.id].refresh();
+		run();
+	}
+	function run() {
+		if (!clients[decoded.id].hasFriendAdded(userID)) {
+			res.send({ status: 1, message: "not your friend" });
+			return;
+		}
+
+		database.getCardUUID(cardID, decoded.id, (result) => {
+			if (result == undefined) {
+				res.send({
+					status: 1,
+					message: "Cant find card, or it isnt yours",
+				});
+				return;
+			}
+
+			database.addTrade(decoded.id, userID, cardID, () => {
+				res.send({ status: 0 });
+			});
+		});
+
+		return;
 	}
 });
 
