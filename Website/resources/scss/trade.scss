@@ -5,9 +5,11 @@
 	display: block;
 	text-align: center;
 	position: relative;
+    margin:auto;
 	margin-top: 140px;
 	width: 100%;
 	height: auto;
+    overflow: auto;
 	#tradeself
 	{
 		position: relative;
@@ -15,6 +17,15 @@
 		width: calc(50% - 1px);
 		height:auto;
 		border-right: 1px solid $sectionBorder;
+		align-items: center;
+		justify-content: center;
+		min-height: 440px;
+		#tradeselfinner
+		{
+			height:auto;
+			margin: auto;
+			margin-top: 30px;
+		}
 	}
 	#tradeother
 	{
@@ -22,6 +33,15 @@
 		float:right;
 		width: 50%;
 		height: auto;
+		align-items: center;
+		justify-content: center;
+		min-height: 440px;
+		#tradeotherinner
+		{
+			height:auto;
+			margin: auto;
+			margin-top: 30px;
+		}
 	}
 	.name
 	{

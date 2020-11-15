@@ -421,6 +421,15 @@ module.exports = {
 			}
 		);
 	},
+	deleteCard: function deleteCard(uuid, callback) {
+		con.query("DELETE FROM unlocked WHERE id=" + uuid, function (
+			err,
+			result,
+			fields
+		) {
+			callback(result);
+		});
+	},
 };
 
 function cards() {

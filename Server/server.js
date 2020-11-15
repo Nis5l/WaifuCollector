@@ -521,24 +521,31 @@ app.post("/upgrade", (req, res) => {
 					(cardresult.quality + mainresult.quality) / 2
 				);
 				var newlevel = cardresult.level + 1;
-				database.addCard(
-					decoded.id,
-					cardresult.cardID,
-					newquality,
-					newlevel,
-					mainresult.frameID,
-					(insertID) => {
-						clients[decoded.id].addCard({
-							id: insertID,
-							userID: decoded.id,
-							cardID: cardresult.cardID,
-							quality: newquality,
-							level: newlevel,
-							frameID: mainresult.frameID,
-						});
-						res.send({ status: 0, uuid: insertID });
-					}
-				);
+
+				clients[decoded.id].deleteCard(carduuid);
+				clients[decoded.id].deleteCard(mainuuid);
+				database.deleteCard(carduuid, () => {
+					database.deleteCard(mainuuid, () => {
+						database.addCard(
+							decoded.id,
+							cardresult.cardID,
+							newquality,
+							newlevel,
+							mainresult.frameID,
+							(insertID) => {
+								clients[decoded.id].addCard({
+									id: insertID,
+									userID: decoded.id,
+									cardID: cardresult.cardID,
+									quality: newquality,
+									level: newlevel,
+									frameID: mainresult.frameID,
+								});
+								res.send({ status: 0, uuid: insertID });
+							}
+						);
+					});
+				});
 			});
 		});
 	}
@@ -721,60 +728,64 @@ app.post("/trade", (req, res) => {
 		var username = undefined;
 		if (clients[userID] != undefined) {
 			username = clients[userID].username;
+			onusername();
 		} else
 			database.getUserName(userID, (user) => {
 				username = user;
+				onusername();
 			});
-		data = {};
-		database.getTrade(decoded.id, userID, (trades) => {
-			data.selfcards = [];
-			run2(0);
-			function run2(i) {
-				if (i != trades.length) {
-					database.getCardUUID(trades[i].card, decoded.id, (result) => {
-						if (result == undefined) {
-							res.send({ status: 1, message: "error" });
-							return;
-						}
-
-						getCard(result.cardID, result.frameID, (_card) => {
-							card = _card;
-							card.level = result.level;
-							card.quality = result.quality;
-							card.uuid = parseInt(trades[i].card);
-							data.selfcards.push(card);
-							run2(i + 1);
-						});
-					});
-				} else {
-					database.getTrade(userID, decoded.id, (trades) => {
-						data.friendcards = [];
-						run3(0);
-						function run3(i) {
-							if (i != trades.length) {
-								database.getCardUUID(trades[i].card, userID, (result) => {
-									if (result == undefined) {
-										res.send({ status: 1, message: "error" });
-										return;
-									}
-
-									getCard(result.cardID, result.frameID, (_card) => {
-										card = _card;
-										card.level = result.level;
-										card.quality = result.quality;
-										card.uuid = parseInt(trades[i].card);
-										data.selfcards.push(card);
-										run3(i + 1);
-									});
-								});
-							} else {
-								res.send({ status: 0, data: data });
+		function onusername() {
+			data = {};
+			database.getTrade(decoded.id, userID, (trades) => {
+				data.selfcards = [];
+				run2(0);
+				function run2(i) {
+					if (i != trades.length) {
+						database.getCardUUID(trades[i].card, decoded.id, (result) => {
+							if (result == undefined) {
+								res.send({ status: 1, message: "error" });
+								return;
 							}
-						}
-					});
+
+							getCard(result.cardID, result.frameID, (_card) => {
+								card = _card;
+								card.level = result.level;
+								card.quality = result.quality;
+								card.uuid = parseInt(trades[i].card);
+								data.selfcards.push(card);
+								run2(i + 1);
+							});
+						});
+					} else {
+						database.getTrade(userID, decoded.id, (trades) => {
+							data.friendcards = [];
+							run3(0);
+							function run3(i) {
+								if (i != trades.length) {
+									database.getCardUUID(trades[i].card, userID, (result) => {
+										if (result == undefined) {
+											res.send({ status: 1, message: "error" });
+											return;
+										}
+
+										getCard(result.cardID, result.frameID, (_card) => {
+											card = _card;
+											card.level = result.level;
+											card.quality = result.quality;
+											card.uuid = parseInt(trades[i].card);
+											data.friendcards.push(card);
+											run3(i + 1);
+										});
+									});
+								} else {
+									res.send({ status: 0, data: data, username: username });
+								}
+							}
+						});
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 });
 

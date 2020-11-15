@@ -11,16 +11,20 @@
 
     </head>
 
-    <body>
+    <body id="test">
 
         <%- include('partials/nav.ejs') %>
 
         <div class="trade">
 			<div id="tradeself">
 				<div class="name">You</div>
+			<div id="tradeselfinner">
+			</div>
 			</div>
 			<div id="tradeother">
-				<div class="name">other</div>
+				<div class="name"><%- username %></div>
+				<div id="tradeotherinner">
+				</div>
 			</div>
 			<input type="button" class="addtrade" value="Add Card"></input>
         </div>
@@ -36,21 +40,35 @@
 
 	<script>
 			 const cards = <%- JSON.stringify(data.selfcards) %>;
-			 var opn = document.getElementById('tradeself');
+			 const cardsother = <%- JSON.stringify(data.friendcards) %>;
+			 var opn = document.getElementById('tradeselfinner');
+			 var opnother = document.getElementById('tradeotherinner');
 
-			 var off = 0;
-			 var tofit = [];
-			for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
-			 {
-			   var path = cards[i].card.cardImage;
-			   var posX =  off;
-			   var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back=${cards[i].card.frame.path_back} pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].card.cardID}  card-size=1></waifu-card>`;
-			   opn.insertAdjacentHTML('beforeend',
-			   cardhtml);
+			var tofit = [];
+			insert(cards, opn);
+			insert(cardsother, opnother);
+			function insert(_cards, _opn)
+			{
+				 var off = 0;
+				for(var i = 0; i < _cards.length; i++/*,off+=cardSize*/)
+				 {
+				   var path = _cards[i].cardImage;
+				   var posX =  off;
+					var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${_cards[i].frame.path_front} frame-back=${_cards[i].frame.path_back} pos-x=${posX} card-name=\"${_cards[i].cardName}\" anime-name=\"${_cards[i].type.name}\" turned=false quality=${_cards[i].quality} level=${_cards[i].level} uuid=${_cards[i].uuid} cardID=${_cards[i].id} card-size=1></waifu-card>`;
+				   _opn.insertAdjacentHTML('beforeend',
+				   cardhtml);
 
-			   var o = document.getElementById(`card${i}`);
-			   tofit.push(o);
-			 }
+				   var o = document.getElementById(`card${i}`);
+				   tofit.push(o);
+				 }
+			}
+			 
+			window.onload = function() {
+		           for(var i = 0; i < tofit.length; i++)
+		           {
+		             	tofit[i].fit();
+		           }
+		         }
 	</script>
 	<script>
       $(".addtrade").click(()=>{
@@ -58,4 +76,29 @@
         ele.submit();
       });
 	</script>
+
+	<script>
+		var parentself = document.querySelector("#tradeself");
+		var inventory = document.querySelector("#tradeselfinner");
+		var parentother = document.querySelector("#tradeother");
+		var inventoryother = document.querySelector("#tradeotherinner");
+		resize(inventory, parentself, cards);
+		resize(inventoryother, parentother, cardsother);
+		window.onresize = function(event) {
+			resize(inventory, parentself, cards);
+			resize(inventoryother, parentother, cardsother);
+		};
+		function resize(inv, parent, c)
+		{
+			var amount = Math.floor((parent.offsetWidth)/ 273);
+			if(amount > c.length)
+				amount = c.length;
+			if(amount <= 0)
+				amount = 1;
+			var size = amount * 273;
+			inv.style.width = size + "px";
+		}
+	</script>
+
+	<script src="../resources/components.js"></script>
 </html>

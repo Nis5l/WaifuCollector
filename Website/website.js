@@ -455,7 +455,11 @@ app.get("/trade", redirectLogin, function (req, res) {
 				for (var i = 0; i < body.data.friendcards.length; i++) {
 					addPathCard(body.data.friendcards[i]);
 				}
-				res.render("trade", { userID: userID, data: body.data });
+				res.render("trade", {
+					userID: userID,
+					data: body.data,
+					username: body.username,
+				});
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}

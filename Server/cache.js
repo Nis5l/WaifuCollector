@@ -208,5 +208,13 @@ class Client {
 			inventory[i + 1] = t;
 		}
 	}
+	deleteCard(uuid) {
+		for (var i = 0; i < this.inventory.length; i++) {
+			if (this.inventory[i].id == uuid) {
+				this.inventory.splice(i);
+				return;
+			}
+		}
+	}
 }
 module.exports = Client;
