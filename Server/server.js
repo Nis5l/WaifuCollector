@@ -526,24 +526,28 @@ app.post("/upgrade", (req, res) => {
 				clients[decoded.id].deleteCard(mainuuid);
 				database.deleteCard(carduuid, () => {
 					database.deleteCard(mainuuid, () => {
-						database.addCard(
-							decoded.id,
-							cardresult.cardID,
-							newquality,
-							newlevel,
-							mainresult.frameID,
-							(insertID) => {
-								clients[decoded.id].addCard({
-									id: insertID,
-									userID: decoded.id,
-									cardID: cardresult.cardID,
-									quality: newquality,
-									level: newlevel,
-									frameID: mainresult.frameID,
-								});
-								res.send({ status: 0, uuid: insertID });
-							}
-						);
+						database.removeTrade(mainuuid, () => {
+							database.removeTrade(carduuid, () => {
+								database.addCard(
+									decoded.id,
+									cardresult.cardID,
+									newquality,
+									newlevel,
+									mainresult.frameID,
+									(insertID) => {
+										clients[decoded.id].addCard({
+											id: insertID,
+											userID: decoded.id,
+											cardID: cardresult.cardID,
+											quality: newquality,
+											level: newlevel,
+											frameID: mainresult.frameID,
+										});
+										res.send({ status: 0, uuid: insertID });
+									}
+								);
+							});
+						});
 					});
 				});
 			});

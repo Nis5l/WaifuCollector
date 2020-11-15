@@ -120,7 +120,7 @@ class Client {
 		this.startDecay(this.time, this.callback);
 		for (var i = 0; i < this.friends.length; i++) {
 			if (this.friends[i].userID == id) {
-				this.friends.splice(i);
+				this.friends.splice(i, 1);
 				return true;
 			}
 		}
@@ -211,7 +211,7 @@ class Client {
 	deleteCard(uuid) {
 		for (var i = 0; i < this.inventory.length; i++) {
 			if (this.inventory[i].id == uuid) {
-				this.inventory.splice(i);
+				this.inventory.splice(i, 1);
 				return;
 			}
 		}

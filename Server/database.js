@@ -430,6 +430,15 @@ module.exports = {
 			callback(result);
 		});
 	},
+	removeTrade: function removeTrade(uuid, callback) {
+		con.query("DELETE FROM trade WHERE card=" + uuid, function (
+			err,
+			result,
+			fields
+		) {
+			callback(result);
+		});
+	},
 };
 
 function cards() {
