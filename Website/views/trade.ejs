@@ -31,6 +31,10 @@
         <form class="addtradeform" action="/tradeinventory" method="get">
             <input type="hidden" name="userID" value="<%-userID%>"/>
         </form>
+        <form class="removetradeform" action="/removetrade" method="post">
+            <input type="hidden" name="userID" value="<%-userID%>"/>
+            <input type="hidden" name="cardID" value=""/>
+        </form>
     </body>
 	
 	<script
@@ -75,6 +79,28 @@
         var ele = document.querySelector(".addtradeform");
         ele.submit();
       });
+	</script>
+
+	<script>
+		 var removeForm = document.querySelector(".removetradeform")	
+		 var isOpen = false;
+         $(document).click(function(event) {
+          var ele = $(event.target);
+		
+          if(ele.is('waifu-card') && ele[0].parentElement.id == "tradeselfinner" && !isOpen)
+          {
+		    document.body.insertAdjacentHTML('afterend',
+				`<card-confirmation message="Remove From Trade?"> </card-confirmation>`);
+			  isOpen = true;
+			var conf = document.querySelector("card-confirmation");
+			conf.yesCallback = () => {
+				removeForm.cardID.value = ele[0].uuid;
+				removeForm.submit();
+				isOpen = false;
+			};
+			conf.noCallback = () => {conf.remove(); isOpen = false;};
+		  }
+	 });
 	</script>
 
 	<script>

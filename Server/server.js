@@ -842,6 +842,40 @@ app.post("/addtrade", (req, res) => {
 	}
 });
 
+app.post("/removetrade", (req, res) => {
+	var token = req.body.token;
+	var userID = req.body.userID;
+	var userID = parseInt(userID);
+	var cardID = req.body.cardID;
+	var cardID = parseInt(cardID);
+
+	if (isNaN(userID) || isNaN(cardID)) {
+		res.send({ status: 1, message: "not a userID" });
+		return;
+	}
+
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		clients[decoded.id].refresh();
+		run();
+	}
+
+	function run() {
+		database.removeTradeUser(cardID, decoded.id, userID, () => {
+			res.send({ status: 0 });
+		});
+		return;
+	}
+});
+
 function getCardRequestData(userID, uuid, next, page, callback) {
 	var inventory;
 	var maincard;

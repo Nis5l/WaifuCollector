@@ -439,6 +439,19 @@ module.exports = {
 			callback(result);
 		});
 	},
+	removeTradeUser: function removeTradeUser(uuid, userone, usertwo, callback) {
+		con.query(
+			"DELETE FROM trade WHERE card=" +
+				uuid +
+				" AND userone=" +
+				userone +
+				" AND usertwo=" +
+				usertwo,
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
+	},
 };
 
 function cards() {
