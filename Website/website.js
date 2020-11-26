@@ -458,6 +458,8 @@ app.get("/trade", redirectLogin, function (req, res) {
 					userID: userID,
 					data: body.data,
 					username: body.username,
+					statusone: body.statusone,
+					statustwo: body.statustwo,
 				});
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
@@ -510,6 +512,7 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 				page: page,
 				search: search,
 				next: next,
+				userID: userID,
 			},
 		},
 		(error, response, body) => {
@@ -540,6 +543,26 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 				token: token,
 				userID: userID,
 				cardID: cardID,
+			},
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect("/trade?userID=" + userID);
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
+app.post("/okTrade", redirectLogin, function (req, res) {
+	var userID = req.body.userID;
+	request.post(
+		"http://" + API_HOST + ":" + API_PORT + "/okTrade",
+		{
+			json: {
+				token: token,
+				userID: userID,
 			},
 		},
 		(error, response, body) => {

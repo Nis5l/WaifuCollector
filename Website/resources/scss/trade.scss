@@ -13,16 +13,26 @@
 	#tradeself
 	{
 		position: relative;
-		float:left;
-		width: calc(50% - 1px);
-		height:auto;
-		border-right: 1px solid $sectionBorder;
+		//margin:none;
+		width: 100%;
+		@media screen and (min-width: 540px) {
+			border-right: 1px solid $sectionBorder;
+			float:left;
+			width: calc(50% - 1px);
+		}
+		@media screen and (max-width: 540px) {
+			border-bottom: 1px solid $sectionBorder;
+			margin-bottom: 20px;
+		}
+		max-height: none;
 		align-items: center;
 		justify-content: center;
 		min-height: 440px;
 		#tradeselfinner
 		{
+			max-height: none;
 			height:auto;
+			overflow: auto;
 			margin: auto;
 			margin-top: 30px;
 		}
@@ -30,8 +40,11 @@
 	#tradeother
 	{
 		position: relative;
-		float:right;
-		width: 50%;
+		width: 100%;
+		@media screen and (min-width: 540px) {
+			float:right;
+			width: 50%;
+		}
 		height: auto;
 		align-items: center;
 		justify-content: center;
@@ -50,6 +63,33 @@
 		text-align: center;
 	}
 	.addtrade
+	{
+		color: $inputColor;
+
+		background: $inputBg;
+		//display: block;
+
+		text-align: center;
+
+		border: 2px solid $settingsShadow;
+
+		width: 70%;
+		outline: none;
+
+		margin:auto;
+		margin-top: 8px;
+		padding: 10px 4px;
+
+		border-radius: 25px;
+
+		&:focus {
+			border-color: $settingsInputColor;
+
+			transition: border 0.2s ease-in-out;
+		}
+	}
+
+	.oktrade
 	{
 		color: $inputColor;
 

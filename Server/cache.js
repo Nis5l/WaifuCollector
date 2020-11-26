@@ -216,5 +216,13 @@ class Client {
 			}
 		}
 	}
+
+	getCard(uuid) {
+		for (var i = 0; i < this.inventory.length; i++) {
+			if (this.inventory[i].id == uuid) {
+				return this.inventory[i];
+			}
+		}
+	}
 }
 module.exports = Client;

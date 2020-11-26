@@ -18,17 +18,23 @@
         <div class="trade">
 			<div id="tradeself">
 				<div class="name">You</div>
+				<div class="confirmationself">sdf</div>
 			<div id="tradeselfinner">
 			</div>
 			</div>
 			<div id="tradeother">
 				<div class="name"><%- username %></div>
+				<div class="confirmationother">sdf</div>
 				<div id="tradeotherinner">
 				</div>
 			</div>
 			<input type="button" class="addtrade" value="Add Card"></input>
+			<input type="button" class="oktrade" value="Confirm"></input>
         </div>
         <form class="addtradeform" action="/tradeinventory" method="get">
+            <input type="hidden" name="userID" value="<%-userID%>"/>
+        </form>
+        <form class="oktradeform" action="/oktrade" method="post">
             <input type="hidden" name="userID" value="<%-userID%>"/>
         </form>
         <form class="removetradeform" action="/removetrade" method="post">
@@ -79,6 +85,10 @@
         var ele = document.querySelector(".addtradeform");
         ele.submit();
       });
+      $(".oktrade").click(()=>{
+        var ele = document.querySelector(".oktradeform");
+        ele.submit();
+      });
 	</script>
 
 	<script>
@@ -126,5 +136,22 @@
 		}
 	</script>
 
+	<script>
+	 	const cs = <%- JSON.stringify(statusone) %>;
+		const co = <%- JSON.stringify(statustwo) %>;
+
+		var csf = document.querySelector(".confirmationself");
+		var cof = document.querySelector(".confirmationother");
+
+		if(cs == 0)
+			csf.innerHTML = "Not Confirmed";
+		else
+			csf.innerHTML = "Confirmed";
+		if(co == 0)
+			cof.innerHTML = "Not Confirmed";
+		else
+			cof.innerHTML = "Confirmed";
+	</script>
+	
 	<script src="../resources/components.js"></script>
 </html>

@@ -13,7 +13,7 @@ var con = sql.createConnection({
 module.exports = {
 	init: function init(callback) {
 		var i = 0;
-		var taskAmount = 10;
+		var taskAmount = 11;
 		con.connect(() => {
 			con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
 				ontaskfinish();
@@ -66,6 +66,13 @@ module.exports = {
 
 			con.query(
 				"CREATE TABLE `waifucollector`.`trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
+				() => {
+					ontaskfinish();
+				}
+			);
+
+			con.query(
+				"CREATE TABLE `waifucollector`.`trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL ) ENGINE = InnoDB;",
 				() => {
 					ontaskfinish();
 				}
@@ -407,6 +414,19 @@ module.exports = {
 			}
 		);
 	},
+	getTradesCard: function getTradesCard(card, callback) {
+		con.query("SELECT * FROM trade WHERE card=" + card, function (
+			err,
+			result,
+			fields
+		) {
+			if (result != undefined && result.length == 0) {
+				callback(undefined);
+				return;
+			}
+			callback(result);
+		});
+	},
 	addTrade: function addTrade(userone, usertwo, cardID, callback) {
 		con.query(
 			"INSERT INTO `trade` (`userone`, `usertwo`, `card`) VALUES ('" +
@@ -448,6 +468,84 @@ module.exports = {
 				" AND usertwo=" +
 				usertwo,
 			function (err, result, fields) {
+				callback(result);
+			}
+		);
+	},
+	addTradeManager: function addTradeManager(userone, usertwo, callback) {
+		con.query(
+			"INSERT INTO `trademanager` (`userone`, `usertwo`, `statusone`, `statustwo`) VALUES ('" +
+				userone +
+				"', '" +
+				usertwo +
+				"', '0', '0')",
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
+	},
+	getTradeManager: function getTradeManager(userone, usertwo, callback) {
+		con.query(
+			"SELECT * FROM trademanager WHERE (userone = " +
+				userone +
+				" AND usertwo = " +
+				usertwo +
+				") OR (userone = " +
+				usertwo +
+				" AND usertwo = " +
+				userone +
+				")",
+			function (err, result, fields) {
+				if (result != undefined && result.length == 0) {
+					callback(undefined);
+					return;
+				}
+				callback(result);
+			}
+		);
+	},
+	setTradeStatus: function setTradeStatus(userone, usertwo, status, callback) {
+		con.query(
+			"UPDATE trademanager SET statusone = " +
+				status +
+				" WHERE userone = " +
+				userone +
+				" AND usertwo = " +
+				usertwo +
+				";",
+			function (err, result, fields) {
+				con.query(
+					"UPDATE trademanager SET statustwo = " +
+						status +
+						" WHERE userone = " +
+						usertwo +
+						" AND usertwo = " +
+						userone +
+						";",
+					(err, result, fields) => {
+						callback();
+					}
+				);
+			}
+		);
+	},
+	tradeExists: function tradeExists(userone, usertwo, cardID, callback) {
+		con.query(
+			"SELECT * FROM trade WHERE userone=" +
+				userone +
+				" AND usertwo=" +
+				usertwo +
+				" AND card=" +
+				cardID,
+			(err, result, fields) => {
+				callback(result != undefined && result.length > 0);
+			}
+		);
+	},
+	changeCardUser: function changeCardUser(card, user, callback) {
+		con.query(
+			"UPDATE unlocked SET userID =" + user + " WHERE id=" + card,
+			(err, result, fields) => {
 				callback(result);
 			}
 		);

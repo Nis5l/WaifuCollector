@@ -371,6 +371,10 @@ app.post("/inventory", (req, res) => {
 	var page = req.body.page;
 	var search = req.body.search;
 	var next = req.body.next;
+
+	var friendID = req.body.userID;
+	var friendID = parseInt(friendID);
+
 	if (next == undefined) next = -1;
 	if (page == undefined) page = 0;
 	if (search == undefined) search = "";
@@ -388,47 +392,61 @@ app.post("/inventory", (req, res) => {
 	}
 	function run(userID) {
 		var ids = cache.getIdsByString(search);
-		if (next == 0) {
-			var inventory = clients[userID].nextPage(inventorySendAmount);
-		} else if (next == 1) {
-			var inventory = clients[userID].prevPage(inventorySendAmount);
-		} else
-			var inventory = clients[userID].getInventory(
-				page,
-				inventorySendAmount,
-				ids
-			);
-		var pageStats = clients[userID].getPageStats();
-		if (inventory.length == 0) {
-			res.send({
-				status: 0,
-				inventory: inventory,
-				page: pageStats[0],
-				pagemax: pageStats[1],
-			});
-			return;
-		}
-		run2(0);
-		function run2(iteration) {
-			getCard(
-				inventory[iteration].cardID,
-				inventory[iteration].frameID,
-				(card) => {
-					inventory[iteration].card = card;
-					if (iteration == inventory.length - 1) {
-						res.send({
-							status: 0,
-							inventory: inventory,
-							page: pageStats[0],
-							pagemax: pageStats[1],
-						});
-
-						return;
-					} else {
-						run2(iteration + 1);
-					}
+		var exclude = [];
+		if (!isNaN(friendID)) {
+			database.getTrade(userID, friendID, (ex) => {
+				for (var i = 0; i < ex.length; i++) {
+					exclude.push(ex[i].card);
 				}
-			);
+				run3();
+			});
+		} else {
+			run3();
+		}
+		function run3() {
+			if (next == 0) {
+				var inventory = clients[userID].nextPage(inventorySendAmount);
+			} else if (next == 1) {
+				var inventory = clients[userID].prevPage(inventorySendAmount);
+			} else
+				var inventory = clients[userID].getInventory(
+					page,
+					inventorySendAmount,
+					ids,
+					exclude
+				);
+			var pageStats = clients[userID].getPageStats();
+			if (inventory.length == 0) {
+				res.send({
+					status: 0,
+					inventory: inventory,
+					page: pageStats[0],
+					pagemax: pageStats[1],
+				});
+				return;
+			}
+			run2(0);
+			function run2(iteration) {
+				getCard(
+					inventory[iteration].cardID,
+					inventory[iteration].frameID,
+					(card) => {
+						inventory[iteration].card = card;
+						if (iteration == inventory.length - 1) {
+							res.send({
+								status: 0,
+								inventory: inventory,
+								page: pageStats[0],
+								pagemax: pageStats[1],
+							});
+
+							return;
+						} else {
+							run2(iteration + 1);
+						}
+					}
+				);
+			}
 		}
 	}
 });
@@ -526,27 +544,63 @@ app.post("/upgrade", (req, res) => {
 				clients[decoded.id].deleteCard(mainuuid);
 				database.deleteCard(carduuid, () => {
 					database.deleteCard(mainuuid, () => {
-						database.removeTrade(mainuuid, () => {
-							database.removeTrade(carduuid, () => {
-								database.addCard(
-									decoded.id,
-									cardresult.cardID,
-									newquality,
-									newlevel,
-									mainresult.frameID,
-									(insertID) => {
-										clients[decoded.id].addCard({
-											id: insertID,
-											userID: decoded.id,
-											cardID: cardresult.cardID,
-											quality: newquality,
-											level: newlevel,
-											frameID: mainresult.frameID,
-										});
-										res.send({ status: 0, uuid: insertID });
+						database.getTradesCard(carduuid, (ts) => {
+							if (ts != undefined) {
+								run2(0);
+								function run2(iter) {
+									if (iter == ts.length) {
+										run3();
+										return;
 									}
-								);
-							});
+									setTrade(ts[iter].userone, ts[iter].usertwo, 0, () => {
+										run2(iter + 1);
+									});
+								}
+							} else {
+								run3();
+							}
+							function run3() {
+								database.getTradesCard(mainuuid, (ts2) => {
+									if (ts2 != undefined) {
+										run4(0);
+										function run4(iter) {
+											if (iter == ts2.length) {
+												run5();
+												return;
+											}
+											setTrade(ts2[iter].userone, ts2[iter].usertwo, 0, () => {
+												run4(iter + 1);
+											});
+										}
+									} else {
+										run5();
+									}
+								});
+								function run5() {
+									database.removeTrade(mainuuid, () => {
+										database.removeTrade(carduuid, () => {
+											database.addCard(
+												decoded.id,
+												cardresult.cardID,
+												newquality,
+												newlevel,
+												mainresult.frameID,
+												(insertID) => {
+													clients[decoded.id].addCard({
+														id: insertID,
+														userID: decoded.id,
+														cardID: cardresult.cardID,
+														quality: newquality,
+														level: newlevel,
+														frameID: mainresult.frameID,
+													});
+													res.send({ status: 0, uuid: insertID });
+												}
+											);
+										});
+									});
+								}
+							}
 						});
 					});
 				});
@@ -740,6 +794,8 @@ app.post("/trade", (req, res) => {
 			});
 		function onusername() {
 			data = {};
+			var tradeok = 0;
+			var tradeokother = 0;
 			database.getTrade(decoded.id, userID, (trades) => {
 				data.selfcards = [];
 				run2(0);
@@ -761,30 +817,47 @@ app.post("/trade", (req, res) => {
 							});
 						});
 					} else {
-						database.getTrade(userID, decoded.id, (trades) => {
-							data.friendcards = [];
-							run3(0);
-							function run3(i) {
-								if (i != trades.length) {
-									database.getCardUUID(trades[i].card, userID, (result) => {
-										if (result == undefined) {
-											res.send({ status: 1, message: "error" });
-											return;
-										}
-
-										getCard(result.cardID, result.frameID, (_card) => {
-											card = _card;
-											card.level = result.level;
-											card.quality = result.quality;
-											card.uuid = parseInt(trades[i].card);
-											data.friendcards.push(card);
-											run3(i + 1);
-										});
-									});
+						database.getTradeManager(decoded.id, userID, (tm) => {
+							if (tm != undefined) {
+								if (tm[0].userone == decoded.id) {
+									tradeok = tm[0].statusone;
+									tradeokother = tm[0].statustwo;
 								} else {
-									res.send({ status: 0, data: data, username: username });
+									tradeok = tm[0].statustwo;
+									tradeokother = tm[0].statusone;
 								}
 							}
+							database.getTrade(userID, decoded.id, (trades) => {
+								data.friendcards = [];
+								run3(0);
+								function run3(i) {
+									if (i != trades.length) {
+										database.getCardUUID(trades[i].card, userID, (result) => {
+											if (result == undefined) {
+												res.send({ status: 1, message: "error" });
+												return;
+											}
+
+											getCard(result.cardID, result.frameID, (_card) => {
+												card = _card;
+												card.level = result.level;
+												card.quality = result.quality;
+												card.uuid = parseInt(trades[i].card);
+												data.friendcards.push(card);
+												run3(i + 1);
+											});
+										});
+									} else {
+										res.send({
+											status: 0,
+											data: data,
+											username: username,
+											statusone: tradeok,
+											statustwo: tradeokother,
+										});
+									}
+								}
+							});
 						});
 					}
 				}
@@ -832,9 +905,18 @@ app.post("/addtrade", (req, res) => {
 				});
 				return;
 			}
-
-			database.addTrade(decoded.id, userID, cardID, () => {
-				res.send({ status: 0 });
+			database.tradeExists(decoded.id, userID, cardID, (b) => {
+				if (b) {
+					res.send({ status: 1, message: "Card already in trade" });
+					return;
+				}
+				database.addTrade(decoded.id, userID, cardID, () => {
+					setTrade(decoded.id, userID, 0, () => {
+						setTrade(userID, decoded.id, 0, () => {
+							res.send({ status: 0 });
+						});
+					});
+				});
 			});
 		});
 
@@ -870,11 +952,121 @@ app.post("/removetrade", (req, res) => {
 
 	function run() {
 		database.removeTradeUser(cardID, decoded.id, userID, () => {
-			res.send({ status: 0 });
+			setTrade(decoded.id, userID, 0, () => {
+				setTrade(userID, decoded.id, 0, () => {
+					res.send({ status: 0 });
+				});
+			});
 		});
 		return;
 	}
 });
+
+app.post("/okTrade", (req, res) => {
+	var token = req.body.token;
+	var userID = req.body.userID;
+	var userID = parseInt(userID);
+
+	if (isNaN(userID)) {
+		res.send({ status: 1, message: "not a userID" });
+		return;
+	}
+
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 1, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, secondCache);
+	} else {
+		clients[decoded.id].refresh();
+		secondCache();
+	}
+
+	function secondCache() {
+		if (clients[userID] == undefined) {
+			database.getUserName(userID, (username) => {
+				if (username == undefined) {
+					res.send({ status: 1, message: "User not found" });
+					return;
+				}
+				createCache(userID, username, run);
+			});
+		} else {
+			clients[userID].refresh();
+			run();
+		}
+	}
+	function run() {
+		setTrade(decoded.id, userID, 1, () => {
+			database.getTradeManager(decoded.id, userID, (tm) => {
+				if (tm != undefined && tm[0].statusone == 1 && tm[0].statustwo == 1) {
+					transfer(decoded.id, userID, () => {
+						transfer(userID, decoded.id, () => {
+							setTrade(decoded.id, userID, 0, () => {
+								setTrade(userID, decoded.id, 0, () => {
+									res.send({ status: 0 });
+									return;
+								});
+							});
+						});
+					});
+					function transfer(userone, usertwo, callback) {
+						database.getTrade(userone, usertwo, (cards) => {
+							for (var i = 0; i < cards.length; i++) {
+								var c = clients[userone].getCard(cards[i].card);
+								clients[usertwo].addCard({
+									id: cards[i],
+									userID: userID,
+									cardID: c.cardID,
+									quality: c.quality,
+									level: c.level,
+									frameID: c.frameID,
+								});
+								clients[userone].deleteCard(cards[i].card);
+							}
+							run2(0);
+							function run2(idx) {
+								if (idx == cards.length) {
+									callback();
+									return;
+								}
+								database.removeTrade(cards[idx].card, () => {
+									database.changeCardUser(cards[idx].card, usertwo, () => {
+										run2(idx + 1);
+									});
+								});
+							}
+						});
+					}
+				} else {
+					res.send({ status: 0 });
+					return;
+				}
+			});
+		});
+	}
+});
+
+function setTrade(userone, usertwo, status, callback) {
+	database.getTradeManager(userone, usertwo, (tm) => {
+		if (tm == undefined) {
+			database.addTradeManager(userone, usertwo, () => {
+				run2();
+			});
+		} else {
+			run2();
+		}
+		function run2() {
+			database.setTradeStatus(userone, usertwo, status, () => {
+				callback();
+			});
+		}
+	});
+}
 
 function getCardRequestData(userID, uuid, next, page, callback) {
 	var inventory;
