@@ -4,8 +4,14 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const { cookie } = require("request");
 const { render } = require("node-sass");
+const https = require("https");
+const fs = require("fs");
 require("./CSSManager.js");
 
+const options = {
+	key: fs.readFileSync("../host.key"),
+	cert: fs.readFileSync("../host.cert"),
+};
 const app = express();
 
 app.set("view engine", "ejs");
@@ -85,12 +91,15 @@ app.post("/login", redirectDashboard, function (req, res) {
 
 	if (username && password) {
 		request.post(
-			"http://" + API_HOST + ":" + API_PORT + "/login",
+			"https://" + API_HOST + ":" + API_PORT + "/login",
 			{
 				json: {
 					username: username,
 					password: password,
 				},
+				rejectUnauthorized: false,
+				requestCert: false,
+				agent: false,
 			},
 			(error, response, body) => {
 				if (!error && response.statusCode == 200) {
@@ -132,7 +141,7 @@ app.post("/passchange", function (req, res) {
 	console.log(password + " " + password2);
 	if (password && password2 && password == password2 && token) {
 		request.post(
-			"http://" + API_HOST + ":" + API_PORT + "/passchange",
+			"https://" + API_HOST + ":" + API_PORT + "/passchange",
 			{
 				json: {
 					token: token,
@@ -170,12 +179,15 @@ app.post("/register", redirectDashboard, function (req, res) {
 	const { username, password } = req.body;
 	if (username && password) {
 		request.post(
-			"http://" + API_HOST + ":" + API_PORT + "/register",
+			"https://" + API_HOST + ":" + API_PORT + "/register",
 			{
 				json: {
 					username: username,
 					password: password,
 				},
+				rejectUnauthorized: false,
+				requestCert: false,
+				agent: false,
 			},
 			(error, response, body) => {
 				if (!error && response.statusCode == 200) {
@@ -203,8 +215,13 @@ app.post("/register", redirectDashboard, function (req, res) {
 
 app.get("/dashboard", redirectLogin, function (req, res) {
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/getDashboard",
-		{ json: { token: token } },
+		"https://" + API_HOST + ":" + API_PORT + "/getDashboard",
+		{
+			json: { token: token },
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200) {
 				if (body.status == 0 || body.status == 1) {
@@ -248,8 +265,13 @@ app.get("/settings", redirectLogin, function (req, res) {
 
 app.get("/pack", redirectLogin, function (req, res) {
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/pack",
-		{ json: { token: token } },
+		"https://" + API_HOST + ":" + API_PORT + "/pack",
+		{
+			json: { token: token },
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200) {
 				if (body.packTime == "0") {
@@ -279,7 +301,7 @@ app.get("/inventory", redirectLogin, function (req, res) {
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/inventory",
+		"https://" + API_HOST + ":" + API_PORT + "/inventory",
 		{
 			json: {
 				token: token,
@@ -287,6 +309,9 @@ app.get("/inventory", redirectLogin, function (req, res) {
 				search: search,
 				next: next,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -315,7 +340,7 @@ app.get("/card", redirectLogin, function (req, res) {
 	}
 	if (page == undefined) page = 0;
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/card",
+		"https://" + API_HOST + ":" + API_PORT + "/card",
 		{
 			json: {
 				token: token,
@@ -323,6 +348,9 @@ app.get("/card", redirectLogin, function (req, res) {
 				page: page,
 				next: next,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -352,13 +380,16 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 		res.redirect("/dashboard");
 	}
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/upgrade",
+		"https://" + API_HOST + ":" + API_PORT + "/upgrade",
 		{
 			json: {
 				token: token,
 				mainuuid: mainuuid,
 				carduuid: carduuid,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -372,11 +403,14 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 
 app.get("/friends", redirectLogin, function (req, res) {
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/friends",
+		"https://" + API_HOST + ":" + API_PORT + "/friends",
 		{
 			json: {
 				token: token,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -394,12 +428,15 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 		res.redirect("/friends");
 	}
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/addfriend",
+		"https://" + API_HOST + ":" + API_PORT + "/addfriend",
 		{
 			json: {
 				token: token,
 				username: username,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -418,13 +455,16 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 		res.redirect("/friends");
 	}
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/managefriend",
+		"https://" + API_HOST + ":" + API_PORT + "/managefriend",
 		{
 			json: {
 				token: token,
 				userID: userID,
 				command: command,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -439,12 +479,15 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 app.get("/trade", redirectLogin, function (req, res) {
 	var userID = req.query.userID;
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/trade",
+		"https://" + API_HOST + ":" + API_PORT + "/trade",
 		{
 			json: {
 				token: token,
 				userID: userID,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -472,13 +515,16 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/addTrade",
+		"https://" + API_HOST + ":" + API_PORT + "/addTrade",
 		{
 			json: {
 				token: token,
 				userID: userID,
 				cardID: cardID,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -505,7 +551,7 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/inventory",
+		"https://" + API_HOST + ":" + API_PORT + "/inventory",
 		{
 			json: {
 				token: token,
@@ -514,6 +560,9 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 				next: next,
 				userID: userID,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -537,13 +586,16 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/removeTrade",
+		"https://" + API_HOST + ":" + API_PORT + "/removeTrade",
 		{
 			json: {
 				token: token,
 				userID: userID,
 				cardID: cardID,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -558,12 +610,15 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 app.post("/okTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	request.post(
-		"http://" + API_HOST + ":" + API_PORT + "/okTrade",
+		"https://" + API_HOST + ":" + API_PORT + "/okTrade",
 		{
 			json: {
 				token: token,
 				userID: userID,
 			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
@@ -576,13 +631,16 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 });
 
 function addPathCard(card) {
-	card.cardImage = "http://" + API_HOST + ":" + API_PORT + "/" + card.cardImage;
+	card.cardImage =
+		"https://" + API_HOST + ":" + API_PORT + "/" + card.cardImage;
 	card.frame.path_front =
-		"http://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_front;
+		"https://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_front;
 	card.frame.path_back =
-		"http://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_back;
+		"https://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_back;
 }
 
-app.listen(port, function () {
-	console.log("Server started at port %s", port);
-});
+https.createServer(options, app).listen(port);
+console.log("Server started at port %s", port);
+//app.listen(port, function () {
+//	console.log("Server started at port %s", port);
+//});
