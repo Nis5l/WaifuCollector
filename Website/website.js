@@ -22,10 +22,10 @@ const port = 10000;
 
 var token;
 const {
-	//API_HOST = "92.243.146.164",
-	API_HOST = "api.waifucollector.com",
-	//API_HOST = "192.168.178.55",
-	//API_PORT = "100",
+	//API_HOST = "api.waifucollector.com",
+	API_HOST = "localhost:10001",
+
+	useSSL= false,
 
 	SESS_NAME = "sid",
 	SESS_SECRET = "jgashjdftzuasgHJFASDHgkjas",
@@ -73,6 +73,8 @@ app.use(
 	})
 );
 
+function getHttp(){ return useSSL ? "https://" : "http://"; }
+
 app.get("/", function (req, res) {
 	res.render("home", { userID: req.session.userID });
 });
@@ -89,9 +91,11 @@ app.get("/login", redirectDashboard, function (req, res) {
 app.post("/login", redirectDashboard, function (req, res) {
 	const { username, password } = req.body;
 
+	console.log(getHttp() + API_HOST + "/login")
+
 	if (username && password) {
 		request.post(
-			"https://" + API_HOST + "/login",
+			getHttp() + API_HOST + "/login",
 			{
 				json: {
 					username: username,
@@ -138,10 +142,12 @@ app.post("/login", redirectDashboard, function (req, res) {
 
 app.post("/passchange", function (req, res) {
 	const { password, password2 } = req.body;
-	console.log(password + " " + password2);
+
+	
+
 	if (password && password2 && password == password2 && token) {
 		request.post(
-			"https://" + API_HOST + "/passchange",
+			getHttp() + API_HOST + "/passchange",
 			{
 				json: {
 					token: token,
@@ -177,9 +183,13 @@ app.get("/register", redirectDashboard, function (req, res) {
 
 app.post("/register", redirectDashboard, function (req, res) {
 	const { username, password } = req.body;
+
+	
+
 	if (username && password) {
+
 		request.post(
-			"https://" + API_HOST + "/register",
+			getHttp() + API_HOST + "/register",
 			{
 				json: {
 					username: username,
@@ -214,8 +224,9 @@ app.post("/register", redirectDashboard, function (req, res) {
 });
 
 app.get("/dashboard", redirectLogin, function (req, res) {
+
 	request.post(
-		"https://" + API_HOST + ":" + "/getDashboard",
+		getHttp() + API_HOST + ":" + "/getDashboard",
 		{
 			json: { token: token },
 			rejectUnauthorized: false,
@@ -264,8 +275,11 @@ app.get("/settings", redirectLogin, function (req, res) {
 });
 
 app.get("/pack", redirectLogin, function (req, res) {
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/pack",
+		getHttp() + API_HOST + "/pack",
 		{
 			json: { token: token },
 			rejectUnauthorized: false,
@@ -300,8 +314,11 @@ app.get("/inventory", redirectLogin, function (req, res) {
 	if (next == undefined) next = 2;
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/inventory",
+		getHttp() + API_HOST + "/inventory",
 		{
 			json: {
 				token: token,
@@ -339,8 +356,9 @@ app.get("/card", redirectLogin, function (req, res) {
 		if (uuid == undefined) return;
 	}
 	if (page == undefined) page = 0;
+
 	request.post(
-		"https://" + API_HOST + "/card",
+		getHttp() + API_HOST + "/card",
 		{
 			json: {
 				token: token,
@@ -379,8 +397,11 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 	if (mainuuid == undefined || carduuid == undefined) {
 		res.redirect("/dashboard");
 	}
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/upgrade",
+		getHttp() + API_HOST + "/upgrade",
 		{
 			json: {
 				token: token,
@@ -402,8 +423,11 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 });
 
 app.get("/friends", redirectLogin, function (req, res) {
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/friends",
+		getHttp() + API_HOST + "/friends",
 		{
 			json: {
 				token: token,
@@ -427,8 +451,11 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 	if (username == undefined) {
 		res.redirect("/friends");
 	}
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/addfriend",
+		getHttp() + API_HOST + "/addfriend",
 		{
 			json: {
 				token: token,
@@ -454,8 +481,11 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 	if (userID == undefined || command == undefined || isNaN(command)) {
 		res.redirect("/friends");
 	}
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/managefriend",
+		getHttp() + API_HOST + "/managefriend",
 		{
 			json: {
 				token: token,
@@ -478,8 +508,11 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 
 app.get("/trade", redirectLogin, function (req, res) {
 	var userID = req.query.userID;
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/trade",
+		getHttp() + API_HOST + "/trade",
 		{
 			json: {
 				token: token,
@@ -514,8 +547,11 @@ app.get("/trade", redirectLogin, function (req, res) {
 app.post("/addTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/addTrade",
+		getHttp() + API_HOST + "/addTrade",
 		{
 			json: {
 				token: token,
@@ -550,8 +586,11 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 	if (next == undefined) next = 2;
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/inventory",
+		getHttp() + API_HOST + "/inventory",
 		{
 			json: {
 				token: token,
@@ -585,8 +624,11 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 app.post("/removeTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/removeTrade",
+		getHttp() + API_HOST + "/removeTrade",
 		{
 			json: {
 				token: token,
@@ -609,8 +651,11 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 
 app.post("/okTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
+
+	
+
 	request.post(
-		"https://" + API_HOST + "/okTrade",
+		getHttp() + API_HOST + "/okTrade",
 		{
 			json: {
 				token: token,
@@ -631,12 +676,15 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 });
 
 function addPathCard(card) {
+
+	
+
 	card.cardImage =
-		"https://" + API_HOST + "/" + card.cardImage;
+		getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front =
-		"https://" + API_HOST + "/" + card.frame.path_front;
+		getHttp() + API_HOST + "/" + card.frame.path_front;
 	card.frame.path_back =
-		"https://" + API_HOST  + "/" + card.frame.path_back;
+		getHttp() + API_HOST  + "/" + card.frame.path_back;
 }
 
 //https.createServer(options, app).listen(port);

@@ -5,10 +5,10 @@ const packTime = "PACKTIME";
 const friend = "FRIEND";
 
 var con = sql.createConnection({
-	host: "192.168.1.102",
+	host: "localhost",
 	port: 3306,
-	user: "waifucol",
-	password: "Np%QdHYuRxk9fbn",
+	user: "root",
+	password: ""
 });
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
 			//con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
 			//	ontaskfinish();
 			//});
-			con.query("USE WaifuCollector", () => {
+			con.query("USE waifucollector", () => {
 				ontaskfinish();
 			});
 			con.query(
@@ -339,9 +339,6 @@ module.exports = {
 				" OR usertwo = " +
 				userID,
 			(err, result, fields) => {
-				console.log(err);
-				console.log(result);
-				console.log(fields);
 				if (result == undefined || result.length == 0) {
 					callback(undefined);
 					return;
