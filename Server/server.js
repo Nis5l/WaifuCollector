@@ -359,7 +359,7 @@ app.post("/getfriends", (req, res) => {
 		} catch (JsonWebTokenError) {
 			res.send({
 				status: 1,
-				message: '"TF you doing here nigga, identify yourself, who tf are you"',
+				message: "Identification missin",
 			});
 			return;
 		}
@@ -709,7 +709,7 @@ app.post("/friends", (req, res) => {
 				function insert() {
 					data.push({
 						userID: friends[i].userID,
-						status: friends[i].status,
+						status: friends[i].friend_status,
 						username: username,
 					});
 					run2(i + 1);

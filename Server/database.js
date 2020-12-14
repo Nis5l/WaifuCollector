@@ -59,7 +59,7 @@ module.exports = {
 				}
 			);
 			con.query(
-				"CREATE TABLE `waifucollector`.`friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `status` INT NOT NULL ) ENGINE = InnoDB;",
+				"CREATE TABLE IF NOT EXISTS friend ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `friend_status` INT NOT NULL ) ENGINE = InnoDB;",
 				() => {
 					ontaskfinish();
 				}
@@ -366,7 +366,7 @@ module.exports = {
 	},
 	addFriendRequest: function addFriendRequest(idone, idtwo, callback) {
 		con.query(
-			"INSERT INTO `friend` (`userone`, `usertwo`, `status`) VALUES ('" +
+			"INSERT INTO `friend` (`userone`, `usertwo`, `friend_status`) VALUES ('" +
 				idone +
 				"', '" +
 				idtwo +
@@ -382,7 +382,7 @@ module.exports = {
 		callback
 	) {
 		con.query(
-			"UPDATE friend SET status = 2 WHERE userone=" +
+			"UPDATE friend SET friend_status = 2 WHERE userone=" +
 				userone +
 				" AND usertwo=" +
 				usertwo,
@@ -561,7 +561,7 @@ function cards() {
 	//Tatsuki Arisawa
 	//juvia - fairy tale
 	con.connect(() => {
-		con.query("DROP TABLE card", () => {
+		//con.query("DROP TABLE card", () => {
 			con.query(
 				"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rem', '1', 'Card_Rem.jpg')"
 			);
@@ -775,7 +775,7 @@ function cards() {
 			con.query(
 				"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Natsuki Mogi', '43', 'Card_NatsukiMogi.jpg')"
 			);
-		});
+		//});
 	});
 }
 

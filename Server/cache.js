@@ -27,7 +27,7 @@ class Client {
 		database.getFriends(this.id, (friends) => {
 			for (var i in friends) {
 				if (this.id == friends[i].userone)
-					if (friends[i].status == 0) {
+					if (friends[i].friend_status == 0) {
 						this.friends.push({
 							userID: friends[i].usertwo,
 							status: 1,
@@ -35,13 +35,13 @@ class Client {
 					} else {
 						this.friends.push({
 							userID: friends[i].usertwo,
-							status: friends[i].status,
+							status: friends[i].friend_status,
 						});
 					}
 				else
 					this.friends.push({
 						userID: friends[i].userone,
-						status: friends[i].status,
+						status: friends[i].friend_status,
 					});
 			}
 			operationFinished();
@@ -95,21 +95,21 @@ class Client {
 	hasFriendAdded(id) {
 		this.startDecay(this.time, this.callback);
 		for (var i = 0; i < this.friends.length; i++) {
-			if (this.friends[i].userID == id && this.friends[i].status == 2)
+			if (this.friends[i].userID == id && this.friends[i].friend_status == 2)
 				return true;
 		}
 		return false;
 	}
 
 	addFriendRequest(id) {
-		this.friends.push({ userID: id, status: 1 });
+		this.friends.push({ userID: id, friend_status: 1 });
 	}
 
 	acceptFriendRequest(id) {
 		this.startDecay(this.time, this.callback);
 		for (var i = 0; i < this.friends.length; i++) {
-			if (this.friends[i].userID == id && this.friends[i].status == 0) {
-				this.friends[i].status = 2;
+			if (this.friends[i].userID == id && this.friends[i].friend_status == 0) {
+				this.friends[i].friend_status = 2;
 				return true;
 			}
 		}
