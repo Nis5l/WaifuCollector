@@ -14,6 +14,41 @@ body {
 
 .scrollable {
   overflow: auto; }
+div[id="cards"] {
+  float: left;
+  margin: auto;
+  overflow: auto;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  margin-top: 130px;
+  width: 60%;
+  height: auto; }
+  @media screen and (min-width: 1255px) {
+    div[id="cards"] {
+      border-right: 1px solid rgba(255, 255, 255, 0.5); } }
+  @media screen and (max-width: 1255px) {
+    div[id="cards"] {
+      width: 100%; } }
+
+div[id="cardsinner"] {
+  margin: auto; }
+
+div[id="maincard"] {
+  margin: auto;
+  margin-top: 130px;
+  width: min-content;
+  margin-right: 100px;
+  float: unset;
+  height: auto; }
+  @media screen and (min-width: 1255px) {
+    div[id="maincard"] {
+      float: right; } }
+  @media screen and (max-width: 1255px) {
+    div[id="maincard"] {
+      margin-right: auto;
+      height: 600px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
 html {
   height: 100%; }
 
@@ -222,6 +257,18 @@ html {
         @media screen and (max-width: 470px) {
           .wrapper .dashboard .friends .text {
             font-size: 14pt; } }
+.friendbox {
+  margin-top: 140px; }
+
+div#friends {
+  margin: auto;
+  margin-top: 40px;
+  overflow: auto;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto; }
 html, body {
   margin: auto;
   height: 100%;
@@ -270,18 +317,6 @@ html, body {
 
 .section:hover .title {
   background-size: 100px 1px; }
-.friendbox {
-  margin-top: 140px; }
-
-div#friends {
-  margin: auto;
-  margin-top: 40px;
-  overflow: auto;
-  max-height: none;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto; }
 input[type="search"] {
   color: #fff;
   background: none;
@@ -383,41 +418,6 @@ div#inventory {
   @media screen and (max-width: 1200px) {
     .page {
       font-size: 200%; } }
-div[id="cards"] {
-  float: left;
-  margin: auto;
-  overflow: auto;
-  max-height: none;
-  align-items: center;
-  justify-content: center;
-  margin-top: 130px;
-  width: 60%;
-  height: auto; }
-  @media screen and (min-width: 1255px) {
-    div[id="cards"] {
-      border-right: 1px solid rgba(255, 255, 255, 0.5); } }
-  @media screen and (max-width: 1255px) {
-    div[id="cards"] {
-      width: 100%; } }
-
-div[id="cardsinner"] {
-  margin: auto; }
-
-div[id="maincard"] {
-  margin: auto;
-  margin-top: 130px;
-  width: min-content;
-  margin-right: 100px;
-  float: unset;
-  height: auto; }
-  @media screen and (min-width: 1255px) {
-    div[id="maincard"] {
-      float: right; } }
-  @media screen and (max-width: 1255px) {
-    div[id="maincard"] {
-      margin-right: auto;
-      height: 600px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
 .content {
   width: 100%;
   height: 100vh; }

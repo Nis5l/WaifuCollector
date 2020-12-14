@@ -23,7 +23,7 @@ const port = 10000;
 var token;
 const {
 	//API_HOST = "92.243.146.164",
-	API_HOST = "api.waifucollector",
+	API_HOST = "api.waifucollector.com",
 	//API_HOST = "192.168.178.55",
 	//API_PORT = "100",
 
