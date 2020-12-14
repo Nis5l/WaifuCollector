@@ -339,9 +339,9 @@ module.exports = {
 				" OR usertwo = " +
 				userID,
 			(err, result, fields) => {
-				console.log(err);
-				console.log(result);
-				console.log(fields);
+				//console.log(err);
+				//console.log(result);
+				//console.log(fields);
 				if (result == undefined || result.length == 0) {
 					callback(undefined);
 					return;

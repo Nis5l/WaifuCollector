@@ -30,18 +30,18 @@ class Client {
 					if (friends[i].friend_status == 0) {
 						this.friends.push({
 							userID: friends[i].usertwo,
-							status: 1,
+							friend_status: 1,
 						});
 					} else {
 						this.friends.push({
 							userID: friends[i].usertwo,
-							status: friends[i].friend_status,
+							friend_status: friends[i].friend_status,
 						});
 					}
 				else
 					this.friends.push({
 						userID: friends[i].userone,
-						status: friends[i].friend_status,
+						friend_status: friends[i].friend_status,
 					});
 			}
 			operationFinished();
