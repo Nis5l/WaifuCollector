@@ -4,11 +4,13 @@ const bcrypt = require("bcrypt");
 const packTime = "PACKTIME";
 const friend = "FRIEND";
 
+const config = require("./config.json");
+
 var con = sql.createConnection({
-	host: "localhost",
-	port: 3306,
-	user: "root",
-	password: ""
+	host: config.mysql.host,
+	port: config.mysql.port,
+	user: config.mysql.user,
+	password: config.mysql.password
 });
 
 module.exports = {
@@ -19,7 +21,7 @@ module.exports = {
 			//con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
 			//	ontaskfinish();
 			//});
-			con.query("USE waifucollector", () => {
+			con.query("USE " + config.mysql.database, () => {
 				ontaskfinish();
 			});
 			con.query(

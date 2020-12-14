@@ -15,20 +15,22 @@ app.use(express.static("Data"));
 const imageBase = "Card/";
 const frameBase = "Frame/";
 
-const port = 10001;
+const config = require("./config.json");
+
+const port = config.port;
 
 const userLen = [4, 20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 const packSize = [1, 1];
 //const passRegex = /^[a-zA-Z0-9_]*}$/;
-const inventorySendAmount = 10;
-const friendLimit = 50;
+const inventorySendAmount = config.inventorySendAmount;
+const friendLimit = config.friendLimit;
 
 var clients = {};
 
 var cacheTime = 10000;
-var packCooldown = 10;
+var packCooldown = config.packCooldown;
 var qualityrange = [1, 7];
 var cardCashInterval = 3600000;
 //var cardCashInterval = 10000;
