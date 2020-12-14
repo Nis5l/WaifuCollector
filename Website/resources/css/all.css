@@ -14,6 +14,44 @@ body {
 
 .scrollable {
   overflow: auto; }
+<<<<<<< HEAD
+=======
+div[id="cards"] {
+  float: left;
+  margin: auto;
+  overflow: auto;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  margin-top: 130px;
+  width: 60%;
+  height: auto; }
+  @media screen and (min-width: 1255px) {
+    div[id="cards"] {
+      border-right: 1px solid rgba(255, 255, 255, 0.5); } }
+  @media screen and (max-width: 1255px) {
+    div[id="cards"] {
+      width: 100%; } }
+
+div[id="cardsinner"] {
+  margin: auto; }
+
+div[id="maincard"] {
+  margin: auto;
+  margin-top: 130px;
+  width: min-content;
+  margin-right: 100px;
+  float: unset;
+  height: auto; }
+  @media screen and (min-width: 1255px) {
+    div[id="maincard"] {
+      float: right; } }
+  @media screen and (max-width: 1255px) {
+    div[id="maincard"] {
+      margin-right: auto;
+      height: 600px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+>>>>>>> 2dc6a18cb81f2ff0356e38ba0608c07aa74b7dbd
 html {
   height: 100%; }
 
@@ -222,6 +260,69 @@ html {
         @media screen and (max-width: 470px) {
           .wrapper .dashboard .friends .text {
             font-size: 14pt; } }
+<<<<<<< HEAD
+=======
+.friendbox {
+  margin-top: 140px; }
+
+div#friends {
+  margin: auto;
+  margin-top: 40px;
+  overflow: auto;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto; }
+html, body {
+  margin: auto;
+  height: 100%;
+  overflow: auto; }
+
+.home {
+  height: 100vh;
+  width: 100%; }
+  .home h1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em; }
+    @media screen and (max-width: 430px) {
+      .home h1 {
+        font-size: 2em; } }
+  .home:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-image: url("/assets/homeBackground.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 0.1;
+    width: 100%;
+    height: 100%; }
+
+.about {
+  width: 100%; }
+  .about .title {
+    margin: 4% 0; }
+
+.section .title {
+  position: relative;
+  font-size: 3em;
+  text-align: center;
+  background: linear-gradient(#fff, #fff);
+  background-repeat: no-repeat;
+  background-size: 0px 1px;
+  background-position: bottom center;
+  transition: background 0.2s ease-in-out; }
+
+.section:hover .title {
+  background-size: 100px 1px; }
+>>>>>>> 2dc6a18cb81f2ff0356e38ba0608c07aa74b7dbd
 input[type="search"] {
   color: #fff;
   background: none;
@@ -369,6 +470,7 @@ div#inventory {
       .content .card input[type="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }
+<<<<<<< HEAD
 div[id="cards"] {
   float: left;
   margin: auto;
@@ -464,6 +566,8 @@ div#friends {
   justify-content: center;
   width: 100%;
   height: auto; }
+=======
+>>>>>>> 2dc6a18cb81f2ff0356e38ba0608c07aa74b7dbd
 .nav {
   position: absolute;
   top: 0;
@@ -506,6 +610,7 @@ div#friends {
       padding: 40px 15px; }
       .nav .nav-list li a:hover {
         background-color: rgba(0, 0, 0, 0.2); }
+<<<<<<< HEAD
 .wrapper .settings {
   min-width: 350px;
   margin-left: 7%; }
@@ -553,6 +658,8 @@ div#friends {
       .wrapper .settings .pass_change input[name="submit"]:disabled {
         background-color: #202320;
         border-color: #202320; }
+=======
+>>>>>>> 2dc6a18cb81f2ff0356e38ba0608c07aa74b7dbd
 .packwrapper {
   position: relative;
   min-width: 200px;
@@ -566,6 +673,7 @@ div#Open {
   margin: auto;
   width: 255px;
   height: 400px; }
+<<<<<<< HEAD
 .trade {
   display: block;
   text-align: center;
@@ -656,6 +764,8 @@ body {
   height: 100%;
   background-color: #15171b;
   color: white; }
+=======
+>>>>>>> 2dc6a18cb81f2ff0356e38ba0608c07aa74b7dbd
 
 .grid_1,.grid_2,.grid_3,.grid_4,.grid_5,.grid_6,.grid_7,.grid_8,.grid_9,.grid_10,.grid_11,.grid_12{ width:100%; box-sizing:border-box; float:left; position:relative; }
 .grid_right { float:right; }
@@ -1399,4 +1509,144 @@ body {
 		.fullsize {max-width:100%;}
 		.bbox {box-sizing:border-box;}
 		.prel {position:relative;}
+<<<<<<< HEAD
 		.hide {display:none;}
+=======
+		.hide {display:none;}.wrapper .settings {
+  min-width: 350px;
+  margin-left: 7%; }
+  .wrapper .settings .pass_change {
+    text-align: center;
+    padding: 0px 0px 2% 0px;
+    width: 300px;
+    background-color: #25282f; }
+    .wrapper .settings .pass_change .pass_change_top {
+      padding: 10px 0px 15px 0px; }
+      .wrapper .settings .pass_change .pass_change_top .pass_change_text {
+        font-size: 19pt;
+        padding: 2% 0px 0px 0%; }
+    .wrapper .settings .pass_change input[type="password"] {
+      color: #fff;
+      margin: auto;
+      margin-top: 10px;
+      background: none;
+      display: block;
+      text-align: center;
+      border: 2px solid #00ff00;
+      width: 70%;
+      outline: none;
+      padding: 10px 4px;
+      border-radius: 25px; }
+      .wrapper .settings .pass_change input[type="password"]:focus {
+        border-color: #fff;
+        transition: border 0.2s ease-in-out; }
+    .wrapper .settings .pass_change input[name="submit"] {
+      color: black;
+      padding: 10px 30px;
+      width: 40%;
+      margin: auto;
+      margin-top: 10px;
+      outline: none;
+      border: 2px solid #00ff00;
+      background-color: #00ff00;
+      border-radius: 25px; }
+      .wrapper .settings .pass_change input[name="submit"]:enabled:hover {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0);
+        transition: background 0.2s ease-in-out; }
+      .wrapper .settings .pass_change input[name="submit"]:active {
+        border-color: #ffffff; }
+      .wrapper .settings .pass_change input[name="submit"]:disabled {
+        background-color: #202320;
+        border-color: #202320; }
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Epilogue'; }
+
+body {
+  height: 100%;
+  background-color: #15171b;
+  color: white; }
+.trade {
+  display: block;
+  text-align: center;
+  position: relative;
+  margin: auto;
+  margin-top: 140px;
+  width: 100%;
+  height: auto;
+  overflow: auto; }
+  .trade #tradeself {
+    position: relative;
+    width: 100%;
+    max-height: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 440px; }
+    @media screen and (min-width: 540px) {
+      .trade #tradeself {
+        border-right: 1px solid rgba(255, 255, 255, 0.5);
+        float: left;
+        width: calc(50% - 1px); } }
+    @media screen and (max-width: 540px) {
+      .trade #tradeself {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        margin-bottom: 20px; } }
+    .trade #tradeself #tradeselfinner {
+      max-height: none;
+      height: auto;
+      overflow: auto;
+      margin: auto;
+      margin-top: 30px; }
+  .trade #tradeother {
+    position: relative;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 440px; }
+    @media screen and (min-width: 540px) {
+      .trade #tradeother {
+        float: right;
+        width: 50%; } }
+    .trade #tradeother #tradeotherinner {
+      height: auto;
+      margin: auto;
+      margin-top: 30px; }
+  .trade .name {
+    color: white;
+    font-size: 20pt;
+    text-align: center; }
+  .trade .addtrade {
+    color: #fff;
+    background: none;
+    text-align: center;
+    border: 2px solid #00ff00;
+    width: 70%;
+    outline: none;
+    margin: auto;
+    margin-top: 8px;
+    padding: 10px 4px;
+    border-radius: 25px; }
+    .trade .addtrade:focus {
+      border-color: #fff;
+      transition: border 0.2s ease-in-out; }
+  .trade .oktrade {
+    color: #fff;
+    background: none;
+    text-align: center;
+    border: 2px solid #00ff00;
+    width: 70%;
+    outline: none;
+    margin: auto;
+    margin-top: 8px;
+    padding: 10px 4px;
+    border-radius: 25px; }
+    .trade .oktrade:focus {
+      border-color: #fff;
+      transition: border 0.2s ease-in-out; }
+>>>>>>> 2dc6a18cb81f2ff0356e38ba0608c07aa74b7dbd

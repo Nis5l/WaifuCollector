@@ -8,24 +8,24 @@ const https = require("https");
 const fs = require("fs");
 require("./CSSManager.js");
 
-const options = {
-	key: fs.readFileSync("../host.key"),
-	cert: fs.readFileSync("../host.cert"),
-};
+//const options = {
+//	key: fs.readFileSync("../host.key"),
+//	cert: fs.readFileSync("../host.cert"),
+//};
 const app = express();
 
 app.set("view engine", "ejs");
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
 
-const port = 8000;
+const port = 10000;
 
 var token;
 const {
 	//API_HOST = "92.243.146.164",
-	API_HOST = "localhost",
+	API_HOST = "api.waifucollector.com",
 	//API_HOST = "192.168.178.55",
-	API_PORT = "100",
+	//API_PORT = "100",
 
 	SESS_NAME = "sid",
 	SESS_SECRET = "jgashjdftzuasgHJFASDHgkjas",
@@ -91,7 +91,7 @@ app.post("/login", redirectDashboard, function (req, res) {
 
 	if (username && password) {
 		request.post(
-			"https://" + API_HOST + ":" + API_PORT + "/login",
+			"https://" + API_HOST + "/login",
 			{
 				json: {
 					username: username,
@@ -141,7 +141,7 @@ app.post("/passchange", function (req, res) {
 	console.log(password + " " + password2);
 	if (password && password2 && password == password2 && token) {
 		request.post(
-			"https://" + API_HOST + ":" + API_PORT + "/passchange",
+			"https://" + API_HOST + "/passchange",
 			{
 				json: {
 					token: token,
@@ -179,7 +179,7 @@ app.post("/register", redirectDashboard, function (req, res) {
 	const { username, password } = req.body;
 	if (username && password) {
 		request.post(
-			"https://" + API_HOST + ":" + API_PORT + "/register",
+			"https://" + API_HOST + "/register",
 			{
 				json: {
 					username: username,
@@ -215,7 +215,7 @@ app.post("/register", redirectDashboard, function (req, res) {
 
 app.get("/dashboard", redirectLogin, function (req, res) {
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/getDashboard",
+		"https://" + API_HOST + ":" + "/getDashboard",
 		{
 			json: { token: token },
 			rejectUnauthorized: false,
@@ -265,7 +265,7 @@ app.get("/settings", redirectLogin, function (req, res) {
 
 app.get("/pack", redirectLogin, function (req, res) {
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/pack",
+		"https://" + API_HOST + "/pack",
 		{
 			json: { token: token },
 			rejectUnauthorized: false,
@@ -301,7 +301,7 @@ app.get("/inventory", redirectLogin, function (req, res) {
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/inventory",
+		"https://" + API_HOST + "/inventory",
 		{
 			json: {
 				token: token,
@@ -340,7 +340,7 @@ app.get("/card", redirectLogin, function (req, res) {
 	}
 	if (page == undefined) page = 0;
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/card",
+		"https://" + API_HOST + "/card",
 		{
 			json: {
 				token: token,
@@ -380,7 +380,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 		res.redirect("/dashboard");
 	}
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/upgrade",
+		"https://" + API_HOST + "/upgrade",
 		{
 			json: {
 				token: token,
@@ -403,7 +403,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 
 app.get("/friends", redirectLogin, function (req, res) {
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/friends",
+		"https://" + API_HOST + "/friends",
 		{
 			json: {
 				token: token,
@@ -428,7 +428,7 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 		res.redirect("/friends");
 	}
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/addfriend",
+		"https://" + API_HOST + "/addfriend",
 		{
 			json: {
 				token: token,
@@ -455,7 +455,7 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 		res.redirect("/friends");
 	}
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/managefriend",
+		"https://" + API_HOST + "/managefriend",
 		{
 			json: {
 				token: token,
@@ -479,7 +479,7 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 app.get("/trade", redirectLogin, function (req, res) {
 	var userID = req.query.userID;
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/trade",
+		"https://" + API_HOST + "/trade",
 		{
 			json: {
 				token: token,
@@ -515,7 +515,7 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/addTrade",
+		"https://" + API_HOST + "/addTrade",
 		{
 			json: {
 				token: token,
@@ -551,7 +551,7 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/inventory",
+		"https://" + API_HOST + "/inventory",
 		{
 			json: {
 				token: token,
@@ -586,7 +586,7 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/removeTrade",
+		"https://" + API_HOST + "/removeTrade",
 		{
 			json: {
 				token: token,
@@ -610,7 +610,7 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 app.post("/okTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	request.post(
-		"https://" + API_HOST + ":" + API_PORT + "/okTrade",
+		"https://" + API_HOST + "/okTrade",
 		{
 			json: {
 				token: token,
@@ -632,15 +632,15 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 
 function addPathCard(card) {
 	card.cardImage =
-		"https://" + API_HOST + ":" + API_PORT + "/" + card.cardImage;
+		"https://" + API_HOST + "/" + card.cardImage;
 	card.frame.path_front =
-		"https://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_front;
+		"https://" + API_HOST + "/" + card.frame.path_front;
 	card.frame.path_back =
-		"https://" + API_HOST + ":" + API_PORT + "/" + card.frame.path_back;
+		"https://" + API_HOST  + "/" + card.frame.path_back;
 }
 
-https.createServer(options, app).listen(port);
-console.log("Server started at port %s", port);
-//app.listen(port, function () {
-//	console.log("Server started at port %s", port);
-//});
+//https.createServer(options, app).listen(port);
+//console.log("Server started at port %s", port);
+app.listen(port, function () {
+	console.log("Server started at port %s", port);
+});

@@ -5,24 +5,25 @@ const packTime = "PACKTIME";
 const friend = "FRIEND";
 
 var con = sql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "",
+	host: "192.168.1.102",
+	port: 3306,
+        user: "waifucol",
+        password: "Np%QdHYuRxk9fbn",
 });
 
 module.exports = {
 	init: function init(callback) {
 		var i = 0;
-		var taskAmount = 11;
+		var taskAmount = 10;
 		con.connect(() => {
-			con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
-				ontaskfinish();
-			});
+			//con.query("CREATE DATABASE IF NOT EXISTS WaifuCollector", () => {
+			//	ontaskfinish();
+			//});
 			con.query("USE WaifuCollector", () => {
 				ontaskfinish();
 			});
 			con.query(
-				"CREATE TABLE IF NOT EXISTS user ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `rank` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+				"CREATE TABLE IF NOT EXISTS user ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `ranking` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 				() => {
 					ontaskfinish();
 				}
@@ -111,7 +112,7 @@ module.exports = {
 			if (!b) {
 				bcrypt.hash(password, 10, (err, hash) => {
 					con.query(
-						"INSERT INTO user (username, password, rank) VALUES ('" +
+						"INSERT INTO user (username, password, ranking) VALUES ('" +
 							username +
 							"', '" +
 							hash +

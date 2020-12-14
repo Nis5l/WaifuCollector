@@ -2,26 +2,20 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const database = require("./database");
 const app = express();
-const jwt = require("jsonWebToken");
+const jwt = require("jsonwebtoken");
 require("datejs");
 const Client = require("./cache");
 const cache = require("./serverCache");
 const jwtSecret = "yCSgVxmL9I";
 const moment = require("moment");
 const utils = require("./utils");
-const https = require("https");
 const fs = require("fs");
 
 app.use(express.static("Data"));
 const imageBase = "Card/";
 const frameBase = "Frame/";
 
-const port = 100;
-
-const options = {
-	key: fs.readFileSync("../host.key"),
-	cert: fs.readFileSync("../host.cert"),
-};
+const port = 10001;
 
 const userLen = [4, 20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
@@ -42,7 +36,7 @@ var cardCashInterval = 3600000;
 app.use(bodyParser.json());
 
 app.get("/", function (req, res) {
-	res.send("Hello World");
+	res.send("WaifuCollector");
 });
 
 app.post("/login", (req, res) => {
@@ -1308,11 +1302,11 @@ function clearCache(userID) {
 console.log("Initializing DataBase");
 database.init(() => {
 	cache.refreshCards(() => {
-		//var server = app.listen(port);
-		var server = https.createServer(options, app).listen(port);
+		var server = app.listen(port);
+		//var server = https.createServer(options, app).listen(port);
 		console.log("Started on port %s", port);
 	});
+	setInterval(() => {
+		cache.refreshCards(() => {});
+	}, cardCashInterval);
 });
-setInterval(() => {
-	cache.refreshCards(() => {});
-}, cardCashInterval);

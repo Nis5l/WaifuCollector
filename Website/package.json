@@ -16,6 +16,7 @@
     "express-session": "^1.17.1",
     "fs-extra": "^9.0.1",
     "glob": "^7.1.6",
+    "package.json": "^2.0.1",
     "request": "^2.88.2"
   },
   "devDependencies": {
