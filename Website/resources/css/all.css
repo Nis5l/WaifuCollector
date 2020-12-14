@@ -49,18 +49,6 @@ div[id="maincard"] {
       margin-right: auto;
       height: 600px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
-.friendbox {
-  margin-top: 140px; }
-
-div#friends {
-  margin: auto;
-  margin-top: 40px;
-  overflow: auto;
-  max-height: none;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto; }
 html {
   height: 100%; }
 
@@ -192,7 +180,7 @@ html {
       height: 100%;
       background-image: url("/assets/OpenSymbol.png");
       background-repeat: no-repeat;
-      background-size: 70%;
+      background-size: 250px;
       background-position: center center;
       display: flex;
       justify-content: center;
@@ -269,6 +257,18 @@ html {
         @media screen and (max-width: 470px) {
           .wrapper .dashboard .friends .text {
             font-size: 14pt; } }
+.friendbox {
+  margin-top: 140px; }
+
+div#friends {
+  margin: auto;
+  margin-top: 40px;
+  overflow: auto;
+  max-height: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto; }
 html, body {
   margin: auto;
   height: 100%;
