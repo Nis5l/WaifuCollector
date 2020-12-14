@@ -43,7 +43,7 @@ app.post("/login", (req, res) => {
 	try {
 		var username = req.body.username;
 		var password = req.body.password;
-		console.log("Login " + username + " " + password);
+		//console.log("Login " + username + " " + password);
 		database.login(username, password, (b, messageV, userIDV) => {
 			var tokenV = "";
 			if (b) tokenV = jwt.sign({ username: username, id: userIDV }, jwtSecret);
@@ -106,7 +106,7 @@ app.post("/register", (req, res) => {
 			}
 		}
 
-		console.log("Register " + username + " " + password);
+		//console.log("Register " + username + " " + password);
 		database.register(username, password, registerCallback);
 
 		function registerCallback(b, message) {
