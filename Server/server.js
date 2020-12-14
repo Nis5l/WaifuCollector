@@ -373,10 +373,13 @@ app.post("/getfriends", (req, res) => {
 
 		function run(userID) {
 			var friendIDs = clients[userID].getFriends();
+			console.log(friendsIDs);
 			var friends = [];
 			for (var i = 0; i < friendIDs.length; i++) {
 				var id = friendIDs[i];
 				if (clients[id] != undefined) {
+					console.log("1userID:" + id);
+					console.log("1username:" + clients[id].username);
 					friends.push({ userID: id, username: clients[id].username });
 
 					if (i == friendIDs.length) {
@@ -707,6 +710,7 @@ app.post("/friends", (req, res) => {
 						insert();
 					});
 				function insert() {
+					//console.log(friends[i]);
 					data.push({
 						userID: friends[i].userID,
 						status: friends[i].friend_status,
