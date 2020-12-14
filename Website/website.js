@@ -18,14 +18,15 @@ app.set("view engine", "ejs");
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
 
-const port = 10000;
-
 var token;
-const {
-	//API_HOST = "api.waifucollector.com",
-	API_HOST = "localhost:10001",
 
-	useSSL= false,
+const config = require("./config.json");
+
+const {
+
+	API_HOST = config.API_HOST,
+	useSSL = config.useSSL,
+	port = config.port,
 
 	SESS_NAME = "sid",
 	SESS_SECRET = "jgashjdftzuasgHJFASDHgkjas",
@@ -90,8 +91,6 @@ app.get("/login", redirectDashboard, function (req, res) {
 
 app.post("/login", redirectDashboard, function (req, res) {
 	const { username, password } = req.body;
-
-	console.log(getHttp() + API_HOST + "/login")
 
 	if (username && password) {
 		request.post(
@@ -226,7 +225,7 @@ app.post("/register", redirectDashboard, function (req, res) {
 app.get("/dashboard", redirectLogin, function (req, res) {
 
 	request.post(
-		getHttp() + API_HOST + ":" + "/getDashboard",
+		getHttp() + API_HOST + "/getDashboard",
 		{
 			json: { token: token },
 			rejectUnauthorized: false,
@@ -243,6 +242,7 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}
+
 			if (body.status == 0) {
 				res.render("dashboard", {
 					userID: req.session.userID,
