@@ -1,16 +1,13 @@
 {
-
-    "port": 10001,
-    "packCooldown": 10,
-    "friendLimit": 50,
-    "inventorySendAmount": 10,
-    "mysql": {
-        "host": "192.168.1.102",
-        "port": 3306,
-        "user": "waifucol",
-        "password": "Np%QdHYuRxk9fbn",
-        "database": "WaifuCollector"
-
-    }
-
+	"port": 800,
+	"packCooldown": 10,
+	"friendLimit": 50,
+	"inventorySendAmount": 10,
+	"mysql": {
+		"host": "127.0.0.1",
+		"port": 3306,
+		"user": "root",
+		"password": "",
+		"database": "WaifuCollector"
+	}
 }

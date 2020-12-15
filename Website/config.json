@@ -1,7 +1,5 @@
 {
-
-    "API_HOST": "api.waifucollector.com",
-    "port": 10000,
-    "useSSL": true
-
+	"API_HOST": "localhost:800",
+	"port": 10000,
+	"useSSL": false
 }
