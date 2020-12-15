@@ -158,7 +158,10 @@ app.post("/passchange", function (req, res) {
 					if (body.status == 0) {
 						res.redirect("/dashboard");
 						//alert("Password Changed");
-					}
+					} else
+						res.redirect(
+							"/settings?errorCode=2&errorMessage=password empty or dont match"
+						);
 				}
 			}
 		);

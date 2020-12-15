@@ -23,7 +23,7 @@ const userLen = [4, 20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 const packSize = [1, 1];
-//const passRegex = /^[a-zA-Z0-9_]*}$/;
+const passRegex = /^[a-zA-Z0-9_.-!?]*}$/;
 const inventorySendAmount = config.inventorySendAmount;
 const friendLimit = config.friendLimit;
 
@@ -324,7 +324,7 @@ app.post("/passchange", (req, res) => {
 		}
 		var username = decoded.username;
 		var newpassword = req.body.newpassword;
-		console.log("Passchange: " + username + " " + newpassword);
+		//console.log("Passchange: " + username + " " + newpassword);
 		switch (checkPass(newpassword)) {
 			case 1: {
 				res.send({
@@ -354,7 +354,6 @@ app.post("/passchange", (req, res) => {
 });
 
 app.post("/getfriends", (req, res) => {
-	console.log("THIS RUNS");
 	try {
 		var tokenV = req.body.token;
 		try {
@@ -376,13 +375,10 @@ app.post("/getfriends", (req, res) => {
 
 		function run(userID) {
 			var friendIDs = clients[userID].getFriends();
-			console.log(friendsIDs);
 			var friends = [];
 			for (var i = 0; i < friendIDs.length; i++) {
 				var id = friendIDs[i];
 				if (clients[id] != undefined) {
-					//console.log("1userID:" + id);
-					//console.log("1username:" + clients[id].username);
 					friends.push({ userID: id, username: clients[id].username });
 
 					if (i == friendIDs.length) {
@@ -713,7 +709,6 @@ app.post("/friends", (req, res) => {
 						insert();
 					});
 				function insert() {
-					//console.log(friends[i]);
 					data.push({
 						userID: friends[i].userID,
 						status: friends[i].friend_status,
@@ -768,7 +763,6 @@ app.post("/addfriend", (req, res) => {
 					return;
 				}
 
-				console.log(decoded.id + " " + id);
 				clients[decoded.id].addFriendRequest(id);
 				database.addFriendRequest(decoded.id, id, () => {
 					res.send({ status: 0 });
@@ -885,8 +879,6 @@ app.post("/trade", (req, res) => {
 				var tradeok = 0;
 				var tradeokother = 0;
 				database.getTrade(decoded.id, userID, (trades) => {
-					console.log("trades:");
-					console.log(trades);
 					data.selfcards = [];
 					run2(0);
 					function run2(i) {
@@ -969,11 +961,6 @@ app.post("/addtrade", (req, res) => {
 		var cardID = req.body.cardID;
 		var cardID = parseInt(cardID);
 
-		console.log("trade:");
-		console.log(token);
-		console.log(userID),
-		console.log(cardID);
-
 		if (isNaN(userID) || isNaN(cardID)) {
 			res.send({ status: 1, message: "not a userID" });
 			return;
@@ -993,14 +980,12 @@ app.post("/addtrade", (req, res) => {
 			run();
 		}
 		function run() {
-			console.log("checking hasadded");
 			if (!clients[decoded.id].hasFriendAdded(userID)) {
 				res.send({ status: 1, message: "not your friend" });
 				return;
 			}
 
 			database.getCardUUID(cardID, decoded.id, (result) => {
-				console.log(result);
 				if (result == undefined) {
 					res.send({
 						status: 1,
@@ -1010,16 +995,12 @@ app.post("/addtrade", (req, res) => {
 				}
 				database.tradeExists(decoded.id, userID, cardID, (b) => {
 					if (b) {
-						console.log("trade exists");
 						res.send({ status: 1, message: "Card already in trade" });
 						return;
 					}
 					database.addTrade(decoded.id, userID, cardID, () => {
-						console.log("adding trade");
 						setTrade(decoded.id, userID, 0, () => {
-							console.log("setting trade");
 							setTrade(userID, decoded.id, 0, () => {
-								console.log("setting trade to 0");
 								res.send({ status: 0 });
 							});
 						});
@@ -1086,7 +1067,6 @@ app.post("/okTrade", (req, res) => {
 		var userID = req.body.userID;
 		var userID = parseInt(userID);
 
-		console.log("isuser?");
 		if (isNaN(userID)) {
 			res.send({ status: 1, message: "not a userID" });
 			return;
@@ -1107,7 +1087,6 @@ app.post("/okTrade", (req, res) => {
 		}
 
 		function secondCache() {
-			console.log("secondcache");
 			if (clients[userID] == undefined) {
 				database.getUserName(userID, (username) => {
 					if (username == undefined) {
@@ -1122,21 +1101,13 @@ app.post("/okTrade", (req, res) => {
 			}
 		}
 		function run() {
-			console.log("run");
 			setTrade(decoded.id, userID, 1, () => {
-				console.log("one");
 				database.getTradeManager(decoded.id, userID, (tm) => {
-					console.log("two");
 					if (tm != undefined && tm[0].statusone == 1 && tm[0].statustwo == 1) {
-						console.log("three");
 						transfer(decoded.id, userID, () => {
-							console.log("four");
 							transfer(userID, decoded.id, () => {
-								console.log("five");
 								setTrade(decoded.id, userID, 0, () => {
-									console.log("six");
 									setTrade(userID, decoded.id, 0, () => {
-										console.log("somehow got here");
 										res.send({ status: 0 });
 										return;
 									});
@@ -1315,7 +1286,7 @@ function checkPass(password) {
 		password.length > userLen[1]
 	)
 		return 1;
-	//if(!passRegex.test(password)) return 2;
+	if (!passRegex.test(password)) return 2;
 	return 0;
 }
 
