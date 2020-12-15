@@ -49,8 +49,10 @@
          $(document).click(function(event) {
           var ele = $(event.target);
           if(ele.is('waifu-card'))
+		 {
            ele[0].fit();
            ele[0].turn();
+		 }
         }); 
     </script>
 

@@ -1,3 +1,5 @@
 /Server/node_modules
 /Website/node_modules
-all.css
+Website/resources/css/all.css
+Website/config.json
+Server/config.json

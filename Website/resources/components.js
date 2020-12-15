@@ -70,8 +70,11 @@ class ProgressRing extends HTMLElement {
 
 	setTime(time) {
 		const text = this._root.querySelector("text");
-		if (time != 0) this.time = Math.floor(time / 1000) + "s";
-		else this.time = "Open";
+		if (time != 0) {
+			var seconds = Math.floor((time / 1000) % 60);
+			if (("" + seconds).length == 1) seconds = "0" + seconds;
+			this.time = Math.floor(time / 60000) + ":" + seconds;
+		} else this.time = "Open";
 		text.innerHTML = this.time;
 	}
 
