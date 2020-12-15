@@ -6,6 +6,7 @@ const { cookie } = require("request");
 const { render } = require("node-sass");
 const https = require("https");
 const fs = require("fs");
+const cookieparser = require("cookie-parser");
 require("./CSSManager.js");
 
 //const options = {
@@ -17,13 +18,11 @@ const app = express();
 app.set("view engine", "ejs");
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
-
-var token;
+app.use(cookieparser());
 
 const config = require("./config.json");
 
 const {
-
 	API_HOST = config.API_HOST,
 	useSSL = config.useSSL,
 	port = config.port,
@@ -53,7 +52,7 @@ if (app.get("env") === "production") {
 app.use(session(sess));
 
 const redirectLogin = (req, res, next) => {
-	if (!req.session.userID) {
+	if (!req.cookies.userID) {
 		res.redirect("/login");
 	} else {
 		next();
@@ -61,7 +60,7 @@ const redirectLogin = (req, res, next) => {
 };
 
 const redirectDashboard = (req, res, next) => {
-	if (req.session.userID) {
+	if (req.cookies.userID) {
 		res.redirect("/dashboard");
 	} else {
 		next();
@@ -74,19 +73,23 @@ app.use(
 	})
 );
 
-function getHttp(){ return useSSL ? "https://" : "http://"; }
+function getHttp() {
+	return useSSL ? "https://" : "http://";
+}
 
 app.get("/", function (req, res) {
-	res.render("home", { userID: req.session.userID });
+	res.render("home", { userID: req.cookies.userID });
 });
 
 app.get("/logout", redirectLogin, function (req, res) {
 	req.session.destroy();
+	res.clearCookie("userID");
+	res.clearCookie("token");
 	res.redirect("/login");
 });
 
 app.get("/login", redirectDashboard, function (req, res) {
-	res.render("login", { userID: req.session.userID });
+	res.render("login", { userID: req.cookies.userID });
 });
 
 app.post("/login", redirectDashboard, function (req, res) {
@@ -107,12 +110,11 @@ app.post("/login", redirectDashboard, function (req, res) {
 			(error, response, body) => {
 				if (!error && response.statusCode == 200) {
 					if (body.status == 0) {
-						token = body.token;
+						res.cookie("token", body.token);
 
 						userID = body.userID;
 
-						req.session.userID = userID;
-						req.session.token = token;
+						res.cookie("userID", userID);
 
 						req.session.save((err) => {
 							if (err) console.log(err);
@@ -142,14 +144,12 @@ app.post("/login", redirectDashboard, function (req, res) {
 app.post("/passchange", function (req, res) {
 	const { password, password2 } = req.body;
 
-	
-
-	if (password && password2 && password == password2 && token) {
+	if (password && password2 && password == password2 && req.cookies.token) {
 		request.post(
 			getHttp() + API_HOST + "/passchange",
 			{
 				json: {
-					token: token,
+					token: req.cookies.token,
 					newpassword: password,
 				},
 			},
@@ -170,7 +170,7 @@ app.post("/passchange", function (req, res) {
 });
 
 app.get("/register", redirectDashboard, function (req, res) {
-	res.render("register", { userID: req.session.userID });
+	res.render("register", { userID: req.cookies.userID });
 });
 
 /*
@@ -183,10 +183,7 @@ app.get("/register", redirectDashboard, function (req, res) {
 app.post("/register", redirectDashboard, function (req, res) {
 	const { username, password } = req.body;
 
-	
-
 	if (username && password) {
-
 		request.post(
 			getHttp() + API_HOST + "/register",
 			{
@@ -223,11 +220,10 @@ app.post("/register", redirectDashboard, function (req, res) {
 });
 
 app.get("/dashboard", redirectLogin, function (req, res) {
-
 	request.post(
 		getHttp() + API_HOST + "/getDashboard",
 		{
-			json: { token: token },
+			json: { token: req.cookies.token },
 			rejectUnauthorized: false,
 			requestCert: false,
 			agent: false,
@@ -245,7 +241,7 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 
 			if (body.status == 0) {
 				res.render("dashboard", {
-					userID: req.session.userID,
+					userID: req.cookies.userID,
 					time: 0,
 					username: username,
 					fulltime: body.fullTime,
@@ -254,7 +250,7 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 				});
 			} else if (body.status == 1) {
 				res.render("dashboard", {
-					userID: req.session.userID,
+					userID: req.cookies.userID,
 					time: body.packTime,
 					username: username,
 					fulltime: body.fullTime,
@@ -271,17 +267,14 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 });
 
 app.get("/settings", redirectLogin, function (req, res) {
-	res.render("settings");
+	res.render("settings", { userID: req.cookies.userID });
 });
 
 app.get("/pack", redirectLogin, function (req, res) {
-
-	
-
 	request.post(
 		getHttp() + API_HOST + "/pack",
 		{
-			json: { token: token },
+			json: { token: req.cookies.token },
 			rejectUnauthorized: false,
 			requestCert: false,
 			agent: false,
@@ -293,6 +286,7 @@ app.get("/pack", redirectLogin, function (req, res) {
 						addPathCard(body.cards[i]);
 					}
 					res.render("pack", {
+						userID: req.cookies.userID,
 						cards: body.cards,
 					});
 				} else {
@@ -315,13 +309,11 @@ app.get("/inventory", redirectLogin, function (req, res) {
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/inventory",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				page: page,
 				search: search,
 				next: next,
@@ -336,6 +328,7 @@ app.get("/inventory", redirectLogin, function (req, res) {
 					addPathCard(body.inventory[i].card);
 				}
 				res.render("inventory", {
+					userID: req.cookies.userID,
 					cards: body.inventory,
 					page: body.page,
 					pagemax: body.pagemax,
@@ -361,7 +354,7 @@ app.get("/card", redirectLogin, function (req, res) {
 		getHttp() + API_HOST + "/card",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				uuid: uuid,
 				page: page,
 				next: next,
@@ -379,6 +372,7 @@ app.get("/card", redirectLogin, function (req, res) {
 				addPathCard(body.card);
 
 				res.render("card", {
+					userID: req.cookies.userID,
 					maincard: body.card,
 					cards: body.inventory,
 					page: body.page,
@@ -398,13 +392,11 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 		res.redirect("/dashboard");
 	}
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/upgrade",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				mainuuid: mainuuid,
 				carduuid: carduuid,
 			},
@@ -423,14 +415,11 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 });
 
 app.get("/friends", redirectLogin, function (req, res) {
-
-	
-
 	request.post(
 		getHttp() + API_HOST + "/friends",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 			},
 			rejectUnauthorized: false,
 			requestCert: false,
@@ -438,7 +427,10 @@ app.get("/friends", redirectLogin, function (req, res) {
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.render("friends", { friends: body.friends });
+				res.render("friends", {
+					friends: body.friends,
+					userID: req.cookies.userID,
+				});
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}
@@ -452,13 +444,11 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 		res.redirect("/friends");
 	}
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/addfriend",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				username: username,
 			},
 			rejectUnauthorized: false,
@@ -482,13 +472,11 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 		res.redirect("/friends");
 	}
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/managefriend",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				userID: userID,
 				command: command,
 			},
@@ -509,13 +497,11 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 app.get("/trade", redirectLogin, function (req, res) {
 	var userID = req.query.userID;
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/trade",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				userID: userID,
 			},
 			rejectUnauthorized: false,
@@ -548,13 +534,11 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/addTrade",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				userID: userID,
 				cardID: cardID,
 			},
@@ -587,13 +571,11 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/inventory",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				page: page,
 				search: search,
 				next: next,
@@ -625,13 +607,11 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 	var cardID = req.body.cardID;
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/removeTrade",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				userID: userID,
 				cardID: cardID,
 			},
@@ -652,13 +632,11 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 app.post("/okTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 
-	
-
 	request.post(
 		getHttp() + API_HOST + "/okTrade",
 		{
 			json: {
-				token: token,
+				token: req.cookies.token,
 				userID: userID,
 			},
 			rejectUnauthorized: false,
@@ -676,15 +654,9 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 });
 
 function addPathCard(card) {
-
-	
-
-	card.cardImage =
-		getHttp() + API_HOST + "/" + card.cardImage;
-	card.frame.path_front =
-		getHttp() + API_HOST + "/" + card.frame.path_front;
-	card.frame.path_back =
-		getHttp() + API_HOST  + "/" + card.frame.path_back;
+	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
+	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
+	card.frame.path_back = getHttp() + API_HOST + "/" + card.frame.path_back;
 }
 
 //https.createServer(options, app).listen(port);
