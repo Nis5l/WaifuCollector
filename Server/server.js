@@ -438,7 +438,7 @@ app.post("/inventory", (req, res) => {
 			var exclude = [];
 			if (!isNaN(friendID)) {
 				database.getTrade(userID, friendID, (ex) => {
-					for (var i = 0; i < ex.length; i++) {
+					for (var i = 0; ex != undefined && i < ex.length; i++) {
 						exclude.push(ex[i].card);
 					}
 					run3();
