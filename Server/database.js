@@ -68,14 +68,14 @@ module.exports = {
 			);
 
 			con.query(
-				"CREATE TABLE `waifucollector`.`trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
+				"CREATE TABLE trade ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 				() => {
 					ontaskfinish();
 				}
 			);
 
 			con.query(
-				"CREATE TABLE `waifucollector`.`trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL ) ENGINE = InnoDB;",
+				"CREATE TABLE trademanager ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL ) ENGINE = InnoDB;",
 				() => {
 					ontaskfinish();
 				}
@@ -413,6 +413,7 @@ module.exports = {
 				" AND usertwo=" +
 				usertwo,
 			function (err, result, fields) {
+				console.log(err);
 				callback(result);
 			}
 		);
