@@ -885,7 +885,7 @@ app.post("/trade", (req, res) => {
 					data.selfcards = [];
 					run2(0);
 					function run2(i) {
-						if (i != trades.length) {
+						if (trades != undefined && i != trades.length) {
 							database.getCardUUID(trades[i].card, decoded.id, (result) => {
 								if (result == undefined) {
 									res.send({ status: 1, message: "error" });
@@ -916,7 +916,7 @@ app.post("/trade", (req, res) => {
 									data.friendcards = [];
 									run3(0);
 									function run3(i) {
-										if (i != trades.length) {
+										if (trades != undefined && i != trades.length) {
 											database.getCardUUID(trades[i].card, userID, (result) => {
 												if (result == undefined) {
 													res.send({ status: 1, message: "error" });
