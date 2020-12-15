@@ -89,7 +89,21 @@ app.get("/logout", redirectLogin, function (req, res) {
 });
 
 app.get("/login", redirectDashboard, function (req, res) {
-	res.render("login", { userID: req.cookies.userID });
+	res.render("login", {
+		userID: req.cookies.userID,
+		accepted: req.cookies.accepted,
+	});
+});
+
+app.get("/privacy", redirectDashboard, function (req, res) {
+	res.render("privacy", {
+		userID: req.cookies.userID,
+	});
+});
+
+app.post("/cookie", function (req, res) {
+	res.cookie("accepted", true);
+	res.redirect("/login");
 });
 
 app.post("/login", redirectDashboard, function (req, res) {

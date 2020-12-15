@@ -26,3 +26,5 @@ Fix:
 	Mehrere Tabs reloaden = Accountwechsel zu gleichen Account
 	Cache saves website and reloads dont work
 	Friend add twice
+	First user pack bug
+	Cookie
