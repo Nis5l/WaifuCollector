@@ -4,11 +4,11 @@
 	"friendLimit": 50,
 	"inventorySendAmount": 10,
 	"mysql": {
-		"host": "192.168.1.102",
+		"host": "localhost",
 		"port": 3306,
-		"user": "waifucol",
-		"password": "Np%QdHYuRxk9fbn",
-		"database": "WaifuCollector"
+		"user": "root",
+		"password": "",
+		"database": "waifucollector"
 	}
 
 }
