@@ -90,7 +90,7 @@
          $(document).click(function(event) {
           var ele = $(event.target);
 		
-          if(ele.is('waifu-card') && !isOpen)
+          if(ele.is('waifu-card') && !isOpen && ele.length != 0 && ele[0].uuid != mc.uuid)
           {
 		    opn.insertAdjacentHTML('afterend',
 				`<card-confirmation message="Combine?"> </card-confirmation>`);

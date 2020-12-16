@@ -562,6 +562,14 @@ app.post("/upgrade", (req, res) => {
 		}
 
 		function run() {
+			if (mainuuid == carduuid) {
+				res.send({
+					status: 1,
+					message: "Cant upgrade itself",
+				});
+				return;
+			}
+
 			database.getCardUUID(mainuuid, decoded.id, (mainresult) => {
 				if (mainresult == undefined) {
 					res.send({
