@@ -129,6 +129,7 @@ class Card extends HTMLElement {
 		this.uuid = this.getAttribute("uuid");
 		this.cardID = this.getAttribute("cardID");
 		this.shadow = this.attachShadow({ mode: "open" });
+		this.turned = turned;
 		//this._root.innerHTML =`
 		this.shadow.innerHTML = `
     <div class="card" id=card> 
@@ -378,6 +379,10 @@ class Card extends HTMLElement {
 	//integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
 	//crossorigin="anonymous"
 
+	getTurned() {
+		return this.turned;
+	}
+
 	turn() {
 		$(this.shadow).find(".card-inner").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".waifu-card").css("transform", "rotateY(0deg)");
@@ -386,6 +391,7 @@ class Card extends HTMLElement {
 		$(this.shadow).find(".anime-name").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".quality").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".level").css("transform", "rotateY(0deg)");
+		this.turned = false;
 	}
 }
 
@@ -667,6 +673,100 @@ class FriendSelection extends HTMLElement {
 	}
 }
 
+class CookieConfirmation extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({ mode: "open" });
+		this.okCallback = undefined;
+
+		this._root.innerHTML = `
+            <div class="card">
+                    <h1>This Website uses Cookies</h1>
+					<a href="/privacy">More Information</a>
+
+                    <input class=ok type="submit" name="submit" value="OK">
+
+            </div>
+			<style>
+	.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    transform: translate(-50%, -50%);
+    background-color: #25282f;
+    padding: 40px;
+	height: 300px;
+	width: 300px;
+    text-align: center; }
+    .card h1 {
+      margin-top: 20px;
+      color: white;
+      display: block;
+	  font-size: 24pt;
+	  }
+	.card a {
+      color: white;
+      display: block;
+	  font-size: 18pt;
+	}
+    .card .wrong {
+      border-color: red !important; }
+    .card input[type="submit"] {
+      color: black;
+      padding: 20px 30px;
+      margin: auto 10px;
+      border: 2px solid #00ff00;
+      background-color: #00ff00;
+      border-radius: 25px;
+	  width: 300px;
+	  position: absolute;
+	  bottom: 30px;
+	  transform: translate(-50%);
+	  font-size: 21pt;
+	  }
+      .card input[type="submit"]:enabled:hover {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0);
+        transition: background 0.2s ease-in-out; }
+      .card input[type="submit"]:disabled {
+        background-color: #202320;
+        border-color: #202320; }
+      .card input[type="text"] {
+            color: #fff;
+
+            background: none;
+            display: block;
+
+            text-align: center;
+
+            border: 2px solid rgba(0, 255, 0, 0.25);
+
+            width: 280px;
+            outline: none;
+
+            margin: 20px auto;
+            padding: 10px 4px;
+
+            border-radius: 25px;
+        }
+      .card input[type="text"]:hover{
+
+                border-color: #00ff00;
+
+                transition: border 0.2s ease-in-out;
+
+		}
+	</style>
+    `;
+		var ele = this._root.querySelector(".ok");
+		ele.onclick = () => {
+			if (this.okCallback != undefined) this.okCallback();
+		};
+	}
+}
+
 var script = document.createElement("script");
 script.src = "https://code.jquery.com/jquery-3.4.1.min.js";
 script.type = "text/javascript";
@@ -678,3 +778,4 @@ window.customElements.define("card-confirmation", Confirmation);
 window.customElements.define("add-friend", AddFriend);
 window.customElements.define("friend-card", Friend);
 window.customElements.define("friend-selection", FriendSelection);
+window.customElements.define("cookie-confirmation", CookieConfirmation);

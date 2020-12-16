@@ -23,7 +23,7 @@ const userLen = [4, 20];
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passLen = [8, 30];
 const packSize = [1, 1];
-//const passRegex = /^[a-zA-Z0-9_]*}$/;
+const passRegex = /^[a-zA-Z0-9_.]+$/;
 const inventorySendAmount = config.inventorySendAmount;
 const friendLimit = config.friendLimit;
 
@@ -324,7 +324,7 @@ app.post("/passchange", (req, res) => {
 		}
 		var username = decoded.username;
 		var newpassword = req.body.newpassword;
-		console.log("Passchange: " + username + " " + newpassword);
+		//console.log("Passchange: " + username + " " + newpassword);
 		switch (checkPass(newpassword)) {
 			case 1: {
 				res.send({
@@ -375,13 +375,10 @@ app.post("/getfriends", (req, res) => {
 
 		function run(userID) {
 			var friendIDs = clients[userID].getFriends();
-			console.log(friendsIDs);
 			var friends = [];
 			for (var i = 0; i < friendIDs.length; i++) {
 				var id = friendIDs[i];
 				if (clients[id] != undefined) {
-					console.log("1userID:" + id);
-					console.log("1username:" + clients[id].username);
 					friends.push({ userID: id, username: clients[id].username });
 
 					if (i == friendIDs.length) {
@@ -712,7 +709,6 @@ app.post("/friends", (req, res) => {
 						insert();
 					});
 				function insert() {
-					//console.log(friends[i]);
 					data.push({
 						userID: friends[i].userID,
 						status: friends[i].friend_status,
@@ -766,6 +762,7 @@ app.post("/addfriend", (req, res) => {
 					res.send({ status: 1, message: "reached max friend count" });
 					return;
 				}
+
 				clients[decoded.id].addFriendRequest(id);
 				database.addFriendRequest(decoded.id, id, () => {
 					res.send({ status: 0 });
@@ -1289,7 +1286,7 @@ function checkPass(password) {
 		password.length > userLen[1]
 	)
 		return 1;
-	//if(!passRegex.test(password)) return 2;
+	if (!passRegex.test(password)) return 2;
 	return 0;
 }
 

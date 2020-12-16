@@ -89,7 +89,21 @@ app.get("/logout", redirectLogin, function (req, res) {
 });
 
 app.get("/login", redirectDashboard, function (req, res) {
-	res.render("login", { userID: req.cookies.userID });
+	res.render("login", {
+		userID: req.cookies.userID,
+		accepted: req.cookies.accepted,
+	});
+});
+
+app.get("/privacy", redirectDashboard, function (req, res) {
+	res.render("privacy", {
+		userID: req.cookies.userID,
+	});
+});
+
+app.post("/cookie", function (req, res) {
+	res.cookie("accepted", true);
+	res.redirect("/login");
 });
 
 app.post("/login", redirectDashboard, function (req, res) {
@@ -158,7 +172,10 @@ app.post("/passchange", function (req, res) {
 					if (body.status == 0) {
 						res.redirect("/dashboard");
 						//alert("Password Changed");
-					}
+					} else
+						res.redirect(
+							"/settings?errorCode=2&errorMessage=password empty or dont match"
+						);
 				}
 			}
 		);
@@ -415,6 +432,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 });
 
 app.get("/friends", redirectLogin, function (req, res) {
+	console.log("TEST");
 	request.post(
 		getHttp() + API_HOST + "/friends",
 		{
@@ -439,6 +457,7 @@ app.get("/friends", redirectLogin, function (req, res) {
 });
 
 app.post("/addfriend", redirectLogin, function (req, res) {
+	console.log("TESTSFD");
 	var username = req.body.username;
 	if (username == undefined) {
 		res.redirect("/friends");
@@ -456,6 +475,8 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
+			console.log(body);
+			console.log(error);
 			if (!error && response.statusCode == 200 && body.status == 0) {
 				res.redirect("/friends");
 			} else {

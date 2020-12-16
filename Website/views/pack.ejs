@@ -15,6 +15,7 @@
 
         <%- include('partials/nav.ejs') %>
 
+		<form class="dashboardform" action="/dashboard" method="get"></form>
 		<div class="packwrapper">
 			<div id="Open">
 			</div>
@@ -45,14 +46,36 @@
         </script>
     <% } %> 
 
-    <script>
+	<script>
+		var wcards = $("waifu-card");
+		var delay = false;
          $(document).click(function(event) {
+
+		  
           var ele = $(event.target);
           if(ele.is('waifu-card'))
 		 {
            ele[0].fit();
            ele[0].turn();
 		 }
+
+		var allturned = true;
+		for(var i = 0; i < wcards.length; i++)
+		{
+			if(wcards[i].turned) allturned = false;
+		}
+		if(allturned)
+		{
+			if(delay)
+			{
+				var f = document.querySelector(".dashboardform");
+				f.submit();
+			}else
+			{
+				setTimeout(() => {delay = true}, 1000);
+			}
+		}
+
         }); 
     </script>
 
