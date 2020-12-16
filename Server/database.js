@@ -313,7 +313,6 @@ module.exports = {
 			"SELECT * FROM user WHERE UPPER(username) = ?",
 			[username.toUpperCase()],
 			function (err, result, fields) {
-				console.log(result);
 				if (result == undefined || result == null || result.length != 1) {
 					callback(undefined);
 					return;
@@ -372,7 +371,7 @@ module.exports = {
 				" AND usertwo=" +
 				usertwo,
 			function (err, result, fields) {
-				console.log(err);
+				if (err) console.log(err);
 				callback(result);
 			}
 		);
@@ -603,7 +602,7 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Moka Akashiya', '23', 'Card_MokaAkashiya.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ririka Momobami', '34', 'Card_RirikaMomobami.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Natsuki Mogi', '43', 'Card_NatsukiMogi.jpg');",
-		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rindo Kobayashi', '6', 'Card_MikasaAckermann.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mikasa Ackermann', '6', 'Card_MikasaAckermann.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
