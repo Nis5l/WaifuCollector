@@ -26,8 +26,8 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `data` ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `key` TEXT NOT NULL , `value` LONGTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `frame` ( `id` INT NOT NULL , `name` TEXT NOT NULL , `path_front` TEXT NOT NULL, `path_back` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `friend_status` INT NOT NULL ) ENGINE = InnoDB;",
-			"CREATE TABLE `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
-			"CREATE TABLE `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL ) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL ) ENGINE = InnoDB;",
 		];
 
 		con.connect(() => {
@@ -277,7 +277,6 @@ module.exports = {
 
 	getCards: function getCards(callback) {
 		con.query("SELECT * FROM card", (err, result, fields) => {
-			console.log(err);
 			callback(result);
 		});
 	},
@@ -514,6 +513,18 @@ module.exports = {
 			}
 		);
 	},
+	getUserRank: function getUserRank(userID, callback) {
+		con.query(
+			"SELECT ranking FROM user WHERE id=" + userID,
+			(err, result, fields) => {
+				if (result == undefined || result.length == 0) {
+					callback(undefined);
+					return;
+				}
+				callback(result[0].ranking);
+			}
+		);
+	},
 };
 
 function cards(callback) {
@@ -697,7 +708,8 @@ function executeArray(sql, callback) {
 	var count = 0;
 
 	for (var i = 0; i < sql.length; i++) {
-		con.query(i, () => {
+		con.query(sql[i], (err) => {
+			if (err) console.log(err);
 			taskEnd();
 		});
 	}

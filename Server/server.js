@@ -47,6 +47,9 @@ app.post("/login", (req, res) => {
 		var password = req.body.password;
 		//console.log("Login " + username + " " + password);
 		database.login(username, password, (b, messageV, userIDV) => {
+			database.getUserRank(userIDV, (rank) => {
+				console.log(rank);
+			});
 			var tokenV = "";
 			if (b) tokenV = jwt.sign({ username: username, id: userIDV }, jwtSecret);
 
