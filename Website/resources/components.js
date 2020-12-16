@@ -129,6 +129,7 @@ class Card extends HTMLElement {
 		this.uuid = this.getAttribute("uuid");
 		this.cardID = this.getAttribute("cardID");
 		this.shadow = this.attachShadow({ mode: "open" });
+		this.turned = turned;
 		//this._root.innerHTML =`
 		this.shadow.innerHTML = `
     <div class="card" id=card> 
@@ -378,6 +379,10 @@ class Card extends HTMLElement {
 	//integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
 	//crossorigin="anonymous"
 
+	getTurned() {
+		return this.turned;
+	}
+
 	turn() {
 		$(this.shadow).find(".card-inner").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".waifu-card").css("transform", "rotateY(0deg)");
@@ -386,6 +391,7 @@ class Card extends HTMLElement {
 		$(this.shadow).find(".anime-name").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".quality").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".level").css("transform", "rotateY(0deg)");
+		this.turned = false;
 	}
 }
 
