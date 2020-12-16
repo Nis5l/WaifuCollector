@@ -16,6 +16,10 @@ require("./CSSManager.js");
 const app = express();
 
 app.set("view engine", "ejs");
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
 app.use(cookieparser());
@@ -72,6 +76,8 @@ app.use(
 		extended: true,
 	})
 );
+
+app.use(renderUserView);
 
 function getHttp() {
 	return useSSL ? "https://" : "http://";
@@ -685,3 +691,52 @@ function addPathCard(card) {
 app.listen(port, function () {
 	console.log("Server started at port %s", port);
 });
+
+function renderUserView(req, res, next){
+
+	var userID = undefined;
+
+	userID = req.cookies.userID;
+	res.locals.userID = userID;
+
+	getRankID(userID, (rankID) => {
+
+		res.locals.rankID = rankID;
+		console.log("RET: " + rankID);
+		console.log("RET 2: " + res.locals.rankID);
+
+		next();
+
+	})
+
+}
+
+function getRankID(userID, callback){
+
+	if(userID != undefined){
+	
+		request.get({
+			url: getHttp() + API_HOST + "/" + userID + "/rank",
+		}, function (err, res) {
+
+			var data = JSON.parse(res.body);
+
+			if(data.status != undefined){
+
+				if(data.status == 1){
+
+					callback(data.rankID);
+					return;
+
+				}
+
+			}
+
+			callback(undefined);
+
+		});
+
+	}else
+		callback(undefined);
+
+}
