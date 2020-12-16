@@ -22,9 +22,9 @@ Fix:
 	Error Messages
 			Passwort besteht aus Leerzeichen
 			Üngültiges Passwort = Seite ladet für immer + keine Abweisende Nachricht
-	Nach Package-Opening Button zum zurückkehren
+			Nach Package-Opening Button zum zurückkehren
 	Mehrere Tabs reloaden = Accountwechsel zu gleichen Account
 	Cache saves website and reloads dont work
 	Friend add twice
 	First user pack bug
-	Cookie
+			Cookie
