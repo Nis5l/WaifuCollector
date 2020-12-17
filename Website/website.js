@@ -16,6 +16,10 @@ require("./CSSManager.js");
 const app = express();
 
 app.set("view engine", "ejs");
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
 app.use(cookieparser());
@@ -67,11 +71,34 @@ const redirectDashboard = (req, res, next) => {
 	}
 };
 
+const redirectIfNotAdmin = (req, res, next) => {
+	
+	redirectLogin(req, res, () => {
+
+		getRankID(req.cookies.userID, (rankID) => {
+
+			if(rankID != undefined && rankID == 1){
+
+				next();
+				return;
+
+			}
+
+			res.redirect("/dashboard");
+
+		});
+
+	});
+
+};
+
 app.use(
 	bodyParser.urlencoded({
 		extended: true,
 	})
 );
+
+app.use(renderUserView);
 
 function getHttp() {
 	return useSSL ? "https://" : "http://";
@@ -283,6 +310,12 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 	);
 });
 
+app.get("/adminpanel", redirectIfNotAdmin, function(req, res){
+
+	res.render("adminpanel");
+
+});
+
 app.get("/settings", redirectLogin, function (req, res) {
 	res.render("settings", { userID: req.cookies.userID });
 });
@@ -432,7 +465,6 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 });
 
 app.get("/friends", redirectLogin, function (req, res) {
-	//console.log("TEST");
 	request.post(
 		getHttp() + API_HOST + "/friends",
 		{
@@ -685,3 +717,50 @@ function addPathCard(card) {
 app.listen(port, function () {
 	console.log("Server started at port %s", port);
 });
+
+function renderUserView(req, res, next){
+
+	var userID = undefined;
+
+	userID = req.cookies.userID;
+	res.locals.userID = userID;
+
+	getRankID(userID, (rankID) => {
+
+		res.locals.rankID = rankID;
+
+		next();
+
+	})
+
+}
+
+function getRankID(userID, callback){
+
+	if(userID != undefined){
+	
+		request.get({
+			url: getHttp() + API_HOST + "/" + userID + "/rank",
+		}, function (err, res) {
+
+			var data = JSON.parse(res.body);
+
+			if(data.status != undefined){
+
+				if(data.status == 1){
+
+					callback(data.rankID);
+					return;
+
+				}
+
+			}
+
+			callback(undefined);
+
+		});
+
+	}else
+		callback(undefined);
+
+}

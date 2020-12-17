@@ -10,6 +10,12 @@
 
         <%if (userID) { %>
 
+            <%if (locals.rankID && rankID == 1) { %>
+
+            <li><a href="./adminpanel">Adminpanel</a></li>
+
+            <% } %>
+
         <li><a href="./dashboard">Dashboard</a></li>
         <li><a href="./logout"><i class="fas fa-sign-out-alt"></i></a></li>
 
