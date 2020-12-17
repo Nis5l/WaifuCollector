@@ -432,7 +432,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 });
 
 app.get("/friends", redirectLogin, function (req, res) {
-	console.log("TEST");
+	//console.log("TEST");
 	request.post(
 		getHttp() + API_HOST + "/friends",
 		{
@@ -457,7 +457,7 @@ app.get("/friends", redirectLogin, function (req, res) {
 });
 
 app.post("/addfriend", redirectLogin, function (req, res) {
-	console.log("TESTSFD");
+	//console.log("TESTSFD");
 	var username = req.body.username;
 	if (username == undefined) {
 		res.redirect("/friends");
@@ -475,8 +475,8 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			console.log(body);
-			console.log(error);
+			//console.log(body);
+			//console.log(error);
 			if (!error && response.statusCode == 200 && body.status == 0) {
 				res.redirect("/friends");
 			} else {
