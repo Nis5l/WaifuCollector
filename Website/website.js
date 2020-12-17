@@ -312,7 +312,42 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 
 app.get("/adminpanel", redirectIfNotAdmin, function(req, res){
 
-	res.render("adminpanel");
+	res.render("adminpanel/adminpanel");
+
+});
+
+app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, res){
+
+	var cards = [
+		
+		{
+
+			name: "Zero Two",
+			anime: "Darling in the Franxx"
+
+		},
+		{
+
+			name: "Ichigo",
+			anime: "Darling in the Franxx"
+
+		},
+		{
+
+			name: "Lion",
+			anime: "RealLife"
+
+		}
+
+	]
+
+	res.render("adminpanel/adminpanel_cards", {cards: cards});
+
+});
+
+app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, res){
+
+	res.render("adminpanel/adminpanel_anime");
 
 });
 
@@ -722,6 +757,8 @@ app.listen(port, function () {
 function renderUserView(req, res, next){
 
 	var userID = undefined;
+
+	res.locals.url = getHttp() + req.get("host");
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;
