@@ -266,6 +266,14 @@ module.exports = {
 			}
 		);
 	},
+	getCardDisplay: function getCardDisplay(cardID, callback) {
+		con.query(
+			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " + cardID,
+			(err, result, fields) => {
+				callback(result[0]);
+			}
+		);
+	},
 
 	getFrame: function getFrame(frameID, callback) {
 		con.query(

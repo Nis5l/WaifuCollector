@@ -59,6 +59,42 @@ app.get("/cards", function(req, res){
 
 });
 
+app.get("/card/:cardID/", function(req, res){
+
+	database.getCard(req.params.cardID, (card) => {
+
+		if(card != undefined){
+
+			res.send({status: 1, card: card});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
+app.get("/display/card/:cardID/", function(req, res){
+
+	database.getCardDisplay(req.params.cardID, (card) => {
+
+		if(card != undefined){
+
+			res.send({status: 1, card: card});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
 app.get("/display/cards", function(req, res){
 
 	database.getCardsDisplay((cards) => {

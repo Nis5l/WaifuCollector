@@ -342,6 +342,38 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, response){
 
 });
 
+app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, function(req, response){
+
+	var cardID = req.params.cardID;
+
+	request.get({
+		url: getHttp() + API_HOST + "/display/card/" + cardID,
+	}, function (err, res) {
+
+		var data = JSON.parse(res.body);
+
+		if(data.status != undefined){
+
+			if(data.status == 1){
+
+				var card = data.card;
+
+				card['image'] = getHttp() + API_HOST + "/Card/" + card['image']; 
+
+				response.render("adminpanel/adminpanel_card_edit", {card: card});
+
+				return;
+
+			}
+
+		}
+
+		response.redirect("/dashboard");
+
+	});
+
+});
+
 app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, response){
 
 	request.get({

@@ -46,30 +46,39 @@
 
         <div class="adminpanel_content">
 
-            <% if(cards != undefined){ %>
+            <% if(card != undefined){ %>
 
-                <% cards.forEach(function(card){ %>
+                <div class="grid_12 waifu">
 
-                    <div class="grid_12 waifu">
+                    <div class="admin_card">
+        
+                        <div class="admin_card-content">
+        
+                            <div class="grid_12">
 
-                        <div class="admin_card">
-        
-                            <div class="admin_card-content">
-        
-                                <%= card['name'] %>
+                                <span style="font-size: 50px;"><%= card['name'] %></span>
+                                <span style="margin-left: 5px; font-size: 25px; color: gray;"><%= card['animeName'] %></span>
 
-                                <span style="margin-left: 5px; font-size: 0.75em; color: gray;"><%= card['anime'] %></span>
-        
-                                <i class="delete fa fa-trash" style="color: #c32222; float: right;"></i>
-                                <a href="<%= url %>/adminpanel/card/<%= card['cardID'] %>/edit"><i class="edit fa fa-edit" style="color: #b3b3b3; float: right; margin-right: 10px;"></i></a>
-        
+                            </div>
+
+                            <div class="grid_6" style="margin-top: 10px;">
+
+                                <input class="grid_6" type="text" value="<%= card['name'] %>" name="name">
+                                <input class="grid_3" type="submit" name="submit" style="margin: 0;">
+
+                            </div>
+
+                            <div class="grid_6">
+
+                                <img src="<%= card['image'] %>" style="float: right; box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); border-radius: 10px;" alt="Card Image" />
+
                             </div>
         
                         </div>
         
                     </div>
-
-                <% }); %>
+        
+                </div>
 
             <% } %>
 
