@@ -187,7 +187,7 @@ class Client {
 					sorted = false;
 					swap(this.inventory, i);
 				} else if (this.inventory[i].level == this.inventory[i + 1].level) {
-					if (this.inventory[i].quality > this.inventory[i + 1].quality) {
+					if (this.inventory[i].quality < this.inventory[i + 1].quality) {
 						sorted = false;
 						swap(this.inventory, i);
 					} else if (
