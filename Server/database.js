@@ -27,7 +27,8 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `frame` ( `id` INT NOT NULL , `name` TEXT NOT NULL , `path_front` TEXT NOT NULL, `path_back` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `friend_status` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL ) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `friendnotification` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
 		];
 
 		con.connect(() => {
@@ -476,6 +477,7 @@ module.exports = {
 				usertwo +
 				";",
 			function (err, result, fields) {
+				if (err) console.log(err);
 				con.query(
 					"UPDATE trademanager SET statustwo = " +
 						status +
@@ -485,6 +487,7 @@ module.exports = {
 						userone +
 						";",
 					(err, result, fields) => {
+						if (err) console.log(err);
 						callback();
 					}
 				);
@@ -522,6 +525,58 @@ module.exports = {
 				}
 				callback(result[0].ranking);
 			}
+		);
+	},
+	getFriendNotification: function getFriendNotification(
+		userone,
+		usertwo,
+		callback
+	) {
+		con.query(
+			"SELECT statusone FROM friendnotification WHERE userone = " +
+				userone +
+				" AND usertwo = " +
+				usertwo,
+			(err, result, fields) => {
+				if (err) console.log(err);
+				if (result != undefined && result.length > 0) {
+					callback(result[0].statusone);
+					return;
+				}
+				con.query(
+					"SELECT statustwo FROM friendnotification WHERE usertwo = " +
+						userone +
+						" AND userone = " +
+						usertwo,
+					(err, result, fields) => {
+						if (err) console.log(err);
+						if (result != undefined && result.length > 0) {
+							callback(result[0].statustwo);
+							return;
+						}
+						callback(0);
+						return;
+					}
+				);
+			}
+		);
+	},
+	friendNotificationExists: function friendNotificationExists(
+		userone,
+		usertwo,
+		callback
+	) {
+		con.query(
+			"SELECT statusone FROM friendnotification WHERE (userone = " +
+				userone +
+				" AND usertwo = " +
+				usertwo +
+				") OR (userone = " +
+				usertwo +
+				" AND usertwo = " +
+				userone +
+				");",
+			(err, result, fields) => {}
 		);
 	},
 };
@@ -603,6 +658,16 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ririka Momobami', '34', 'Card_RirikaMomobami.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Natsuki Mogi', '43', 'Card_NatsukiMogi.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mikasa Ackermann', '6', 'Card_MikasaAckermann.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Aqua', '4', 'Card_Aqua.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shokuhou Misaki', '44', 'Card_ShokuhouMisaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mikoto Misaka', '44', 'Card_MikotoMisaka.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kanzaki Kaori', '45', 'Card_KanzakiKaori.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Julis Riessfeld', '46', 'Card_JulisRiessfeld.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mine', '5', 'Card_Mine.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Toudou Kirin', '46', 'Card_ToudouKirin.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Claudia Enfield', '46', 'Card_ClaudiaEnfield.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sasamiya Saya', '46', 'Card_SasamiyaSaya.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Toka Kirishima', '47', 'Card_TokaKirishima.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -661,6 +726,10 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('41', 'Your Lie in April');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('42', 'Undefeated Bahamut Chronicle');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('43', 'Initial D');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('44', 'A Certain Scientific Railgun');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('45', 'A Certain Magical Index');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('46', 'The Asterisk War');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('47', 'Tokyo Ghoul');",
 	];
 
 	con.connect(() => {

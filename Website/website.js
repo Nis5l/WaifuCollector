@@ -432,7 +432,6 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 });
 
 app.get("/friends", redirectLogin, function (req, res) {
-	console.log("TEST");
 	request.post(
 		getHttp() + API_HOST + "/friends",
 		{
