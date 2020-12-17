@@ -1,6 +1,6 @@
 {
 	"port": 10001,
-	"packCooldown": 1800,
+	"packCooldown": 0,
 	"friendLimit": 50,
 	"inventorySendAmount": 10,
 	"mysql": {

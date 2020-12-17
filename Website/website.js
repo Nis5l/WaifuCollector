@@ -71,6 +71,27 @@ const redirectDashboard = (req, res, next) => {
 	}
 };
 
+const redirectIfNotAdmin = (req, res, next) => {
+	
+	redirectLogin(req, res, () => {
+
+		getRankID(req.cookies.userID, (rankID) => {
+
+			if(rankID != undefined && rankID == 1){
+
+				next();
+				return;
+
+			}
+
+			res.redirect("/dashboard");
+
+		});
+
+	});
+
+};
+
 app.use(
 	bodyParser.urlencoded({
 		extended: true,
@@ -287,6 +308,12 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 			}
 		}
 	);
+});
+
+app.get("/adminpanel", redirectIfNotAdmin, function(req, res){
+
+	res.render("adminpanel");
+
 });
 
 app.get("/settings", redirectLogin, function (req, res) {
@@ -702,8 +729,6 @@ function renderUserView(req, res, next){
 	getRankID(userID, (rankID) => {
 
 		res.locals.rankID = rankID;
-		console.log("RET: " + rankID);
-		console.log("RET 2: " + res.locals.rankID);
 
 		next();
 
