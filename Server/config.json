@@ -1,0 +1,14 @@
+{
+	"port": 10001,
+	"packCooldown": 0,
+	"friendLimit": 50,
+	"inventorySendAmount": 10,
+	"mysql": {
+		"host": "localhost",
+		"port": 3306,
+		"user": "root",
+		"password": "",
+		"database": "waifucollector"
+	}
+
+}

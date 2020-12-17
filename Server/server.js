@@ -41,6 +41,49 @@ app.get("/", function (req, res) {
 	res.send("WaifuCollector");
 });
 
+app.use("/:id/rank", function (req, res) {
+	
+	var userID = req.params.id;
+
+	if(userID){
+
+		database.getUserRank(userID, (rankID) => {
+
+			if(rankID != undefined){
+
+				res.send({
+
+					status: 1,
+					rankID: rankID
+
+				});
+
+			}else{
+
+				res.send({
+
+					status: 0,
+					message: "RankID not found"
+
+				});
+
+			}
+
+		});
+
+	}else{
+
+		res.send({
+
+			status: 0,
+			message: "Missing userID given"
+
+		});
+
+	}
+
+});
+
 app.post("/login", (req, res) => {
 	try {
 		var username = req.body.username;
