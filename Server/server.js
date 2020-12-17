@@ -16,6 +16,7 @@ const imageBase = "Card/";
 const frameBase = "Frame/";
 
 const config = require("./config.json");
+const { randomInt } = require("crypto");
 
 const port = config.port;
 
@@ -31,7 +32,7 @@ var clients = {};
 
 var cacheTime = 900000;
 var packCooldown = config.packCooldown;
-var qualityrange = [1, 7];
+var qualityrange = [1, 5];
 var cardCashInterval = 3600000;
 //var cardCashInterval = 10000;
 
@@ -620,77 +621,49 @@ app.post("/upgrade", (req, res) => {
 							message: "Cant upgrade these cards",
 						});
 					}
-					var newquality = Math.round(
-						(cardresult.quality + mainresult.quality) / 2
-					);
-					var newlevel = cardresult.level + 1;
 
+					var chance = (cardresult.quality + mainresult.quality) * 10;
+
+					var succes = true;
+					var r = utils.getRandomInt(0, 100);
+					console.log(chance);
+					console.log(r);
+					if (r > chance) succes = false;
+
+					var newlevel = 0;
+					var newquality = 0;
+					if (succes) {
+						newlevel = cardresult.level + 1;
+						newquality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
+					} else {
+						newlevel = cardresult.level;
+						newquality = Math.round(
+							(cardresult.quality + mainresult.quality) / 2
+						);
+					}
 					clients[decoded.id].deleteCard(carduuid);
 					clients[decoded.id].deleteCard(mainuuid);
 					database.deleteCard(carduuid, () => {
 						database.deleteCard(mainuuid, () => {
-							database.getTradesCard(carduuid, (ts) => {
-								if (ts != undefined) {
-									run2(0);
-									function run2(iter) {
-										if (iter == ts.length) {
-											run3();
-											return;
-										}
-										setTrade(ts[iter].userone, ts[iter].usertwo, 0, () => {
-											run2(iter + 1);
+							removeTrade(carduuid, mainuuid, () => {
+								database.addCard(
+									decoded.id,
+									cardresult.cardID,
+									newquality,
+									newlevel,
+									mainresult.frameID,
+									(insertID) => {
+										clients[decoded.id].addCard({
+											id: insertID,
+											userID: decoded.id,
+											cardID: cardresult.cardID,
+											quality: newquality,
+											level: newlevel,
+											frameID: mainresult.frameID,
 										});
+										res.send({ status: 0, uuid: insertID });
 									}
-								} else {
-									run3();
-								}
-								function run3() {
-									database.getTradesCard(mainuuid, (ts2) => {
-										if (ts2 != undefined) {
-											run4(0);
-											function run4(iter) {
-												if (iter == ts2.length) {
-													run5();
-													return;
-												}
-												setTrade(
-													ts2[iter].userone,
-													ts2[iter].usertwo,
-													0,
-													() => {
-														run4(iter + 1);
-													}
-												);
-											}
-										} else {
-											run5();
-										}
-									});
-									function run5() {
-										database.removeTrade(mainuuid, () => {
-											database.removeTrade(carduuid, () => {
-												database.addCard(
-													decoded.id,
-													cardresult.cardID,
-													newquality,
-													newlevel,
-													mainresult.frameID,
-													(insertID) => {
-														clients[decoded.id].addCard({
-															id: insertID,
-															userID: decoded.id,
-															cardID: cardresult.cardID,
-															quality: newquality,
-															level: newlevel,
-															frameID: mainresult.frameID,
-														});
-														res.send({ status: 0, uuid: insertID });
-													}
-												);
-											});
-										});
-									}
-								}
+								);
 							});
 						});
 					});
@@ -703,6 +676,51 @@ app.post("/upgrade", (req, res) => {
 		return;
 	}
 });
+
+function removeTrade(carduuid, mainuuid, callback) {
+	database.getTradesCard(carduuid, (ts) => {
+		if (ts != undefined) {
+			run2(0);
+			function run2(iter) {
+				if (iter == ts.length) {
+					run3();
+					return;
+				}
+				setTrade(ts[iter].userone, ts[iter].usertwo, 0, () => {
+					run2(iter + 1);
+				});
+			}
+		} else {
+			run3();
+		}
+		function run3() {
+			database.getTradesCard(mainuuid, (ts2) => {
+				if (ts2 != undefined) {
+					run4(0);
+					function run4(iter) {
+						if (iter == ts2.length) {
+							run5();
+							return;
+						}
+						setTrade(ts2[iter].userone, ts2[iter].usertwo, 0, () => {
+							run4(iter + 1);
+						});
+					}
+				} else {
+					run5();
+				}
+
+				function run5() {
+					database.removeTrade(mainuuid, () => {
+						database.removeTrade(carduuid, () => {
+							callback();
+						});
+					});
+				}
+			});
+		}
+	});
+}
 
 app.post("/friends", (req, res) => {
 	try {

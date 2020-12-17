@@ -1,4 +1,5 @@
 Waifus:
+	rias
 		Aqua
 		Akame
 		mine
@@ -7,15 +8,15 @@ Waifus:
 				eto
 				rize
 		toka(tokyo ghoul)
-	Tohru
-	Kanna
-	Lucoa
-	emma (kobayashis dragon maid)
-	yumeko
-	mary saotome
-	runa yomozuki
-	kirari & ririka momobami
-	yuriko nishinotouin
+		Tohru
+		Kanna
+		Lucoa
+		emma (kobayashis dragon maid)
+		yumeko
+		mary saotome
+		runa yomozuki
+		kirari & ririka momobami
+		yuriko nishinotouin
 	yumemi(kakegurui)
 		Shokuhou Misaki || Railgun (BILD ICEEYE)
 		Mikoto Misaka || Railgun
