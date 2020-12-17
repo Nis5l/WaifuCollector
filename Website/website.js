@@ -316,32 +316,29 @@ app.get("/adminpanel", redirectIfNotAdmin, function(req, res){
 
 });
 
-app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, res){
+app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, response){
 
-	var cards = [
-		
-		{
+	request.get({
+		url: getHttp() + API_HOST + "/display/cards",
+	}, function (err, res) {
 
-			name: "Zero Two",
-			anime: "Darling in the Franxx"
+		var data = JSON.parse(res.body);
 
-		},
-		{
+		if(data.status != undefined){
 
-			name: "Ichigo",
-			anime: "Darling in the Franxx"
+			if(data.status == 1){
 
-		},
-		{
+				response.render("adminpanel/adminpanel_cards", {cards: data.cards});
 
-			name: "Lion",
-			anime: "RealLife"
+				return;
+
+			}
 
 		}
 
-	]
+		response.redirect("/dashboard");
 
-	res.render("adminpanel/adminpanel_cards", {cards: cards});
+	});
 
 });
 
