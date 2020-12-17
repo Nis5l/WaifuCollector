@@ -276,8 +276,18 @@ module.exports = {
 		);
 	},
 
+	getCardsDisplay: function getCardsDisplay(callback) {
+		con.query('SELECT card.id AS "cardID", cardName AS "name", cardImage AS "image", cardtype.name AS anime  FROM `card` INNER JOIN cardtype On card.typeID = cardtype.id', (err, result, fields) => {
+			callback(result);
+		});
+	},
 	getCards: function getCards(callback) {
 		con.query("SELECT * FROM card", (err, result, fields) => {
+			callback(result);
+		});
+	},
+	getAnimes: function getAnimes(callback) {
+		con.query("SELECT * FROM cardtype", (err, result, fields) => {
 			callback(result);
 		});
 	},

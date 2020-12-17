@@ -312,7 +312,59 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 
 app.get("/adminpanel", redirectIfNotAdmin, function(req, res){
 
-	res.render("adminpanel");
+	res.render("adminpanel/adminpanel");
+
+});
+
+app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, response){
+
+	request.get({
+		url: getHttp() + API_HOST + "/display/cards",
+	}, function (err, res) {
+
+		var data = JSON.parse(res.body);
+
+		if(data.status != undefined){
+
+			if(data.status == 1){
+
+				response.render("adminpanel/adminpanel_cards", {cards: data.cards});
+
+				return;
+
+			}
+
+		}
+
+		response.redirect("/dashboard");
+
+	});
+
+});
+
+app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, response){
+
+	request.get({
+		url: getHttp() + API_HOST + "/animes",
+	}, function (err, res) {
+
+		var data = JSON.parse(res.body);
+
+		if(data.status != undefined){
+
+			if(data.status == 1){
+
+				response.render("adminpanel/adminpanel_anime", {animes: data.animes});
+
+				return;
+
+			}
+
+		}
+
+		response.redirect("/dashboard");
+
+	});
 
 });
 
@@ -721,6 +773,8 @@ app.listen(port, function () {
 function renderUserView(req, res, next){
 
 	var userID = undefined;
+
+	res.locals.url = getHttp() + req.get("host");
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;

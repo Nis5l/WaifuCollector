@@ -42,6 +42,60 @@ app.get("/", function (req, res) {
 	res.send("WaifuCollector");
 });
 
+app.get("/cards", function(req, res){
+
+	database.getCards((cards) => {
+
+		if(cards != undefined){
+
+			res.send({status: 1, cards: cards});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
+app.get("/display/cards", function(req, res){
+
+	database.getCardsDisplay((cards) => {
+
+		if(cards != undefined){
+
+			res.send({status: 1, cards: cards});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
+app.get("/animes", function(req, res){
+
+	database.getAnimes((animes) => {
+
+		if(animes != undefined){
+
+			res.send({status: 1, animes: animes});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
 app.use("/:id/rank", function (req, res) {
 	var userID = req.params.id;
 

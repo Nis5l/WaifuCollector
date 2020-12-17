@@ -80,6 +80,21 @@ function combineCSSFiles(){
         throw err;
     }
 
+    fs.readFile("resources/css/_std.css", (err, data) => {
+      if(err) {
+          throw err;
+      }
+
+      fs.write(file, data.toString(), function(err){
+
+        console.log("resources/css/_std.css");
+
+        if (err) return console.error(err);
+
+      });
+
+    });
+
     getDirectories(cssDir, function (err, files) {
 
       if (err) {
@@ -90,7 +105,7 @@ function combineCSSFiles(){
   
         files.forEach(element => {
 
-            if(element.endsWith(".css") && element != "all.css"){
+            if(element.endsWith(".css") && !element.endsWith("all.css") && !element.endsWith("_std.css")){
   
               fs.readFile(element, (err, data) => {
                 if(err) {
@@ -105,7 +120,7 @@ function combineCSSFiles(){
   
                 });
   
-            });
+              });
   
             }
   

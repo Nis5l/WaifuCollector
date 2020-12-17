@@ -12,17 +12,17 @@
 
             <%if (locals.rankID && rankID == 1) { %>
 
-            <li><a href="./adminpanel">Adminpanel</a></li>
+            <li><a href="<%= url %>/adminpanel">Adminpanel</a></li>
 
             <% } %>
 
-        <li><a href="./dashboard">Dashboard</a></li>
-        <li><a href="./logout"><i class="fas fa-sign-out-alt"></i></a></li>
+        <li><a href="<%= url %>/dashboard">Dashboard</a></li>
+        <li><a href="<%= url %>/logout"><i class="fas fa-sign-out-alt"></i></a></li>
 
         <% }else{ %>
 
-            <li><a href="./login">Login</a></li>
-            <li><a href="./register">Register</a></li>
+            <li><a href="<%= url %>/login">Login</a></li>
+            <li><a href="<%= url %>/register">Register</a></li>
 
         <% } %>
 
