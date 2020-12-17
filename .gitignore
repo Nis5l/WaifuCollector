@@ -1,5 +1,4 @@
 /Server/node_modules
 /Website/node_modules
 /Website/resources/css/all.css
-/Website/config.json
-/Server/config.json
+*/config.json
