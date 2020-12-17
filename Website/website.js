@@ -342,9 +342,29 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, response){
 
 });
 
-app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, res){
+app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, response){
 
-	res.render("adminpanel/adminpanel_anime");
+	request.get({
+		url: getHttp() + API_HOST + "/animes",
+	}, function (err, res) {
+
+		var data = JSON.parse(res.body);
+
+		if(data.status != undefined){
+
+			if(data.status == 1){
+
+				response.render("adminpanel/adminpanel_anime", {animes: data.animes});
+
+				return;
+
+			}
+
+		}
+
+		response.redirect("/dashboard");
+
+	});
 
 });
 

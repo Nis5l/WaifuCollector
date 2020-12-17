@@ -77,6 +77,24 @@ app.get("/display/cards", function(req, res){
 
 });
 
+app.get("/animes", function(req, res){
+
+	database.getAnimes((animes) => {
+
+		if(animes != undefined){
+
+			res.send({status: 1, animes: animes});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
 app.use("/:id/rank", function (req, res) {
 	var userID = req.params.id;
 

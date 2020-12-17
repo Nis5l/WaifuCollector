@@ -286,6 +286,11 @@ module.exports = {
 			callback(result);
 		});
 	},
+	getAnimes: function getAnimes(callback) {
+		con.query("SELECT * FROM cardtype", (err, result, fields) => {
+			callback(result);
+		});
+	},
 	getCardUUID: function getCardUUID(uuid, userID, callback) {
 		con.query(
 			"SELECT * FROM unlocked WHERE id=" + uuid + " AND userID=" + userID,

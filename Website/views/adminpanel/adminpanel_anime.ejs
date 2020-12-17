@@ -24,6 +24,13 @@
 
             }
 
+
+            .anime:last-child{
+
+                padding-bottom: 100px;
+
+            }
+
         </style>
 
     </head>
@@ -40,8 +47,31 @@
 
         <div class="adminpanel_content">
 
-            
-            
+            <% if(animes != undefined){ %>
+
+                <% animes.forEach(function(anime){ %>
+
+                    <div class="grid_12 anime">
+
+                        <div class="admin_card">
+        
+                            <div class="admin_card-content">
+        
+                                <%= anime['name'] %>
+        
+                                <i class="delete fa fa-trash" style="color: #c32222; float: right;"></i>
+                                <i class="edit fa fa-edit" style="color: #b3b3b3; float: right; margin-right: 10px;"></i>
+        
+                            </div>
+        
+                        </div>
+        
+                    </div>
+
+                <% }); %>
+
+            <% } %>
+
         </div>
 
         <script
