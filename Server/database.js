@@ -668,6 +668,14 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Claudia Enfield', '46', 'Card_ClaudiaEnfield.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sasamiya Saya', '46', 'Card_SasamiyaSaya.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Toka Kirishima', '47', 'Card_TokaKirishima.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tohru', '48', 'Card_Tohru.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kanna Kamui', '48', 'Card_KannaKamui.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Luoca', '48', 'Card_Luoca.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Elma', '48', 'Card_Elma.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ichigo', '2', 'Card_Ichigo.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Runa Yomozuki', '10', 'Card_RunaYomozuki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuriko Nishinotouin', '10', 'Card_YurikoNishinotouin.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yumemite Yumemi', '10', 'Card_YumemiteYumemi.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -730,6 +738,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('45', 'A Certain Magical Index');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('46', 'The Asterisk War');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('47', 'Tokyo Ghoul');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('48', 'Miss Kobayashis Dragon Maid');",
 	];
 
 	con.connect(() => {
