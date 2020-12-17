@@ -1,11 +1,12 @@
 Waifus:
-	Mikasa ackermann
-	Akame
-	mine
-	leone (akame ga kill)
-	eto
-	rize
-	toka(tokyo ghoul)
+		Aqua
+		Akame
+		mine
+		leone (akame ga kill)
+			WTF:
+				eto
+				rize
+		toka(tokyo ghoul)
 	Tohru
 	Kanna
 	Lucoa
@@ -16,6 +17,9 @@ Waifus:
 	kirari & ririka momobami
 	yuriko nishinotouin
 	yumemi(kakegurui)
+		Shokuhou Misaki || Railgun (BILD ICEEYE)
+		Mikoto Misaka || Railgun
+		Kanzaki Kaori || A Certain Magical Index
 
 Fix:
 	Admin Panel (Hannes)
@@ -28,3 +32,7 @@ Fix:
 	Friend add twice
 	First user pack bug
 			Cookie
+			Upgrade Itself
+	Trade Notification
+	Frined Notification
+	Beim Carttrading, add cart( keine karte zur auswahl == Stuck im auswahlscreen
