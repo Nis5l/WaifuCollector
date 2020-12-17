@@ -29,7 +29,7 @@ const friendLimit = config.friendLimit;
 
 var clients = {};
 
-var cacheTime = 10000;
+var cacheTime = 900000;
 var packCooldown = config.packCooldown;
 var qualityrange = [1, 7];
 var cardCashInterval = 3600000;
@@ -42,46 +42,28 @@ app.get("/", function (req, res) {
 });
 
 app.use("/:id/rank", function (req, res) {
-	
 	var userID = req.params.id;
 
-	if(userID){
-
+	if (userID) {
 		database.getUserRank(userID, (rankID) => {
-
-			if(rankID != undefined){
-
+			if (rankID != undefined) {
 				res.send({
-
 					status: 1,
-					rankID: rankID
-
+					rankID: rankID,
 				});
-
-			}else{
-
+			} else {
 				res.send({
-
 					status: 0,
-					message: "RankID not found"
-
+					message: "RankID not found",
 				});
-
 			}
-
 		});
-
-	}else{
-
+	} else {
 		res.send({
-
 			status: 0,
-			message: "Missing userID given"
-
+			message: "Missing userID given",
 		});
-
 	}
-
 });
 
 app.post("/login", (req, res) => {
