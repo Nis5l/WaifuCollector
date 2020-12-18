@@ -42,61 +42,37 @@ app.get("/", function (req, res) {
 	res.send("WaifuCollector");
 });
 
-app.get("/cards", function(req, res){
-
+app.get("/cards", function (req, res) {
 	database.getCards((cards) => {
-
-		if(cards != undefined){
-
-			res.send({status: 1, cards: cards});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (cards != undefined) {
+			res.send({ status: 1, cards: cards });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/display/cards", function(req, res){
-
+app.get("/display/cards", function (req, res) {
 	database.getCardsDisplay((cards) => {
-
-		if(cards != undefined){
-
-			res.send({status: 1, cards: cards});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (cards != undefined) {
+			res.send({ status: 1, cards: cards });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/animes", function(req, res){
-
+app.get("/animes", function (req, res) {
 	database.getAnimes((animes) => {
-
-		if(animes != undefined){
-
-			res.send({status: 1, animes: animes});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (animes != undefined) {
+			res.send({ status: 1, animes: animes });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.use("/:id/rank", function (req, res) {
+app.get("/:id/rank", function (req, res) {
 	var userID = req.params.id;
 
 	if (userID) {
@@ -117,6 +93,30 @@ app.use("/:id/rank", function (req, res) {
 		res.send({
 			status: 0,
 			message: "Missing userID given",
+		});
+	}
+});
+
+app.post("/notifications", (req, res) => {
+	var token = req.body.token;
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 2, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		clients[decoded.id].refresh();
+		run(decoded.id);
+	}
+
+	function run() {
+		database.getNotifications(decoded.id, (result) => {
+			res.send({ status: 0, data: result });
+			return;
 		});
 	}
 });
@@ -680,8 +680,6 @@ app.post("/upgrade", (req, res) => {
 
 					var succes = true;
 					var r = utils.getRandomInt(0, 100);
-					console.log(chance);
-					console.log(r);
 					if (r > chance) succes = false;
 
 					var newlevel = 0;
@@ -1106,7 +1104,17 @@ app.post("/addtrade", (req, res) => {
 					database.addTrade(decoded.id, userID, cardID, () => {
 						setTrade(decoded.id, userID, 0, () => {
 							setTrade(userID, decoded.id, 0, () => {
-								res.send({ status: 0 });
+								console.log(userID);
+								database.addNotification(
+									userID,
+									"New Trade",
+									"You got a New Trade, Click to View",
+									"trade?userID=" + decoded.id,
+									() => {
+										res.send({ status: 0 });
+										return;
+									}
+								);
 							});
 						});
 					});

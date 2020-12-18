@@ -17,8 +17,8 @@ const app = express();
 
 app.set("view engine", "ejs");
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
@@ -72,24 +72,16 @@ const redirectDashboard = (req, res, next) => {
 };
 
 const redirectIfNotAdmin = (req, res, next) => {
-	
 	redirectLogin(req, res, () => {
-
 		getRankID(req.cookies.userID, (rankID) => {
-
-			if(rankID != undefined && rankID == 1){
-
+			if (rankID != undefined && rankID == 1) {
 				next();
 				return;
-
 			}
 
 			res.redirect("/dashboard");
-
 		});
-
 	});
-
 };
 
 app.use(
@@ -310,62 +302,52 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 	);
 });
 
-app.get("/adminpanel", redirectIfNotAdmin, function(req, res){
-
+app.get("/adminpanel", redirectIfNotAdmin, function (req, res) {
 	res.render("adminpanel/adminpanel");
-
 });
 
-app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, response){
+app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/display/cards",
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	request.get({
-		url: getHttp() + API_HOST + "/display/cards",
-	}, function (err, res) {
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					response.render("adminpanel/adminpanel_cards", { cards: data.cards });
 
-		var data = JSON.parse(res.body);
-
-		if(data.status != undefined){
-
-			if(data.status == 1){
-
-				response.render("adminpanel/adminpanel_cards", {cards: data.cards});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
-app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, response){
+app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/animes",
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	request.get({
-		url: getHttp() + API_HOST + "/animes",
-	}, function (err, res) {
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					response.render("adminpanel/adminpanel_anime", {
+						animes: data.animes,
+					});
 
-		var data = JSON.parse(res.body);
-
-		if(data.status != undefined){
-
-			if(data.status == 1){
-
-				response.render("adminpanel/adminpanel_anime", {animes: data.animes});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
 app.get("/settings", redirectLogin, function (req, res) {
@@ -770,8 +752,7 @@ app.listen(port, function () {
 	console.log("Server started at port %s", port);
 });
 
-function renderUserView(req, res, next){
-
+function renderUserView(req, res, next) {
 	var userID = undefined;
 
 	res.locals.url = getHttp() + req.get("host");
@@ -780,41 +761,60 @@ function renderUserView(req, res, next){
 	res.locals.userID = userID;
 
 	getRankID(userID, (rankID) => {
+		getNotifications(req.cookies.token, (data) => {
+			console.log(data);
+			res.locals.rankID = rankID;
+			res.locals.notifications = data;
 
-		res.locals.rankID = rankID;
-
-		next();
-
-	})
-
+			next();
+		});
+	});
 }
 
-function getRankID(userID, callback){
+function getRankID(userID, callback) {
+	if (userID != undefined) {
+		request.get(
+			{
+				url: getHttp() + API_HOST + "/" + userID + "/rank",
+			},
+			function (err, res) {
+				var data = JSON.parse(res.body);
 
-	if(userID != undefined){
-	
-		request.get({
-			url: getHttp() + API_HOST + "/" + userID + "/rank",
-		}, function (err, res) {
-
-			var data = JSON.parse(res.body);
-
-			if(data.status != undefined){
-
-				if(data.status == 1){
-
-					callback(data.rankID);
-					return;
-
+				if (data.status != undefined) {
+					if (data.status == 1) {
+						callback(data.rankID);
+						return;
+					}
 				}
 
+				callback(undefined);
 			}
+		);
+	} else callback(undefined);
+}
 
-			callback(undefined);
+function getNotifications(token, callback) {
+	if (token != undefined) {
+		request.post(
+			getHttp() + API_HOST + "/notifications",
+			{
+				json: {
+					token: token,
+				},
+				rejectUnauthorized: false,
+				requestCert: false,
+				agent: false,
+			},
+			(err, res, body) => {
+				if (body.status != undefined) {
+					if (body.status == 0) {
+						callback(body.data);
+						return;
+					}
+				}
 
-		});
-
-	}else
-		callback(undefined);
-
+				callback(undefined);
+			}
+		);
+	} else callback(undefined);
 }

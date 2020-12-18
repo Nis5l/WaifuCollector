@@ -98,7 +98,7 @@
                     const el = document.querySelector('progress-ring');
                     x = e.pageX;
                     y = e.pageY;
-                    if (el.isClicked(x,y)) {
+                    if (nb == undefined && el.isClicked(x,y)) {
                         var form = document.createElement('form');
                         document.body.appendChild(form);
                         form.method = 'get';
