@@ -262,6 +262,23 @@ module.exports = {
 		con.query(
 			"SELECT * FROM card WHERE id=" + cardID,
 			(err, result, fields) => {
+
+				if(result != undefined){
+
+					callback(result[0]);
+
+				}else{
+
+					callback(undefined);
+
+				}
+			}
+		);
+	},
+	getCardDisplay: function getCardDisplay(cardID, callback) {
+		con.query(
+			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " + cardID,
+			(err, result, fields) => {
 				callback(result[0]);
 			}
 		);
@@ -274,6 +291,25 @@ module.exports = {
 				callback(result[0]);
 			}
 		);
+	},
+
+	registerCard: function registerCard(name, typeID, image, callback){
+
+		con.query("INSERT INTO `card` (`cardName`, `typeID`, `cardImage`) VALUES (?, ?, ?)",
+			[name, typeID, image],
+			(err, result, fields) =>{
+				
+				if(!err){
+
+					callback(true);
+					return;
+
+				}
+
+				callback(false);
+
+			});
+
 	},
 
 	getCardsDisplay: function getCardsDisplay(callback) {
@@ -315,6 +351,19 @@ module.exports = {
 				userID,
 			(err, result, fields) => {
 				if (result == undefined || result.length == 0) {
+					callback(undefined);
+					return;
+				}
+				callback(result);
+			}
+		);
+	},
+	getUsers: function getUsers(callback) {
+		con.query(
+			"SELECT id, username AS name, ranking AS rank FROM user",
+			function (err, result, fields) {
+
+				if (result == undefined) {
 					callback(undefined);
 					return;
 				}

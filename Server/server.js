@@ -11,12 +11,19 @@ const moment = require("moment");
 const utils = require("./utils");
 const fs = require("fs");
 
+const upload = require("express-fileupload");
+
+app.use(upload());
+
+const csv = require("csv-string");
+
 app.use(express.static("Data"));
 const imageBase = "Card/";
 const frameBase = "Frame/";
 
 const config = require("./config.json");
 const { randomInt } = require("crypto");
+const { response } = require("express");
 
 const port = config.port;
 
@@ -52,7 +59,125 @@ app.get("/cards", function (req, res) {
 	});
 });
 
-app.get("/display/cards", function (req, res) {
+app.get("/cards/export", function(req, res){
+
+	database.getCards((cards) => {
+
+		var fileContent = "";
+
+		if(cards != undefined){
+
+			cards.forEach(function(card){
+
+				if(card != undefined){
+
+					fileContent += card['cardName'] + "," + card['typeID'] + "," + card['cardImage'] + "\n";
+
+				}
+
+			});
+
+		}
+
+		res.set("content-type", "text/csv");
+		res.set("Content-Disposition", "attachment; filename=card_export.csv");
+
+		res.send(fileContent);
+
+	});
+
+});
+
+app.post("/cards/import", function(req, res){
+
+	try{
+
+		if(!req.files || !req.files.cardCSV){
+
+			res.send({status: 0, message: "No file uploaded!"});
+			return;
+
+		}
+
+		let file = req.files.cardCSV;
+
+		var data = file.data.toString('utf8');
+
+		var dataArray = csv.parse(data);
+
+		dataArray.forEach(function(card){
+
+			//console.log("Name: " + card[0] + "\nTypeID: " + card[1] + "\nImage: " + card[2]);
+
+			database.registerCard(card[0], card[1], card[2], (result) =>{
+
+				if(!result){
+
+					console.log("Couldn't register " + card[0] + "!");
+
+				}
+
+			});
+
+		});
+
+		if(req.query && req.query.redirUrl){
+
+			res.redirect(req.query.redirUrl);
+			return;
+
+		}
+
+		res.redirect("/");
+
+	}catch(err){
+
+		res.send({status:0});
+
+		console.log(err);
+
+	}
+
+});
+
+app.get("/card/:cardID/", function(req, res){
+
+	database.getCard(req.params.cardID, (card) => {
+
+		if(card != undefined){
+
+			res.send({status: 1, card: card});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
+app.get("/display/card/:cardID/", function(req, res){
+
+	database.getCardDisplay(req.params.cardID, (card) => {
+
+		if(card != undefined){
+
+			res.send({status: 1, card: card});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
+app.get("/display/cards", function(req, res){
+
 	database.getCardsDisplay((cards) => {
 		if (cards != undefined) {
 			res.send({ status: 1, cards: cards });
@@ -70,6 +195,24 @@ app.get("/animes", function (req, res) {
 			res.send({ status: 0 });
 		}
 	});
+});
+
+app.get("/users", function(req, res){
+
+	database.getUsers((users) => {
+
+		if(users != undefined){
+
+			res.send({status: 1, users: users});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
 });
 
 app.get("/:id/rank", function (req, res) {
