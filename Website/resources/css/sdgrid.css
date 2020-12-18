@@ -742,3 +742,4 @@
 		.bbox {box-sizing:border-box;}
 		.prel {position:relative;}
 		.hide {display:none;}
+		.wrap{ width: 92%; margin: 0 auto; max-width: 1280px; }
