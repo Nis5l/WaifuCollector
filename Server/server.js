@@ -107,8 +107,6 @@ app.post("/cards/import", function(req, res){
 
 		dataArray.forEach(function(card){
 
-			//console.log("Name: " + card[0] + "\nTypeID: " + card[1] + "\nImage: " + card[2]);
-
 			database.registerCard(card[0], card[1], card[2], (result) =>{
 
 				if(!result){

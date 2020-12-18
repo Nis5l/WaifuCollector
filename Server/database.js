@@ -782,6 +782,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('46', 'The Asterisk War');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('47', 'Tokyo Ghoul');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('48', 'Miss Kobayashis Dragon Maid');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('49', 'Guilty Crown');",
 	];
 
 	con.connect(() => {

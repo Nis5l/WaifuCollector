@@ -68,7 +68,7 @@ function updateFiles(){
     
   }
 
-  setTimeout(combineCSSFiles, 1000);
+  //setTimeout(combineCSSFiles, 1000);
 
 }
 
