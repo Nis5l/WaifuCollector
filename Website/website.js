@@ -283,6 +283,14 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}
 
+			if(body == undefined){
+
+				res.redirect(
+					"/login?errorCode=" + body.status + "&errorMessage=BodyUndefined"
+				);
+
+			}
+
 			if (body.status == 0) {
 				res.render("dashboard", {
 					userID: req.cookies.userID,
@@ -387,6 +395,32 @@ app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, response){
 			if(data.status == 1){
 
 				response.render("adminpanel/adminpanel_anime", {animes: data.animes});
+
+				return;
+
+			}
+
+		}
+
+		response.redirect("/dashboard");
+
+	});
+
+});
+
+app.get("/adminpanel/users", redirectIfNotAdmin, function(req, response){
+
+	request.get({
+		url: getHttp() + API_HOST + "/users",
+	}, function (err, res) {
+
+		var data = JSON.parse(res.body);
+
+		if(data.status != undefined){
+
+			if(data.status == 1){
+
+				response.render("adminpanel/adminpanel_users", {users: data.users});
 
 				return;
 
@@ -829,14 +863,22 @@ function getRankID(userID, callback){
 			url: getHttp() + API_HOST + "/" + userID + "/rank",
 		}, function (err, res) {
 
-			var data = JSON.parse(res.body);
+			if(res != undefined){
 
-			if(data.status != undefined){
+				if(res.body != undefined){
 
-				if(data.status == 1){
+					var data = JSON.parse(res.body);
 
-					callback(data.rankID);
-					return;
+					if(data.status != undefined){
+
+						if(data.status == 1){
+
+							callback(data.rankID);
+							return;
+
+						}
+
+					}
 
 				}
 

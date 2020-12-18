@@ -262,7 +262,16 @@ module.exports = {
 		con.query(
 			"SELECT * FROM card WHERE id=" + cardID,
 			(err, result, fields) => {
-				callback(result[0]);
+
+				if(result != undefined){
+
+					callback(result[0]);
+
+				}else{
+
+					callback(undefined);
+
+				}
 			}
 		);
 	},
@@ -320,6 +329,19 @@ module.exports = {
 				userID,
 			(err, result, fields) => {
 				if (result == undefined || result.length == 0) {
+					callback(undefined);
+					return;
+				}
+				callback(result);
+			}
+		);
+	},
+	getUsers: function getUsers(callback) {
+		con.query(
+			"SELECT id, username AS name, ranking AS rank FROM user",
+			function (err, result, fields) {
+
+				if (result == undefined) {
 					callback(undefined);
 					return;
 				}

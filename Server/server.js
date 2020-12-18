@@ -132,7 +132,25 @@ app.get("/animes", function(req, res){
 
 });
 
-app.use("/:id/rank", function (req, res) {
+app.get("/users", function(req, res){
+
+	database.getUsers((users) => {
+
+		if(users != undefined){
+
+			res.send({status: 1, users: users});
+
+		}else{
+
+			res.send({status: 0});
+
+		}
+
+	});
+
+});
+
+app.get("/:id/rank", function (req, res) {
 	var userID = req.params.id;
 
 	if (userID) {
