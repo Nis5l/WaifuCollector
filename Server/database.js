@@ -293,6 +293,25 @@ module.exports = {
 		);
 	},
 
+	registerCard: function registerCard(name, typeID, image, callback){
+
+		con.query("INSERT INTO `card` (`cardName`, `typeID`, `cardImage`) VALUES (?, ?, ?)",
+			[name, typeID, image],
+			(err, result, fields) =>{
+				
+				if(!err){
+
+					callback(true);
+					return;
+
+				}
+
+				callback(false);
+
+			});
+
+	},
+
 	getCardsDisplay: function getCardsDisplay(callback) {
 		con.query('SELECT card.id AS "cardID", cardName AS "name", cardImage AS "image", cardtype.name AS anime  FROM `card` INNER JOIN cardtype On card.typeID = cardtype.id', (err, result, fields) => {
 			callback(result);
