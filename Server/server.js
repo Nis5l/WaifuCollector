@@ -59,123 +59,86 @@ app.get("/cards", function (req, res) {
 	});
 });
 
-app.get("/cards/export", function(req, res){
-
+app.get("/cards/export", function (req, res) {
 	database.getCards((cards) => {
-
 		var fileContent = "";
 
-		if(cards != undefined){
-
-			cards.forEach(function(card){
-
-				if(card != undefined){
-
-					fileContent += card['cardName'] + "," + card['typeID'] + "," + card['cardImage'] + "\n";
-
+		if (cards != undefined) {
+			cards.forEach(function (card) {
+				if (card != undefined) {
+					fileContent +=
+						card["cardName"] +
+						"," +
+						card["typeID"] +
+						"," +
+						card["cardImage"] +
+						"\n";
 				}
-
 			});
-
 		}
 
 		res.set("content-type", "text/csv");
 		res.set("Content-Disposition", "attachment; filename=card_export.csv");
 
 		res.send(fileContent);
-
 	});
-
 });
 
-app.post("/cards/import", function(req, res){
-
-	try{
-
-		if(!req.files || !req.files.cardCSV){
-
-			res.send({status: 0, message: "No file uploaded!"});
+app.post("/cards/import", function (req, res) {
+	try {
+		if (!req.files || !req.files.cardCSV) {
+			res.send({ status: 0, message: "No file uploaded!" });
 			return;
-
 		}
 
 		let file = req.files.cardCSV;
 
-		var data = file.data.toString('utf8');
+		var data = file.data.toString("utf8");
 
 		var dataArray = csv.parse(data);
 
-		dataArray.forEach(function(card){
-
-			database.registerCard(card[0], card[1], card[2], (result) =>{
-
-				if(!result){
-
+		dataArray.forEach(function (card) {
+			database.registerCard(card[0], card[1], card[2], (result) => {
+				if (!result) {
 					console.log("Couldn't register " + card[0] + "!");
-
 				}
-
 			});
-
 		});
 
-		if(req.query && req.query.redirUrl){
-
+		if (req.query && req.query.redirUrl) {
 			res.redirect(req.query.redirUrl);
 			return;
-
 		}
 
 		res.redirect("/");
-
-	}catch(err){
-
-		res.send({status:0});
+	} catch (err) {
+		res.send({ status: 0 });
 
 		console.log(err);
-
 	}
-
 });
 
-app.get("/card/:cardID/", function(req, res){
-
+app.get("/card/:cardID/", function (req, res) {
 	database.getCard(req.params.cardID, (card) => {
-
-		if(card != undefined){
-
-			res.send({status: 1, card: card});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (card != undefined) {
+			res.send({ status: 1, card: card });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/display/card/:cardID/", function(req, res){
-
+app.get("/display/card/:cardID/", function (req, res) {
 	database.getCardDisplay(req.params.cardID, (card) => {
-
-		if(card != undefined){
-
-			res.send({status: 1, card: card});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (card != undefined) {
+			res.send({ status: 1, card: card });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/display/cards", function(req, res){
-
+app.get("/display/cards", function (req, res) {
 	database.getCardsDisplay((cards) => {
 		if (cards != undefined) {
 			res.send({ status: 1, cards: cards });
@@ -195,22 +158,14 @@ app.get("/animes", function (req, res) {
 	});
 });
 
-app.get("/users", function(req, res){
-
+app.get("/users", function (req, res) {
 	database.getUsers((users) => {
-
-		if(users != undefined){
-
-			res.send({status: 1, users: users});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (users != undefined) {
+			res.send({ status: 1, users: users });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
 app.get("/:id/rank", function (req, res) {
@@ -1401,6 +1356,43 @@ app.post("/okTrade", (req, res) => {
 						return;
 					}
 				});
+			});
+		}
+	} catch (e) {
+		console.log(e);
+		res.send({ status: 0, message: "internal server error" });
+		return;
+	}
+});
+
+app.post("/deleteNotification", (req, res) => {
+	try {
+		var token = req.body.token;
+		var notificationID = req.body.notificationID;
+		var notificationID = parseInt(notificationID);
+
+		if (isNaN(notificationID)) {
+			res.send({ status: 1, message: "not a notificationID" });
+			return;
+		}
+
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({ status: 1, message: "Identification Please" });
+			return;
+		}
+
+		if (clients[decoded.id] == undefined) {
+			createCache(decoded.id, decoded.username, run);
+		} else {
+			clients[decoded.id].refresh();
+			run();
+		}
+
+		function run() {
+			database.removeNotification(notificationID, decoded.id, () => {
+				res.send({ status: 0 });
 			});
 		}
 	} catch (e) {

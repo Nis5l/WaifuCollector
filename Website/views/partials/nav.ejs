@@ -16,7 +16,14 @@
 
             <% } %>
 
-        <li><a class="bell"><i class="fas fa-bell"></i></a></li>
+        <form class="redirectForm" action="/redirect" method="get">
+            <input type="hidden" name="notificationID" value=""/>
+            <input type="hidden" name="url" value=""/>
+        </form>
+
+		<%if (notifications) {%>
+        <li><a class="bell"><i class="fas fa-bell"> <%= notifications.length%></i></a></li>
+		<% } %>
         <li><a href="<%= url %>/dashboard">Dashboard</a></li>
         <li><a href="<%= url %>/logout"><i class="fas fa-sign-out-alt"></i></a></li>
 
@@ -26,6 +33,7 @@
         crossorigin="anonymous"></script>
 	
 		<script>
+			var redirectForm = document.querySelector(".redirectForm");
 			var nb = undefined;
             const data = <%- JSON.stringify(notifications) %>;
 			$(".bell").click(() => {
@@ -36,10 +44,16 @@
 					nb.remove();
 					nb = undefined;
 				}
+				nb.elementCallback = (nID ,eurl) => {
+					var url = '<%= url %>/' + eurl;
+					redirectForm.notificationID.value = nID;
+					redirectForm.url.value = eurl;
+					redirectForm.submit();
+				}
 				for(var i = 0; i < data.length; i++)
 				{
 					var box = nb.shadowRoot.querySelector(".box");
-					box.insertAdjacentHTML('beforeend', `<notification-element title="${data[i].title}" message="${data[i].message}" url="${data.url}" nId=data[i].id> </notification-element>`);
+					box.insertAdjacentHTML('beforeend', `<notification-element title="${data[i].title}" message="${data[i].message}" url="${data[i].url}" nId="${data[i].id}"> </notification-element>`);
 				}
 			});	
 

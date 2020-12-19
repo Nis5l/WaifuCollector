@@ -275,12 +275,10 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}
 
-			if(body == undefined){
-
+			if (body == undefined) {
 				res.redirect(
 					"/login?errorCode=" + body.status + "&errorMessage=BodyUndefined"
 				);
-
 			}
 
 			if (body.status == 0) {
@@ -335,88 +333,78 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 	);
 });
 
-app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, function(req, response){
-
+app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, function (
+	req,
+	response
+) {
 	var cardID = req.params.cardID;
 
-	request.get({
-		url: getHttp() + API_HOST + "/display/card/" + cardID,
-	}, function (err, res) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/display/card/" + cardID,
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-		var data = JSON.parse(res.body);
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					var card = data.card;
 
-		if(data.status != undefined){
+					card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
 
-			if(data.status == 1){
+					response.render("adminpanel/adminpanel_card_edit", { card: card });
 
-				var card = data.card;
-
-				card['image'] = getHttp() + API_HOST + "/Card/" + card['image']; 
-
-				response.render("adminpanel/adminpanel_card_edit", {card: card});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
-app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, response){
+app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/animes",
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	request.get({
-		url: getHttp() + API_HOST + "/animes",
-	}, function (err, res) {
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					response.render("adminpanel/adminpanel_anime", {
+						animes: data.animes,
+					});
 
-		var data = JSON.parse(res.body);
-
-		if(data.status != undefined){
-
-			if(data.status == 1){
-
-				response.render("adminpanel/adminpanel_anime", {animes: data.animes});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
-app.get("/adminpanel/users", redirectIfNotAdmin, function(req, response){
+app.get("/adminpanel/users", redirectIfNotAdmin, function (req, response) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/users",
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	request.get({
-		url: getHttp() + API_HOST + "/users",
-	}, function (err, res) {
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					response.render("adminpanel/adminpanel_users", { users: data.users });
 
-		var data = JSON.parse(res.body);
-
-		if(data.status != undefined){
-
-			if(data.status == 1){
-
-				response.render("adminpanel/adminpanel_users", {users: data.users});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
 app.get("/settings", redirectLogin, function (req, res) {
@@ -809,6 +797,37 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 	);
 });
 
+app.get("/redirect", redirectLogin, function (req, res) {
+	var url = req.query.url;
+	var nId = req.query.notificationID;
+	var nId = parseInt(nId);
+
+	if (url == undefined || isNaN(nId)) {
+		res.redirect("/dashboard");
+		return;
+	}
+
+	request.post(
+		getHttp() + API_HOST + "/deleteNotification",
+		{
+			json: {
+				token: req.cookies.token,
+				notificationID: nId,
+			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect(url);
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
 function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
@@ -831,7 +850,6 @@ function renderUserView(req, res, next) {
 
 	getRankID(userID, (rankID) => {
 		getNotifications(req.cookies.token, (data) => {
-			console.log(data);
 			res.locals.rankID = rankID;
 			res.locals.notifications = data;
 
@@ -840,42 +858,30 @@ function renderUserView(req, res, next) {
 	});
 }
 
-function getRankID(userID, callback){
+function getRankID(userID, callback) {
+	if (userID != undefined) {
+		request.get(
+			{
+				url: getHttp() + API_HOST + "/" + userID + "/rank",
+			},
+			function (err, res) {
+				if (res != undefined) {
+					if (res.body != undefined) {
+						var data = JSON.parse(res.body);
 
-	if(userID != undefined){
-	
-		request.get({
-			url: getHttp() + API_HOST + "/" + userID + "/rank",
-		}, function (err, res) {
-
-			if(res != undefined){
-
-				if(res.body != undefined){
-
-					var data = JSON.parse(res.body);
-
-					if(data.status != undefined){
-
-						if(data.status == 1){
-
-							callback(data.rankID);
-							return;
-
+						if (data.status != undefined) {
+							if (data.status == 1) {
+								callback(data.rankID);
+								return;
+							}
 						}
-
 					}
-
 				}
 
+				callback(undefined);
 			}
-
-			callback(undefined);
-
-		});
-
-	}else
-		callback(undefined);
-
+		);
+	} else callback(undefined);
 }
 
 function getNotifications(token, callback) {

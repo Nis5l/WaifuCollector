@@ -262,22 +262,18 @@ module.exports = {
 		con.query(
 			"SELECT * FROM card WHERE id=" + cardID,
 			(err, result, fields) => {
-
-				if(result != undefined){
-
+				if (result != undefined) {
 					callback(result[0]);
-
-				}else{
-
+				} else {
 					callback(undefined);
-
 				}
 			}
 		);
 	},
 	getCardDisplay: function getCardDisplay(cardID, callback) {
 		con.query(
-			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " + cardID,
+			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " +
+				cardID,
 			(err, result, fields) => {
 				callback(result[0]);
 			}
@@ -293,23 +289,19 @@ module.exports = {
 		);
 	},
 
-	registerCard: function registerCard(name, typeID, image, callback){
-
-		con.query("INSERT INTO `card` (`cardName`, `typeID`, `cardImage`) VALUES (?, ?, ?)",
+	registerCard: function registerCard(name, typeID, image, callback) {
+		con.query(
+			"INSERT INTO `card` (`cardName`, `typeID`, `cardImage`) VALUES (?, ?, ?)",
 			[name, typeID, image],
-			(err, result, fields) =>{
-				
-				if(!err){
-
+			(err, result, fields) => {
+				if (!err) {
 					callback(true);
 					return;
-
 				}
 
 				callback(false);
-
-			});
-
+			}
+		);
 	},
 
 	getCardsDisplay: function getCardsDisplay(callback) {
@@ -362,7 +354,6 @@ module.exports = {
 		con.query(
 			"SELECT id, username AS name, ranking AS rank FROM user",
 			function (err, result, fields) {
-
 				if (result == undefined) {
 					callback(undefined);
 					return;
@@ -614,10 +605,27 @@ module.exports = {
 		);
 	},
 	getNotifications: function getNotifications(userID, callback) {
-		//"INSERT INTO `trademanager` (`userone`, `usertwo`, `statusone`, `statustwo`) VALUES ('" +
 		con.query(
 			"SELECT * FROM notification WHERE userID = " + userID + ";",
 			(err, result, fields) => {
+				if (err) console.log(err);
+				callback(result);
+			}
+		);
+	},
+	removeNotification: function removeNotification(
+		notificationID,
+		userID,
+		callback
+	) {
+		con.query(
+			"DELETE FROM notification WHERE id = " +
+				notificationID +
+				" AND userID = " +
+				userID +
+				";",
+			(err, result, fields) => {
+				if (err) console.log(err);
 				callback(result);
 			}
 		);

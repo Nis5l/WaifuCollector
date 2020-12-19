@@ -773,6 +773,7 @@ class NotificationBox extends HTMLElement {
 
 		this._root = this.attachShadow({ mode: "open" });
 		this.closeCallback = undefined;
+		this.elementCallback = undefined;
 
 		this._root.innerHTML = `
 			<div class="blocker">
@@ -807,6 +808,14 @@ class NotificationBox extends HTMLElement {
 		var ele = this._root.querySelector(".blocker");
 		ele.onclick = (res) => {
 			var cl = res.target.getAttribute("class");
+			var tl = res.target.tagName;
+			if (
+				tl != undefined &&
+				tl == "NOTIFICATION-ELEMENT" &&
+				this.elementCallback != undefined
+			)
+				this.elementCallback(res.target.nId, res.target.url);
+
 			if (cl != undefined && cl == "blocker" && this.closeCallback != undefined)
 				this.closeCallback();
 		};
