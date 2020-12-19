@@ -6,7 +6,7 @@ input[type="search"] {
   border: 2px solid #00ff00;
   width: 70%;
   outline: none;
-  margin-top: 50px;
+  margin-top: 150px;
   padding: 10px 4px;
   margin-left: auto;
   margin-right: auto;
@@ -44,48 +44,6 @@ div#inventory {
   width: 100%;
   height: auto; }
 
-.next {
-  color: black;
-  padding: 10px 30px;
-  padding: 1%;
-  float: right;
-  width: 50px;
-  margin-right: 5%;
-  outline: none;
-  border: 2px solid #00ff00;
-  background-color: #00ff00;
-  border-radius: 25px; }
-  .next:enabled:hover {
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0);
-    transition: background 0.2s ease-in-out; }
-  .next:active {
-    border-color: #ffffff; }
-  .next:disabled {
-    background-color: #202320;
-    border-color: #202320; }
-
-.previous {
-  color: black;
-  padding: 10px 30px;
-  margin-left: 5%;
-  padding: 1%;
-  float: left;
-  outline: none;
-  border: 2px solid #00ff00;
-  width: 50px;
-  background-color: #00ff00;
-  border-radius: 25px; }
-  .previous:enabled:hover {
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0);
-    transition: background 0.2s ease-in-out; }
-  .previous:active {
-    border-color: #ffffff; }
-  .previous:disabled {
-    background-color: #202320;
-    border-color: #202320; }
-
 .page {
   position: relative;
   color: white;
@@ -96,6 +54,46 @@ div#inventory {
   width: 100%;
   text-align: center;
   margin-bottom: 2%; }
+  .page .next {
+    color: black;
+    padding: 10px 30px;
+    padding: 1%;
+    float: right;
+    width: 50px;
+    margin-right: 5%;
+    outline: none;
+    border: 2px solid #00ff00;
+    background-color: #00ff00;
+    border-radius: 25px; }
+    .page .next:enabled:hover {
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0);
+      transition: background 0.2s ease-in-out; }
+    .page .next:active {
+      border-color: #ffffff; }
+    .page .next:disabled {
+      background-color: #202320;
+      border-color: #202320; }
+  .page .previous {
+    color: black;
+    padding: 10px 30px;
+    margin-left: 5%;
+    padding: 1%;
+    float: left;
+    outline: none;
+    border: 2px solid #00ff00;
+    width: 50px;
+    background-color: #00ff00;
+    border-radius: 25px; }
+    .page .previous:enabled:hover {
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0);
+      transition: background 0.2s ease-in-out; }
+    .page .previous:active {
+      border-color: #ffffff; }
+    .page .previous:disabled {
+      background-color: #202320;
+      border-color: #202320; }
   @media screen and (max-width: 1200px) {
     .page {
       font-size: 200%; } }
