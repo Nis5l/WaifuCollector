@@ -350,6 +350,27 @@ module.exports = {
 			}
 		);
 	},
+	isFriendPending: function getFriends(userID, userID2, callback) {
+		con.query(
+			"SELECT * FROM `friend` WHERE (userone = " +
+				userID +
+				" AND usertwo = " +
+				userID2 +
+				") OR (userone = " +
+				userID2 +
+				" AND usertwo = " +
+				userID +
+				");",
+			(err, result, fields) => {
+				if (err) console.log(err);
+				if (result == undefined || result.length == 0) {
+					callback(false);
+					return;
+				}
+				callback(true);
+			}
+		);
+	},
 	getUsers: function getUsers(callback) {
 		con.query(
 			"SELECT id, username AS name, ranking AS rank FROM user",

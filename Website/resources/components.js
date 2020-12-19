@@ -840,6 +840,7 @@ class NotificationElement extends HTMLElement {
 			<style>
 	.box {
 	margin: auto;
+	margin-bottom: 5px;
     width: 95%;
 	height: auto;
     background-color: #1c1e23;

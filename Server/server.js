@@ -835,6 +835,13 @@ function removeTrade(carduuid, mainuuid, callback) {
 					return;
 				}
 				setTrade(ts[iter].userone, ts[iter].usertwo, 0, () => {
+					database.addNotification(
+						ts[iter].usertwo,
+						"Trade Card Removed",
+						"A card got removed from a trade, click to view!",
+						"trade?userID=" + ts[iter].userone,
+						() => {}
+					);
 					run2(iter + 1);
 				});
 			}
@@ -851,6 +858,13 @@ function removeTrade(carduuid, mainuuid, callback) {
 							return;
 						}
 						setTrade(ts2[iter].userone, ts2[iter].usertwo, 0, () => {
+							database.addNotification(
+								ts[iter].usertwo,
+								"Trade Card Removed",
+								"A card got removed from a trade, click to view!",
+								"trade?userID=" + ts[iter].userone,
+								() => {}
+							);
 							run4(iter + 1);
 						});
 					}
@@ -961,12 +975,37 @@ app.post("/addfriend", (req, res) => {
 					res.send({ status: 1, message: "reached max friend count" });
 					return;
 				}
-
-				clients[decoded.id].addFriendRequest(id);
-				database.addFriendRequest(decoded.id, id, () => {
-					res.send({ status: 0 });
-					return;
-				});
+				if (clients[id] != undefined) {
+					if (clients[id].hasFriend(decoded.id)) {
+						res.send({ status: 1, message: "already sent" });
+						return;
+					}
+					run2();
+				} else {
+					database.isFriendPending(decoded.id, id, (b) => {
+						if (b) {
+							res.send({ status: 1, message: "already sent" });
+							return;
+						}
+						run2();
+					});
+				}
+				function run2() {
+					clients[decoded.id].addFriendRequest(id);
+					if (clients[id] != undefined)
+						clients[id].addFriendRequestIncoming(decoded.id);
+					database.addFriendRequest(decoded.id, id, () => {
+						database.addNotification(
+							id,
+							"Friend Request",
+							"You got a new friend request, click to view!",
+							"friends",
+							() => {}
+						);
+						res.send({ status: 0 });
+						return;
+					});
+				}
 			});
 		}
 	} catch (e) {
@@ -1012,7 +1051,16 @@ app.post("/managefriend", (req, res) => {
 					res.send({ status: 1, message: "user not found" });
 					return;
 				}
+				if (clients[userID] != undefined)
+					clients[userID].friendRequestAccepted(decoded.id);
 				database.acceptFriendRequest(userID, decoded.id, () => {
+					database.addNotification(
+						decoded.id,
+						"Friend Accepted",
+						"You friend request got accepted, click to view!",
+						"friends",
+						() => {}
+					);
 					res.send({ status: 0 });
 					return;
 				});
@@ -1021,6 +1069,8 @@ app.post("/managefriend", (req, res) => {
 					res.send({ status: 1, message: "user not found" });
 					return;
 				}
+				if (clients[userID] != undefined)
+					clients[userID].deleteFriend(decoded.id);
 				database.deleteFriend(userID, decoded.id, () => {
 					res.send({ status: 0 });
 					return;
@@ -1203,14 +1253,13 @@ app.post("/addtrade", (req, res) => {
 								console.log(userID);
 								database.addNotification(
 									userID,
-									"New Trade",
-									"You got a New Trade, Click to View",
+									"Trade Changed",
+									"A card got added to the trade, click to view!",
 									"trade?userID=" + decoded.id,
-									() => {
-										res.send({ status: 0 });
-										return;
-									}
+									() => {}
 								);
+								res.send({ status: 0 });
+								return;
 							});
 						});
 					});
@@ -1257,6 +1306,13 @@ app.post("/removetrade", (req, res) => {
 			database.removeTradeUser(cardID, decoded.id, userID, () => {
 				setTrade(decoded.id, userID, 0, () => {
 					setTrade(userID, decoded.id, 0, () => {
+						database.addNotification(
+							userID,
+							"Trade Changed",
+							"A card got removed from the trade, click to view!",
+							"trade?userID=" + decoded.id,
+							() => {}
+						);
 						res.send({ status: 0 });
 					});
 				});
@@ -1317,6 +1373,13 @@ app.post("/okTrade", (req, res) => {
 							transfer(userID, decoded.id, () => {
 								setTrade(decoded.id, userID, 0, () => {
 									setTrade(userID, decoded.id, 0, () => {
+										database.addNotification(
+											userID,
+											"Trade Complete",
+											"A trade has been complete, click to view!",
+											"trade?userID=" + decoded.id,
+											() => {}
+										);
 										res.send({ status: 0 });
 										return;
 									});
@@ -1352,6 +1415,13 @@ app.post("/okTrade", (req, res) => {
 							});
 						}
 					} else {
+						database.addNotification(
+							userID,
+							"Trade Confirmed",
+							"A trade has been confirmed, click to view!",
+							"trade?userID=" + decoded.id,
+							() => {}
+						);
 						res.send({ status: 0 });
 						return;
 					}

@@ -102,13 +102,30 @@ class Client {
 	}
 
 	addFriendRequest(id) {
+		this.startDecay(this.time, this.callback);
 		this.friends.push({ userID: id, friend_status: 1 });
+	}
+
+	addFriendRequestIncoming(id) {
+		this.startDecay(this.time, this.callback);
+		this.friends.push({ userID: id, friend_status: 0 });
 	}
 
 	acceptFriendRequest(id) {
 		this.startDecay(this.time, this.callback);
 		for (var i = 0; i < this.friends.length; i++) {
 			if (this.friends[i].userID == id && this.friends[i].friend_status == 0) {
+				this.friends[i].friend_status = 2;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	friendRequestAccepted(id) {
+		this.startDecay(this.time, this.callback);
+		for (var i = 0; i < this.friends.length; i++) {
+			if (this.friends[i].userID == id) {
 				this.friends[i].friend_status = 2;
 				return true;
 			}
