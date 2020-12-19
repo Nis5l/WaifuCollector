@@ -128,6 +128,47 @@ app.get("/card/:cardID/", function (req, res) {
 	});
 });
 
+app.post("/card/:cardID/update", function(req, res){
+
+	function redirect(res, req, query){
+
+		if(req.query && req.query.redirUrl){
+
+			res.redirect(req.query.redirUrl + "?" + query);
+
+		}else{
+
+			res.redirect("/?" + query);
+
+		}
+
+	}
+
+	var cardID = req.params.cardID;
+	var name = req.body.name;
+	var animeID = req.body.anime;
+
+	var changedName = false;
+	var changedAnimeID = false;
+
+	if(name)
+		changedName = database.updateCardName(cardID, name);
+
+	if(animeID)
+		changedAnimeID = database.updateCardAnime(cardID, animeID);
+
+	if(changedAnimeID != undefined || changedName != undefined){
+
+		redirect(res, req, "status=failed&changedAnimeID=" + changedAnimeID + "&changedName=" + changedName);
+
+	}else{
+
+		redirect(res, req, "status=success");
+
+	}
+
+});
+
 app.get("/display/card/:cardID/", function (req, res) {
 	database.getCardDisplay(req.params.cardID, (card) => {
 		if (card != undefined) {

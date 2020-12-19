@@ -272,7 +272,7 @@ module.exports = {
 	},
 	getCardDisplay: function getCardDisplay(cardID, callback) {
 		con.query(
-			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " +
+			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName, cardtype.id AS animeID FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " +
 				cardID,
 			(err, result, fields) => {
 				callback(result[0]);
@@ -304,6 +304,28 @@ module.exports = {
 		);
 	},
 
+	updateCardName: function(cardID, cardName){
+
+		con.query("UPDATE `card` SET `cardName`=? WHERE `id`=?",
+			[cardName, cardID],
+			(err, result, fields) => {
+
+				return err;
+
+			});
+
+	},
+	updateCardAnime: function(cardID, cardAnime){
+
+		con.query("UPDATE `card` SET `typeID`=? WHERE `id`=?",
+			[cardAnime, cardID],
+			(err, result, fields) => {
+
+				return err;
+
+			});
+
+	},
 	getCardsDisplay: function getCardsDisplay(callback) {
 		con.query(
 			'SELECT card.id AS "cardID", cardName AS "name", cardImage AS "image", cardtype.name AS anime  FROM `card` INNER JOIN cardtype On card.typeID = cardtype.id',
