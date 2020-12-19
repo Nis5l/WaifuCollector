@@ -108,6 +108,7 @@ app.get("/logout", redirectLogin, function (req, res) {
 });
 
 app.get("/login", redirectDashboard, function (req, res) {
+	res.locals.message = req.query.errorMessage;
 	res.render("login", {
 		userID: req.cookies.userID,
 		accepted: req.cookies.accepted,
@@ -217,6 +218,7 @@ app.get("/register", redirectDashboard, function (req, res) {
 */
 
 app.post("/register", redirectDashboard, function (req, res) {
+	res.locals.message = req.query.errorMessage;
 	const { username, password } = req.body;
 
 	if (username && password) {
@@ -256,6 +258,7 @@ app.post("/register", redirectDashboard, function (req, res) {
 });
 
 app.get("/dashboard", redirectLogin, function (req, res) {
+	res.locals.message = req.query.errorMessage;
 	request.post(
 		getHttp() + API_HOST + "/getDashboard",
 		{
@@ -431,7 +434,7 @@ app.get("/pack", redirectLogin, function (req, res) {
 						cards: body.cards,
 					});
 				} else {
-					res.redirect("/dashboard?errorCode=" + body.message);
+					res.redirect("/dashboard?errorMessage=" + body.message);
 				}
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
@@ -530,7 +533,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 	var mainuuid = req.query.mainuuid;
 	var carduuid = req.query.carduuid;
 	if (mainuuid == undefined || carduuid == undefined) {
-		res.redirect("/dashboard");
+		res.redirect("/dashboard?errorMessage='Wrong Data'");
 	}
 
 	request.post(
@@ -706,7 +709,7 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 	var search = req.query.search;
 	var next = req.query.next;
 	if (userID == undefined || isNaN(userID)) {
-		res.redirect("/dashboard");
+		res.redirect("/dashboard?errorMessage='Wrong Data'");
 		return;
 	}
 	if (next == "0") next = 0;

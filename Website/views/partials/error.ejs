@@ -1,0 +1,13 @@
+
+<% if(locals.message) {%>
+<script>
+	const message = "<%- message %>";
+	document.body.insertAdjacentHTML('afterend', `<error-message message="${message}"> </error-message>`);
+	var me = document.querySelector("error-message");
+	
+	me.closeCallback = () => {
+		me.remove();
+		me = undefined;
+	}
+</script>
+<% } %>

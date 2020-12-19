@@ -44,11 +44,11 @@ Fix:
 			Üngültiges Passwort = Seite ladet für immer + keine Abweisende Nachricht
 			Nach Package-Opening Button zum zurückkehren
 	Mehrere Tabs reloaden = Accountwechsel zu gleichen Account
-	Cache saves website and reloads dont work
-	Friend add twice
+	Not sure: Cache saves website and reloads dont work
+		Friend add twice
 	First user pack bug
 			Cookie
 			Upgrade Itself
-	Trade Notification
-	Friend Notification
+		Trade Notification
+		Friend Notification
 		Beim Cardtrading, add card( keine karte zur auswahl == Stuck im auswahlscreen

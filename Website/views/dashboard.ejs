@@ -13,6 +13,7 @@
 
     <body class="scrollable">
 
+
         <%- include('partials/nav.ejs') %>
 
         <div class="wrapper">
@@ -92,12 +93,13 @@
             <% } %>
 
             <script>
-                
+               	
+				var me = undefined;
                 window.onmousedown = function(e) {
                     const el = document.querySelector('progress-ring');
                     x = e.pageX;
                     y = e.pageY;
-                    if (nb == undefined && el.isClicked(x,y)) {
+                    if (nb == undefined && me == undefined && el.isClicked(x,y)) {
                         var form = document.createElement('form');
                         document.body.appendChild(form);
                         form.method = 'get';
@@ -122,7 +124,6 @@
 			</script>-->
             
             <script>
-                //;
                 $(".inventory").click(()=>{
                     $(".inventory").css("background-color", "rgba(255, 255, 255, 0.1)")
                     var form = document.createElement('form');
@@ -140,8 +141,10 @@
                     form.submit();
                 });
             </script>
-        <script src="../resources/components.js"></script>
 
+		<script src="../resources/components.js"></script>
+
+        <%- include('partials/error.ejs') %>
     </body>
 
 </html>

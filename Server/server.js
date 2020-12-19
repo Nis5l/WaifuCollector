@@ -387,8 +387,6 @@ app.post("/pack", (req, res) => {
 			var date = moment(nowDate).add(packCooldown, "seconds");
 			var packDate = moment(parseInt(clients[decoded.id].packTime));
 
-			console.log(clients[decoded.id].packTime);
-
 			if (
 				clients[decoded.id] == null ||
 				clients[decoded.id].packTime == "null" ||

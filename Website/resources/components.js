@@ -28,7 +28,9 @@ class ProgressRing extends HTMLElement {
            cx= 50%
            cy= 50%
         />
-        <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">${time}</text>
+        <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">${
+					this.time
+				}</text>
       </svg>
       
       <style>
@@ -107,8 +109,10 @@ class ProgressRing extends HTMLElement {
 		const ret =
 			Math.sqrt((circleX - x) * (circleX - x) + (circleY - y) * (circleY - y)) <
 			this.radius;
-		if (ret) circle.style.fillOpacity = "0.5";
-		if (ret) return ret;
+		if (ret) {
+			circle.style.fillOpacity = "0.5";
+			return ret;
+		}
 	}
 }
 
@@ -876,6 +880,52 @@ class NotificationElement extends HTMLElement {
 	}
 }
 
+class ErrorMessage extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({ mode: "open" });
+		this.closeCallback = "sdf";
+		const message = this.getAttribute("message");
+
+		this._root.innerHTML = `
+			<div class="box">
+				<div class="header">
+					Error
+				</div>
+				${message}
+			</div>
+			<style>
+	.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+	color: white;
+    transform: translate(-50%, -50%);
+    background-color: #25282f;
+    padding: 10px;
+	height: 300px;
+	z-index: 1000;
+    text-align: center; }
+	.box .header {
+		font-size: 18pt;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		margin-bottom: 5px;
+		color: white;
+		border-bottom: 1px solid white;
+	}
+	</style>
+    `;
+
+		var ele = this._root.querySelector(".box");
+		ele.onclick = () => {
+			if (this.closeCallback != undefined) this.closeCallback();
+		};
+	}
+}
+
 var script = document.createElement("script");
 script.src = "https://code.jquery.com/jquery-3.4.1.min.js";
 script.type = "text/javascript";
@@ -890,3 +940,4 @@ window.customElements.define("friend-selection", FriendSelection);
 window.customElements.define("cookie-confirmation", CookieConfirmation);
 window.customElements.define("notification-box", NotificationBox);
 window.customElements.define("notification-element", NotificationElement);
+window.customElements.define("error-message", ErrorMessage);
