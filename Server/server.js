@@ -49,191 +49,123 @@ app.get("/", function (req, res) {
 	res.send("WaifuCollector");
 });
 
-app.get("/cards", function(req, res){
-
+app.get("/cards", function (req, res) {
 	database.getCards((cards) => {
-
-		if(cards != undefined){
-
-			res.send({status: 1, cards: cards});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (cards != undefined) {
+			res.send({ status: 1, cards: cards });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/cards/export", function(req, res){
-
+app.get("/cards/export", function (req, res) {
 	database.getCards((cards) => {
-
 		var fileContent = "";
 
-		if(cards != undefined){
-
-			cards.forEach(function(card){
-
-				if(card != undefined){
-
-					fileContent += card['cardName'] + "," + card['typeID'] + "," + card['cardImage'] + "\n";
-
+		if (cards != undefined) {
+			cards.forEach(function (card) {
+				if (card != undefined) {
+					fileContent +=
+						card["cardName"] +
+						"," +
+						card["typeID"] +
+						"," +
+						card["cardImage"] +
+						"\n";
 				}
-
 			});
-
 		}
 
 		res.set("content-type", "text/csv");
 		res.set("Content-Disposition", "attachment; filename=card_export.csv");
 
 		res.send(fileContent);
-
 	});
-
 });
 
-app.post("/cards/import", function(req, res){
-
-	try{
-
-		if(!req.files || !req.files.cardCSV){
-
-			res.send({status: 0, message: "No file uploaded!"});
+app.post("/cards/import", function (req, res) {
+	try {
+		if (!req.files || !req.files.cardCSV) {
+			res.send({ status: 0, message: "No file uploaded!" });
 			return;
-
 		}
 
 		let file = req.files.cardCSV;
 
-		var data = file.data.toString('utf8');
+		var data = file.data.toString("utf8");
 
 		var dataArray = csv.parse(data);
 
-		dataArray.forEach(function(card){
-
-			database.registerCard(card[0], card[1], card[2], (result) =>{
-
-				if(!result){
-
+		dataArray.forEach(function (card) {
+			database.registerCard(card[0], card[1], card[2], (result) => {
+				if (!result) {
 					console.log("Couldn't register " + card[0] + "!");
-
 				}
-
 			});
-
 		});
 
-		if(req.query && req.query.redirUrl){
-
+		if (req.query && req.query.redirUrl) {
 			res.redirect(req.query.redirUrl);
 			return;
-
 		}
 
 		res.redirect("/");
-
-	}catch(err){
-
-		res.send({status:0});
+	} catch (err) {
+		res.send({ status: 0 });
 
 		console.log(err);
-
 	}
-
 });
 
-app.get("/card/:cardID/", function(req, res){
-
+app.get("/card/:cardID/", function (req, res) {
 	database.getCard(req.params.cardID, (card) => {
-
-		if(card != undefined){
-
-			res.send({status: 1, card: card});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (card != undefined) {
+			res.send({ status: 1, card: card });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/display/card/:cardID/", function(req, res){
-
+app.get("/display/card/:cardID/", function (req, res) {
 	database.getCardDisplay(req.params.cardID, (card) => {
-
-		if(card != undefined){
-
-			res.send({status: 1, card: card});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (card != undefined) {
+			res.send({ status: 1, card: card });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/display/cards", function(req, res){
-
+app.get("/display/cards", function (req, res) {
 	database.getCardsDisplay((cards) => {
-
-		if(cards != undefined){
-
-			res.send({status: 1, cards: cards});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (cards != undefined) {
+			res.send({ status: 1, cards: cards });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/animes", function(req, res){
-
+app.get("/animes", function (req, res) {
 	database.getAnimes((animes) => {
-
-		if(animes != undefined){
-
-			res.send({status: 1, animes: animes});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (animes != undefined) {
+			res.send({ status: 1, animes: animes });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
-app.get("/users", function(req, res){
-
+app.get("/users", function (req, res) {
 	database.getUsers((users) => {
-
-		if(users != undefined){
-
-			res.send({status: 1, users: users});
-
-		}else{
-
-			res.send({status: 0});
-
+		if (users != undefined) {
+			res.send({ status: 1, users: users });
+		} else {
+			res.send({ status: 0 });
 		}
-
 	});
-
 });
 
 app.get("/:id/rank", function (req, res) {
@@ -257,6 +189,30 @@ app.get("/:id/rank", function (req, res) {
 		res.send({
 			status: 0,
 			message: "Missing userID given",
+		});
+	}
+});
+
+app.post("/notifications", (req, res) => {
+	var token = req.body.token;
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({ status: 2, message: "Identification Please" });
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		clients[decoded.id].refresh();
+		run(decoded.id);
+	}
+
+	function run() {
+		database.getNotifications(decoded.id, (result) => {
+			res.send({ status: 0, data: result });
+			return;
 		});
 	}
 });
@@ -820,8 +776,6 @@ app.post("/upgrade", (req, res) => {
 
 					var succes = true;
 					var r = utils.getRandomInt(0, 100);
-					console.log(chance);
-					console.log(r);
 					if (r > chance) succes = false;
 
 					var newlevel = 0;
@@ -881,6 +835,13 @@ function removeTrade(carduuid, mainuuid, callback) {
 					return;
 				}
 				setTrade(ts[iter].userone, ts[iter].usertwo, 0, () => {
+					database.addNotification(
+						ts[iter].usertwo,
+						"Trade Card Removed",
+						"A card got removed from a trade, click to view!",
+						"trade?userID=" + ts[iter].userone,
+						() => {}
+					);
 					run2(iter + 1);
 				});
 			}
@@ -897,6 +858,13 @@ function removeTrade(carduuid, mainuuid, callback) {
 							return;
 						}
 						setTrade(ts2[iter].userone, ts2[iter].usertwo, 0, () => {
+							database.addNotification(
+								ts[iter].usertwo,
+								"Trade Card Removed",
+								"A card got removed from a trade, click to view!",
+								"trade?userID=" + ts[iter].userone,
+								() => {}
+							);
 							run4(iter + 1);
 						});
 					}
@@ -1007,12 +975,37 @@ app.post("/addfriend", (req, res) => {
 					res.send({ status: 1, message: "reached max friend count" });
 					return;
 				}
-
-				clients[decoded.id].addFriendRequest(id);
-				database.addFriendRequest(decoded.id, id, () => {
-					res.send({ status: 0 });
-					return;
-				});
+				if (clients[id] != undefined) {
+					if (clients[id].hasFriend(decoded.id)) {
+						res.send({ status: 1, message: "already sent" });
+						return;
+					}
+					run2();
+				} else {
+					database.isFriendPending(decoded.id, id, (b) => {
+						if (b) {
+							res.send({ status: 1, message: "already sent" });
+							return;
+						}
+						run2();
+					});
+				}
+				function run2() {
+					clients[decoded.id].addFriendRequest(id);
+					if (clients[id] != undefined)
+						clients[id].addFriendRequestIncoming(decoded.id);
+					database.addFriendRequest(decoded.id, id, () => {
+						database.addNotification(
+							id,
+							"Friend Request",
+							"You got a new friend request, click to view!",
+							"friends",
+							() => {}
+						);
+						res.send({ status: 0 });
+						return;
+					});
+				}
 			});
 		}
 	} catch (e) {
@@ -1058,7 +1051,16 @@ app.post("/managefriend", (req, res) => {
 					res.send({ status: 1, message: "user not found" });
 					return;
 				}
+				if (clients[userID] != undefined)
+					clients[userID].friendRequestAccepted(decoded.id);
 				database.acceptFriendRequest(userID, decoded.id, () => {
+					database.addNotification(
+						decoded.id,
+						"Friend Accepted",
+						"You friend request got accepted, click to view!",
+						"friends",
+						() => {}
+					);
 					res.send({ status: 0 });
 					return;
 				});
@@ -1067,6 +1069,8 @@ app.post("/managefriend", (req, res) => {
 					res.send({ status: 1, message: "user not found" });
 					return;
 				}
+				if (clients[userID] != undefined)
+					clients[userID].deleteFriend(decoded.id);
 				database.deleteFriend(userID, decoded.id, () => {
 					res.send({ status: 0 });
 					return;
@@ -1246,7 +1250,16 @@ app.post("/addtrade", (req, res) => {
 					database.addTrade(decoded.id, userID, cardID, () => {
 						setTrade(decoded.id, userID, 0, () => {
 							setTrade(userID, decoded.id, 0, () => {
+								console.log(userID);
+								database.addNotification(
+									userID,
+									"Trade Changed",
+									"A card got added to the trade, click to view!",
+									"trade?userID=" + decoded.id,
+									() => {}
+								);
 								res.send({ status: 0 });
+								return;
 							});
 						});
 					});
@@ -1293,6 +1306,13 @@ app.post("/removetrade", (req, res) => {
 			database.removeTradeUser(cardID, decoded.id, userID, () => {
 				setTrade(decoded.id, userID, 0, () => {
 					setTrade(userID, decoded.id, 0, () => {
+						database.addNotification(
+							userID,
+							"Trade Changed",
+							"A card got removed from the trade, click to view!",
+							"trade?userID=" + decoded.id,
+							() => {}
+						);
 						res.send({ status: 0 });
 					});
 				});
@@ -1353,6 +1373,13 @@ app.post("/okTrade", (req, res) => {
 							transfer(userID, decoded.id, () => {
 								setTrade(decoded.id, userID, 0, () => {
 									setTrade(userID, decoded.id, 0, () => {
+										database.addNotification(
+											userID,
+											"Trade Complete",
+											"A trade has been complete, click to view!",
+											"trade?userID=" + decoded.id,
+											() => {}
+										);
 										res.send({ status: 0 });
 										return;
 									});
@@ -1388,10 +1415,54 @@ app.post("/okTrade", (req, res) => {
 							});
 						}
 					} else {
+						database.addNotification(
+							userID,
+							"Trade Confirmed",
+							"A trade has been confirmed, click to view!",
+							"trade?userID=" + decoded.id,
+							() => {}
+						);
 						res.send({ status: 0 });
 						return;
 					}
 				});
+			});
+		}
+	} catch (e) {
+		console.log(e);
+		res.send({ status: 0, message: "internal server error" });
+		return;
+	}
+});
+
+app.post("/deleteNotification", (req, res) => {
+	try {
+		var token = req.body.token;
+		var notificationID = req.body.notificationID;
+		var notificationID = parseInt(notificationID);
+
+		if (isNaN(notificationID)) {
+			res.send({ status: 1, message: "not a notificationID" });
+			return;
+		}
+
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({ status: 1, message: "Identification Please" });
+			return;
+		}
+
+		if (clients[decoded.id] == undefined) {
+			createCache(decoded.id, decoded.username, run);
+		} else {
+			clients[decoded.id].refresh();
+			run();
+		}
+
+		function run() {
+			database.removeNotification(notificationID, decoded.id, () => {
+				res.send({ status: 0 });
 			});
 		}
 	} catch (e) {

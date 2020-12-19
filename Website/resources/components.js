@@ -767,6 +767,115 @@ class CookieConfirmation extends HTMLElement {
 	}
 }
 
+class NotificationBox extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({ mode: "open" });
+		this.closeCallback = undefined;
+		this.elementCallback = undefined;
+
+		this._root.innerHTML = `
+			<div class="blocker">
+				<div class="box">
+					<div class="header">
+						Notifications
+					</div>
+				</div>
+            </div>
+			<style>
+	.blocker {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100%;
+		height: 100%;
+		z-index: 1000;
+		background-color: rgba(50, 50, 50, 0.5);
+	}
+	.blocker .box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    transform: translate(-50%, -50%);
+    background-color: #25282f;
+    padding: 10px;
+	height: 90%;
+	z-index: 1001;
+    text-align: center; }
+	.blocker .box .header {
+		font-size: 18pt;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		margin-bottom: 5px;
+		color: white;
+		border-bottom: 1px solid white;
+	}
+	</style>
+    `;
+
+		var ele = this._root.querySelector(".blocker");
+		ele.onclick = (res) => {
+			var cl = res.target.getAttribute("class");
+			var tl = res.target.tagName;
+			if (
+				tl != undefined &&
+				tl == "NOTIFICATION-ELEMENT" &&
+				this.elementCallback != undefined
+			)
+				this.elementCallback(res.target.nId, res.target.url);
+
+			if (cl != undefined && cl == "blocker" && this.closeCallback != undefined)
+				this.closeCallback();
+		};
+	}
+}
+
+class NotificationElement extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({ mode: "open" });
+		this.title = this.getAttribute("title");
+		this.message = this.getAttribute("message");
+		this.url = this.getAttribute("url");
+		this.nId = this.getAttribute("nId");
+
+		this._root.innerHTML = `
+            <div class="box">
+				<div class="title">${this.title}</div>
+				<div class="message">${this.message}</div>
+            </div>
+			<style>
+	.box {
+	margin: auto;
+	margin-bottom: 5px;
+    width: 95%;
+	height: auto;
+    background-color: #1c1e23;
+    padding: 20px;
+	z-index: 1001;
+	border: 1px solid white;
+    text-align: center; }
+	.box .title {
+		font-size: 18pt;
+		padding: 10px;
+		padding-bottom: 20px;
+		color: white;
+		border-bottom: 1px solid white;
+	}
+	.box .message {
+		font-size: 12pt;
+		padding-top: 20px;
+		color: white;
+	}
+	</style>
+    `;
+	}
+}
+
 var script = document.createElement("script");
 script.src = "https://code.jquery.com/jquery-3.4.1.min.js";
 script.type = "text/javascript";
@@ -779,3 +888,5 @@ window.customElements.define("add-friend", AddFriend);
 window.customElements.define("friend-card", Friend);
 window.customElements.define("friend-selection", FriendSelection);
 window.customElements.define("cookie-confirmation", CookieConfirmation);
+window.customElements.define("notification-box", NotificationBox);
+window.customElements.define("notification-element", NotificationElement);

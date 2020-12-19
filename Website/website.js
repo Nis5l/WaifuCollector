@@ -17,8 +17,8 @@ const app = express();
 
 app.set("view engine", "ejs");
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
@@ -72,24 +72,16 @@ const redirectDashboard = (req, res, next) => {
 };
 
 const redirectIfNotAdmin = (req, res, next) => {
-	
 	redirectLogin(req, res, () => {
-
 		getRankID(req.cookies.userID, (rankID) => {
-
-			if(rankID != undefined && rankID == 1){
-
+			if (rankID != undefined && rankID == 1) {
 				next();
 				return;
-
 			}
 
 			res.redirect("/dashboard");
-
 		});
-
 	});
-
 };
 
 app.use(
@@ -283,12 +275,10 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 			}
 
-			if(body == undefined){
-
+			if (body == undefined) {
 				res.redirect(
 					"/login?errorCode=" + body.status + "&errorMessage=BodyUndefined"
 				);
-
 			}
 
 			if (body.status == 0) {
@@ -318,120 +308,103 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 	);
 });
 
-app.get("/adminpanel", redirectIfNotAdmin, function(req, res){
-
+app.get("/adminpanel", redirectIfNotAdmin, function (req, res) {
 	res.render("adminpanel/adminpanel");
-
 });
 
-app.get("/adminpanel/cards", redirectIfNotAdmin, function(req, response){
+app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/display/cards",
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	request.get({
-		url: getHttp() + API_HOST + "/display/cards",
-	}, function (err, res) {
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					response.render("adminpanel/adminpanel_cards", { cards: data.cards });
 
-		var data = JSON.parse(res.body);
-
-		if(data.status != undefined){
-
-			if(data.status == 1){
-
-				response.render("adminpanel/adminpanel_cards", {cards: data.cards});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
-app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, function(req, response){
-
+app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, function (
+	req,
+	response
+) {
 	var cardID = req.params.cardID;
 
-	request.get({
-		url: getHttp() + API_HOST + "/display/card/" + cardID,
-	}, function (err, res) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/display/card/" + cardID,
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-		var data = JSON.parse(res.body);
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					var card = data.card;
 
-		if(data.status != undefined){
+					card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
 
-			if(data.status == 1){
+					response.render("adminpanel/adminpanel_card_edit", { card: card });
 
-				var card = data.card;
-
-				card['image'] = getHttp() + API_HOST + "/Card/" + card['image']; 
-
-				response.render("adminpanel/adminpanel_card_edit", {card: card});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
-app.get("/adminpanel/anime", redirectIfNotAdmin, function(req, response){
+app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/animes",
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	request.get({
-		url: getHttp() + API_HOST + "/animes",
-	}, function (err, res) {
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					response.render("adminpanel/adminpanel_anime", {
+						animes: data.animes,
+					});
 
-		var data = JSON.parse(res.body);
-
-		if(data.status != undefined){
-
-			if(data.status == 1){
-
-				response.render("adminpanel/adminpanel_anime", {animes: data.animes});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
-app.get("/adminpanel/users", redirectIfNotAdmin, function(req, response){
+app.get("/adminpanel/users", redirectIfNotAdmin, function (req, response) {
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/users",
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	request.get({
-		url: getHttp() + API_HOST + "/users",
-	}, function (err, res) {
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					response.render("adminpanel/adminpanel_users", { users: data.users });
 
-		var data = JSON.parse(res.body);
-
-		if(data.status != undefined){
-
-			if(data.status == 1){
-
-				response.render("adminpanel/adminpanel_users", {users: data.users});
-
-				return;
-
+					return;
+				}
 			}
 
+			response.redirect("/dashboard");
 		}
-
-		response.redirect("/dashboard");
-
-	});
-
+	);
 });
 
 app.get("/settings", redirectLogin, function (req, res) {
@@ -824,6 +797,37 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 	);
 });
 
+app.get("/redirect", redirectLogin, function (req, res) {
+	var url = req.query.url;
+	var nId = req.query.notificationID;
+	var nId = parseInt(nId);
+
+	if (url == undefined || isNaN(nId)) {
+		res.redirect("/dashboard");
+		return;
+	}
+
+	request.post(
+		getHttp() + API_HOST + "/deleteNotification",
+		{
+			json: {
+				token: req.cookies.token,
+				notificationID: nId,
+			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect(url);
+			} else {
+				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
 function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
@@ -836,8 +840,7 @@ app.listen(port, function () {
 	console.log("Server started at port %s", port);
 });
 
-function renderUserView(req, res, next){
-
+function renderUserView(req, res, next) {
 	var userID = undefined;
 
 	res.locals.url = getHttp() + req.get("host");
@@ -846,49 +849,63 @@ function renderUserView(req, res, next){
 	res.locals.userID = userID;
 
 	getRankID(userID, (rankID) => {
+		getNotifications(req.cookies.token, (data) => {
+			res.locals.rankID = rankID;
+			res.locals.notifications = data;
 
-		res.locals.rankID = rankID;
-
-		next();
-
-	})
-
+			next();
+		});
+	});
 }
 
-function getRankID(userID, callback){
+function getRankID(userID, callback) {
+	if (userID != undefined) {
+		request.get(
+			{
+				url: getHttp() + API_HOST + "/" + userID + "/rank",
+			},
+			function (err, res) {
+				if (res != undefined) {
+					if (res.body != undefined) {
+						var data = JSON.parse(res.body);
 
-	if(userID != undefined){
-	
-		request.get({
-			url: getHttp() + API_HOST + "/" + userID + "/rank",
-		}, function (err, res) {
-
-			if(res != undefined){
-
-				if(res.body != undefined){
-
-					var data = JSON.parse(res.body);
-
-					if(data.status != undefined){
-
-						if(data.status == 1){
-
-							callback(data.rankID);
-							return;
-
+						if (data.status != undefined) {
+							if (data.status == 1) {
+								callback(data.rankID);
+								return;
+							}
 						}
-
 					}
-
 				}
 
+				callback(undefined);
 			}
+		);
+	} else callback(undefined);
+}
 
-			callback(undefined);
+function getNotifications(token, callback) {
+	if (token != undefined) {
+		request.post(
+			getHttp() + API_HOST + "/notifications",
+			{
+				json: {
+					token: token,
+				},
+				rejectUnauthorized: false,
+				requestCert: false,
+				agent: false,
+			},
+			(err, res, body) => {
+				if (body.status != undefined) {
+					if (body.status == 0) {
+						callback(body.data);
+						return;
+					}
+				}
 
-		});
-
-	}else
-		callback(undefined);
-
+				callback(undefined);
+			}
+		);
+	} else callback(undefined);
 }

@@ -28,7 +28,7 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `friend_status` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `friendnotification` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
 		];
 
 		con.connect(() => {
@@ -262,22 +262,18 @@ module.exports = {
 		con.query(
 			"SELECT * FROM card WHERE id=" + cardID,
 			(err, result, fields) => {
-
-				if(result != undefined){
-
+				if (result != undefined) {
 					callback(result[0]);
-
-				}else{
-
+				} else {
 					callback(undefined);
-
 				}
 			}
 		);
 	},
 	getCardDisplay: function getCardDisplay(cardID, callback) {
 		con.query(
-			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " + cardID,
+			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " +
+				cardID,
 			(err, result, fields) => {
 				callback(result[0]);
 			}
@@ -293,29 +289,28 @@ module.exports = {
 		);
 	},
 
-	registerCard: function registerCard(name, typeID, image, callback){
-
-		con.query("INSERT INTO `card` (`cardName`, `typeID`, `cardImage`) VALUES (?, ?, ?)",
+	registerCard: function registerCard(name, typeID, image, callback) {
+		con.query(
+			"INSERT INTO `card` (`cardName`, `typeID`, `cardImage`) VALUES (?, ?, ?)",
 			[name, typeID, image],
-			(err, result, fields) =>{
-				
-				if(!err){
-
+			(err, result, fields) => {
+				if (!err) {
 					callback(true);
 					return;
-
 				}
 
 				callback(false);
-
-			});
-
+			}
+		);
 	},
 
 	getCardsDisplay: function getCardsDisplay(callback) {
-		con.query('SELECT card.id AS "cardID", cardName AS "name", cardImage AS "image", cardtype.name AS anime  FROM `card` INNER JOIN cardtype On card.typeID = cardtype.id', (err, result, fields) => {
-			callback(result);
-		});
+		con.query(
+			'SELECT card.id AS "cardID", cardName AS "name", cardImage AS "image", cardtype.name AS anime  FROM `card` INNER JOIN cardtype On card.typeID = cardtype.id',
+			(err, result, fields) => {
+				callback(result);
+			}
+		);
 	},
 	getCards: function getCards(callback) {
 		con.query("SELECT * FROM card", (err, result, fields) => {
@@ -355,11 +350,31 @@ module.exports = {
 			}
 		);
 	},
+	isFriendPending: function getFriends(userID, userID2, callback) {
+		con.query(
+			"SELECT * FROM `friend` WHERE (userone = " +
+				userID +
+				" AND usertwo = " +
+				userID2 +
+				") OR (userone = " +
+				userID2 +
+				" AND usertwo = " +
+				userID +
+				");",
+			(err, result, fields) => {
+				if (err) console.log(err);
+				if (result == undefined || result.length == 0) {
+					callback(false);
+					return;
+				}
+				callback(true);
+			}
+		);
+	},
 	getUsers: function getUsers(callback) {
 		con.query(
 			"SELECT id, username AS name, ranking AS rank FROM user",
 			function (err, result, fields) {
-
 				if (result == undefined) {
 					callback(undefined);
 					return;
@@ -586,56 +601,54 @@ module.exports = {
 			}
 		);
 	},
-	getFriendNotification: function getFriendNotification(
-		userone,
-		usertwo,
+	addNotification: function addNotification(
+		userID,
+		title,
+		message,
+		url,
 		callback
 	) {
+		//"INSERT INTO `trademanager` (`userone`, `usertwo`, `statusone`, `statustwo`) VALUES ('" +
 		con.query(
-			"SELECT statusone FROM friendnotification WHERE userone = " +
-				userone +
-				" AND usertwo = " +
-				usertwo,
+			"INSERT INTO notification (`userID`, `title`, `message`, `url`) VALUES ('" +
+				userID +
+				"', '" +
+				title +
+				"', '" +
+				message +
+				"', '" +
+				url +
+				"');",
 			(err, result, fields) => {
 				if (err) console.log(err);
-				if (result != undefined && result.length > 0) {
-					callback(result[0].statusone);
-					return;
-				}
-				con.query(
-					"SELECT statustwo FROM friendnotification WHERE usertwo = " +
-						userone +
-						" AND userone = " +
-						usertwo,
-					(err, result, fields) => {
-						if (err) console.log(err);
-						if (result != undefined && result.length > 0) {
-							callback(result[0].statustwo);
-							return;
-						}
-						callback(0);
-						return;
-					}
-				);
+				callback(result);
 			}
 		);
 	},
-	friendNotificationExists: function friendNotificationExists(
-		userone,
-		usertwo,
+	getNotifications: function getNotifications(userID, callback) {
+		con.query(
+			"SELECT * FROM notification WHERE userID = " + userID + ";",
+			(err, result, fields) => {
+				if (err) console.log(err);
+				callback(result);
+			}
+		);
+	},
+	removeNotification: function removeNotification(
+		notificationID,
+		userID,
 		callback
 	) {
 		con.query(
-			"SELECT statusone FROM friendnotification WHERE (userone = " +
-				userone +
-				" AND usertwo = " +
-				usertwo +
-				") OR (userone = " +
-				usertwo +
-				" AND usertwo = " +
-				userone +
-				");",
-			(err, result, fields) => {}
+			"DELETE FROM notification WHERE id = " +
+				notificationID +
+				" AND userID = " +
+				userID +
+				";",
+			(err, result, fields) => {
+				if (err) console.log(err);
+				callback(result);
+			}
 		);
 	},
 };

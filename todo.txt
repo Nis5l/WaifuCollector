@@ -1,5 +1,19 @@
 Waifus:
-	rias
+	rias remori
+	asia agento
+	gurren jagann logo
+	hinata
+	erza fairytail
+	asuna
+	rent a girlfriend
+	azur lane
+	rin tosaka
+	misa aname
+	shinoa seraph
+	nezuko
+	saber fate
+	shisu the time i got reincarnated as a slime
+	
 		Aqua
 		Akame
 		mine
@@ -35,5 +49,5 @@ Fix:
 			Cookie
 			Upgrade Itself
 	Trade Notification
-	Frined Notification
-	Beim Carttrading, add cart( keine karte zur auswahl == Stuck im auswahlscreen
+	Friend Notification
+		Beim Cardtrading, add card( keine karte zur auswahl == Stuck im auswahlscreen
