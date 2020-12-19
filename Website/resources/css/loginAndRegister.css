@@ -15,7 +15,7 @@
       color: white;
       display: block; }
     .content .card input[type="text"], .content .card input[type="password"] {
-      color: #fff;
+      color: #0a0909;
       background: none;
       display: block;
       text-align: center;
@@ -26,7 +26,7 @@
       padding: 10px 4px;
       border-radius: 25px; }
       .content .card input[type="text"]:hover, .content .card input[type="password"]:hover {
-        border-color: #00ff00;
+        border-color: #f7f7f7;
         transition: border 0.2s ease-in-out; }
     .content .card .wrong {
       border-color: red !important; }
@@ -34,11 +34,11 @@
       color: black;
       padding: 10px 30px;
       margin: auto;
-      border: 2px solid #00ff00;
-      background-color: #00ff00;
+      border: 2px solid #f7f7f7;
+      background-color: #f7f7f7;
       border-radius: 25px; }
       .content .card input[type="submit"]:enabled:hover {
-        color: #fff;
+        color: #0a0909;
         background-color: rgba(0, 0, 0, 0);
         transition: background 0.2s ease-in-out; }
       .content .card input[type="submit"]:disabled {
