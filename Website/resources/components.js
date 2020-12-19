@@ -778,6 +778,9 @@ class NotificationBox extends HTMLElement {
 		this._root.innerHTML = `
 			<div class="blocker">
 				<div class="box">
+					<div class="header">
+						Notifications
+					</div>
 				</div>
             </div>
 			<style>
@@ -802,6 +805,14 @@ class NotificationBox extends HTMLElement {
 	height: 90%;
 	z-index: 1001;
     text-align: center; }
+	.blocker .box .header {
+		font-size: 18pt;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		margin-bottom: 5px;
+		color: white;
+		border-bottom: 1px solid white;
+	}
 	</style>
     `;
 
