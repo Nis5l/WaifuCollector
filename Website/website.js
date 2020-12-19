@@ -333,34 +333,49 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 	);
 });
 
-app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, function (
-	req,
-	response
-) {
+app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, async function (req,response) {
+
+	function jsonToArray(dataString){
+
+		var data = JSON.parse(dataString);
+
+		if (data.status != undefined) {
+			if (data.status == 1) {
+				
+				return data;
+
+			}
+		}
+
+		return undefined;
+
+	}
+
 	var cardID = req.params.cardID;
 
-	request.get(
-		{
-			url: getHttp() + API_HOST + "/display/card/" + cardID,
-		},
-		function (err, res) {
-			var data = JSON.parse(res.body);
+	var cardData = jsonToArray(await getPageBody(getHttp() + API_HOST + "/display/card/" + cardID));
 
-			if (data.status != undefined) {
-				if (data.status == 1) {
-					var card = data.card;
+	if(cardData == undefined){
 
-					card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
+		response.redirect("/dashboard");
+		return;
 
-					response.render("adminpanel/adminpanel_card_edit", { card: card });
+	}
 
-					return;
-				}
-			}
+	var card = cardData.card;
+	card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
 
-			response.redirect("/dashboard");
-		}
-	);
+	var animeData = jsonToArray(await getPageBody(getHttp() + API_HOST + "/animes"));
+
+	if(animeData == undefined){
+
+		response.render("adminpanel/adminpanel_card_edit", { card: card, animes: undefined});
+		return;
+
+	}
+
+	response.render("adminpanel/adminpanel_card_edit", { card: card, animes: animeData.animes});
+
 });
 
 app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
@@ -844,6 +859,7 @@ function renderUserView(req, res, next) {
 	var userID = undefined;
 
 	res.locals.url = getHttp() + req.get("host");
+	res.locals.api_url = getHttp() + API_HOST;
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;
@@ -908,4 +924,18 @@ function getNotifications(token, callback) {
 			}
 		);
 	} else callback(undefined);
+}
+
+function getPageBody(url){
+
+	return new Promise((resolve, reject) => {
+		request(url, (error, response, body) => {
+			if (error) reject(error);
+			if (response.statusCode != 200) {
+				reject('Invalid status code <' + response.statusCode + '>');
+			}
+			resolve(body);
+		});
+	});
+
 }

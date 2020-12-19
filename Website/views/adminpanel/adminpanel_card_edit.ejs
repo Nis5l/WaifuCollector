@@ -63,8 +63,41 @@
 
                             <div class="grid_6" style="margin-top: 10px;">
 
-                                <input class="grid_6" type="text" value="<%= card['name'] %>" name="name">
-                                <input class="grid_3" type="submit" name="submit" style="margin: 0;">
+                                <form action="<%= api_url %>/card/<%= card['id'] %>/update?redirUrl=<%= url %>/adminpanel/card/<%= card['id'] %>/edit" method="POST" enctype="multipart/form-data">
+
+                                    <input class="grid_6" type="text" value="<%= card['name'] %>" name="name">
+
+                                    <% if(animes != undefined){ %>
+
+                                        <select class="grid_6 clearme" name="anime" style="margin-top: 10px;">
+
+                                            <% animes.forEach(function(anime){
+
+                                                var selected = "";
+
+                                                if(anime['id'] == card['animeID'])
+                                                    selected = 'selected="selected"';
+
+                                                %>
+
+                                                <option value="<%= anime['id'] %>" <%= selected %>><%= anime['name'] %></option>
+
+                                            <% }); %>
+
+                                        </select>
+
+                                    <% } %>
+                                    
+                                    <div class="grid_4 clearme" style="margin-top: 10px;">
+
+                                        <label>Change Image</label>
+                                        <input type="file" name="image" style="margin-top: 5px;" />
+
+                                    </div>
+
+                                    <input class="grid_3 clearme" type="submit" name="submit" style="margin: 10px 0px;" value="Update">
+
+                                </form>
 
                             </div>
 

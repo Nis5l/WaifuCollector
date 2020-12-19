@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="<%= url %>/resources/css/adminpanel.css">
         <link rel="stylesheet" href="<%= url %>/resources/css/adminpanel_sidebar.css">
 
+        <link rel="stylesheet" href="<%= url %>/resources/css/forms.css">
+
         <style>
 
             .nav{
@@ -43,6 +45,15 @@
         </div>
 
         <div class="adminpanel_content">
+
+            <div class="grid_12" style="margin-bottom: 10px">
+
+                <a class="button grid_1" href="<%= api_url %>/cards/export">Export</a>
+                <a class="button grid_1" href="?status=no_lol" style="margin-left: 10px;">Import</a>
+
+                <a class="button button2 clearme grid_1" href="?status=no_lol" style="margin-top: 10px;">New</a>
+
+            </div>
 
             <% if(cards != undefined){ %>
 

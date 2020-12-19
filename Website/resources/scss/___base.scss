@@ -23,13 +23,25 @@ $inputBackground: #f7f7f7;
 $inputBorder: #f7f7f7;
 $inputColor: #0a0909;
 
+//Standard Button Colors
+
 $buttonBackground: #2980B9;
 $buttonBorder: #2980B9;
 $buttonColor: #fff;
 
 $buttonBackgroundHover: #1b4d6d;
-$buttonBorderHover: #1b4d6d;
+$buttonBorderHover: $buttonBorder;
 $buttonColorHover: #fff;
+
+//Button2 Colors
+
+$button2Background: #26a244;
+$button2Border: #26a244;
+$button2Color: #fff;
+
+$button2BackgroundHover: #1b6b2f;
+$button2BorderHover: $button2Border;
+$button2ColorHover: #fff;
 
 //Settings Gear
 $settingsGearColor: #979CA7;

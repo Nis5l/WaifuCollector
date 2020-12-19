@@ -10,7 +10,7 @@ select {
     background: $inputBackground;
     color: $inputColor;
     font-weight: 300;
-    border-radius: 10px;
+    border-radius: 4px;
 }
 input[type="text"],
 input[type="password"],
@@ -26,11 +26,12 @@ textarea {
 .button,
 input[type="submit"],
 input[type="button"],
-button {
+button,
+.button{
     text-transform: uppercase;
     line-height: 20px;
-    min-height: 70px;
-    padding: 24px 25px;
+    min-height: 0px;
+    padding: 10px;
     text-decoration: none;
     border: 1px solid transparent;
     display: inline-block;
@@ -44,7 +45,9 @@ button {
 }
 input[type="submit"],
 input[type="button"],
-button {
+label.file-upload,
+button,
+.button{
 
     border-radius: 4px;
 
@@ -54,15 +57,54 @@ button {
     text-decoration: none;
 }
 input[type="submit"],
-input[type="button"] {
+input[type="button"]{
     padding: 0px;
     min-height: 50px;
 }
 input[type="submit"]:hover,
 input[type="button"]:hover,
-button:hover {
+button:hover,
+.button:hover {
     background-color: $buttonBackgroundHover;
     color: $buttonColorHover;
     border-color: $buttonBorderHover;
     text-decoration: none;
+
+    cursor: pointer;
+
+}
+
+label.file-upload{
+
+    text-transform: uppercase;
+    line-height: 20px;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    display: inline-block;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    transition-property: background-color, color, border-color;
+    transition-duration: 0.25s,0.5s,0.25s;
+    font-family: 'Source Sans Pro', normal;
+    font-weight: 900;
+
+}
+
+//Button2 colors:
+
+.button2:hover {
+    background-color: $button2BackgroundHover;
+    color: $button2ColorHover;
+    border-color: $button2BorderHover;
+
+}
+
+.button2{
+
+    background-color: $button2Background;
+    color: $button2Color;
+    border-color: $button2Border;
+
 }
