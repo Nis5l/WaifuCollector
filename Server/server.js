@@ -383,103 +383,82 @@ app.post("/pack", (req, res) => {
 			run();
 		}
 		function run() {
-			if (clients[decoded.id].packTime != null) {
-				packCallBack(decoded.id);
-				return;
-			} else {
-				createCache(decoded.id, decoded.username, () => {
-					packCallBack(decoded.id);
-				});
-				return;
-			}
+			var nowDate = moment();
+			var date = moment(nowDate).add(packCooldown, "seconds");
+			var packDate = moment(parseInt(clients[decoded.id].packTime));
 
-			function packCallBack(userID) {
-				if (clients[userID] == undefined) {
-					createCache(userID, decoded.username, run);
-				} else {
-					run(userID);
-				}
+			console.log(clients[decoded.id].packTime);
 
-				function run(userID) {
-					var nowDate = moment();
-					var date = moment(nowDate).add(packCooldown, "seconds");
-					var packDate = moment(parseInt(clients[userID].packTime));
+			if (
+				clients[decoded.id] == null ||
+				clients[decoded.id].packTime == "null" ||
+				nowDate.isAfter(packDate) ||
+				!packDate.isValid()
+			) {
+				clients[decoded.id].packTime = date.valueOf();
+				var iterations = utils.getRandomInt(packSize[0], packSize[1]);
+				database.getRandomCard(iterations, (cards) => {
+					for (var j = 0; j < cards.length; j++) {
+						var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
+						cards[j].quality = quality;
+						cards[j].cardImage = imageBase + cards[j].cardImage;
+					}
+					database.getRandomFrame(iterations, (frames) => {
+						for (var j = 0; j < frames.length; j++) {
+							frames[j].path_front = frameBase + frames[j].path_front;
+							frames[j].path_back = frameBase + frames[j].path_back;
+						}
 
-					if (
-						clients[userID] == null ||
-						clients[userID].packTime == "null" ||
-						nowDate.isAfter(packDate) ||
-						!packDate.isValid()
-					) {
-						clients[userID].packTime = date.valueOf();
-						var iterations = utils.getRandomInt(packSize[0], packSize[1]);
-						database.getRandomCard(iterations, (cards) => {
-							for (var j = 0; j < cards.length; j++) {
-								var quality = utils.getRandomInt(
-									qualityrange[0],
-									qualityrange[1]
-								);
-								cards[j].quality = quality;
-								cards[j].cardImage = imageBase + cards[j].cardImage;
-							}
-							database.getRandomFrame(iterations, (frames) => {
-								for (var j = 0; j < frames.length; j++) {
-									frames[j].path_front = frameBase + frames[j].path_front;
-									frames[j].path_back = frameBase + frames[j].path_back;
-								}
-
-								for (var j = frames.length - 1; j < iterations; j++) {
-									frames[j] = frames[utils.getRandomInt(0, frames.length - 1)];
-								}
-								run3(0);
-								function run3(j) {
-									cards[j].frame = frames[j];
-									database.addCard(
-										userID,
-										cards[j].id,
-										quality,
-										0,
-										frames[j].id,
-										(insertID) => {
-											clients[userID].addCard({
-												id: insertID,
-												userID: userID,
-												cardID: cards[j].id,
-												quality: quality,
-												level: 0,
-												frameID: frames[j].id,
-											});
-											if (j == cards.length - 1) {
-												run2(0);
-												return;
-											} else {
-												run3(j + 1);
-											}
-										}
-									);
-								}
-								function run2(iteration) {
-									database.getCardType(cards[iteration].typeID, (result) => {
-										cards[iteration].type = result;
-										if (iteration == iterations - 1) {
-											res.send({ packTime: "0", message: "OK", cards: cards });
-											return;
-										} else {
-											run2(iteration + 1);
-										}
+						for (var j = frames.length - 1; j < iterations; j++) {
+							frames[j] = frames[utils.getRandomInt(0, frames.length - 1)];
+						}
+						run3(0);
+						function run3(j) {
+							cards[j].frame = frames[j];
+							database.addCard(
+								decoded.id,
+								cards[j].id,
+								quality,
+								0,
+								frames[j].id,
+								(insertID) => {
+									clients[decoded.id].addCard({
+										id: insertID,
+										userID: decoded.id,
+										cardID: cards[j].id,
+										quality: quality,
+										level: 0,
+										frameID: frames[j].id,
 									});
+									if (j == cards.length - 1) {
+										run2(0);
+										return;
+									} else {
+										run3(j + 1);
+									}
+								}
+							);
+						}
+						function run2(iteration) {
+							database.getCardType(cards[iteration].typeID, (result) => {
+								cards[iteration].type = result;
+								if (iteration == iterations - 1) {
+									res.send({ packTime: "0", message: "OK", cards: cards });
+									return;
+								} else {
+									run2(iteration + 1);
 								}
 							});
-						});
-					} else {
-						res.send({
-							packTime: packDate.diff(nowDate).seconds(),
-							message: "WAIT",
-							cards: [],
-						});
-						return;
-					}
-				}
+						}
+					});
+				});
+			} else {
+				res.send({
+					packTime: packDate.diff(nowDate).seconds(),
+					message: "WAIT",
+					cards: [],
+				});
+				return;
 			}
 		}
 	} catch (e) {
