@@ -45,7 +45,6 @@
 			var opn = undefined; 
 
 			var off = 0;
-			var tofit = [];
 			var mc = undefined;			
 			function displayCards(cards)
 			{
@@ -59,7 +58,6 @@
 				   cardhtml);
 
 		           var o = document.getElementById(`card${i}`);
-		           tofit.push(o);
 				   cardAmount++;
 		         }
 				nextCards = true;
@@ -75,14 +73,6 @@
 
 				mc = document.getElementById(`card-main`);
 			}
-
-		window.onload = function() {
-			if(mc != undefined) mc.fit();
-		           for(var i = 0; i < tofit.length; i++)
-		           {
-		             	tofit[i].fit();
-		           }
-		         }
 
 		var opn = document.getElementById('body');
 		var isOpen = false;

@@ -45,7 +45,6 @@
 				//var cardSize = 110;
 				//var off = 235-(cards.length-1) / 2 * cardSize;
 				var off = 0;           
-				var tofit = [];
 				for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
 				{
 					cardAmount++;
@@ -57,13 +56,6 @@
 				  cardhtml);
 				
 				  var o = document.getElementById(`card${i}`);
-				  tofit.push(o);
-				}
-				window.onload = function() {
-				  for(var i = 0; i < tofit.length; i++)
-				  {
-					tofit[i].fit();
-				  }
 				}
 				nextCards = true;
 			}

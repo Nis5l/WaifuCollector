@@ -53,7 +53,6 @@
 			 var opn = document.getElementById('tradeselfinner');
 			 var opnother = document.getElementById('tradeotherinner');
 
-			var tofit = [];
 			insert(cards, opn);
 			insert(cardsother, opnother);
 			var j = 0;
@@ -69,17 +68,10 @@
 				   cardhtml);
 
 				   var o = document.getElementById(`card${j}`);
-				   tofit.push(o);
 				   j++;
 				 }
 			}
 			 
-			window.onload = function() {
-		           for(var i = 0; i < tofit.length; i++)
-		           {
-		             	tofit[i].fit();
-		           }
-		         }
 	</script>
 	<script>
       $(".addtrade").click(()=>{

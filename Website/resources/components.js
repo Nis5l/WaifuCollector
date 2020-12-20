@@ -335,6 +335,7 @@ class Card extends HTMLElement {
       }
       </style>
     `;
+		this.fit();
 	}
 	isClicked(x, y) {
 		const card = this.shadow.querySelector(".card");
