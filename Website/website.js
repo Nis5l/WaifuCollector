@@ -287,15 +287,6 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 			if (body.status == 0) {
 				res.render("dashboard", {
 					userID: req.cookies.userID,
-					time: 0,
-					username: username,
-					fulltime: body.fullTime,
-					friends: body.friendcount,
-					maxfriends: body.maxfriendcount,
-				});
-			} else if (body.status == 1) {
-				res.render("dashboard", {
-					userID: req.cookies.userID,
 					time: body.packTime,
 					username: username,
 					fulltime: body.fullTime,
@@ -306,6 +297,25 @@ app.get("/dashboard", redirectLogin, function (req, res) {
 				res.redirect(
 					"/login?errorCode=" + body.status + "&errorMessage=" + body.message
 				);
+			}
+		}
+	);
+});
+
+app.post("/packTime", (req, res) => {
+	request.get(
+		getHttp() + API_HOST + "/packTime",
+		{
+			json: { token: req.cookies.token },
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.send({ packTime: body.packTime });
+			} else {
+				res.send({ packTime: "Error" });
 			}
 		}
 	);

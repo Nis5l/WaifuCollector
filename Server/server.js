@@ -275,7 +275,7 @@ app.post("/login", (req, res) => {
 		});
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -326,7 +326,7 @@ app.post("/register", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -364,42 +364,64 @@ app.post("/getDashboard", (req, res) => {
 			var maxfriendcount = friendLimit;
 
 			//packtime
-			var nowDate = moment();
-			var packDate = moment(parseInt(clients[userID].packTime));
-
-			if (
-				clients[userID] == null ||
-				clients[userID].packTime == "null" ||
-				nowDate.isAfter(packDate) ||
-				!packDate.isValid()
-			) {
-				res.send({
-					status: 0,
-					packTime: 0,
-					fullTime: packCooldown * 1000,
-					name: username,
-					friendcount: friendcount,
-					maxfriendcount: maxfriendcount,
-				});
-				return;
-			} else {
-				res.send({
-					status: 1,
-					packTime: packDate.diff(nowDate).seconds(),
-					fullTime: packCooldown * 1000,
-					name: username,
-					friendcount: friendcount,
-					maxfriendcount: maxfriendcount,
-				});
-			}
+			res.send({
+				status: 0,
+				packTime: getPackTime(userID),
+				fullTime: packCooldown * 1000,
+				name: username,
+				friendcount: friendcount,
+				maxfriendcount: maxfriendcount,
+			});
 		}
 		return;
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
+
+app.get("/packTime", (req, res) => {
+	try {
+		var token = req.body.token;
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({ status: 2, message: "Identification Please" });
+			return;
+		}
+
+		if (clients[decoded.id] == undefined) {
+			createCache(decoded.id, decoded.username, run);
+		} else {
+			clients[decoded.id].refresh();
+			run(decoded.id);
+		}
+		function run() {
+			res.send({ status: 0, packTime: getPackTime(decoded.id) });
+		}
+	} catch (e) {
+		console.log(e);
+		res.send({ status: 1, message: "internal server error" });
+		return;
+	}
+});
+
+function getPackTime(userID) {
+	var nowDate = moment();
+	var packDate = moment(parseInt(clients[userID].packTime));
+
+	if (
+		clients[userID] == undefined ||
+		clients[userID].packTime == "null" ||
+		nowDate.isAfter(packDate) ||
+		!packDate.isValid()
+	) {
+		return 0;
+	} else {
+		return packDate.diff(nowDate).seconds();
+	}
+}
 
 app.post("/pack", (req, res) => {
 	try {
@@ -495,7 +517,7 @@ app.post("/pack", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -535,7 +557,7 @@ app.post("/passchange", (req, res) => {
 		});
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -587,7 +609,7 @@ app.post("/getfriends", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -678,7 +700,7 @@ app.post("/inventory", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -719,7 +741,7 @@ app.post("/card", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -831,7 +853,7 @@ app.post("/upgrade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -944,7 +966,7 @@ app.post("/friends", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -1021,7 +1043,7 @@ app.post("/addfriend", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -1090,7 +1112,7 @@ app.post("/managefriend", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -1208,7 +1230,7 @@ app.post("/trade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -1281,7 +1303,7 @@ app.post("/addtrade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -1332,7 +1354,7 @@ app.post("/removetrade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -1441,7 +1463,7 @@ app.post("/okTrade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });
@@ -1478,7 +1500,7 @@ app.post("/deleteNotification", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 0, message: "internal server error" });
+		res.send({ status: 1, message: "internal server error" });
 		return;
 	}
 });

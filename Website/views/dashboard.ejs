@@ -142,6 +142,22 @@
                 });
             </script>
 
+			<script>
+				window.onfocus = () => {
+				  var xhttp = new XMLHttpRequest();
+				  xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						var json = JSON.parse(this.response);
+						const el = document.querySelector('progress-ring');
+						time = json.packTime;
+					}
+				  }
+				  xhttp.open("POST", "/packTime", true);
+				  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+				  xhttp.send(JSON.stringify());
+				}
+			</script>
+
 		<script src="../resources/components.js"></script>
 
         <%- include('partials/error.ejs') %>
