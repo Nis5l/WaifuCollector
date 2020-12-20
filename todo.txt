@@ -1,54 +1,18 @@
 Waifus:
-	rias remori
-	asia agento
-	gurren jagann logo
-	hinata
-	erza fairytail
-	asuna
-	rent a girlfriend
-	azur lane
-	rin tosaka
-	misa aname
-	shinoa seraph
-	nezuko
-	saber fate
-	shisu the time i got reincarnated as a slime
-	violet evergarden
-	
-		Aqua
-		Akame
-		mine
-		leone (akame ga kill)
-			WTF:
-				eto
-				rize
-		toka(tokyo ghoul)
-		Tohru
-		Kanna
-		Lucoa
-		emma (kobayashis dragon maid)
-		yumeko
-		mary saotome
-		runa yomozuki
-		kirari & ririka momobami
-		yuriko nishinotouin
-	yumemi(kakegurui)
-		Shokuhou Misaki || Railgun (BILD ICEEYE)
-		Mikoto Misaka || Railgun
-		Kanzaki Kaori || A Certain Magical Index
 
 Fix:
-	Admin Panel (Hannes)
-	Error Messages
+			Admin Panel (Hannes)
+			Error Messages
 			Passwort besteht aus Leerzeichen
 			Üngültiges Passwort = Seite ladet für immer + keine Abweisende Nachricht
 			Nach Package-Opening Button zum zurückkehren
-	Mehrere Tabs reloaden = Accountwechsel zu gleichen Account
+		Mehrere Tabs reloaden = Accountwechsel zu gleichen Account
 	Not sure: Cache saves website and reloads dont work
-		Friend add twice
-	First user pack bug
+			Friend add twice
+			First user pack bug
 			Cookie
 			Upgrade Itself
 		Trade Notification
 		Friend Notification
 		Beim Cardtrading, add card( keine karte zur auswahl == Stuck im auswahlscreen
+	background: 1b1515;

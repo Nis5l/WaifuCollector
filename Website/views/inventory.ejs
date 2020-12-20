@@ -13,22 +13,9 @@
 
         <%- include('partials/nav.ejs') %>
         
-        <form action="/inventory" method="get">
+        <form class="filter" action="#" onsubmit="onfilter(); return false">
             <input type="search" name="search" placeholder=""/>
             <input type="submit" value="Search" name="submit"></input>
-        </form>
-        <div class="page">
-          <input type="button" class="previous" value="<"></input>
-            <%- `${page}/${pagemax}` %>
-          <input type="button" class="next" value=">"></input>
-        </div>
-
-        <form class="nextForm" action="/inventory" method="get">
-            <input type="hidden" name="next" value="0"/>
-        </form>
-
-        <form class="prevForm" action="/inventory" method="get">
-            <input type="hidden" name="next" value="1"/>
         </form>
 
         <form class="cardForm" action="/card" method="get">
@@ -38,12 +25,6 @@
         <div id="inventory">
         </div>
         
-
-        <div class="page">
-          <input type="button" class="previous" value="<"></input>
-            <%- `${page}/${pagemax}` %>
-          <input type="button" class="next" value=">"></input>
-        </div>
         <div class="bot"></div>
     </body>
 
@@ -52,35 +33,42 @@
     integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
     crossorigin="anonymous"></script>
 
-    <% if (cards != undefined) { %>
         <script>
-            const cards = <%- JSON.stringify(cards) %>;
+
+			var nextCards = true; 
+            var cardAmount = 0;
             var opn = document.getElementById('inventory');
+			//displayCards(lcards);
             
-            //var cardSize = 110;
-            //var off = 235-(cards.length-1) / 2 * cardSize;
-            var off = 0;           
-            var tofit = [];
-            for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
-            {
-              var path = cards[i].card.cardImage;
-              var posX =  off;
-				//console.log(cards[i].cardID + " " + cards[i].card.cardName);
-				var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back="" pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].cardID} card-size=1></waifu-card>`;
-              opn.insertAdjacentHTML('beforeend',
-              cardhtml);
-            
-              var o = document.getElementById(`card${i}`);
-              tofit.push(o);
-            }
-            window.onload = function() {
-              for(var i = 0; i < tofit.length; i++)
-              {
-                tofit[i].fit();
-              }
-            }
+			function displayCards(cards)
+			{
+				//var cardSize = 110;
+				//var off = 235-(cards.length-1) / 2 * cardSize;
+				var off = 0;           
+				var tofit = [];
+				for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
+				{
+					cardAmount++;
+				  var path = cards[i].card.cardImage;
+				  var posX =  off;
+					//console.log(cards[i].cardID + " " + cards[i].card.cardName);
+					var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back="" pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].cardID} card-size=1></waifu-card>`;
+				  opn.insertAdjacentHTML('beforeend',
+				  cardhtml);
+				
+				  var o = document.getElementById(`card${i}`);
+				  tofit.push(o);
+				}
+				window.onload = function() {
+				  for(var i = 0; i < tofit.length; i++)
+				  {
+					tofit[i].fit();
+				  }
+				}
+				nextCards = true;
+			}
+
         </script>
-    <% } %> 
 
 
     <script>
@@ -97,28 +85,6 @@
     </script>
 
     
-    <script>
-      $(".next").click(()=>{
-        var ele = document.querySelector(".nextForm");
-        ele.submit();
-      });
-
-      $(".previous").click(()=>{
-        var ele = document.querySelector(".prevForm");
-        ele.submit();
-      });
-      
-      $(".next2").click(()=>{
-        var ele = document.querySelector(".nextForm");
-        ele.submit();
-      });
-
-      $(".previous2").click(()=>{
-        var ele = document.querySelector(".prevForm");
-        ele.submit();
-      });
-    </script>
-
 	<script>
 		var inv = document.querySelector("#inventory");
 		resize();
@@ -128,13 +94,64 @@
 		function resize()
 		{
 			var amount = Math.floor(document.body.offsetWidth / 273);
-			if(amount > cards.length)
-				amount = cards.length;
+			if(amount > cardAmount)
+				amount = cardAmount;
 			if(amount <= 0)
 				amount = 1;
 			var size = amount * 273;
 			inv.style.width = size + "px";
 }
+	</script>
+
+	<script>
+
+		var filter = document.querySelector(".filter");
+		var page = 0;
+		var pageamount = 1;
+		loadCards(true);
+		window.onscroll = function(ev) {
+			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 30) {
+				loadCards();
+			}
+		};
+
+		function loadCards(first) {
+			if(first)
+			{
+				page = 0;
+				pageamount = 1;
+			}
+			if(nextCards && page < pageamount)
+			{
+			  var xhttp = new XMLHttpRequest();
+			  xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var json = JSON.parse(this.response);
+					page = json.page;
+					pageamount = json.pagemax;
+					displayCards(json.cards);
+					resize();
+					if((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 30)
+						loadCards();
+				}
+			}
+			  nextCards = false;
+			  xhttp.open("POST", "/inventory", true);
+			  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+				if(!first)
+				  xhttp.send(JSON.stringify({ next: 0, search: filter.search.value}));
+				else
+				  xhttp.send(JSON.stringify({ page: 0, search: filter.search.value}));
+		  };
+		}
+	</script>
+
+	<script>
+		function onfilter()
+		{
+			inventory.innerHTML = "";
+			loadCards(true);
+		}
 	</script>
 
     <script src="../resources/components.js"></script> 

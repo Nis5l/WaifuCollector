@@ -12,7 +12,7 @@
         font-size: 19pt;
         padding: 2% 0px 0px 0%; }
     .wrapper .settings .pass_change input[type="password"] {
-      color: #0a0909;
+      color: #f7f7f7;
       margin: auto;
       margin-top: 10px;
       background: none;
@@ -37,7 +37,7 @@
       background-color: #00ff00;
       border-radius: 25px; }
       .wrapper .settings .pass_change input[name="submit"]:enabled:hover {
-        color: #0a0909;
+        color: #f7f7f7;
         background-color: rgba(0, 0, 0, 0);
         transition: background 0.2s ease-in-out; }
       .wrapper .settings .pass_change input[name="submit"]:active {

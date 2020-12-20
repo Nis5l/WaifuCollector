@@ -56,6 +56,7 @@
 			var tofit = [];
 			insert(cards, opn);
 			insert(cardsother, opnother);
+			var j = 0;
 			function insert(_cards, _opn)
 			{
 				 var off = 0;
@@ -63,12 +64,13 @@
 				 {
 				   var path = _cards[i].cardImage;
 				   var posX =  off;
-					var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${_cards[i].frame.path_front} frame-back=${_cards[i].frame.path_back} pos-x=${posX} card-name=\"${_cards[i].cardName}\" anime-name=\"${_cards[i].type.name}\" turned=false quality=${_cards[i].quality} level=${_cards[i].level} uuid=${_cards[i].uuid} cardID=${_cards[i].id} card-size=1></waifu-card>`;
+					var cardhtml = `<waifu-card id=card${j} img_path=${path} frame-front=${_cards[i].frame.path_front} frame-back=${_cards[i].frame.path_back} pos-x=${posX} card-name=\"${_cards[i].cardName}\" anime-name=\"${_cards[i].type.name}\" turned=false quality=${_cards[i].quality} level=${_cards[i].level} uuid=${_cards[i].uuid} cardID=${_cards[i].id} card-size=1></waifu-card>`;
 				   _opn.insertAdjacentHTML('beforeend',
 				   cardhtml);
 
-				   var o = document.getElementById(`card${i}`);
+				   var o = document.getElementById(`card${j}`);
 				   tofit.push(o);
+				   j++;
 				 }
 			}
 			 

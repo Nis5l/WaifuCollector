@@ -336,49 +336,34 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 	);
 });
 
-app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, async function (req,response) {
-
-	function jsonToArray(dataString){
-
-		var data = JSON.parse(dataString);
-
-		if (data.status != undefined) {
-			if (data.status == 1) {
-				
-				return data;
-
-			}
-		}
-
-		return undefined;
-
-	}
-
+app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, function (
+	req,
+	response
+) {
 	var cardID = req.params.cardID;
 
-	var cardData = jsonToArray(await getPageBody(getHttp() + API_HOST + "/display/card/" + cardID));
+	request.get(
+		{
+			url: getHttp() + API_HOST + "/display/card/" + cardID,
+		},
+		function (err, res) {
+			var data = JSON.parse(res.body);
 
-	if(cardData == undefined){
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					var card = data.card;
 
-		response.redirect("/dashboard");
-		return;
+					card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
 
-	}
+					response.render("adminpanel/adminpanel_card_edit", { card: card });
 
-	var card = cardData.card;
-	card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
+					return;
+				}
+			}
 
-	var animeData = jsonToArray(await getPageBody(getHttp() + API_HOST + "/animes"));
-
-	if(animeData == undefined){
-
-		response.render("adminpanel/adminpanel_card_edit", { card: card, animes: undefined});
-		return;
-
-	}
-
-	response.render("adminpanel/adminpanel_card_edit", { card: card, animes: animeData.animes});
-
+			response.redirect("/dashboard");
+		}
+	);
 });
 
 app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
@@ -459,23 +444,55 @@ app.get("/pack", redirectLogin, function (req, res) {
 });
 
 app.get("/inventory", redirectLogin, function (req, res) {
-	var page = req.query.page;
-	var search = req.query.search;
-	var next = req.query.next;
+	//var page = 0;
+	//var search = req.query.search;
+	//var next = req.query.next;
+
+	//getInventoryData(req.cookies.token, next, search, page, (data) => {
+	//	if (data.status == 0)
+	res.render("inventory", {
+		userID: req.cookies.userID,
+	});
+	//	else res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+	//});
+});
+
+app.post("/inventory", redirectLogin, function (req, res) {
+	getInventoryData(
+		req.cookies.token,
+		req.body.next,
+		req.body.search,
+		req.body.page,
+		req.body.userID,
+		(data) => {
+			if (data.status == 0)
+				res.send({
+					status: data.status,
+					cards: data.cards,
+					page: data.page,
+					pagemax: data.pagemax,
+				});
+			else res.send({ userID: req.cookies.userID, status: 1 });
+		}
+	);
+});
+
+function getInventoryData(token, next, search, page, userID, callback) {
 	if (next == "0") next = 0;
 	else if (next == "1") next = 1;
 	if (next == undefined) next = 2;
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
-
+	if (userID == undefined) userID = -1;
 	request.post(
 		getHttp() + API_HOST + "/inventory",
 		{
 			json: {
-				token: req.cookies.token,
+				token: token,
 				page: page,
 				search: search,
 				next: next,
+				userID: userID,
 			},
 			rejectUnauthorized: false,
 			requestCert: false,
@@ -486,26 +503,29 @@ app.get("/inventory", redirectLogin, function (req, res) {
 				for (var i = 0; i < body.inventory.length; i++) {
 					addPathCard(body.inventory[i].card);
 				}
-				res.render("inventory", {
-					userID: req.cookies.userID,
+				callback({
+					status: 0,
 					cards: body.inventory,
 					page: body.page,
 					pagemax: body.pagemax,
 				});
 			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+				callback({ status: 1 });
 			}
 		}
 	);
-});
+}
 
-app.get("/card", redirectLogin, function (req, res) {
-	var uuid = req.query.uuid;
-	var page = req.query.page;
-	var next = req.query.next;
+app.post("/card", redirectLogin, function (req, res) {
+	var uuid = req.body.uuid;
+	var page = req.body.page;
+	var next = req.body.next;
 	if (next == undefined) next = -1;
 	if (next == -1) {
-		if (uuid == undefined) return;
+		if (uuid == undefined) {
+			res.send({ status: 1 });
+			return;
+		}
 	}
 	if (page == undefined) page = 0;
 
@@ -530,7 +550,8 @@ app.get("/card", redirectLogin, function (req, res) {
 
 				addPathCard(body.card);
 
-				res.render("card", {
+				res.send({
+					status: 0,
 					userID: req.cookies.userID,
 					maincard: body.card,
 					cards: body.inventory,
@@ -538,10 +559,15 @@ app.get("/card", redirectLogin, function (req, res) {
 					pagemax: body.pagemax,
 				});
 			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+				res.send({ status: 1 });
 			}
 		}
 	);
+});
+
+app.get("/card", redirectLogin, function (req, res) {
+	var uuid = req.query.uuid;
+	res.render("card", { uuid: uuid });
 });
 
 app.get("/upgrade", redirectLogin, function (req, res) {
@@ -720,49 +746,14 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 
 app.get("/tradeinventory", redirectLogin, function (req, res) {
 	var userID = req.query.userID;
-	var page = req.query.page;
-	var search = req.query.search;
-	var next = req.query.next;
 	if (userID == undefined || isNaN(userID)) {
 		res.redirect("/dashboard?errorMessage='Wrong Data'");
 		return;
 	}
-	if (next == "0") next = 0;
-	else if (next == "1") next = 1;
-	if (next == undefined) next = 2;
-	if (search == undefined) search = "";
-	if (page == undefined) page = 0;
-
-	request.post(
-		getHttp() + API_HOST + "/inventory",
-		{
-			json: {
-				token: req.cookies.token,
-				page: page,
-				search: search,
-				next: next,
-				userID: userID,
-			},
-			rejectUnauthorized: false,
-			requestCert: false,
-			agent: false,
-		},
-		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				for (var i = 0; i < body.inventory.length; i++) {
-					addPathCard(body.inventory[i].card);
-				}
-				res.render("tradeinventory", {
-					userID: userID,
-					cards: body.inventory,
-					page: body.page,
-					pagemax: body.pagemax,
-				});
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
-		}
-	);
+	console.log(userID);
+	res.render("tradeinventory", {
+		friendID: userID,
+	});
 });
 
 app.post("/removeTrade", redirectLogin, function (req, res) {
@@ -862,7 +853,6 @@ function renderUserView(req, res, next) {
 	var userID = undefined;
 
 	res.locals.url = getHttp() + req.get("host");
-	res.locals.api_url = getHttp() + API_HOST;
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;
@@ -927,18 +917,4 @@ function getNotifications(token, callback) {
 			}
 		);
 	} else callback(undefined);
-}
-
-function getPageBody(url){
-
-	return new Promise((resolve, reject) => {
-		request(url, (error, response, body) => {
-			if (error) reject(error);
-			if (response.statusCode != 200) {
-				reject('Invalid status code <' + response.statusCode + '>');
-			}
-			resolve(body);
-		});
-	});
-
 }
