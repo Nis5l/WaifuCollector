@@ -750,7 +750,7 @@ app.get("/tradeinventory", redirectLogin, function (req, res) {
 		res.redirect("/dashboard?errorMessage='Wrong Data'");
 		return;
 	}
-	console.log(userID);
+	//console.log(userID);
 	res.render("tradeinventory", {
 		friendID: userID,
 	});

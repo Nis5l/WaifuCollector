@@ -1261,7 +1261,7 @@ app.post("/addtrade", (req, res) => {
 					database.addTrade(decoded.id, userID, cardID, () => {
 						setTrade(decoded.id, userID, 0, () => {
 							setTrade(userID, decoded.id, 0, () => {
-								console.log(userID);
+								//console.log(userID);
 								database.addNotification(
 									userID,
 									"Trade Changed",
