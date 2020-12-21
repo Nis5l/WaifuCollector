@@ -419,7 +419,7 @@ class Confirmation extends HTMLElement {
             </div>
 			<style>
 	.card {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 300px;
@@ -480,7 +480,7 @@ class AddFriend extends HTMLElement {
             </div>
 			<style>
 	.card {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 300px;
@@ -623,7 +623,7 @@ class FriendSelection extends HTMLElement {
             </div>
 			<style>
 	.card {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 300px;
@@ -695,7 +695,7 @@ class CookieConfirmation extends HTMLElement {
             </div>
 			<style>
 	.card {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 300px;
@@ -790,7 +790,7 @@ class NotificationBox extends HTMLElement {
             </div>
 			<style>
 	.blocker {
-		position: absolute;
+		position: fixed;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
@@ -898,7 +898,7 @@ class ErrorMessage extends HTMLElement {
 			</div>
 			<style>
 	.box {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 300px;
