@@ -48,10 +48,14 @@
 					nb = undefined;
 				}
 				nb.elementCallback = (nID ,eurl) => {
-					var url = '<%= url %>/' + eurl;
-					redirectForm.notificationID.value = nID;
-					redirectForm.url.value = eurl;
-					redirectForm.submit();
+				  var xhttp = new XMLHttpRequest();
+				  xhttp.open("POST", `/deleteNotification`, true);
+				  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+				  xhttp.onreadystatechange = function() { 
+						if (xhttp.readyState == 4 && xhttp.status == 200)
+							window.location.href = eurl;
+				  }
+				  xhttp.send(JSON.stringify({notificationID: nID}));
 				}
 				for(var i = 0; i < data.length; i++)
 				{

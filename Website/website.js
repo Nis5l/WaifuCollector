@@ -816,13 +816,12 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 	);
 });
 
-app.get("/redirect", redirectLogin, function (req, res) {
-	var url = req.query.url;
-	var nId = req.query.notificationID;
+app.post("/deleteNotification", redirectLogin, function (req, res) {
+	var nId = req.body.notificationID;
 	var nId = parseInt(nId);
 
-	if (url == undefined || isNaN(nId)) {
-		res.redirect("/dashboard");
+	if (isNaN(nId)) {
+		res.send({ status: 1 });
 		return;
 	}
 
@@ -839,9 +838,9 @@ app.get("/redirect", redirectLogin, function (req, res) {
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect(url);
+				res.send({ status: 0 });
 			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+				res.send({ status: 1 });
 			}
 		}
 	);
