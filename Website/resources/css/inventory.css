@@ -10,7 +10,7 @@
   margin-right: 50px;
   float: left;
   font-size: 1.5rem;
-  color: #f7f7f7;
+  color: #000;
   display: grid;
   grid-template-columns: min-content auto;
   grid-gap: 0.5em; }
@@ -38,7 +38,7 @@
   line-height: 1; }
 
 input[type="search"] {
-  color: #f7f7f7;
+  color: #000;
   background: none;
   display: block;
   text-align: center;
@@ -55,7 +55,7 @@ input[type="search"] {
     transition: border 0.2s ease-in-out; }
 
 input[name="submit"] {
-  color: #f7f7f7;
+  color: #000;
   padding: 10px 30px;
   margin-top: 1%;
   margin-left: 30%;
@@ -65,7 +65,7 @@ input[name="submit"] {
   background-color: #323232;
   border-radius: 25px; }
   input[name="submit"]:enabled:hover {
-    color: #f7f7f7;
+    color: #000;
     background-color: rgba(0, 0, 0, 0);
     transition: background 0.2s ease-in-out; }
   input[name="submit"]:active {
@@ -95,7 +95,7 @@ div#inventory {
   background-color: #f7f7f7;
   border-radius: 25px; }
   .next:enabled:hover {
-    color: #f7f7f7;
+    color: #000;
     background-color: rgba(0, 0, 0, 0);
     transition: background 0.2s ease-in-out; }
   .next:active {
@@ -116,7 +116,7 @@ div#inventory {
   background-color: #f7f7f7;
   border-radius: 25px; }
   .previous:enabled:hover {
-    color: #f7f7f7;
+    color: #000;
     background-color: rgba(0, 0, 0, 0);
     transition: background 0.2s ease-in-out; }
   .previous:active {

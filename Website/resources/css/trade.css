@@ -49,7 +49,7 @@
     font-size: 20pt;
     text-align: center; }
   .trade .addtrade {
-    color: #f7f7f7;
+    color: #000;
     background: none;
     text-align: center;
     border: 2px solid #f7f7f7;
@@ -63,7 +63,7 @@
       border-color: #fff;
       transition: border 0.2s ease-in-out; }
   .trade .oktrade {
-    color: #f7f7f7;
+    color: #000;
     background: none;
     text-align: center;
     border: 2px solid #f7f7f7;
