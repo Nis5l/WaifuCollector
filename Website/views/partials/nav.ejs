@@ -16,18 +16,14 @@
 
             <% } %>
 
-        <!-- <form class="redirectForm" action="/redirect" method="get">
-            <input type="hidden" name="notificationID" value=""/>
-            <input type="hidden" name="url" value=""/>
-        </form> -->
-
+		<li><a href="<%= url %>/dashboard">Dashboard</a></li>
+		
 		<%if (notifications) {%>
 
 			<li><a class="bell"><i class="fas fa-bell"> <%= notifications.length%></i></a></li>
 			
 		<% } %>
 
-        <li><a href="<%= url %>/dashboard">Dashboard</a></li>
         <li><a href="<%= url %>/logout"><i class="fas fa-sign-out-alt"></i></a></li>
 
         <script
