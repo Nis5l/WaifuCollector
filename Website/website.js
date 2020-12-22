@@ -872,6 +872,7 @@ function renderUserView(req, res, next) {
 	var userID = undefined;
 
 	res.locals.url = getHttp() + req.get("host");
+	res.locals.api_url = getHttp() + API_HOST;
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;
