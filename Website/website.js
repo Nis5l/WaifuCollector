@@ -474,6 +474,7 @@ app.post("/inventory", redirectLogin, function (req, res) {
 		req.body.search,
 		req.body.page,
 		req.body.userID,
+		req.body.sortType,
 		(data) => {
 			if (data.status == 0)
 				res.send({
@@ -487,7 +488,15 @@ app.post("/inventory", redirectLogin, function (req, res) {
 	);
 });
 
-function getInventoryData(token, next, search, page, userID, callback) {
+function getInventoryData(
+	token,
+	next,
+	search,
+	page,
+	userID,
+	sortType,
+	callback
+) {
 	if (next == "0") next = 0;
 	else if (next == "1") next = 1;
 	if (next == undefined) next = 2;
@@ -503,6 +512,7 @@ function getInventoryData(token, next, search, page, userID, callback) {
 				search: search,
 				next: next,
 				userID: userID,
+				sortType: sortType,
 			},
 			rejectUnauthorized: false,
 			requestCert: false,

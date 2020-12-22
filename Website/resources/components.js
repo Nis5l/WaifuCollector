@@ -434,11 +434,11 @@ class Confirmation extends HTMLElement {
     .card .wrong {
       border-color: red !important; }
     .card input[type="submit"] {
-      color: black;
+      color: #f7f7f7;
       padding: 10px 30px;
       margin: auto 10px;
-      border: 2px solid #00ff00;
-      background-color: #00ff00;
+      border: 2px solid #fff;
+      background-color: #323232;
       border-radius: 25px; }
       .card input[type="submit"]:enabled:hover {
         color: #fff;
@@ -495,11 +495,11 @@ class AddFriend extends HTMLElement {
     .card .wrong {
       border-color: red !important; }
     .card input[type="submit"] {
-      color: black;
+      color: #f7f7f7;
       padding: 10px 30px;
       margin: auto 10px;
-      border: 2px solid #00ff00;
-      background-color: #00ff00;
+      border: 2px solid #fff;
+      background-color: #323232;
       border-radius: 25px;
 	  width: 125px;
 	  }
@@ -518,7 +518,7 @@ class AddFriend extends HTMLElement {
 
             text-align: center;
 
-            border: 2px solid rgba(0, 255, 0, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.25);
 
             width: 280px;
             outline: none;
@@ -530,7 +530,7 @@ class AddFriend extends HTMLElement {
         }
       .card input[type="text"]:hover{
 
-                border-color: #00ff00;
+                border-color: #fff;
 
                 transition: border 0.2s ease-in-out;
 
@@ -719,11 +719,11 @@ class CookieConfirmation extends HTMLElement {
     .card .wrong {
       border-color: red !important; }
     .card input[type="submit"] {
-      color: black;
+      color: #f7f7f7;
       padding: 20px 30px;
       margin: auto 10px;
-      border: 2px solid #00ff00;
-      background-color: #00ff00;
+      border: 2px solid #fff;
+      background-color: #323232;
       border-radius: 25px;
 	  width: 300px;
 	  position: absolute;
@@ -731,6 +731,7 @@ class CookieConfirmation extends HTMLElement {
 	  transform: translate(-50%);
 	  font-size: 21pt;
 	  }
+
       .card input[type="submit"]:enabled:hover {
         color: #fff;
         background-color: rgba(0, 0, 0, 0);

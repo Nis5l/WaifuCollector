@@ -83,11 +83,11 @@ label.file-upload {
   font-weight: 900; }
 
 .button2:hover {
-  background-color: #1b6b2f;
+  background-color: #fff;
   color: #fff;
-  border-color: #26a244; }
+  border-color: #fff; }
 
 .button2 {
-  background-color: #26a244;
+  background-color: #fff;
   color: #fff;
-  border-color: #26a244; }
+  border-color: #fff; }

@@ -620,6 +620,8 @@ app.post("/inventory", (req, res) => {
 		var page = req.body.page;
 		var search = req.body.search;
 		var next = req.body.next;
+		var sortType = req.body.sortType;
+		sortType = parseInt(sortType);
 
 		var friendID = req.body.userID;
 		var friendID = parseInt(friendID);
@@ -627,6 +629,7 @@ app.post("/inventory", (req, res) => {
 		if (next == undefined) next = -1;
 		if (page == undefined) page = 0;
 		if (search == undefined) search = "";
+		if (isNaN(sortType)) sortType = undefined;
 		try {
 			var decoded = jwt.verify(tokenV, jwtSecret);
 		} catch (JsonWebTokenError) {
@@ -662,7 +665,9 @@ app.post("/inventory", (req, res) => {
 						page,
 						inventorySendAmount,
 						ids,
-						exclude
+						exclude,
+						undefined,
+						sortType
 					);
 				var pageStats = clients[userID].getPageStats();
 				if (inventory.length == 0) {
@@ -712,8 +717,11 @@ app.post("/card", (req, res) => {
 		uuid = parseInt(uuid);
 		var next = req.body.next;
 		var page = req.body.page;
+		var sortType = req.body.sortType;
+		sortType = parseInt(sortType);
 		if (page == undefined) page = 0;
 		if (next == undefined) next = -1;
+		if (isNaN(sortType)) sortType = undefined;
 		if (next == -1) {
 			if (uuid == undefined) {
 				res.send({ status: 1, message: "Invalid data" });
@@ -735,7 +743,7 @@ app.post("/card", (req, res) => {
 			run();
 		}
 		function run() {
-			getCardRequestData(decoded.id, uuid, next, page, (data) => {
+			getCardRequestData(decoded.id, uuid, next, page, sortType, (data) => {
 				res.send(data);
 			});
 		}
@@ -1522,10 +1530,11 @@ function setTrade(userone, usertwo, status, callback) {
 	});
 }
 
-function getCardRequestData(userID, uuid, next, page, callback) {
+function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 	var inventory;
 	var maincard;
 	var pageStats;
+
 	if (uuid == undefined || isNaN(uuid) || uuid == null) {
 		uuid = clients[userID].lastmain;
 		if (uuid == undefined) {
@@ -1555,7 +1564,8 @@ function getCardRequestData(userID, uuid, next, page, callback) {
 				inventorySendAmount,
 				ids,
 				uuids,
-				result.level
+				result.level,
+				sortType
 			);
 		pageStats = clients[userID].getPageStats();
 		getCard(result.cardID, result.frameID, (_maincard) => {

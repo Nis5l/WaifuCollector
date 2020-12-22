@@ -1,10 +1,12 @@
 const database = require("./database");
+const cache = require("./serverCache");
 
 class Client {
 	constructor(id, username, loadedCallback) {
 		this.id = id;
 		this.packTime = -1;
 		this.username = username;
+		this.inventorySort = 0;
 		this.inventory = [];
 		this.friends = [];
 		this.lastids = undefined;
@@ -144,8 +146,10 @@ class Client {
 		return false;
 	}
 
-	getInventory(page, amount, ids, exclude, level) {
+	getInventory(page, amount, ids, exclude, level, sortMethod) {
 		this.startDecay(this.time, this.callback);
+		if (sortMethod != undefined) this.inventorySort = sortMethod;
+		this.sortInv();
 		this.lastids = ids;
 		this.lastexclude = exclude;
 		this.lastlevel = level;
@@ -196,6 +200,59 @@ class Client {
 	}
 
 	sortInv() {
+		if (this.inventorySort != 0 && this.inventorySort != 1)
+			this.inventorySort = 0;
+
+		switch (this.inventorySort) {
+			case 0:
+				{
+					this.sortInvName();
+				}
+				break;
+			case 1:
+				{
+					this.sortInvLevel();
+				}
+				break;
+		}
+	}
+
+	sortInvName() {
+		this.startDecay(this.time, this.callback);
+		while (true) {
+			var sorted = true;
+			for (var i = 0; i < this.inventory.length - 1; i++) {
+				if (
+					cache.getSortByID(this.inventory[i].cardID) >
+					cache.getSortByID(this.inventory[i + 1].cardID)
+				) {
+					sorted = false;
+					swap(this.inventory, i);
+				} else if (
+					cache.getSortByID(this.inventory[i].cardID) ==
+					cache.getSortByID(this.inventory[i + 1].cardID)
+				) {
+					if (this.inventory[i].level < this.inventory[i + 1].level) {
+						sorted = false;
+						swap(this.inventory, i);
+					} else if (this.inventory[i].level == this.inventory[i + 1].level) {
+						if (this.inventory[i].quality < this.inventory[i + 1].quality) {
+							sorted = false;
+							swap(this.inventory, i);
+						}
+					}
+				}
+			}
+			if (sorted) return;
+		}
+		function swap(inventory, i) {
+			var t = inventory[i];
+			inventory[i] = inventory[i + 1];
+			inventory[i + 1] = t;
+		}
+	}
+
+	sortInvLevel() {
 		this.startDecay(this.time, this.callback);
 		while (true) {
 			var sorted = true;
@@ -225,6 +282,7 @@ class Client {
 			inventory[i + 1] = t;
 		}
 	}
+
 	deleteCard(uuid) {
 		for (var i = 0; i < this.inventory.length; i++) {
 			if (this.inventory[i].id == uuid) {

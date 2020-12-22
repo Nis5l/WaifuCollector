@@ -12,7 +12,7 @@ Fix:
 			First user pack bug
 			Cookie
 			Upgrade Itself
-		Trade Notification
-		Friend Notification
+			Trade Notification
+			Friend Notification
 		Beim Cardtrading, add card( keine karte zur auswahl == Stuck im auswahlscreen
 	background: 1b1515;
