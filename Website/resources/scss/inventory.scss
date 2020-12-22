@@ -13,7 +13,7 @@
   margin-right: 50px;
   float:left;
   font-size: 1.5rem;
-  color: $inputColor;
+  color:  #fff;
 
   display: grid;
   grid-template-columns: min-content auto;
@@ -52,14 +52,14 @@
 }
 
 input[type="search"] {
-	color: $inputColor;
+	color:  #fff;
 
-	background: $inputBg;
+	background: transparent;
 	display: block;
 
 	text-align: center;
 
-	border: 2px solid $settingsShadow;
+	border: 2px solid  #fff;
 
 	width: 70%;
 	outline: none;
@@ -72,28 +72,28 @@ input[type="search"] {
 	border-radius: 25px;
 
 	&:focus {
-		border-color: $settingsInputColor;
+		border-color:  #fff;
 
 		transition: border 0.2s ease-in-out;
 	}
 }
 
 input[name="submit"] {
-	color: $inputColor;
+	color:  #fff;
 	padding: 10px 30px;
 	margin-top: 1%;
 	margin-left: 30%;
 	width: 40%;
 
 	outline: none;
-	border: 2px solid $settingsShadow;
-	background-color: $buttonBG;
+	border: 2px solid  #fff;
+	background-color: transparent;
 
 	border-radius: 25px;
 
 	&:enabled {
 		&:hover {
-			color: $inputColor;
+			color:  #fff;
 			background-color: rgba(0, 0, 0, 0);
 
 			transition: background 0.2s ease-in-out;
@@ -105,8 +105,8 @@ input[name="submit"] {
 	}
 
 	&:disabled {
-		background-color: $inputBorderDisabled;
-		border-color: $inputBorderDisabled;
+		background-color: transparent;
+		border-color:  #fff;
 	}
 }
 
@@ -120,83 +120,4 @@ div#inventory {
 	//margin-top: 100px;
 	width: 100%;
 	height: auto;
-}
-
-.next {
-	color: black;
-	padding: 10px 30px;
-	padding: 1%;
-	float: right;
-	width: 50px;
-	margin-right: 5%;
-
-	outline: none;
-	border: 2px solid $settingsShadow;
-	background-color: $settingsShadow;
-
-	border-radius: 25px;
-
-	&:enabled {
-		&:hover {
-			color: $inputColor;
-			background-color: rgba(0, 0, 0, 0);
-
-			transition: background 0.2s ease-in-out;
-		}
-	}
-
-	&:active {
-		border-color: #ffffff;
-	}
-
-	&:disabled {
-		background-color: $inputBorderDisabled;
-		border-color: $inputBorderDisabled;
-	}
-}
-.previous {
-	color: black;
-	padding: 10px 30px;
-	margin-left: 5%;
-	padding: 1%;
-	float: left;
-	outline: none;
-	border: 2px solid $settingsShadow;
-	width: 50px;
-	background-color: $settingsShadow;
-
-	border-radius: 25px;
-
-	&:enabled {
-		&:hover {
-			color: $inputColor;
-			background-color: rgba(0, 0, 0, 0);
-
-			transition: background 0.2s ease-in-out;
-		}
-	}
-
-	&:active {
-		border-color: #ffffff;
-	}
-
-	&:disabled {
-		background-color: $inputBorderDisabled;
-		border-color: $inputBorderDisabled;
-	}
-}
-
-.page {
-	position: relative;
-	color: white;
-	float: left;
-	font-size: 300%;
-	@media screen and (max-width: 1200px) {
-		font-size: 200%;
-	}
-	margin: auto;
-	margin-top: 2%;
-	width: 100%;
-	text-align: center;
-	margin-bottom: 2%;
 }
