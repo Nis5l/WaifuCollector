@@ -122,7 +122,9 @@ app.get("/privacy", redirectDashboard, function (req, res) {
 });
 
 app.post("/cookie", function (req, res) {
-	res.cookie("accepted", true);
+	var date = new Date();
+	date.setTime(date.getTime() + 315532800000);
+	res.cookie("accepted", true, { expires: date });
 	res.redirect("/login");
 });
 
@@ -346,49 +348,52 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 	);
 });
 
-app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, async function (req, response) {
-
-	function jsonToArray(dataString){
-
+app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, async function (
+	req,
+	response
+) {
+	function jsonToArray(dataString) {
 		var data = JSON.parse(dataString);
 
 		if (data.status != undefined) {
 			if (data.status == 1) {
-				
 				return data;
-
 			}
 		}
 
 		return undefined;
-
 	}
 
 	var cardID = req.params.cardID;
 
-	var cardData = jsonToArray(await getPageBody(getHttp() + API_HOST + "/display/card/" + cardID));
+	var cardData = jsonToArray(
+		await getPageBody(getHttp() + API_HOST + "/display/card/" + cardID)
+	);
 
-	if(cardData == undefined){
-
+	if (cardData == undefined) {
 		response.redirect("/dashboard");
 		return;
-
 	}
 
 	var card = cardData.card;
 	card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
 
-	var animeData = jsonToArray(await getPageBody(getHttp() + API_HOST + "/animes"));
+	var animeData = jsonToArray(
+		await getPageBody(getHttp() + API_HOST + "/animes")
+	);
 
-	if(animeData == undefined){
-
-		response.render("adminpanel/adminpanel_card_edit", { card: card, animes: undefined});
+	if (animeData == undefined) {
+		response.render("adminpanel/adminpanel_card_edit", {
+			card: card,
+			animes: undefined,
+		});
 		return;
-
 	}
 
-	response.render("adminpanel/adminpanel_card_edit", { card: card, animes: animeData.animes});
-
+	response.render("adminpanel/adminpanel_card_edit", {
+		card: card,
+		animes: animeData.animes,
+	});
 });
 
 app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
@@ -928,18 +933,16 @@ function getRankID(userID, callback) {
 	} else callback(undefined);
 }
 
-function getPageBody(url){
-
+function getPageBody(url) {
 	return new Promise((resolve, reject) => {
 		request(url, (error, response, body) => {
 			if (error) reject(error);
 			if (response.statusCode != 200) {
-				reject('Invalid status code <' + response.statusCode + '>');
+				reject("Invalid status code <" + response.statusCode + ">");
 			}
 			resolve(body);
 		});
 	});
-
 }
 
 function getNotifications(token, callback) {
