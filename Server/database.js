@@ -395,7 +395,7 @@ module.exports = {
 	},
 	getUsers: function getUsers(callback) {
 		con.query(
-			"SELECT id, username AS name, ranking AS rank FROM user",
+			"SELECT id, username AS name, ranking FROM user",
 			function (err, result, fields) {
 				if (result == undefined) {
 					callback(undefined);

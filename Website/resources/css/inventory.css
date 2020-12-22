@@ -10,7 +10,7 @@
   margin-right: 50px;
   float: left;
   font-size: 1.5rem;
-  color: #000;
+  color: #fff;
   display: grid;
   grid-template-columns: min-content auto;
   grid-gap: 0.5em; }
@@ -38,11 +38,11 @@
   line-height: 1; }
 
 input[type="search"] {
-  color: #000;
-  background: none;
+  color: #fff;
+  background: transparent;
   display: block;
   text-align: center;
-  border: 2px solid #f7f7f7;
+  border: 2px solid  #fff;
   width: 70%;
   outline: none;
   margin-top: 50px;
@@ -55,24 +55,24 @@ input[type="search"] {
     transition: border 0.2s ease-in-out; }
 
 input[name="submit"] {
-  color: #000;
+  color: #fff;
   padding: 10px 30px;
   margin-top: 1%;
   margin-left: 30%;
   width: 40%;
   outline: none;
-  border: 2px solid #f7f7f7;
-  background-color: #323232;
+  border: 2px solid  #fff;
+  background-color: transparent;
   border-radius: 25px; }
   input[name="submit"]:enabled:hover {
-    color: #000;
+    color: #fff;
     background-color: rgba(0, 0, 0, 0);
     transition: background 0.2s ease-in-out; }
   input[name="submit"]:active {
     border-color: #ffffff; }
   input[name="submit"]:disabled {
-    background-color: #202320;
-    border-color: #202320; }
+    background-color: transparent;
+    border-color: #fff; }
 
 div#inventory {
   margin: auto;
@@ -82,59 +82,3 @@ div#inventory {
   justify-content: center;
   width: 100%;
   height: auto; }
-
-.next {
-  color: black;
-  padding: 10px 30px;
-  padding: 1%;
-  float: right;
-  width: 50px;
-  margin-right: 5%;
-  outline: none;
-  border: 2px solid #f7f7f7;
-  background-color: #f7f7f7;
-  border-radius: 25px; }
-  .next:enabled:hover {
-    color: #000;
-    background-color: rgba(0, 0, 0, 0);
-    transition: background 0.2s ease-in-out; }
-  .next:active {
-    border-color: #ffffff; }
-  .next:disabled {
-    background-color: #202320;
-    border-color: #202320; }
-
-.previous {
-  color: black;
-  padding: 10px 30px;
-  margin-left: 5%;
-  padding: 1%;
-  float: left;
-  outline: none;
-  border: 2px solid #f7f7f7;
-  width: 50px;
-  background-color: #f7f7f7;
-  border-radius: 25px; }
-  .previous:enabled:hover {
-    color: #000;
-    background-color: rgba(0, 0, 0, 0);
-    transition: background 0.2s ease-in-out; }
-  .previous:active {
-    border-color: #ffffff; }
-  .previous:disabled {
-    background-color: #202320;
-    border-color: #202320; }
-
-.page {
-  position: relative;
-  color: white;
-  float: left;
-  font-size: 300%;
-  margin: auto;
-  margin-top: 2%;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 2%; }
-  @media screen and (max-width: 1200px) {
-    .page {
-      font-size: 200%; } }

@@ -6,7 +6,7 @@ select {
   width: 100%;
   box-sizing: border-box;
   background: #f7f7f7;
-  color: #000;
+  color: #0a0909;
   font-weight: 300;
   border-radius: 4px; }
 
@@ -83,11 +83,11 @@ label.file-upload {
   font-weight: 900; }
 
 .button2:hover {
-  background-color: #fff;
+  background-color: #1b6b2f;
   color: #fff;
-  border-color: #fff; }
+  border-color: #26a244; }
 
 .button2 {
-  background-color: #fff;
+  background-color: #26a244;
   color: #fff;
-  border-color: #fff; }
+  border-color: #26a244; }

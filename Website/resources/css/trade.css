@@ -49,10 +49,10 @@
     font-size: 20pt;
     text-align: center; }
   .trade .addtrade {
-    color: #fff;
+    color: white;
     background: none;
     text-align: center;
-    border: 2px solid #f7f7f7;
+    border: 2px solid white;
     width: 70%;
     outline: none;
     margin: auto;
@@ -60,13 +60,13 @@
     padding: 10px 4px;
     border-radius: 25px; }
     .trade .addtrade:focus {
-      border-color: #fff;
+      border-color: #555555;
       transition: border 0.2s ease-in-out; }
   .trade .oktrade {
-    color: #000;
+    color: white;
     background: none;
     text-align: center;
-    border: 2px solid #f7f7f7;
+    border: 2px solid #fff;
     width: 70%;
     outline: none;
     margin: auto;
@@ -74,5 +74,5 @@
     padding: 10px 4px;
     border-radius: 25px; }
     .trade .oktrade:focus {
-      border-color: #fff;
+      border-color: #555555;
       transition: border 0.2s ease-in-out; }
