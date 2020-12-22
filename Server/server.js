@@ -1432,7 +1432,7 @@ app.post("/okTrade", (req, res) => {
 								for (var i = 0; i < cards.length; i++) {
 									var c = clients[userone].getCard(cards[i].card);
 									clients[usertwo].addCard({
-										id: cards[i],
+										id: cards[i].card,
 										userID: userID,
 										cardID: c.cardID,
 										quality: c.quality,
