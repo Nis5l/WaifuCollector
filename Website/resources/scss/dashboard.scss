@@ -142,6 +142,7 @@ html {
 				border-bottom: 1px solid $sectionBorder;
 			}
 			.pack {
+				cursor: pointer;
 				width: 100%;
 				height: 100%;
 				.progress {
@@ -160,6 +161,7 @@ html {
 			}
 		}
 		.inventory {
+			cursor: pointer;
 			@media screen and (min-width: 1200px) {
 				height: 90%;
 				width: 25%;
@@ -225,6 +227,7 @@ html {
 			}
 		}
 		.friends {
+			cursor: pointer;
 			@media screen and (min-width: 1200px) {
 				height: 90%;
 				width: 24%;

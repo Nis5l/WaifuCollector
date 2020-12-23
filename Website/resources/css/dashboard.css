@@ -101,6 +101,7 @@ html {
         width: 100%;
         border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
     .wrapper .dashboard .collection .pack {
+      cursor: pointer;
       width: 100%;
       height: 100%; }
       .wrapper .dashboard .collection .pack .progress {
@@ -112,67 +113,70 @@ html {
         transform-origin: 50% 50%; }
       .wrapper .dashboard .collection .pack .time {
         font-size: 100pt; }
-    @media screen and (min-width: 1200px) {
-      .wrapper .dashboard .inventory {
-        height: 90%;
-        width: 25%;
-        float: left;
-        border-right: 1px solid rgba(255, 255, 255, 0.5); } }
-    @media screen and (max-width: 1200px) {
-      .wrapper .dashboard .inventory {
-        height: 350px;
-        width: 100%;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
-    .wrapper .dashboard .inventory .image {
-      margin-top: 0%;
-      width: 100%;
-      height: 100%;
-      background-image: url("/assets/OpenSymbol.png");
-      background-repeat: no-repeat;
-      background-size: 250px;
-      background-position: center center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      vertical-align: middle; }
+    .wrapper .dashboard .inventory {
+      cursor: pointer; }
+      @media screen and (min-width: 1200px) {
+        .wrapper .dashboard .inventory {
+          height: 90%;
+          width: 25%;
+          float: left;
+          border-right: 1px solid rgba(255, 255, 255, 0.5); } }
       @media screen and (max-width: 1200px) {
-        .wrapper .dashboard .inventory .image {
-          background-size: 19%; } }
-      @media screen and (max-width: 900px) {
-        .wrapper .dashboard .inventory .image {
-          background-size: 25%; } }
-      @media screen and (max-width: 700px) {
-        .wrapper .dashboard .inventory .image {
-          background-size: 30%; } }
-      @media screen and (max-width: 570px) {
-        .wrapper .dashboard .inventory .image {
-          background-size: 35%; } }
-      @media screen and (max-width: 470px) {
-        .wrapper .dashboard .inventory .image {
-          background-size: 43%; } }
-      @media screen and (max-width: 360px) {
-        .wrapper .dashboard .inventory .image {
-          background-size: 60%; } }
-      .wrapper .dashboard .inventory .image .text {
-        margin: auto;
-        font-size: 21pt;
-        text-align: center;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none; }
+        .wrapper .dashboard .inventory {
+          height: 350px;
+          width: 100%;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+      .wrapper .dashboard .inventory .image {
+        margin-top: 0%;
+        width: 100%;
+        height: 100%;
+        background-image: url("/assets/OpenSymbol.png");
+        background-repeat: no-repeat;
+        background-size: 250px;
+        background-position: center center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        vertical-align: middle; }
+        @media screen and (max-width: 1200px) {
+          .wrapper .dashboard .inventory .image {
+            background-size: 19%; } }
+        @media screen and (max-width: 900px) {
+          .wrapper .dashboard .inventory .image {
+            background-size: 25%; } }
         @media screen and (max-width: 700px) {
-          .wrapper .dashboard .inventory .image .text {
-            font-size: 18pt; } }
+          .wrapper .dashboard .inventory .image {
+            background-size: 30%; } }
         @media screen and (max-width: 570px) {
-          .wrapper .dashboard .inventory .image .text {
-            font-size: 18pt; } }
+          .wrapper .dashboard .inventory .image {
+            background-size: 35%; } }
         @media screen and (max-width: 470px) {
-          .wrapper .dashboard .inventory .image .text {
-            font-size: 14pt; } }
+          .wrapper .dashboard .inventory .image {
+            background-size: 43%; } }
+        @media screen and (max-width: 360px) {
+          .wrapper .dashboard .inventory .image {
+            background-size: 60%; } }
+        .wrapper .dashboard .inventory .image .text {
+          margin: auto;
+          font-size: 21pt;
+          text-align: center;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none; }
+          @media screen and (max-width: 700px) {
+            .wrapper .dashboard .inventory .image .text {
+              font-size: 18pt; } }
+          @media screen and (max-width: 570px) {
+            .wrapper .dashboard .inventory .image .text {
+              font-size: 18pt; } }
+          @media screen and (max-width: 470px) {
+            .wrapper .dashboard .inventory .image .text {
+              font-size: 14pt; } }
     .wrapper .dashboard .friends {
+      cursor: pointer;
       text-align: center;
       display: flex;
       justify-content: center;

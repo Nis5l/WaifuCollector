@@ -304,27 +304,23 @@ module.exports = {
 		);
 	},
 
-	updateCardName: function(cardID, cardName){
-
-		con.query("UPDATE `card` SET `cardName`=? WHERE `id`=?",
+	updateCardName: function (cardID, cardName) {
+		con.query(
+			"UPDATE `card` SET `cardName`=? WHERE `id`=?",
 			[cardName, cardID],
 			(err, result, fields) => {
-
 				return err;
-
-			});
-
+			}
+		);
 	},
-	updateCardAnime: function(cardID, cardAnime){
-
-		con.query("UPDATE `card` SET `typeID`=? WHERE `id`=?",
+	updateCardAnime: function (cardID, cardAnime) {
+		con.query(
+			"UPDATE `card` SET `typeID`=? WHERE `id`=?",
 			[cardAnime, cardID],
 			(err, result, fields) => {
-
 				return err;
-
-			});
-
+			}
+		);
 	},
 	getCardsDisplay: function getCardsDisplay(callback) {
 		con.query(
@@ -394,16 +390,17 @@ module.exports = {
 		);
 	},
 	getUsers: function getUsers(callback) {
-		con.query(
-			"SELECT id, username AS name, ranking FROM user",
-			function (err, result, fields) {
-				if (result == undefined) {
-					callback(undefined);
-					return;
-				}
-				callback(result);
+		con.query("SELECT id, username AS name, ranking FROM user", function (
+			err,
+			result,
+			fields
+		) {
+			if (result == undefined) {
+				callback(undefined);
+				return;
 			}
-		);
+			callback(result);
+		});
 	},
 	getUserID: function getUserID(username, callback) {
 		con.query(
@@ -673,6 +670,15 @@ module.exports = {
 			}
 		);
 	},
+	removeNotifications: function removeNotifications(userID, callback) {
+		con.query(
+			"DELETE FROM notification WHERE userID = " + userID + ";",
+			(err, result, fields) => {
+				if (err) console.log(err);
+				callback(result);
+			}
+		);
+	},
 };
 
 function cards(callback) {
@@ -784,6 +790,14 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nezuko Kamado', '55', 'Card_NezukoKamado.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Artoria Pendragon', '52', 'Card_ArtoriaPendragon.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Violet Evergarden', '56', 'Card_VioletEvergarden.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuna', '57', 'Card_Yuna.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Momoka Sonokawa', '58', 'Card_MomokaSonokawa.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Miou Ootori', '58', 'Card_MiouOotori.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Maya Kyodo', '58', 'Card_MayaKyodo.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Urara Kasugano', '58', 'Card_UraraKasugano.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yui', '19', 'Card_Yui.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuri Nakamura', '19', 'Card_YuriNakamura.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Eri Shiina', '19', 'Card_EriShiina.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -855,6 +869,8 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('54', 'Owari no Seraph');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('55', 'Demon Slayer');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('56', 'Violet Evergarden');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('57', 'Kuma Kuma Kuma Bear');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('58', 'Sabagebu!');",
 	];
 
 	con.connect(() => {

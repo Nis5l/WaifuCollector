@@ -93,6 +93,10 @@ class ProgressRing extends HTMLElement {
 		}
 	}
 
+	isReady() {
+		return this.time == 0 || this.time == "Open";
+	}
+
 	isClicked(x, y) {
 		if (this.time != 0 && this.time != "Open") return;
 		const circle = this._root.querySelector("circle");
@@ -161,6 +165,7 @@ class Card extends HTMLElement {
       @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@1,700&display=swap');
       .card
       {
+		cursor: pointer;
         float: left;
         margin: 10px;
         margin-top: 2%;
@@ -439,7 +444,8 @@ class Confirmation extends HTMLElement {
       margin: auto 10px;
       border: 2px solid #fff;
       background-color: #323232;
-      border-radius: 25px; }
+      border-radius: 25px;
+	  cursor: pointer;}
       .card input[type="submit"]:enabled:hover {
         color: #fff;
         background-color: rgba(0, 0, 0, 0);
@@ -502,6 +508,7 @@ class AddFriend extends HTMLElement {
       background-color: #323232;
       border-radius: 25px;
 	  width: 125px;
+	  cursor: pointer;
 	  }
       .card input[type="submit"]:enabled:hover {
         color: #fff;
@@ -590,7 +597,9 @@ class Friend extends HTMLElement {
 		background-color: #25282f;
 		padding: 10px;
 		font-family: 'Allerta Stencil', sans-serif;
-		text-align: center; }
+		text-align: center;
+		cursor: pointer;
+		}
 		.card .username {
 		  margin-top: 26px;
 		  color: white;
@@ -652,6 +661,7 @@ class FriendSelection extends HTMLElement {
 	  height: 190px;
 	  border-bottom: 1px solid #ffff;
       font-size: 24pt;
+	  cursor: pointer;
 	  }
     .card .delete {
       color: white;
@@ -661,6 +671,7 @@ class FriendSelection extends HTMLElement {
 	  vertical-align:middle;
 	  height: 80px;
 	  font-size: 16pt;
+	  cursor: pointer;
 	  }
 	</style>
     `;
@@ -719,6 +730,7 @@ class CookieConfirmation extends HTMLElement {
     .card .wrong {
       border-color: red !important; }
     .card input[type="submit"] {
+	  cursor: pointer;
       color: #f7f7f7;
       padding: 20px 30px;
       margin: auto 10px;
@@ -780,11 +792,14 @@ class NotificationBox extends HTMLElement {
 		this._root = this.attachShadow({ mode: "open" });
 		this.closeCallback = undefined;
 		this.elementCallback = undefined;
+		this.deleteAllCallback = undefined;
 
 		this._root.innerHTML = `
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 			<div class="blocker">
 				<div class="box">
 					<div class="header">
+						<i class="delete fa fa-trash" style="color: #fff; float: right; z-index: 10002; padding-right: 20px; cursor: pointer;"></i>
 						Notifications
 					</div>
 				</div>
@@ -836,6 +851,14 @@ class NotificationBox extends HTMLElement {
 			if (cl != undefined && cl == "blocker" && this.closeCallback != undefined)
 				this.closeCallback();
 		};
+		ele = this._root.querySelector(".delete");
+		ele.onclick = () => {
+			if (this.deleteAllCallback != undefined) this.deleteAllCallback();
+		};
+	}
+	clearAll() {
+		var ele = this._root.querySelectorAll("notification-element");
+		for (var i = 0; i < ele.length; i++) ele[i].remove();
 	}
 }
 
@@ -856,6 +879,7 @@ class NotificationElement extends HTMLElement {
             </div>
 			<style>
 	.box {
+   	cursor: pointer;
 	margin: auto;
 	margin-bottom: 5px;
     width: 95%;
@@ -899,6 +923,7 @@ class ErrorMessage extends HTMLElement {
 			</div>
 			<style>
 	.box {
+	cursor: pointer;
     position: fixed;
     top: 50%;
     left: 50%;

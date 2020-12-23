@@ -92,23 +92,6 @@
                 </script>
             <% } %>
 
-            <script>
-               	
-				var me = undefined;
-                window.onmousedown = function(e) {
-                    const el = document.querySelector('progress-ring');
-                    x = e.pageX;
-                    y = e.pageY;
-                    if (nb == undefined && me == undefined && el.isClicked(x,y)) {
-                        var form = document.createElement('form');
-                        document.body.appendChild(form);
-                        form.method = 'get';
-                        form.action = '/pack';
-                        form.submit();
-                    }
-                }
-            </script>
-
             <!--<script>
                 function sectionHeights() {
                     var height = $('.dashboard').outerHeight() - $('.dashboard .menu').outerHeight() -35;
@@ -139,6 +122,17 @@
                     form.method = 'get';
                     form.action = '/friends'; 
                     form.submit();
+                });
+				
+				var em = document.querySelector("progress-ring");
+                $(".pack").click(()=>{
+                    if (em.isReady()) {
+                        var form = document.createElement('form');
+                        document.body.appendChild(form);
+                        form.method = 'get';
+                        form.action = '/pack';
+                        form.submit();
+                    }
                 });
             </script>
 

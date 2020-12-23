@@ -1494,18 +1494,30 @@ app.post("/deleteNotification", (req, res) => {
 			return;
 		}
 
-		if (clients[decoded.id] == undefined) {
-			createCache(decoded.id, decoded.username, run);
-		} else {
-			clients[decoded.id].refresh();
-			run();
+		database.removeNotification(notificationID, decoded.id, () => {
+			res.send({ status: 0 });
+		});
+	} catch (e) {
+		console.log(e);
+		res.send({ status: 1, message: "internal server error" });
+		return;
+	}
+});
+
+app.post("/deleteAllNotifications", (req, res) => {
+	try {
+		var token = req.body.token;
+
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({ status: 1, message: "Identification Please" });
+			return;
 		}
 
-		function run() {
-			database.removeNotification(notificationID, decoded.id, () => {
-				res.send({ status: 0 });
-			});
-		}
+		database.removeNotifications(decoded.id, () => {
+			res.send({ status: 0 });
+		});
 	} catch (e) {
 		console.log(e);
 		res.send({ status: 1, message: "internal server error" });

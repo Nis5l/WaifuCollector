@@ -876,6 +876,27 @@ app.post("/deleteNotification", redirectLogin, function (req, res) {
 	);
 });
 
+app.post("/deleteAllNotifications", redirectLogin, function (req, res) {
+	request.post(
+		getHttp() + API_HOST + "/deleteAllNotifications",
+		{
+			json: {
+				token: req.cookies.token,
+			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.send({ status: 0 });
+			} else {
+				res.send({ status: 1 });
+			}
+		}
+	);
+});
+
 function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
