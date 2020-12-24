@@ -4,53 +4,79 @@
 
         <%- include('partials/standard_header.ejs') %>
 
-        <title>WaifuCollector | Pack</title>
+        <title>WaifuCollector | TradeInventory</title>
 
         <link rel="stylesheet" href="<%= url %>/resources/css/inventory.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard_sidebar.css">
+
+        <style>
+
+            .nav{
+
+                position: fixed;
+                top: 0;
+                left: 0;
+
+                box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5);
+
+            }
+
+        </style>
+
 
     </head>
-    <body class="scrollable">
+
+	<form class="cardForm" action="/card" method="get">
+		<input type="hidden" name="uuid" value="1"/>
+	</form>
+
+	<form class="addForm" action="/addtrade" method="post">
+		<input type="hidden" name="userID" value="<%-friendID%>"/>
+		<input type="hidden" name="cardID" value=""/>
+	</form>
+
+    <body style="overflow: hidden;">
 
         <%- include('partials/nav.ejs') %>
-        
-        <form class="filter" action="#" onsubmit="onfilter(); return false">
-            <input type="search" name="search" placeholder=""/>
-			<br>
-			<div class="radio_wrap">
-				<label class="radio">
-				  <span class="radio__input">
-					<input type="radio" checked="checked" name="sortType">
-					<span class="radio__control"></span>
-				  </span>
-				  <span class="radio__label">Name</span>
-				</label>
 
-				<label class="radio">
-				  <span class="radio__input">
-					<input type="radio" name="sortType">
-					<span class="radio__control"></span>
-				  </span>
-				  <span class="radio__label">Level</span>
-				</label>
-			</div>
-			<br>
-            <input type="submit" value="Search" name="submit"></input>
-        </form>
+        <div class="sidebar">
 
-        <form class="cardForm" action="/card" method="get">
-            <input type="hidden" name="uuid" value="1"/>
-        </form>
+            <%- include('partials/dash_nav.ejs') %>
 
-        <form class="addForm" action="/addtrade" method="post">
-            <input type="hidden" name="userID" value="<%-friendID%>"/>
-            <input type="hidden" name="cardID" value=""/>
-        </form>
-
-
-        <div id="inventory">
         </div>
-        
-        <div class="bot"></div>
+
+        <div class="dashboard_content">
+			<div class="dashboard_content_wrapper scrollable">
+				<form class="filter" action="#" onsubmit="onfilter(); return false">
+					<input type="search" name="search" placeholder=""/>
+					<br>
+					<div class="radio_wrap">
+						<label class="radio">
+						  <span class="radio__input">
+							<input type="radio" checked="checked" name="sortType">
+							<span class="radio__control"></span>
+						  </span>
+						  <span class="radio__label">Name</span>
+						</label>
+
+						<label class="radio">
+						  <span class="radio__input">
+							<input type="radio" name="sortType">
+							<span class="radio__control"></span>
+						  </span>
+						  <span class="radio__label">Level</span>
+						</label>
+					</div>
+					<br>
+					<input type="submit" value="Search" name="submit"></input>
+				</form>
+
+				<div id="inventory">
+				</div>
+				
+			</div>
+        </div>
     </body>
 
     <script
@@ -89,6 +115,7 @@
 
 
     <script>
+		var inv_wrapper = document.querySelector(".dashboard_content_wrapper");
         var inv = document.querySelector("#inventory");
         resize();
         window.onresize = function(event) {
@@ -96,7 +123,7 @@
         };
         function resize()
         {
-            var amount = Math.floor(document.body.offsetWidth / 273);
+            var amount = Math.floor(inv_wrapper.offsetWidth / 273);
             if(amount > cardAmount)
                 amount = cardAmount;
             if(amount <= 0)
@@ -108,12 +135,13 @@
 
 	<script>
 
+		var scroll = document.querySelector(".scrollable");
 		var filter = document.querySelector(".filter");
 		var page = 0;
 		var pageamount = 1;
 		loadCards(true);
-		window.onscroll = function(ev) {
-			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 30) {
+		scroll.onscroll = function(ev) {
+			if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1) {
 				loadCards();
 			}
 		};
@@ -134,7 +162,7 @@
 					pageamount = json.pagemax;
 					displayCards(json.cards);
 					resize();
-					if((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 30)
+					if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1)
 						loadCards();
 				}
 			}
@@ -187,10 +215,12 @@
 	<script>
 		function onfilter()
 		{
+			cardAmount = 0;
 			inventory.innerHTML = "";
 			loadCards(true);
 		}
 	</script>
 
     <script src="../resources/components.js"></script> 
+    <%- include('partials/error.ejs') %>
 </html>

@@ -1,6 +1,7 @@
 
 <% if(locals.message) {%>
 <script>
+	console.log("sf");
 	const message = "<%- message %>";
 	document.body.insertAdjacentHTML('afterend', `<error-message message="${message}"> </error-message>`);
 	var me = document.querySelector("error-message");

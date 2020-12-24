@@ -42,7 +42,9 @@ class ProgressRing extends HTMLElement {
         }
         circle {
           transition: stroke-dashoffset 0.35s;
-          transition: fillOpacity 0.35s;
+
+		  transition: fill-opacity 0.25s linear; 
+
           transform: rotate(-90deg);
           transform-origin: 50% 50%;
         }
@@ -117,6 +119,12 @@ class ProgressRing extends HTMLElement {
 			circle.style.fillOpacity = "0.5";
 			return ret;
 		}
+	}
+
+	setFocused(b) {
+		const circle = this._root.querySelector("circle");
+		if (b) circle.style.fillOpacity = "0.5";
+		else circle.style.fillOpacity = "0.06";
 	}
 }
 

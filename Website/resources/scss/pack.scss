@@ -1,13 +1,10 @@
 @import "___base.scss";
 
 .packwrapper {
+	display: flex;
 	position: relative;
-	//min-width: 480px;
-	min-width: 200px;
-
 	width: 100%;
-	height: auto;
-	padding: 150px 0px 0px 0px;
+	height: 100%;
 }
 
 div#Open {

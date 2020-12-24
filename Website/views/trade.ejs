@@ -1,45 +1,75 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
 
 		<%- include('partials/standard_header.ejs') %>
 
-		<title>WaifuCollector | Settings</title>
+		<title>WaifuCollector | Trade</title>
 		
 		<link rel="stylesheet" href="<%= url %>/resources/css/trade.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard_sidebar.css">
+
+        <style>
+
+            .nav{
+
+                position: fixed;
+                top: 0;
+                left: 0;
+
+                box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5);
+
+            }
+
+        </style>
+
 
     </head>
 
-    <body id="test">
+	<form class="addtradeform" action="/tradeinventory" method="get">
+		<input type="hidden" name="userID" value="<%-userID%>"/>
+	</form>
+	<form class="oktradeform" action="/oktrade" method="post">
+		<input type="hidden" name="userID" value="<%-userID%>"/>
+	</form>
+	<form class="removetradeform" action="/removetrade" method="post">
+		<input type="hidden" name="userID" value="<%-userID%>"/>
+		<input type="hidden" name="cardID" value=""/>
+	</form>
+
+    <body style="overflow: hidden;">
 
         <%- include('partials/nav.ejs') %>
 
-        <div class="trade">
-			<div id="tradeself">
-				<div class="name">You</div>
-				<div class="confirmationself">sdf</div>
-			<div id="tradeselfinner">
-			</div>
-			</div>
-			<div id="tradeother">
-				<div class="name"><%- username %></div>
-				<div class="confirmationother">sdf</div>
-				<div id="tradeotherinner">
+        <div class="sidebar">
+
+            <%- include('partials/dash_nav.ejs') %>
+
+        </div>
+
+        <div class="dashboard_content">
+			<div class="dashboard_content_wrapper">
+				<div class="trade scrollable">
+					<div class="packwrapper">
+						<div id="tradeself">
+							<div class="name">You</div>
+							<div class="confirmationself">sdf</div>
+						<div id="tradeselfinner">
+						</div>
+						</div>
+						<div id="tradeother">
+							<div class="name"><%- username %></div>
+							<div class="confirmationother">sdf</div>
+							<div id="tradeotherinner">
+							</div>
+						</div>
+						<input type="button" class="addtrade" value="Add Card"></input>
+						<input type="button" class="oktrade" value="Confirm"></input>
+					</div>
 				</div>
 			</div>
-			<input type="button" class="addtrade" value="Add Card"></input>
-			<input type="button" class="oktrade" value="Confirm"></input>
         </div>
-        <form class="addtradeform" action="/tradeinventory" method="get">
-            <input type="hidden" name="userID" value="<%-userID%>"/>
-        </form>
-        <form class="oktradeform" action="/oktrade" method="post">
-            <input type="hidden" name="userID" value="<%-userID%>"/>
-        </form>
-        <form class="removetradeform" action="/removetrade" method="post">
-            <input type="hidden" name="userID" value="<%-userID%>"/>
-            <input type="hidden" name="cardID" value=""/>
-        </form>
     </body>
 	
 	<script
@@ -147,4 +177,5 @@
 	</script>
 	
 	<script src="../resources/components.js"></script>
+    <%- include('partials/error.ejs') %>
 </html>

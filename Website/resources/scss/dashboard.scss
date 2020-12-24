@@ -1,267 +1,111 @@
 @import "___base.scss";
 
-html {
-	height: 100%;
-}
-.wrapper {
-	position: relative;
-	//min-width: 480px;
-	min-width: 300px;
-	height: 100%;
+.dashboard_content{
 
-	min-height: 0px;
-	@media screen and (max-width: 1200px) {
-		min-height: 1300px;
-	}
+	position: absolute;
+    margin-left: 250px;
+    margin-top: 100px;
+	width: calc(100% - 250px);
+	height: calc(100% - 100px);
+		
+	.dashboard_content_wrapper{
+		padding: 10px;
+		display: block;
+		position: relative;
+		width: calc(100% - 20px);
+		height: calc(100% - 20px);
 
-	width: 100%;
-	padding: 50px 0px 0px 0px;
-	.dashboard {
-		//position: relative;
+		#settings {
+			position: absolute;
+			top: 20px;
+			right: 20px;
 
-		height: 92%;
-		@media screen and (min-width: 1200px) {
-			height: 500px;
-		}
-		margin: auto;
-		width: 90%;
-		//align-items: center;
-		padding: 20px;
-		@media screen and (max-width: 400px) {
-			padding: 10px;
-		}
+			float: right;
 
-		background-color: $cardBg2;
+			color: $settingsGearColor;
 
-		.menu {
-			border-bottom: 1px solid $sectionBorder;
+			transition: transform 1s;
 
-			#username {
-				display: inline-block;
+			margin-top: 10px;
+			margin-right: 10px;
 
-				font-size: 3em;
-				font-family: "Oswald";
-				font-weight: 700;
+			font-size: 25px;
 
-				text-transform: uppercase;
-			}
+			&:hover {
+				color: $settingsGearColorHover;
 
-			#settings {
-				position: relative;
+				-webkit-animation: rotating 5s linear infinite;
+				-moz-animation: rotating 5s linear infinite;
+				-ms-animation: rotating 5s linear infinite;
+				-o-animation: rotating 5s linear infinite;
+				animation: rotating 5s linear infinite;
 
-				float: right;
-
-				color: $settingsGearColor;
-
-				transition: transform 1s;
-
-				margin-top: 10px;
-				margin-right: 10px;
-
-				&:hover {
-					color: $settingsGearColorHover;
-
-					-webkit-animation: rotating 5s linear infinite;
-					-moz-animation: rotating 5s linear infinite;
-					-ms-animation: rotating 5s linear infinite;
-					-o-animation: rotating 5s linear infinite;
-					animation: rotating 5s linear infinite;
-
-					//@-webkit-keyframes rotating [> Safari and Chrome <] {
-					@-webkit-keyframes rotating {
-						from {
-							-webkit-transform: rotate(0deg);
-							-o-transform: rotate(0deg);
-							transform: rotate(0deg);
-						}
-
-						to {
-							-webkit-transform: rotate(360deg);
-							-o-transform: rotate(360deg);
-							transform: rotate(360deg);
-						}
+				//@-webkit-keyframes rotating [> Safari and Chrome <] {
+				@-webkit-keyframes rotating {
+					from {
+						-webkit-transform: rotate(0deg);
+						-o-transform: rotate(0deg);
+						transform: rotate(0deg);
 					}
 
-					@keyframes rotating {
-						from {
-							-ms-transform: rotate(0deg);
-							-moz-transform: rotate(0deg);
-							-webkit-transform: rotate(0deg);
-							-o-transform: rotate(0deg);
-							transform: rotate(0deg);
-						}
+					to {
+						-webkit-transform: rotate(360deg);
+						-o-transform: rotate(360deg);
+						transform: rotate(360deg);
+					}
+				}
 
-						to {
-							-ms-transform: rotate(360deg);
-							-moz-transform: rotate(360deg);
-							-webkit-transform: rotate(360deg);
-							-o-transform: rotate(360deg);
-							transform: rotate(360deg);
-						}
+				@keyframes rotating {
+					from {
+						-ms-transform: rotate(0deg);
+						-moz-transform: rotate(0deg);
+						-webkit-transform: rotate(0deg);
+						-o-transform: rotate(0deg);
+						transform: rotate(0deg);
+					}
+
+					to {
+						-ms-transform: rotate(360deg);
+						-moz-transform: rotate(360deg);
+						-webkit-transform: rotate(360deg);
+						-o-transform: rotate(360deg);
+						transform: rotate(360deg);
 					}
 				}
 			}
-			vertical-align: middle;
 		}
+		
 
-		.stats {
-			@media screen and (min-width: 1200px) {
-				height: 90%;
-				float: left;
-				width: 25%;
-				border-right: 1px solid $sectionBorder;
-			}
-			margin: 0px;
-			@media screen and (max-width: 1200px) {
-				height: 200px;
-				width: 100%;
-				border-bottom: 1px solid $sectionBorder;
-			}
-			.content {
-				margin-top: 25px;
-				height: 100%;
-
-				text-align: center;
-
-				p:not(:last-child) {
-					margin-bottom: 15px;
-				}
-			}
-		}
-
-		.collection {
-			@media screen and (min-width: 1200px) {
-				height: 90%;
-				width: 25%;
-				float: left;
-				border-right: 1px solid $sectionBorder;
-			}
-			@media screen and (max-width: 1200px) {
-				height: 300px;
-				width: 100%;
-				border-bottom: 1px solid $sectionBorder;
-			}
-			.pack {
-				cursor: pointer;
-				width: 100%;
-				height: 100%;
-				.progress {
-					fill: transparent;
-					stroke-width: 4;
-					stroke: rgb(255, 0, 0);
-
-					transition: 0.35s stroke-dashoffset;
-					transform: rotate(-90deg);
-					transform-origin: 50% 50%;
-				}
-
-				.time {
-					font-size: 100pt;
-				}
-			}
-		}
-		.inventory {
-			cursor: pointer;
-			@media screen and (min-width: 1200px) {
-				height: 90%;
-				width: 25%;
-				float: left;
-				border-right: 1px solid $sectionBorder;
-			}
-			@media screen and (max-width: 1200px) {
-				height: 350px;
-				width: 100%;
-				border-bottom: 1px solid $sectionBorder;
-			}
-			.image {
-				margin-top: 0%;
-				width: 100%;
-				height: 100%;
-				background-image: url("/assets/OpenSymbol.png");
-				background-repeat: no-repeat;
-				background-size: 250px;
-				@media screen and (max-width: 1200px) {
-					background-size: 19%;
-				}
-				@media screen and (max-width: 900px) {
-					background-size: 25%;
-				}
-				@media screen and (max-width: 700px) {
-					background-size: 30%;
-				}
-				@media screen and (max-width: 570px) {
-					background-size: 35%;
-				}
-				@media screen and (max-width: 470px) {
-					background-size: 43%;
-				}
-				@media screen and (max-width: 360px) {
-					background-size: 60%;
-				}
-				background-position: center center;
-
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				vertical-align: middle;
-				.text {
-					margin: auto;
-					font-size: 21pt;
-					@media screen and (max-width: 700px) {
-						font-size: 18pt;
-					}
-					@media screen and (max-width: 570px) {
-						font-size: 18pt;
-					}
-					@media screen and (max-width: 470px) {
-						font-size: 14pt;
-					}
-					text-align: center;
-					-webkit-touch-callout: none;
-					-webkit-user-select: none;
-					-khtml-user-select: none;
-					-moz-user-select: none;
-					-ms-user-select: none;
-					user-select: none;
-				}
-			}
-		}
-		.friends {
-			cursor: pointer;
-			@media screen and (min-width: 1200px) {
-				height: 90%;
-				width: 24%;
-				float: left;
-			}
-			@media screen and (max-width: 1200px) {
-				height: 260px;
-				width: 100%;
-			}
-			text-align: center;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			vertical-align: middle;
-			.text {
-				margin: auto;
+		.dashboard_stats
+		{
+			width: fit-content;
+			height: min-content;
+			#dashboard_username
+			{
+				margin-top: 20px;
+				margin-left: 20px;
 				font-size: 32pt;
-				@media screen and (max-width: 700px) {
-					font-size: 18pt;
-				}
-				@media screen and (max-width: 570px) {
-					font-size: 18pt;
-				}
-				@media screen and (max-width: 470px) {
-					font-size: 14pt;
-				}
-				text-align: center;
-				-webkit-touch-callout: none;
-				-webkit-user-select: none;
-				-khtml-user-select: none;
-				-moz-user-select: none;
-				-ms-user-select: none;
-				user-select: none;
 			}
+
+			#dashboard_friends
+			{
+				margin-top: 20px;
+				margin-left: 50px;
+				font-size: 18pt;
+			}
+
+
+		}
+
+		.progress_wrapper
+		{
+			cursor: pointer;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 260px;
+			height: 260px;
+			transform: translate(-50%, -50%);
 		}
 	}
 }

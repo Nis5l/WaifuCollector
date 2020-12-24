@@ -1,13 +1,11 @@
 div[id="cards"] {
   float: left;
   margin: auto;
-  overflow: auto;
   max-height: none;
   align-items: center;
   justify-content: center;
-  margin-top: 130px;
   width: 60%;
-  height: auto; }
+  height: 100%; }
   @media screen and (min-width: 1255px) {
     div[id="cards"] {
       border-right: 1px solid rgba(255, 255, 255, 0.5); } }
@@ -19,17 +17,18 @@ div[id="cardsinner"] {
   margin: auto; }
 
 div[id="maincard"] {
+  display: flex;
   margin: auto;
-  margin-top: 130px;
-  width: min-content;
-  margin-right: 100px;
-  float: unset;
-  height: auto; }
+  margin-top: 25px;
+  margin-left: 5px;
+  justify-content: center;
+  vertical-align: middle;
+  height: 100%; }
   @media screen and (min-width: 1255px) {
     div[id="maincard"] {
-      float: right; } }
+      float: right;
+      width: calc(40% - 1px - 5px); } }
   @media screen and (max-width: 1255px) {
     div[id="maincard"] {
-      margin-right: auto;
       height: 600px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }

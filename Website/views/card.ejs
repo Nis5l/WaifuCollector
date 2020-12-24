@@ -4,34 +4,62 @@
 		
 		<%- include('partials/standard_header.ejs') %>
 
-		<title>WaifuCollector | Pack</title>
+		<title>WaifuCollector | Card</title>
 
-		<link rel="stylesheet" href="resources/css/all.css" />
+        <link rel="stylesheet" href="<%= url %>/resources/css/card.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard_sidebar.css">
+		
+        <style>
+
+            .nav{
+
+                position: fixed;
+                top: 0;
+                left: 0;
+
+                box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5);
+
+            }
+
+        </style>
+
 	</head>
-	<body class="scrollable" id=body>
 
-		<%- include('partials/nav.ejs') %>
-		<div id="maincard"></div>
-		<div id="cards">
-			<div id="cardsinner">
+	<form class="nextForm" action="/card" method="get">
+		<input type="hidden" name="next" value="0"/>
+	</form>
+
+	<form class="prevForm" action="/card" method="get">
+		<input type="hidden" name="next" value="1"/>
+	</form>
+
+	<form class="upgrade" action="/upgrade" method="get">
+		<input type="hidden" name="mainuuid" value="0"/>
+		<input type="hidden" name="carduuid" value="0"/>
+	</form>
+
+
+    <body style="overflow: hidden;">
+
+        <%- include('partials/nav.ejs') %>
+
+        <div class="sidebar">
+
+            <%- include('partials/dash_nav.ejs') %>
+
+        </div>
+
+        <div class="dashboard_content">
+			<div class="dashboard_content_wrapper">
+				<div id="maincard"></div>
+				<div id="cards" class="scrollable">
+					<div id="cardsinner">
+					</div>
+				</div>
 			</div>
-		</div>
-
-        <form class="nextForm" action="/card" method="get">
-            <input type="hidden" name="next" value="0"/>
-        </form>
-
-        <form class="prevForm" action="/card" method="get">
-            <input type="hidden" name="next" value="1"/>
-        </form>
-
-        <form class="upgrade" action="/upgrade" method="get">
-            <input type="hidden" name="mainuuid" value="0"/>
-            <input type="hidden" name="carduuid" value="0"/>
-        </form>
-
-	</body>
-
+        </div>
+    </body>
 		
 	<script
 		src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -68,13 +96,12 @@
 		        opn = document.getElementById('maincard');
 		     	path = maincard.cardImage;
 				var posX =  off;
-				var cardhtml = `<waifu-card id=card-main img_path=${path} frame-front=${maincard.frame.path_front} frame-back=${maincard.frame.path_back} pos-x=${posX} card-name=\"${maincard.cardName}\" anime-name=\"${maincard.type.name}\" turned=false quality=${maincard.quality} level=${maincard.level} uuid=${maincard.uuid} cardID=${maincard.cardID} card-size=1.3></waifu-card>`;
+				var cardhtml = `<waifu-card id=card-main img_path=${path} frame-front=${maincard.frame.path_front} frame-back=${maincard.frame.path_back} pos-x=${posX} card-name=\"${maincard.cardName}\" anime-name=\"${maincard.type.name}\" turned=false quality=${maincard.quality} level=${maincard.level} uuid=${maincard.uuid} cardID=${maincard.cardID} card-size=1.3 style="margin:auto"></waifu-card>`;
 				opn.insertAdjacentHTML('beforeend',cardhtml);
 
 				mc = document.getElementById(`card-main`);
 			}
 
-		var opn = document.getElementById('body');
 		var isOpen = false;
 		var upform = document.querySelector('.upgrade');
          $(document).click(function(event) {
@@ -82,7 +109,7 @@
 		
           if(ele.is('waifu-card') && !isOpen && ele.length != 0 && ele[0].uuid != mc.uuid)
           {
-		    opn.insertAdjacentHTML('afterend',
+		    document.body.insertAdjacentHTML('afterend',
 				`<card-confirmation message="Combine?"> </card-confirmation>`);
 			  isOpen = true;
 			var conf = document.querySelector("card-confirmation");
@@ -140,11 +167,12 @@
 
 	<script>
 
+		var scroll = document.querySelector(".scrollable");
 		var page = 0;
 		var pageamount = 1;
 		loadCards(true);
-		window.onscroll = function(ev) {
-			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 30) {
+		scroll.onscroll = function(ev) {
+			if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1) {
 				loadCards();
 			}
 		};
@@ -169,7 +197,7 @@
 						displayMain(json.maincard);
 					displayCards(json.cards);
 					resize();
-					if((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 30)
+					if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1)
 					{
 						loadCards();
 					}
@@ -187,4 +215,5 @@
 	</script>
 
 	<script src="../resources/components.js"></script>
+    <%- include('partials/error.ejs') %>
 </html>

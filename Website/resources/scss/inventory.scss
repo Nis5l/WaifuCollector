@@ -1,5 +1,13 @@
 @import "___base.scss";
 
+.filter
+{
+	position: absolute;
+	vertical-align: top;
+	margin: auto;
+	width: 100%;
+}
+
 .radio_wrap {
 	margin: auto;
 	margin-top: 20px;
@@ -114,6 +122,7 @@ input[name="submit"] {
 
 div#inventory {
 	margin: auto;
+	margin-top: 290px;
 	overflow: auto;
 	max-height: none;
 	//overflow-y: scroll;

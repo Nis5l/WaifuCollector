@@ -1,16 +1,13 @@
-.friendbox
-{
-	margin-top: 140px;
-}
 div#friends {
+	position: relative;
 	margin: auto;
-	margin-top: 40px;
-	overflow: auto;
-	max-height: none;
-	//overflow-y: scroll;
-	align-items: center;
-	justify-content: center;
-	//margin-top: 100px;
-	width: 100%;
-	height: auto;
+	margin-top: 100px;
+	height: calc(100% - 100px);
+}
+
+.addfriend
+{
+	position: absolute;
+	vertical-align: top;
+	height: 50px;
 }

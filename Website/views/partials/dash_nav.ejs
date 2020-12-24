@@ -1,0 +1,71 @@
+<ul class="sidebar-nav">
+
+    <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/dashboard"><span>Dashboard</span></a></li>
+    <li class="sidebar-nav-item"><a class="sidebar-nav-link" onclick=onPack()><span id="packSpan">Pack</span></a></li>
+    <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/Inventory"><span>Inventory</span></a></li>
+    <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/Friends">
+		<span>Friends <%=(dashboard.friendcount && dashboard.maxfriendcount) ? "(" + dashboard.friendcount + "/" + dashboard.maxfriendcount + ")" : "" %></span>
+	</a></li>
+    <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/Settings"><span>Settings</span></a></li>
+
+	<% if (dashboard.packTime != undefined && dashboard.fullTime != undefined) { %>
+		<script>
+			const update = 10;
+			var packSpan = document.querySelector("#packSpan")
+
+			var time = parseInt("<%= dashboard.packTime %>");
+			var fulltime = parseInt("<%= dashboard.fullTime %>");
+
+			const interval = setInterval(() => {
+				if(updateTime() == 1) clearInterval(interval);
+			}, update);
+
+			function updateTime()
+			{
+				time -= update;
+
+				if (time <= 0) time = 0;
+
+				if (typeof updateTimeDash !== "undefined") updateTimeDash();
+
+				if (time == 0)
+				{
+					packSpan.innerText = "Pack";
+					return 1;
+				}
+
+				var seconds = Math.floor((time / 1000) % 60);
+				if (("" + seconds).length == 1) seconds = "0" + seconds;
+				var formatTime = Math.floor(time / 60000) + ":" + seconds;
+				packSpan.innerText = `Pack (${formatTime})`;
+				return 0;
+			}
+		</script>
+
+		<script>
+			window.onfocus = () => {
+			  var xhttp = new XMLHttpRequest();
+			  xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var json = JSON.parse(this.response);
+					const el = document.querySelector('progress-ring');
+					time = json.packTime;
+				}
+			  }
+			  xhttp.open("POST", "/packTime", true);
+			  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			  xhttp.send(JSON.stringify());
+			}
+		</script>
+
+		<script>
+			function onPack()
+			{
+				if(time == 0)
+					window.location.href = "<%= url %>/pack"
+			}
+		</script>
+
+	<% } %>
+
+</ul>

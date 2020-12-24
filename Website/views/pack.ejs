@@ -8,19 +8,43 @@
         <title>WaifuCollector | Pack</title>
 
         <link rel="stylesheet" href="<%= url %>/resources/css/pack.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/dashboard_sidebar.css">
+
+        <style>
+
+            .nav{
+
+                position: fixed;
+                top: 0;
+                left: 0;
+
+                box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5);
+
+            }
+
+        </style>
 
     </head>
 
-    <body>
+    <body class="scrollable">
 
         <%- include('partials/nav.ejs') %>
 
-		<form class="dashboardform" action="/dashboard" method="get"></form>
-		<div class="packwrapper">
-			<div id="Open">
-			</div>
+        <div class="sidebar">
+
+            <%- include('partials/dash_nav.ejs') %>
+
         </div>
 
+        <div class="dashboard_content">
+			<div class="dashboard_content_wrapper">
+				<div class="packwrapper">
+					<div id="Open">
+					</div>
+				</div>
+			</div>
+        </div>
     </body>
 
     <script
@@ -68,8 +92,7 @@
 		{
 			if(delay)
 			{
-				var f = document.querySelector(".dashboardform");
-				f.submit();
+				document.location.href = "/dashboard";
 			}else
 			{
 				setTimeout(() => {delay = true}, 1000);
@@ -80,4 +103,5 @@
     </script>
 
     <script src="../resources/components.js"></script> 
+    <%- include('partials/error.ejs') %>
 </html>

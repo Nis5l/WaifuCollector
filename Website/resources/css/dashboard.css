@@ -1,51 +1,32 @@
-html {
-  height: 100%; }
-
-.wrapper {
-  position: relative;
-  min-width: 300px;
-  height: 100%;
-  min-height: 0px;
-  width: 100%;
-  padding: 50px 0px 0px 0px; }
-  @media screen and (max-width: 1200px) {
-    .wrapper {
-      min-height: 1300px; } }
-  .wrapper .dashboard {
-    height: 92%;
-    margin: auto;
-    width: 90%;
-    padding: 20px;
-    background-color: #25282f; }
-    @media screen and (min-width: 1200px) {
-      .wrapper .dashboard {
-        height: 500px; } }
-    @media screen and (max-width: 400px) {
-      .wrapper .dashboard {
-        padding: 10px; } }
-    .wrapper .dashboard .menu {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-      vertical-align: middle; }
-      .wrapper .dashboard .menu #username {
-        display: inline-block;
-        font-size: 3em;
-        font-family: "Oswald";
-        font-weight: 700;
-        text-transform: uppercase; }
-      .wrapper .dashboard .menu #settings {
-        position: relative;
-        float: right;
-        color: #979CA7;
-        transition: transform 1s;
-        margin-top: 10px;
-        margin-right: 10px; }
-        .wrapper .dashboard .menu #settings:hover {
-          color: #fff;
-          -webkit-animation: rotating 5s linear infinite;
-          -moz-animation: rotating 5s linear infinite;
-          -ms-animation: rotating 5s linear infinite;
-          -o-animation: rotating 5s linear infinite;
-          animation: rotating 5s linear infinite; }
+.dashboard_content {
+  position: absolute;
+  margin-left: 250px;
+  margin-top: 100px;
+  width: calc(100% - 250px);
+  height: calc(100% - 100px); }
+  .dashboard_content .dashboard_content_wrapper {
+    padding: 10px;
+    display: block;
+    position: relative;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px); }
+    .dashboard_content .dashboard_content_wrapper #settings {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      float: right;
+      color: #979CA7;
+      transition: transform 1s;
+      margin-top: 10px;
+      margin-right: 10px;
+      font-size: 25px; }
+      .dashboard_content .dashboard_content_wrapper #settings:hover {
+        color: #fff;
+        -webkit-animation: rotating 5s linear infinite;
+        -moz-animation: rotating 5s linear infinite;
+        -ms-animation: rotating 5s linear infinite;
+        -o-animation: rotating 5s linear infinite;
+        animation: rotating 5s linear infinite; }
 
 @-webkit-keyframes rotating {
   from {
@@ -70,143 +51,22 @@ html {
     -webkit-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg); } }
-    .wrapper .dashboard .stats {
-      margin: 0px; }
-      @media screen and (min-width: 1200px) {
-        .wrapper .dashboard .stats {
-          height: 90%;
-          float: left;
-          width: 25%;
-          border-right: 1px solid rgba(255, 255, 255, 0.5); } }
-      @media screen and (max-width: 1200px) {
-        .wrapper .dashboard .stats {
-          height: 200px;
-          width: 100%;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
-      .wrapper .dashboard .stats .content {
-        margin-top: 25px;
-        height: 100%;
-        text-align: center; }
-        .wrapper .dashboard .stats .content p:not(:last-child) {
-          margin-bottom: 15px; }
-    @media screen and (min-width: 1200px) {
-      .wrapper .dashboard .collection {
-        height: 90%;
-        width: 25%;
-        float: left;
-        border-right: 1px solid rgba(255, 255, 255, 0.5); } }
-    @media screen and (max-width: 1200px) {
-      .wrapper .dashboard .collection {
-        height: 300px;
-        width: 100%;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
-    .wrapper .dashboard .collection .pack {
+    .dashboard_content .dashboard_content_wrapper .dashboard_stats {
+      width: fit-content;
+      height: min-content; }
+      .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_username {
+        margin-top: 20px;
+        margin-left: 20px;
+        font-size: 32pt; }
+      .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_friends {
+        margin-top: 20px;
+        margin-left: 50px;
+        font-size: 18pt; }
+    .dashboard_content .dashboard_content_wrapper .progress_wrapper {
       cursor: pointer;
-      width: 100%;
-      height: 100%; }
-      .wrapper .dashboard .collection .pack .progress {
-        fill: transparent;
-        stroke-width: 4;
-        stroke: red;
-        transition: 0.35s stroke-dashoffset;
-        transform: rotate(-90deg);
-        transform-origin: 50% 50%; }
-      .wrapper .dashboard .collection .pack .time {
-        font-size: 100pt; }
-    .wrapper .dashboard .inventory {
-      cursor: pointer; }
-      @media screen and (min-width: 1200px) {
-        .wrapper .dashboard .inventory {
-          height: 90%;
-          width: 25%;
-          float: left;
-          border-right: 1px solid rgba(255, 255, 255, 0.5); } }
-      @media screen and (max-width: 1200px) {
-        .wrapper .dashboard .inventory {
-          height: 350px;
-          width: 100%;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
-      .wrapper .dashboard .inventory .image {
-        margin-top: 0%;
-        width: 100%;
-        height: 100%;
-        background-image: url("/assets/OpenSymbol.png");
-        background-repeat: no-repeat;
-        background-size: 250px;
-        background-position: center center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        vertical-align: middle; }
-        @media screen and (max-width: 1200px) {
-          .wrapper .dashboard .inventory .image {
-            background-size: 19%; } }
-        @media screen and (max-width: 900px) {
-          .wrapper .dashboard .inventory .image {
-            background-size: 25%; } }
-        @media screen and (max-width: 700px) {
-          .wrapper .dashboard .inventory .image {
-            background-size: 30%; } }
-        @media screen and (max-width: 570px) {
-          .wrapper .dashboard .inventory .image {
-            background-size: 35%; } }
-        @media screen and (max-width: 470px) {
-          .wrapper .dashboard .inventory .image {
-            background-size: 43%; } }
-        @media screen and (max-width: 360px) {
-          .wrapper .dashboard .inventory .image {
-            background-size: 60%; } }
-        .wrapper .dashboard .inventory .image .text {
-          margin: auto;
-          font-size: 21pt;
-          text-align: center;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -khtml-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none; }
-          @media screen and (max-width: 700px) {
-            .wrapper .dashboard .inventory .image .text {
-              font-size: 18pt; } }
-          @media screen and (max-width: 570px) {
-            .wrapper .dashboard .inventory .image .text {
-              font-size: 18pt; } }
-          @media screen and (max-width: 470px) {
-            .wrapper .dashboard .inventory .image .text {
-              font-size: 14pt; } }
-    .wrapper .dashboard .friends {
-      cursor: pointer;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      vertical-align: middle; }
-      @media screen and (min-width: 1200px) {
-        .wrapper .dashboard .friends {
-          height: 90%;
-          width: 24%;
-          float: left; } }
-      @media screen and (max-width: 1200px) {
-        .wrapper .dashboard .friends {
-          height: 260px;
-          width: 100%; } }
-      .wrapper .dashboard .friends .text {
-        margin: auto;
-        font-size: 32pt;
-        text-align: center;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none; }
-        @media screen and (max-width: 700px) {
-          .wrapper .dashboard .friends .text {
-            font-size: 18pt; } }
-        @media screen and (max-width: 570px) {
-          .wrapper .dashboard .friends .text {
-            font-size: 18pt; } }
-        @media screen and (max-width: 470px) {
-          .wrapper .dashboard .friends .text {
-            font-size: 14pt; } }
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 260px;
+      height: 260px;
+      transform: translate(-50%, -50%); }
