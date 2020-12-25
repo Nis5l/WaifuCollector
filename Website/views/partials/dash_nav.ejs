@@ -2,7 +2,9 @@
 
     <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/dashboard"><span>Dashboard</span></a></li>
     <li class="sidebar-nav-item"><a class="sidebar-nav-link" onclick=onPack()><span id="packSpan">Pack</span></a></li>
-    <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/Inventory"><span>Inventory</span></a></li>
+    <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/Inventory">
+	<span>Inventory <%=(dashboard.cardCount && dashboard.cardMax) ? "(" + dashboard.cardCount + "/" + dashboard.cardMax + ")" : "" %></span>
+	</a></li>
     <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/Friends">
 		<span>Friends <%=(dashboard.friendcount && dashboard.maxfriendcount) ? "(" + dashboard.friendcount + "/" + dashboard.maxfriendcount + ")" : "" %></span>
 	</a></li>

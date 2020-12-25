@@ -62,6 +62,10 @@
         margin-top: 20px;
         margin-left: 50px;
         font-size: 18pt; }
+      .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_cards {
+        margin-top: 10px;
+        margin-left: 50px;
+        font-size: 18pt; }
     .dashboard_content .dashboard_content_wrapper .progress_wrapper {
       cursor: pointer;
       position: absolute;

@@ -40,7 +40,7 @@
 			<div class="dashboard_content_wrapper">
 				<div class="dashboard_stats">
 					<h2 id="dashboard_username"><%= dashboard.name %></h2>
-					<% if (dashboard.friendcount && dashboard.maxfriendcount) { %>
+					<% if (dashboard.friendcount && dashboard.maxfriendcount && dashboard.cardCount && dashboard.cardMax) { %>
 					<p id="dashboard_friends"><%="Friends " + dashboard.friendcount + "/" + dashboard.maxfriendcount%></p>
 					<p id="dashboard_cards"><%="Waifus " + dashboard.cardCount + "/" + dashboard.cardMax%></p>
 					<% } %>
