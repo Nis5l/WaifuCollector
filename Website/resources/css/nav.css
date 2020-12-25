@@ -5,35 +5,47 @@
   background-color: #26282b;
   z-index: 100;
   font-family: 'Allerta Stencil', sans-serif; }
+  .nav .burger {
+    float: left;
+    margin: 34px 30px;
+    font-size: 25pt; }
+    @media screen and (max-width: 800px) {
+      .nav .burger {
+        margin: 21px 20px;
+        font-size: 15pt; } }
+    .nav .burger:hover {
+      color: #aaa; }
+  @media screen and (max-width: 800px) {
+    .nav {
+      height: 60px; } }
   .nav .logo {
     float: left;
     font-size: 14pt;
-    margin-left: 30px;
-    margin-top: 40px;
+    margin-top: 34px;
     color: white;
     text-decoration: none; }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 800px) {
       .nav .logo {
-        font-size: 6pt; } }
-    @media screen and (max-width: 350px) {
-      .nav .logo {
-        font-size: 4pt; } }
+        margin-top: 20px;
+        font-size: 9pt; } }
   .nav .nav-list {
     float: right;
     list-style-type: none;
-    margin-top: 40px;
-    margin-right: 5px; }
-    @media screen and (min-width: 350px) {
+    margin-top: 42px;
+    margin-right: 8px;
+    font-size: 12pt; }
+    @media screen and (max-width: 800px) {
       .nav .nav-list {
-        margin-right: 30px; } }
-    @media screen and (max-width: 350px) {
-      .nav .nav-list {
-        font-size: 10pt; } }
+        margin-top: 25px;
+        font-size: 8pt; } }
   .nav .nav-list li {
     display: inline; }
     .nav .nav-list li a {
       color: white;
       text-decoration: none;
       padding: 40px 15px; }
+      @media screen and (max-width: 800px) {
+        .nav .nav-list li a {
+          padding: 40px 8px; } }
       .nav .nav-list li a:hover {
         background-color: rgba(0, 0, 0, 0.2); }

@@ -1,5 +1,6 @@
 .sidebar {
   width: 250px;
+  transform: translateX(0px);
   height: 100vh;
   position: fixed;
   top: 100px;
@@ -8,6 +9,9 @@
   overflow: hidden;
   background: #26282b;
   box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5); }
+  @media screen and (max-width: 800px) {
+    .sidebar {
+      top: 60px; } }
   .sidebar .sidebar-nav {
     list-style: none;
     padding: 0;

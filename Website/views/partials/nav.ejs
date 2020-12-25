@@ -1,5 +1,7 @@
 <div class="nav">
 
+	<a class="burger"><i class="fas fa-bars"></i></a>
+
     <a href="/" class="logo">
 
         <h1>WaifuCollector</h1>
@@ -20,7 +22,7 @@
 		
 		<%if (notifications) {%>
 
-			<li style="cursor: pointer;"><a class="bell""><i class="fas fa-bell"> <%= notifications.length%></i></a></li>
+			<li style="cursor: pointer;"><a class="bell"><i class="fas fa-bell"> <%= notifications.length%></i></a></li>
 			
 		<% } %>
 
@@ -75,6 +77,21 @@
 					box.insertAdjacentHTML('beforeend', `<notification-element title="${data[i].title}" message="${data[i].message}" url="${data[i].url}" nId="${data[i].id}"> </notification-element>`);
 				}
 			});	
+
+			var sidebarOut = true;
+			//$(".dashboard_content").css("--sideBar", "0px");
+			$(".burger").click(()=>{
+				if(sidebarOut)
+				{
+					$(".sidebar").css("transform", "translateX(-250px)");
+					$(".dashboard_content").css("--sideBar", "0px");
+				}else
+				{
+					$(".sidebar").css("transform", "translateX(0px)");
+					$(".dashboard_content").css("--sideBar", "250px");
+				}
+				sidebarOut = !sidebarOut;
+			});
 
 		</script>
 		

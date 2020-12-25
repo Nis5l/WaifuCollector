@@ -3,11 +3,16 @@
 .sidebar{
 
     width: 250px;
+	transform: translateX(0px);
+	//transition: transform 0.2s linear;
     height: 100vh;
     
     position: fixed;
 
     top: 100px;
+	@media screen and (max-width: 800px) { 
+		top: 60px;
+	}
     left: 0;
 
     z-index: 99;

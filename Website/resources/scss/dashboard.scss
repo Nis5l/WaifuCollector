@@ -2,10 +2,13 @@
 
 .dashboard_content{
 
+	--sideBar: 250px;
+	//transition: width 0.2s linear;
+	//transition: margin 0.2s linear;
 	position: absolute;
-    margin-left: 250px;
+    margin-left: var(--sideBar);
     margin-top: 100px;
-	width: calc(100% - 250px);
+	width: calc(100% - var(--sideBar));
 	height: calc(100% - 100px);
 		
 	.dashboard_content_wrapper{

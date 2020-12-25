@@ -1,8 +1,9 @@
 .dashboard_content {
+  --sideBar: 250px;
   position: absolute;
-  margin-left: 250px;
+  margin-left: var(--sideBar);
   margin-top: 100px;
-  width: calc(100% - 250px);
+  width: calc(100% - var(--sideBar));
   height: calc(100% - 100px); }
   .dashboard_content .dashboard_content_wrapper {
     padding: 10px;
