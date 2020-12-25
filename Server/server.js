@@ -363,11 +363,17 @@ app.post("/getDashboard", (req, res) => {
 			var friendcount = clients[userID].getFriends().length;
 			var maxfriendcount = friendLimit;
 
+			//cardAmount
+			var cardCount = clients[userID].getCardTypeAmount();
+			var cardMax = cache.getCardAmount();
+
 			//packtime
 			res.send({
 				status: 0,
 				packTime: getPackTime(userID),
 				fullTime: packCooldown * 1000,
+				cardCount: cardCount,
+				cardMax: cardMax,
 				name: username,
 				friendcount: friendcount,
 				maxfriendcount: maxfriendcount,

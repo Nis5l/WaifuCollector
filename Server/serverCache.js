@@ -3,9 +3,11 @@ const database = require("./database");
 var nameToID = {};
 var idToName = new Map();
 var idToSort = new Map();
+var cardAmount = 0;
 module.exports = {
 	refreshCards: function refreshCards(callback) {
 		database.getCards((cards) => {
+			cardAmount = cards.length;
 			var namesort = [];
 			for (var i = 0; i < cards.length; i++) {
 				nameToID[cards[i].cardName] = cards[i].id;
@@ -45,5 +47,8 @@ module.exports = {
 	getSortByID: function getSortByID(id) {
 		if (idToSort.has(id)) return idToSort.get(id);
 		return undefined;
+	},
+	getCardAmount: function getCardAmount() {
+		return cardAmount;
 	},
 };

@@ -12,6 +12,7 @@ class Client {
 		this.lastids = undefined;
 		this.page = 0;
 		this.lastmain = undefined;
+		this.cardTypeAmount = 0;
 		var operations = 3;
 		var operationsComplete = 0;
 
@@ -23,6 +24,7 @@ class Client {
 		database.getInventory(this.id, (inventory) => {
 			this.inventory = inventory;
 			this.sortInv();
+			this.refreshCardTypeAmount();
 			operationFinished();
 		});
 
@@ -79,6 +81,7 @@ class Client {
 		this.startDecay(this.time, this.callback);
 		this.inventory.push(card);
 		this.sortInv();
+		this.refreshCardTypeAmount();
 	}
 
 	getFriends() {
@@ -287,6 +290,7 @@ class Client {
 		for (var i = 0; i < this.inventory.length; i++) {
 			if (this.inventory[i].id == uuid) {
 				this.inventory.splice(i, 1);
+				this.refreshCardTypeAmount();
 				return;
 			}
 		}
@@ -298,6 +302,28 @@ class Client {
 				return this.inventory[i];
 			}
 		}
+	}
+
+	refreshCardTypeAmount() {
+		this.cardTypeAmount = 0;
+		var typeIDs = [];
+		for (var i = 0; i < this.inventory.length; i++) {
+			var exists = false;
+			for (var j = 0; j < typeIDs.length; j++) {
+				if (typeIDs[j] == this.inventory[i].cardID) {
+					exists = true;
+					break;
+				}
+			}
+			if (!exists) {
+				typeIDs.push(this.inventory[i].cardID);
+				this.cardTypeAmount++;
+			}
+		}
+	}
+
+	getCardTypeAmount() {
+		return this.cardTypeAmount;
 	}
 }
 module.exports = Client;
