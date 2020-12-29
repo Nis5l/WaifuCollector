@@ -39,8 +39,12 @@
         color: white;
         text-decoration: none;
 		@media screen and (max-width: 800px) { 
-			margin-top: 20px;
-			font-size: 9pt;
+			margin-top: 23px;
+			font-size: 7pt;
+		}
+		@media screen and (max-width: 440px) { 
+			margin-top: 25px;
+			font-size: 5pt;
 		}
     }
 

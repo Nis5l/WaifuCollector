@@ -3,12 +3,18 @@
 .dashboard_content{
 
 	--sideBar: 250px;
+	//--sideBar: 0px;
 	//transition: width 0.2s linear;
 	//transition: margin 0.2s linear;
+	
 	position: absolute;
-    margin-left: var(--sideBar);
     margin-top: 100px;
+    margin-left: var(--sideBar);
 	width: calc(100% - var(--sideBar));
+	@media screen and (max-width: 900px) { 
+		margin-left: 0px;
+		width: 100%;
+	}
 	height: calc(100% - 100px);
 		
 	.dashboard_content_wrapper{
@@ -111,6 +117,9 @@
 			cursor: pointer;
 			position: absolute;
 			top: 50%;
+			@media screen and (max-width: 800px) { 
+				top: 60%;
+			}
 			left: 50%;
 			width: 260px;
 			height: 260px;

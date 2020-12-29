@@ -26,8 +26,12 @@
     text-decoration: none; }
     @media screen and (max-width: 800px) {
       .nav .logo {
-        margin-top: 20px;
-        font-size: 9pt; } }
+        margin-top: 23px;
+        font-size: 7pt; } }
+    @media screen and (max-width: 440px) {
+      .nav .logo {
+        margin-top: 25px;
+        font-size: 5pt; } }
   .nav .nav-list {
     float: right;
     list-style-type: none;

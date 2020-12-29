@@ -890,7 +890,7 @@ class NotificationElement extends HTMLElement {
    	cursor: pointer;
 	margin: auto;
 	margin-bottom: 5px;
-    width: 95%;
+    width: calc(95% - 40px);
 	height: auto;
     background-color: #1c1e23;
     padding: 20px;

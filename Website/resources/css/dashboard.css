@@ -1,10 +1,14 @@
 .dashboard_content {
   --sideBar: 250px;
   position: absolute;
-  margin-left: var(--sideBar);
   margin-top: 100px;
+  margin-left: var(--sideBar);
   width: calc(100% - var(--sideBar));
   height: calc(100% - 100px); }
+  @media screen and (max-width: 900px) {
+    .dashboard_content {
+      margin-left: 0px;
+      width: 100%; } }
   .dashboard_content .dashboard_content_wrapper {
     padding: 10px;
     display: block;
@@ -75,3 +79,6 @@
       width: 260px;
       height: 260px;
       transform: translate(-50%, -50%); }
+      @media screen and (max-width: 800px) {
+        .dashboard_content .dashboard_content_wrapper .progress_wrapper {
+          top: 60%; } }
