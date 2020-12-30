@@ -8,14 +8,21 @@
 	//transition: margin 0.2s linear;
 	
 	position: absolute;
-    margin-top: 100px;
+	margin-top: 100px;
+	@media screen and (max-width: 800px) { 
+		margin-top: 60px;
+	}
     margin-left: var(--sideBar);
 	width: calc(100% - var(--sideBar));
 	@media screen and (max-width: 900px) { 
 		margin-left: 0px;
 		width: 100%;
 	}
+
 	height: calc(100% - 100px);
+	@media screen and (max-width: 800px) { 
+		height: calc(100% - 60px);
+	}
 		
 	.dashboard_content_wrapper{
 		padding: 10px;
