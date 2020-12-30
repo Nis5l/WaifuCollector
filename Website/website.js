@@ -97,7 +97,10 @@ function getHttp() {
 }
 
 app.get("/", function (req, res) {
-	res.render("home", { userID: req.cookies.userID });
+	res.render("home", {
+		userID: req.cookies.userID,
+		api_url: getHttp() + API_HOST,
+	});
 });
 
 app.get("/logout", redirectLogin, function (req, res) {

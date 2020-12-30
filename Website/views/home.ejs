@@ -27,16 +27,31 @@
 
         <div class="home">
 
-            <h1>WaifuCollector</h1>
+			<h4 class="title">Disclaimer</h4>
+				
+			<p class="content" style="margin-left: 30px;">If you have any copyright related issues please contact me, i will happily mention you, remove it or other.</p>
+			<p class="content" style="margin-left: 30px;">Everything is nonprofit, i am not earning any money off of this, so i would be thankful if we could solve the problems together without any sort of legal process.</p>
 
-        </div>
+			<h4 class="title">Tutorial</h4>
+			
+			<h5 class="subtitle">Packs</h5>
+			<p class="content">In this game you can collect, upgrade and trade Waifu-Cards.</p>
+			<p class="content">Every 30 minutes you can pull a Waifu-Card.
+			<br>Each Waifu-Card starts with Level 1 and a random Quality from 1-5 (X: Quality, Y: Level).</p>
 
-        <div class="section about">
+			<waifu-card img_path="<%- api_url %>/Card/Card_ZeroTwo.jpg" frame-front="<%- api_url %>/Frame/Frame_Silver_Front.png" frame-back="" pos-x="10" card-name="Name" anime-name="Anime" turned="false" quality="X" level="Y" card-size="1"></waifu-card>
 
-            <h2 class="title">About</h2>
+			<h5 class="subtitle" style="margin-top: 490px;">Upgrading</h5>
+			<p class="content">By Combining 2 Cards of the same Level you can Upgrade them.
+			<br>The Chance for the Upgrade to succeede in % is (Quality1 + Quality2) * 10.</p>
+			<p class="content">If the Upgrade succeedes the new Cards Level will be one higher and the Quality will be random from 1-5.
+			<br>If the Upgrade fails the new Cards Level will stay the same, and the Quality will be the avarage of the two.</p>
 
-        </div>
+			<h5 class="subtitle">Trading</h5>
+			<p class="content">You can add Waifu-Cards to the Trade and when both Users hit accept the Trade is complete.</p>
 
+		</div>
     </body>
 
+    <script src="../resources/components.js"></script> 
 </html>
