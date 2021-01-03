@@ -906,10 +906,10 @@ function removeTrade(carduuid, mainuuid, callback) {
 						}
 						setTrade(ts2[iter].userone, ts2[iter].usertwo, 0, () => {
 							database.addNotification(
-								ts[iter].usertwo,
+								ts2[iter].usertwo,
 								"Trade Card Removed",
 								"A card got removed from a trade, click to view!",
-								"trade?userID=" + ts[iter].userone,
+								"trade?userID=" + ts2[iter].userone,
 								() => {}
 							);
 							run4(iter + 1);
