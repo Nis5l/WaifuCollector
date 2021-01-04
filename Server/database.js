@@ -798,6 +798,25 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yui', '19', 'Card_Yui.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuri Nakamura', '19', 'Card_YuriNakamura.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Eri Shiina', '19', 'Card_EriShiina.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hestia', '59', 'Card_Hestia.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yamato Mikoto', '59', 'Card_YamatoMikoto.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sanjouno Haruhime', '59', 'Card_SanjounoHaruhime.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ais Wallenstein', '59', 'Card_AisWallenstein.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Syr Flova', '59', 'Card_SyrFlova.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ryuu Lion', '59', 'Card_RyuuLion.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Eina Tulle', '59', 'Card_EinaTulle.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kaguya Shinomiya', '3', 'Card_KaguyaShinomiya.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mai Sakurajima', '60', 'Card_MaiSakurajima.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kaname Arisugawa', '61', 'Card_KanameArisugawa.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Aya Arisugawa', '61', 'Card_AyaArisugawa.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tsukasa Tsukuyomi', '61', 'Card_TsukasaTsukuyomi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Maki Oze', '62', 'Card_MakiOze.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Noel Niihashi', '11', 'Card_NoelNiihashi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shiba Miyuki', '63', 'Card_ShibaMiyuki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sayaka Kirasaka', '64', 'Card_SayakaKirasaka.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Venessa Anoteca', '65', 'Card_VenessaAnoteca.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Elaina', '66', 'Card_Elaina.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Elaina', '1', 'Card_Echidna.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -871,6 +890,14 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('56', 'Violet Evergarden');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('57', 'Kuma Kuma Kuma Bear');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('58', 'Sabagebu!');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('59', 'DanMachi');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('60', 'Bunny Girl Senpai');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('61', 'Tonikaku Kawaii');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('62', 'Fire Force');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('63', 'The Irregular at Magic High School');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('64', 'Strike The Blood');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('65', 'Black Clover');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('66', 'Majo No Tabitabi');",
 	];
 
 	con.connect(() => {
