@@ -118,10 +118,8 @@ app.get("/login", redirectDashboard, function (req, res) {
 	});
 });
 
-app.get("/privacy", redirectDashboard, function (req, res) {
-	res.render("privacy", {
-		userID: req.cookies.userID,
-	});
+app.get("/privacy", function (req, res) {
+	res.render("privacy");
 });
 
 app.post("/cookie", function (req, res) {
