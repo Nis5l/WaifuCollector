@@ -61,9 +61,10 @@
             //var off = 235-(cards.length-1) / 2 * cardSize;
             for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
             {
+			  console.log(cards[i]);
               var path = cards[i].cardImage;
               var posX =  0;
-              var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].frame.path_front} frame-back=${cards[i].frame.path_back} pos-x=${posX} card-name=\"${cards[i].cardName}\" anime-name=\"${cards[i].type.name}\" turned=true quality=${cards[i].quality} level=0 uuid=${cards[i].id} cardID=${cards[i].cardID} card-size=1></waifu-card>`;
+              var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].frame.path_front} frame-back=${cards[i].frame.path_back} pos-x=${posX} card-name=\"${cards[i].cardName}\" anime-name=\"${cards[i].type.name}\" turned=true quality=${cards[i].quality} level=0 uuid=${cards[i].uuid} cardID=${cards[i].id} card-size=1></waifu-card>`;
               opn.insertAdjacentHTML('beforeend', cardhtml);  
             }
 			$('#Open').css('transform', `translateX(calc(50% - 254px * ${cards.length} / 2))`)
@@ -75,9 +76,8 @@
 		var delay = false;
          $(document).click(function(event) {
 
-		  
           var ele = $(event.target);
-          if(ele.is('waifu-card'))
+         if(ele.is('waifu-card'))
 		 {
            ele[0].fit();
            ele[0].turn();
@@ -92,10 +92,16 @@
 		{
 			if(delay)
 			{
-				document.location.href = "/dashboard";
+				if(ele.is('waifu-card'))
+				{
+					document.location.href = "/card?uuid=" + ele[0].uuid;
+				}else
+				{
+					document.location.href = "/dashboard";
+				}
 			}else
 			{
-				setTimeout(() => {delay = true}, 1000);
+				setTimeout(() => {delay = true}, 500);
 			}
 		}
 

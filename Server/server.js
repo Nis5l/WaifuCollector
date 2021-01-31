@@ -482,6 +482,7 @@ app.post("/pack", (req, res) => {
 								0,
 								frames[j].id,
 								(insertID) => {
+									cards[j].uuid = insertID;
 									clients[decoded.id].addCard({
 										id: insertID,
 										userID: decoded.id,

@@ -152,13 +152,12 @@ module.exports = {
 	},
 
 	getRandomCard: function getRandomCard(amount, callback) {
-		con.query("SELECT * FROM `card` ORDER BY RAND() LIMIT " + amount, function (
-			err,
-			result,
-			fields
-		) {
-			callback(result);
-		});
+		con.query(
+			"SELECT * FROM `card` ORDER BY RAND() LIMIT " + amount,
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
 	},
 
 	getRandomFrame: function getRandomFrame(amount, callback) {
@@ -171,24 +170,23 @@ module.exports = {
 	},
 
 	getUserName: function getUserName(userID, callback) {
-		con.query("SELECT username FROM `user` WHERE id=" + userID, function (
-			err,
-			result,
-			fields
-		) {
-			if (err) console.log(err);
+		con.query(
+			"SELECT username FROM `user` WHERE id=" + userID,
+			function (err, result, fields) {
+				if (err) console.log(err);
 
-			if (
-				result != undefined &&
-				result[0] != undefined &&
-				result[0].username != undefined
-			) {
-				callback(result[0].username);
-				return;
+				if (
+					result != undefined &&
+					result[0] != undefined &&
+					result[0].username != undefined
+				) {
+					callback(result[0].username);
+					return;
+				}
+
+				callback("null");
 			}
-
-			callback("null");
-		});
+		);
 	},
 
 	addCard: function addCard(userID, cardID, quality, level, frame, callback) {
@@ -224,18 +222,17 @@ module.exports = {
 	},
 
 	getCardType: function getCardType(typeID, callback) {
-		con.query("SELECT * FROM `cardtype` WHERE id=" + typeID, function (
-			err,
-			result,
-			fields
-		) {
-			if (result != undefined && result[0] != undefined) {
-				callback(result[0]);
-				return;
-			}
+		con.query(
+			"SELECT * FROM `cardtype` WHERE id=" + typeID,
+			function (err, result, fields) {
+				if (result != undefined && result[0] != undefined) {
+					callback(result[0]);
+					return;
+				}
 
-			callback("null");
-		});
+				callback("null");
+			}
+		);
 	},
 
 	userexists: function userexists(username, callback) {
@@ -390,17 +387,16 @@ module.exports = {
 		);
 	},
 	getUsers: function getUsers(callback) {
-		con.query("SELECT id, username AS name, ranking FROM user", function (
-			err,
-			result,
-			fields
-		) {
-			if (result == undefined) {
-				callback(undefined);
-				return;
+		con.query(
+			"SELECT id, username AS name, ranking FROM user",
+			function (err, result, fields) {
+				if (result == undefined) {
+					callback(undefined);
+					return;
+				}
+				callback(result);
 			}
-			callback(result);
-		});
+		);
 	},
 	getUserID: function getUserID(username, callback) {
 		con.query(
@@ -471,17 +467,16 @@ module.exports = {
 		);
 	},
 	getTradesCard: function getTradesCard(card, callback) {
-		con.query("SELECT * FROM trade WHERE card=" + card, function (
-			err,
-			result,
-			fields
-		) {
-			if (result != undefined && result.length == 0) {
-				callback(undefined);
-				return;
+		con.query(
+			"SELECT * FROM trade WHERE card=" + card,
+			function (err, result, fields) {
+				if (result != undefined && result.length == 0) {
+					callback(undefined);
+					return;
+				}
+				callback(result);
 			}
-			callback(result);
-		});
+		);
 	},
 	addTrade: function addTrade(userone, usertwo, cardID, callback) {
 		con.query(
@@ -498,22 +493,20 @@ module.exports = {
 		);
 	},
 	deleteCard: function deleteCard(uuid, callback) {
-		con.query("DELETE FROM unlocked WHERE id=" + uuid, function (
-			err,
-			result,
-			fields
-		) {
-			callback(result);
-		});
+		con.query(
+			"DELETE FROM unlocked WHERE id=" + uuid,
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
 	},
 	removeTrade: function removeTrade(uuid, callback) {
-		con.query("DELETE FROM trade WHERE card=" + uuid, function (
-			err,
-			result,
-			fields
-		) {
-			callback(result);
-		});
+		con.query(
+			"DELETE FROM trade WHERE card=" + uuid,
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
 	},
 	removeTradeUser: function removeTradeUser(uuid, userone, usertwo, callback) {
 		con.query(
@@ -830,6 +823,31 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hori Kyouko', '69', 'Card_HoriKyouko.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Cyan', '70', 'Card_Cyan.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kohaku', '25', 'Card_Kohaku.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shinobu Oshino', '71', 'Card_ShinobuOshino.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Suruga Kanbaru', '71', 'Card_SurugaKanbaru.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tsubasa Hanekawa', '71', 'Card_TsubasaHanekawa.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ougi Oshino', '71', 'Card_OugiOshino.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Izuko Gaen', '71', 'Card_IzukoGaen.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ryuko Matoi', '72', 'Card_RyukoMatoi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Satsuki Kiryuin', '72', 'Card_SatsukiKiryuin.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nui Harime', '72', 'Card_NuiHarime.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mako Mankanshoku', '72', 'Card_MakoMankanshoku.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nonon Jakuzure', '72', 'Card_NononJakuzure.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kokoro', '2', 'Card_Kokoro.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Miku', '2', 'Card_Miku.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ikuno', '2', 'Card_Ikuno.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, '001', '2', 'Card_001.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Aina Ardebit', '73', 'Card_AinaArdebit.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Phosphophyllite', '74', 'Card_Phosphophyllite.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Cinnabar', '74', 'Card_Cinnabar.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Diamond', '74', 'Card_Diamond.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Swindler', '75', 'Card_Swindler.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Seras Victoria', '76', 'Card_SerasVictoria.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shiki Ryougi', '77', 'Card_ShikiRyougi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Asuka Langley Sohryu', '9', 'Card_AsukaLangleySohryu.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Misato Katsuragi', '9', 'Card_MisatoKatsuragi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Stephanie Dola', '78', 'Card_StephanieDola.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Jibril', '78', 'Card_Jibril.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -915,6 +933,14 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('68', 'The Quintessential Quintuplets');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('69', 'Horimiya');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('70', 'Show By Rock!!');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('71', 'Monogatari Series');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('72', 'Kill la Kill');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('73', 'Promare');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('74', 'Land of the Lustrous');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('75', 'Akudama Drive');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('76', 'Hellsing Ultimate');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('77', 'Kara no Kyoukai');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('78', 'No Game No Life');",
 	];
 
 	con.connect(() => {

@@ -340,53 +340,54 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 	);
 });
 
-app.get("/adminpanel/card/:cardID/edit", redirectIfNotAdmin, async function (
-	req,
-	response
-) {
-	function jsonToArray(dataString) {
-		var data = JSON.parse(dataString);
+app.get(
+	"/adminpanel/card/:cardID/edit",
+	redirectIfNotAdmin,
+	async function (req, response) {
+		function jsonToArray(dataString) {
+			var data = JSON.parse(dataString);
 
-		if (data.status != undefined) {
-			if (data.status == 1) {
-				return data;
+			if (data.status != undefined) {
+				if (data.status == 1) {
+					return data;
+				}
 			}
+
+			return undefined;
 		}
 
-		return undefined;
-	}
+		var cardID = req.params.cardID;
 
-	var cardID = req.params.cardID;
+		var cardData = jsonToArray(
+			await getPageBody(getHttp() + API_HOST + "/display/card/" + cardID)
+		);
 
-	var cardData = jsonToArray(
-		await getPageBody(getHttp() + API_HOST + "/display/card/" + cardID)
-	);
+		if (cardData == undefined) {
+			response.redirect("/dashboard");
+			return;
+		}
 
-	if (cardData == undefined) {
-		response.redirect("/dashboard");
-		return;
-	}
+		var card = cardData.card;
+		card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
 
-	var card = cardData.card;
-	card["image"] = getHttp() + API_HOST + "/Card/" + card["image"];
+		var animeData = jsonToArray(
+			await getPageBody(getHttp() + API_HOST + "/animes")
+		);
 
-	var animeData = jsonToArray(
-		await getPageBody(getHttp() + API_HOST + "/animes")
-	);
+		if (animeData == undefined) {
+			response.render("adminpanel/adminpanel_card_edit", {
+				card: card,
+				animes: undefined,
+			});
+			return;
+		}
 
-	if (animeData == undefined) {
 		response.render("adminpanel/adminpanel_card_edit", {
 			card: card,
-			animes: undefined,
+			animes: animeData.animes,
 		});
-		return;
 	}
-
-	response.render("adminpanel/adminpanel_card_edit", {
-		card: card,
-		animes: animeData.animes,
-	});
-});
+);
 
 app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
 	request.get(
@@ -455,6 +456,7 @@ app.get("/pack", redirectLogin, function (req, res) {
 						addPathCard(body.cards[i]);
 					}
 					var dashboard = await getDashboard(req, res);
+					console.log(body.cards);
 					res.render("pack", {
 						userID: req.cookies.userID,
 						cards: body.cards,
