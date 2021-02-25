@@ -7,6 +7,11 @@ html, body {
   margin: 20px;
   height: 100vh;
   width: calc(100% - 40px); }
+  .home #discord {
+    width: 100px; }
+    @media screen and (max-width: 470px) {
+      .home #discord {
+        width: 60px; } }
   .home .title {
     margin-top: 50px;
     font-size: 24pt;

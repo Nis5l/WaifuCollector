@@ -8,6 +8,14 @@ html, body {margin:auto; height: 100%; overflow: auto}
     height: 100vh;
     width: calc(100% - 40px); 
 
+	#discord
+	{
+		width: 100px;
+		@media screen and (max-width: 470px) { 
+			width: 60px;
+		}
+	}
+
 	.title
 	{
 		margin-top: 50px;
