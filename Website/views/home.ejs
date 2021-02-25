@@ -21,40 +21,51 @@
 
     </head>
 
-    <body>
+    <body class="scrollable" style='background-image: url("<%= url %>/assets/homeBackground.png"); background-size: cover; background-repeat: no-repeat; background-position: center;'>
 
         <%- include('partials/nav.ejs') %>
 
         <div class="home">
 
-			<h4 class="title">Disclaimer</h4>
+			<details>
+				<summary class="title" style="margin-top: 20px;">Tutorial</summary>
 				
-			<p class="content" style="margin-left: 30px;">If you have any copyright related issues please contact me (contact.waifucollector@gmail.com), I will happily mention you, remove it or other.</p>
-			<p class="content" style="margin-left: 30px; margin-bottom: 10px;">Everything is nonprofit, I am not earning any money off of this, so I would be thankful if we could solve the problems together without any sort of legal process.</p>
+				<h5 class="subtitle" style="margin-top: 30px;">Packs</h5>
+				<p class="content">In this game you can collect, upgrade and trade Waifu-Cards.</p>
+				<p class="content">Every 30 minutes you can pull a Waifu-Card.
+				<br>Each Waifu-Card starts with Level 1 and a random Quality from 1-5 (X: Quality, Y: Level).</p>
 
-			 <a href="https://discord.gg/hftNUqNgRj" target="_blank">
-			  <img src="<%= url %>/assets/discordicon.png" id="discord"/>
-			 </a>
+				<waifu-card img_path="<%- api_url %>/Card/Card_ZeroTwo.jpg" frame-front="<%- api_url %>/Frame/Frame_Silver_Front.png" frame-back="" pos-x="10" card-name="Name" anime-name="Anime" turned="false" quality="X" level="Y" card-size="1"></waifu-card>
 
-			<h4 class="title" style="margin-top: 20px;">Tutorial</h4>
-			
-			<h5 class="subtitle">Packs</h5>
-			<p class="content">In this game you can collect, upgrade and trade Waifu-Cards.</p>
-			<p class="content">Every 30 minutes you can pull a Waifu-Card.
-			<br>Each Waifu-Card starts with Level 1 and a random Quality from 1-5 (X: Quality, Y: Level).</p>
+				<h5 class="subtitle" style="margin-top: 490px;">Upgrading</h5>
+				<p class="content">By Combining 2 Cards of the same Level you can Upgrade them.
+				<br>The Chance for the Upgrade to succeede in % is (Quality1 + Quality2) * 10.</p>
+				<p class="content">If the Upgrade succeedes the new Cards Level will be one higher and the Quality will be random from 1-5.
+				<br>If the Upgrade fails the new Cards Level will stay the same, and the Quality will be the avarage of the two.</p>
 
-			<waifu-card img_path="<%- api_url %>/Card/Card_ZeroTwo.jpg" frame-front="<%- api_url %>/Frame/Frame_Silver_Front.png" frame-back="" pos-x="10" card-name="Name" anime-name="Anime" turned="false" quality="X" level="Y" card-size="1"></waifu-card>
+				<h5 class="subtitle">Trading</h5>
+				<p class="content">You can add Waifu-Cards to the Trade and when both Users hit accept the Trade is complete.</p>
+			</details>
 
-			<h5 class="subtitle" style="margin-top: 490px;">Upgrading</h5>
-			<p class="content">By Combining 2 Cards of the same Level you can Upgrade them.
-			<br>The Chance for the Upgrade to succeede in % is (Quality1 + Quality2) * 10.</p>
-			<p class="content">If the Upgrade succeedes the new Cards Level will be one higher and the Quality will be random from 1-5.
-			<br>If the Upgrade fails the new Cards Level will stay the same, and the Quality will be the avarage of the two.</p>
+			<details style="margin-top: 30px">
+				<summary class="title" style="margin-top: 10px;">Disclaimer</summary>
+					
+				<p class="content" style="margin-left: 30px;">If you have any copyright related issues please contact me (contact.waifucollector@gmail.com), I will happily mention you, remove it or other.</p>
+				<p class="content" style="margin-left: 30px; margin-bottom: 10px;">Everything is nonprofit, I am not earning any money off of this, so I would be thankful if we could solve the problems together without any sort of legal process.</p>
+			</details>
 
-			<h5 class="subtitle">Trading</h5>
-			<p class="content">You can add Waifu-Cards to the Trade and when both Users hit accept the Trade is complete.</p>
+			 <div class="box" style="width: calc(100% - 20px); margin-top:30px; display: table;">
+				 <a href="https://discord.gg/hftNUqNgRj" target="_blank">
+				  <img src="<%= url %>/assets/discordicon.png" id="discord"/>
+				 </a>
+				 <div style="display: table-cell; margin: auto; text-align: center; vertical-align: middle;">
+					 <a class="subtitle" style="text-decoration: none;" href="privacy">
+						 Privacy
+					 </a>
+				 </div>
+			 </div>
 
-			<a class="subtitle" style="margin-top: 490px; font-size=12pt; padding-bottom: 20px; text-decoration: none;" href="privacy">Privacy</a>
+
 		</div>
     </body>
 

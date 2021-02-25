@@ -116,11 +116,12 @@ app.get("/login", redirectDashboard, function (req, res) {
 	res.render("login", {
 		userID: req.cookies.userID,
 		accepted: req.cookies.accepted,
+		ishome: true,
 	});
 });
 
 app.get("/privacy", function (req, res) {
-	res.render("privacy");
+	res.render("privacy", { ishome: true });
 });
 
 app.post("/cookie", function (req, res) {
@@ -212,7 +213,7 @@ app.post("/passchange", function (req, res) {
 
 app.get("/register", redirectDashboard, function (req, res) {
 	res.locals.message = req.query.errorMessage;
-	res.render("register", { userID: req.cookies.userID });
+	res.render("register", { userID: req.cookies.userID, ishome: true });
 });
 
 /*
