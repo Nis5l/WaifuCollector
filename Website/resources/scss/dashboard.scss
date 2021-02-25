@@ -14,10 +14,10 @@
 	}
     margin-left: var(--sideBar);
 	width: calc(100% - var(--sideBar));
-	@media screen and (max-width: 900px) { 
+//	@media screen and (max-width: 900px) { 
 		margin-left: 0px;
 		width: 100%;
-	}
+//	}
 
 	height: calc(100% - 100px);
 	@media screen and (max-width: 800px) { 
@@ -101,6 +101,10 @@
 				margin-top: 20px;
 				margin-left: 20px;
 				font-size: 32pt;
+
+				@media screen and (max-width: 500px) { 
+					font-size: 20pt;
+				}
 			}
 
 			#dashboard_friends
@@ -108,6 +112,11 @@
 				margin-top: 20px;
 				margin-left: 50px;
 				font-size: 18pt;
+
+				@media screen and (max-width: 500px) { 
+					margin-top: 10px;
+					font-size: 10pt;
+				}
 			}
 
 			#dashboard_cards
@@ -115,6 +124,10 @@
 				margin-top: 10px;
 				margin-left: 50px;
 				font-size: 18pt;
+
+				@media screen and (max-width: 500px) { 
+					font-size: 10pt;
+				}
 			}
 
 		}

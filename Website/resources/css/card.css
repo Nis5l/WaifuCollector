@@ -32,3 +32,6 @@ div[id="maincard"] {
     div[id="maincard"] {
       height: 600px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+  @media screen and (max-width: 400px) {
+    div[id="maincard"] {
+      height: 400px; } }

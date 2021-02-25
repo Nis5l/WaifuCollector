@@ -39,4 +39,9 @@ div[id="maincard"]
 		height: 600px;
 		border-bottom: 1px solid $sectionBorder;
 	}
+
+	@media screen and (max-width: 400px) {
+		height: 400px;
+	}
+
 }

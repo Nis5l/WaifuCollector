@@ -4,14 +4,12 @@
   margin-top: 100px;
   margin-left: var(--sideBar);
   width: calc(100% - var(--sideBar));
+  margin-left: 0px;
+  width: 100%;
   height: calc(100% - 100px); }
   @media screen and (max-width: 800px) {
     .dashboard_content {
       margin-top: 60px; } }
-  @media screen and (max-width: 900px) {
-    .dashboard_content {
-      margin-left: 0px;
-      width: 100%; } }
   @media screen and (max-width: 800px) {
     .dashboard_content {
       height: calc(100% - 60px); } }
@@ -69,14 +67,24 @@
         margin-top: 20px;
         margin-left: 20px;
         font-size: 32pt; }
+        @media screen and (max-width: 500px) {
+          .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_username {
+            font-size: 20pt; } }
       .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_friends {
         margin-top: 20px;
         margin-left: 50px;
         font-size: 18pt; }
+        @media screen and (max-width: 500px) {
+          .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_friends {
+            margin-top: 10px;
+            font-size: 10pt; } }
       .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_cards {
         margin-top: 10px;
         margin-left: 50px;
         font-size: 18pt; }
+        @media screen and (max-width: 500px) {
+          .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_cards {
+            font-size: 10pt; } }
     .dashboard_content .dashboard_content_wrapper .progress_wrapper {
       cursor: pointer;
       position: absolute;

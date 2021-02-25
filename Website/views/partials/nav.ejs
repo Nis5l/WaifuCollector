@@ -1,10 +1,12 @@
 <div class="nav">
 
-	<a class="burger"><i class="fas fa-bars"></i></a>
+	<%if (typeof ishome == 'undefined') { %>
+		<a class="burger"><i class="fas fa-bars"></i></a>
+    <% } %>
 
-    <a href="/" class="logo">
+	<a href="/" class="logo">
 
-        <h1>WaifuCollector</h1>
+		<h1 style="margin-left: <%= (typeof ishome != 'undefined') ? "20px":"0px"; %>" >WaifuCollector</h1>
 
     </a>
 
@@ -18,7 +20,9 @@
 
             <% } %>
 
-		<li><a href="<%= url %>/dashboard">Dashboard</a></li>
+			<%if (typeof ishome != 'undefined') { %>
+				<li><a href="<%= url %>/dashboard">Dashboard</a></li>
+            <% } %>
 		
 		<%if (notifications) {%>
 

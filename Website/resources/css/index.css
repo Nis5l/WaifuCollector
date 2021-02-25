@@ -10,14 +10,26 @@ html, body {
   .home .title {
     margin-top: 50px;
     font-size: 24pt;
-    margin-bottom: 20px; }
+    margin-bottom: 20px;
+    overflow-wrap: break-word; }
+    @media screen and (max-width: 470px) {
+      .home .title {
+        font-size: 18pt; } }
   .home .subtitle {
     margin-top: 10px;
     font-size: 20pt;
     margin-bottom: 20px;
-    margin-left: 30px; }
+    margin-left: 30px;
+    overflow-wrap: break-word; }
+    @media screen and (max-width: 470px) {
+      .home .subtitle {
+        font-size: 14pt; } }
   .home .content {
     margin-left: 60px;
     font-size: 16pt;
     margin-bottom: 30px;
-    line-height: 30px; }
+    line-height: 30px;
+    overflow-wrap: break-word; }
+    @media screen and (max-width: 470px) {
+      .home .content {
+        font-size: 8pt; } }

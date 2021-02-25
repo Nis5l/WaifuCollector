@@ -20,6 +20,11 @@
   display: grid;
   grid-template-columns: min-content auto;
   grid-gap: 0.5em; }
+  @media screen and (max-width: 460px) {
+    .radio {
+      margin-left: 20px;
+      margin-right: 20px;
+      font-size: 1.2rem; } }
 
 .radio__input {
   cursor: pointer;
@@ -38,11 +43,17 @@
   border-radius: 50%;
   border: 0.1em solid currentColor;
   transform: translateY(-0.05em); }
+  @media screen and (max-width: 460px) {
+    .radio__control {
+      transform: translateY(-0.1em); } }
 
 .radio__label {
   padding: auto;
   font-size: 2rem;
   line-height: 1; }
+  @media screen and (max-width: 460px) {
+    .radio__label {
+      font-size: 1.5rem; } }
 
 input[type="search"] {
   color: #fff;
@@ -65,7 +76,7 @@ input[name="submit"] {
   color: #fff;
   padding: 10px 30px;
   margin-top: 1%;
-  margin-left: 30%;
+  margin-left: calc(50% - 20% - 10px);
   width: 40%;
   cursor: pointer;
   outline: none;

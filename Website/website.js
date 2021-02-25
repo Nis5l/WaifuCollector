@@ -100,6 +100,7 @@ app.get("/", function (req, res) {
 	res.render("home", {
 		userID: req.cookies.userID,
 		api_url: getHttp() + API_HOST,
+		ishome: true,
 	});
 });
 

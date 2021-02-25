@@ -1,6 +1,6 @@
 .content {
   width: 100%;
-  height: 100vh; }
+  height: 100%; }
   .content .card {
     position: absolute;
     top: 50%;
@@ -10,6 +10,11 @@
     background-color: #25282f;
     padding: 40px;
     text-align: center; }
+    @media screen and (max-width: 400px) {
+      .content .card {
+        top: 50%;
+        width: 200px;
+        padding: 20px; } }
     .content .card a {
       margin-top: 20px;
       color: white;
@@ -25,6 +30,9 @@
       margin: 20px auto;
       padding: 10px 4px;
       border-radius: 25px; }
+      @media screen and (max-width: 400px) {
+        .content .card input[type="text"], .content .card input[type="password"] {
+          width: 180px; } }
       .content .card input[type="text"]:hover, .content .card input[type="password"]:hover {
         border-color: #f7f7f7;
         transition: border 0.2s ease-in-out; }

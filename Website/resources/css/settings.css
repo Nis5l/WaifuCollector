@@ -4,6 +4,9 @@
   width: 340px;
   height: 220px;
   background-color: #25282f; }
+  @media screen and (max-width: 500px) {
+    .pass_change {
+      width: 280px; } }
   .pass_change .pass_change_top {
     padding: 10px 0px 15px 0px; }
     .pass_change .pass_change_top .pass_change_text {

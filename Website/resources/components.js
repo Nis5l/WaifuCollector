@@ -247,7 +247,7 @@ class Card extends HTMLElement {
         backface-visibility: hidden;
         transform: rotateY(${turned ? 180 : 0}deg);
         margin-left: 23%;
-        line-height: 170%;
+        line-height: normal;
         transform-origin: inherit;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -274,7 +274,7 @@ class Card extends HTMLElement {
         backface-visibility: hidden;
         transform: rotateY(${turned ? 180 : 0}deg);
         margin-left: 33%;
-        line-height: 170%;
+        line-height: normal;
         transform-origin: inherit;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -367,7 +367,8 @@ class Card extends HTMLElement {
 	fit() {
 		while (
 			$(this.shadow).find(".anime-name div").height() >
-			$(this.shadow).find(".anime-name").height()
+				$(this.shadow).find(".anime-name").height() &&
+			parseInt($(this.shadow).find(".anime-name div").css("font-size")) > 0
 		) {
 			$(this.shadow)
 				.find(".anime-name div")
@@ -381,7 +382,8 @@ class Card extends HTMLElement {
 
 		while (
 			$(this.shadow).find(".card-name div").height() >
-			$(this.shadow).find(".card-name").height()
+				$(this.shadow).find(".card-name").height() &&
+			parseInt($(this.shadow).find(".card-name div").css("font-size")) > 0
 		) {
 			$(this.shadow)
 				.find(".card-name div")
@@ -422,6 +424,9 @@ class Confirmation extends HTMLElement {
 		this.yesCallback = undefined;
 		this.message = this.getAttribute("message");
 
+		var widthsub = 0;
+		if ($(document).width() <= 400) widthsub = 80;
+
 		this._root.innerHTML = `
             <div class="card">
                     <h1>${this.message}</h1>
@@ -435,7 +440,7 @@ class Confirmation extends HTMLElement {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 300px;
+    width: calc(300px - ${widthsub}px);
     transform: translate(-50%, -50%);
     background-color: #25282f;
     padding: 40px;
@@ -483,6 +488,9 @@ class AddFriend extends HTMLElement {
 		this.noCallback = undefined;
 		this.yesCallback = undefined;
 
+		var widthsub = 0;
+		if ($(document).width() <= 400) widthsub = 80;
+
 		this._root.innerHTML = `
             <div class="card">
                     <h1>Add Friend</h1>
@@ -497,7 +505,7 @@ class AddFriend extends HTMLElement {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 300px;
+    width: calc(300px - ${widthsub}px);
     transform: translate(-50%, -50%);
     background-color: #25282f;
     padding: 40px;
@@ -510,12 +518,12 @@ class AddFriend extends HTMLElement {
       border-color: red !important; }
     .card input[type="submit"] {
       color: #f7f7f7;
-      padding: 10px 30px;
+      padding: 10px 10px;
       margin: auto 10px;
       border: 2px solid #fff;
       background-color: #323232;
       border-radius: 25px;
-	  width: 125px;
+	  width: calc(125px - ${widthsub}px / 2);
 	  cursor: pointer;
 	  }
       .card input[type="submit"]:enabled:hover {
@@ -535,7 +543,7 @@ class AddFriend extends HTMLElement {
 
             border: 2px solid rgba(255, 255, 255, 0.25);
 
-            width: 280px;
+            width: calc(280px - ${widthsub}px);
             outline: none;
 
             margin: 20px auto;
@@ -631,6 +639,8 @@ class FriendSelection extends HTMLElement {
 		this.username = this.getAttribute("username");
 		this.tradeCallback = undefined;
 		this.deleteCallback = undefined;
+		var widthsub = 0;
+		if ($(document).width() <= 400) widthsub = 50;
 
 		this._root.innerHTML = `
             <div class="card">
@@ -643,7 +653,7 @@ class FriendSelection extends HTMLElement {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 300px;
+    width: calc(300px - ${widthsub}px);
     transform: translate(-50%, -50%);
     background-color: #25282f;
     padding: 10px;
@@ -665,7 +675,7 @@ class FriendSelection extends HTMLElement {
 	  display: flex;
 	  align-items: center;
 	  justify-content: center;
-	  width: 300px;
+	  width: calc(300px - ${widthsub}px);
 	  height: 190px;
 	  border-bottom: 1px solid #ffff;
       font-size: 24pt;
@@ -704,6 +714,9 @@ class CookieConfirmation extends HTMLElement {
 		this._root = this.attachShadow({ mode: "open" });
 		this.okCallback = undefined;
 
+		var widthsub = 0;
+		if ($(document).width() <= 400) widthsub = 80;
+
 		this._root.innerHTML = `
             <div class="card">
                     <h1>This Website uses Cookies</h1>
@@ -722,7 +735,10 @@ class CookieConfirmation extends HTMLElement {
     background-color: #25282f;
     padding: 40px;
 	height: 300px;
-	width: 300px;
+	width: calc(300px - ${widthsub}px);
+	@media screen and (max-width: 400px) { 
+		width: 250px;
+	}
     text-align: center; }
     .card h1 {
       margin-top: 20px;
@@ -745,7 +761,7 @@ class CookieConfirmation extends HTMLElement {
       border: 2px solid #fff;
       background-color: #323232;
       border-radius: 25px;
-	  width: 300px;
+	  width: calc(300px - ${widthsub}px);
 	  position: absolute;
 	  bottom: 30px;
 	  transform: translate(-50%);
@@ -768,8 +784,7 @@ class CookieConfirmation extends HTMLElement {
             text-align: center;
 
             border: 2px solid rgba(0, 255, 0, 0.25);
-
-            width: 280px;
+		    width: calc(280px - ${widthsub}px);
             outline: none;
 
             margin: 20px auto;
@@ -922,6 +937,9 @@ class ErrorMessage extends HTMLElement {
 		this.closeCallback = "sdf";
 		const message = this.getAttribute("message");
 
+		var widthsub = 0;
+		if ($(document).width() <= 400) widthsub = 80;
+
 		this._root.innerHTML = `
 			<div class="box">
 				<div class="header">
@@ -935,7 +953,7 @@ class ErrorMessage extends HTMLElement {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 300px;
+    width: calc(300px - ${widthsub}px);
 	color: white;
     transform: translate(-50%, -50%);
     background-color: #25282f;

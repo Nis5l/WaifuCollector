@@ -3,7 +3,7 @@
 .content{
     
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
     .card{
 
@@ -18,6 +18,12 @@
         background-color: $cardBg1;
         
         padding: 40px;
+
+		@media screen and (max-width: 400px) { 
+			top: 50%;
+			width: 200px;
+			padding: 20px;
+		}
 
         text-align: center;
 
@@ -42,6 +48,9 @@
             border: 2px solid rgba(255, 255, 255, 0.25);
 
             width: 280px;
+			@media screen and (max-width: 400px) { 
+				width: 180px;
+			}
             outline: none;
 
             margin: 20px auto;

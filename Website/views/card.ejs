@@ -76,12 +76,14 @@
 			var mc = undefined;			
 			function displayCards(cards)
 			{
+				var cardsize = 1;
+				if($(document).width() < 400) cardsize = 0.8;
 				opn = document.getElementById('cardsinner');
 				for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
 		         {
 		           var path = cards[i].card.cardImage;
 		           var posX =  off;
-		           var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back=${cards[i].card.frame.path_back} pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].card.cardID}  card-size=1></waifu-card>`;
+							 var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back=${cards[i].card.frame.path_back} pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].card.cardID}  card-size=${cardsize}></waifu-card>`;
 				   opn.insertAdjacentHTML('beforeend',
 				   cardhtml);
 
@@ -93,10 +95,12 @@
 
 			function displayMain(maincard)
 			{
+				var cardsize = 1.3;
+				if($(document).width() < 400) cardsize = 1;
 		        opn = document.getElementById('maincard');
 		     	path = maincard.cardImage;
 				var posX =  off;
-				var cardhtml = `<waifu-card id=card-main img_path=${path} frame-front=${maincard.frame.path_front} frame-back=${maincard.frame.path_back} pos-x=${posX} card-name=\"${maincard.cardName}\" anime-name=\"${maincard.type.name}\" turned=false quality=${maincard.quality} level=${maincard.level} uuid=${maincard.uuid} cardID=${maincard.cardID} card-size=1.3 style="margin:auto"></waifu-card>`;
+						var cardhtml = `<waifu-card id=card-main img_path=${path} frame-front=${maincard.frame.path_front} frame-back=${maincard.frame.path_back} pos-x=${posX} card-name=\"${maincard.cardName}\" anime-name=\"${maincard.type.name}\" turned=false quality=${maincard.quality} level=${maincard.level} uuid=${maincard.uuid} cardID=${maincard.cardID} card-size=${cardsize} style="margin:auto"></waifu-card>`;
 				opn.insertAdjacentHTML('beforeend',cardhtml);
 
 				mc = document.getElementById(`card-main`);
@@ -155,12 +159,14 @@
 		};
 		function resize()
 		{
-			var amount = Math.floor((parent.offsetWidth)/ 273);
+			var cwidth = 273; 
+			if($(document).width() < 400) cwidth = 218;
+			var amount = Math.floor((parent.offsetWidth)/ cwidth);
 			if(amount > cardAmount)
 				amount = cardAmount;
 			if(amount <= 0)
 				amount = 1;
-			var size = amount * 273;
+			var size = amount * cwidth;
 			inv.style.width = size + "px";
 		}
 	</script>

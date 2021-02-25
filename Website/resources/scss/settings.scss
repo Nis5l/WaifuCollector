@@ -4,6 +4,10 @@
 	text-align: center;
 	padding: 10px 0px 2% 0px;
 	width: 340px;
+	@media screen and (max-width: 500px) { 
+		width: 280px;
+	}
+
 	height: 220px;
 	background-color: $cardBg2;
 	.pass_change_top {
