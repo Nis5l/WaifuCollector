@@ -650,7 +650,11 @@ app.post("/inventory", (req, res) => {
 			run(decoded.id);
 		}
 		function run(userID) {
-			var ids = cache.getIdsByString(search);
+			var ids = clients[userID].lastsearch;
+			if (clients[userID].lastsearch != search) {
+				clients[userID].lastsearch = search;
+				ids = cache.getIdsByString(search);
+			}
 			var exclude = [];
 			if (!isNaN(friendID)) {
 				database.getTrade(userID, friendID, (ex) => {

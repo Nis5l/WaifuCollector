@@ -13,6 +13,7 @@ class Client {
 		this.page = 0;
 		this.lastmain = undefined;
 		this.cardTypeAmount = 0;
+		this.lastsearch = undefined;
 		var operations = 3;
 		var operationsComplete = 0;
 
