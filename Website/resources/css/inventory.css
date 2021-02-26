@@ -1,5 +1,4 @@
 .filter {
-  position: absolute;
   vertical-align: top;
   margin: auto;
   width: 100%; }
@@ -95,7 +94,7 @@ input[name="submit"] {
 
 div#inventory {
   margin: auto;
-  margin-top: 290px;
+  margin-top: 50px;
   overflow: auto;
   max-height: none;
   align-items: center;
