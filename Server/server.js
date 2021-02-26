@@ -650,7 +650,7 @@ app.post("/inventory", (req, res) => {
 			run(decoded.id);
 		}
 		function run(userID) {
-			var ids = clients[userID].lastsearch;
+			var ids = clients[userID].lastids;
 			if (clients[userID].lastsearch != search) {
 				clients[userID].lastsearch = search;
 				ids = cache.getIdsByString(search);
