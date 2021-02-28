@@ -87,6 +87,12 @@
 
 			transition: border 0.2s ease-in-out;
 		}
+
+		&:disabled
+		{
+			color: gray;
+			border-color: gray;
+		}
 	}
 
 	.oktrade
@@ -114,6 +120,12 @@
 			border-color: #555555;
 
 			transition: border 0.2s ease-in-out;
+		}
+
+		&:disabled
+		{
+			color: gray;
+			border-color: gray;
 		}
 	}
 }

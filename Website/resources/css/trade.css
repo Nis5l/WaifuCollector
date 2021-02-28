@@ -62,6 +62,9 @@
     .trade .addtrade:focus {
       border-color: #555555;
       transition: border 0.2s ease-in-out; }
+    .trade .addtrade:disabled {
+      color: gray;
+      border-color: gray; }
   .trade .oktrade {
     cursor: pointer;
     color: white;
@@ -77,3 +80,6 @@
     .trade .oktrade:focus {
       border-color: #555555;
       transition: border 0.2s ease-in-out; }
+    .trade .oktrade:disabled {
+      color: gray;
+      border-color: gray; }

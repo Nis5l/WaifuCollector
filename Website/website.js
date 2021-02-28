@@ -762,6 +762,10 @@ app.get("/trade", redirectLogin, function (req, res) {
 					statusone: body.statusone,
 					statustwo: body.statustwo,
 					dashboard: dashboard,
+					tradeCount1: body.tradeCount1,
+					tradeCount2: body.tradeCount2,
+					tradeLimit: body.tradeLimit,
+					tradeTime: body.tradeTime,
 				});
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
@@ -916,6 +920,13 @@ function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
 	card.frame.path_back = getHttp() + API_HOST + "/" + card.frame.path_back;
+	if (
+		card.effect != null &&
+		card.effect != undefined &&
+		card.effect != "null" &&
+		card.effect != "undefined"
+	)
+		card.effect = getHttp() + API_HOST + "/" + card.effect;
 }
 
 //https.createServer(options, app).listen(port);

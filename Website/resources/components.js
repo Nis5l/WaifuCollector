@@ -75,9 +75,8 @@ class ProgressRing extends HTMLElement {
 	setTime(time) {
 		const text = this._root.querySelector("text");
 		if (time != 0) {
-			var seconds = Math.floor((time / 1000) % 60);
-			if (("" + seconds).length == 1) seconds = "0" + seconds;
-			this.time = Math.floor(time / 60000) + ":" + seconds;
+			var ft = formatTime(time);
+			this.time = ft;
 		} else this.time = "Open";
 		text.innerHTML = this.time;
 	}
@@ -128,10 +127,33 @@ class ProgressRing extends HTMLElement {
 	}
 }
 
+function formatTime(t) {
+	var seconds = Math.floor((t / 1000) % 60);
+	if (("" + seconds).length == 1) seconds = "0" + seconds;
+	var minutes = Math.floor((t / (60 * 1000)) % 60);
+	if (("" + minutes).length == 1) minutes = "0" + minutes;
+	var hours = Math.floor((t / (60 * 60 * 1000)) % 24);
+	if (("" + hours).length == 1) hours = "0" + hours;
+	var days = Math.floor(t / (60 * 60 * 24 * 1000));
+	if (("" + days).length == 1) days = "0" + days;
+	var formatTime = days + ":" + hours + ":" + minutes + ":" + seconds;
+	if (days == "00") {
+		formatTime = hours + ":" + minutes + ":" + seconds;
+		if (hours == "00") {
+			formatTime = minutes + ":" + seconds;
+			if ((minutes = "00")) {
+				formatTime = seconds;
+			}
+		}
+	}
+	return formatTime;
+}
+
 class Card extends HTMLElement {
 	constructor() {
 		super();
 		const img = this.getAttribute("img_path");
+		const effect = this.getAttribute("effect_path");
 		const frame_front = this.getAttribute("frame-front");
 		const frame_back = this.getAttribute("frame-back");
 		const card_name = this.getAttribute("card-name");
@@ -149,7 +171,9 @@ class Card extends HTMLElement {
 		//this._root.innerHTML =`
 		this.shadow.innerHTML = `
     <div class="card" id=card> 
-      <div class="card-inner id=card-inner">
+      <div class="card-inner" id="card-inner">
+      </div>  
+      <div class="card-effect">
       </div>  
       <div class="waifu-card-back">
       </div>
@@ -195,6 +219,30 @@ class Card extends HTMLElement {
         height: 100%;
         backface-visibility: hidden;
         transform: rotateY(${turned ? 180 : 0}deg);
+      }
+
+      .card-effect
+      {
+        background-color: transparent;
+		${
+			effect == null ||
+			effect == undefined ||
+			effect == "undefined" ||
+			effect == "null"
+				? "//"
+				: ""
+		}background-image: url(${effect});
+        background-size: 80%;
+        background-repeat: no-repeat;
+        background-position: 48% 35%;
+        transition-duration: 1s;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        transform: rotateY(${turned ? 180 : 0}deg);
+		position: absolute;
+		top: 0;
+		left: 0;
       }
 
       .waifu-card

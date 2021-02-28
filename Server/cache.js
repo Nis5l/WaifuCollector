@@ -5,6 +5,7 @@ class Client {
 	constructor(id, username, loadedCallback) {
 		this.id = id;
 		this.packTime = -1;
+		this.tradeTime = -1;
 		this.username = username;
 		this.inventorySort = 0;
 		this.inventory = [];
@@ -14,11 +15,16 @@ class Client {
 		this.lastmain = undefined;
 		this.cardTypeAmount = 0;
 		this.lastsearch = undefined;
-		var operations = 3;
+		var operations = 4;
 		var operationsComplete = 0;
 
 		database.getPackTime(this.id, (time) => {
 			this.packTime = time;
+			operationFinished();
+		});
+
+		database.getTradeTime(this.id, (time) => {
+			this.tradeTime = time;
 			operationFinished();
 		});
 
@@ -62,6 +68,7 @@ class Client {
 
 	save() {
 		database.setPackTime(this.id, this.packTime);
+		database.setTradeTime(this.id, this.tradeTime);
 	}
 
 	startDecay(time, callback) {

@@ -20,6 +20,7 @@ const csv = require("csv-string");
 app.use(express.static("Data"));
 const imageBase = "Card/";
 const frameBase = "Frame/";
+const effectBase = "Effect/";
 
 const config = require("./config.json");
 const { randomInt } = require("crypto");
@@ -34,11 +35,13 @@ const packSize = [1, 1];
 const passRegex = /^[a-zA-Z0-9_.]+$/;
 const inventorySendAmount = config.inventorySendAmount;
 const friendLimit = config.friendLimit;
+const tradeLimit = config.tradeLimit;
 
 var clients = {};
 
 var cacheTime = 900000;
 var packCooldown = config.packCooldown;
+var tradeCooldown = config.tradecooldown;
 var qualityrange = [1, 5];
 var cardCashInterval = 3600000;
 //var cardCashInterval = 10000;
@@ -371,6 +374,7 @@ app.post("/getDashboard", (req, res) => {
 			res.send({
 				status: 0,
 				packTime: getPackTime(userID),
+				tradeTime: getTradeTime(userID),
 				fullTime: packCooldown * 1000,
 				cardCount: cardCount,
 				cardMax: cardMax,
@@ -696,19 +700,23 @@ app.post("/inventory", (req, res) => {
 						inventory[iteration].cardID,
 						inventory[iteration].frameID,
 						(card) => {
-							inventory[iteration].card = card;
-							if (iteration == inventory.length - 1) {
-								res.send({
-									status: 0,
-									inventory: inventory,
-									page: pageStats[0],
-									pagemax: pageStats[1],
-								});
+							database.getEffect(inventory[iteration].level, (ep) => {
+								inventory[iteration].card = card;
+								if (ep == null) inventory[iteration].card.effect = null;
+								else inventory[iteration].card.effect = effectBase + ep;
+								if (iteration == inventory.length - 1) {
+									res.send({
+										status: 0,
+										inventory: inventory,
+										page: pageStats[0],
+										pagemax: pageStats[1],
+									});
 
-								return;
-							} else {
-								run2(iteration + 1);
-							}
+									return;
+								} else {
+									run2(iteration + 1);
+								}
+							});
 						}
 					);
 				}
@@ -1179,7 +1187,9 @@ app.post("/trade", (req, res) => {
 				data = {};
 				var tradeok = 0;
 				var tradeokother = 0;
+				var tradeCount1 = 0;
 				database.getTrade(decoded.id, userID, (trades) => {
+					tradeCount1 = trades.length;
 					data.selfcards = [];
 					run2(0);
 					function run2(i) {
@@ -1195,8 +1205,12 @@ app.post("/trade", (req, res) => {
 									card.level = result.level;
 									card.quality = result.quality;
 									card.uuid = parseInt(trades[i].card);
-									data.selfcards.push(card);
-									run2(i + 1);
+									database.getEffect(card.level, (ep) => {
+										if (ep == null) card.effect = null;
+										else card.effect = effectBase + ep;
+										data.selfcards.push(card);
+										run2(i + 1);
+									});
 								});
 							});
 						} else {
@@ -1210,7 +1224,9 @@ app.post("/trade", (req, res) => {
 										tradeokother = tm[0].statusone;
 									}
 								}
+								var tradeCount2 = 0;
 								database.getTrade(userID, decoded.id, (trades) => {
+									tradeCount2 = trades.length;
 									data.friendcards = [];
 									run3(0);
 									function run3(i) {
@@ -1226,8 +1242,12 @@ app.post("/trade", (req, res) => {
 													card.level = result.level;
 													card.quality = result.quality;
 													card.uuid = parseInt(trades[i].card);
-													data.friendcards.push(card);
-													run3(i + 1);
+													database.getEffect(card.level, (ep) => {
+														if (ep == null) card.effect = null;
+														else card.effect = effectBase + ep;
+														data.friendcards.push(card);
+														run3(i + 1);
+													});
 												});
 											});
 										} else {
@@ -1237,6 +1257,9 @@ app.post("/trade", (req, res) => {
 												username: username,
 												statusone: tradeok,
 												statustwo: tradeokother,
+												tradeCount1: tradeCount1,
+												tradeCount2: tradeCount2,
+												tradeLimit: tradeLimit,
 											});
 										}
 									}
@@ -1286,32 +1309,39 @@ app.post("/addtrade", (req, res) => {
 				return;
 			}
 
-			database.getCardUUID(cardID, decoded.id, (result) => {
-				if (result == undefined) {
-					res.send({
-						status: 1,
-						message: "Cant find card, or it isnt yours",
-					});
+			database.getTrade(decoded.id, userID, (cards) => {
+				if (cards.length >= tradeLimit) {
+					res.send({ status: 1, message: "Tradelimit reached" });
 					return;
 				}
-				database.tradeExists(decoded.id, userID, cardID, (b) => {
-					if (b) {
-						res.send({ status: 1, message: "Card already in trade" });
+
+				database.getCardUUID(cardID, decoded.id, (result) => {
+					if (result == undefined) {
+						res.send({
+							status: 1,
+							message: "Cant find card, or it isnt yours",
+						});
 						return;
 					}
-					database.addTrade(decoded.id, userID, cardID, () => {
-						setTrade(decoded.id, userID, 0, () => {
-							setTrade(userID, decoded.id, 0, () => {
-								//console.log(userID);
-								database.addNotification(
-									userID,
-									"Trade Changed",
-									"A card got added to the trade, click to view!",
-									"trade?userID=" + decoded.id,
-									() => {}
-								);
-								res.send({ status: 0 });
-								return;
+					database.tradeExists(decoded.id, userID, cardID, (b) => {
+						if (b) {
+							res.send({ status: 1, message: "Card already in trade" });
+							return;
+						}
+						database.addTrade(decoded.id, userID, cardID, () => {
+							setTrade(decoded.id, userID, 0, () => {
+								setTrade(userID, decoded.id, 0, () => {
+									//console.log(userID);
+									database.addNotification(
+										userID,
+										"Trade Changed",
+										"A card got added to the trade, click to view!",
+										"trade?userID=" + decoded.id,
+										() => {}
+									);
+									res.send({ status: 0 });
+									return;
+								});
 							});
 						});
 					});
@@ -1418,67 +1448,87 @@ app.post("/okTrade", (req, res) => {
 			}
 		}
 		function run() {
-			setTrade(decoded.id, userID, 1, () => {
-				database.getTradeManager(decoded.id, userID, (tm) => {
-					if (tm != undefined && tm[0].statusone == 1 && tm[0].statustwo == 1) {
-						transfer(decoded.id, userID, () => {
-							transfer(userID, decoded.id, () => {
-								setTrade(decoded.id, userID, 0, () => {
-									setTrade(userID, decoded.id, 0, () => {
-										database.addNotification(
-											userID,
-											"Trade Complete",
-											"A trade has been complete, click to view!",
-											"trade?userID=" + decoded.id,
-											() => {}
-										);
-										res.send({ status: 0 });
-										return;
+			var nowDate = moment();
+			var date = moment(nowDate).add(tradeCooldown, "seconds");
+			var tradeDate = moment(parseInt(clients[decoded.id].tradeTime));
+
+			if (
+				clients[decoded.id] == null ||
+				clients[decoded.id].tradeTime == "null" ||
+				nowDate.isAfter(tradeDate) ||
+				!tradeDate.isValid()
+			) {
+				setTrade(decoded.id, userID, 1, () => {
+					database.getTradeManager(decoded.id, userID, (tm) => {
+						if (
+							tm != undefined &&
+							tm[0].statusone == 1 &&
+							tm[0].statustwo == 1
+						) {
+							transfer(decoded.id, userID, () => {
+								transfer(userID, decoded.id, () => {
+									setTrade(decoded.id, userID, 0, () => {
+										setTrade(userID, decoded.id, 0, () => {
+											database.addNotification(
+												userID,
+												"Trade Complete",
+												"A trade has been complete, click to view!",
+												"trade?userID=" + decoded.id,
+												() => {}
+											);
+											clients[decoded.id].tradeTime = date.valueOf();
+											clients[userID].tradeTime = date.valueOf();
+											res.send({ status: 0 });
+											return;
+										});
 									});
 								});
 							});
-						});
-						function transfer(userone, usertwo, callback) {
-							database.getTrade(userone, usertwo, (cards) => {
-								for (var i = 0; i < cards.length; i++) {
-									var c = clients[userone].getCard(cards[i].card);
-									clients[usertwo].addCard({
-										id: cards[i].card,
-										userID: userID,
-										cardID: c.cardID,
-										quality: c.quality,
-										level: c.level,
-										frameID: c.frameID,
-									});
-									clients[userone].deleteCard(cards[i].card);
-								}
-								run2(0);
-								function run2(idx) {
-									if (idx == cards.length) {
-										callback();
-										return;
-									}
-									database.removeTrade(cards[idx].card, () => {
-										database.changeCardUser(cards[idx].card, usertwo, () => {
-											run2(idx + 1);
+							function transfer(userone, usertwo, callback) {
+								database.getTrade(userone, usertwo, (cards) => {
+									for (var i = 0; i < cards.length; i++) {
+										var c = clients[userone].getCard(cards[i].card);
+										clients[usertwo].addCard({
+											id: cards[i].card,
+											userID: userID,
+											cardID: c.cardID,
+											quality: c.quality,
+											level: c.level,
+											frameID: c.frameID,
 										});
-									});
-								}
-							});
+										clients[userone].deleteCard(cards[i].card);
+									}
+									run2(0);
+									function run2(idx) {
+										if (idx == cards.length) {
+											callback();
+											return;
+										}
+										database.removeTrade(cards[idx].card, () => {
+											database.changeCardUser(cards[idx].card, usertwo, () => {
+												run2(idx + 1);
+											});
+										});
+									}
+								});
+							}
+						} else {
+							database.addNotification(
+								userID,
+								"Trade Confirmed",
+								"A trade has been confirmed, click to view!",
+								"trade?userID=" + decoded.id,
+								() => {}
+							);
+							res.send({ status: 0 });
+							return;
 						}
-					} else {
-						database.addNotification(
-							userID,
-							"Trade Confirmed",
-							"A trade has been confirmed, click to view!",
-							"trade?userID=" + decoded.id,
-							() => {}
-						);
-						res.send({ status: 0 });
-						return;
-					}
+					});
 				});
-			});
+			} else {
+				res.send({ status: 1, message: "Wait" });
+				return;
+			}
 		}
 	} catch (e) {
 		console.log(e);
@@ -1486,6 +1536,22 @@ app.post("/okTrade", (req, res) => {
 		return;
 	}
 });
+
+function getTradeTime(userID) {
+	var nowDate = moment();
+	var packDate = moment(parseInt(clients[userID].tradeTime));
+
+	if (
+		clients[userID] == undefined ||
+		clients[userID].packTime == "null" ||
+		nowDate.isAfter(packDate) ||
+		!packDate.isValid()
+	) {
+		return 0;
+	} else {
+		return packDate.diff(nowDate).seconds();
+	}
+}
 
 app.post("/deleteNotification", (req, res) => {
 	try {
@@ -1594,9 +1660,13 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 		getCard(result.cardID, result.frameID, (_maincard) => {
 			maincard = _maincard;
 			maincard.level = result.level;
-			maincard.quality = result.quality;
-			maincard.uuid = parseInt(uuid);
-			run2(0);
+			database.getEffect(maincard.level, (ep) => {
+				if (ep == null) maincard.effect = null;
+				else maincard.effect = effectBase + ep;
+				maincard.quality = result.quality;
+				maincard.uuid = parseInt(uuid);
+				run2(0);
+			});
 		});
 	});
 	function run2(iteration) {
@@ -1614,20 +1684,24 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 			inventory[iteration].cardID,
 			inventory[iteration].frameID,
 			(card) => {
-				inventory[iteration].card = card;
+				database.getEffect(inventory[iteration].level, (ep) => {
+					inventory[iteration].card = card;
+					if (ep == null) inventory[iteration].card.effect = null;
+					else inventory[iteration].card.effect = effectBase + ep;
 
-				if (iteration == inventory.length - 1) {
-					callback({
-						status: 0,
-						inventory: inventory,
-						card: maincard,
-						page: pageStats[0],
-						pagemax: pageStats[1],
-					});
-					return;
-				} else {
-					run2(iteration + 1);
-				}
+					if (iteration == inventory.length - 1) {
+						callback({
+							status: 0,
+							inventory: inventory,
+							card: maincard,
+							page: pageStats[0],
+							pagemax: pageStats[1],
+						});
+						return;
+					} else {
+						run2(iteration + 1);
+					}
+				});
 			}
 		);
 	}

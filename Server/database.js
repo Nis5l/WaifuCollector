@@ -2,7 +2,7 @@ const sql = require("mysql");
 const bcrypt = require("bcrypt");
 
 const packTime = "PACKTIME";
-const friend = "FRIEND";
+const tradeTime = "TRADETIME";
 
 const config = require("./config.json");
 
@@ -29,6 +29,7 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
+			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 		];
 
 		con.connect(() => {
@@ -40,9 +41,12 @@ module.exports = {
 					cardTypes(() => {
 						console.log("Initializing Frames");
 						frames(() => {
-							console.log("Using DB");
-							con.query("USE " + config.mysql.database + ";", () => {
-								callback();
+							console.log("Initializing Effects");
+							effects(() => {
+								console.log("Using DB");
+								con.query("USE " + config.mysql.database + ";", () => {
+									callback();
+								});
 							});
 						});
 					});
@@ -88,23 +92,6 @@ module.exports = {
 				callback(false, "error: user already exists");
 			}
 		});
-	},
-
-	getPackTime: function getPackTime(userID, res, callback) {
-		con.query(
-			"SELECT * FROM data WHERE `userID` = " +
-				userID +
-				' AND `key` = "' +
-				packTime +
-				'"',
-			function (err, result, fields) {
-				if (result == undefined || result.length == 0) {
-					callback(userID, null, res);
-					return;
-				}
-				callback(userID, result[0].value, res);
-			}
-		);
 	},
 
 	getPackTime: function getPackTime(userID, callback) {
@@ -593,6 +580,18 @@ module.exports = {
 			}
 		);
 	},
+	tradeCount: function tradeCount(user, usertwo, callback) {
+		con.query(
+			"SELECT * FROM trade WHERE userone=" +
+				userone +
+				" AND usertwo=" +
+				usertwo +
+				";",
+			(err, result, fields) => {
+				callback(result != undefined && result.length > 0);
+			}
+		);
+	},
 	changeCardUser: function changeCardUser(card, user, callback) {
 		con.query(
 			"UPDATE unlocked SET userID =" + user + " WHERE id=" + card,
@@ -669,6 +668,60 @@ module.exports = {
 			(err, result, fields) => {
 				if (err) console.log(err);
 				callback(result);
+			}
+		);
+	},
+	setTradeTime: function setTradeTime(userID, time) {
+		con.query(
+			"UPDATE `data` SET `value` = '" +
+				time +
+				"' WHERE `data`.`userID` = " +
+				userID +
+				' AND `data`.`key` = "' +
+				tradeTime +
+				'"',
+			function (err, result, fields) {
+				if (result == undefined || result.affectedRows == 0) {
+					con.query(
+						"INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" +
+							userID +
+							", '" +
+							tradeTime +
+							"', '" +
+							time +
+							"')",
+						function (err, result, fields) {}
+					);
+				} else {
+				}
+			}
+		);
+	},
+	getTradeTime: function getTradeTime(userID, callback) {
+		con.query(
+			"SELECT * FROM data WHERE `userID` = " +
+				userID +
+				' AND `key` = "' +
+				tradeTime +
+				'"',
+			function (err, result, fields) {
+				if (result == undefined || result.length == 0) {
+					callback(null);
+					return;
+				}
+				callback(result[0].value);
+			}
+		);
+	},
+	getEffect: function getEffect(level, callback) {
+		con.query(
+			"SELECT * FROM effect WHERE `id` = " + level + ";",
+			function (err, result, fields) {
+				if (result == undefined || result.length == 0) {
+					callback(null);
+					return;
+				}
+				callback(result[0].path);
 			}
 		);
 	},
@@ -858,6 +911,43 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ghislaine Dedoldia', '79', 'Card_GhislaineDedoldia.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sylphiette', '79', 'Card_Sylphiette.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Robert E O Speedwagon', '80', 'Card_RobertEOSpeedwagon.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sakura Matou', '52', 'Card_SakuraMatou.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuuna Yunohana', '81', 'Card_YuunaYunohana.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Amane Suou', '82', 'Card_AmaneSuou.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yumiko Sakaki', '82', 'Card_YumikoSakaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Michiru Matsushima', '82', 'Card_MichiruMatsushima.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sachi Komine', '82', 'Card_SachiKomine.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Makina Irisu', '82', 'Card_MakinaIrisu.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kazuki Kazami', '82', 'Card_KazukiKazami.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Akeno Himejima', '30', 'Card_AkenoHimejima.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ravel Phoenix', '30', 'Card_RavelPhoenix.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Albedo', '83', 'Card_Albedo.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Lisa Lisa', '80', 'Card_LisaLisa.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Trish Una', '80', 'Card_TrishUna.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yukako Yamagishi', '80', 'Card_YukakoYamagishi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yoruichi Shihoin', '11', 'Card_YoruichiShihoin.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nemu Kurotsuchi', '11', 'Card_NemuKurotsuchi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sode no Shirayuki', '11', 'Card_SodenoShirayuki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nelliel Tu Odelschwanck', '11', 'Card_NellielTuOdelschwanck.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tier Harribel', '11', 'Card_TierHarribel.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Cyan Sung-Sun', '11', 'Card_CyanSung-Sun.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Lisa Yadomaru', '11', 'Card_LisaYadomaru.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hiyori Sarugaki', '11', 'Card_HiyoriSarugaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Charmy Pappitson', '65', 'Card_CharmyPappitson.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Vanica Zogratis', '65', 'Card_VanicaZogratis.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Fana', '65', 'Card_Fana.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sister Lily', '65', 'Card_SisterLily.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Dorothy Unsworth', '65', 'Card_DorothyUnsworth.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sol Marron', '65', 'Card_SolMarron.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nico Robin', '21', 'Card_NicoRobin.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shirahoshi', '21', 'Card_Shirahoshi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nefeltari Vivi', '21', 'Card_NefeltariVivi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Carrot', '21', 'Card_Carrot.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Charlotte Pudding', '21', 'Card_CharlottePudding.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kozuki Hiyori', '21', 'Card_KozukiHiyori.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Marguerite', '21', 'Card_Marguerite.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tomoko Kuroki', '84', 'Card_TomokoKuroki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuu Naruse', '84', 'Card_YuuNaruse.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -953,6 +1043,10 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('78', 'No Game No Life');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('79', 'Mushoku Tensei');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('80', 'JoJos Bizarre Adventure');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('81', 'Yuunas Haunted Hot Springs');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('82', 'The Fruit of Grisaia');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('83', 'Overlord');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('84', 'Watamote');",
 	];
 
 	con.connect(() => {
@@ -984,6 +1078,22 @@ function frames(callback) {
 	});
 }
 
+function effects(callback) {
+	//var sql = ["INSERT INTO `effect` (`id`, `path`) VALUES ('2', 'Effect1.png')"];
+	var sql = [];
+
+	con.connect(() => {
+		con.query("DROP TABLE effect", () => {
+			con.query(
+				"CREATE TABLE IF NOT EXISTS effect ( `id` INT NOT NULL , `path` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+				() => {
+					executeArray(sql, callback);
+				}
+			);
+		});
+	});
+}
+
 function userexists(username, callback) {
 	con.query(
 		'SELECT * FROM user WHERE UPPER(username) = "' +
@@ -997,6 +1107,10 @@ function userexists(username, callback) {
 
 function executeArray(sql, callback) {
 	var count = 0;
+	if (sql.length == 0) {
+		callback();
+		return;
+	}
 
 	for (var i = 0; i < sql.length; i++) {
 		con.query(sql[i], (err) => {
