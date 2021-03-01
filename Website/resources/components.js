@@ -141,7 +141,7 @@ function formatTime(t) {
 		formatTime = hours + ":" + minutes + ":" + seconds;
 		if (hours == "00") {
 			formatTime = minutes + ":" + seconds;
-			if ((minutes = "00")) {
+			if ((minutes == "00")) {
 				formatTime = seconds;
 			}
 		}
