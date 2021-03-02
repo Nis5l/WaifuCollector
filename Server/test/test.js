@@ -2,20 +2,6 @@ var request = require('request');
 var io = require('console-read-write');
 var tokenV = "";
 
-function login(user, pass)
-{
-    request.post(
-        'http://127.0.0.1:100/login',
-        { json: { username: user, password: pass } },
-        (error, response, body) => 
-        {
-            if (!error && response.statusCode == 200) {
-                console.log(body);
-                tokenV = body.token;
-            }
-        }
-    );
-}
 
 function register(user, pass)
 {
@@ -76,7 +62,7 @@ function getfriends()
         }
     );
 }
-
+/*
 async function main()
 {
     console.log("GO");
@@ -90,3 +76,25 @@ async function main()
 }
 
 main();
+*/
+var date;
+function login(user, pass)
+{
+    console.log("presend: " + (Date.now() - date) + "ms");
+    date = Date.now();
+    request.post(
+        'http://10.0.0.105:20001/login',
+        { json: { username: user, password: pass } },
+        (error, response, body) => 
+        {
+	    console.log("response: " +  (Date.now() - date) + "ms");
+            if (!error && response.statusCode == 200) {
+                console.log(body);
+                tokenV = body.token;
+            }
+        }
+    );
+}
+date = Date.now();
+console.log("sending login");
+login("Test123", "Test1234");

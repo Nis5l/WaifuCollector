@@ -258,11 +258,13 @@ app.post("/login", (req, res) => {
 	try {
 		var username = req.body.username;
 		var password = req.body.password;
-		//console.log("Login " + username + " " + password);
+		console.log("Login " + username);
 		database.login(username, password, (b, messageV, userIDV) => {
+			console.log("db");
 			var tokenV = "";
 			if (b) tokenV = jwt.sign({ username: username, id: userIDV }, jwtSecret);
 
+			console.log("res");
 			if (b)
 				res.send({
 					status: b ? 0 : 1,
