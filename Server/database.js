@@ -962,12 +962,10 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mei Misaki', '88', 'Card_MeiMisaki.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Himeka Akishino', '89', 'Card_HimekaAkishino.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Chiwa Harusaki', '89', 'Card_ChiwaHarusaki.jpg');",
-		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mashiro Shiina', '17', 'Card_MashiroShiina.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kaede Azusagawa', '60', 'Card_KaedeAzusagawa.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Onna Shinkan', '90', 'Card_OnnaShinkan.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Erufu', '90', 'Card_Erufu.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shalltear Bloodfallen', '91', 'Card_ShalltearBloodfallen.jpg');",
-
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
