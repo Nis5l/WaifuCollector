@@ -948,6 +948,26 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Marguerite', '21', 'Card_Marguerite.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tomoko Kuroki', '84', 'Card_TomokoKuroki.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuu Naruse', '84', 'Card_YuuNaruse.jpg');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rem Galleu', '85', 'Card_RemGalleu.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Setsuna', '86', 'Card_Setsuna.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rikka Takanashi', '87', 'Card_RikkaTakanashi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Satone Shichimiya', '87', 'Card_SatoneShichimiya.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kumin Tsuyuri', '87', 'Card_KuminTsuyuri.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yoshino Himekawa', '22', 'Card_YoshinoHimekawa.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Itsuka Kotori', '22', 'Card_ItsukaKotori.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kaguya Yamai', '22', 'Card_KaguyaYamai.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yamai Kazamachi', '22', 'Card_YamaiKazamachi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tohka Yatogami', '22', 'Card_TohkaYatogami.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mei Misaki', '88', 'Card_MeiMisaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Himeka Akishino', '89', 'Card_HimekaAkishino.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Chiwa Harusaki', '89', 'Card_ChiwaHarusaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mashiro Shiina', '17', 'Card_MashiroShiina.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kaede Azusagawa', '60', 'Card_KaedeAzusagawa.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Onna Shinkan', '90', 'Card_OnnaShinkan.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Erufu', '90', 'Card_Erufu.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shalltear Bloodfallen', '91', 'Card_ShalltearBloodfallen.jpg');",
+
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1047,6 +1067,14 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('82', 'The Fruit of Grisaia');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('83', 'Overlord');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('84', 'Watamote');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('85', 'How no to summon a demon lord');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('86', 'Redo of Healer');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('87', 'Love, Chunibyo & Other Delusions!');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('88', 'Another');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('89', 'Oreshura');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('90', 'Goblin Slayer');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('91', 'Overlord');",
 	];
 
 	con.connect(() => {
