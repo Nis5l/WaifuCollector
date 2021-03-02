@@ -1066,7 +1066,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('83', 'Overlord');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('84', 'Watamote');",
 
-		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('85', 'How no to summon a demon lord');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('85', 'How Not to Summon a Demon Lord');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('86', 'Redo of Healer');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('87', 'Love, Chunibyo & Other Delusions!');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('88', 'Another');",
