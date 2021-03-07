@@ -1,0 +1,2656 @@
+FUNCTION  GetJavascriptGraphQLIndent()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\after\indent/javascript-2.vim line 39
+Called 2 times
+Total time:   0.002590
+ Self time:   0.000200
+
+count  total (s)   self (s)
+    2              0.000161   let l:stack = map(synstack(v:lnum, 1), "synIDattr(v:val, 'name')")
+    2              0.000007   if get(l:stack, 0, '') ==# 'graphqlTemplateString'
+                                return GetGraphQLIndent()
+    2              0.000002   endif
+                            
+    2   0.002410   0.000021   return eval(b:indentexpr_base)
+
+FUNCTION  <SNR>26_notify()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\client.vim line 181
+Called 42 times
+Total time:   0.002031
+ Self time:   0.001835
+
+count  total (s)   self (s)
+   42   0.000449   0.000252   let channel = coc#client#get_channel(self)
+   42              0.000045   if empty(channel)
+                                return ''
+   42              0.000031   endif
+   42              0.000023   try
+   42              0.000037     if s:is_vim
+                                  call ch_sendraw(channel, json_encode([0, [a:method, a:args]])."\n")
+   42              0.000018     else
+   42              0.000543       call call('rpcnotify', [channel, a:method] + a:args)
+   42              0.000020     endif
+                              catch /.*/
+                                if v:exception =~# 'E475'
+                                  if get(g:, 'coc_vim_leaving', 0)
+                                    return
+                                  endif
+                                  echohl Error | echom '['.self.name.'] server connection lost' | echohl None
+                                  let name = self.name
+                                  call s:on_exit(name, 0)
+                                  execute 'silent do User ConnectionLost'.toupper(name[0]).name[1:]
+                                elseif v:exception =~# 'E12'
+                                  " neovim's bug, ignore it
+                                else
+                                  echohl Error | echo 'Error on notify ('.a:method.'): '.v:exception | echohl None
+                                endif
+   42              0.000024   endtry
+
+FUNCTION  coc#client#get_channel()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\client.vim line 141
+Called 42 times
+Total time:   0.000197
+ Self time:   0.000197
+
+count  total (s)   self (s)
+   42              0.000052   if s:is_vim
+                                return a:client['channel']
+   42              0.000013   endif
+   42              0.000047   return a:client['chan_id']
+
+FUNCTION  coc#highlight#clear_match_group()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\highlight.vim line 202
+Called 5 times
+Total time:   0.001534
+ Self time:   0.001534
+
+count  total (s)   self (s)
+    5              0.000044   let winid = a:winid == 0 ? win_getid() : a:winid
+    5              0.000036   if empty(getwininfo(winid))
+                                " not valid
+                                return
+    5              0.000003   endif
+    5              0.000006   if s:clear_match_by_window
+                                let arr = filter(getmatches(winid), 'v:val["group"] =~# "'.a:match.'"')
+                                for item in arr
+                                  call matchdelete(item['id'], winid)
+                                endfor
+    5              0.000002   else
+    5              0.000009     let curr = win_getid()
+    5              0.000016     let switch = exists('*nvim_set_current_win') && curr != winid
+    5              0.000003     if switch
+                                  noa call nvim_set_current_win(a:winid)
+    5              0.000002     endif
+    5              0.000005     if win_getid() == winid
+    5              0.000784       let arr = filter(getmatches(), 'v:val["group"] =~# "'.a:match.'"')
+  205              0.000135       for item in arr
+  200              0.000267         call matchdelete(item['id'])
+  205              0.000060       endfor
+    5              0.000002     endif
+    5              0.000003     if switch
+                                  noa call nvim_set_current_win(curr)
+    5              0.000002     endif
+    5              0.000002   endif
+
+FUNCTION  <SNR>105_Nat()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 161
+Called 4 times
+Total time:   0.000005
+ Self time:   0.000005
+
+count  total (s)   self (s)
+    4              0.000005   return a:int * (a:int > 0)
+
+FUNCTION  gitgutter#async#execute()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\async.vim line 16
+Called 2 times
+Total time:   0.008313
+ Self time:   0.008247
+
+count  total (s)   self (s)
+    2   0.000059   0.000011   call gitgutter#debug#log('[async] '.a:cmd)
+                            
+    2              0.000006   let options = {   'stdoutbuffer': [],   'buffer': a:bufnr,   'handler': a:handler }
+    2   0.000027   0.000010   let command = s:build_command(a:cmd)
+                            
+    2              0.000003   if has('nvim')
+    2              0.008161     call jobstart(command, extend(options, {   'on_stdout': function('s:on_stdout_nvim'),   'on_stderr': function('s:on_stderr_nvim'),   'on_exit':   function('s:on_exit_nvim') }))
+                              else
+                                let job = job_start(command, {   'out_cb':   function('s:on_stdout_vim', options),   'err_cb':   function('s:on_stderr_vim', options),   'close_cb': function('s:on_exit_vim', options) })
+                                let s:jobs[s:job_id(job)] = 1
+    2              0.000018   endif
+
+FUNCTION  <SNR>128_is_modified()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 281
+Called 2 times
+Total time:   0.000005
+ Self time:   0.000005
+
+count  total (s)   self (s)
+    2              0.000004   return a:from_count > 0 && a:to_count > 0 && a:from_count == a:to_count
+
+FUNCTION  <SNR>74_Highlight_Matching_Pair()
+    Defined: C:\Program Files\Neovim\share\nvim\runtime\plugin\matchparen.vim line 39
+Called 19 times
+Total time:   0.001893
+ Self time:   0.001893
+
+count  total (s)   self (s)
+                              " Remove any previous match.
+   19              0.000048   if exists('w:paren_hl_on') && w:paren_hl_on
+    3              0.000008     silent! call matchdelete(3)
+    3              0.000004     let w:paren_hl_on = 0
+   19              0.000007   endif
+                            
+                              " Avoid that we remove the popup menu.
+                              " Return when there are no colors (looks like the cursor jumps).
+   19              0.000049   if pumvisible() || (&t_Co < 8 && !has("gui_running"))
+                                return
+   19              0.000005   endif
+                            
+                              " Get the character under the cursor and check if it's in 'matchpairs'.
+   19              0.000029   let c_lnum = line('.')
+   19              0.000026   let c_col = col('.')
+   19              0.000014   let before = 0
+                            
+   19              0.000032   let text = getline(c_lnum)
+   19              0.000264   let matches = matchlist(text, '\(.\)\=\%'.c_col.'c\(.\=\)')
+   19              0.000024   if empty(matches)
+                                let [c_before, c] = ['', '']
+   19              0.000007   else
+   19              0.000049     let [c_before, c] = matches[1:2]
+   19              0.000006   endif
+   19              0.000207   let plist = split(&matchpairs, '.\zs[:,]')
+   19              0.000038   let i = index(plist, c)
+   19              0.000012   if i < 0
+                                " not found, in Insert mode try character before the cursor
+   17              0.000042     if c_col > 1 && (mode() == 'i' || mode() == 'R')
+    6              0.000011       let before = strlen(c_before)
+    6              0.000005       let c = c_before
+    6              0.000008       let i = index(plist, c)
+   17              0.000006     endif
+   17              0.000010     if i < 0
+                                  " not found, nothing to do
+   17              0.000009       return
+                                endif
+    2              0.000000   endif
+                            
+                              " Figure out the arguments for searchpairpos().
+    2              0.000001   if i % 2 == 0
+                                let s_flags = 'nW'
+                                let c2 = plist[i + 1]
+    2              0.000001   else
+    2              0.000002     let s_flags = 'nbW'
+    2              0.000002     let c2 = c
+    2              0.000002     let c = plist[i - 1]
+    2              0.000001   endif
+    2              0.000001   if c == '['
+                                let c = '\['
+                                let c2 = '\]'
+    2              0.000000   endif
+                            
+                              " Find the match.  When it was just before the cursor move it there for a
+                              " moment.
+    2              0.000001   if before > 0
+                                let has_getcurpos = exists("*getcurpos")
+                                if has_getcurpos
+                                  " getcurpos() is more efficient but doesn't exist before 7.4.313.
+                                  let save_cursor = getcurpos()
+                                else
+                                  let save_cursor = winsaveview()
+                                endif
+                                call cursor(c_lnum, c_col - before)
+    2              0.000001   endif
+                            
+    2              0.000007   if !has("syntax") || !exists("g:syntax_on")
+                                let s_skip = "0"
+    2              0.000001   else
+                                " Build an expression that detects whether the current cursor position is
+                                " in certain syntax types (string, comment, etc.), for use as
+                                " searchpairpos()'s skip argument.
+                                " We match "escape" for special items, such as lispEscapeSpecial.
+    2              0.000005     let s_skip = '!empty(filter(map(synstack(line("."), col(".")), ''synIDattr(v:val, "name")''), ' . '''v:val =~? "string\\|character\\|singlequote\\|escape\\|comment"''))'
+                                " If executing the expression determines that the cursor is currently in
+                                " one of the syntax types, then we want searchpairpos() to find the pair
+                                " within those syntax types (i.e., not skip).  Otherwise, the cursor is
+                                " outside of the syntax types and s_skip should keep its value so we skip
+                                " any matching pair inside the syntax types.
+                                " Catch if this throws E363: pattern uses more memory than 'maxmempattern'.
+    2              0.000001     try
+    2              0.000202       execute 'if ' . s_skip . ' | let s_skip = "0" | endif'
+                                catch /^Vim\%((\a\+)\)\=:E363/
+                                  " We won't find anything, so skip searching, should keep Vim responsive.
+                                  return
+    2              0.000001     endtry
+    2              0.000001   endif
+                            
+                              " Limit the search to lines visible in the window.
+    2              0.000010   let stoplinebottom = line('w$')
+    2              0.000003   let stoplinetop = line('w0')
+    2              0.000002   if i % 2 == 0
+                                let stopline = stoplinebottom
+    2              0.000001   else
+    2              0.000003     let stopline = stoplinetop
+    2              0.000001   endif
+                            
+                              " Limit the search time to 300 msec to avoid a hang on very long lines.
+                              " This fails when a timeout is not supported.
+    2              0.000004   if mode() == 'i' || mode() == 'R'
+                                let timeout = exists("b:matchparen_insert_timeout") ? b:matchparen_insert_timeout : g:matchparen_insert_timeout
+    2              0.000000   else
+    2              0.000006     let timeout = exists("b:matchparen_timeout") ? b:matchparen_timeout : g:matchparen_timeout
+    2              0.000000   endif
+    2              0.000001   try
+    2              0.000205     let [m_lnum, m_col] = searchpairpos(c, '', c2, s_flags, s_skip, stopline, timeout)
+                              catch /E118/
+                                " Can't use the timeout, restrict the stopline a bit more to avoid taking
+                                " a long time on closed folds and long lines.
+                                " The "viewable" variables give a range in which we can scroll while
+                                " keeping the cursor at the same position.
+                                " adjustedScrolloff accounts for very large numbers of scrolloff.
+                                let adjustedScrolloff = min([&scrolloff, (line('w$') - line('w0')) / 2])
+                                let bottom_viewable = min([line('$'), c_lnum + &lines - adjustedScrolloff - 2])
+                                let top_viewable = max([1, c_lnum-&lines+adjustedScrolloff + 2])
+                                " one of these stoplines will be adjusted below, but the current values are
+                                " minimal boundaries within the current window
+                                if i % 2 == 0
+                                  if has("byte_offset") && has("syntax_items") && &smc > 0
+                            	let stopbyte = min([line2byte("$"), line2byte(".") + col(".") + &smc * 2])
+                            	let stopline = min([bottom_viewable, byte2line(stopbyte)])
+                                  else
+                            	let stopline = min([bottom_viewable, c_lnum + 100])
+                                  endif
+                                  let stoplinebottom = stopline
+                                else
+                                  if has("byte_offset") && has("syntax_items") && &smc > 0
+                            	let stopbyte = max([1, line2byte(".") + col(".") - &smc * 2])
+                            	let stopline = max([top_viewable, byte2line(stopbyte)])
+                                  else
+                            	let stopline = max([top_viewable, c_lnum - 100])
+                                  endif
+                                  let stoplinetop = stopline
+                                endif
+                                let [m_lnum, m_col] = searchpairpos(c, '', c2, s_flags, s_skip, stopline)
+    2              0.000001   endtry
+                            
+    2              0.000001   if before > 0
+                                if has_getcurpos
+                                  call setpos('.', save_cursor)
+                                else
+                                  call winrestview(save_cursor)
+                                endif
+    2              0.000001   endif
+                            
+                              " If a match is found setup match highlighting.
+    2              0.000003   if m_lnum > 0 && m_lnum >= stoplinetop && m_lnum <= stoplinebottom 
+    2              0.000003     if exists('*matchaddpos')
+    2              0.000042       call matchaddpos('MatchParen', [[c_lnum, c_col - before], [m_lnum, m_col]], 10, 3)
+                                else
+                                  exe '3match MatchParen /\(\%' . c_lnum . 'l\%' . (c_col - before) . 'c\)\|\(\%' . m_lnum . 'l\%' . m_col . 'c\)/'
+    2              0.000001     endif
+    2              0.000002     let w:paren_hl_on = 1
+    2              0.000001   endif
+
+FUNCTION  coc#util#do_autocmd()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\util.vim line 708
+Called 1 time
+Total time:   0.000008
+ Self time:   0.000008
+
+count  total (s)   self (s)
+    1              0.000005   if exists('#User#'.a:name)
+                                exe 'doautocmd <nomodeline> User '.a:name
+    1              0.000000   endif
+
+FUNCTION  <SNR>23_AsyncRequest()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\plugin\coc.vim line 109
+Called 7 times
+Total time:   0.000797
+ Self time:   0.000247
+
+count  total (s)   self (s)
+    7              0.000078   let Cb = empty(a:args)? v:null : a:args[len(a:args) - 1]
+    7              0.000033   if type(Cb) == 2
+                                if !coc#rpc#ready()
+                                  call Cb('service not started', v:null)
+                                else
+                                  call coc#rpc#request_async(a:name, a:args[0:-2], Cb)
+                                endif
+                                return ''
+    7              0.000002   endif
+    7   0.000592   0.000043   call coc#rpc#notify(a:name, a:args)
+    7              0.000003   return ''
+
+FUNCTION  <SNR>128_process_modified_and_added()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 319
+Called 2 times
+Total time:   0.000129
+ Self time:   0.000129
+
+count  total (s)   self (s)
+    2              0.000002   let offset = 0
+    4              0.000005   while offset < a:from_count
+    2              0.000003     let line_number = a:to_line + offset
+    2              0.000005     call add(a:modifications, [line_number, 'modified'])
+    2              0.000003     let offset += 1
+    4              0.000003   endwhile
+   19              0.000017   while offset < a:to_count
+   17              0.000021     let line_number = a:to_line + offset
+   17              0.000032     call add(a:modifications, [line_number, 'added'])
+   17              0.000013     let offset += 1
+   19              0.000007   endwhile
+
+FUNCTION  <SNR>105_SkipFunc()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 114
+Called 2 times
+Total time:   0.000077
+ Self time:   0.000077
+
+count  total (s)   self (s)
+    2              0.000002   if s:top_col == 1
+                                throw 'out of bounds'
+    2              0.000001   elseif s:check_in
+                                if eval(s:skip_expr)
+                                  return 1
+                                endif
+                                let s:check_in = 0
+    2              0.000019   elseif getline('.') =~ '\%<'.col('.').'c\/.\{-}\/\|\%>'.col('.').'c[''"]\|\\$'
+                                if eval(s:skip_expr)
+                                  return 1
+                                endif
+    2              0.000019   elseif search('\m`\|\${\|\*\/','nW'.s:z,s:looksyn)
+                                if eval(s:skip_expr)
+                                  let s:check_in = 1
+                                  return 1
+                                endif
+    2              0.000001   else
+    2              0.000010     let s:synid_cache[:] += [[line2byte('.') + col('.') - 1], ['']]
+    2              0.000001   endif
+    2              0.000005   let [s:looksyn, s:top_col] = getpos('.')[1:2]
+
+FUNCTION  <SNR>133_start_syntax()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 40
+Called 2 times
+Total time:   0.000041
+ Self time:   0.000019
+
+count  total (s)   self (s)
+    2   0.000040   0.000018   return s:syntax_at(a:lnum, s:start_col(a:lnum))
+
+FUNCTION  coc#float#check_related()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\float.vim line 796
+Called 7 times
+Total time:   0.000343
+ Self time:   0.000343
+
+count  total (s)   self (s)
+    7              0.000013   let invalids = []
+    7              0.000007   if s:is_vim
+                                if !exists('*popup_list')
+                                  return
+                                endif
+                                for id in popup_list()
+                                  let target = getwinvar(id, 'target_winid', 0)
+                                  if (target && !s:popup_visible(target)) || getwinvar(id, 'kind', '') == 'pum'
+                                    call add(invalids, id)
+                                  endif
+                                endfor
+    7              0.000003   else
+   14              0.000033     for i in range(1, winnr('$'))
+    7              0.000036       let target = getwinvar(i, 'target_winid', 0)
+    7              0.000010       if target && !nvim_win_is_valid(target)
+                                    call add(invalids, win_getid(i))
+    7              0.000014       elseif getwinvar(i, 'kind', '') == 'pum'
+                                    call add(invalids, win_getid(i))
+    7              0.000002       endif
+   14              0.000022     endfor
+    7              0.000003   endif
+    7              0.000009   for id in invalids
+                                call coc#float#close(id)
+    7              0.000004   endfor
+
+FUNCTION  jsx_pretty#indent#get()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 240
+Called 2 times
+Total time:   0.002357
+ Self time:   0.000187
+
+count  total (s)   self (s)
+    2   0.000041   0.000016   let line = s:trim(getline(v:lnum))
+    2   0.000053   0.000012   let start_syntax = s:start_syntax(v:lnum)
+                            
+    2   0.000022   0.000012   if s:is_jsx_backticks(start_syntax)
+                                return s:jsx_indent_backticks(v:lnum)
+    2              0.000001   endif
+                            
+    2   0.000016   0.000008   if s:is_jsx_brace(start_syntax)
+                                return s:jsx_indent_element(v:lnum)
+    2              0.000001   endif
+                            
+    2   0.000015   0.000009   if s:is_opening_tag(start_syntax) && line =~ '^>'
+                                return s:jsx_indent_trail_punct(v:lnum)
+    2              0.000001   endif
+                            
+    2   0.000561   0.000026   let syntax_context = s:syntax_context(v:lnum)
+                            
+    2              0.000002   if syntax_context == 'jsxRegion'
+                                if s:is_closing_tag(start_syntax)
+                                  return s:jsx_indent_closing_tag(v:lnum)
+                                endif
+                            
+                                let prev_lnum = s:prev_lnum(v:lnum)
+                                let prev_line = s:trim(getline(prev_lnum))
+                            
+                                if prev_line =~ '[([{=?]$'
+                                  return indent(prev_lnum) + s:sw()
+                                elseif prev_line =~ '[:|&<>]$' && s:trim(getline(s:prev_lnum(prev_lnum))) !~ '[?:|&<>]$'
+                                  return indent(prev_lnum) + s:sw()
+                                else
+                                  return indent(prev_lnum)
+                                endif
+    2              0.000002   elseif syntax_context == 'jsxTaggedRegion'
+                                if s:is_closing_tag(start_syntax)
+                                  return s:jsx_indent_closing_tag(v:lnum)
+                                elseif s:is_jsx_comment(start_syntax)
+                                  return s:jsx_indent_comment(v:lnum)
+                                else
+                                  return indent(s:prev_lnum(v:lnum)) + s:sw()
+                                endif
+    2              0.000002   elseif syntax_context == 'jsxElement'
+                                if s:is_jsx_comment(start_syntax)
+                                  return s:jsx_indent_comment(v:lnum)
+                                endif
+                            
+                                if s:is_comment(start_syntax)
+                                  return s:jsx_indent_comment(v:lnum)
+                                endif
+                            
+                                return s:jsx_indent_element(v:lnum)
+    2              0.000002   elseif syntax_context == 'jsxExpressionBlock'
+                                let prev_lnum = s:prev_lnum(v:lnum)
+                                let prev_line = s:trim(getline(prev_lnum))
+                            
+                                if line =~ '^?'
+                                  return indent(prev_lnum) + s:sw()
+                                elseif line =~ '^:'
+                                  return indent(prev_lnum)
+                                else
+                                  return a:js_indent()
+                                endif
+    2              0.000001   endif
+                            
+    2   0.001555   0.000009   return a:js_indent()
+
+FUNCTION  <SNR>133_start_col()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 35
+Called 4 times
+Total time:   0.000025
+ Self time:   0.000025
+
+count  total (s)   self (s)
+    4              0.000024   return len(matchstr(getline(a:lnum), '^\s*')) + 1
+
+FUNCTION  coc#util#cursor()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\util.vim line 35
+Called 9 times
+Total time:   0.000108
+ Self time:   0.000108
+
+count  total (s)   self (s)
+    9              0.000094   return [line('.') - 1, strchars(strpart(getline('.'), 0, col('.') - 1))]
+
+FUNCTION  <SNR>133_is_jsx_element()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 71
+Called 6 times
+Total time:   0.000018
+ Self time:   0.000018
+
+count  total (s)   self (s)
+    6              0.000016   return a:syntax =~? 'jsxElement'
+
+FUNCTION  gitgutter#utility#get_diff_base()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 196
+Called 2 times
+Total time:   0.000437
+ Self time:   0.000437
+
+count  total (s)   self (s)
+    2              0.000397   let p = resolve(expand('#'.a:bufnr.':p'))
+    2              0.000026   let ml = matchlist(p, '\v^fugitive:/.*/(\x{40,})/')
+    2              0.000005   if !empty(ml) && !empty(ml[1])
+                                return ml[1].'^'
+    2              0.000001   endif
+    2              0.000004   return g:gitgutter_diff_base
+
+FUNCTION  gitgutter#hunk#increment_lines_added()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\hunk.vim line 28
+Called 4 times
+Total time:   0.000139
+ Self time:   0.000047
+
+count  total (s)   self (s)
+    4   0.000071   0.000019   let summary = gitgutter#hunk#summary(a:bufnr)
+    4              0.000005   let summary[0] += a:count
+    4   0.000061   0.000021   call gitgutter#utility#setbufvar(a:bufnr, 'summary', summary)
+
+FUNCTION  coc#float#get_related()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\float.vim line 1207
+Called 10 times
+Total time:   0.000125
+ Self time:   0.000125
+
+count  total (s)   self (s)
+   10              0.000064   for winid in getwinvar(a:winid, 'related', [])
+                                if getwinvar(winid, 'kind', '') ==# a:kind
+                                  return winid
+                                endif
+   10              0.000008   endfor
+   10              0.000007   return 0
+
+FUNCTION  gitgutter#hunk#summary()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\hunk.vim line 20
+Called 6 times
+Total time:   0.000076
+ Self time:   0.000035
+
+count  total (s)   self (s)
+    6   0.000075   0.000034   return gitgutter#utility#getbufvar(a:bufnr, 'summary', [0,0,0])
+
+FUNCTION  <SNR>59_build_command()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\async.vim line 43
+Called 2 times
+Total time:   0.000018
+ Self time:   0.000018
+
+count  total (s)   self (s)
+    2              0.000005   if has('unix')
+                                return ['sh', '-c', a:cmd]
+    2              0.000001   endif
+                            
+    2              0.000002   if has('win32')
+    2              0.000006     return has('nvim') ? ['cmd.exe', '/c', a:cmd] : 'cmd.exe /c '.a:cmd
+                              endif
+                            
+                              throw 'unknown os'
+
+FUNCTION  <lambda>53()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000293
+ Self time:   0.000005
+
+count  total (s)   self (s)
+    1   0.000293   0.000004 return self.onExitCB()
+
+FUNCTION  gitgutter#utility#has_repo_path()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 102
+Called 9 times
+Total time:   0.000205
+ Self time:   0.000064
+
+count  total (s)   self (s)
+    9   0.000201   0.000060   return index(['', -1, -2], gitgutter#utility#repo_path(a:bufnr, 0)) == -1
+
+FUNCTION  <SNR>128_is_added()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 273
+Called 4 times
+Total time:   0.000007
+ Self time:   0.000007
+
+count  total (s)   self (s)
+    4              0.000006   return a:from_count == 0 && a:to_count > 0
+
+FUNCTION  <SNR>105_GetPair()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 75
+Called 2 times
+Total time:   0.000122
+ Self time:   0.000045
+
+count  total (s)   self (s)
+    2   0.000121   0.000044     return searchpair('\m'.a:start,'','\m'.a:end,a:flags,a:skip,s:l1,a:skip ==# 's:SkipFunc()' ? 2000 : 200)
+
+FUNCTION  gitgutter#utility#cd_cmd()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 164
+Called 2 times
+Total time:   0.000556
+ Self time:   0.000044
+
+count  total (s)   self (s)
+    2   0.000278   0.000030   let cd = s:unc_path(a:bufnr) ? 'pushd' : (gitgutter#utility#windows() && s:dos_shell() ? 'cd /d' : 'cd')
+    2   0.000277   0.000012   return cd.' '.s:dir(a:bufnr).' && '.a:cmd
+
+FUNCTION  <lambda>54()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 2 times
+Total time:   0.000077
+ Self time:   0.000033
+
+count  total (s)   self (s)
+    2   0.000075   0.000031 return self.onStdoutCB(data)
+
+FUNCTION  <SNR>51_onCursorHold()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\nerdtree_plugin\git_status.vim line 187
+Called 7 times
+Total time:   0.023124
+ Self time:   0.000311
+
+count  total (s)   self (s)
+                                " Do not update when a special buffer is selected
+    7              0.000020     if !empty(&l:buftype)
+                                    return
+    7              0.000003     endif
+    7              0.000054     let l:fname = s:is_win ? substitute(a:fname, '\', '/', 'g') : a:fname
+                            
+    7   0.000111   0.000073     if !exists('g:NTGitWorkdir') || !s:hasPrefix(l:fname, g:NTGitWorkdir)
+                                    return
+    7              0.000002     endif
+                            
+    7   0.022451   0.000046     let l:job = s:refreshGitStatus('cursor-hold', g:NTGitWorkdir)
+    7   0.000453   0.000083     call s:logger.debug('run cursor-hold job: ' . l:job.id)
+
+FUNCTION  <SNR>105_Token()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 169
+Called 4 times
+Total time:   0.000067
+ Self time:   0.000052
+
+count  total (s)   self (s)
+    4   0.000065   0.000051   return s:LookingAt() =~ '\k' ? expand('<cword>') : s:LookingAt()
+
+FUNCTION  gitgutter#diff#parse_diff()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 205
+Called 2 times
+Total time:   0.000957
+ Self time:   0.000374
+
+count  total (s)   self (s)
+    2              0.000002   let hunks = []
+   38              0.000054   for line in split(a:diff, '\n')
+   36   0.000767   0.000184     let hunk_info = gitgutter#diff#parse_hunk(line)
+   36              0.000043     if len(hunk_info) == 4
+    4              0.000007       call add(hunks, hunk_info)
+   36              0.000013     endif
+   38              0.000018   endfor
+    2              0.000001   return hunks
+
+FUNCTION  gitgutter#diff#process_hunks()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 231
+Called 2 times
+Total time:   0.000669
+ Self time:   0.000046
+
+count  total (s)   self (s)
+    2              0.000002   let modified_lines = []
+    6              0.000005   for hunk in a:hunks
+    4   0.000651   0.000029     call extend(modified_lines, s:process_hunk(a:bufnr, hunk))
+    6              0.000003   endfor
+    2              0.000002   return modified_lines
+
+FUNCTION  coc#highlight#add_highlight()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\highlight.vim line 41
+Called 11 times
+Total time:   0.000190
+ Self time:   0.000190
+
+count  total (s)   self (s)
+   11              0.000016   if has('nvim')
+   11              0.000135     call nvim_buf_add_highlight(a:bufnr, a:src_id, a:hl_group, a:line, a:col_start, a:col_end)
+                              else
+                                call coc#api#call('buf_add_highlight', [a:bufnr, a:src_id, a:hl_group, a:line, a:col_start, a:col_end])
+   11              0.000003   endif
+
+FUNCTION  <SNR>132_create_namespace()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\highlight.vim line 300
+Called 5 times
+Total time:   0.000051
+ Self time:   0.000051
+
+count  total (s)   self (s)
+    5              0.000021   if type(a:key) == 0
+                                return a:key
+    5              0.000001   endif
+    5              0.000009   if has('nvim')
+    5              0.000013     return nvim_create_namespace('coc-'.a:key)
+                              endif
+                              if !has_key(s:namespace_map, a:key)
+                                let s:namespace_map[a:key] = s:ns_id
+                                let s:ns_id = s:ns_id + 1
+                              endif
+                              return s:namespace_map[a:key]
+
+FUNCTION  <SNR>66_CursorHoldUpdate()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-devicons\plugin\webdevicons.vim line 397
+Called 7 times
+Total time:   0.000359
+ Self time:   0.000094
+
+count  total (s)   self (s)
+    7              0.000021   if g:NERDTreeUpdateOnCursorHold != 1 || g:NERDTreeGitStatusUpdateOnCursorHold != 1
+                                return
+    7              0.000002   endif
+                            
+    7   0.000319   0.000053   if !exists('g:NERDTree') || !g:NERDTree.IsOpen()
+    7              0.000003     return
+                              endif
+                            
+                              " Do not update when a special buffer is selected
+                              if !empty(&l:buftype)
+                                return
+                              endif
+                            
+                              " winnr need to make focus go to opened file
+                              " CursorToTreeWin needed to avoid error on opening file
+                              let l:winnr = winnr()
+                              let l:altwinnr = winnr('#')
+                            
+                              call g:NERDTree.CursorToTreeWin()
+                              call b:NERDTree.root.refreshFlags()
+                              call NERDTreeRender()
+                            
+                              exec l:altwinnr . 'wincmd w'
+                              exec l:winnr . 'wincmd w'
+
+FUNCTION  gitgutter#debug#log()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\debug.vim line 70
+Called 4 times
+Total time:   0.000101
+ Self time:   0.000101
+
+count  total (s)   self (s)
+    4              0.000004   if g:gitgutter_log
+                                if s:new_log_session && gitgutter#async#available()
+                                  if exists('*ch_logfile')
+                                    call ch_logfile(s:channel_log, 'w')
+                                  endif
+                                endif
+                            
+                                execute 'redir >> '.s:log_file
+                                  if s:new_log_session
+                                    let s:start = reltime()
+                                    silent echo "\n==== start log session ===="
+                                  endif
+                            
+                                  let elapsed = reltimestr(reltime(s:start)).' '
+                                  silent echo ''
+                                  " callers excluding this function
+                                  silent echo elapsed.expand('<sfile>')[:-22].':'
+                                  silent echo elapsed.s:format_for_log(a:message)
+                                  if a:0 && !empty(a:1)
+                                    for msg in a:000
+                                      silent echo elapsed.s:format_for_log(msg)
+                                    endfor
+                                  endif
+                                redir END
+                            
+                                let s:new_log_session = 0
+    4              0.000001   endif
+
+FUNCTION  <SNR>84_setup_path()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter.vim line 156
+Called 9 times
+Total time:   0.000257
+ Self time:   0.000052
+
+count  total (s)   self (s)
+    9   0.000253   0.000047   if gitgutter#utility#has_repo_path(a:bufnr) | return | endif
+                            
+                              return gitgutter#utility#set_repo_path(a:bufnr, a:continuation)
+
+FUNCTION  186()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree\lib\nerdtree\creator.vim line 37
+Called 14 times
+Total time:   0.000019
+ Self time:   0.000019
+
+count  total (s)   self (s)
+   14              0.000013     return 'NERD_tree_'
+
+FUNCTION  coc#highlight#ranges()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\highlight.vim line 15
+Called 4 times
+Total time:   0.000985
+ Self time:   0.000756
+
+count  total (s)   self (s)
+    4              0.000023   let bufnr = a:bufnr == 0 ? bufnr('%') : a:bufnr
+    4              0.000009   if !bufloaded(bufnr) || !exists('*getbufline')
+                                return
+    4              0.000001   endif
+    4   0.000058   0.000019   let srcId = s:create_namespace(a:key)
+   15              0.000011   for range in a:ranges
+   11              0.000012     let start = range['start']
+   11              0.000010     let end = range['end']
+   22              0.000029     for lnum in range(start['line'] + 1, end['line'] + 1)
+   11              0.000041       let arr = getbufline(bufnr, lnum)
+   11              0.000017       let line = empty(arr) ? '' : arr[0]
+   11              0.000025       if empty(line)
+                                    continue
+   11              0.000003       endif
+                                  " TODO don't know how to count UTF16 code point, should work most cases.
+   11              0.000052       let colStart = lnum == start['line'] + 1 ? strlen(strcharpart(line, 0, start['character'])) : 0
+   11              0.000033       let colEnd = lnum == end['line'] + 1 ? strlen(strcharpart(line, 0, end['character'])) : -1
+   11              0.000008       if colStart == colEnd
+                                    continue
+   11              0.000003       endif
+   11   0.000304   0.000115       call coc#highlight#add_highlight(bufnr, srcId, a:hlGroup, lnum - 1, colStart, colEnd)
+   22              0.000023     endfor
+   15              0.000020   endfor
+
+FUNCTION  gitstatus#job#Spawn()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 132
+Called 7 times
+Total time:   0.021983
+ Self time:   0.000085
+
+count  total (s)   self (s)
+    7   0.000178   0.000034     let l:job = s:newJob(a:name, a:opts)
+    7   0.021788   0.000033     call l:job.run(a:cmd)
+    7              0.000012     return l:job
+
+FUNCTION  <SNR>128_is_removed()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 277
+Called 2 times
+Total time:   0.000004
+ Self time:   0.000004
+
+count  total (s)   self (s)
+    2              0.000003   return a:from_count > 0 && a:to_count == 0
+
+FUNCTION  gitgutter#hunk#hunks()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\hunk.vim line 10
+Called 2 times
+Total time:   0.000026
+ Self time:   0.000011
+
+count  total (s)   self (s)
+    2   0.000025   0.000010   return gitgutter#utility#getbufvar(a:bufnr, 'hunks', [])
+
+FUNCTION  gitstatus#util#ParseGitStatusLine()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\util.vim line 174
+Called 14 times
+Total time:   0.000460
+ Self time:   0.000374
+
+count  total (s)   self (s)
+   14              0.000033     if get(a:opts, 'NERDTreeGitStatusPorcelainVersion', 2) ==# 2
+   14              0.000020         if a:statusLine[0] ==# '1'
+    7   0.000136   0.000049             let l:statusKey = s:getStatusKey(a:statusLine[2], a:statusLine[3])
+    7              0.000011             let l:pathStr = a:statusLine[113:]
+    7              0.000008         elseif a:statusLine[0] ==# '2'
+                                        let l:statusKey = 'Renamed'
+                                        let l:pathStr = a:statusLine[113:]
+                                        let l:pathStr = l:pathStr[stridx(l:pathStr, ' ')+1:]
+    7              0.000008         elseif a:statusLine[0] ==# 'u'
+                                        let l:statusKey = 'Unmerged'
+                                        let l:pathStr = a:statusLine[161:]
+    7              0.000007         elseif a:statusLine[0] ==# '?'
+    7              0.000007             let l:statusKey = 'Untracked'
+    7              0.000009             let l:pathStr = a:statusLine[2:]
+                                    elseif a:statusLine[0] ==# '!'
+                                        let l:statusKey = 'Ignored'
+                                        let l:pathStr = a:statusLine[2:]
+                                    else
+                                        throw '[nerdtree_git_status] unknown status: ' . a:statusLine
+   14              0.000005         endif
+   14              0.000035         return [l:pathStr, l:statusKey]
+                                else
+                                    let l:pathStr = a:statusLine[3:]
+                                    let l:statusKey = s:getStatusKey(a:statusLine[0], a:statusLine[1])
+                                    return [l:pathStr, l:statusKey]
+                                endif
+
+FUNCTION  <SNR>95_getStatusKey()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\util.vim line 149
+Called 7 times
+Total time:   0.000087
+ Self time:   0.000087
+
+count  total (s)   self (s)
+    7              0.000031     let l:xy = a:x . a:y
+    7              0.000013     if get(s:unmerged_status, l:xy, 0)
+                                    return 'Unmerged'
+    7              0.000007     elseif l:xy ==# '??'
+                                    return 'Untracked'
+    7              0.000005     elseif l:xy ==# '!!'
+                                    return 'Ignored'
+    7              0.000005     elseif a:y ==# 'M'
+    7              0.000005         return 'Modified'
+                                elseif a:y ==# 'D'
+                                    return 'Deleted'
+                                elseif a:y =~# '[RC]'
+                                    return 'Renamed'
+                                elseif a:x ==# 'D'
+                                    return 'Deleted'
+                                elseif a:x =~# '[MA]'
+                                    return 'Staged'
+                                elseif a:x =~# '[RC]'
+                                    return 'Renamed'
+                                else
+                                    return 'Unknown'
+                                endif
+
+FUNCTION  <SNR>105_sw()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 55
+Called 2 times
+Total time:   0.000003
+ Self time:   0.000003
+
+count  total (s)   self (s)
+    2              0.000002     return shiftwidth()
+
+FUNCTION  <SNR>51_onGitStatusSuccessCB()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\nerdtree_plugin\git_status.vim line 160
+Called 7 times
+Total time:   0.002043
+ Self time:   0.000262
+
+count  total (s)   self (s)
+    7              0.000026     if !exists('g:NTGitWorkdir') || g:NTGitWorkdir !=# a:job.opts.cwd
+                                    call s:logger.debug(printf("git workdir has changed: '%s' -> '%s'", a:job.opts.cwd, get(g:, 'NTGitWorkdir', '')))
+                                    return
+    7              0.000003     endif
+    7              0.000026     let l:output = join(a:job.chunks, '')
+    7              0.000055     let l:lines = split(l:output, "\n")
+    7   0.001531   0.000052     let l:cache = gitstatus#util#ParseGitStatusLines(a:job.opts.cwd, l:lines, g:)
+                            
+    7   0.000048   0.000031     call s:listener.SetNext(l:cache)
+    7   0.000308   0.000022     call s:listener.TryUpdateNERDTreeUI()
+
+FUNCTION  <SNR>128_is_modified_and_added()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 285
+Called 2 times
+Total time:   0.000005
+ Self time:   0.000005
+
+count  total (s)   self (s)
+    2              0.000004   return a:from_count > 0 && a:to_count > 0 && a:from_count < a:to_count
+
+FUNCTION  <SNR>128_write_buffer()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 375
+Called 2 times
+Total time:   2.291560
+ Self time:   2.291560
+
+count  total (s)   self (s)
+    2              0.000488   let bufcontents = getbufline(a:bufnr, 1, '$')
+                            
+    2              0.000005   if bufcontents == [''] && line2byte(1) == -1
+                                " Special case: completely empty buffer.
+                                " A nearly empty buffer of only a newline has line2byte(1) == 1.
+                                call writefile([], a:file)
+                                return
+    2              0.000001   endif
+                            
+    2              0.000005   if getbufvar(a:bufnr, '&fileformat') ==# 'dos'
+    2              0.001851     call map(bufcontents, 'v:val."\r"')
+    2              0.000001   endif
+                            
+    2              0.000004   if getbufvar(a:bufnr, '&endofline')
+    2              0.000003     call add(bufcontents, '')
+    2              0.000000   endif
+                            
+    2              0.000004   let fenc = getbufvar(a:bufnr, '&fileencoding')
+    2              0.000003   if fenc !=# &encoding
+                                call map(bufcontents, 'iconv(v:val, &encoding, "'.fenc.'")')
+    2              0.000001   endif
+                            
+    2              0.000003   if getbufvar(a:bufnr, '&bomb')
+                                let bufcontents[0]='﻿'.bufcontents[0]
+    2              0.000000   endif
+                            
+                              " The file we are writing to is a temporary file.  Sometimes the parent
+                              " directory is deleted outside Vim but, because Vim caches the directory
+                              " name at startup and does not check for its existence subsequently, Vim
+                              " does not realise.  This causes E482 errors.
+    2              0.000001   try
+    2              2.289094     call writefile(bufcontents, a:file, 'b')
+                              catch /E482/
+                                call mkdir(fnamemodify(a:file, ':h'), '', '0700')
+                                call writefile(bufcontents, a:file, 'b')
+    2              0.000002   endtry
+
+FUNCTION  <SNR>133_syntax_at()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 30
+Called 2 times
+Total time:   0.000006
+ Self time:   0.000006
+
+count  total (s)   self (s)
+    2              0.000005   return synIDattr(synID(a:lnum, a:col, 1), 'name')
+
+FUNCTION  gitgutter#utility#extension()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 88
+Called 2 times
+Total time:   0.000229
+ Self time:   0.000011
+
+count  total (s)   self (s)
+    2   0.000228   0.000011   return fnamemodify(s:abs_path(a:bufnr, 0), ':e')
+
+FUNCTION  <SNR>133_is_jsx_expression()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 76
+Called 6 times
+Total time:   0.000044
+ Self time:   0.000044
+
+count  total (s)   self (s)
+    6              0.000043   return a:syntax =~? 'jsxExpressionBlock'
+
+FUNCTION  <SNR>99_isEOF()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 128
+Called 7 times
+Total time:   0.000023
+ Self time:   0.000023
+
+count  total (s)   self (s)
+    7              0.000020     return len(a:data) == 1 && a:data[0] is# ''
+
+FUNCTION  <SNR>105_PreviousToken()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 173
+Called 4 times
+Total time:   0.000260
+ Self time:   0.000194
+
+count  total (s)   self (s)
+    4              0.000011   let [l:pos, tok] = [getpos('.'), '']
+    4              0.000038   if search('\m\k\{1,}\|\S','ebW')
+    4              0.000030     if getline('.')[col('.')-2:col('.')-1] == '*/'
+                                  if eval(s:in_comm) && !s:SearchLoop('\S\ze\_s*\/[/*]','bW',s:in_comm)
+                                    call setpos('.',l:pos)
+                                  else
+                                    let tok = s:Token()
+                                  endif
+    4              0.000001     else
+    4              0.000039       let two = a:0 || line('.') != l:pos[1] ? strridx(getline('.')[:col('.')],'//') + 1 : 0
+    4              0.000004       if two && eval(s:in_comm)
+                                    call cursor(0,two)
+                                    let tok = s:PreviousToken(1)
+                                    if tok is ''
+                                      call setpos('.',l:pos)
+                                    endif
+    4              0.000001       else
+    4   0.000082   0.000015         let tok = s:Token()
+    4              0.000002       endif
+    4              0.000001     endif
+    4              0.000001   endif
+    4              0.000003   return tok
+
+FUNCTION  coc#rpc#ready()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\rpc.vim line 31
+Called 42 times
+Total time:   0.000239
+ Self time:   0.000239
+
+count  total (s)   self (s)
+   42              0.000119   if empty(s:client) || s:client['running'] == 0
+                                return 0
+   42              0.000013   endif
+   42              0.000023   return 1
+
+FUNCTION  <SNR>51_refreshGitStatus()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\nerdtree_plugin\git_status.vim line 149
+Called 7 times
+Total time:   0.022405
+ Self time:   0.000188
+
+count  total (s)   self (s)
+    7              0.000054     let l:opts =  { 'on_failed_cb': function('s:onGitStatusFailedCB'), 'on_success_cb': function('s:onGitStatusSuccessCB'), 'cwd': a:workdir }
+    7   0.022336   0.000119     let l:job = gitstatus#job#Spawn(a:name, s:buildGitStatusCommand(a:workdir), l:opts)
+    7              0.000007     return l:job
+
+FUNCTION  gitgutter#utility#shellescape()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 73
+Called 13 times
+Total time:   0.000337
+ Self time:   0.000273
+
+count  total (s)   self (s)
+   13              0.000128   if a:arg =~ '^[A-Za-z0-9_/.-]\+$'
+    2              0.000002     return a:arg
+   11   0.000113   0.000049   elseif s:winshell()
+   11              0.000071     return '"' . substitute(substitute(a:arg, '"', '""', 'g'), '%', '"%"', 'g') . '"'
+                              else
+                                return shellescape(a:arg)
+                              endif
+
+FUNCTION  gitgutter#async#available()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\async.vim line 11
+Called 2 times
+Total time:   0.000003
+ Self time:   0.000003
+
+count  total (s)   self (s)
+    2              0.000002   return s:available
+
+FUNCTION  <SNR>57_abs_path()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 205
+Called 24 times
+Total time:   0.003651
+ Self time:   0.003651
+
+count  total (s)   self (s)
+   24              0.003143   let p = resolve(expand('#'.a:bufnr.':p'))
+                            
+                              " Remove extra parts from fugitive's filepaths
+   24              0.000392   let p = substitute(substitute(p, '^fugitive:', '', ''), '\v\.git/\x{40,}/', '', '')
+                            
+   24              0.000057   return a:shellesc ? gitgutter#utility#shellescape(p) : p
+
+FUNCTION  gitgutter#diff#parse_hunk()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 216
+Called 36 times
+Total time:   0.000583
+ Self time:   0.000583
+
+count  total (s)   self (s)
+   36              0.000227   let matches = matchlist(a:line, s:hunk_re)
+   36              0.000041   if len(matches) > 0
+    4              0.000008     let from_line  = str2nr(matches[1])
+    4              0.000010     let from_count = (matches[2] == '') ? 1 : str2nr(matches[2])
+    4              0.000007     let to_line    = str2nr(matches[3])
+    4              0.000010     let to_count   = (matches[4] == '') ? 1 : str2nr(matches[4])
+    4              0.000008     return [from_line, from_count, to_line, to_count]
+   32              0.000012   else
+   32              0.000018     return []
+                              end
+
+FUNCTION  CocActionAsync()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\plugin\coc.vim line 79
+Called 7 times
+Total time:   0.000876
+ Self time:   0.000079
+
+count  total (s)   self (s)
+    7   0.000869   0.000072   return s:AsyncRequest(a:name, a:000)
+
+FUNCTION  coc#util#check_refresh()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\util.vim line 61
+Called 1 time
+Total time:   0.000013
+ Self time:   0.000013
+
+count  total (s)   self (s)
+    1              0.000003   if !bufloaded(a:bufnr)
+                                return 0
+    1              0.000000   endif
+    1              0.000002   if getbufvar(a:bufnr, 'coc_diagnostic_disable', 0)
+                                return 0
+    1              0.000000   endif
+    1              0.000002   if get(g: , 'EasyMotion_loaded', 0)
+                                return EasyMotion#is_active() != 1
+    1              0.000000   endif
+    1              0.000000   return 1
+
+FUNCTION  <SNR>51_buildGitStatusCommand()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\nerdtree_plugin\git_status.vim line 145
+Called 7 times
+Total time:   0.000234
+ Self time:   0.000075
+
+count  total (s)   self (s)
+    7   0.000232   0.000073     return gitstatus#util#BuildGitStatusCommand(a:workdir, g:)
+
+FUNCTION  gitgutter#sign#update_signs()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\sign.vim line 57
+Called 2 times
+Total time:   0.000419
+ Self time:   0.000350
+
+count  total (s)   self (s)
+    2              0.000004   if exists('*sign_unplace')
+                                " Vim is (hopefully) now quick enough to remove all signs then place new ones.
+    2              0.000010     call sign_unplace('gitgutter', {'buffer': a:bufnr})
+                            
+    2   0.000026   0.000011     let modified_lines = s:handle_double_hunk(a:modified_lines)
+    2   0.000241   0.000188     let signs = map(copy(modified_lines), '{'. '"buffer":   a:bufnr,'. '"group":    "gitgutter",'. '"name":     s:highlight_name_for_change(v:val[1]),'. '"lnum":     v:val[0],'. '"priority": g:gitgutter_sign_priority'. '}')
+                            
+    2              0.000003     if exists('*sign_placelist')
+                                  call sign_placelist(signs)
+                                  return
+    2              0.000001     endif
+                            
+   24              0.000014     for sign in signs
+   22              0.000089       call sign_place(0, sign.group, sign.name, sign.buffer, {'lnum': sign.lnum, 'priority': sign.priority})
+   24              0.000010     endfor
+    2              0.000001     return
+                              endif
+                            
+                            
+                              " Derive a delta between the current signs and the ones we want.
+                              " Remove signs from lines that no longer need a sign.
+                              " Upsert the remaining signs.
+                            
+                              call s:find_current_signs(a:bufnr)
+                            
+                              let new_gitgutter_signs_line_numbers = map(copy(a:modified_lines), 'v:val[0]')
+                              let obsolete_signs = s:obsolete_gitgutter_signs_to_remove(a:bufnr, new_gitgutter_signs_line_numbers)
+                            
+                              call s:remove_signs(a:bufnr, obsolete_signs, s:remove_all_old_signs)
+                              call s:upsert_new_gitgutter_signs(a:bufnr, a:modified_lines)
+
+FUNCTION  <SNR>128_process_added()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 293
+Called 2 times
+Total time:   0.000030
+ Self time:   0.000030
+
+count  total (s)   self (s)
+    2              0.000002   let offset = 0
+    5              0.000005   while offset < a:to_count
+    3              0.000004     let line_number = a:to_line + offset
+    3              0.000006     call add(a:modifications, [line_number, 'added'])
+    3              0.000003     let offset += 1
+    5              0.000003   endwhile
+
+FUNCTION  <SNR>57_exists_file()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 223
+Called 9 times
+Total time:   0.002470
+ Self time:   0.000642
+
+count  total (s)   self (s)
+    9   0.002464   0.000636   return filereadable(s:abs_path(a:bufnr, 0))
+
+FUNCTION  gitstatus#util#BuildGitStatusCommand()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\util.vim line 59
+Called 7 times
+Total time:   0.000159
+ Self time:   0.000159
+
+count  total (s)   self (s)
+    7              0.000051     let l:cmd = [ get(a:opts, 'NERDTreeGitStatusGitBinPath', 'git'), '-C', a:root, 'status', '--porcelain' . (get(a:opts, 'NERDTreeGitStatusPorcelainVersion', 2) ==# 2 ? '=v2' : ''), '-z' ]
+    7              0.000013     if has_key(a:opts, 'NERDTreeGitStatusUntrackedFilesMode')
+    7              0.000024         let l:cmd += ['--untracked-files=' . a:opts['NERDTreeGitStatusUntrackedFilesMode']]
+    7              0.000003     endif
+                            
+    7              0.000013     if get(a:opts, 'NERDTreeGitStatusShowIgnored', 0)
+                                    let l:cmd += ['--ignored=traditional']
+    7              0.000002     endif
+                            
+    7              0.000010     if has_key(a:opts, 'NERDTreeGitStatusIgnoreSubmodules')
+                                    let l:cmd += ['--ignore-submodules=' . a:opts['NERDTreeGitStatusIgnoreSubmodules']]
+    7              0.000002     endif
+                            
+    7              0.000005     return l:cmd
+
+FUNCTION  GetJsxIndent()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\after\indent/jsx.vim line 28
+Called 2 times
+Total time:   0.002389
+ Self time:   0.000032
+
+count  total (s)   self (s)
+    2   0.002388   0.000031   return jsx_pretty#indent#get(function('GetJavascriptIndent'))
+
+FUNCTION  <SNR>133_is_jsx_brace()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 81
+Called 2 times
+Total time:   0.000007
+ Self time:   0.000007
+
+count  total (s)   self (s)
+    2              0.000006   return a:syntax =~? 'jsxBraces'
+
+FUNCTION  gitgutter#utility#setbufvar()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 9
+Called 12 times
+Total time:   0.000129
+ Self time:   0.000129
+
+count  total (s)   self (s)
+   12              0.000014   let buffer = +a:buffer
+                              " Default value for getbufvar() was introduced in Vim 7.3.831.
+   12              0.000023   let ggvars = getbufvar(buffer, 'gitgutter')
+   12              0.000020   if type(ggvars) == type('')
+                                unlet ggvars
+                                let ggvars = {}
+                                call setbufvar(buffer, 'gitgutter', ggvars)
+   12              0.000004   endif
+   12              0.000022   let ggvars[a:varname] = a:val
+
+FUNCTION  <SNR>57_winshell()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 68
+Called 11 times
+Total time:   0.000064
+ Self time:   0.000064
+
+count  total (s)   self (s)
+   11              0.000059   return &shell =~? 'cmd' || exists('+shellslash') && !&shellslash
+
+FUNCTION  <SNR>84_has_fresh_changes()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter.vim line 162
+Called 9 times
+Total time:   0.000110
+ Self time:   0.000053
+
+count  total (s)   self (s)
+    9   0.000107   0.000050   return getbufvar(a:bufnr, 'changedtick') != gitgutter#utility#getbufvar(a:bufnr, 'tick')
+
+FUNCTION  <SNR>133_is_jsx_backticks()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 96
+Called 2 times
+Total time:   0.000010
+ Self time:   0.000010
+
+count  total (s)   self (s)
+    2              0.000009   return a:syntax =~? 'jsxBackticks'
+
+FUNCTION  291()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 48
+Called 7 times
+Total time:   0.002216
+ Self time:   0.000092
+
+count  total (s)   self (s)
+    7              0.000025     let self.running = 0
+    7              0.000006     if self.failed
+                                    call self.onFailed()
+    7              0.000004     else
+    7   0.002160   0.000036         call self.onSuccess()
+    7              0.000002     endif
+
+FUNCTION  <SNR>127_syn_name()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\comment.vim line 32
+Called 10 times
+Total time:   0.001121
+ Self time:   0.001121
+
+count  total (s)   self (s)
+   10              0.001084   let syn_id = get(synstack(a:lnum, a:cnum), -1)
+   10              0.000027   return synIDattr(syn_id, "name")
+
+FUNCTION  <SNR>133_syntax_context()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 198
+Called 2 times
+Total time:   0.000535
+ Self time:   0.000343
+
+count  total (s)   self (s)
+    2   0.000018   0.000008   let start_col = s:start_col(a:lnum)
+    2   0.000102   0.000012   let syntax_stack = s:syntax_stack_at(a:lnum, start_col)
+    2              0.000004   let start_syntax = syntax_stack[-1]
+    2              0.000004   let reversed = reverse(syntax_stack)
+    2              0.000001   let i = 0
+                            
+    8              0.000009   for syntax_name in reversed
+                                " If the current line is jsxExpressionBlock and not starts with jsxBraces
+    6   0.000110   0.000065     if s:is_jsx_expression(syntax_name)
+                                  return 'jsxExpressionBlock'
+    6              0.000002     endif
+                            
+    6   0.000056   0.000025     if s:is_jsx_region(syntax_name)
+                                  return 'jsxRegion'
+    6              0.000002     endif
+                            
+    6   0.000061   0.000043     if s:is_jsx_element(syntax_name)
+                                  " If current line starts with the opening tag
+                                  if s:is_opening_tag(start_syntax) || s:is_closing_tag(start_syntax)
+                                    " And the next syntax is jsxRegion
+                                    if s:is_jsx_region(reversed[i+1])
+                                      return 'jsxRegion'
+                                    elseif reversed[i+1] =~ 'jsxTaggedRegion'
+                                      return 'jsxTaggedRegion'
+                                    else
+                                      return 'jsxElement'
+                                    endif
+                                  elseif reversed[i+1] =~ 'jsxTaggedRegion'
+                                    return 'jsxTaggedRegion'
+                                  else
+                                    return 'jsxElement'
+                                  endif
+    6              0.000002     endif
+                            
+    6              0.000022     let i = i + 1
+    8              0.000005   endfor
+                              
+    2              0.000001   return 'Other'
+
+FUNCTION  gitgutter#process_buffer()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter.vim line 21
+Called 9 times
+Total time:   2.307393
+ Self time:   0.000505
+
+count  total (s)   self (s)
+                              " NOTE a:bufnr is not necessarily the current buffer.
+                            
+    9   0.004670   0.000051   if gitgutter#utility#is_active(a:bufnr)
+                            
+    9              0.000032     if has('patch-7.4.1559')
+    9              0.000047       let l:Callback = function('gitgutter#process_buffer', [a:bufnr, a:force])
+                                else
+                                  let l:Callback = {'function': 'gitgutter#process_buffer', 'arguments': [a:bufnr, a:force]}
+    9              0.000004     endif
+    9   0.000314   0.000057     let how = s:setup_path(a:bufnr, l:Callback)
+    9              0.000014     if [how] == ['async']  " avoid string-to-number conversion if how is a number
+                                  return
+    9              0.000003     endif
+                            
+    9   0.000153   0.000043     if a:force || s:has_fresh_changes(a:bufnr)
+                            
+    2              0.000002       let diff = 'NOT SET'
+    2              0.000001       try
+    2   2.301921   0.000019         let diff = gitgutter#diff#run_diff(a:bufnr, g:gitgutter_diff_relative_to, 0)
+                                  catch /gitgutter not tracked/
+                                    call gitgutter#debug#log('Not tracked: '.gitgutter#utility#file(a:bufnr))
+                                  catch /gitgutter diff failed/
+                                    call gitgutter#debug#log('Diff failed: '.gitgutter#utility#file(a:bufnr))
+                                    call gitgutter#hunk#reset(a:bufnr)
+    2              0.000001       endtry
+                            
+    2              0.000003       if diff != 'async' && diff != 'NOT SET'
+                                    call gitgutter#diff#handler(a:bufnr, diff)
+    2              0.000001       endif
+                            
+    9              0.000003     endif
+    9              0.000003   endif
+
+FUNCTION  gitgutter#utility#repo_path()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 112
+Called 15 times
+Total time:   0.000263
+ Self time:   0.000120
+
+count  total (s)   self (s)
+   15   0.000195   0.000079   let p = gitgutter#utility#getbufvar(a:bufnr, 'path', '')
+   15   0.000060   0.000033   return a:shellesc ? gitgutter#utility#shellescape(p) : p
+
+FUNCTION  <SNR>131_handle_double_hunk()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\sign.vim line 212
+Called 2 times
+Total time:   0.000015
+ Self time:   0.000015
+
+count  total (s)   self (s)
+    2              0.000007   if a:modified_lines[0:1] == [[1, 'removed_first_line'], [1, 'removed']]
+                                return [[1, 'removed_above_and_below']] + a:modified_lines[2:]
+    2              0.000001   endif
+                            
+    2              0.000001   return a:modified_lines
+
+FUNCTION  <SNR>57_unc_path()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 169
+Called 2 times
+Total time:   0.000236
+ Self time:   0.000019
+
+count  total (s)   self (s)
+    2   0.000235   0.000018   return s:abs_path(a:bufnr, 0) =~ '^\\\\'
+
+FUNCTION  <SNR>57_is_file_buffer()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 63
+Called 9 times
+Total time:   0.000047
+ Self time:   0.000047
+
+count  total (s)   self (s)
+    9              0.000042   return empty(getbufvar(a:bufnr, '&buftype'))
+
+FUNCTION  <lambda>52()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000015
+ Self time:   0.000003
+
+count  total (s)   self (s)
+    1   0.000015   0.000003 return self.onStderrCB(data)
+
+FUNCTION  gitgutter#utility#windows()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 236
+Called 2 times
+Total time:   0.000006
+ Self time:   0.000006
+
+count  total (s)   self (s)
+    2              0.000006   return has('win64') || has('win32') || has('win16')
+
+FUNCTION  <lambda>59()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000313
+ Self time:   0.000005
+
+count  total (s)   self (s)
+    1   0.000313   0.000004 return self.onExitCB()
+
+FUNCTION  <SNR>105_IsBlock()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 323
+Called 2 times
+Total time:   0.000175
+ Self time:   0.000084
+
+count  total (s)   self (s)
+    2   0.000099   0.000008   let tok = s:PreviousToken()
+    2              0.000018   if join(s:stack) =~? 'xml\|jsx' && s:SynAt(line('.'),col('.')-1) =~? 'xml\|jsx'
+                                let s:in_jsx = 1
+                                return tok != '{'
+    2              0.000005   elseif tok =~ '\k'
+    2              0.000002     if tok ==# 'type'
+                                  return s:Pure('eval',"s:PreviousToken() !~# '^\\%(im\\|ex\\)port$' || s:PreviousToken() == '.'")
+    2              0.000001     elseif tok ==# 'of'
+                                  return s:Pure('eval',"!s:GetPair('[[({]','[])}]','bW',s:skip_expr) || s:LookingAt() != '(' ||" ."s:{s:PreviousToken() ==# 'await' ? 'Previous' : ''}Token() !=# 'for' || s:PreviousToken() == '.'")
+    2              0.000001     endif
+    2              0.000036     return index(split('return const let import export extends yield default delete var await void typeof throw case new in instanceof') ,tok) < (line('.') != a:firstline) || s:Pure('s:PreviousToken') == '.'
+                              elseif tok == '>'
+                                return getline('.')[col('.')-2] == '=' || s:SynAt(line('.'),col('.')) =~? 'jsflow\|^html'
+                              elseif tok == '*'
+                                return s:Pure('s:PreviousToken') == ':'
+                              elseif tok == ':'
+                                return s:Pure('eval',"s:PreviousToken() =~ '^\\K\\k*$' && !s:ExprCol()")
+                              elseif tok == '/'
+                                return s:SynAt(line('.'),col('.')) =~? 'regex'
+                              elseif tok !~ '[=~!<,.?^%|&([]'
+                                return tok !~ '[-+]' || line('.') != a:firstline && getline('.')[col('.')-2] == tok
+                              endif
+
+FUNCTION  <SNR>133_syntax_stack_at()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 25
+Called 2 times
+Total time:   0.000090
+ Self time:   0.000090
+
+count  total (s)   self (s)
+    2              0.000089   return map(synstack(a:lnum, a:col), 'synIDattr(v:val, "name")')
+
+FUNCTION  jsx_pretty#comment#update_commentstring()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\comment.vim line 5
+Called 10 times
+Total time:   0.001730
+ Self time:   0.000609
+
+count  total (s)   self (s)
+   10              0.000020   let line = getline(".")
+   10              0.000013   let col = col('.')
+   10              0.000118   if line !~# '^\s*$' && line[: col - 1] =~# '^\s*$'    " skip indent
+    2              0.000004     let col = indent('.') + 1
+   10              0.000004   endif
+   10   0.001226   0.000106   let syn_start = s:syn_name(line('.'), col)
+   10              0.000023   let save_cursor = getcurpos()
+                            
+   10              0.000064   if syn_start =~? '^jsx'
+                                if line =~ '^\s*//'
+                                  let &l:commentstring = '// %s'
+                                elseif s:syn_contains(line('.'), col, 'jsxTaggedRegion')
+                                  let &l:commentstring = '<!-- %s -->'
+                                elseif syn_start =~? '^jsxAttrib'
+                                  let &l:commentstring = '// %s'
+                                else
+                                  let &l:commentstring = '{/* %s */}'
+                                endif
+   10              0.000003   else
+   10              0.000078     let &l:commentstring = a:original
+   10              0.000003   endif
+                            
+                              " Restore the cursor position
+   10              0.000038   call setpos('.', save_cursor)
+
+FUNCTION  <SNR>51_hasPrefix()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\nerdtree_plugin\git_status.vim line 217
+Called 7 times
+Total time:   0.000038
+ Self time:   0.000038
+
+count  total (s)   self (s)
+    7              0.000034     return len(a:text) >= len(a:prefix) && a:text[:len(a:prefix)-1] ==# a:prefix
+
+FUNCTION  gitgutter#diff#run_diff()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 71
+Called 2 times
+Total time:   2.301902
+ Self time:   0.000683
+
+count  total (s)   self (s)
+    2   0.000037   0.000009   if gitgutter#utility#repo_path(a:bufnr, 0) == -1
+                                throw 'gitgutter author fail'
+    2              0.000001   endif
+                            
+    2   0.000030   0.000008   if gitgutter#utility#repo_path(a:bufnr, 0) == -2
+                                throw 'gitgutter not tracked'
+    2              0.000000   endif
+                            
+                              " Wrap compound commands in parentheses to make Windows happy.
+                              " bash doesn't mind the parentheses.
+    2              0.000001   let cmd = '('
+                            
+                              " Append buffer number to temp filenames to avoid race conditions between
+                              " writing and reading the files when asynchronously processing multiple
+                              " buffers.
+                            
+                              " Without the buffer number, buff_file would have a race between the
+                              " second gitgutter#process_buffer() writing the file (synchronously, below)
+                              " and the first gitgutter#process_buffer()'s async job reading it (with
+                              " git-diff).
+    2              0.000005   let buff_file = s:temp_buffer.'.'.a:bufnr
+                            
+                              " Add a counter to avoid a similar race with two quick writes of the same buffer.
+                              " Use a modulus greater than a maximum reasonable number of visible buffers.
+    2              0.000003   let s:counter = (s:counter + 1) % 20
+    2              0.000004   let buff_file .= '.'.s:counter
+                            
+    2   0.000238   0.000009   let extension = gitgutter#utility#extension(a:bufnr)
+    2              0.000003   if !empty(extension)
+    2              0.000004     let buff_file .= '.'.extension
+    2              0.000001   endif
+                            
+                              " Write buffer to temporary file.
+                              " Note: this is synchronous.
+    2   2.291936   0.000376   call s:write_buffer(a:bufnr, buff_file)
+                            
+    2              0.000005   if a:from ==# 'index'
+                                " Without the buffer number, from_file would have a race in the shell
+                                " between the second process writing it (with git-show) and the first
+                                " reading it (with git-diff).
+    2              0.000026     let from_file = s:temp_from.'.'.a:bufnr
+                            
+                                " Add a counter to avoid a similar race with two quick writes of the same buffer.
+    2              0.000005     let from_file .= '.'.s:counter
+                            
+    2              0.000005     if !empty(extension)
+    2              0.000003       let from_file .= '.'.extension
+    2              0.000001     endif
+                            
+                                " Write file from index to temporary file.
+    2   0.000561   0.000053     let index_name = gitgutter#utility#get_diff_base(a:bufnr).':'.gitgutter#utility#repo_path(a:bufnr, 1)
+    2              0.000012     let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager show '.index_name.' > '.from_file.' && '
+                            
+                              elseif a:from ==# 'working_tree'
+                                let from_file = gitgutter#utility#repo_path(a:bufnr, 1)
+    2              0.000001   endif
+                            
+                              " Call git-diff.
+    2              0.000006   let cmd .= g:gitgutter_git_executable.' '.g:gitgutter_git_args.' --no-pager'
+    2              0.000001   if s:c_flag
+    2              0.000003     let cmd .= ' -c "diff.autorefreshindex=0"'
+    2              0.000003     let cmd .= ' -c "diff.noprefix=false"'
+    2              0.000003     let cmd .= ' -c "core.safecrlf=false"'
+    2              0.000001   endif
+    2              0.000008   let cmd .= ' diff --no-ext-diff --no-color -U0 '.g:gitgutter_diff_args.' -- '.from_file.' '.buff_file
+                            
+                              " Pipe git-diff output into grep.
+    2              0.000004   if !a:preserve_full_diff && !empty(g:gitgutter_grep)
+                                let cmd .= ' | '.g:gitgutter_grep.' '.gitgutter#utility#shellescape('^@@ ')
+    2              0.000001   endif
+                            
+                              " grep exits with 1 when no matches are found; git-diff exits with 1 when
+                              " differences are found.  However we want to treat non-matches and
+                              " differences as non-erroneous behaviour; so we OR the command with one
+                              " which always exits with success (0).
+    2              0.000003   let cmd .= ' || exit 0'
+                            
+    2              0.000002   let cmd .= ')'
+                            
+    2   0.000567   0.000011   let cmd = gitgutter#utility#cd_cmd(a:bufnr, cmd)
+                            
+    2   0.000012   0.000009   if g:gitgutter_async && gitgutter#async#available()
+    2   0.008334   0.000022     call gitgutter#async#execute(cmd, a:bufnr, {   'out': function('gitgutter#diff#handler'),   'err': function('gitgutter#hunk#reset'), })
+    2              0.000002     return 'async'
+                            
+                              else
+                                let diff = gitgutter#utility#system(cmd)
+                            
+                                if v:shell_error
+                                  call gitgutter#debug#log(diff)
+                                  throw 'gitgutter diff failed'
+                                endif
+                            
+                                return diff
+                              endif
+
+FUNCTION  224()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree\lib\nerdtree\nerdtree.vim line 148
+Called 14 times
+Total time:   0.000461
+ Self time:   0.000441
+
+count  total (s)   self (s)
+   14              0.000047     if exists('t:NERDTreeBufName')
+                                    return bufwinnr(t:NERDTreeBufName)
+   14              0.000005     endif
+                            
+                                " If WindowTree, there is no t:NERDTreeBufName variable. Search all windows.
+   28              0.000058     for w in range(1,winnr('$'))
+   14   0.000203   0.000184         if bufname(winbufnr(w)) =~# '^' . g:NERDTreeCreator.BufNamePrefix() . '\d\+$'
+                                        return w
+   14              0.000005         endif
+   28              0.000018     endfor
+                            
+   14              0.000008     return -1
+
+FUNCTION  225()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree\lib\nerdtree\nerdtree.vim line 164
+Called 14 times
+Total time:   0.000517
+ Self time:   0.000057
+
+count  total (s)   self (s)
+   14   0.000511   0.000051     return s:NERDTree.GetWinNum() !=# -1
+
+FUNCTION  <lambda>62()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000313
+ Self time:   0.000006
+
+count  total (s)   self (s)
+    1   0.000313   0.000005 return self.onExitCB()
+
+FUNCTION  gitgutter#diff#handler()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 173
+Called 2 times
+Total time:   0.002379
+ Self time:   0.000136
+
+count  total (s)   self (s)
+    2   0.000065   0.000011   call gitgutter#debug#log(a:diff)
+                            
+    2              0.000005   if !bufexists(a:bufnr)
+                                return
+    2              0.000001   endif
+                            
+    2   0.001062   0.000021   call gitgutter#hunk#set_hunks(a:bufnr, gitgutter#diff#parse_diff(a:diff))
+    2   0.000713   0.000019   let modified_lines = gitgutter#diff#process_hunks(a:bufnr, gitgutter#hunk#hunks(a:bufnr))
+                            
+    2              0.000003   let signs_count = len(modified_lines)
+    2              0.000003   if g:gitgutter_max_signs != -1 && signs_count > g:gitgutter_max_signs
+                                call gitgutter#utility#warn_once(a:bufnr, printf( 'exceeded maximum number of signs (%d > %d, configured by g:gitgutter_max_signs).', signs_count, g:gitgutter_max_signs), 'max_signs')
+                                call gitgutter#sign#clear_signs(a:bufnr)
+                            
+    2              0.000001   else
+    2              0.000003     if g:gitgutter_signs || g:gitgutter_highlight_lines || g:gitgutter_highlight_linenrs
+    2   0.000441   0.000022       call gitgutter#sign#update_signs(a:bufnr, modified_lines)
+    2              0.000001     endif
+    2              0.000001   endif
+                            
+    2   0.000047   0.000012   call s:save_last_seen_change(a:bufnr)
+    2              0.000008   if exists('#User#GitGutter')
+                                let g:gitgutter_hook_context = {'bufnr': a:bufnr}
+                                execute 'doautocmd' s:nomodeline 'User GitGutter'
+                                unlet g:gitgutter_hook_context
+    2              0.000001   endif
+
+FUNCTION  <SNR>105_GetVars()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 49
+Called 2 times
+Total time:   0.000070
+ Self time:   0.000070
+
+count  total (s)   self (s)
+    2              0.000068   call extend(b:,extend(s:bvars,{'js_cache': [0,0,0]}),'keep')
+
+FUNCTION  gitgutter#hunk#increment_lines_modified()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\hunk.vim line 34
+Called 2 times
+Total time:   0.000066
+ Self time:   0.000022
+
+count  total (s)   self (s)
+    2   0.000033   0.000009   let summary = gitgutter#hunk#summary(a:bufnr)
+    2              0.000002   let summary[1] += a:count
+    2   0.000029   0.000010   call gitgutter#utility#setbufvar(a:bufnr, 'summary', summary)
+
+FUNCTION  <SNR>133_is_opening_tag()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 56
+Called 2 times
+Total time:   0.000006
+ Self time:   0.000006
+
+count  total (s)   self (s)
+    2              0.000005   return a:syntax =~? 'jsxOpenPunct'
+
+FUNCTION  <lambda>60()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 2 times
+Total time:   0.000020
+ Self time:   0.000009
+
+count  total (s)   self (s)
+    2   0.000019   0.000008 return self.onStdoutCB(data)
+
+FUNCTION  coc#highlight#clear_highlight()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\highlight.vim line 49
+Called 1 time
+Total time:   0.000095
+ Self time:   0.000083
+
+count  total (s)   self (s)
+    1              0.000023   let bufnr = a:bufnr == 0 ? bufnr('%') : a:bufnr
+    1              0.000003   if !bufloaded(bufnr)
+                                return
+    1              0.000000   endif
+    1   0.000024   0.000012   let src_id = s:create_namespace(a:key)
+    1              0.000017   if has('nvim')
+    1              0.000021     call nvim_buf_clear_namespace(a:bufnr, src_id, a:start_line, a:end_line)
+                              else
+                                call coc#api#call('buf_clear_namespace', [a:bufnr, src_id, a:start_line, a:end_line])
+    1              0.000000   endif
+
+FUNCTION  <SNR>130_reset_summary()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\hunk.vim line 24
+Called 2 times
+Total time:   0.000033
+ Self time:   0.000012
+
+count  total (s)   self (s)
+    2   0.000032   0.000011   call gitgutter#utility#setbufvar(a:bufnr, 'summary', [0,0,0])
+
+FUNCTION  gitgutter#utility#is_active()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 50
+Called 9 times
+Total time:   0.004619
+ Self time:   0.000254
+
+count  total (s)   self (s)
+    9   0.004610   0.000245   return g:gitgutter_enabled && gitgutter#utility#getbufvar(a:bufnr, 'enabled', 1) && !pumvisible() && s:is_file_buffer(a:bufnr) && s:exists_file(a:bufnr) && s:not_git_dir(a:bufnr)
+
+FUNCTION  <SNR>23_Autocmd()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\plugin\coc.vim line 228
+Called 35 times
+Total time:   0.002629
+ Self time:   0.000331
+
+count  total (s)   self (s)
+   35              0.000051   if !g:coc_workspace_initialized
+                                return
+   35              0.000015   endif
+   35   0.002501   0.000203   call coc#rpc#notify('CocAutocmd', a:000)
+
+FUNCTION  268()
+    Defined: C:\Program Files\Neovim\share\nvim\runtime\autoload\provider\clipboard.vim line 22
+Called 1 time
+Total time:   0.000012
+ Self time:   0.000012
+
+count  total (s)   self (s)
+                              " At this point this nvim instance might already have launched
+                              " a new provider instance. Don't drop ownership in this case.
+    1              0.000002   if self.owner == a:jobid
+    1              0.000001     let self.owner = 0
+    1              0.000000   endif
+    1              0.000001   if a:data != 0
+                                echohl WarningMsg
+                                echomsg 'clipboard: error invoking '.get(self.argv, 0, '?').': '.join(self.stderr)
+                                echohl None
+    1              0.000000   endif
+
+FUNCTION  <SNR>59_on_stderr_nvim()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\async.vim line 66
+Called 2 times
+Total time:   0.000019
+ Self time:   0.000019
+
+count  total (s)   self (s)
+    2              0.000009   if a:data != ['']  " With Neovim there is always [''] reported on stderr.
+                                call self.handler.err(self.buffer)
+    2              0.000001   endif
+
+FUNCTION  coc#highlight#match_ranges()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\highlight.vim line 152
+Called 6 times
+Total time:   0.014505
+ Self time:   0.014505
+
+count  total (s)   self (s)
+    6              0.000014   let winid = a:winid == 0 ? win_getid() : a:winid
+    6              0.000026   let bufnr = a:bufnr == 0 ? winbufnr(winid) : a:bufnr
+    6              0.000033   if empty(getwininfo(winid)) || (a:bufnr != 0 && winbufnr(a:winid) != a:bufnr)
+                                " not valid
+                                return []
+    6              0.000002   endif
+    6              0.000005   if !s:clear_match_by_window
+    6              0.000007     let curr = win_getid()
+    6              0.000012     if has('nvim')
+    6              0.000028       noa call nvim_set_current_win(winid)
+                                else
+                                  noa call win_gotoid(winid)
+    6              0.000002     endif
+    6              0.000002   endif
+    6              0.000005   let ids = []
+  306              0.000191   for range in a:ranges
+  300              0.000319     let list = []
+  300              0.000375     let start = range['start']
+  300              0.000269     let end = range['end']
+  600              0.000839     for lnum in range(start['line'] + 1, end['line'] + 1)
+  300              0.000614       let arr = getbufline(bufnr, lnum)
+  300              0.000466       let line = empty(arr) ? '' : arr[0]
+  300              0.000292       if empty(line)
+                                    continue
+  300              0.000109       endif
+  300              0.001153       let colStart = lnum == start['line'] + 1 ? strlen(strcharpart(line, 0, start['character'])) + 1 : 1
+  300              0.001180       let colEnd = lnum == end['line'] + 1 ? strlen(strcharpart(line, 0, end['character'])) + 1 : strlen(line) + 1
+  300              0.000230       if colStart == colEnd
+                                    continue
+  300              0.000107       endif
+  300              0.000676       call add(list, [lnum, colStart, colEnd - colStart])
+  600              0.000256     endfor
+  300              0.000311     if !empty(list)
+  300              0.000564       let opts = s:clear_match_by_window ? {'window': a:winid} : {}
+  300              0.001704       let id = matchaddpos(a:hlGroup, list, a:priority, -1, opts)
+  300              0.000424       call add(ids, id)
+  300              0.000125     endif
+  306              0.000113   endfor
+    6              0.000006   if !s:clear_match_by_window
+    6              0.000010     if has('nvim')
+    6              0.000032       noa call nvim_set_current_win(curr)
+                                else
+                                  noa call win_gotoid(curr)
+    6              0.000002     endif
+    6              0.000002   endif
+    6              0.000005   return ids
+
+FUNCTION  coc#status()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc.vim line 123
+Called 92 times
+Total time:   0.002872
+ Self time:   0.002468
+
+count  total (s)   self (s)
+   92              0.000495   let info = get(b:, 'coc_diagnostic_info', {})
+   92              0.000107   let msgs = []
+   92              0.000179   if get(info, 'error', 0)
+                                call add(msgs, s:error_sign . info['error'])
+   92              0.000077   endif
+   92              0.000135   if get(info, 'warning', 0)
+                                call add(msgs, s:warning_sign . info['warning'])
+   92              0.000027   endif
+   92   0.001307   0.000903   return s:trim(join(msgs, ' ') . ' ' . get(g:, 'coc_status', ''))
+
+FUNCTION  <SNR>59_on_exit_nvim()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\async.vim line 72
+Called 2 times
+Total time:   0.002416
+ Self time:   0.000037
+
+count  total (s)   self (s)
+    2              0.000003   if !a:exit_code
+    2   0.002411   0.000032     call self.handler.out(self.buffer, join(self.stdoutbuffer, "\n"))
+    2              0.000001   endif
+
+FUNCTION  <SNR>105_LookingAt()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 165
+Called 10 times
+Total time:   0.000023
+ Self time:   0.000023
+
+count  total (s)   self (s)
+   10              0.000020   return getline('.')[col('.')-1]
+
+FUNCTION  provider#clipboard#Call()
+    Defined: C:\Program Files\Neovim\share\nvim\runtime\autoload\provider\clipboard.vim line 195
+Called 1 time
+Total time:   0.006564
+ Self time:   0.000036
+
+count  total (s)   self (s)
+    1              0.000010   if get(s:, 'here', v:false)  " Clipboard provider must not recurse. #7184
+                                return 0
+    1              0.000001   endif
+    1              0.000003   let s:here = v:true
+    1              0.000001   try
+    1   0.006542   0.000014     return call(s:clipboard[a:method],a:args,s:clipboard)
+    1              0.000001   finally
+    1              0.000002     let s:here = v:false
+    1              0.000001   endtry
+
+FUNCTION  <SNR>131_highlight_name_for_change()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\sign.vim line 234
+Called 22 times
+Total time:   0.000054
+ Self time:   0.000054
+
+count  total (s)   self (s)
+   22              0.000021   if a:text ==# 'added'
+   20              0.000013     return 'GitGutterLineAdded'
+    2              0.000002   elseif a:text ==# 'removed'
+                                return 'GitGutterLineRemoved'
+    2              0.000002   elseif a:text ==# 'removed_first_line'
+                                return 'GitGutterLineRemovedFirstLine'
+    2              0.000002   elseif a:text ==# 'modified'
+    2              0.000001     return 'GitGutterLineModified'
+                              elseif a:text ==# 'modified_removed'
+                                return 'GitGutterLineModifiedRemoved'
+                              elseif a:text ==# 'removed_above_and_below'
+                                return 'GitGutterLineRemovedAboveAndBelow'
+                              endif
+
+FUNCTION  270()
+    Defined: C:\Program Files\Neovim\share\nvim\runtime\autoload\provider\clipboard.vim line 142
+Called 1 time
+Total time:   0.006528
+ Self time:   0.006528
+
+count  total (s)   self (s)
+    1              0.000001   if a:reg == '"'
+                                call s:clipboard.set(a:lines,a:regtype,'+')
+                                if s:copy['*'] != s:copy['+']
+                                  call s:clipboard.set(a:lines,a:regtype,'*')
+                                end
+                                return 0
+    1              0.000000   end
+                            
+    1              0.000003   if type(s:copy[a:reg]) == v:t_func
+                                call s:copy[a:reg](a:lines, a:regtype)
+                                return 0
+    1              0.000000   end
+                            
+    1              0.000001   if s:cache_enabled == 0
+                                call s:try_cmd(s:copy[a:reg], a:lines)
+                                return 0
+    1              0.000000   end
+                            
+    1              0.000002   if s:selections[a:reg].owner > 0
+                                let prev_job = s:selections[a:reg].owner
+    1              0.000000   end
+    1              0.000008   let s:selections[a:reg] = copy(s:selection)
+    1              0.000002   let selection = s:selections[a:reg]
+    1              0.000002   let selection.data = [a:lines, a:regtype]
+    1              0.000010   let argv = split(s:copy[a:reg], " ")
+    1              0.000001   let selection.argv = argv
+    1              0.000001   let selection.detach = s:cache_enabled
+    1              0.000001   let selection.cwd = "/"
+    1              0.006444   let jobid = jobstart(argv, selection)
+    1              0.000004   if jobid > 0
+    1              0.000008     call jobsend(jobid, a:lines)
+    1              0.000003     call jobclose(jobid, 'stdin')
+    1              0.000002     let selection.owner = jobid
+    1              0.000001     let ret = 1
+                              else
+                                echohl WarningMsg
+                                echomsg 'clipboard: failed to execute: '.(s:copy[a:reg])
+                                echohl None
+                                let ret = 1
+    1              0.000000   endif
+                            
+                              " The previous provider instance should exit when the new one takes
+                              " ownership, but kill it to be sure we don't fill up the job table.
+    1              0.000002   if exists('prev_job')
+                                call timer_start(1000, {... -> jobwait([prev_job], 0)[0] == -1 && jobstop(prev_job)})
+    1              0.000000   endif
+                            
+    1              0.000001   return ret
+
+FUNCTION  271()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\log.vim line 24
+Called 7 times
+Total time:   0.000030
+ Self time:   0.000030
+
+count  total (s)   self (s)
+    7              0.000017     if a:level < self.level
+    7              0.000005         return
+                                endif
+                                echomsg '[nerdtree-git-status] ' . a:msg
+
+FUNCTION  272()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\log.vim line 31
+Called 7 times
+Total time:   0.000370
+ Self time:   0.000340
+
+count  total (s)   self (s)
+    7   0.000365   0.000335     echohl LineNr | call self.output(s:debug, a:msg) | echohl None
+
+FUNCTION  coc#util#set_buf_var()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\util.vim line 842
+Called 1 time
+Total time:   0.000009
+ Self time:   0.000009
+
+count  total (s)   self (s)
+    1              0.000003   if !bufloaded(a:bufnr) | return | endif
+    1              0.000004   call setbufvar(a:bufnr, a:name, a:val)
+
+FUNCTION  <SNR>57_dos_shell()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 173
+Called 2 times
+Total time:   0.000006
+ Self time:   0.000006
+
+count  total (s)   self (s)
+    2              0.000005   return &shell == 'cmd.exe' || &shell == 'command.com'
+
+FUNCTION  coc#float#nvim_refresh_scrollbar()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\float.vim line 765
+Called 10 times
+Total time:   0.000276
+ Self time:   0.000151
+
+count  total (s)   self (s)
+   10   0.000219   0.000094   let id = coc#float#get_related(a:winid, 'scrollbar')
+   10              0.000014   if id && nvim_win_is_valid(id)
+                                call coc#float#nvim_scrollbar(a:winid)
+   10              0.000003   endif
+
+FUNCTION  <SNR>128_process_hunk()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 240
+Called 4 times
+Total time:   0.000622
+ Self time:   0.000238
+
+count  total (s)   self (s)
+    4              0.000004   let modifications = []
+    4              0.000005   let from_line  = a:hunk[0]
+    4              0.000005   let from_count = a:hunk[1]
+    4              0.000004   let to_line    = a:hunk[2]
+    4              0.000004   let to_count   = a:hunk[3]
+                            
+    4   0.000027   0.000019   if s:is_added(from_count, to_count)
+    2   0.000043   0.000013     call s:process_added(modifications, from_count, to_count, to_line)
+    2   0.000078   0.000011     call gitgutter#hunk#increment_lines_added(a:bufnr, to_count)
+                            
+    2   0.000013   0.000009   elseif s:is_removed(from_count, to_count)
+                                call s:process_removed(modifications, from_count, to_count, to_line)
+                                call gitgutter#hunk#increment_lines_removed(a:bufnr, from_count)
+                            
+    2   0.000014   0.000009   elseif s:is_modified(from_count, to_count)
+                                call s:process_modified(modifications, from_count, to_count, to_line)
+                                call gitgutter#hunk#increment_lines_modified(a:bufnr, to_count)
+                            
+    2   0.000018   0.000013   elseif s:is_modified_and_added(from_count, to_count)
+    2   0.000143   0.000014     call s:process_modified_and_added(modifications, from_count, to_count, to_line)
+    2   0.000085   0.000013     call gitgutter#hunk#increment_lines_added(a:bufnr, to_count - from_count)
+    2   0.000078   0.000012     call gitgutter#hunk#increment_lines_modified(a:bufnr, from_count)
+                            
+                              elseif s:is_modified_and_removed(from_count, to_count)
+                                call s:process_modified_and_removed(modifications, from_count, to_count, to_line)
+                                call gitgutter#hunk#increment_lines_modified(a:bufnr, to_count)
+                                call gitgutter#hunk#increment_lines_removed(a:bufnr, from_count - to_count)
+                            
+    4              0.000001   endif
+    4              0.000003   return modifications
+
+FUNCTION  <SNR>57_dir()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 214
+Called 11 times
+Total time:   0.001857
+ Self time:   0.000158
+
+count  total (s)   self (s)
+   11   0.001852   0.000153   return gitgutter#utility#shellescape(fnamemodify(s:abs_path(a:bufnr, 0), ':h'))
+
+FUNCTION  gitstatus#util#UpdateParentDirsStatus()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\util.vim line 203
+Called 14 times
+Total time:   0.000410
+ Self time:   0.000410
+
+count  total (s)   self (s)
+   14              0.000047     let l:dirtyPath = fnamemodify(a:pathStr, ':h')
+   14              0.000033     let l:dir_dirty_only = get(a:opts, 'NERDTreeGitStatusDirDirtyOnly', 1)
+   21              0.000032     while l:dirtyPath !=# a:root
+    7              0.000014         let l:key = get(a:cache, l:dirtyPath, '')
+    7              0.000006         if l:dir_dirty_only
+    7              0.000006             if l:key ==# ''
+    7              0.000013                 let a:cache[l:dirtyPath] = 'Dirty'
+                                        else
+                                            return
+    7              0.000003             endif
+                                    else
+                                        if l:key ==# ''
+                                            let a:cache[l:dirtyPath] = a:statusKey
+                                        elseif l:key ==# 'Dirty' || l:key ==# a:statusKey
+                                            return
+                                        else
+                                            let a:cache[l:dirtyPath] = 'Dirty'
+                                        endif
+    7              0.000003         endif
+    7              0.000018         let l:dirtyPath = fnamemodify(l:dirtyPath, ':h')
+   21              0.000017     endwhile
+
+FUNCTION  281()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\listener.vim line 65
+Called 7 times
+Total time:   0.000017
+ Self time:   0.000017
+
+count  total (s)   self (s)
+    7              0.000014     let self.next = a:cache
+
+FUNCTION  285()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\listener.vim line 81
+Called 7 times
+Total time:   0.000286
+ Self time:   0.000035
+
+count  total (s)   self (s)
+    7   0.000278   0.000027     if !g:NERDTree.IsOpen()
+    7              0.000003         return
+                                endif
+                            
+                                if !self.changed()
+                                    return
+                                endif
+                            
+                                call self.update()
+                            
+                                let l:winnr = winnr()
+                                let l:altwinnr = winnr('#')
+                            
+                                try
+                                    call g:NERDTree.CursorToTreeWin()
+                                    call b:NERDTree.root.refreshFlags()
+                                    call NERDTreeRender()
+                                finally
+                                    noautocmd exec l:altwinnr . 'wincmd w'
+                                    noautocmd exec l:winnr . 'wincmd w'
+                                endtry
+
+FUNCTION  289()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 37
+Called 14 times
+Total time:   0.000143
+ Self time:   0.000143
+
+count  total (s)   self (s)
+   14              0.000063     let self.chunks[-1] .= a:data[0]
+   14              0.000046     call extend(self.chunks, a:data[1:])
+
+FUNCTION  <SNR>128_save_last_seen_change()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\diff.vim line 415
+Called 2 times
+Total time:   0.000035
+ Self time:   0.000014
+
+count  total (s)   self (s)
+    2   0.000034   0.000013   call gitgutter#utility#setbufvar(a:bufnr, 'tick', getbufvar(a:bufnr, 'changedtick'))
+
+FUNCTION  coc#rpc#notify()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc\rpc.vim line 95
+Called 42 times
+Total time:   0.002847
+ Self time:   0.000577
+
+count  total (s)   self (s)
+   42   0.000399   0.000160   if !coc#rpc#ready()
+                                return ''
+   42              0.000011   endif
+   42   0.002349   0.000318   call s:client['notify'](a:method, a:args)
+   42              0.000026   return ''
+
+FUNCTION  <SNR>59_on_stdout_nvim()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\async.vim line 56
+Called 4 times
+Total time:   0.000130
+ Self time:   0.000130
+
+count  total (s)   self (s)
+    4              0.000037   if empty(self.stdoutbuffer)
+    2              0.000007     let self.stdoutbuffer = a:data
+    2              0.000002   else
+    2              0.000055     let self.stdoutbuffer = self.stdoutbuffer[:-2] + [self.stdoutbuffer[-1] . a:data[0]] + a:data[1:]
+    4              0.000003   endif
+
+FUNCTION  <SNR>86_trim()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\coc.nvim\autoload\coc.vim line 135
+Called 92 times
+Total time:   0.000404
+ Self time:   0.000404
+
+count  total (s)   self (s)
+   92              0.000172   if exists('*trim')
+   92              0.000171     return trim(a:str)
+                              endif
+                              return substitute(a:str, '\s\+$', '', '')
+
+FUNCTION  290()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 42
+Called 7 times
+Total time:   0.000104
+ Self time:   0.000081
+
+count  total (s)   self (s)
+    7   0.000068   0.000045     let self.failed = self.failed || !s:isEOF(a:data)
+    7              0.000015     let self.err_chunks[-1] .= a:data[0]
+    7              0.000015     call extend(self.err_chunks, a:data[1:])
+
+FUNCTION  293()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 63
+Called 7 times
+Total time:   0.002124
+ Self time:   0.000081
+
+count  total (s)   self (s)
+    7              0.000018     if has_key(self.opts, 'on_success_cb')
+    7   0.002098   0.000055         call call(self.opts.on_success_cb, [self])
+    7              0.000003     endif
+
+FUNCTION  294()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 7 times
+Total time:   0.021754
+ Self time:   0.021754
+
+count  total (s)   self (s)
+    7              0.021613         let jid = jobstart(a:cmd, { 'on_stdout': {_job_id, data, _event  -> self.onStdoutCB(data)}, 'on_stderr': {_job_id, data, _event  -> self.onStderrCB(data)}, 'on_exit':   {_job_id, _data, _event -> self.onExitCB()}, 'env':       {'GIT_OPTIONAL_LOCKS': '0'}, })
+    7              0.000043         let self.id = jid
+    7              0.000017         let self.running = jid > 0
+    7              0.000008         if jid <= 0
+                                        let self.failed = 1
+                                        let self.err_chunks = jid == 0 ? ['invalid arguments'] : ['command is not executable']
+                                        call self.onExitCB()
+    7              0.000004         endif
+
+FUNCTION  gitgutter#utility#getbufvar()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 21
+Called 41 times
+Total time:   0.000352
+ Self time:   0.000352
+
+count  total (s)   self (s)
+   41              0.000105   let ggvars = getbufvar(a:buffer, 'gitgutter')
+   41              0.000147   if type(ggvars) == type({}) && has_key(ggvars, a:varname)
+   32              0.000039     return ggvars[a:varname]
+    9              0.000003   endif
+    9              0.000006   if a:0
+    9              0.000007     return a:1
+                              endif
+
+FUNCTION  <SNR>57_not_git_dir()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\utility.vim line 59
+Called 9 times
+Total time:   0.001725
+ Self time:   0.000133
+
+count  total (s)   self (s)
+    9   0.001720   0.000128   return s:dir(a:bufnr) !~ '[/\\]\.git\($\|[/\\]\)'
+
+FUNCTION  <lambda>51()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 2 times
+Total time:   0.000022
+ Self time:   0.000009
+
+count  total (s)   self (s)
+    2   0.000021   0.000008 return self.onStdoutCB(data)
+
+FUNCTION  <lambda>55()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000042
+ Self time:   0.000023
+
+count  total (s)   self (s)
+    1   0.000042   0.000023 return self.onStderrCB(data)
+
+FUNCTION  <lambda>56()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000344
+ Self time:   0.000005
+
+count  total (s)   self (s)
+    1   0.000343   0.000004 return self.onExitCB()
+
+FUNCTION  <lambda>57()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 2 times
+Total time:   0.000048
+ Self time:   0.000026
+
+count  total (s)   self (s)
+    2   0.000046   0.000024 return self.onStdoutCB(data)
+
+FUNCTION  <lambda>58()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000022
+ Self time:   0.000005
+
+count  total (s)   self (s)
+    1   0.000022   0.000004 return self.onStderrCB(data)
+
+FUNCTION  <SNR>99_newJob()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 30
+Called 7 times
+Total time:   0.000144
+ Self time:   0.000144
+
+count  total (s)   self (s)
+    7              0.000140     return extend(deepcopy(s:Job), { 'name': a:name, 'opts': a:opts })
+
+FUNCTION  <SNR>1_check_back_space()
+    Defined: C:\Program Files\Neovim\share\nvim\sysinit.vim line 155
+Called 1 time
+Total time:   0.000031
+ Self time:   0.000031
+
+count  total (s)   self (s)
+    1              0.000007   let col = col('.') - 1
+    1              0.000022   return !col || getline('.')[col - 1]  =~# '\s'
+
+FUNCTION  GetJavascriptIndent()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\indent\javascript.vim line 350
+Called 2 times
+Total time:   0.001547
+ Self time:   0.000994
+
+count  total (s)   self (s)
+    2   0.000079   0.000009   call s:GetVars()
+    2              0.000005   let s:synid_cache = [[],[]]
+    2              0.000003   let l:line = getline(v:lnum)
+                              " use synstack as it validates syn state and works in an empty line
+    2              0.000064   let s:stack = [''] + map(synstack(v:lnum,1),"synIDattr(v:val,'name')")
+                            
+                              " start with strings,comments,etc.
+    2              0.000013   if s:stack[-1] =~? 'comment\|doc'
+                                if l:line !~ '^\s*\/[/*]'
+                                  return l:line =~ '^\s*\*' ? cindent(v:lnum) : -1
+                                endif
+    2              0.000013   elseif s:stack[-1] =~? b:syng_str
+                                if b:js_cache[0] == v:lnum - 1 && s:Balanced(v:lnum-1,getline(v:lnum-1))
+                                  let b:js_cache[0] = v:lnum
+                                endif
+                                return -1
+    2              0.000001   endif
+                            
+    2              0.000006   let nest = get(get(b:,'hi_indent',{}),'blocklnr')
+    2              0.000008   let s:l1 = max([0, prevnonblank(v:lnum) - (s:rel ? 2000 : 1000), nest])
+    2              0.000004   call cursor(v:lnum,1)
+    2   0.000180   0.000011   if s:PreviousToken() is ''
+                                return
+    2              0.000001   endif
+    2              0.000011   let [l:lnum, lcol, pline] = getpos('.')[1:2] + [getline('.')[:col('.')-1]]
+                            
+    2              0.000011   let l:line = substitute(l:line,'^\s*','','')
+    2              0.000017   let l:line_s = l:line[0]
+    2              0.000002   if l:line[:1] == '/*'
+                                let l:line = substitute(l:line,'^\%(\/\*.\{-}\*\/\s*\)*','','')
+    2              0.000001   endif
+    2              0.000006   if l:line =~ '^\/[/*]'
+                                let l:line = ''
+    2              0.000000   endif
+                            
+                              " the containing paren, bracket, or curly. Many hacks for performance
+    2              0.000020   call cursor(v:lnum,1)
+    2              0.000005   let idx = index([']',')','}'],l:line[0])
+    2              0.000007   if b:js_cache[0] > l:lnum && b:js_cache[0] < v:lnum || b:js_cache[0] == l:lnum && s:Balanced(l:lnum,pline)
+                                call call('cursor',b:js_cache[1:])
+    2              0.000001   else
+    2              0.000447     let [s:looksyn, s:top_col, s:check_in, s:l1] = [v:lnum - 1,0,0, max([s:l1, &smc ? search('\m^.\{'.&smc.',}','nbW',s:l1 + 1) + 1 : 0])]
+    2              0.000001     try
+    2              0.000002       if idx != -1
+                                    call s:GetPair(['\[','(','{'][idx],'])}'[idx],'bW','s:SkipFunc()')
+    2              0.000020       elseif getline(v:lnum) !~ '^\S' && s:stack[-1] =~? 'block\|^jsobject$'
+    2   0.000135   0.000013         if !s:GetPair('{','}','bW','s:SkipFunc()') && s:stack[-1] ==# 'jsObject'
+                                      return indent(l:lnum)
+    2              0.000001         endif
+                                  else
+                                    call s:AlternatePair()
+    2              0.000000       endif
+                                catch /^\Cout of bounds$/
+                                  call cursor(v:lnum,1)
+    2              0.000001     endtry
+    2              0.000008     let b:js_cache[1:] = line('.') == v:lnum ? [0,0] : getpos('.')[1:2]
+    2              0.000001   endif
+                            
+    2              0.000005   let [b:js_cache[0], num] = [v:lnum, b:js_cache[1]]
+                            
+    2   0.000018   0.000015   let [num_ind, is_op, b_l, l:switch_offset, s:in_jsx] = [s:Nat(indent(num)),0,0,0,0]
+    2   0.000193   0.000014   if !num || s:LookingAt() == '{' && s:IsBlock()
+    2              0.000003     let ilnum = line('.')
+    2   0.000015   0.000011     if num && !s:in_jsx && s:LookingAt() == ')' && s:GetPair('(',')','bW',s:skip_expr)
+                                  if ilnum == num
+                                    let [num, num_ind] = [line('.'), indent('.')]
+                                  endif
+                                  if idx == -1 && s:PreviousToken() ==# 'switch' && s:IsSwitch()
+                                    let l:switch_offset = &cino !~ ':' ? s:sw() : s:ParseCino(':')
+                                    if pline[-1:] != '.' && l:line =~# '^\%(default\|case\)\>'
+                                      return s:Nat(num_ind + l:switch_offset)
+                                    elseif &cino =~ '='
+                                      let l:case_offset = s:ParseCino('=')
+                                    endif
+                                  endif
+    2              0.000000     endif
+    2              0.000008     if idx == -1 && pline[-1:] !~ '[{;]'
+                                  call cursor(l:lnum, lcol)
+                                  let sol = matchstr(l:line,s:opfirst)
+                                  if sol is '' || sol == '/' && s:SynAt(v:lnum, 1 + len(getline(v:lnum)) - len(l:line)) =~? 'regex'
+                                    if s:Continues()
+                                      let is_op = s:sw()
+                                    endif
+                                  elseif num && sol =~# '^\%(in\%(stanceof\)\=\|\*\)$' && s:LookingAt() == '}' && s:GetPair('{','}','bW',s:skip_expr) && s:PreviousToken() == ')' && s:GetPair('(',')','bW',s:skip_expr) && (s:PreviousToken() == ']' || s:LookingAt() =~ '\k' && s:{s:PreviousToken() == '*' ? 'Previous' : ''}Token() !=# 'function')
+                                    return num_ind + s:sw()
+                                  else
+                                    let is_op = s:sw()
+                                  endif
+                                  call cursor(l:lnum, lcol)
+                                  let b_l = s:Nat(s:IsContOne(is_op) - (!is_op && l:line =~ '^{')) * s:sw()
+    2              0.000001     endif
+                              elseif idx == -1 && s:LookingAt() == '(' && &cino =~ '(' && (search('\m\S','nbW',num) || s:ParseCino('U'))
+                                let pval = s:ParseCino('(')
+                                if !pval
+                                  let [Wval, vcol] = [s:ParseCino('W'), virtcol('.')]
+                                  if search('\m'.get(g:,'javascript_indent_W_pat','\S'),'W',num)
+                                    return s:ParseCino('w') ? vcol : virtcol('.')-1
+                                  endif
+                                  return Wval ? s:Nat(num_ind + Wval) : vcol
+                                endif
+                                return s:Nat(num_ind + pval + searchpair('\m(','','\m)','nbrmW',s:skip_expr,num) * s:sw())
+    2              0.000001   endif
+                            
+                              " main return
+    2              0.000007   if l:line =~ '^[])}]\|^|}'
+                                if l:line_s == ')'
+                                  if s:ParseCino('M')
+                                    return indent(l:lnum)
+                                  elseif num && &cino =~# 'm' && !s:ParseCino('m')
+                                    return virtcol('.') - 1
+                                  endif
+                                endif
+                                return num_ind
+    2              0.000001   elseif num
+    2   0.000022   0.000017     return s:Nat(num_ind + get(l:,'case_offset',s:sw()) + l:switch_offset + b_l + is_op)
+                              elseif nest
+                                return indent(nextnonblank(nest+1)) + b_l + is_op
+                              endif
+                              return b_l + is_op
+
+FUNCTION  <lambda>61()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\job.vim line 70
+Called 1 time
+Total time:   0.000015
+ Self time:   0.000003
+
+count  total (s)   self (s)
+    1   0.000014   0.000003 return self.onStderrCB(data)
+
+FUNCTION  gitstatus#util#ParseGitStatusLines()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\nerdtree-git-plugin\autoload\gitstatus\util.vim line 82
+Called 7 times
+Total time:   0.001479
+ Self time:   0.000609
+
+count  total (s)   self (s)
+    7              0.000008     let l:result = {}
+    7              0.000007     let l:is_rename = 0
+   21              0.000029     for l:line in a:statusLines
+   14              0.000011         if l:is_rename
+                                        call gitstatus#util#UpdateParentDirsStatus(l:result, a:root, a:root . '/' . l:line, 'Dirty', a:opts)
+                                        let l:is_rename = 0
+                                        continue
+   14              0.000005         endif
+   14   0.000567   0.000106         let [l:pathStr, l:statusKey] = gitstatus#util#ParseGitStatusLine(l:line, a:opts)
+                            
+   14              0.000030         let l:pathStr = a:root . '/' . l:pathStr
+   14              0.000020         if l:pathStr[-1:-1] is# '/'
+                                        let l:pathStr = l:pathStr[:-2]
+   14              0.000005         endif
+   14              0.000021         let l:is_rename = l:statusKey is# 'Renamed'
+   14              0.000029         let l:result[l:pathStr] = l:statusKey
+                            
+   14   0.000529   0.000120         call gitstatus#util#UpdateParentDirsStatus(l:result, a:root, l:pathStr, l:statusKey, a:opts)
+   21              0.000012     endfor
+    7              0.000005     return l:result
+
+FUNCTION  <SNR>133_trim()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 20
+Called 2 times
+Total time:   0.000025
+ Self time:   0.000025
+
+count  total (s)   self (s)
+    2              0.000023   return substitute(a:line, '^\s*\|\s*$', '', 'g')
+
+FUNCTION  <SNR>133_is_jsx_region()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-polyglot\autoload\jsx_pretty\indent.vim line 66
+Called 6 times
+Total time:   0.000031
+ Self time:   0.000031
+
+count  total (s)   self (s)
+    6              0.000030   return a:syntax =~? 'jsxRegion'
+
+FUNCTION  gitgutter#hunk#set_hunks()
+    Defined: C:\Program Files\Neovim\share\nvim\plugged\vim-gitgutter\autoload\gitgutter\hunk.vim line 5
+Called 2 times
+Total time:   0.000084
+ Self time:   0.000023
+
+count  total (s)   self (s)
+    2   0.000040   0.000013   call gitgutter#utility#setbufvar(a:bufnr, 'hunks', a:hunks)
+    2   0.000043   0.000010   call s:reset_summary(a:bufnr)
+
+FUNCTIONS SORTED ON TOTAL TIME
+count  total (s)   self (s)  function
+    9   2.307393   0.000505  gitgutter#process_buffer()
+    2   2.301902   0.000683  gitgutter#diff#run_diff()
+    2   2.291560             <SNR>128_write_buffer()
+    7   0.023124   0.000311  <SNR>51_onCursorHold()
+    7   0.022405   0.000188  <SNR>51_refreshGitStatus()
+    7   0.021983   0.000085  gitstatus#job#Spawn()
+    7   0.021754             294()
+    6   0.014505             coc#highlight#match_ranges()
+    2   0.008313   0.008247  gitgutter#async#execute()
+    1   0.006564   0.000036  provider#clipboard#Call()
+    1   0.006528             270()
+    9   0.004619   0.000254  gitgutter#utility#is_active()
+   24   0.003651             <SNR>57_abs_path()
+   92   0.002872   0.002468  coc#status()
+   42   0.002847   0.000577  coc#rpc#notify()
+   35   0.002629   0.000331  <SNR>23_Autocmd()
+    2   0.002590   0.000200  GetJavascriptGraphQLIndent()
+    9   0.002470   0.000642  <SNR>57_exists_file()
+    2   0.002416   0.000037  <SNR>59_on_exit_nvim()
+    2   0.002389   0.000032  GetJsxIndent()
+
+FUNCTIONS SORTED ON SELF TIME
+count  total (s)   self (s)  function
+    2              2.291560  <SNR>128_write_buffer()
+    7              0.021754  294()
+    6              0.014505  coc#highlight#match_ranges()
+    2   0.008313   0.008247  gitgutter#async#execute()
+    1              0.006528  270()
+   24              0.003651  <SNR>57_abs_path()
+   92   0.002872   0.002468  coc#status()
+   19              0.001893  <SNR>74_Highlight_Matching_Pair()
+   42   0.002031   0.001835  <SNR>26_notify()
+    5              0.001534  coc#highlight#clear_match_group()
+   10              0.001121  <SNR>127_syn_name()
+    2   0.001547   0.000994  GetJavascriptIndent()
+    4   0.000985   0.000756  coc#highlight#ranges()
+    2   2.301902   0.000683  gitgutter#diff#run_diff()
+    9   0.002470   0.000642  <SNR>57_exists_file()
+    7   0.001479   0.000609  gitstatus#util#ParseGitStatusLines()
+   10   0.001730   0.000609  jsx_pretty#comment#update_commentstring()
+   36              0.000583  gitgutter#diff#parse_hunk()
+   42   0.002847   0.000577  coc#rpc#notify()
+    9   2.307393   0.000505  gitgutter#process_buffer()
+

@@ -598,24 +598,26 @@ app.post("/getfriends", (req, res) => {
 		function run(userID) {
 			var friendIDs = clients[userID].getFriends();
 			var friends = [];
-			for (var i = 0; i < friendIDs.length; i++) {
+			iterate(0);
+			function iterate(i) {
 				var id = friendIDs[i];
 				if (clients[id] != undefined) {
 					friends.push({ userID: id, username: clients[id].username });
 
 					if (i == friendIDs.length) {
 						res.send({ status: 0, friends: friends });
+						return;
 					}
+					iterate(i + 1);
 				} else {
-					database.getUserName(id, (username) => {
-						if (username != null) {
-							createCache(id, username, () => {
-								friends.push({ userID: id, username: clients[id].username });
-								if (i == friendIDs.length) {
-									res.send({ status: 0, friends: friends });
-								}
-							});
+					createCache(id, username, (ret) => {
+						if (ret == -1) res.send({ status: 1, message: "userID not found" });
+						friends.push({ userID: id, username: clients[id].username });
+						if (i == friendIDs.length) {
+							res.send({ status: 0, friends: friends });
+							return;
 						}
+						iterate(i + 1);
 					});
 				}
 			}
@@ -1437,12 +1439,12 @@ app.post("/okTrade", (req, res) => {
 
 		function secondCache() {
 			if (clients[userID] == undefined) {
-				database.getUserName(userID, (username) => {
-					if (username == undefined) {
+				createCache(userID, undefined, (ret) => {
+					if (ret == -1) {
 						res.send({ status: 1, message: "User not found" });
 						return;
 					}
-					createCache(userID, username, run);
+					run();
 				});
 			} else {
 				clients[userID].refresh();
@@ -1750,8 +1752,22 @@ function checkPass(password) {
 
 function createCache(userIDV, username, callback) {
 	if (!clients[userIDV]) {
-		clients[userIDV] = new Client(userIDV, username, callback);
-		clients[userIDV].startDecay(cacheTime, clearCache);
+		if (username == undefined) {
+			database.getUserName(username, (_usr) => {
+				if (_usr == "null") {
+					callback(-1);
+					return;
+				} else {
+					run();
+				}
+			});
+		} else {
+			run();
+		}
+		function run() {
+			clients[userIDV] = new Client(userIDV, username, callback);
+			clients[userIDV].startDecay(cacheTime, clearCache);
+		}
 	}
 }
 
