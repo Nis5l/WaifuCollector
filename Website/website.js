@@ -30,6 +30,7 @@ const {
 	API_HOST = config.API_HOST,
 	API_HOST_LOCAL = config.API_HOST_LOCAL,
 	useSSL = config.useSSL,
+	useSSL_LOCAL = config.useSSL_LOCAL,
 	port = config.port,
 
 	SESS_NAME = "sid",
@@ -93,6 +94,10 @@ app.use(
 
 app.use(renderUserView);
 
+function getHttpLocal() {
+	return useSSL_LOCAL ? "https://" : "http://";
+}
+
 function getHttp() {
 	return useSSL ? "https://" : "http://";
 }
@@ -100,7 +105,7 @@ function getHttp() {
 app.get("/", function (req, res) {
 	res.render("home", {
 		userID: req.cookies.userID,
-		api_url: getHttp() + API_HOST_LOCAL,
+		api_url: getHttpLocal() + API_HOST_LOCAL,
 		ishome: true,
 	});
 });
@@ -138,7 +143,7 @@ app.post("/login", redirectDashboard, function (req, res) {
 	console.log(username);
 	if (username && password) {
 		request.post(
-			getHttp() + API_HOST_LOCAL + "/login",
+			getHttpLocal() + API_HOST_LOCAL + "/login",
 			{
 				json: {
 					username: username,
@@ -189,7 +194,7 @@ app.post("/passchange", function (req, res) {
 
 	if (password && password2 && password == password2 && req.cookies.token) {
 		request.post(
-			getHttp() + API_HOST_LOCAL + "/passchange",
+			getHttpLocal() + API_HOST_LOCAL + "/passchange",
 			{
 				json: {
 					token: req.cookies.token,
@@ -233,7 +238,7 @@ app.post("/register", redirectDashboard, function (req, res) {
 
 	if (username && password) {
 		request.post(
-			getHttp() + API_HOST_LOCAL + "/register",
+			getHttpLocal() + API_HOST_LOCAL + "/register",
 			{
 				json: {
 					username: username,
@@ -279,7 +284,7 @@ app.get("/dashboard", redirectLogin, async function (req, res) {
 function getDashboard(req, res) {
 	return new Promise((resolve, reject) => {
 		request.post(
-			getHttp() + API_HOST_LOCAL + "/getDashboard",
+			getHttpLocal() + API_HOST_LOCAL + "/getDashboard",
 			{
 				json: { token: req.cookies.token },
 				rejectUnauthorized: false,
@@ -304,7 +309,7 @@ function getDashboard(req, res) {
 
 app.post("/packTime", (req, res) => {
 	request.get(
-		getHttp() + API_HOST_LOCAL + "/packTime",
+		getHttpLocal() + API_HOST_LOCAL + "/packTime",
 		{
 			json: { token: req.cookies.token },
 			rejectUnauthorized: false,
@@ -328,7 +333,7 @@ app.get("/adminpanel", redirectIfNotAdmin, function (req, res) {
 app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 	request.get(
 		{
-			url: getHttp() + API_HOST_LOCAL + "/display/cards",
+			url: getHttpLocal() + API_HOST_LOCAL + "/display/cards",
 		},
 		function (err, res) {
 			var data = JSON.parse(res.body);
@@ -365,7 +370,9 @@ app.get(
 		var cardID = req.params.cardID;
 
 		var cardData = jsonToArray(
-			await getPageBody(getHttp() + API_HOST_LOCAL + "/display/card/" + cardID)
+			await getPageBody(
+				getHttpLocal() + API_HOST_LOCAL + "/display/card/" + cardID
+			)
 		);
 
 		if (cardData == undefined) {
@@ -374,10 +381,10 @@ app.get(
 		}
 
 		var card = cardData.card;
-		card["image"] = getHttp() + API_HOST_LOCAL + "/Card/" + card["image"];
+		card["image"] = getHttpLocal() + API_HOST_LOCAL + "/Card/" + card["image"];
 
 		var animeData = jsonToArray(
-			await getPageBody(getHttp() + API_HOST_LOCAL + "/animes")
+			await getPageBody(getHttpLocal() + API_HOST_LOCAL + "/animes")
 		);
 
 		if (animeData == undefined) {
@@ -398,7 +405,7 @@ app.get(
 app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
 	request.get(
 		{
-			url: getHttp() + API_HOST_LOCAL + "/animes",
+			url: getHttpLocal() + API_HOST_LOCAL + "/animes",
 		},
 		function (err, res) {
 			var data = JSON.parse(res.body);
@@ -421,7 +428,7 @@ app.get("/adminpanel/anime", redirectIfNotAdmin, function (req, response) {
 app.get("/adminpanel/users", redirectIfNotAdmin, function (req, response) {
 	request.get(
 		{
-			url: getHttp() + API_HOST_LOCAL + "/users",
+			url: getHttpLocal() + API_HOST_LOCAL + "/users",
 		},
 		function (err, res) {
 			var data = JSON.parse(res.body);
@@ -448,7 +455,7 @@ app.get("/settings", redirectLogin, async function (req, res) {
 app.get("/pack", redirectLogin, function (req, res) {
 	res.locals.message = req.query.errorMessage;
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/pack",
+		getHttpLocal() + API_HOST_LOCAL + "/pack",
 		{
 			json: { token: req.cookies.token },
 			rejectUnauthorized: false,
@@ -532,7 +539,7 @@ function getInventoryData(
 	if (page == undefined) page = 0;
 	if (userID == undefined) userID = -1;
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/inventory",
+		getHttpLocal() + API_HOST_LOCAL + "/inventory",
 		{
 			json: {
 				token: token,
@@ -578,7 +585,7 @@ app.post("/card", redirectLogin, function (req, res) {
 	if (page == undefined) page = 0;
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/card",
+		getHttpLocal() + API_HOST_LOCAL + "/card",
 		{
 			json: {
 				token: req.cookies.token,
@@ -628,7 +635,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 	}
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/upgrade",
+		getHttpLocal() + API_HOST_LOCAL + "/upgrade",
 		{
 			json: {
 				token: req.cookies.token,
@@ -652,7 +659,7 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 app.get("/friends", redirectLogin, function (req, res) {
 	res.locals.message = req.query.errorMessage;
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/friends",
+		getHttpLocal() + API_HOST_LOCAL + "/friends",
 		{
 			json: {
 				token: req.cookies.token,
@@ -684,7 +691,7 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 	}
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/addfriend",
+		getHttpLocal() + API_HOST_LOCAL + "/addfriend",
 		{
 			json: {
 				token: req.cookies.token,
@@ -714,7 +721,7 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 	}
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/managefriend",
+		getHttpLocal() + API_HOST_LOCAL + "/managefriend",
 		{
 			json: {
 				token: req.cookies.token,
@@ -740,7 +747,7 @@ app.get("/trade", redirectLogin, function (req, res) {
 	var userID = req.query.userID;
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/trade",
+		getHttpLocal() + API_HOST_LOCAL + "/trade",
 		{
 			json: {
 				token: req.cookies.token,
@@ -783,7 +790,7 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 	var cardID = req.body.cardID;
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/addTrade",
+		getHttpLocal() + API_HOST_LOCAL + "/addTrade",
 		{
 			json: {
 				token: req.cookies.token,
@@ -824,7 +831,7 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 	var cardID = req.body.cardID;
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/removeTrade",
+		getHttpLocal() + API_HOST_LOCAL + "/removeTrade",
 		{
 			json: {
 				token: req.cookies.token,
@@ -849,7 +856,7 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 	var userID = req.body.userID;
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/okTrade",
+		getHttpLocal() + API_HOST_LOCAL + "/okTrade",
 		{
 			json: {
 				token: req.cookies.token,
@@ -879,7 +886,7 @@ app.post("/deleteNotification", redirectLogin, function (req, res) {
 	}
 
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/deleteNotification",
+		getHttpLocal() + API_HOST_LOCAL + "/deleteNotification",
 		{
 			json: {
 				token: req.cookies.token,
@@ -901,7 +908,7 @@ app.post("/deleteNotification", redirectLogin, function (req, res) {
 
 app.post("/deleteAllNotifications", redirectLogin, function (req, res) {
 	request.post(
-		getHttp() + API_HOST_LOCAL + "/deleteAllNotifications",
+		getHttpLocal() + API_HOST_LOCAL + "/deleteAllNotifications",
 		{
 			json: {
 				token: req.cookies.token,
@@ -921,16 +928,16 @@ app.post("/deleteAllNotifications", redirectLogin, function (req, res) {
 });
 
 function addPathCard(card) {
-	card.cardImage = "https://" + API_HOST + "/" + card.cardImage;
-	card.frame.path_front = "https://" + API_HOST + "/" + card.frame.path_front;
-	card.frame.path_back = "https://" + API_HOST + "/" + card.frame.path_back;
+	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
+	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
+	card.frame.path_back = getHttp() + API_HOST + "/" + card.frame.path_back;
 	if (
 		card.effect != null &&
 		card.effect != undefined &&
 		card.effect != "null" &&
 		card.effect != "undefined"
 	)
-		card.effect = "https://" + API_HOST + "/" + card.effect;
+		card.effect = getHttp() + API_HOST + "/" + card.effect;
 }
 
 //https.createServer(options, app).listen(port);
@@ -942,8 +949,8 @@ app.listen(port, function () {
 function renderUserView(req, res, next) {
 	var userID = undefined;
 
-	res.locals.url = "https://" + req.get("host");
-	res.locals.api_url = getHttp() + API_HOST_LOCAL;
+	res.locals.url = getHttp() + req.get("host");
+	res.locals.api_url = getHttpLocal() + API_HOST_LOCAL;
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;
@@ -962,7 +969,7 @@ function getRankID(userID, callback) {
 	if (userID != undefined) {
 		request.get(
 			{
-				url: getHttp() + API_HOST_LOCAL + "/" + userID + "/rank",
+				url: getHttpLocal() + API_HOST_LOCAL + "/" + userID + "/rank",
 			},
 			function (err, res) {
 				if (res != undefined) {
@@ -999,7 +1006,7 @@ function getPageBody(url) {
 function getNotifications(token, callback) {
 	if (token != undefined) {
 		request.post(
-			getHttp() + API_HOST_LOCAL + "/notifications",
+			getHttpLocal() + API_HOST_LOCAL + "/notifications",
 			{
 				json: {
 					token: token,
