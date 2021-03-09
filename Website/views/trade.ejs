@@ -80,6 +80,26 @@
 	crossorigin="anonymous"></script>
 
 	<script>
+        var tradeTimeFriend = <%-tradeTimeFriend%>
+        const tradeinterval = setInterval(() => {
+            updateTradeTime();
+            if(tradeTimeFriend == 0)
+            {
+                clearInterval(tradeinterval);
+            }
+        }, update);
+
+        function updateTradeTime()
+        {
+            tradeTimeFriend -= update;
+
+            if (tradeTimeFriend <= 0) tradeTimeFriend = 0;
+
+            if (typeof tradeTimeTrade !== "undefined") tradeTimeTrade();
+
+            return 0;
+        }
+
 		if(<%- tradeCount1 >= tradeLimit%>)
 		{
 			document.querySelector('.addtrade').disabled = true;
@@ -87,10 +107,14 @@
 
 		function tradeTimeTrade()
 		{
-			if(tradeTime != 0)
+			if(tradeTime != 0 || tradeTimeFriend != 0)
 			{
-				var ft = formatTime(tradeTime);
-				document.querySelector('.oktrade').value = ft;
+				var ft1, ft2;
+				if(tradeTime == 0) ft1 = "Ready";
+				else ft1 = formatTime(tradeTime);
+				if(tradeTimeFriend == 0) ft2 = "Ready";
+				else ft2 = formatTime(tradeTimeFriend);
+				document.querySelector('.oktrade').value = ft1 + " / " + ft2;
 				document.querySelector('.oktrade').disabled = true;
 			}
 			else
@@ -99,6 +123,19 @@
 				document.querySelector('.oktrade').disabled = false;
 			}
 		}
+
+		onloadFuncs.push(() => {
+		  var xtradehttp = new XMLHttpRequest();
+		  xtradehttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var json = JSON.parse(this.response);
+				tradeTimeFriend = json.tradeTime;
+			}
+		  }
+		  xtradehttp.open("POST", "/tradeTime", true);
+		  xtradehttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		  xtradehttp.send(JSON.stringify( {userID: <%-userID%>}));
+		});
 	</script>
 
 	<script>

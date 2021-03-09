@@ -161,7 +161,6 @@ module.exports = {
 			"SELECT username FROM `user` WHERE id=" + userID,
 			function (err, result, fields) {
 				if (err) console.log(err);
-
 				if (
 					result != undefined &&
 					result[0] != undefined &&

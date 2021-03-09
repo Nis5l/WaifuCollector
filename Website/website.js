@@ -140,7 +140,6 @@ app.post("/cookie", function (req, res) {
 app.post("/login", redirectDashboard, function (req, res) {
 	const { username, password } = req.body;
 
-	console.log(username);
 	if (username && password) {
 		request.post(
 			getHttpLocal() + API_HOST_LOCAL + "/login",
@@ -154,9 +153,7 @@ app.post("/login", redirectDashboard, function (req, res) {
 				agent: false,
 			},
 			(error, response, body) => {
-				console.log("in " + error);
 				if (!error && response.statusCode == 200) {
-					console.log(body.status);
 					if (body.status == 0) {
 						res.cookie("token", body.token);
 
@@ -279,6 +276,26 @@ app.get("/dashboard", redirectLogin, async function (req, res) {
 		userID: req.cookies.userID,
 		dashboard: body,
 	});
+});
+
+app.post("/tradeTime", (req, res) => {
+	const userID = req.body.userID;
+	request.get(
+		getHttpLocal() + API_HOST_LOCAL + "/tradeTime",
+		{
+			json: { token: req.cookies.token, userID: userID },
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.send({ tradeTime: body.tradeTime });
+			} else {
+				res.send({ tradeTime: "Error" });
+			}
+		}
+	);
 });
 
 function getDashboard(req, res) {
@@ -776,7 +793,7 @@ app.get("/trade", redirectLogin, function (req, res) {
 					tradeCount1: body.tradeCount1,
 					tradeCount2: body.tradeCount2,
 					tradeLimit: body.tradeLimit,
-					tradeTime: body.tradeTime,
+					tradeTimeFriend: body.tradeTimeFriend,
 				});
 			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");

@@ -78,19 +78,37 @@
 		</script>
 
 		<script>
+			var onloadFuncs = [];
+
 			window.onfocus = () => {
+			 for(var i in this.onloadFuncs)
+			 {
+			  this.onloadFuncs[i]();
+			 }
+			}
+			onloadFuncs.push(() => {
 			  var xhttp = new XMLHttpRequest();
 			  xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
 					var json = JSON.parse(this.response);
-					const el = document.querySelector('progress-ring');
 					time = json.packTime;
 				}
 			  }
 			  xhttp.open("POST", "/packTime", true);
 			  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			  xhttp.send(JSON.stringify());
-			}
+
+			  var xtradehttp = new XMLHttpRequest();
+			  xtradehttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var json = JSON.parse(this.response);
+					tradeTime = json.tradeTime;
+				}
+			  }
+			  xtradehttp.open("POST", "/tradeTime", true);
+			  xtradehttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			  xtradehttp.send(JSON.stringify());
+			});
 		</script>
 
 		<script>

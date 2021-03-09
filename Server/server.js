@@ -260,11 +260,9 @@ app.post("/login", (req, res) => {
 		var password = req.body.password;
 		console.log("Login " + username);
 		database.login(username, password, (b, messageV, userIDV) => {
-			console.log("db");
 			var tokenV = "";
 			if (b) tokenV = jwt.sign({ username: username, id: userIDV }, jwtSecret);
 
-			console.log("res");
 			if (b)
 				res.send({
 					status: b ? 0 : 1,
@@ -1178,15 +1176,18 @@ app.post("/trade", (req, res) => {
 				return;
 			}
 
-			var username = undefined;
 			if (clients[userID] != undefined) {
-				username = clients[userID].username;
+				clients[userID].refresh();
 				onusername();
-			} else
-				database.getUserName(userID, (user) => {
-					username = user;
+			} else {
+				createCache(userID, undefined, (ret) => {
+					if (ret == -1) {
+						res.send({ status: 1, message: "User Not Found" });
+						return;
+					}
 					onusername();
 				});
+			}
 			function onusername() {
 				data = {};
 				var tradeok = 0;
@@ -1258,12 +1259,13 @@ app.post("/trade", (req, res) => {
 											res.send({
 												status: 0,
 												data: data,
-												username: username,
+												username: clients[userID].username,
 												statusone: tradeok,
 												statustwo: tradeokother,
 												tradeCount1: tradeCount1,
 												tradeCount2: tradeCount2,
 												tradeLimit: tradeLimit,
+												tradeTimeFriend: getTradeTime(userID),
 											});
 										}
 									}
@@ -1541,6 +1543,55 @@ app.post("/okTrade", (req, res) => {
 	}
 });
 
+app.get("/tradeTime", (req, res) => {
+	try {
+		var token = req.body.token;
+		var userID = parseInt(req.body.userID);
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({ status: 2, message: "Identification Please" });
+			return;
+		}
+		if (isNaN(userID)) userID = decoded.id;
+
+		if (clients[decoded.id] == undefined) {
+			createCache(decoded.id, decoded.username, run);
+		} else {
+			clients[decoded.id].refresh();
+			run();
+		}
+		function run() {
+			if (clients[userID] == undefined) {
+				createCache(userID, undefined, (ret) => {
+					if (ret == -1) {
+						res.send({ status: 1, message: "User doesnt exist" });
+						return;
+					}
+					run2();
+				});
+			} else {
+				clients[userID].refresh();
+				run2();
+			}
+			function run2() {
+				if (
+					userID != decoded.id &&
+					!clients[decoded.id].hasFriendAdded(userID)
+				) {
+					res.send({ status: 1, message: "User is not your Friend" });
+					return;
+				}
+				res.send({ status: 0, tradeTime: getTradeTime(userID) });
+			}
+		}
+	} catch (e) {
+		console.log(e);
+		res.send({ status: 1, message: "internal server error" });
+		return;
+	}
+});
+
 function getTradeTime(userID) {
 	var nowDate = moment();
 	var packDate = moment(parseInt(clients[userID].tradeTime));
@@ -1753,8 +1804,9 @@ function checkPass(password) {
 function createCache(userIDV, username, callback) {
 	if (!clients[userIDV]) {
 		if (username == undefined) {
-			database.getUserName(username, (_usr) => {
-				if (_usr == "null") {
+			database.getUserName(userIDV, (_usr) => {
+				username = _usr;
+				if (username == "null") {
 					callback(-1);
 					return;
 				} else {
