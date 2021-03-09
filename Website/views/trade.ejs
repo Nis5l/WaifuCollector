@@ -80,6 +80,9 @@
 	crossorigin="anonymous"></script>
 
 	<script>
+	 	const cs = <%- JSON.stringify(statusone) %>;
+		const co = <%- JSON.stringify(statustwo) %>;
+
         var tradeTimeFriend = <%-tradeTimeFriend%>
         const tradeinterval = setInterval(() => {
             updateTradeTime();
@@ -119,8 +122,17 @@
 			}
 			else
 			{
-				document.querySelector('.oktrade').value = "Confirm";
-				document.querySelector('.oktrade').disabled = false;
+				console.log(cs);
+				if(cs == 0)
+				{
+					document.querySelector('.oktrade').value = "Confirm";
+					document.querySelector('.oktrade').disabled = false;
+				}
+				else
+				{
+					document.querySelector('.oktrade').disabled = true;
+					document.querySelector('.oktrade').value = "Already Confirmed";
+				}
 			}
 		}
 
@@ -217,13 +229,12 @@
 				amount = 1;
 			var size = amount * 273;
 			inv.style.width = size + "px";
+	 	const cs = <%- JSON.stringify(statusone) %>;
+		const co = <%- JSON.stringify(statustwo) %>;
 		}
 	</script>
 
 	<script>
-	 	const cs = <%- JSON.stringify(statusone) %>;
-		const co = <%- JSON.stringify(statustwo) %>;
-
 		var csf = document.querySelector(".confirmationself");
 		var cof = document.querySelector(".confirmationother");
 

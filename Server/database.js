@@ -618,15 +618,23 @@ module.exports = {
 		url,
 		callback
 	) {
-		//"INSERT INTO `trademanager` (`userone`, `usertwo`, `statusone`, `statustwo`) VALUES ('" +
 		con.query(
-			"INSERT INTO notification (`userID`, `title`, `message`, `url`) VALUES ('" +
+			"INSERT INTO notification(`userID`, `title`, `message`, `url`)" +
+				" SELECT '" +
 				userID +
 				"', '" +
 				title +
 				"', '" +
 				message +
 				"', '" +
+				url +
+				"' FROM dual WHERE NOT EXISTS" +
+				" ( SELECT * FROM notification WHERE" +
+				" userID = '" +
+				userID +
+				"' AND title = '" +
+				title +
+				"' AND url = '" +
 				url +
 				"');",
 			(err, result, fields) => {
