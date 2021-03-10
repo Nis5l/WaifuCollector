@@ -29,7 +29,7 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
-			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 		];
 
 		con.connect(() => {
@@ -725,10 +725,10 @@ module.exports = {
 			"SELECT * FROM effect WHERE `id` = " + level + ";",
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
-					callback(null);
+					callback(null, 1);
 					return;
 				}
-				callback(result[0].path);
+				callback(result[0].path, result[0].opacity);
 			}
 		);
 	},
@@ -973,6 +973,13 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Onna Shinkan', '90', 'Card_OnnaShinkan.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Erufu', '90', 'Card_Erufu.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shalltear Bloodfallen', '91', 'Card_ShalltearBloodfallen.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Reimi Sugimoto', '80', 'Card_ReimiSugimoto.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Erina Pendleton', '80', 'Card_ErinaPendleton.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Suzie Q', '80', 'Card_SuzieQ.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Elsha Lean', '92', 'Card_ElshaLean.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Atlee Ariel', '92', 'Card_AtleeAriel.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ren Sin', '92', 'Card_RenSin.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ai Ohto', '93', 'Card_AiOhto.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1080,6 +1087,8 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('89', 'Oreshura');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('90', 'Goblin Slayer');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('91', 'Overlord');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('92', 'Back Arrow');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('93', 'Wonder Egg Priority');",
 	];
 
 	con.connect(() => {
@@ -1112,13 +1121,12 @@ function frames(callback) {
 }
 
 function effects(callback) {
-	//var sql = ["INSERT INTO `effect` (`id`, `path`) VALUES ('2', 'Effect1.png')"];
-	var sql = [];
+	var sql = ["INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('1', 'Effect1.gif', '0.5')"];
 
 	con.connect(() => {
 		con.query("DROP TABLE effect", () => {
 			con.query(
-				"CREATE TABLE IF NOT EXISTS effect ( `id` INT NOT NULL , `path` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 				() => {
 					executeArray(sql, callback);
 				}

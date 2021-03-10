@@ -1,5 +1,6 @@
 var request = require("request");
 var io = require("console-read-write");
+const bcrypt = require("bcrypt");
 var tokenV = "";
 
 function register(user, pass) {
@@ -87,3 +88,13 @@ function login(user, pass) {
 date = Date.now();
 console.log("sending login");
 login("Test123", "Test1234");
+
+bcrypt.hash("Test123", 10, (err, hash) => {
+	console.log(hash);
+	bcrypt.compare("Test123", "$2b$10$XbriiwI4VJ6ragqQYdyvquTibZjEOXp4smNyRIA7mUarxlNS7awva", function (err, resp) {
+		console.log("1 " + resp);
+	});
+	bcrypt.compare("Test123", hash, function (err, resp) {
+		console.log("2 " + resp);
+	});
+});

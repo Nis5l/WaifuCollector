@@ -460,62 +460,36 @@ app.post("/pack", (req, res) => {
 				!packDate.isValid()
 			) {
 				clients[decoded.id].packTime = date.valueOf();
-				var iterations = utils.getRandomInt(packSize[0], packSize[1]);
-				database.getRandomCard(iterations, (cards) => {
-					for (var j = 0; j < cards.length; j++) {
-						var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
-						cards[j].quality = quality;
-						cards[j].cardImage = imageBase + cards[j].cardImage;
-					}
-					database.getRandomFrame(iterations, (frames) => {
-						for (var j = 0; j < frames.length; j++) {
-							frames[j].path_front = frameBase + frames[j].path_front;
-							frames[j].path_back = frameBase + frames[j].path_back;
-						}
+				var cardamount = utils.getRandomInt(packSize[0], packSize[1]);
 
-						for (var j = frames.length - 1; j < iterations; j++) {
-							frames[j] = frames[utils.getRandomInt(0, frames.length - 1)];
-						}
-						run3(0);
-						function run3(j) {
-							cards[j].frame = frames[j];
-							database.addCard(
-								decoded.id,
-								cards[j].id,
-								quality,
-								0,
-								frames[j].id,
-								(insertID) => {
-									cards[j].uuid = insertID;
-									clients[decoded.id].addCard({
-										id: insertID,
-										userID: decoded.id,
-										cardID: cards[j].id,
-										quality: quality,
-										level: 0,
-										frameID: frames[j].id,
-									});
-									if (j == cards.length - 1) {
-										run2(0);
-										return;
-									} else {
-										run3(j + 1);
-									}
-								}
-							);
-						}
-						function run2(iteration) {
-							database.getCardType(cards[iteration].typeID, (result) => {
-								cards[iteration].type = result;
-								if (iteration == iterations - 1) {
+				getRandomCards(cardamount, (cards)=> {
+					addToDB(0);
+					function addToDB(j) {
+						database.addCard(
+							decoded.id,
+							cards[j].card.id,
+							cards[j].quality,
+							cards[j].level,
+							cards[j].frameID,
+							(insertID) => {
+								cards[j].id = insertID;
+								clients[decoded.id].addCard({
+									id: insertID,
+									userID: decoded.id,
+									cardID: cards[j].card.id,
+									quality: cards[j].quality,
+									level: cards[j].level,
+									frameID: cards[j].frameID,
+								});
+								if (j == cards.length - 1) {
 									res.send({ packTime: "0", message: "OK", cards: cards });
 									return;
 								} else {
-									run2(iteration + 1);
+									addToDB(j + 1);
 								}
-							});
-						}
-					});
+							}
+						);
+					}
 				});
 			} else {
 				res.send({
@@ -696,32 +670,15 @@ app.post("/inventory", (req, res) => {
 					});
 					return;
 				}
-				run2(0);
-				function run2(iteration) {
-					getCard(
-						inventory[iteration].cardID,
-						inventory[iteration].frameID,
-						(card) => {
-							database.getEffect(inventory[iteration].level, (ep) => {
-								inventory[iteration].card = card;
-								if (ep == null) inventory[iteration].card.effect = null;
-								else inventory[iteration].card.effect = effectBase + ep;
-								if (iteration == inventory.length - 1) {
-									res.send({
-										status: 0,
-										inventory: inventory,
-										page: pageStats[0],
-										pagemax: pageStats[1],
-									});
-
-									return;
-								} else {
-									run2(iteration + 1);
-								}
-							});
-						}
-					);
-				}
+				getCards(inventory, ()=>
+				{
+					res.send({
+						status: 0,
+						inventory: inventory,
+						page: pageStats[0],
+						pagemax: pageStats[1],
+					});
+				});
 			}
 		}
 	} catch (e) {
@@ -1210,9 +1167,10 @@ app.post("/trade", (req, res) => {
 									card.level = result.level;
 									card.quality = result.quality;
 									card.uuid = parseInt(trades[i].card);
-									database.getEffect(card.level, (ep) => {
+									database.getEffect(card.level, (ep, eo) => {
 										if (ep == null) card.effect = null;
 										else card.effect = effectBase + ep;
+										card.effectopacity = eo;
 										data.selfcards.push(card);
 										run2(i + 1);
 									});
@@ -1247,9 +1205,10 @@ app.post("/trade", (req, res) => {
 													card.level = result.level;
 													card.quality = result.quality;
 													card.uuid = parseInt(trades[i].card);
-													database.getEffect(card.level, (ep) => {
+													database.getEffect(card.level, (ep, eo) => {
 														if (ep == null) card.effect = null;
 														else card.effect = effectBase + ep;
+														card.effectopacity = eo;
 														data.friendcards.push(card);
 														run3(i + 1);
 													});
@@ -1688,44 +1647,33 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 	} else {
 		clients[userID].lastmain = uuid;
 	}
-	database.getCardUUID(uuid, userID, (result) => {
-		if (result == undefined) {
-			callback({
-				status: 1,
-				message: "Cant find card, or it isnt yours",
-			});
-			return;
-		}
-		var ids = [result.cardID];
-		var uuids = [uuid];
-		if (next == 0) {
-			inventory = clients[userID].nextPage(inventorySendAmount);
-		} else if (next == 1) {
-			inventory = clients[userID].prevPage(inventorySendAmount);
-		} else
-			inventory = clients[userID].getInventory(
-				page,
-				inventorySendAmount,
-				ids,
-				uuids,
-				result.level,
-				sortType
-			);
-		pageStats = clients[userID].getPageStats();
-		getCard(result.cardID, result.frameID, (_maincard) => {
-			maincard = _maincard;
-			maincard.level = result.level;
-			database.getEffect(maincard.level, (ep) => {
-				if (ep == null) maincard.effect = null;
-				else maincard.effect = effectBase + ep;
-				maincard.quality = result.quality;
-				maincard.uuid = parseInt(uuid);
-				run2(0);
-			});
+	var maincard = clients[userID].getCard(userID) 
+	if (maincard == undefined) {
+		callback({
+			status: 1,
+			message: "Cant find card, or it isnt yours",
 		});
-	});
-	function run2(iteration) {
-		if (inventory.length == 0) {
+		return;
+	}
+	var ids = [maincard.cardID];
+	var uuids = [uuid];
+	if (next == 0) {
+		inventory = clients[userID].nextPage(inventorySendAmount);
+	} else if (next == 1) {
+		inventory = clients[userID].prevPage(inventorySendAmount);
+	} else
+		inventory = clients[userID].getInventory(
+			page,
+			inventorySendAmount,
+			ids,
+			uuids,
+			maincard.level,
+			sortType
+		);
+	pageStats = clients[userID].getPageStats();
+	getCard(maincard.cardID, maincard.frameID, maincard.level, (maincard) => {
+		maincard = maincard;
+		getCards(inventory, () => {
 			callback({
 				status: 0,
 				inventory: inventory,
@@ -1733,36 +1681,11 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 				page: pageStats[0],
 				pagemax: pageStats[1],
 			});
-			return;
-		}
-		getCard(
-			inventory[iteration].cardID,
-			inventory[iteration].frameID,
-			(card) => {
-				database.getEffect(inventory[iteration].level, (ep) => {
-					inventory[iteration].card = card;
-					if (ep == null) inventory[iteration].card.effect = null;
-					else inventory[iteration].card.effect = effectBase + ep;
-
-					if (iteration == inventory.length - 1) {
-						callback({
-							status: 0,
-							inventory: inventory,
-							card: maincard,
-							page: pageStats[0],
-							pagemax: pageStats[1],
-						});
-						return;
-					} else {
-						run2(iteration + 1);
-					}
-				});
-			}
-		);
-	}
+		});
+	});
 }
 
-function getCard(cardID, frameID, callback) {
+function getCard(cardID, frameID, level, callback) {
 	var card;
 	database.getCard(cardID, (result) => {
 		card = result;
@@ -1773,8 +1696,57 @@ function getCard(cardID, frameID, callback) {
 				frame.path_front = frameBase + frame.path_front;
 				frame.path_back = frameBase + frame.path_back;
 				card.frame = frame;
-				callback(card);
+				database.getEffect(level, (ep, eo) => {
+					if (ep == null) card.effect = null;
+					else card.effect = effectBase + ep;
+					card.effectopacity = eo;
+					callback(card);
+				});
 			});
+		});
+	});
+}
+
+function getCards(cards, callback)
+{
+	run(0);
+	function run(iteration) {
+		getCard(
+			cards[iteration].cardID,
+			cards[iteration].frameID,
+			cards[iteration].level,
+			(card) => {
+				cards[iteration].card = card;
+				if (iteration == cards.length - 1) {
+					callback();
+					return;
+				} else {
+					run(iteration + 1);
+				}
+			}
+		);
+	}
+}
+
+function getRandomCards(amount, callback)
+{
+	var cards = [];
+	database.getRandomCard(amount, (_cards) => {
+		for (var j = 0; j < _cards.length; j++) {
+			var quality = utils.getRandomInt(qualityrange[0], qualityrange[1]);
+			cards[j] = {};
+			cards[j].quality = quality;
+			cards[j].level = 0;
+			cards[j].cardID = _cards[j].id;
+			cards[j].typeID = _cards[j].typeID;
+		}
+		database.getRandomFrame(amount, (_frames) => {
+			for (var j = 0; j < cards.length; j++) {
+				cards[j].frameID = _frames[utils.getRandomInt(0,_frames.length - 1)].id;
+			}
+			getCards(cards, ()=>{
+				callback(cards);
+			})	
 		});
 	});
 }

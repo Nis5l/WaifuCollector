@@ -1,0 +1,28 @@
+<script>
+	function insertcards(_cards, _opn, _turned, _size)
+	{
+		console.log(_cards);
+		for(var i = 0; i < _cards.length; i++)
+		{
+			var cardhtml = `<waifu-card id=card${cardid}
+							img_path=${_cards[i].card.cardImage}
+							frame-front=${_cards[i].card.frame.path_front}
+							frame-back=${_cards[i].card.frame.path_back}
+							pos-x=${0}
+							card-name=\"${_cards[i].card.cardName}\"
+							anime-name=\"${_cards[i].card.type.name}\"
+							turned=${_turned}
+							quality=${_cards[i].quality}
+							level=${_cards[i].level}
+							uuid=${_cards[i].id}
+							cardID=${_cards[i].card.id}
+							card-size=${_size}
+							effect_path="${_cards[i].effect}">
+							</waifu-card>`;
+				
+			_opn.insertAdjacentHTML('beforeend', cardhtml);
+			var o = document.getElementById(`card${cardid}`);
+			cardid++;
+		}
+	}
+</script>

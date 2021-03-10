@@ -73,41 +73,23 @@
     integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
     crossorigin="anonymous"></script>
 
-        <script>
+    <%- include('partials/insert_cards.ejs') %>
 
-			var nextCards = true; 
-            var cardAmount = 0;
-            var opn = document.getElementById('inventory');
-            
-			function displayCards(cards)
-			{
-				var off = 0;           
-				for(var i = 0; i < cards.length; i++/*,off+=cardSize*/)
-				{
-					cardAmount++;
-				  var path = cards[i].card.cardImage;
-				  var posX =  off;
-				var cardhtml = `<waifu-card id=card${i} img_path=${path} frame-front=${cards[i].card.frame.path_front} frame-back="" pos-x=${posX} card-name=\"${cards[i].card.cardName}\" anime-name=\"${cards[i].card.type.name}\" turned=false quality=${cards[i].quality} level=${cards[i].level} uuid=${cards[i].id} cardID=${cards[i].cardID} card-size=1 effect_path=\"${cards[i].card.effect}\"></waifu-card>`;
-				  opn.insertAdjacentHTML('beforeend',
-				  cardhtml);
-				
-				  var o = document.getElementById(`card${i}`);
-				}
-				nextCards = true;
-			}
-
-        </script>
+	<script>
+		var cardid = 0;
+		var opn = document.getElementById('inventory');
+	</script>
 
 
     <script>
-         $(document).click(function(event) {
-          var ele = $(event.target);
+		$(document).click(function(event) {
+    	var ele = $(event.target);
 		
-          if(ele.is('waifu-card'))
-          {
-			  window.location.href = "/card?uuid=" + ele[0].uuid;
-          }
-        }); 
+    	if(ele.is('waifu-card'))
+		{
+			window.location.href = "/card?uuid=" + ele[0].uuid;
+		}
+    }); 
     </script>
 
     
@@ -121,17 +103,16 @@
 		function resize()
 		{
 			var amount = Math.floor(inv_wrapper.offsetWidth / 273);
-			if(amount > cardAmount)
-				amount = cardAmount;
+			if(amount > cardid)
+				amount = cardid;
 			if(amount <= 0)
 				amount = 1;
 			var size = amount * 273;
 			inv.style.width = size + "px";
-}
+		}
 	</script>
 
 	<script>
-
 		var scroll = document.querySelector(".scrollable");
 		var filter = document.querySelector(".filter");
 		var page = 0;
@@ -149,35 +130,33 @@
 				page = 0;
 				pageamount = 1;
 			}
-			if(nextCards && page < pageamount)
+			if(page < pageamount)
 			{
-			  var xhttp = new XMLHttpRequest();
-			  xhttp.onreadystatechange = function() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
 					var json = JSON.parse(this.response);
 					page = json.page;
 					pageamount = json.pagemax;
-					displayCards(json.cards);
+					insertcards(json.cards, opn, false, 1);
 					resize();
-					if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1)
-						loadCards();
+					if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1) loadCards();
 				}
 			}
-			  var radios = document.getElementsByName('sortType');
-			  var radioValue = undefined;
-			  for (var i = 0, length = radios.length; i < length; i++) {
-			    if (radios[i].checked) {
-				  radioValue = i;
-				  break;
-			    }
-			  }
-			  nextCards = false;
-			  xhttp.open("POST", "/inventory", true);
-			  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-				if(!first)
-				  xhttp.send(JSON.stringify({ next: 0, search: filter.search.value, sortType: i}));
-				else
-				  xhttp.send(JSON.stringify({ page: 0, search: filter.search.value, sortType: i}));
+			var radios = document.getElementsByName('sortType');
+			var radioValue = undefined;
+			for (var i = 0, length = radios.length; i < length; i++) {
+				if (radios[i].checked) {
+					radioValue = i;
+					break;
+				}
+			}
+			xhttp.open("POST", "/inventory", true);
+			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			if(!first)
+				xhttp.send(JSON.stringify({ next: 0, search: filter.search.value, sortType: i}));
+			else
+				xhttp.send(JSON.stringify({ page: 0, search: filter.search.value, sortType: i}));
 		  };
 		}
 	</script>

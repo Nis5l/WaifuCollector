@@ -483,10 +483,9 @@ app.get("/pack", redirectLogin, function (req, res) {
 			if (!error && response.statusCode == 200) {
 				if (body.packTime == "0") {
 					for (var i = 0; i < body.cards.length; i++) {
-						addPathCard(body.cards[i]);
+						addPathCard(body.cards[i].card);
 					}
 					var dashboard = await getDashboard(req, res);
-					console.log(body.cards);
 					res.render("pack", {
 						userID: req.cookies.userID,
 						cards: body.cards,
