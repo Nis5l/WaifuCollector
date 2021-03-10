@@ -42,7 +42,7 @@ module.exports = {
 			});
 		});
 	},
-	getIdsByString: function getIdsByName(name) {
+	getIdsByString: function getIdsByString(name) {
 		ids = [];
 		name = name.toLowerCase();
 		for (hash in nameToID) {
@@ -107,6 +107,9 @@ module.exports = {
 				}
 			}
 		}
+		
+		//ids = ids.reverse();
+
 		return ids;
 	},
 	getStringById: function getStringById(name) {

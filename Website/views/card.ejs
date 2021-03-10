@@ -67,23 +67,26 @@
 		crossorigin="anonymous"
 	></script>
 
+    <%- include('partials/insert_cards.ejs') %>
+
 	<script>
+		var maincarduuid = -1;
 		var cardid = 0;
 		var opn = document.getElementById('cardsinner'); 
-		var mainopn = document.getElementById('cardsinner'); 
+		var mainopn = document.getElementById('maincard');
 		
 		var isOpen = false;
 		var upform = document.querySelector('.upgrade');
     	$(document).click(function(event) {
     	var ele = $(event.target);
 		
-    	if(ele.is('waifu-card') && !isOpen && ele.length != 0 && ele[0].uuid != mc.uuid)
+    	if(ele.is('waifu-card') && !isOpen && ele.length != 0 && ele[0].uuid != maincarduuid)
     	{
 			document.body.insertAdjacentHTML('afterend', `<card-confirmation message="Combine?"> </card-confirmation>`);
 			isOpen = true;
 			var conf = document.querySelector("card-confirmation");
 			conf.yesCallback = () => {
-				upform.mainuuid.value = mc.uuid;
+				upform.mainuuid.value = maincarduuid;
 				upform.carduuid.value = ele[0].uuid;
 				upform.submit();
 				isOpen = false;
@@ -127,8 +130,8 @@
 			var cwidth = 273; 
 			if($(document).width() < 400) cwidth = 218;
 			var amount = Math.floor((parent.offsetWidth)/ cwidth);
-			if(amount > cardAmount)
-				amount = cardAmount;
+			if(amount > cardid)
+				amount = cardid;
 			if(amount <= 0)
 				amount = 1;
 			var size = amount * cwidth;
@@ -148,25 +151,33 @@
 			}
 		};
 
-		var mcdiv = document.getElementById('maincard');
-
 		function loadCards(first) {
 			if(first)
 			{
 				page = 0;
 				pageamount = 1;
 			}
-			if(nextCards && page < pageamount)
+			
+			var size = 1;
+			var mainsize = 1.3;
+			if($(document).width() < 400)
 			{
+				size = 0.8;
+				mainsize = 1;
+			}
+			
+			if(page < pageamount)
+			{
+				
 				var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
 					if (this.readyState == 4 && this.status == 200) {
 						var json = JSON.parse(this.response);
 						page = json.page;
 						pageamount = json.pagemax;
-						if(mcdiv.innerHTML == "")
-							displayMain(json.maincard);
-						displayCards(json.cards);
+						maincarduuid = json.maincard.id;
+						if(mainopn.innerHTML == "") insertcards([json.maincard], mainopn, false, mainsize);
+						insertcards(json.cards, opn, false, size);
 						resize();
 						if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1)
 						{
@@ -174,7 +185,6 @@
 						}
 					}
 				}
-				nextCards = false;
 				xhttp.open("POST", "/card", true);
 				xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 				if(!first)

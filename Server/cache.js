@@ -310,6 +310,7 @@ class Client {
 				return this.inventory[i];
 			}
 		}
+		return undefined;
 	}
 
 	refreshCardTypeAmount() {

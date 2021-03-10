@@ -154,6 +154,7 @@ class Card extends HTMLElement {
 		super();
 		const img = this.getAttribute("img_path");
 		const effect = this.getAttribute("effect_path");
+		const effectopacity = this.getAttribute("effect_opacity");
 		const frame_front = this.getAttribute("frame-front");
 		const frame_back = this.getAttribute("frame-back");
 		const card_name = this.getAttribute("card-name");
@@ -232,6 +233,14 @@ class Card extends HTMLElement {
 				? "//"
 				: ""
 		}background-image: url(${effect});
+		${
+			effectopacity == null ||
+			effectopacity == undefined ||
+			effectopacity == "undefined" ||
+			effectopacity == "null"
+				? "//"
+				: ""
+		}opacity: ${effectopacity};
         background-size: 80%;
         background-repeat: no-repeat;
         background-position: 48% 35%;

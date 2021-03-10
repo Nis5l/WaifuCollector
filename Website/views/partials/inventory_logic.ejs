@@ -1,0 +1,84 @@
+<%- include('insert_cards.ejs') %>
+
+<script>
+	var cardid = 0;
+	var opn = document.getElementById('inventory');
+
+	var inv = document.querySelector("#inventory");
+	var inv_wrapper = document.querySelector(".dashboard_content_wrapper");
+	resize();
+	window.onresize = function(event) {
+		resize();
+	};
+	function resize()
+	{
+		var amount = Math.floor(inv_wrapper.offsetWidth / 273);
+		if(amount > cardid)
+			amount = cardid;
+		if(amount <= 0)
+			amount = 1;
+		var size = amount * 273;
+		inv.style.width = size + "px";
+	}
+			
+	var scroll = document.querySelector(".scrollable");
+	var filter = document.querySelector(".filter");
+	var page = 0;
+	var pageamount = 1;
+	loadCards(true);
+	scroll.onscroll = function(ev) {
+		if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1) {
+			loadCards();
+		}
+	};
+
+	function loadCards(first) {
+		if(first)
+		{
+			page = 0;
+			pageamount = 1;
+		}
+		if(page < pageamount)
+		{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var json = JSON.parse(this.response);
+				page = json.page;
+				pageamount = json.pagemax;
+				insertcards(json.cards, opn, false, 1);
+				resize();
+				if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1) loadCards();
+			}
+		}
+		var radios = document.getElementsByName('sortType');
+		var radioValue = undefined;
+		for (var i = 0, length = radios.length; i < length; i++) {
+			if (radios[i].checked) {
+				radioValue = i;
+				break;
+			}
+		}
+		xhttp.open("POST", "/inventory", true);
+		xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		var fid = (typeof friendID !== 'undefined') ? friendID : undefined;
+		if(!first)
+				xhttp.send(JSON.stringify({ next: 0,
+						search: filter.search.value,
+						sortType: i,
+						userID: fid}));
+		else
+				xhttp.send(JSON.stringify({ page: 0,
+						search: filter.search.value,
+						sortType: i,
+						userID: fid}));
+	  };
+	}
+
+	function onfilter()
+	{
+		cardid = 0;
+		inventory.innerHTML = "";
+		loadCards(true);
+	}
+</script>

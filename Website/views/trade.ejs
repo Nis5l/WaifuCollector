@@ -152,13 +152,14 @@
     <%- include('partials/insert_cards.ejs') %>
 
 	<script>
-			const cards = <%- JSON.stringify(data.selfcards) %>;
-			const cardsother = <%- JSON.stringify(data.friendcards) %>;
-			var opn = document.getElementById('tradeselfinner');
-			var opnother = document.getElementById('tradeotherinner');
+		var cardid = 0;
+		const cards = <%- JSON.stringify(cards) %>;
+		const cardsfriend = <%- JSON.stringify(cardsfriend) %>;
+		var opn = document.getElementById('tradeselfinner');
+		var opnother = document.getElementById('tradeotherinner');
 
-			insertcards(cards, opn, false, 1);
-			insertcards(cardsother, opnother, false, 1);
+		insertcards(cards, opn, false, 1);
+		insertcards(cardsfriend, opnother, false, 1);
 	</script>
 	<script>
       $(".addtrade").click(()=>{
@@ -199,10 +200,10 @@
 		var parentother = document.querySelector("#tradeother");
 		var inventoryother = document.querySelector("#tradeotherinner");
 		resize(inventory, parentself, cards);
-		resize(inventoryother, parentother, cardsother);
+		resize(inventoryother, parentother, cardsfriend);
 		window.onresize = function(event) {
 			resize(inventory, parentself, cards);
-			resize(inventoryother, parentother, cardsother);
+			resize(inventoryother, parentother, cardsfriend);
 		};
 		function resize(inv, parent, c)
 		{

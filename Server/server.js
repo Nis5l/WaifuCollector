@@ -631,7 +631,7 @@ app.post("/inventory", (req, res) => {
 		}
 		function run(userID) {
 			var ids = clients[userID].lastids;
-			if (clients[userID].lastsearch != search) {
+			if (clients[userID].lastsearch != search || (page == 0 && next != -1)) {
 				clients[userID].lastsearch = search;
 				ids = cache.getIdsByString(search);
 			}
@@ -1145,95 +1145,62 @@ app.post("/trade", (req, res) => {
 					onusername();
 				});
 			}
-			function onusername() {
-				data = {};
-				var tradeok = 0;
-				var tradeokother = 0;
-				var tradeCount1 = 0;
-				database.getTrade(decoded.id, userID, (trades) => {
-					tradeCount1 = trades.length;
-					data.selfcards = [];
-					run2(0);
-					function run2(i) {
-						if (trades != undefined && i != trades.length) {
-							database.getCardUUID(trades[i].card, decoded.id, (result) => {
-								if (result == undefined) {
-									res.send({ status: 1, message: "error" });
-									return;
-								}
+		}
 
-								getCard(result.cardID, result.frameID, (_card) => {
-									card = _card;
-									card.level = result.level;
-									card.quality = result.quality;
-									card.uuid = parseInt(trades[i].card);
-									database.getEffect(card.level, (ep, eo) => {
-										if (ep == null) card.effect = null;
-										else card.effect = effectBase + ep;
-										card.effectopacity = eo;
-										data.selfcards.push(card);
-										run2(i + 1);
-									});
-								});
-							});
-						} else {
-							database.getTradeManager(decoded.id, userID, (tm) => {
-								if (tm != undefined) {
-									if (tm[0].userone == decoded.id) {
-										tradeok = tm[0].statusone;
-										tradeokother = tm[0].statustwo;
-									} else {
-										tradeok = tm[0].statustwo;
-										tradeokother = tm[0].statusone;
-									}
-								}
-								var tradeCount2 = 0;
-								database.getTrade(userID, decoded.id, (trades) => {
-									tradeCount2 = trades.length;
-									data.friendcards = [];
-									run3(0);
-									function run3(i) {
-										if (trades != undefined && i != trades.length) {
-											database.getCardUUID(trades[i].card, userID, (result) => {
-												if (result == undefined) {
-													res.send({ status: 1, message: "error" });
-													return;
-												}
-
-												getCard(result.cardID, result.frameID, (_card) => {
-													card = _card;
-													card.level = result.level;
-													card.quality = result.quality;
-													card.uuid = parseInt(trades[i].card);
-													database.getEffect(card.level, (ep, eo) => {
-														if (ep == null) card.effect = null;
-														else card.effect = effectBase + ep;
-														card.effectopacity = eo;
-														data.friendcards.push(card);
-														run3(i + 1);
-													});
-												});
-											});
-										} else {
-											res.send({
-												status: 0,
-												data: data,
-												username: clients[userID].username,
-												statusone: tradeok,
-												statustwo: tradeokother,
-												tradeCount1: tradeCount1,
-												tradeCount2: tradeCount2,
-												tradeLimit: tradeLimit,
-												tradeTimeFriend: getTradeTime(userID),
-											});
-										}
-									}
-								});
-							});
+		function onusername() {
+			var tradeok = 0;
+			var tradeokother = 0;
+			database.getTradeManager(decoded.id, userID, (tm) => {
+				if (tm != undefined) {
+					if (tm[0].userone == decoded.id) {
+						tradeok = tm[0].statusone;
+						tradeokother = tm[0].statustwo;
+					} else {
+						tradeok = tm[0].statustwo;
+						tradeokother = tm[0].statusone;
+					}
+				}
+				var cards = [];
+				var cardsfriend = [];
+				database.getTrade(decoded.id, userID, (uuids) => {
+					for(var i = 0; i < uuids.length; i++)
+					{
+						cards.push(clients[decoded.id].getCard(uuids[i].card));
+						if(cards[i] == undefined)
+						{
+							res.send({status: 1, message: "Cant find card"});
+							return;
 						}
 					}
+					database.getTrade(userID, decoded.id, (uuidsfriend) => {
+						for(var i = 0; i < uuidsfriend.length; i++)
+						{
+							cardsfriend.push(clients[userID].getCard(uuidsfriend[i].card));
+							if(cardsfriend[i] == undefined)
+							{
+								res.send({status: 1, message: "Cant find card"});
+								return;
+							}
+						}
+						getCards(cards, () => {
+							getCards(cardsfriend, () => {
+								res.send({
+									status: 0,
+									cards: cards,
+									cardsfriend: cardsfriend,
+									username: clients[userID].username,
+									statusone: tradeok,
+									statustwo: tradeokother,
+									tradeCount1: cards.length,
+									tradeCount2: cardsfriend.length,
+									tradeLimit: tradeLimit,
+									tradeTimeFriend: getTradeTime(userID),
+								});
+							})	
+						})	
+					});
 				});
-			}
+			});
 		}
 	} catch (e) {
 		console.log(e);
@@ -1647,7 +1614,7 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 	} else {
 		clients[userID].lastmain = uuid;
 	}
-	var maincard = clients[userID].getCard(userID) 
+	var maincard = clients[userID].getCard(uuid) 
 	if (maincard == undefined) {
 		callback({
 			status: 1,
@@ -1671,8 +1638,8 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 			sortType
 		);
 	pageStats = clients[userID].getPageStats();
-	getCard(maincard.cardID, maincard.frameID, maincard.level, (maincard) => {
-		maincard = maincard;
+	getCard(maincard.cardID, maincard.frameID, maincard.level, (_maincard) => {
+		maincard.card = _maincard;
 		getCards(inventory, () => {
 			callback({
 				status: 0,
@@ -1709,6 +1676,11 @@ function getCard(cardID, frameID, level, callback) {
 
 function getCards(cards, callback)
 {
+	if(cards.length == 0)
+	{
+		callback();
+		return;
+	}
 	run(0);
 	function run(iteration) {
 		getCard(

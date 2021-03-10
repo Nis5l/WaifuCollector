@@ -619,7 +619,7 @@ app.post("/card", redirectLogin, function (req, res) {
 					addPathCard(body.inventory[i].card);
 				}
 
-				addPathCard(body.card);
+				addPathCard(body.card.card);
 
 				res.send({
 					status: 0,
@@ -775,16 +775,17 @@ app.get("/trade", redirectLogin, function (req, res) {
 		},
 		async (error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				for (var i = 0; i < body.data.selfcards.length; i++) {
-					addPathCard(body.data.selfcards[i]);
+				for (var i = 0; i < body.cards.length; i++) {
+					addPathCard(body.cards[i].card);
 				}
-				for (var i = 0; i < body.data.friendcards.length; i++) {
-					addPathCard(body.data.friendcards[i]);
+				for (var i = 0; i < body.cardsfriend.length; i++) {
+					addPathCard(body.cardsfriend[i].card);
 				}
 				var dashboard = await getDashboard(req, res);
 				res.render("trade", {
 					userID: userID,
-					data: body.data,
+					cards: body.cards,
+					cardsfriend: body.cardsfriend,
 					username: body.username,
 					statusone: body.statusone,
 					statustwo: body.statustwo,
