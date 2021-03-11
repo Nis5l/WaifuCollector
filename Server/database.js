@@ -992,6 +992,7 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Atlee Ariel', '92', 'Card_AtleeAriel.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ren Sin', '92', 'Card_RenSin.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ai Ohto', '93', 'Card_AiOhto.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Holo', '94', 'Card_Holo.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1101,6 +1102,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('91', 'Overlord');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('92', 'Back Arrow');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('93', 'Wonder Egg Priority');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('94', 'Spice and Wolf');",
 	];
 
 	con.connect(() => {
