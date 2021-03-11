@@ -105,7 +105,7 @@ function getHttp() {
 app.get("/", function (req, res) {
 	res.render("home", {
 		userID: req.cookies.userID,
-		api_url: getHttp() + API_HOST_LOCAL,
+		api_url: getHttp() + API_HOST,
 		ishome: true,
 	});
 });
@@ -986,7 +986,7 @@ function renderUserView(req, res, next) {
 	var userID = undefined;
 
 	res.locals.url = getHttp() + req.get("host");
-	res.locals.api_url = getHttp() + API_HOST_LOCAL;
+	res.locals.api_url = getHttp() + API_HOST;
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;
