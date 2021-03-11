@@ -164,11 +164,7 @@ module.exports = {
 	},
 	addPackData: function addPackData(packDate) {
 		for (var i = 0; i < packData.length; i++) {
-			console.log(new Date(packData[i].time).toString());
-			console.log(new Date(packDate).toString());
-			console.log();
 			if (packData[i].time == packDate) {
-				console.log("XXXX");
 				packData[i].amount++;
 				return;
 			}
