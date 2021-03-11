@@ -461,7 +461,7 @@ app.post("/pack", (req, res) => {
 				nowDate.isAfter(packDate) ||
 				!packDate.isValid()
 			) {
-				var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % packDateSpan);
+				var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % packDateSpan) + packDateSpan;
 				database.addPackData(packdatadate);
 				cache.addPackData(packdatadate);
 				clients[decoded.id].packTime = date.valueOf();

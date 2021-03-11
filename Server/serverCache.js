@@ -130,7 +130,7 @@ module.exports = {
 	},
 	loadPackData: function loadPackData(packSpan, sendSpan, callback) {
 		var mnt = moment().valueOf();
-		var nowDate = mnt - (mnt % packSpan);
+		var nowDate = mnt - (mnt % packSpan) + packSpan;
 		var pastDate = nowDate - sendSpan;
 		database.getPackDataRange(pastDate, nowDate, (data) => {
 			packData = [];
@@ -154,7 +154,7 @@ module.exports = {
 
 			function updatePackData(packSpan) {
 				var mnt = moment().valueOf();
-				var nowDate = mnt - (mnt % packSpan);
+				var nowDate = mnt - (mnt % packSpan) + packSpan;
 				for (var i = 1; i < packData.length; i++) {
 					packData[i - 1] = packData[i];
 				}
