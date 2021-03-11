@@ -944,6 +944,25 @@ app.post("/deleteAllNotifications", redirectLogin, function (req, res) {
 	);
 });
 
+app.post("/packData", (req, res) => {
+	request.get(
+		getHttpLocal() + API_HOST_LOCAL + "/packData",
+		{
+			json: {},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.send({status: 0, data: body.packData});
+			} else {
+				res.send({status: 1, message: "Cant get packdata"});
+			}
+		}
+	);
+});
+
 function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;

@@ -30,6 +30,7 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
 			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;"
 		];
 
 		con.connect(() => {
@@ -59,8 +60,8 @@ module.exports = {
 		//SQL INJECTION
 		con.query(
 			'SELECT * FROM user WHERE UPPER(username) = "' +
-				username.toUpperCase() +
-				'"',
+			username.toUpperCase() +
+			'"',
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
 					callback(0, "login failed", -1);
@@ -79,10 +80,10 @@ module.exports = {
 				bcrypt.hash(password, 10, (err, hash) => {
 					con.query(
 						"INSERT INTO user (username, password, ranking) VALUES ('" +
-							username +
-							"', '" +
-							hash +
-							"', 0)",
+						username +
+						"', '" +
+						hash +
+						"', 0)",
 						function (err, result, fields) {
 							callback(true, "registered");
 						}
@@ -97,10 +98,10 @@ module.exports = {
 	getPackTime: function getPackTime(userID, callback) {
 		con.query(
 			"SELECT * FROM data WHERE `userID` = " +
-				userID +
-				' AND `key` = "' +
-				packTime +
-				'"',
+			userID +
+			' AND `key` = "' +
+			packTime +
+			'"',
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
 					callback(null);
@@ -114,22 +115,22 @@ module.exports = {
 	setPackTime: function setPackTime(userID, time) {
 		con.query(
 			"UPDATE `data` SET `value` = '" +
-				time +
-				"' WHERE `data`.`userID` = " +
-				userID +
-				' AND `data`.`key` = "' +
-				packTime +
-				'"',
+			time +
+			"' WHERE `data`.`userID` = " +
+			userID +
+			' AND `data`.`key` = "' +
+			packTime +
+			'"',
 			function (err, result, fields) {
 				if (result == undefined || result.affectedRows == 0) {
 					con.query(
 						"INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" +
-							userID +
-							", '" +
-							packTime +
-							"', '" +
-							time +
-							"')",
+						userID +
+						", '" +
+						packTime +
+						"', '" +
+						time +
+						"')",
 						function (err, result, fields) {}
 					);
 				} else {
@@ -178,16 +179,16 @@ module.exports = {
 	addCard: function addCard(userID, cardID, quality, level, frame, callback) {
 		con.query(
 			"INSERT INTO `unlocked` (`id`, `userID`, `cardID`, `quality`, `level`, `frameID`) VALUES (NULL, " +
-				userID +
-				", " +
-				cardID +
-				", " +
-				quality +
-				", " +
-				level +
-				", " +
-				frame +
-				");",
+			userID +
+			", " +
+			cardID +
+			", " +
+			quality +
+			", " +
+			level +
+			", " +
+			frame +
+			");",
 			function (err, result, fields) {
 				callback(result.insertId);
 			}
@@ -198,10 +199,10 @@ module.exports = {
 		bcrypt.hash(newPass, 10, (err, hash) => {
 			con.query(
 				"UPDATE `user` SET `password` = '" +
-					hash +
-					"' WHERE `user`.`username` = \"" +
-					username +
-					'"',
+				hash +
+				"' WHERE `user`.`username` = \"" +
+				username +
+				'"',
 				function (err, result, fields) {}
 			);
 		});
@@ -224,8 +225,8 @@ module.exports = {
 	userexists: function userexists(username, callback) {
 		con.query(
 			'SELECT * FROM user WHERE UPPER(username) = "' +
-				username.toUpperCase() +
-				'"',
+			username.toUpperCase() +
+			'"',
 			function (err, result, fields) {
 				callback(result != null && result.length > 0);
 			}
@@ -256,7 +257,7 @@ module.exports = {
 	getCardDisplay: function getCardDisplay(cardID, callback) {
 		con.query(
 			"SELECT card.id AS id, card.cardName AS name, card.cardImage AS image, cardtype.name AS animeName, cardtype.id AS animeID FROM `card` INNER JOIN cardtype ON card.typeID = cardtype.id WHERE card.id = " +
-				cardID,
+			cardID,
 			(err, result, fields) => {
 				callback(result[0]);
 			}
@@ -339,9 +340,9 @@ module.exports = {
 	getFriends: function getFriends(userID, callback) {
 		con.query(
 			"SELECT * FROM `friend` WHERE userone = " +
-				userID +
-				" OR usertwo = " +
-				userID,
+			userID +
+			" OR usertwo = " +
+			userID,
 			(err, result, fields) => {
 				if (result == undefined || result.length == 0) {
 					callback(undefined);
@@ -354,14 +355,14 @@ module.exports = {
 	isFriendPending: function getFriends(userID, userID2, callback) {
 		con.query(
 			"SELECT * FROM `friend` WHERE (userone = " +
-				userID +
-				" AND usertwo = " +
-				userID2 +
-				") OR (userone = " +
-				userID2 +
-				" AND usertwo = " +
-				userID +
-				");",
+			userID +
+			" AND usertwo = " +
+			userID2 +
+			") OR (userone = " +
+			userID2 +
+			" AND usertwo = " +
+			userID +
+			");",
 			(err, result, fields) => {
 				if (err) console.log(err);
 				if (result == undefined || result.length == 0) {
@@ -400,10 +401,10 @@ module.exports = {
 	addFriendRequest: function addFriendRequest(idone, idtwo, callback) {
 		con.query(
 			"INSERT INTO `friend` (`userone`, `usertwo`, `friend_status`) VALUES ('" +
-				idone +
-				"', '" +
-				idtwo +
-				"', '0')",
+			idone +
+			"', '" +
+			idtwo +
+			"', '0')",
 			function (err, result, fields) {
 				callback();
 			}
@@ -416,9 +417,9 @@ module.exports = {
 	) {
 		con.query(
 			"UPDATE friend SET friend_status = 2 WHERE userone=" +
-				userone +
-				" AND usertwo=" +
-				usertwo,
+			userone +
+			" AND usertwo=" +
+			usertwo,
 			function (err, result, fields) {
 				callback();
 			}
@@ -427,14 +428,14 @@ module.exports = {
 	deleteFriend: function deleteFriend(userone, usertwo, callback) {
 		con.query(
 			"DELETE FROM friend WHERE (userone=" +
-				userone +
-				" AND usertwo=" +
-				usertwo +
-				") OR (userone=" +
-				usertwo +
-				" AND usertwo=" +
-				userone +
-				")",
+			userone +
+			" AND usertwo=" +
+			usertwo +
+			") OR (userone=" +
+			usertwo +
+			" AND usertwo=" +
+			userone +
+			")",
 			function (err, result, fields) {
 				callback();
 			}
@@ -443,9 +444,9 @@ module.exports = {
 	getTrade: function getTrade(userone, usertwo, callback) {
 		con.query(
 			"SELECT * FROM trade WHERE userone=" +
-				userone +
-				" AND usertwo=" +
-				usertwo,
+			userone +
+			" AND usertwo=" +
+			usertwo,
 			function (err, result, fields) {
 				if (err) console.log(err);
 				callback(result);
@@ -467,12 +468,12 @@ module.exports = {
 	addTrade: function addTrade(userone, usertwo, cardID, callback) {
 		con.query(
 			"INSERT INTO `trade` (`userone`, `usertwo`, `card`) VALUES ('" +
-				userone +
-				"', '" +
-				usertwo +
-				"', '" +
-				cardID +
-				"')",
+			userone +
+			"', '" +
+			usertwo +
+			"', '" +
+			cardID +
+			"')",
 			function (err, result, fields) {
 				callback(result);
 			}
@@ -497,11 +498,11 @@ module.exports = {
 	removeTradeUser: function removeTradeUser(uuid, userone, usertwo, callback) {
 		con.query(
 			"DELETE FROM trade WHERE card=" +
-				uuid +
-				" AND userone=" +
-				userone +
-				" AND usertwo=" +
-				usertwo,
+			uuid +
+			" AND userone=" +
+			userone +
+			" AND usertwo=" +
+			usertwo,
 			function (err, result, fields) {
 				callback(result);
 			}
@@ -510,10 +511,10 @@ module.exports = {
 	addTradeManager: function addTradeManager(userone, usertwo, callback) {
 		con.query(
 			"INSERT INTO `trademanager` (`userone`, `usertwo`, `statusone`, `statustwo`) VALUES ('" +
-				userone +
-				"', '" +
-				usertwo +
-				"', '0', '0')",
+			userone +
+			"', '" +
+			usertwo +
+			"', '0', '0')",
 			function (err, result, fields) {
 				callback(result);
 			}
@@ -522,14 +523,14 @@ module.exports = {
 	getTradeManager: function getTradeManager(userone, usertwo, callback) {
 		con.query(
 			"SELECT * FROM trademanager WHERE (userone = " +
-				userone +
-				" AND usertwo = " +
-				usertwo +
-				") OR (userone = " +
-				usertwo +
-				" AND usertwo = " +
-				userone +
-				")",
+			userone +
+			" AND usertwo = " +
+			usertwo +
+			") OR (userone = " +
+			usertwo +
+			" AND usertwo = " +
+			userone +
+			")",
 			function (err, result, fields) {
 				if (result != undefined && result.length == 0) {
 					callback(undefined);
@@ -542,22 +543,22 @@ module.exports = {
 	setTradeStatus: function setTradeStatus(userone, usertwo, status, callback) {
 		con.query(
 			"UPDATE trademanager SET statusone = " +
-				status +
-				" WHERE userone = " +
-				userone +
-				" AND usertwo = " +
-				usertwo +
-				";",
+			status +
+			" WHERE userone = " +
+			userone +
+			" AND usertwo = " +
+			usertwo +
+			";",
 			function (err, result, fields) {
 				if (err) console.log(err);
 				con.query(
 					"UPDATE trademanager SET statustwo = " +
-						status +
-						" WHERE userone = " +
-						usertwo +
-						" AND usertwo = " +
-						userone +
-						";",
+					status +
+					" WHERE userone = " +
+					usertwo +
+					" AND usertwo = " +
+					userone +
+					";",
 					(err, result, fields) => {
 						if (err) console.log(err);
 						callback();
@@ -569,11 +570,11 @@ module.exports = {
 	tradeExists: function tradeExists(userone, usertwo, cardID, callback) {
 		con.query(
 			"SELECT * FROM trade WHERE userone=" +
-				userone +
-				" AND usertwo=" +
-				usertwo +
-				" AND card=" +
-				cardID,
+			userone +
+			" AND usertwo=" +
+			usertwo +
+			" AND card=" +
+			cardID,
 			(err, result, fields) => {
 				callback(result != undefined && result.length > 0);
 			}
@@ -582,10 +583,10 @@ module.exports = {
 	tradeCount: function tradeCount(user, usertwo, callback) {
 		con.query(
 			"SELECT * FROM trade WHERE userone=" +
-				userone +
-				" AND usertwo=" +
-				usertwo +
-				";",
+			userone +
+			" AND usertwo=" +
+			usertwo +
+			";",
 			(err, result, fields) => {
 				callback(result != undefined && result.length > 0);
 			}
@@ -620,23 +621,23 @@ module.exports = {
 	) {
 		con.query(
 			"INSERT INTO notification(`userID`, `title`, `message`, `url`)" +
-				" SELECT '" +
-				userID +
-				"', '" +
-				title +
-				"', '" +
-				message +
-				"', '" +
-				url +
-				"' FROM dual WHERE NOT EXISTS" +
-				" ( SELECT * FROM notification WHERE" +
-				" userID = '" +
-				userID +
-				"' AND title = '" +
-				title +
-				"' AND url = '" +
-				url +
-				"');",
+			" SELECT '" +
+			userID +
+			"', '" +
+			title +
+			"', '" +
+			message +
+			"', '" +
+			url +
+			"' FROM dual WHERE NOT EXISTS" +
+			" ( SELECT * FROM notification WHERE" +
+			" userID = '" +
+			userID +
+			"' AND title = '" +
+			title +
+			"' AND url = '" +
+			url +
+			"');",
 			(err, result, fields) => {
 				if (err) console.log(err);
 				callback(result);
@@ -659,10 +660,10 @@ module.exports = {
 	) {
 		con.query(
 			"DELETE FROM notification WHERE id = " +
-				notificationID +
-				" AND userID = " +
-				userID +
-				";",
+			notificationID +
+			" AND userID = " +
+			userID +
+			";",
 			(err, result, fields) => {
 				if (err) console.log(err);
 				callback(result);
@@ -681,22 +682,22 @@ module.exports = {
 	setTradeTime: function setTradeTime(userID, time) {
 		con.query(
 			"UPDATE `data` SET `value` = '" +
-				time +
-				"' WHERE `data`.`userID` = " +
-				userID +
-				' AND `data`.`key` = "' +
-				tradeTime +
-				'"',
+			time +
+			"' WHERE `data`.`userID` = " +
+			userID +
+			' AND `data`.`key` = "' +
+			tradeTime +
+			'"',
 			function (err, result, fields) {
 				if (result == undefined || result.affectedRows == 0) {
 					con.query(
 						"INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" +
-							userID +
-							", '" +
-							tradeTime +
-							"', '" +
-							time +
-							"')",
+						userID +
+						", '" +
+						tradeTime +
+						"', '" +
+						time +
+						"')",
 						function (err, result, fields) {}
 					);
 				} else {
@@ -707,10 +708,10 @@ module.exports = {
 	getTradeTime: function getTradeTime(userID, callback) {
 		con.query(
 			"SELECT * FROM data WHERE `userID` = " +
-				userID +
-				' AND `key` = "' +
-				tradeTime +
-				'"',
+			userID +
+			' AND `key` = "' +
+			tradeTime +
+			'"',
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
 					callback(null);
@@ -732,6 +733,17 @@ module.exports = {
 			}
 		);
 	},
+	addPackData: function addPackData(time, callback) {
+		con.query("INSERT INTO `packdata` ( `amount`, `time`) values ( 1, " + time + ") ON DUPLICATE KEY UPDATE amount = amount + 1;",
+			(err, result, fields) => {
+				if (callback != undefined) callback();
+			})
+	},
+	getPackDataRange: function getPackDataRange(floor, ceil, callback) {
+		con.query("SELECT * FROM packdata WHERE time BETWEEN " + floor + " AND " + ceil + ";", (err, result, fields) => {
+			if (callback != undefined) callback(result);
+		});
+	}
 };
 
 function cards(callback) {
@@ -1126,7 +1138,7 @@ function effects(callback) {
 	con.connect(() => {
 		con.query("DROP TABLE effect", () => {
 			con.query(
-			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+				"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 				() => {
 					executeArray(sql, callback);
 				}
@@ -1138,8 +1150,8 @@ function effects(callback) {
 function userexists(username, callback) {
 	con.query(
 		'SELECT * FROM user WHERE UPPER(username) = "' +
-			username.toUpperCase() +
-			'"',
+		username.toUpperCase() +
+		'"',
 		function (err, result, fields) {
 			callback(result != null && result.length > 0);
 		}

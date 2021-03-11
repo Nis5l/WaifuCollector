@@ -5,7 +5,7 @@ html, body {
 
 .home {
   margin: 20px;
-  height: 100vh;
+  height: fit-content;
   width: calc(100% - 40px); }
   .home .box {
     padding-top: 15px;
@@ -66,3 +66,14 @@ html, body {
     @media screen and (max-width: 470px) {
       .home .content {
         font-size: 8pt; } }
+  .home #graph {
+    padding: 5px;
+    width: calc(100% - 20px);
+    height: 500px;
+    margin: auto; }
+    @media screen and (max-width: 1300px) {
+      .home #graph {
+        height: 350px; } }
+    @media screen and (max-width: 470px) {
+      .home #graph {
+        height: 300px; } }

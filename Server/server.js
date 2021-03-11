@@ -23,8 +23,8 @@ const frameBase = "Frame/";
 const effectBase = "Effect/";
 
 const config = require("./config.json");
-const { randomInt } = require("crypto");
-const { response } = require("express");
+const {randomInt} = require("crypto");
+const {response} = require("express");
 
 const port = config.port;
 
@@ -36,6 +36,8 @@ const passRegex = /^[a-zA-Z0-9_.]+$/;
 const inventorySendAmount = config.inventorySendAmount;
 const friendLimit = config.friendLimit;
 const tradeLimit = config.tradeLimit;
+const packDateSpan = config.packDateSpan;
+const packDateSendSpan = config.packDateSendSpan;
 
 var clients = {};
 
@@ -55,9 +57,9 @@ app.get("/", function (req, res) {
 app.get("/cards", function (req, res) {
 	database.getCards((cards) => {
 		if (cards != undefined) {
-			res.send({ status: 1, cards: cards });
+			res.send({status: 1, cards: cards});
 		} else {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		}
 	});
 });
@@ -90,7 +92,7 @@ app.get("/cards/export", function (req, res) {
 app.post("/cards/import", function (req, res) {
 	try {
 		if (!req.files || !req.files.cardCSV) {
-			res.send({ status: 0, message: "No file uploaded!" });
+			res.send({status: 0, message: "No file uploaded!"});
 			return;
 		}
 
@@ -115,7 +117,7 @@ app.post("/cards/import", function (req, res) {
 
 		res.redirect("/");
 	} catch (err) {
-		res.send({ status: 0 });
+		res.send({status: 0});
 
 		console.log(err);
 	}
@@ -124,9 +126,9 @@ app.post("/cards/import", function (req, res) {
 app.get("/card/:cardID/", function (req, res) {
 	database.getCard(req.params.cardID, (card) => {
 		if (card != undefined) {
-			res.send({ status: 1, card: card });
+			res.send({status: 1, card: card});
 		} else {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		}
 	});
 });
@@ -156,9 +158,9 @@ app.post("/card/:cardID/update", function (req, res) {
 			res,
 			req,
 			"status=failed&changedAnimeID=" +
-				changedAnimeID +
-				"&changedName=" +
-				changedName
+			changedAnimeID +
+			"&changedName=" +
+			changedName
 		);
 	} else {
 		redirect(res, req, "status=success");
@@ -168,9 +170,9 @@ app.post("/card/:cardID/update", function (req, res) {
 app.get("/display/card/:cardID/", function (req, res) {
 	database.getCardDisplay(req.params.cardID, (card) => {
 		if (card != undefined) {
-			res.send({ status: 1, card: card });
+			res.send({status: 1, card: card});
 		} else {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		}
 	});
 });
@@ -178,9 +180,9 @@ app.get("/display/card/:cardID/", function (req, res) {
 app.get("/display/cards", function (req, res) {
 	database.getCardsDisplay((cards) => {
 		if (cards != undefined) {
-			res.send({ status: 1, cards: cards });
+			res.send({status: 1, cards: cards});
 		} else {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		}
 	});
 });
@@ -188,9 +190,9 @@ app.get("/display/cards", function (req, res) {
 app.get("/animes", function (req, res) {
 	database.getAnimes((animes) => {
 		if (animes != undefined) {
-			res.send({ status: 1, animes: animes });
+			res.send({status: 1, animes: animes});
 		} else {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		}
 	});
 });
@@ -198,9 +200,9 @@ app.get("/animes", function (req, res) {
 app.get("/users", function (req, res) {
 	database.getUsers((users) => {
 		if (users != undefined) {
-			res.send({ status: 1, users: users });
+			res.send({status: 1, users: users});
 		} else {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		}
 	});
 });
@@ -235,7 +237,7 @@ app.post("/notifications", (req, res) => {
 	try {
 		var decoded = jwt.verify(token, jwtSecret);
 	} catch (JsonWebTokenError) {
-		res.send({ status: 2, message: "Identification Please" });
+		res.send({status: 2, message: "Identification Please"});
 		return;
 	}
 
@@ -248,7 +250,7 @@ app.post("/notifications", (req, res) => {
 
 	function run() {
 		database.getNotifications(decoded.id, (result) => {
-			res.send({ status: 0, data: result });
+			res.send({status: 0, data: result});
 			return;
 		});
 	}
@@ -261,7 +263,7 @@ app.post("/login", (req, res) => {
 		console.log("Login " + username);
 		database.login(username, password, (b, messageV, userIDV) => {
 			var tokenV = "";
-			if (b) tokenV = jwt.sign({ username: username, id: userIDV }, jwtSecret);
+			if (b) tokenV = jwt.sign({username: username, id: userIDV}, jwtSecret);
 
 			if (b)
 				res.send({
@@ -270,7 +272,7 @@ app.post("/login", (req, res) => {
 					userID: userIDV,
 					message: messageV,
 				});
-			else res.send({ status: b ? 0 : 1, token: tokenV, message: messageV });
+			else res.send({status: b ? 0 : 1, token: tokenV, message: messageV});
 
 			if (b) {
 				createCache(userIDV, username, () => {});
@@ -278,7 +280,7 @@ app.post("/login", (req, res) => {
 		});
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -293,9 +295,9 @@ app.post("/register", (req, res) => {
 				registerCallback(
 					false,
 					"the username length must be between " +
-						userLen[0] +
-						" and " +
-						userLen[1]
+					userLen[0] +
+					" and " +
+					userLen[1]
 				);
 				return;
 			}
@@ -313,9 +315,9 @@ app.post("/register", (req, res) => {
 				registerCallback(
 					false,
 					"the password length must be between " +
-						passLen[0] +
-						" and " +
-						passLen[1]
+					passLen[0] +
+					" and " +
+					passLen[1]
 				);
 				return;
 			}
@@ -325,11 +327,11 @@ app.post("/register", (req, res) => {
 		database.register(username, password, registerCallback);
 
 		function registerCallback(b, message) {
-			res.send({ status: b ? 0 : 1, message: message });
+			res.send({status: b ? 0 : 1, message: message});
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -340,7 +342,7 @@ app.post("/getDashboard", (req, res) => {
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 2, message: "Identification Please" });
+			res.send({status: 2, message: "Identification Please"});
 			return;
 		}
 
@@ -386,7 +388,7 @@ app.post("/getDashboard", (req, res) => {
 		return;
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -397,7 +399,7 @@ app.get("/packTime", (req, res) => {
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 2, message: "Identification Please" });
+			res.send({status: 2, message: "Identification Please"});
 			return;
 		}
 
@@ -408,11 +410,11 @@ app.get("/packTime", (req, res) => {
 			run(decoded.id);
 		}
 		function run() {
-			res.send({ status: 0, packTime: getPackTime(decoded.id) });
+			res.send({status: 0, packTime: getPackTime(decoded.id)});
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -439,7 +441,7 @@ app.post("/pack", (req, res) => {
 		try {
 			var decoded = jwt.verify(tokenV, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 		if (clients[decoded.id] == undefined) {
@@ -459,10 +461,13 @@ app.post("/pack", (req, res) => {
 				nowDate.isAfter(packDate) ||
 				!packDate.isValid()
 			) {
+				var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % packDateSpan);
+				database.addPackData(packdatadate);
+				cache.addPackData(packdatadate);
 				clients[decoded.id].packTime = date.valueOf();
 				var cardamount = utils.getRandomInt(packSize[0], packSize[1]);
 
-				getRandomCards(cardamount, (cards)=> {
+				getRandomCards(cardamount, (cards) => {
 					addToDB(0);
 					function addToDB(j) {
 						database.addCard(
@@ -482,7 +487,7 @@ app.post("/pack", (req, res) => {
 									frameID: cards[j].frameID,
 								});
 								if (j == cards.length - 1) {
-									res.send({ packTime: "0", message: "OK", cards: cards });
+									res.send({packTime: "0", message: "OK", cards: cards});
 									return;
 								} else {
 									addToDB(j + 1);
@@ -502,7 +507,7 @@ app.post("/pack", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -513,7 +518,7 @@ app.post("/passchange", (req, res) => {
 		try {
 			var decoded = jwt.verify(tokenV, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 		var username = decoded.username;
@@ -535,14 +540,14 @@ app.post("/passchange", (req, res) => {
 		database.userexists(username, (b) => {
 			if (b) {
 				database.changePass(username, newpassword);
-				res.send({ status: 0, message: "Password changed" });
+				res.send({status: 0, message: "Password changed"});
 			} else {
-				res.send({ status: 1, message: "Failed" });
+				res.send({status: 1, message: "Failed"});
 			}
 		});
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -574,19 +579,19 @@ app.post("/getfriends", (req, res) => {
 			function iterate(i) {
 				var id = friendIDs[i];
 				if (clients[id] != undefined) {
-					friends.push({ userID: id, username: clients[id].username });
+					friends.push({userID: id, username: clients[id].username});
 
 					if (i == friendIDs.length) {
-						res.send({ status: 0, friends: friends });
+						res.send({status: 0, friends: friends});
 						return;
 					}
 					iterate(i + 1);
 				} else {
 					createCache(id, username, (ret) => {
-						if (ret == -1) res.send({ status: 1, message: "userID not found" });
-						friends.push({ userID: id, username: clients[id].username });
+						if (ret == -1) res.send({status: 1, message: "userID not found"});
+						friends.push({userID: id, username: clients[id].username});
 						if (i == friendIDs.length) {
-							res.send({ status: 0, friends: friends });
+							res.send({status: 0, friends: friends});
 							return;
 						}
 						iterate(i + 1);
@@ -596,7 +601,7 @@ app.post("/getfriends", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -620,7 +625,7 @@ app.post("/inventory", (req, res) => {
 		try {
 			var decoded = jwt.verify(tokenV, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 		if (clients[decoded.id] == undefined) {
@@ -670,8 +675,7 @@ app.post("/inventory", (req, res) => {
 					});
 					return;
 				}
-				getCards(inventory, ()=>
-				{
+				getCards(inventory, () => {
 					res.send({
 						status: 0,
 						inventory: inventory,
@@ -683,7 +687,7 @@ app.post("/inventory", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -702,7 +706,7 @@ app.post("/card", (req, res) => {
 		if (isNaN(sortType)) sortType = undefined;
 		if (next == -1) {
 			if (uuid == undefined) {
-				res.send({ status: 1, message: "Invalid data" });
+				res.send({status: 1, message: "Invalid data"});
 				return;
 			}
 		}
@@ -710,7 +714,7 @@ app.post("/card", (req, res) => {
 		try {
 			var decoded = jwt.verify(tokenV, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -727,7 +731,7 @@ app.post("/card", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -738,14 +742,14 @@ app.post("/upgrade", (req, res) => {
 		var carduuid = req.body.carduuid;
 		var mainuuid = req.body.mainuuid;
 		if (carduuid == undefined && mainuuid == undefined) {
-			res.send({ status: 1, message: "Invalid data" });
+			res.send({status: 1, message: "Invalid data"});
 			return;
 		}
 
 		try {
 			var decoded = jwt.verify(tokenV, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -828,7 +832,7 @@ app.post("/upgrade", (req, res) => {
 											level: newlevel,
 											frameID: mainresult.frameID,
 										});
-										res.send({ status: 0, uuid: insertID });
+										res.send({status: 0, uuid: insertID});
 									}
 								);
 							});
@@ -839,7 +843,7 @@ app.post("/upgrade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -910,7 +914,7 @@ app.post("/friends", (req, res) => {
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -927,7 +931,7 @@ app.post("/friends", (req, res) => {
 			run2(0);
 			function run2(i) {
 				if (i == friends.length) {
-					res.send({ status: 0, friends: data });
+					res.send({status: 0, friends: data});
 					return;
 				}
 
@@ -952,7 +956,7 @@ app.post("/friends", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -965,7 +969,7 @@ app.post("/addfriend", (req, res) => {
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -979,31 +983,31 @@ app.post("/addfriend", (req, res) => {
 		function run() {
 			database.getUserID(username, (id) => {
 				if (id == undefined) {
-					res.send({ status: 1, message: "cant find user" });
+					res.send({status: 1, message: "cant find user"});
 					return;
 				}
 				if (id == decoded.id) {
-					res.send({ status: 1, message: "cant add yourself" });
+					res.send({status: 1, message: "cant add yourself"});
 					return;
 				}
 				if (clients[decoded.id].hasFriend(id)) {
-					res.send({ status: 1, message: "already added" });
+					res.send({status: 1, message: "already added"});
 					return;
 				}
 				if (clients[decoded.id].getFriends().length == friendLimit) {
-					res.send({ status: 1, message: "reached max friend count" });
+					res.send({status: 1, message: "reached max friend count"});
 					return;
 				}
 				if (clients[id] != undefined) {
 					if (clients[id].hasFriend(decoded.id)) {
-						res.send({ status: 1, message: "already sent" });
+						res.send({status: 1, message: "already sent"});
 						return;
 					}
 					run2();
 				} else {
 					database.isFriendPending(decoded.id, id, (b) => {
 						if (b) {
-							res.send({ status: 1, message: "already sent" });
+							res.send({status: 1, message: "already sent"});
 							return;
 						}
 						run2();
@@ -1021,7 +1025,7 @@ app.post("/addfriend", (req, res) => {
 							"friends",
 							() => {}
 						);
-						res.send({ status: 0 });
+						res.send({status: 0});
 						return;
 					});
 				}
@@ -1029,7 +1033,7 @@ app.post("/addfriend", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1043,18 +1047,18 @@ app.post("/managefriend", (req, res) => {
 		var command = parseInt(command);
 
 		if (isNaN(userID) || isNaN(command)) {
-			res.send({ status: 1, message: "not a userID" });
+			res.send({status: 1, message: "not a userID"});
 			return;
 		}
 
 		if (command != 0 && command != 1) {
-			res.send({ status: 1, message: "wrong data" });
+			res.send({status: 1, message: "wrong data"});
 		}
 
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -1067,7 +1071,7 @@ app.post("/managefriend", (req, res) => {
 		function run() {
 			if (command == 0) {
 				if (!clients[decoded.id].acceptFriendRequest(userID)) {
-					res.send({ status: 1, message: "user not found" });
+					res.send({status: 1, message: "user not found"});
 					return;
 				}
 				if (clients[userID] != undefined)
@@ -1080,25 +1084,25 @@ app.post("/managefriend", (req, res) => {
 						"friends",
 						() => {}
 					);
-					res.send({ status: 0 });
+					res.send({status: 0});
 					return;
 				});
 			} else if (command == 1) {
 				if (!clients[decoded.id].deleteFriend(userID)) {
-					res.send({ status: 1, message: "user not found" });
+					res.send({status: 1, message: "user not found"});
 					return;
 				}
 				if (clients[userID] != undefined)
 					clients[userID].deleteFriend(decoded.id);
 				database.deleteFriend(userID, decoded.id, () => {
-					res.send({ status: 0 });
+					res.send({status: 0});
 					return;
 				});
 			}
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1110,14 +1114,14 @@ app.post("/trade", (req, res) => {
 		var userID = parseInt(userID);
 
 		if (isNaN(userID)) {
-			res.send({ status: 1, message: "not a userID" });
+			res.send({status: 1, message: "not a userID"});
 			return;
 		}
 
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -1129,7 +1133,7 @@ app.post("/trade", (req, res) => {
 		}
 		function run() {
 			if (!clients[decoded.id].hasFriendAdded(userID)) {
-				res.send({ status: 1, message: "not your friend" });
+				res.send({status: 1, message: "not your friend"});
 				return;
 			}
 
@@ -1139,7 +1143,7 @@ app.post("/trade", (req, res) => {
 			} else {
 				createCache(userID, undefined, (ret) => {
 					if (ret == -1) {
-						res.send({ status: 1, message: "User Not Found" });
+						res.send({status: 1, message: "User Not Found"});
 						return;
 					}
 					onusername();
@@ -1163,21 +1167,17 @@ app.post("/trade", (req, res) => {
 				var cards = [];
 				var cardsfriend = [];
 				database.getTrade(decoded.id, userID, (uuids) => {
-					for(var i = 0; i < uuids.length; i++)
-					{
+					for (var i = 0; i < uuids.length; i++) {
 						cards.push(clients[decoded.id].getCard(uuids[i].card));
-						if(cards[i] == undefined)
-						{
+						if (cards[i] == undefined) {
 							res.send({status: 1, message: "Cant find card"});
 							return;
 						}
 					}
 					database.getTrade(userID, decoded.id, (uuidsfriend) => {
-						for(var i = 0; i < uuidsfriend.length; i++)
-						{
+						for (var i = 0; i < uuidsfriend.length; i++) {
 							cardsfriend.push(clients[userID].getCard(uuidsfriend[i].card));
-							if(cardsfriend[i] == undefined)
-							{
+							if (cardsfriend[i] == undefined) {
 								res.send({status: 1, message: "Cant find card"});
 								return;
 							}
@@ -1196,15 +1196,15 @@ app.post("/trade", (req, res) => {
 									tradeLimit: tradeLimit,
 									tradeTimeFriend: getTradeTime(userID),
 								});
-							})	
-						})	
+							})
+						})
 					});
 				});
 			});
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1218,14 +1218,14 @@ app.post("/addtrade", (req, res) => {
 		var cardID = parseInt(cardID);
 
 		if (isNaN(userID) || isNaN(cardID)) {
-			res.send({ status: 1, message: "not a userID" });
+			res.send({status: 1, message: "not a userID"});
 			return;
 		}
 
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -1237,13 +1237,13 @@ app.post("/addtrade", (req, res) => {
 		}
 		function run() {
 			if (!clients[decoded.id].hasFriendAdded(userID)) {
-				res.send({ status: 1, message: "not your friend" });
+				res.send({status: 1, message: "not your friend"});
 				return;
 			}
 
 			database.getTrade(decoded.id, userID, (cards) => {
 				if (cards.length >= tradeLimit) {
-					res.send({ status: 1, message: "Tradelimit reached" });
+					res.send({status: 1, message: "Tradelimit reached"});
 					return;
 				}
 
@@ -1257,7 +1257,7 @@ app.post("/addtrade", (req, res) => {
 					}
 					database.tradeExists(decoded.id, userID, cardID, (b) => {
 						if (b) {
-							res.send({ status: 1, message: "Card already in trade" });
+							res.send({status: 1, message: "Card already in trade"});
 							return;
 						}
 						database.addTrade(decoded.id, userID, cardID, () => {
@@ -1271,7 +1271,7 @@ app.post("/addtrade", (req, res) => {
 										"trade?userID=" + decoded.id,
 										() => {}
 									);
-									res.send({ status: 0 });
+									res.send({status: 0});
 									return;
 								});
 							});
@@ -1284,7 +1284,7 @@ app.post("/addtrade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1298,14 +1298,14 @@ app.post("/removetrade", (req, res) => {
 		var cardID = parseInt(cardID);
 
 		if (isNaN(userID) || isNaN(cardID)) {
-			res.send({ status: 1, message: "not a userID" });
+			res.send({status: 1, message: "not a userID"});
 			return;
 		}
 
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -1327,7 +1327,7 @@ app.post("/removetrade", (req, res) => {
 							"trade?userID=" + decoded.id,
 							() => {}
 						);
-						res.send({ status: 0 });
+						res.send({status: 0});
 					});
 				});
 			});
@@ -1335,7 +1335,7 @@ app.post("/removetrade", (req, res) => {
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1347,14 +1347,14 @@ app.post("/okTrade", (req, res) => {
 		var userID = parseInt(userID);
 
 		if (isNaN(userID)) {
-			res.send({ status: 1, message: "not a userID" });
+			res.send({status: 1, message: "not a userID"});
 			return;
 		}
 
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -1369,7 +1369,7 @@ app.post("/okTrade", (req, res) => {
 			if (clients[userID] == undefined) {
 				createCache(userID, undefined, (ret) => {
 					if (ret == -1) {
-						res.send({ status: 1, message: "User not found" });
+						res.send({status: 1, message: "User not found"});
 						return;
 					}
 					run();
@@ -1410,7 +1410,7 @@ app.post("/okTrade", (req, res) => {
 											);
 											clients[decoded.id].tradeTime = date.valueOf();
 											clients[userID].tradeTime = date.valueOf();
-											res.send({ status: 0 });
+											res.send({status: 0});
 											return;
 										});
 									});
@@ -1452,19 +1452,19 @@ app.post("/okTrade", (req, res) => {
 								"trade?userID=" + decoded.id,
 								() => {}
 							);
-							res.send({ status: 0 });
+							res.send({status: 0});
 							return;
 						}
 					});
 				});
 			} else {
-				res.send({ status: 1, message: "Wait" });
+				res.send({status: 1, message: "Wait"});
 				return;
 			}
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1476,7 +1476,7 @@ app.get("/tradeTime", (req, res) => {
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 2, message: "Identification Please" });
+			res.send({status: 2, message: "Identification Please"});
 			return;
 		}
 		if (isNaN(userID)) userID = decoded.id;
@@ -1491,7 +1491,7 @@ app.get("/tradeTime", (req, res) => {
 			if (clients[userID] == undefined) {
 				createCache(userID, undefined, (ret) => {
 					if (ret == -1) {
-						res.send({ status: 1, message: "User doesnt exist" });
+						res.send({status: 1, message: "User doesnt exist"});
 						return;
 					}
 					run2();
@@ -1505,15 +1505,15 @@ app.get("/tradeTime", (req, res) => {
 					userID != decoded.id &&
 					!clients[decoded.id].hasFriendAdded(userID)
 				) {
-					res.send({ status: 1, message: "User is not your Friend" });
+					res.send({status: 1, message: "User is not your Friend"});
 					return;
 				}
-				res.send({ status: 0, tradeTime: getTradeTime(userID) });
+				res.send({status: 0, tradeTime: getTradeTime(userID)});
 			}
 		}
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1541,23 +1541,23 @@ app.post("/deleteNotification", (req, res) => {
 		var notificationID = parseInt(notificationID);
 
 		if (isNaN(notificationID)) {
-			res.send({ status: 1, message: "not a notificationID" });
+			res.send({status: 1, message: "not a notificationID"});
 			return;
 		}
 
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
 		database.removeNotification(notificationID, decoded.id, () => {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		});
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1569,16 +1569,26 @@ app.post("/deleteAllNotifications", (req, res) => {
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({ status: 1, message: "Identification Please" });
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
 		database.removeNotifications(decoded.id, () => {
-			res.send({ status: 0 });
+			res.send({status: 0});
 		});
 	} catch (e) {
 		console.log(e);
-		res.send({ status: 1, message: "internal server error" });
+		res.send({status: 1, message: "internal server error"});
+		return;
+	}
+});
+
+app.get("/packData", (req, res) => {
+	try {
+		res.send({status: 0, packData: cache.getPackData()});
+	} catch (e) {
+		console.log(e);
+		res.send({status: 1, message: "internal server error"});
 		return;
 	}
 });
@@ -1608,13 +1618,13 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 	if (uuid == undefined || isNaN(uuid) || uuid == null) {
 		uuid = clients[userID].lastmain;
 		if (uuid == undefined) {
-			callback({ status: 1, message: "No main uuid" });
+			callback({status: 1, message: "No main uuid"});
 			return;
 		}
 	} else {
 		clients[userID].lastmain = uuid;
 	}
-	var maincard = clients[userID].getCard(uuid) 
+	var maincard = clients[userID].getCard(uuid)
 	if (maincard == undefined) {
 		callback({
 			status: 1,
@@ -1674,10 +1684,8 @@ function getCard(cardID, frameID, level, callback) {
 	});
 }
 
-function getCards(cards, callback)
-{
-	if(cards.length == 0)
-	{
+function getCards(cards, callback) {
+	if (cards.length == 0) {
 		callback();
 		return;
 	}
@@ -1700,8 +1708,7 @@ function getCards(cards, callback)
 	}
 }
 
-function getRandomCards(amount, callback)
-{
+function getRandomCards(amount, callback) {
 	var cards = [];
 	database.getRandomCard(amount, (_cards) => {
 		for (var j = 0; j < _cards.length; j++) {
@@ -1714,11 +1721,11 @@ function getRandomCards(amount, callback)
 		}
 		database.getRandomFrame(amount, (_frames) => {
 			for (var j = 0; j < cards.length; j++) {
-				cards[j].frameID = _frames[utils.getRandomInt(0,_frames.length - 1)].id;
+				cards[j].frameID = _frames[utils.getRandomInt(0, _frames.length - 1)].id;
 			}
-			getCards(cards, ()=>{
+			getCards(cards, () => {
 				callback(cards);
-			})	
+			})
 		});
 	});
 }
@@ -1775,9 +1782,11 @@ function clearCache(userID) {
 console.log("Initializing DataBase");
 database.init(() => {
 	cache.refreshCards(() => {
-		var server = app.listen(port);
-		//var server = https.createServer(options, app).listen(port);
-		console.log("Started on port %s", port);
+		cache.loadPackData(packDateSpan, packDateSendSpan, () => {
+			var server = app.listen(port);
+			//var server = https.createServer(options, app).listen(port);
+			console.log("Started on port %s", port);
+		});
 	});
 	setInterval(() => {
 		cache.refreshCards(() => {});

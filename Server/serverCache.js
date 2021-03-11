@@ -1,4 +1,5 @@
 const database = require("./database");
+const moment = require("moment");
 
 var nameToID = {};
 var animeToID = {};
@@ -6,7 +7,9 @@ var animeNameToIDs = {};
 var idToAnime = new Map();
 var idToName = new Map();
 var idToSort = new Map();
+var packData = [];
 var cardAmount = 0;
+var packInterval = undefined;
 module.exports = {
 	refreshCards: function refreshCards(callback) {
 		database.getAnimes((animes) => {
@@ -21,7 +24,7 @@ module.exports = {
 				for (var i = 0; i < cards.length; i++) {
 					nameToID[cards[i].cardName] = cards[i].id;
 					idToName.set(cards[i].id, cards[i].cardName);
-					namesort[i] = { name: cards[i].cardName, id: cards[i].id };
+					namesort[i] = {name: cards[i].cardName, id: cards[i].id};
 					animeNameToIDs[idToAnime.get(cards[i].typeID)].push(cards[i].id);
 				}
 				var sorted = false;
@@ -107,7 +110,7 @@ module.exports = {
 				}
 			}
 		}
-		
+
 		//ids = ids.reverse();
 
 		return ids;
@@ -124,5 +127,54 @@ module.exports = {
 	},
 	getCardAmount: function getCardAmount() {
 		return cardAmount;
+	},
+	loadPackData: function loadPackData(packSpan, sendSpan, callback) {
+		var mnt = moment().valueOf();
+		var nowDate = mnt - (mnt % packSpan);
+		var pastDate = nowDate - sendSpan;
+		database.getPackDataRange(pastDate, nowDate, (data) => {
+			packData = [];
+			for (var j = 0; pastDate <= nowDate; pastDate += packSpan, j++) {
+				packData.push({time: pastDate, amount: 0});
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].time == packData[j].time) {
+						packData[j].amount = data[i].amount;
+						break;
+					}
+				}
+			}
+			if (packInterval == undefined) clearInterval(packInterval);
+			setTimeout(() => {
+				updatePackData(packSpan);
+				packInterval = setInterval(() => {
+					updatePackData(packSpan);
+				}, packSpan);
+			}, packSpan - (moment().valueOf() % packSpan));
+			if (callback != undefined) callback();
+
+			function updatePackData(packSpan) {
+				var mnt = moment().valueOf();
+				var nowDate = mnt - (mnt % packSpan);
+				for (var i = 1; i < packData.length; i++) {
+					packData[i - 1] = packData[i];
+				}
+				packData[packData.length - 1] = {time: nowDate, amount: 0};
+			}
+		});
+	},
+	addPackData: function addPackData(packDate) {
+		for (var i = 0; i < packData.length; i++) {
+			if (packData[i].time == packDate) {
+				packData[i].amount++;
+				return;
+			}
+		}
+		for (var i = 1; i < packData.length; i++) {
+			packData[i - 1] = packData[i];
+		}
+		packData[packData.length - 1] = {time: packDate, amount: 1};
+	},
+	getPackData: function getPackData() {
+		return packData;
 	},
 };
