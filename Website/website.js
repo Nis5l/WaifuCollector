@@ -2,8 +2,8 @@ const request = require("request");
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const { cookie } = require("request");
-const { render } = require("node-sass");
+const {cookie} = require("request");
+const {render} = require("node-sass");
 const https = require("https");
 const fs = require("fs");
 const cookieparser = require("cookie-parser");
@@ -18,7 +18,7 @@ const app = express();
 app.set("view engine", "ejs");
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use("/resources", express.static("resources"));
 app.use("/assets", express.static("assets"));
@@ -105,7 +105,7 @@ function getHttp() {
 app.get("/", function (req, res) {
 	res.render("home", {
 		userID: req.cookies.userID,
-		api_url: getHttpLocal() + API_HOST_LOCAL,
+		api_url: getHttp() + API_HOST_LOCAL,
 		ishome: true,
 	});
 });
@@ -127,18 +127,18 @@ app.get("/login", redirectDashboard, function (req, res) {
 });
 
 app.get("/privacy", function (req, res) {
-	res.render("privacy", { ishome: true });
+	res.render("privacy", {ishome: true});
 });
 
 app.post("/cookie", function (req, res) {
 	var date = new Date();
 	date.setTime(date.getTime() + 315532800000);
-	res.cookie("accepted", true, { expires: date });
+	res.cookie("accepted", true, {expires: date});
 	res.redirect("/login");
 });
 
 app.post("/login", redirectDashboard, function (req, res) {
-	const { username, password } = req.body;
+	const {username, password} = req.body;
 
 	if (username && password) {
 		request.post(
@@ -169,9 +169,9 @@ app.post("/login", redirectDashboard, function (req, res) {
 					} else {
 						res.redirect(
 							"/login?errorCode=" +
-								body.status +
-								"&errorMessage=" +
-								body.message
+							body.status +
+							"&errorMessage=" +
+							body.message
 						);
 					}
 				} else {
@@ -187,7 +187,7 @@ app.post("/login", redirectDashboard, function (req, res) {
 });
 
 app.post("/passchange", function (req, res) {
-	const { password, password2 } = req.body;
+	const {password, password2} = req.body;
 
 	if (password && password2 && password == password2 && req.cookies.token) {
 		request.post(
@@ -219,19 +219,19 @@ app.post("/passchange", function (req, res) {
 
 app.get("/register", redirectDashboard, function (req, res) {
 	res.locals.message = req.query.errorMessage;
-	res.render("register", { userID: req.cookies.userID, ishome: true });
+	res.render("register", {userID: req.cookies.userID, ishome: true});
 });
 
 /*
 
-    ERROR CODES:
-        2 : username or password are null, empty or unidentified
+	ERROR CODES:
+		2 : username or password are null, empty or unidentified
 
 */
 
 app.post("/register", redirectDashboard, function (req, res) {
 	res.locals.message = req.query.errorMessage;
-	const { username, password } = req.body;
+	const {username, password} = req.body;
 
 	if (username && password) {
 		request.post(
@@ -252,9 +252,9 @@ app.post("/register", redirectDashboard, function (req, res) {
 					} else {
 						res.redirect(
 							"/register?errorCode=" +
-								body.status +
-								"&errorMessage=" +
-								body.message
+							body.status +
+							"&errorMessage=" +
+							body.message
 						);
 					}
 				} else {
@@ -283,16 +283,16 @@ app.post("/tradeTime", (req, res) => {
 	request.get(
 		getHttpLocal() + API_HOST_LOCAL + "/tradeTime",
 		{
-			json: { token: req.cookies.token, userID: userID },
+			json: {token: req.cookies.token, userID: userID},
 			rejectUnauthorized: false,
 			requestCert: false,
 			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.send({ tradeTime: body.tradeTime });
+				res.send({tradeTime: body.tradeTime});
 			} else {
-				res.send({ tradeTime: "Error" });
+				res.send({tradeTime: "Error"});
 			}
 		}
 	);
@@ -303,7 +303,7 @@ function getDashboard(req, res) {
 		request.post(
 			getHttpLocal() + API_HOST_LOCAL + "/getDashboard",
 			{
-				json: { token: req.cookies.token },
+				json: {token: req.cookies.token},
 				rejectUnauthorized: false,
 				requestCert: false,
 				agent: false,
@@ -328,16 +328,16 @@ app.post("/packTime", (req, res) => {
 	request.get(
 		getHttpLocal() + API_HOST_LOCAL + "/packTime",
 		{
-			json: { token: req.cookies.token },
+			json: {token: req.cookies.token},
 			rejectUnauthorized: false,
 			requestCert: false,
 			agent: false,
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.send({ packTime: body.packTime });
+				res.send({packTime: body.packTime});
 			} else {
-				res.send({ packTime: "Error" });
+				res.send({packTime: "Error"});
 			}
 		}
 	);
@@ -357,7 +357,7 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 
 			if (data.status != undefined) {
 				if (data.status == 1) {
-					response.render("adminpanel/adminpanel_cards", { cards: data.cards });
+					response.render("adminpanel/adminpanel_cards", {cards: data.cards});
 
 					return;
 				}
@@ -452,7 +452,7 @@ app.get("/adminpanel/users", redirectIfNotAdmin, function (req, response) {
 
 			if (data.status != undefined) {
 				if (data.status == 1) {
-					response.render("adminpanel/adminpanel_users", { users: data.users });
+					response.render("adminpanel/adminpanel_users", {users: data.users});
 
 					return;
 				}
@@ -466,7 +466,7 @@ app.get("/adminpanel/users", redirectIfNotAdmin, function (req, response) {
 app.get("/settings", redirectLogin, async function (req, res) {
 	res.locals.message = req.query.errorMessage;
 	var dashboard = await getDashboard(req, res);
-	res.render("settings", { userID: req.cookies.userID, dashboard: dashboard });
+	res.render("settings", {userID: req.cookies.userID, dashboard: dashboard});
 });
 
 app.get("/pack", redirectLogin, function (req, res) {
@@ -474,7 +474,7 @@ app.get("/pack", redirectLogin, function (req, res) {
 	request.post(
 		getHttpLocal() + API_HOST_LOCAL + "/pack",
 		{
-			json: { token: req.cookies.token },
+			json: {token: req.cookies.token},
 			rejectUnauthorized: false,
 			requestCert: false,
 			agent: false,
@@ -534,7 +534,7 @@ app.post("/inventory", redirectLogin, function (req, res) {
 					page: data.page,
 					pagemax: data.pagemax,
 				});
-			else res.send({ userID: req.cookies.userID, status: 1 });
+			else res.send({userID: req.cookies.userID, status: 1});
 		}
 	);
 });
@@ -581,7 +581,7 @@ function getInventoryData(
 					pagemax: body.pagemax,
 				});
 			} else {
-				callback({ status: 1 });
+				callback({status: 1});
 			}
 		}
 	);
@@ -594,7 +594,7 @@ app.post("/card", redirectLogin, function (req, res) {
 	if (next == undefined) next = -1;
 	if (next == -1) {
 		if (uuid == undefined) {
-			res.send({ status: 1 });
+			res.send({status: 1});
 			return;
 		}
 	}
@@ -630,7 +630,7 @@ app.post("/card", redirectLogin, function (req, res) {
 					pagemax: body.pagemax,
 				});
 			} else {
-				res.send({ status: 1 });
+				res.send({status: 1});
 			}
 		}
 	);
@@ -640,7 +640,7 @@ app.get("/card", redirectLogin, async function (req, res) {
 	res.locals.message = req.query.errorMessage;
 	var uuid = req.query.uuid;
 	var dashboard = await getDashboard(req, res);
-	res.render("card", { uuid: uuid, dashboard: dashboard });
+	res.render("card", {uuid: uuid, dashboard: dashboard});
 });
 
 app.get("/upgrade", redirectLogin, function (req, res) {
@@ -898,7 +898,7 @@ app.post("/deleteNotification", redirectLogin, function (req, res) {
 	var nId = parseInt(nId);
 
 	if (isNaN(nId)) {
-		res.send({ status: 1 });
+		res.send({status: 1});
 		return;
 	}
 
@@ -915,9 +915,9 @@ app.post("/deleteNotification", redirectLogin, function (req, res) {
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.send({ status: 0 });
+				res.send({status: 0});
 			} else {
-				res.send({ status: 1 });
+				res.send({status: 1});
 			}
 		}
 	);
@@ -936,9 +936,9 @@ app.post("/deleteAllNotifications", redirectLogin, function (req, res) {
 		},
 		(error, response, body) => {
 			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.send({ status: 0 });
+				res.send({status: 0});
 			} else {
-				res.send({ status: 1 });
+				res.send({status: 1});
 			}
 		}
 	);
@@ -967,7 +967,7 @@ function renderUserView(req, res, next) {
 	var userID = undefined;
 
 	res.locals.url = getHttp() + req.get("host");
-	res.locals.api_url = getHttpLocal() + API_HOST_LOCAL;
+	res.locals.api_url = getHttp() + API_HOST_LOCAL;
 
 	userID = req.cookies.userID;
 	res.locals.userID = userID;
