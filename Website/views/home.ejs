@@ -88,7 +88,8 @@
 
 							for(var i = 0; i < packData.length; i++)
 							{
-								var d = new Date(packData[i].time + new Date().getTimezoneOffset()*60*1000);
+								<!--var d = new Date(packData[i].time + new Date().getTimezoneOffset()*60*1000);-->
+								var d = new Date(packData[i].time);
 								var timestring = d.toLocaleDateString("en-US", options);
 								chart.data.labels.push(timestring);
 								chart.data.datasets[0].data.push(packData[i].amount);

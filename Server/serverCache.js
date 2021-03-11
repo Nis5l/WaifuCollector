@@ -131,7 +131,7 @@ module.exports = {
 	loadPackData: function loadPackData(packSpan, sendSpan, callback) {
 		var mnt = moment().valueOf();
 		var nowDate = mnt - (mnt % packSpan) + packSpan;
-		var pastDate = nowDate - sendSpan;
+		var pastDate = nowDate - (sendSpan - (sendSpan % packSpan));
 		database.getPackDataRange(pastDate, nowDate, (data) => {
 			packData = [];
 			for (var j = 0; pastDate <= nowDate; pastDate += packSpan, j++) {
@@ -149,7 +149,7 @@ module.exports = {
 				packInterval = setInterval(() => {
 					updatePackData(packSpan);
 				}, packSpan);
-			}, packSpan - (moment().valueOf() % packSpan));
+			}, nowDate - moment().valueOf());
 			if (callback != undefined) callback();
 
 			function updatePackData(packSpan) {
@@ -164,15 +164,15 @@ module.exports = {
 	},
 	addPackData: function addPackData(packDate) {
 		for (var i = 0; i < packData.length; i++) {
+			console.log(new Date(packData[i].time).toString());
+			console.log(new Date(packDate).toString());
+			console.log();
 			if (packData[i].time == packDate) {
+				console.log("XXXX");
 				packData[i].amount++;
 				return;
 			}
 		}
-		for (var i = 1; i < packData.length; i++) {
-			packData[i - 1] = packData[i];
-		}
-		packData[packData.length - 1] = {time: packDate, amount: 1};
 	},
 	getPackData: function getPackData() {
 		return packData;
