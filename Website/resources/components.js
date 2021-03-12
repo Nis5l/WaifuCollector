@@ -238,9 +238,9 @@ class Card extends HTMLElement {
 				? "//"
 				: ""
 			}opacity: ${effectopacity};
-        background-size: 80%;
+        background-size: 75%;
         background-repeat: no-repeat;
-        background-position: 48% 35%;
+        background-position: 48% 33%;
         transition-duration: 1s;
         width: 100%;
         height: 100%;

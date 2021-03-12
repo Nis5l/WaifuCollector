@@ -1135,7 +1135,10 @@ function frames(callback) {
 }
 
 function effects(callback) {
-	var sql = ["INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('1', 'Effect1.gif', '0.5')"];
+	var sql = [
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('1', 'Effect1.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('2', 'Effect2.gif', '0.5')",
+	];
 
 	con.connect(() => {
 		con.query("DROP TABLE effect", () => {
