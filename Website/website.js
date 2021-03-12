@@ -131,9 +131,9 @@ app.get("/privacy", function (req, res) {
 });
 
 app.post("/cookie", function (req, res) {
-	var date = new Date();
-	date.setTime(date.getTime() + 315532800000);
-	res.cookie("accepted", true, {expires: date});
+	const expirationdate = new Date();
+	expirationdate.setTime(expirationdate.getTime() + 315532800000);
+	res.cookie("accepted", true, {expires: expirationdate});
 	res.redirect("/login");
 });
 
@@ -155,11 +155,14 @@ app.post("/login", redirectDashboard, function (req, res) {
 			(error, response, body) => {
 				if (!error && response.statusCode == 200) {
 					if (body.status == 0) {
-						res.cookie("token", body.token);
+						const expirationdate = new Date();
+						expirationdate.setTime(expirationdate.getTime() + 315532800000);
+
+						res.cookie("token", body.token, {expires: expirationdate});
 
 						userID = body.userID;
 
-						res.cookie("userID", userID);
+						res.cookie("userID", userID, {expires: expirationdate});
 
 						req.session.save((err) => {
 							if (err) console.log(err);
@@ -310,14 +313,19 @@ function getDashboard(req, res) {
 			},
 			(error, response, body) => {
 				if (error) {
-					reject(error);
+					res.clearCookie("userID");
+					res.clearCookie("token");
+					res.redirect("/login?errorCode=3&errorMessage=Wrong response");
 					return;
 				}
-				if (body.status == 0 || body.status == 1) {
-					resolve(body);
+				if (body.status != 0) {
+					res.clearCookie("userID");
+					res.clearCookie("token");
+					res.redirect("/login")
 					return;
 				}
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+
+				resolve(body);
 				return;
 			}
 		);

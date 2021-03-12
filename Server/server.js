@@ -263,7 +263,7 @@ app.post("/login", (req, res) => {
 		console.log("Login " + username);
 		database.login(username, password, (b, messageV, userIDV) => {
 			var tokenV = "";
-			if (b) tokenV = jwt.sign({username: username, id: userIDV}, jwtSecret);
+			if (b) tokenV = jwt.sign({username: username, id: userIDV}, jwtSecret, {expiresIn: 30 * 24 * 60 * 60});
 
 			if (b)
 				res.send({
@@ -342,7 +342,7 @@ app.post("/getDashboard", (req, res) => {
 		try {
 			var decoded = jwt.verify(token, jwtSecret);
 		} catch (JsonWebTokenError) {
-			res.send({status: 2, message: "Identification Please"});
+			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
 
@@ -359,7 +359,7 @@ app.post("/getDashboard", (req, res) => {
 
 			if (!username || username == "null" || username == null) {
 				res.send({
-					status: 2,
+					status: 1,
 					message: "User with userID " + userID + " not found!",
 				});
 				return;
