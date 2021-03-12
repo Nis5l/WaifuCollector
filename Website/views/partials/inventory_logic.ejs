@@ -2,6 +2,7 @@
 
 <script>
 	var cardid = 0;
+	var nextPage = true;
 	var opn = document.getElementById('inventory');
 
 	var inv = document.querySelector("#inventory");
@@ -33,6 +34,9 @@
 	};
 
 	function loadCards(first) {
+		if(!nextPage) return;
+		nextPage = false;
+		
 		if(first)
 		{
 			page = 0;
@@ -40,38 +44,39 @@
 		}
 		if(page < pageamount)
 		{
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var json = JSON.parse(this.response);
-				page = json.page;
-				pageamount = json.pagemax;
-				insertcards(json.cards, opn, false, 1);
-				resize();
-				if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1) loadCards();
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var json = JSON.parse(this.response);
+					page = json.page;
+					pageamount = json.pagemax;
+					insertcards(json.cards, opn, false, 1);
+					nextPage = true;
+					resize();
+					if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 1) loadCards();
+				}
 			}
-		}
-		var radios = document.getElementsByName('sortType');
-		var radioValue = undefined;
-		for (var i = 0, length = radios.length; i < length; i++) {
-			if (radios[i].checked) {
-				radioValue = i;
-				break;
+			var radios = document.getElementsByName('sortType');
+			var radioValue = undefined;
+			for (var i = 0, length = radios.length; i < length; i++) {
+				if (radios[i].checked) {
+					radioValue = i;
+					break;
+				}
 			}
-		}
-		xhttp.open("POST", "/inventory", true);
-		xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		var fid = (typeof friendID !== 'undefined') ? friendID : undefined;
-		if(!first)
-				xhttp.send(JSON.stringify({ next: 0,
-						search: filter.search.value,
-						sortType: i,
-						userID: fid}));
-		else
-				xhttp.send(JSON.stringify({ page: 0,
-						search: filter.search.value,
-						sortType: i,
-						userID: fid}));
+			xhttp.open("POST", "/inventory", true);
+			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			var fid = (typeof friendID !== 'undefined') ? friendID : undefined;
+			if(!first)
+					xhttp.send(JSON.stringify({ next: 0,
+							search: filter.search.value,
+							sortType: i,
+							userID: fid}));
+			else
+					xhttp.send(JSON.stringify({ page: 0,
+							search: filter.search.value,
+							sortType: i,
+							userID: fid}));
 	  };
 	}
 

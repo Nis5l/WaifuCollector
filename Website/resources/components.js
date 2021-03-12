@@ -8,7 +8,7 @@ class ProgressRing extends HTMLElement {
 		this.time = this.getAttribute("time");
 		this._circumference = normalizedRadius * 2 * Math.PI;
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this._root.innerHTML = `
       <svg
         height="${radius * 2}"
@@ -28,9 +28,8 @@ class ProgressRing extends HTMLElement {
            cx= 50%
            cy= 50%
         />
-        <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">${
-					this.time
-				}</text>
+        <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">${this.time
+			}</text>
       </svg>
       
       <style>
@@ -105,12 +104,12 @@ class ProgressRing extends HTMLElement {
 			circle.getBoundingClientRect().right -
 			(circle.getBoundingClientRect().right -
 				circle.getBoundingClientRect().left) /
-				2;
+			2;
 		const circleY =
 			circle.getBoundingClientRect().top -
 			(circle.getBoundingClientRect().top -
 				circle.getBoundingClientRect().bottom) /
-				2;
+			2;
 		const ret =
 			Math.sqrt((circleX - x) * (circleX - x) + (circleY - y) * (circleY - y)) <
 			this.radius;
@@ -167,7 +166,7 @@ class Card extends HTMLElement {
 		this.level = level;
 		this.uuid = this.getAttribute("uuid");
 		this.cardID = this.getAttribute("cardID");
-		this.shadow = this.attachShadow({ mode: "open" });
+		this.shadow = this.attachShadow({mode: "open"});
 		this.turned = turned;
 		//this._root.innerHTML =`
 		this.shadow.innerHTML = `
@@ -225,22 +224,20 @@ class Card extends HTMLElement {
       .card-effect
       {
         background-color: transparent;
-		${
-			effect == null ||
-			effect == undefined ||
-			effect == "undefined" ||
-			effect == "null"
+		${effect == null ||
+				effect == undefined ||
+				effect == "undefined" ||
+				effect == "null"
 				? "//"
 				: ""
-		}background-image: url(${effect});
-		${
-			effectopacity == null ||
-			effectopacity == undefined ||
-			effectopacity == "undefined" ||
-			effectopacity == "null"
+			}background-image: url(${effect});
+		${effectopacity == null ||
+				effectopacity == undefined ||
+				effectopacity == "undefined" ||
+				effectopacity == "null"
 				? "//"
 				: ""
-		}opacity: ${effectopacity};
+			}opacity: ${effectopacity};
         background-size: 80%;
         background-repeat: no-repeat;
         background-position: 48% 35%;
@@ -424,7 +421,7 @@ class Card extends HTMLElement {
 	fit() {
 		while (
 			$(this.shadow).find(".anime-name div").height() >
-				$(this.shadow).find(".anime-name").height() &&
+			$(this.shadow).find(".anime-name").height() &&
 			parseInt($(this.shadow).find(".anime-name div").css("font-size")) > 0
 		) {
 			$(this.shadow)
@@ -432,14 +429,14 @@ class Card extends HTMLElement {
 				.css(
 					"font-size",
 					parseInt($(this.shadow).find(".anime-name div").css("font-size")) -
-						1 +
-						"px"
+					1 +
+					"px"
 				);
 		}
 
 		while (
 			$(this.shadow).find(".card-name div").height() >
-				$(this.shadow).find(".card-name").height() &&
+			$(this.shadow).find(".card-name").height() &&
 			parseInt($(this.shadow).find(".card-name div").css("font-size")) > 0
 		) {
 			$(this.shadow)
@@ -447,8 +444,8 @@ class Card extends HTMLElement {
 				.css(
 					"font-size",
 					parseInt($(this.shadow).find(".card-name div").css("font-size")) -
-						1 +
-						"px"
+					1 +
+					"px"
 				);
 		}
 	}
@@ -476,7 +473,7 @@ class Confirmation extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.noCallback = undefined;
 		this.yesCallback = undefined;
 		this.message = this.getAttribute("message");
@@ -541,7 +538,7 @@ class AddFriend extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.noCallback = undefined;
 		this.yesCallback = undefined;
 
@@ -634,7 +631,7 @@ class Friend extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.username = this.getAttribute("username");
 		this.userID = this.getAttribute("userID");
 		this.status = this.getAttribute("status");
@@ -692,7 +689,7 @@ class FriendSelection extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.username = this.getAttribute("username");
 		this.tradeCallback = undefined;
 		this.deleteCallback = undefined;
@@ -768,7 +765,7 @@ class CookieConfirmation extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.okCallback = undefined;
 
 		var widthsub = 0;
@@ -793,9 +790,6 @@ class CookieConfirmation extends HTMLElement {
     padding: 40px;
 	height: 300px;
 	width: calc(300px - ${widthsub}px);
-	@media screen and (max-width: 400px) { 
-		width: 250px;
-	}
     text-align: center; }
     .card h1 {
       margin-top: 20px;
@@ -814,7 +808,6 @@ class CookieConfirmation extends HTMLElement {
 	  cursor: pointer;
       color: #f7f7f7;
       padding: 20px 30px;
-      margin: auto 10px;
       border: 2px solid #fff;
       background-color: #323232;
       border-radius: 25px;
@@ -869,7 +862,7 @@ class NotificationBox extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.closeCallback = undefined;
 		this.elementCallback = undefined;
 		this.deleteAllCallback = undefined;
@@ -946,7 +939,7 @@ class NotificationElement extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.title = this.getAttribute("title");
 		this.message = this.getAttribute("message");
 		this.url = this.getAttribute("url");
@@ -990,7 +983,7 @@ class ErrorMessage extends HTMLElement {
 	constructor() {
 		super();
 
-		this._root = this.attachShadow({ mode: "open" });
+		this._root = this.attachShadow({mode: "open"});
 		this.closeCallback = "sdf";
 		const message = this.getAttribute("message");
 
