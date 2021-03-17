@@ -483,58 +483,68 @@ app.post("/pack", (req, res) => {
 			run();
 		}
 		function run() {
-			var nowDate = moment();
-			var date = moment(nowDate).add(packCooldown, "seconds");
-			var packDate = moment(parseInt(clients[decoded.id].packTime));
+			try {
+				var nowDate = moment();
+				var date = moment(nowDate).add(packCooldown, "seconds");
+				var packDate = moment(parseInt(clients[decoded.id].packTime));
 
-			if (
-				clients[decoded.id] == null ||
-				clients[decoded.id].packTime == "null" ||
-				nowDate.isAfter(packDate) ||
-				!packDate.isValid()
-			) {
+				if (
+					clients[decoded.id] == null ||
+					clients[decoded.id].packTime == "null" ||
+					nowDate.isAfter(packDate) ||
+					!packDate.isValid()
+				) {
 
-				var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % packDateSpan) + packDateSpan;
-				database.addPackData(packdatadate);
-				cache.addPackData(packdatadate);
+					var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % packDateSpan) + packDateSpan;
+					database.addPackData(packdatadate);
+					cache.addPackData(packdatadate);
 
-				clients[decoded.id].packTime = date.valueOf();
-				var cardamount = utils.getRandomInt(packSize[0], packSize[1]);
+					clients[decoded.id].packTime = date.valueOf();
+					var cardamount = utils.getRandomInt(packSize[0], packSize[1]);
 
-				//(highest-level)^3 * 0.5
+					//(highest-level)^3 * 0.5
 
-				getRandomCards(cardamount, (cards) => {
-					addToDB(0);
-					function addToDB(j) {
-						if (cards[j].level == 1)
-							logger.write(decoded.username + " Pulled a lvl1");
-						if (cards[j].level == 2)
-							logger.write(decoded.username + " Pulled a lvl2");
-						addCardToUser(
-							decoded.id,
-							cards[j].card.id,
-							cards[j].quality,
-							cards[j].level,
-							cards[j].frameID
-							, (insertID) => {
-								cards[j].id = insertID;
-								if (j == cards.length - 1) {
-									res.send({packTime: "0", message: "OK", cards: cards});
-									return;
-								} else {
-									addToDB(j + 1);
-								}
+					getRandomCards(cardamount, (cards) => {
+						try {
+							addToDB(0);
+							function addToDB(j) {
+								if (cards[j].level == 1)
+									logger.write(decoded.username + " Pulled a lvl1");
+								if (cards[j].level == 2)
+									logger.write(decoded.username + " Pulled a lvl2");
+								addCardToUser(
+									decoded.id,
+									cards[j].card.id,
+									cards[j].quality,
+									cards[j].level,
+									cards[j].frameID
+									, (insertID) => {
+										cards[j].id = insertID;
+										if (j == cards.length - 1) {
+											res.send({packTime: "0", message: "OK", cards: cards});
+											return;
+										} else {
+											addToDB(j + 1);
+										}
+									}
+								);
 							}
-						);
-					}
-				});
-			} else {
-				res.send({
-					packTime: packDate.diff(nowDate).seconds(),
-					message: "WAIT",
-					cards: [],
-				});
-				return;
+						} catch (ex) {
+							console.log("grc");
+							console.log("ex");
+						}
+					});
+				} else {
+					res.send({
+						packTime: packDate.diff(nowDate).seconds(),
+						message: "WAIT",
+						cards: [],
+					});
+					return;
+				}
+			} catch (ex) {
+				console.log("packrun");
+				console.log(ex);
 			}
 		}
 	} catch (e) {
