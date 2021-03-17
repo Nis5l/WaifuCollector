@@ -8,13 +8,19 @@ module.exports =
 		file = _file;
 	},
 	write: function write(string) {
-		var d = new Date(moment().valueOf());
-		var timestring = d.toLocaleDateString("en-US", options);
-		fs.appendFile(file, "[" + timestring + "] " + string + "\n", () => {});
+		try {
+			var d = new Date(moment().valueOf());
+			var timestring = d.toLocaleDateString("en-US", options);
+			fs.appendFile(file, "[" + timestring + "] " + string + "\n", () => {});
+		} catch (ex) {
+		}
 	},
 	read: function read(callback) {
-		fs.readFile(file, {encoding: 'utf-8'}, function (err, data) {
-			callback(data);
-		});
+		try {
+			fs.readFile(file, {encoding: 'utf-8'}, function (err, data) {
+				callback(data);
+			});
+		} catch (ex) {
+		}
 	}
 }

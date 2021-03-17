@@ -501,6 +501,8 @@ app.post("/pack", (req, res) => {
 				clients[decoded.id].packTime = date.valueOf();
 				var cardamount = utils.getRandomInt(packSize[0], packSize[1]);
 
+				//(highest-level)^3 * 0.5
+
 				getRandomCards(cardamount, (cards) => {
 					addToDB(0);
 					function addToDB(j) {
