@@ -1949,6 +1949,9 @@ function getRandomCards(amount, callback) {
 			cards[j] = {};
 			cards[j].quality = quality;
 			cards[j].level = 0;
+			var r = utils.getRandomInt(0, 1000);
+			if (r <= 50) cards[j].level = 1;
+			if (r <= 5) cards[j].level = 2;
 			cards[j].cardID = _cards[j].id;
 			cards[j].typeID = _cards[j].typeID;
 		}
