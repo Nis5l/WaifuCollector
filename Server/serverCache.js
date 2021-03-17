@@ -10,6 +10,8 @@ var idToSort = new Map();
 var packData = [];
 var cardAmount = 0;
 var packInterval = undefined;
+
+var friendinventorylinks = new Map();
 module.exports = {
 	refreshCards: function refreshCards(callback) {
 		database.getAnimes((animes) => {
@@ -173,4 +175,27 @@ module.exports = {
 	getPackData: function getPackData() {
 		return packData;
 	},
+	addFriendinventorylink: function addFriendinventorylink(userone, usertwo) {
+		if (!friendinventorylinks.has(userone)) friendinventorylinks.set(userone, []);
+
+		var contains = false;
+		for (var i = 0; friendinventorylinks.has(userone) && i < friendinventorylinks.get(userone).length; i++)
+			if (friendinventorylinks.get(userone)[i] == usertwo) {
+				contains = true;
+				break;
+			}
+		if (!contains) friendinventorylinks.get(userone).push(usertwo);
+	},
+	getFriendinventorylinks: function getFriendinventorylinks(user) {
+		if (!friendinventorylinks.has(user)) return undefined;
+		return friendinventorylinks.get(user);
+	},
+	removeFriendinventorylink: function removeFriendinventorylink(userone, usertwo) {
+		if (!friendinventorylinks.has(userone)) return;
+		for (var i = 0; i < friendinventorylinks.get(userone).length; i++)
+			if (friendinventorylinks.get(userone)[i] == usertwo) {
+				friendinventorylinks.get(userone).splice(i, 1);
+				break;
+			}
+	}
 };

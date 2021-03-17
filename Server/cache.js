@@ -15,6 +15,7 @@ class Client {
 		this.lastmain = undefined;
 		this.cardTypeAmount = 0;
 		this.lastsearch = undefined;
+		this.friendinventory = undefined;
 		var operations = 4;
 		var operationsComplete = 0;
 
@@ -30,6 +31,7 @@ class Client {
 
 		database.getInventory(this.id, (inventory) => {
 			this.inventory = inventory;
+			for (var i = 0; i < this.inventory.length; i++) delete this.inventory[i].userID;
 			this.sortInv();
 			this.refreshCardTypeAmount();
 			operationFinished();
@@ -92,6 +94,12 @@ class Client {
 		this.refreshCardTypeAmount();
 	}
 
+	addCardFriend(card) {
+		this.startDecay(this.time, this.callback);
+		this.friendinventory.inventory.push(card);
+		this.sortInv(true);
+	}
+
 	getFriends() {
 		this.startDecay(this.time, this.callback);
 		return this.friends;
@@ -116,12 +124,12 @@ class Client {
 
 	addFriendRequest(id) {
 		this.startDecay(this.time, this.callback);
-		this.friends.push({ userID: id, friend_status: 1 });
+		this.friends.push({userID: id, friend_status: 1});
 	}
 
 	addFriendRequestIncoming(id) {
 		this.startDecay(this.time, this.callback);
-		this.friends.push({ userID: id, friend_status: 0 });
+		this.friends.push({userID: id, friend_status: 0});
 	}
 
 	acceptFriendRequest(id) {
@@ -157,7 +165,7 @@ class Client {
 		return false;
 	}
 
-	getInventory(page, amount, ids, exclude, level, sortMethod) {
+	getInventory(page, amount, ids, exclude, level, sortMethod, friend) {
 		this.startDecay(this.time, this.callback);
 		if (sortMethod != undefined) this.inventorySort = sortMethod;
 		this.sortInv();
@@ -165,13 +173,16 @@ class Client {
 		this.lastexclude = exclude;
 		this.lastlevel = level;
 
+		var inv = this.inventory;
+		if (friend) inv = this.friendinventory.inventory;
+
 		var ret = [];
 		var newinv = [];
-		for (var obj in this.inventory) {
-			if (ids == undefined || ids.includes(this.inventory[obj].cardID))
-				if (exclude == undefined || !exclude.includes(this.inventory[obj].id))
-					if (level == undefined || this.inventory[obj].level == level)
-						newinv.push(this.inventory[obj]);
+		for (var obj in inv) {
+			if (ids == undefined || ids.includes(inv[obj].cardID))
+				if (exclude == undefined || !exclude.includes(inv[obj].id))
+					if (level == undefined || inv[obj].level == level)
+						newinv.push(inv[obj]);
 		}
 		this.pageamount = Math.ceil(newinv.length / amount);
 		if (page >= this.pageamount) page = this.pageamount - 1;
@@ -187,18 +198,20 @@ class Client {
 		return [this.page + 1, this.pageamount];
 	}
 
-	nextPage(amount) {
+	nextPage(amount, friend) {
 		this.page++;
 		return this.getInventory(
 			this.page,
 			amount,
 			this.lastids,
 			this.lastexclude,
-			this.lastlevel
+			this.lastlevel,
+			undefined,
+			friend
 		);
 	}
 
-	prevPage(amount) {
+	prevPage(amount, friend) {
 		this.page--;
 		if (this.page < 0) this.page = 0;
 		return this.getInventory(
@@ -206,50 +219,55 @@ class Client {
 			amount,
 			this.lastids,
 			this.lastexclude,
-			this.lastlevel
+			this.lastlevel,
+			undefined,
+			friend
 		);
 	}
 
-	sortInv() {
+	sortInv(friend) {
+		var sortinv = this.inventory;
+		if (friend) sortinv = this.friendinventory.inventory;
+
 		if (this.inventorySort != 0 && this.inventorySort != 1)
 			this.inventorySort = 0;
 
 		switch (this.inventorySort) {
 			case 0:
 				{
-					this.sortInvName();
+					this.sortInvName(sortinv);
 				}
 				break;
 			case 1:
 				{
-					this.sortInvLevel();
+					this.sortInvLevel(sortinv);
 				}
 				break;
 		}
 	}
 
-	sortInvName() {
+	sortInvName(inv) {
 		this.startDecay(this.time, this.callback);
 		while (true) {
 			var sorted = true;
-			for (var i = 0; i < this.inventory.length - 1; i++) {
+			for (var i = 0; i < inv.length - 1; i++) {
 				if (
-					cache.getSortByID(this.inventory[i].cardID) >
-					cache.getSortByID(this.inventory[i + 1].cardID)
+					cache.getSortByID(inv[i].cardID) >
+					cache.getSortByID(inv[i + 1].cardID)
 				) {
 					sorted = false;
-					swap(this.inventory, i);
+					swap(inv, i);
 				} else if (
-					cache.getSortByID(this.inventory[i].cardID) ==
-					cache.getSortByID(this.inventory[i + 1].cardID)
+					cache.getSortByID(inv[i].cardID) ==
+					cache.getSortByID(inv[i + 1].cardID)
 				) {
-					if (this.inventory[i].level < this.inventory[i + 1].level) {
+					if (inv[i].level < inv[i + 1].level) {
 						sorted = false;
-						swap(this.inventory, i);
-					} else if (this.inventory[i].level == this.inventory[i + 1].level) {
-						if (this.inventory[i].quality < this.inventory[i + 1].quality) {
+						swap(inv, i);
+					} else if (inv[i].level == inv[i + 1].level) {
+						if (inv[i].quality < inv[i + 1].quality) {
 							sorted = false;
-							swap(this.inventory, i);
+							swap(inv, i);
 						}
 					}
 				}
@@ -263,24 +281,24 @@ class Client {
 		}
 	}
 
-	sortInvLevel() {
+	sortInvLevel(inv) {
 		this.startDecay(this.time, this.callback);
 		while (true) {
 			var sorted = true;
-			for (var i = 0; i < this.inventory.length - 1; i++) {
-				if (this.inventory[i].level < this.inventory[i + 1].level) {
+			for (var i = 0; i < inv.length - 1; i++) {
+				if (inv[i].level < inv[i + 1].level) {
 					sorted = false;
-					swap(this.inventory, i);
-				} else if (this.inventory[i].level == this.inventory[i + 1].level) {
-					if (this.inventory[i].quality < this.inventory[i + 1].quality) {
+					swap(inv, i);
+				} else if (inv[i].level == inv[i + 1].level) {
+					if (inv[i].quality < inv[i + 1].quality) {
 						sorted = false;
-						swap(this.inventory, i);
+						swap(inv, i);
 					} else if (
-						this.inventory[i].quality == this.inventory[i + 1].quality
+						inv[i].quality == inv[i + 1].quality
 					) {
-						if (this.inventory[i].cardID > this.inventory[i + 1].cardID) {
+						if (inv[i].cardID > inv[i + 1].cardID) {
 							sorted = false;
-							swap(this.inventory, i);
+							swap(inv, i);
 						}
 					}
 				}

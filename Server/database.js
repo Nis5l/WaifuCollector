@@ -30,7 +30,8 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
 			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;"
+			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `tradesuggestion` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;"
 		];
 
 		con.connect(() => {
@@ -453,6 +454,18 @@ module.exports = {
 			}
 		);
 	},
+	getTradeSuggestions: function getTradeSuggestions(userone, usertwo, callback) {
+		con.query(
+			"SELECT * FROM tradesuggestion WHERE userone=" +
+			userone +
+			" AND usertwo=" +
+			usertwo,
+			function (err, result, fields) {
+				if (err) console.log(err);
+				callback(result);
+			}
+		);
+	},
 	getTradesCard: function getTradesCard(card, callback) {
 		con.query(
 			"SELECT * FROM trade WHERE card=" + card,
@@ -468,6 +481,20 @@ module.exports = {
 	addTrade: function addTrade(userone, usertwo, cardID, callback) {
 		con.query(
 			"INSERT INTO `trade` (`userone`, `usertwo`, `card`) VALUES ('" +
+			userone +
+			"', '" +
+			usertwo +
+			"', '" +
+			cardID +
+			"')",
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
+	},
+	addTradeSuggestion: function addTradeSuggestion(userone, usertwo, cardID, callback) {
+		con.query(
+			"INSERT INTO `tradesuggestion` (`userone`, `usertwo`, `card`) VALUES ('" +
 			userone +
 			"', '" +
 			usertwo +
@@ -495,9 +522,30 @@ module.exports = {
 			}
 		);
 	},
+	removeSuggestion: function removeSuggestion(uuid, callback) {
+		con.query(
+			"DELETE FROM tradesuggestion WHERE card=" + uuid,
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
+	},
 	removeTradeUser: function removeTradeUser(uuid, userone, usertwo, callback) {
 		con.query(
 			"DELETE FROM trade WHERE card=" +
+			uuid +
+			" AND userone=" +
+			userone +
+			" AND usertwo=" +
+			usertwo,
+			function (err, result, fields) {
+				callback(result);
+			}
+		);
+	},
+	removeSuggestionUser: function removeSuggestionUser(userone, usertwo, uuid, callback) {
+		con.query(
+			"DELETE FROM tradesuggestion WHERE card=" +
 			uuid +
 			" AND userone=" +
 			userone +
@@ -570,6 +618,19 @@ module.exports = {
 	tradeExists: function tradeExists(userone, usertwo, cardID, callback) {
 		con.query(
 			"SELECT * FROM trade WHERE userone=" +
+			userone +
+			" AND usertwo=" +
+			usertwo +
+			" AND card=" +
+			cardID,
+			(err, result, fields) => {
+				callback(result != undefined && result.length > 0);
+			}
+		);
+	},
+	tradeSuggestionExists: function tradeSuggestionExists(userone, usertwo, cardID, callback) {
+		con.query(
+			"SELECT * FROM tradesuggestion WHERE userone=" +
 			userone +
 			" AND usertwo=" +
 			usertwo +
@@ -853,7 +914,7 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Misa Amane', '53', 'Card_MisaAmane.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shinoa Hiragi', '54', 'Card_ShinoaHiragi.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nezuko Kamado', '55', 'Card_NezukoKamado.jpg');",
-		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Artoria Pendragon', '52', 'Card_ArtoriaPendragon.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Saber', '52', 'Card_ArtoriaPendragon.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Violet Evergarden', '56', 'Card_VioletEvergarden.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuna', '57', 'Card_Yuna.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Momoka Sonokawa', '58', 'Card_MomokaSonokawa.jpg');",
@@ -993,6 +1054,11 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ren Sin', '92', 'Card_RenSin.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ai Ohto', '93', 'Card_AiOhto.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Holo', '94', 'Card_Holo.jpg');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuria', '95', 'Card_Yuria.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tou', '95', 'Card_Tou.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mamiya', '95', 'Card_Mamiya.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ilulu', '48', 'Card_Ilulu.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1103,6 +1169,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('92', 'Back Arrow');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('93', 'Wonder Egg Priority');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('94', 'Spice and Wolf');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('95', 'Hokuto no Ken');",
 	];
 
 	con.connect(() => {

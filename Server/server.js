@@ -10,6 +10,7 @@ const jwtSecret = "yCSgVxmL9I";
 const moment = require("moment");
 const utils = require("./utils");
 const fs = require("fs");
+const logger = require("./logger");
 
 const upload = require("express-fileupload");
 
@@ -38,6 +39,8 @@ const friendLimit = config.friendLimit;
 const tradeLimit = config.tradeLimit;
 const packDateSpan = config.packDateSpan;
 const packDateSendSpan = config.packDateSendSpan;
+
+const logfile = config.logfile;
 
 var clients = {};
 
@@ -87,6 +90,34 @@ app.get("/cards/export", function (req, res) {
 
 		res.send(fileContent);
 	});
+});
+
+app.get("/log", (req, res) => {
+	var token = req.body.token;
+	try {
+		var decoded = jwt.verify(token, jwtSecret);
+	} catch (JsonWebTokenError) {
+		res.send({status: 2, message: "Identification Please"});
+		return;
+	}
+
+	if (clients[decoded.id] == undefined) {
+		createCache(decoded.id, decoded.username, run);
+	} else {
+		clients[decoded.id].refresh();
+		run(decoded.id);
+	}
+
+	function run() {
+		database.getUserRank(decoded.id, (rank) => {
+			if (rank != 1) {
+				res.send({status: 1, message: "You dont have permission to view this"});
+			}
+			logger.read((data) => {
+				res.send({status: 0, log: data});
+			});
+		});
+	}
 });
 
 app.post("/cards/import", function (req, res) {
@@ -260,7 +291,7 @@ app.post("/login", (req, res) => {
 	try {
 		var username = req.body.username;
 		var password = req.body.password;
-		console.log("Login " + username);
+		logger.write("Login " + username);
 		database.login(username, password, (b, messageV, userIDV) => {
 			var tokenV = "";
 			if (b) tokenV = jwt.sign({username: username, id: userIDV}, jwtSecret, {expiresIn: 30 * 24 * 60 * 60});
@@ -290,6 +321,7 @@ app.post("/register", (req, res) => {
 		var username = req.body.username;
 		var password = req.body.password;
 
+		logger.write("Register " + username);
 		switch (checkUser(username)) {
 			case 1: {
 				registerCallback(
@@ -472,22 +504,14 @@ app.post("/pack", (req, res) => {
 				getRandomCards(cardamount, (cards) => {
 					addToDB(0);
 					function addToDB(j) {
-						database.addCard(
+						addCardToUser(
 							decoded.id,
 							cards[j].card.id,
 							cards[j].quality,
 							cards[j].level,
-							cards[j].frameID,
-							(insertID) => {
+							cards[j].frameID
+							, (insertID) => {
 								cards[j].id = insertID;
-								clients[decoded.id].addCard({
-									id: insertID,
-									userID: decoded.id,
-									cardID: cards[j].card.id,
-									quality: cards[j].quality,
-									level: cards[j].level,
-									frameID: cards[j].frameID,
-								});
 								if (j == cards.length - 1) {
 									res.send({packTime: "0", message: "OK", cards: cards});
 									return;
@@ -540,6 +564,7 @@ app.post("/passchange", (req, res) => {
 			}
 		}
 		database.userexists(username, (b) => {
+			logger.write(decoded.username + " Changed Password");
 			if (b) {
 				database.changePass(username, newpassword);
 				res.send({status: 0, message: "Password changed"});
@@ -582,7 +607,6 @@ app.post("/getfriends", (req, res) => {
 				var id = friendIDs[i];
 				if (clients[id] != undefined) {
 					friends.push({userID: id, username: clients[id].username});
-
 					if (i == friendIDs.length) {
 						res.send({status: 0, friends: friends});
 						return;
@@ -619,6 +643,7 @@ app.post("/inventory", (req, res) => {
 
 		var friendID = req.body.userID;
 		var friendID = parseInt(friendID);
+		var friend = req.body.friend == undefined ? false : true;
 
 		if (next == undefined) next = -1;
 		if (page == undefined) page = 0;
@@ -630,34 +655,72 @@ app.post("/inventory", (req, res) => {
 			res.send({status: 1, message: "Identification Please"});
 			return;
 		}
+
+		var nm = run;
+		if (friend) nm = cachefriend;
+
 		if (clients[decoded.id] == undefined) {
-			createCache(decoded.id, decoded.username, run);
+			createCache(decoded.id, decoded.username, nm);
 		} else {
 			clients[decoded.id].refresh();
-			run(decoded.id);
+			nm(decoded.id);
+		}
+
+		function cachefriend() {
+			if (clients[friendID] == undefined) {
+				createCache(friendID, undefined, (ret) => {
+					if (ret == -1) {
+						res.send({status: 1, message: "Not your friend"});
+						return;
+					}
+					run(decoded.id);
+				});
+			} else {
+				clients[friendID].refresh();
+				run(decoded.id);
+			}
 		}
 		function run(userID) {
-			var ids = clients[userID].lastids;
-			if (clients[userID].lastsearch != search) {
-				clients[userID].lastsearch = search;
+			if (friend && !clients[userID].hasFriendAdded(friendID)) {
+				res.send({status: 1, message: "Not your friend"});
+				return;
+			}
+			var ids = clients[decoded.id].lastids;
+			if (clients[decoded.id].lastsearch != search || (page == 0 && next != -1)) {
+				clients[decoded.id].lastsearch = search;
 				ids = cache.getIdsByString(search);
 			}
 			var exclude = [];
 			if (!isNaN(friendID)) {
-				database.getTrade(userID, friendID, (ex) => {
-					for (var i = 0; ex != undefined && i < ex.length; i++) {
-						exclude.push(ex[i].card);
-					}
-					run3();
-				});
+				if (!friend) {
+					database.getTrade(userID, friendID, (ex) => {
+						for (var i = 0; ex != undefined && i < ex.length; i++) {
+							exclude.push(ex[i].card);
+						}
+						run3();
+					});
+				} else {
+					database.getTrade(friendID, userID, (ex) => {
+						database.getTradeSuggestions(userID, friendID, (exs) => {
+							for (var i = 0; ex != undefined && i < ex.length; i++) {
+								exclude.push(ex[i].card);
+							}
+							for (var i = 0; exs != undefined && i < exs.length; i++) {
+								exclude.push(exs[i].card);
+							}
+							run3();
+						});
+					});
+				}
 			} else {
 				run3();
 			}
 			function run3() {
+				if (friend) setFriendinventory(clients[userID], clients[friendID]);
 				if (next == 0) {
-					var inventory = clients[userID].nextPage(inventorySendAmount);
+					var inventory = clients[userID].nextPage(inventorySendAmount, friend);
 				} else if (next == 1) {
-					var inventory = clients[userID].prevPage(inventorySendAmount);
+					var inventory = clients[userID].prevPage(inventorySendAmount, friend);
 				} else
 					var inventory = clients[userID].getInventory(
 						page,
@@ -665,7 +728,8 @@ app.post("/inventory", (req, res) => {
 						ids,
 						exclude,
 						undefined,
-						sortType
+						sortType,
+						friend
 					);
 				var pageStats = clients[userID].getPageStats();
 				if (inventory.length == 0) {
@@ -803,6 +867,8 @@ app.post("/upgrade", (req, res) => {
 					var r = utils.getRandomInt(0, 100);
 					if (r > chance) succes = false;
 
+					logger.write(decoded.username + " Upgrade lvl:" + cardresult.level + (succes ? " Succeded" : " Failed"));
+
 					var newlevel = 0;
 					var newquality = 0;
 					if (succes) {
@@ -819,21 +885,13 @@ app.post("/upgrade", (req, res) => {
 					database.deleteCard(carduuid, () => {
 						database.deleteCard(mainuuid, () => {
 							removeTrade(carduuid, mainuuid, () => {
-								database.addCard(
+								addCardToUser(
 									decoded.id,
 									cardresult.cardID,
 									newquality,
 									newlevel,
 									mainresult.frameID,
 									(insertID) => {
-										clients[decoded.id].addCard({
-											id: insertID,
-											userID: decoded.id,
-											cardID: cardresult.cardID,
-											quality: newquality,
-											level: newlevel,
-											frameID: mainresult.frameID,
-										});
 										res.send({status: 0, uuid: insertID});
 									}
 								);
@@ -1168,6 +1226,8 @@ app.post("/trade", (req, res) => {
 				}
 				var cards = [];
 				var cardsfriend = [];
+				var cardsuggestions = [];
+				var cardsuggestionsfriend = [];
 				database.getTrade(decoded.id, userID, (uuids) => {
 					for (var i = 0; i < uuids.length; i++) {
 						cards.push(clients[decoded.id].getCard(uuids[i].card));
@@ -1184,22 +1244,46 @@ app.post("/trade", (req, res) => {
 								return;
 							}
 						}
-						getCards(cards, () => {
-							getCards(cardsfriend, () => {
-								res.send({
-									status: 0,
-									cards: cards,
-									cardsfriend: cardsfriend,
-									username: clients[userID].username,
-									statusone: tradeok,
-									statustwo: tradeokother,
-									tradeCount1: cards.length,
-									tradeCount2: cardsfriend.length,
-									tradeLimit: tradeLimit,
-									tradeTimeFriend: getTradeTime(userID),
+						database.getTradeSuggestions(userID, decoded.id, (uuidseg) => {
+							for (var i = 0; i < uuidseg.length; i++) {
+								cardsuggestions.push(clients[decoded.id].getCard(uuidseg[i].card));
+								if (cardsuggestions[i] == undefined) {
+									res.send({status: 1, message: "Cant find card"});
+									return;
+								}
+							}
+							database.getTradeSuggestions(decoded.id, userID, (uuidsegfriend) => {
+								for (var i = 0; i < uuidsegfriend.length; i++) {
+									cardsuggestionsfriend.push(clients[userID].getCard(uuidsegfriend[i].card));
+									if (cardsuggestionsfriend[i] == undefined) {
+										res.send({status: 1, message: "Cant find card"});
+										return;
+									}
+								}
+								getCards(cardsuggestions, () => {
+									getCards(cardsuggestionsfriend, () => {
+										getCards(cards, () => {
+											getCards(cardsfriend, () => {
+												res.send({
+													status: 0,
+													cards: cards,
+													cardsfriend: cardsfriend,
+													cardsuggestions: cardsuggestions,
+													cardsuggestionsfriend: cardsuggestionsfriend,
+													username: clients[userID].username,
+													statusone: tradeok,
+													statustwo: tradeokother,
+													tradeCount1: cards.length,
+													tradeCount2: cardsfriend.length,
+													tradeLimit: tradeLimit,
+													tradeTimeFriend: getTradeTime(userID),
+												});
+											});
+										});
+									});
 								});
-							})
-						})
+							});
+						});
 					});
 				});
 			});
@@ -1238,45 +1322,83 @@ app.post("/addtrade", (req, res) => {
 			run();
 		}
 		function run() {
+			addCardTrade(decoded.id, userID, cardID, (sc) => {
+				if (sc.status == 0)
+					database.addNotification(
+						usertwo,
+						"Trade Changed",
+						"A card got added to the trade, click to view!",
+						"trade?userID=" + userone,
+						() => {}
+					);
+				res.send(sc);
+			});
+			return;
+		}
+	} catch (e) {
+		console.log(e);
+		res.send({status: 1, message: "internal server error"});
+		return;
+	}
+});
+
+app.post("/suggesttrade", (req, res) => {
+	try {
+		var token = req.body.token;
+		var userID = parseInt(req.body.userID);
+		var cardID = parseInt(req.body.cardID);
+
+		if (isNaN(userID) || isNaN(cardID)) {
+			res.send({status: 1, message: "not a userID"});
+			return;
+		}
+
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({status: 1, message: "Identification Please"});
+			return;
+		}
+
+		if (clients[decoded.id] == undefined) {
+			createCache(decoded.id, decoded.username, run);
+		} else {
+			clients[decoded.id].refresh();
+			run();
+		}
+		function run() {
 			if (!clients[decoded.id].hasFriendAdded(userID)) {
 				res.send({status: 1, message: "not your friend"});
 				return;
 			}
-
-			database.getTrade(decoded.id, userID, (cards) => {
-				if (cards.length >= tradeLimit) {
-					res.send({status: 1, message: "Tradelimit reached"});
+			database.getCardUUID(cardID, userID, (result) => {
+				if (result == undefined) {
+					res.send({
+						status: 1,
+						message: "Cant find card, or it isnt his",
+					});
 					return;
 				}
-
-				database.getCardUUID(cardID, decoded.id, (result) => {
-					if (result == undefined) {
-						res.send({
-							status: 1,
-							message: "Cant find card, or it isnt yours",
-						});
+				database.tradeExists(decoded.id, userID, cardID, (b) => {
+					if (b) {
+						res.send({status: 1, message: "Card already in trade"});
 						return;
 					}
-					database.tradeExists(decoded.id, userID, cardID, (b) => {
+					database.tradeSuggestionExists(decoded.id, userID, cardID, (b) => {
 						if (b) {
-							res.send({status: 1, message: "Card already in trade"});
+							res.send({status: 1, message: "Card Suggestion already in trade"});
 							return;
 						}
-						database.addTrade(decoded.id, userID, cardID, () => {
-							setTrade(decoded.id, userID, 0, () => {
-								setTrade(userID, decoded.id, 0, () => {
-									//console.log(userID);
-									database.addNotification(
-										userID,
-										"Trade Changed",
-										"A card got added to the trade, click to view!",
-										"trade?userID=" + decoded.id,
-										() => {}
-									);
-									res.send({status: 0});
-									return;
-								});
-							});
+						database.addTradeSuggestion(decoded.id, userID, cardID, () => {
+							database.addNotification(
+								userID,
+								"Trade Suggestion",
+								"A friend changed the card suggestions, click to view!",
+								"trade?userID=" + decoded.id,
+								() => {}
+							);
+							res.send({status: 0});
+							return;
 						});
 					});
 				});
@@ -1294,13 +1416,11 @@ app.post("/addtrade", (req, res) => {
 app.post("/removetrade", (req, res) => {
 	try {
 		var token = req.body.token;
-		var userID = req.body.userID;
-		var userID = parseInt(userID);
-		var cardID = req.body.cardID;
-		var cardID = parseInt(cardID);
+		var userID = parseInt(req.body.userID);
+		var cardID = parseInt(req.body.cardID);
 
 		if (isNaN(userID) || isNaN(cardID)) {
-			res.send({status: 1, message: "not a userID"});
+			res.send({status: 1, message: "not a userID/cardID"});
 			return;
 		}
 
@@ -1341,6 +1461,105 @@ app.post("/removetrade", (req, res) => {
 		return;
 	}
 });
+
+app.post("/removesuggestion", (req, res) => {
+	try {
+		var token = req.body.token;
+		var userID = parseInt(req.body.userID);
+		var cardID = parseInt(req.body.cardID);
+		var friend = req.body.friend == undefined ? false : true;
+
+		if (isNaN(userID) || isNaN(cardID)) {
+			res.send({status: 1, message: "not a userID/cardID"});
+			return;
+		}
+
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({status: 1, message: "Identification Please"});
+			return;
+		}
+
+		if (clients[decoded.id] == undefined) {
+			createCache(decoded.id, decoded.username, run);
+		} else {
+			clients[decoded.id].refresh();
+			run();
+		}
+
+		function run() {
+			var uo = userID;
+			var ut = decoded.id;
+			if (friend) {
+				uo = decoded.id;
+				ut = userID;
+			}
+			database.removeSuggestionUser(uo, ut, cardID, () => {
+				database.addNotification(
+					userID,
+					"Trade Suggestion",
+					"A friend changed the card suggestions, click to view!",
+					"trade?userID=" + decoded.id,
+					() => {}
+				);
+				res.send({status: 0});
+			});
+			return;
+		}
+	} catch (e) {
+		console.log(e);
+		res.send({status: 1, message: "internal server error"});
+		return;
+	}
+});
+
+app.post("/acceptsuggestion", (req, res) => {
+	try {
+		var token = req.body.token;
+		var userID = parseInt(req.body.userID);
+		var cardID = parseInt(req.body.cardID);
+
+		if (isNaN(userID) || isNaN(cardID)) {
+			res.send({status: 1, message: "not a userID/cardID"});
+			return;
+		}
+
+		try {
+			var decoded = jwt.verify(token, jwtSecret);
+		} catch (JsonWebTokenError) {
+			res.send({status: 1, message: "Identification Please"});
+			return;
+		}
+
+		if (clients[decoded.id] == undefined) {
+			createCache(decoded.id, decoded.username, run);
+		} else {
+			clients[decoded.id].refresh();
+			run();
+		}
+
+		function run() {
+			addCardTrade(decoded.id, userID, cardID, (sc) => {
+				if (sc.status == 0)
+					database.addNotification(
+						userID,
+						"Trade Suggestion",
+						"A friend accepted a card suggestion, click to view!",
+						"trade?userID=" + decoded.id,
+						() => {}
+					);
+				res.send(sc);
+			});
+			return;
+		}
+	} catch (e) {
+		console.log(e);
+		res.send({status: 1, message: "internal server error"});
+		return;
+	}
+});
+
 
 app.post("/okTrade", (req, res) => {
 	try {
@@ -1403,6 +1622,7 @@ app.post("/okTrade", (req, res) => {
 								transfer(userID, decoded.id, () => {
 									setTrade(decoded.id, userID, 0, () => {
 										setTrade(userID, decoded.id, 0, () => {
+											logger.write("Traded: " + clients[decoded.id].username + " " + clients[userID].username);
 											database.addNotification(
 												userID,
 												"Trade Complete",
@@ -1420,30 +1640,41 @@ app.post("/okTrade", (req, res) => {
 							});
 							function transfer(userone, usertwo, callback) {
 								database.getTrade(userone, usertwo, (cards) => {
-									for (var i = 0; i < cards.length; i++) {
-										var c = clients[userone].getCard(cards[i].card);
-										clients[usertwo].addCard({
-											id: cards[i].card,
-											userID: userID,
-											cardID: c.cardID,
-											quality: c.quality,
-											level: c.level,
-											frameID: c.frameID,
-										});
-										clients[userone].deleteCard(cards[i].card);
-									}
-									run2(0);
-									function run2(idx) {
-										if (idx == cards.length) {
-											callback();
-											return;
+									database.getTradeSuggestions(userone, usertwo, (suggestions) => {
+										for (var i = 0; i < cards.length; i++) {
+											var c = clients[userone].getCard(cards[i].card);
+											addCardToUserCache(
+												usertwo,
+												cards[i].card,
+												c.cardID,
+												c.quality,
+												c.level,
+												c.frameID,
+											);
+											clients[userone].deleteCard(cards[i].card);
 										}
-										database.removeTrade(cards[idx].card, () => {
-											database.changeCardUser(cards[idx].card, usertwo, () => {
-												run2(idx + 1);
+										run2(0);
+										function run2(idx) {
+											if (idx == cards.length) {
+												run3(0);
+												return;
+											}
+											database.removeTrade(cards[idx].card, () => {
+												database.changeCardUser(cards[idx].card, usertwo, () => {
+													run2(idx + 1);
+												});
 											});
-										});
-									}
+										}
+										function run3(idx) {
+											if (idx == suggestions.length) {
+												callback();
+												return;
+											}
+											database.removeSuggestion(suggestions[idx].card, () => {
+												run3(idx + 1);
+											});
+										}
+									});
 								});
 							}
 						} else {
@@ -1781,7 +2012,99 @@ function clearCache(userID) {
 	delete clients[userID];
 }
 
+function setFriendinventory(userone, usertwo) {
+	if (userone.friendinventory != undefined && userone.friendinventory.id == usertwo.id) return;
+	removeFriendinventory(userone, usertwo);
+	userone.friendinventory = {id: usertwo.id, inventory: [...usertwo.inventory]};
+	cache.addFriendinventorylink(usertwo.id, userone.id);
+}
+
+function removeFriendinventory(userone, usertwo) {
+	if (userone.friendinventory == undefined) return;
+	userone.friendinventory = undefined;
+	cache.removeFriendinventorylink(usertwo.id, userone.id);
+}
+
+function addCardToUser(userID, cardID, quality, level, frameID, callback) {
+	database.addCard(
+		userID,
+		cardID,
+		quality,
+		level,
+		frameID,
+		(insertID) => {
+			addCardToUserCache(userID, insertID, cardID, quality, level, frameID);
+			callback(insertID);
+		});
+}
+
+function addCardToUserCache(userID, id, cardID, quality, level, frameID) {
+	if (clients[userID] != undefined)
+		clients[userID].addCard({
+			id: id,
+			cardID: cardID,
+			quality: quality,
+			level: level,
+			frameID: frameID,
+		});
+
+	var links = cache.getFriendinventorylinks(userID);
+	if (links != undefined) {
+		for (var i = 0; i < links.length; i++)
+			if (clients[links[i]] != undefined)
+				clients[links[i]].addCardFriend({
+					id: id,
+					cardID: cardID,
+					quality: quality,
+					level: level,
+					frameID: frameID,
+				});
+	}
+}
+
+function addCardTrade(userone, usertwo, uuid, callback) {
+
+	if (!clients[userone].hasFriendAdded(usertwo)) {
+		callback({status: 1, message: "not your friend"});
+		return;
+	}
+
+	database.getTrade(userone, usertwo, (cards) => {
+		if (cards.length >= tradeLimit) {
+			callback({status: 1, message: "Tradelimit reached"});
+			return;
+		}
+
+		database.getCardUUID(uuid, userone, (result) => {
+			if (result == undefined) {
+				callback({
+					status: 1,
+					message: "Cant find card, or it isnt yours",
+				});
+				return;
+			}
+			database.tradeExists(userone, usertwo, uuid, (b) => {
+				if (b) {
+					callback({status: 1, message: "Card already in trade"});
+					return;
+				}
+				database.addTrade(userone, usertwo, uuid, () => {
+					database.removeSuggestionUser(usertwo, userone, uuid, () => {
+						setTrade(userone, usertwo, 0, () => {
+							setTrade(usertwo, userone, 0, () => {
+								callback({status: 0});
+								return;
+							});
+						});
+					});
+				});
+			});
+		});
+	});
+}
+
 console.log("Initializing DataBase");
+logger.init(logfile);
 database.init(() => {
 	cache.refreshCards(() => {
 		cache.loadPackData(packDateSpan, packDateSendSpan, () => {
