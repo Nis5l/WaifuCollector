@@ -504,6 +504,10 @@ app.post("/pack", (req, res) => {
 				getRandomCards(cardamount, (cards) => {
 					addToDB(0);
 					function addToDB(j) {
+						if (cards[j].level == 1)
+							logger.write(decoded.username + " Pulled a lvl1");
+						if (cards[j].level == 2)
+							logger.write(decoded.username + " Pulled a lvl2");
 						addCardToUser(
 							decoded.id,
 							cards[j].card.id,
