@@ -166,6 +166,8 @@ class Card extends HTMLElement {
 		this.level = level;
 		this.uuid = this.getAttribute("uuid");
 		this.cardID = this.getAttribute("cardID");
+		this.backcolor = this.getAttribute("backcolor");
+		this.identifier = this.getAttribute("identifier");
 		this.shadow = this.attachShadow({mode: "open"});
 		this.turned = turned;
 		//this._root.innerHTML =`
@@ -174,6 +176,8 @@ class Card extends HTMLElement {
       <div class="card-inner" id="card-inner">
       </div>  
       <div class="card-effect">
+      </div>  
+      <div class="card-color">
       </div>  
       <div class="waifu-card-back">
       </div>
@@ -211,12 +215,13 @@ class Card extends HTMLElement {
       {
         background-color: transparent;
         background-image: url(${img});
-        background-size: 80%;
+        background-size: 100%;
         background-repeat: no-repeat;
-        background-position: 48% 35%;
+		margin-left: 10%;
+		margin-top: 11%;
         transition-duration: 1s;
-        width: 100%;
-        height: 100%;
+        width: 78%;
+        height: 78%;
         backface-visibility: hidden;
         transform: rotateY(${turned ? 180 : 0}deg);
       }
@@ -238,15 +243,32 @@ class Card extends HTMLElement {
 				? "//"
 				: ""
 			}opacity: ${effectopacity};
-        background-size: 75%;
+        background-size: 100%;
         background-repeat: no-repeat;
-        background-position: 48% 33%;
+		margin-left: 11.8%;
+		margin-top: 13%;
         transition-duration: 1s;
-        width: 100%;
-        height: 100%;
+        width: 76%;
+        height: 76%;
         backface-visibility: hidden;
         transform: rotateY(${turned ? 180 : 0}deg);
 		position: absolute;
+		top: 0;
+		left: 0;
+      }
+
+      .card-color
+      {
+		position: absolute;
+		background-color: ${this.backcolor == null ? "transparent" : this.backcolor};
+        background-size: 100%;
+		margin-left: 10%;
+		margin-top: 11%;
+        transition-duration: 1s;
+        width: 78%;
+        height: 78%;
+        backface-visibility: hidden;
+        transform: rotateY(${turned ? 180 : 0}deg);
 		top: 0;
 		left: 0;
       }
@@ -530,6 +552,81 @@ class Confirmation extends HTMLElement {
 		var ele = this._root.querySelector(".yes");
 		ele.onclick = () => {
 			if (this.yesCallback != undefined) this.yesCallback();
+		};
+	}
+}
+
+class ConfirmationCancel extends HTMLElement {
+	constructor() {
+		super();
+
+		this._root = this.attachShadow({mode: "open"});
+		this.noCallback = undefined;
+		this.yesCallback = undefined;
+		this.cancelCallback = undefined;
+		this.message = this.getAttribute("message");
+
+		var widthsub = 0;
+		if ($(document).width() <= 400) widthsub = 80;
+
+		this._root.innerHTML = `
+            <div class="card">
+                    <h1>${this.message}</h1>
+
+                    <input class=no type="submit" name="submit" value="No">
+                    <input class=yes type="submit" name="submit" value="Yes">
+					<input class=cancel style="margin-top: 8px;" type="submit" name="submit" value="Cancel">
+            </div>
+			<style>
+	.card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: calc(300px - ${widthsub}px);
+    transform: translate(-50%, -50%);
+    background-color: #25282f;
+    padding: 40px;
+    text-align: center; }
+    .card h1 {
+      margin-top: 20px;
+      color: white;
+      display: block; }
+    .card .wrong {
+      border-color: red !important; }
+	.card .cancel {
+		margin-top: 8px;
+		width: 63%;
+	}
+    .card input[type="submit"] {
+      color: #f7f7f7;
+      padding: 10px 30px;
+      margin: auto 10px;
+      border: 2px solid #fff;
+      background-color: #323232;
+      border-radius: 25px;
+	  cursor: pointer;}
+      .card input[type="submit"]:enabled:hover {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0);
+        transition: background 0.2s ease-in-out; }
+      .card input[type="submit"]:disabled {
+        background-color: #202320;
+        border-color: #202320; }
+	</style>
+    `;
+		var ele = this._root.querySelector(".no");
+		ele.onclick = () => {
+			if (this.noCallback != undefined) this.noCallback();
+		};
+
+		var ele = this._root.querySelector(".yes");
+		ele.onclick = () => {
+			if (this.yesCallback != undefined) this.yesCallback();
+		};
+
+		var ele = this._root.querySelector(".cancel");
+		ele.onclick = () => {
+			if (this.cancelCallback != undefined) this.cancelCallback();
 		};
 	}
 }
@@ -1037,6 +1134,7 @@ document.getElementsByTagName("head")[0].appendChild(script);
 window.customElements.define("progress-ring", ProgressRing);
 window.customElements.define("waifu-card", Card);
 window.customElements.define("card-confirmation", Confirmation);
+window.customElements.define("card-confirmation-cancel", ConfirmationCancel);
 window.customElements.define("add-friend", AddFriend);
 window.customElements.define("friend-card", Friend);
 window.customElements.define("friend-selection", FriendSelection);

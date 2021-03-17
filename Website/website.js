@@ -352,7 +352,26 @@ app.post("/packTime", (req, res) => {
 });
 
 app.get("/adminpanel", redirectIfNotAdmin, function (req, res) {
-	res.render("adminpanel/adminpanel");
+	request.get(
+		getHttpLocal() + API_HOST_LOCAL + "/log",
+		{
+			json: {token: req.cookies.token},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				console.log(body.log);
+				res.render("adminpanel/adminpanel",
+					{
+						log: body.log,
+					});
+			} else {
+				res.render("adminpanel/adminpanel");
+			}
+		}
+	);
 });
 
 app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
@@ -534,6 +553,7 @@ app.post("/inventory", redirectLogin, function (req, res) {
 		req.body.page,
 		req.body.userID,
 		req.body.sortType,
+		req.body.friend,
 		(data) => {
 			if (data.status == 0)
 				res.send({
@@ -554,6 +574,7 @@ function getInventoryData(
 	page,
 	userID,
 	sortType,
+	friend,
 	callback
 ) {
 	if (next == "0") next = 0;
@@ -562,6 +583,7 @@ function getInventoryData(
 	if (search == undefined) search = "";
 	if (page == undefined) page = 0;
 	if (userID == undefined) userID = -1;
+	if (friend != undefined) friend = true;
 	request.post(
 		getHttpLocal() + API_HOST_LOCAL + "/inventory",
 		{
@@ -572,6 +594,7 @@ function getInventoryData(
 				next: next,
 				userID: userID,
 				sortType: sortType,
+				friend: friend
 			},
 			rejectUnauthorized: false,
 			requestCert: false,
@@ -789,11 +812,19 @@ app.get("/trade", redirectLogin, function (req, res) {
 				for (var i = 0; i < body.cardsfriend.length; i++) {
 					addPathCard(body.cardsfriend[i].card);
 				}
+				for (var i = 0; i < body.cardsuggestions.length; i++) {
+					addPathCard(body.cardsuggestions[i].card);
+				}
+				for (var i = 0; i < body.cardsuggestionsfriend.length; i++) {
+					addPathCard(body.cardsuggestionsfriend[i].card);
+				}
 				var dashboard = await getDashboard(req, res);
 				res.render("trade", {
 					userID: userID,
 					cards: body.cards,
 					cardsfriend: body.cardsfriend,
+					cardsuggestions: body.cardsuggestions,
+					cardsuggestionsfriend: body.cardsuggestionsfriend,
 					username: body.username,
 					statusone: body.statusone,
 					statustwo: body.statustwo,
@@ -830,7 +861,87 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 			if (!error && response.statusCode == 200 && body.status == 0) {
 				res.redirect("/trade?userID=" + userID);
 			} else {
+				res.redirect("/trade?userID=" + userID);
+			}
+		}
+	);
+});
+
+app.post("/suggesttrade", redirectLogin, function (req, res) {
+	var userID = req.body.userID;
+	var cardID = req.body.cardID;
+
+	request.post(
+		getHttpLocal() + API_HOST_LOCAL + "/suggesttrade",
+		{
+			json: {
+				token: req.cookies.token,
+				userID: userID,
+				cardID: cardID,
+			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect("/trade?userID=" + userID);
+			} else {
+				res.redirect("/trade?userID=" + userID);
+			}
+		}
+	);
+});
+
+app.post("/removesuggestion", redirectLogin, function (req, res) {
+	var userID = req.body.userID;
+	var cardID = req.body.cardID;
+	var friend = req.body.friend;
+
+	request.post(
+		getHttpLocal() + API_HOST_LOCAL + "/removesuggestion",
+		{
+			json: {
+				token: req.cookies.token,
+				userID: userID,
+				cardID: cardID,
+				friend: friend
+			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect("/trade?userID=" + userID);
+			} else {
 				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			}
+		}
+	);
+});
+
+app.post("/acceptsuggestion", redirectLogin, function (req, res) {
+	var userID = req.body.userID;
+	var cardID = req.body.cardID;
+
+	request.post(
+		getHttpLocal() + API_HOST_LOCAL + "/acceptsuggestion",
+		{
+			json: {
+				token: req.cookies.token,
+				userID: userID,
+				cardID: cardID,
+			},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (!error && response.statusCode == 200 && body.status == 0) {
+				res.redirect("/trade?userID=" + userID);
+			} else {
+				res.redirect("/trade?userID=" + userID);
 			}
 		}
 	);
@@ -839,6 +950,8 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 app.get("/tradeinventory", redirectLogin, async function (req, res) {
 	res.locals.message = req.query.errorMessage;
 	var userID = req.query.userID;
+	var friend = req.query.friend;
+	if (friend != undefined) friend = true;
 	if (userID == undefined || isNaN(userID)) {
 		res.redirect("/dashboard?errorMessage='Wrong Data'");
 		return;
@@ -847,6 +960,7 @@ app.get("/tradeinventory", redirectLogin, async function (req, res) {
 	var dashboard = await getDashboard(req, res);
 	res.render("tradeinventory", {
 		friendID: userID,
+		friend: friend,
 		dashboard: dashboard,
 	});
 });

@@ -68,15 +68,35 @@
 			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			var fid = (typeof friendID !== 'undefined') ? friendID : undefined;
 			if(!first)
+			{
+					<%if(typeof friend == "undefined") {%>
 					xhttp.send(JSON.stringify({ next: 0,
 							search: filter.search.value,
 							sortType: i,
 							userID: fid}));
+					<%}else{%>
+					xhttp.send(JSON.stringify({ next: 0,
+							search: filter.search.value,
+							sortType: i,
+							userID: fid,
+							friend: true}));
+					<%}%>
+			}
 			else
+			{
+				<%if(typeof friend == "undefined") {%>
 					xhttp.send(JSON.stringify({ page: 0,
 							search: filter.search.value,
 							sortType: i,
 							userID: fid}));
+				<%}else{%>
+					xhttp.send(JSON.stringify({ page: 0,
+							search: filter.search.value,
+							sortType: i,
+							userID: fid,
+							friend: true}));
+				<%}%>
+			}
 	  };
 	}
 

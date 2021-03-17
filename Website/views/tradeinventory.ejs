@@ -34,6 +34,11 @@
 		<input type="hidden" name="cardID" value=""/>
 	</form>
 
+	<form class="suggestForm" action="/suggesttrade" method="post">
+		<input type="hidden" name="userID" value="<%-friendID%>"/>
+		<input type="hidden" name="cardID" value=""/>
+	</form>
+
     <body style="overflow: hidden;">
 
         <%- include('partials/nav.ejs') %>
@@ -85,9 +90,11 @@
 
     <script>
         var f = document.querySelector(".addForm");
+        var f2 = document.querySelector(".suggestForm");
          $(document).click(function(event) {
           var ele = $(event.target);
         
+         <% if(typeof friend == "undefined") { %>
           if(ele.is('waifu-card'))
           {
             opn.insertAdjacentHTML('afterend',
@@ -106,6 +113,26 @@
                 isOpen = false;
               };
           }
+         <% } else {%>
+          if(ele.is('waifu-card'))
+          {
+            opn.insertAdjacentHTML('afterend',
+                `<card-confirmation message="Suggest Card?"> </card-confirmation>`);
+              isOpen = true;
+            conf = document.querySelector("card-confirmation");
+            conf.yesCallback = () => {
+                f2.cardID.value = ele[0].uuid;
+                f2.submit();
+                conf.remove();
+                isOpen = false;
+            };
+              conf.noCallback = () =>
+              {
+                conf.remove();
+                isOpen = false;
+              };
+          }
+         <% } %>
         }); 
     </script>
 

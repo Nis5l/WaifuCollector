@@ -1,5 +1,5 @@
 <script>
-	function insertcards(_cards, _opn, _turned, _size)
+	function insertcards(_cards, _opn, _turned, _size, backcolor, identifier)
 	{
 		for(var i = 0; i < _cards.length; i++)
 		{
@@ -17,7 +17,9 @@
 							cardID=${_cards[i].card.id}
 							card-size=${_size}
 							effect_path="${_cards[i].card.effect}"
-							effect_opacity=${_cards[i].card.effectopacity}>
+							effect_opacity=${_cards[i].card.effectopacity}
+							backcolor=${backcolor}
+							identifier="${identifier}">
 							</waifu-card>`;
 				
 			_opn.insertAdjacentHTML('beforeend', cardhtml);

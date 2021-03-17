@@ -9,15 +9,24 @@
 	margin-top: 10px;
 	width: 100%;
 	height: 100%;
+	.trades
+	{
+		display: inline-block;
+		width: 100%;
+		@media screen and (min-width: 540px) {
+			background: linear-gradient(#fff, #fff) no-repeat center/1px 100%;
+		}
+	}
+
 	#tradeself
 	{
 		position: relative;
 		//margin:none;
 		width: 100%;
+		height: 100%;
 		@media screen and (min-width: 540px) {
-			border-right: 1px solid $sectionBorder;
 			float:left;
-			width: calc(50% - 1px);
+			width: calc(50%);
 		}
 		@media screen and (max-width: 540px) {
 			border-bottom: 1px solid $sectionBorder;
@@ -40,9 +49,10 @@
 	{
 		position: relative;
 		width: 100%;
+		height: 100%;
 		@media screen and (min-width: 540px) {
 			float:right;
-			width: 50%;
+			width: calc(50%);
 		}
 		height: auto;
 		align-items: center;
@@ -61,19 +71,19 @@
 		font-size: 20pt;
 		text-align: center;
 	}
-	.addtrade
+	.addtrade, .addtradeother
 	{
 		cursor: pointer;
 		color: white;
 
 		background: none;
-		//display: block;
+		display: inline-block;
 
 		text-align: center;
 
 		border: 2px solid white;
 
-		width: 70%;
+		width: 45%;
 		outline: none;
 
 		margin:auto;

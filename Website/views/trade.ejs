@@ -30,10 +30,27 @@
 	<form class="addtradeform" action="/tradeinventory" method="get">
 		<input type="hidden" name="userID" value="<%-userID%>"/>
 	</form>
+	<form class="addtradeotherform" action="/tradeinventory" method="get">
+		<input type="hidden" name="userID" value="<%-userID%>"/>
+		<input type="hidden" name="friend" value="true"/>
+	</form>
 	<form class="oktradeform" action="/oktrade" method="post">
 		<input type="hidden" name="userID" value="<%-userID%>"/>
 	</form>
 	<form class="removetradeform" action="/removetrade" method="post">
+		<input type="hidden" name="userID" value="<%-userID%>"/>
+		<input type="hidden" name="cardID" value=""/>
+	</form>
+	<form class="removesuggestionform" action="/removesuggestion" method="post">
+		<input type="hidden" name="userID" value="<%-userID%>"/>
+		<input type="hidden" name="cardID" value=""/>
+	</form>
+	<form class="removesuggestionformfriend" action="/removesuggestion" method="post">
+		<input type="hidden" name="userID" value="<%-userID%>"/>
+		<input type="hidden" name="cardID" value=""/>
+		<input type="hidden" name="friend" value="true"/>
+	</form>
+	<form class="acceptsuggestionform" action="/acceptsuggestion" method="post">
 		<input type="hidden" name="userID" value="<%-userID%>"/>
 		<input type="hidden" name="cardID" value=""/>
 	</form>
@@ -51,24 +68,25 @@
         <div class="dashboard_content">
 			<div class="dashboard_content_wrapper">
 				<div class="trade scrollable">
-					<div class="packwrapper">
-						<div id="tradeself">
-							<div class="name">You</div>
-							<div class=""><%- tradeCount1 + "/" + tradeLimit %></div>
-							<div class="confirmationself"></div>
-						<div id="tradeselfinner">
-						</div>
-						</div>
-						<div id="tradeother">
-							<div class="name"><%- username %></div>
-							<div class=""><%- tradeCount2 + "/" + tradeLimit %></div>
-							<div class="confirmationother"></div>
-							<div id="tradeotherinner">
-							</div>
-						</div>
-						<input type="button" class="addtrade" value="Add Card"></input>
-						<input type="button" class="oktrade" value="Confirm"></input>
+					<div class="trades">
+					<div id="tradeself">
+						<div class="name">You</div>
+						<div class=""><%- tradeCount1 + "/" + tradeLimit %></div>
+						<div class="confirmationself"></div>
+					<div id="tradeselfinner">
 					</div>
+					</div>
+					<div id="tradeother">
+						<div class="name"><%- username %></div>
+						<div class=""><%- tradeCount2 + "/" + tradeLimit %></div>
+						<div class="confirmationother"></div>
+						<div id="tradeotherinner">
+						</div>
+					</div>
+					</div>
+					<input type="button" class="addtrade" style="float: left; margin-left: 2%" value="Add Card"></input>
+					<input type="button" class="addtradeother" style="float: right; margin-right: 2%" value="Suggest Card"></input>
+					<input type="button" class="oktrade" value="Confirm"></input>
 				</div>
 			</div>
         </div>
@@ -107,6 +125,11 @@
 		{
 			document.querySelector('.addtrade').disabled = true;
 		}
+
+		<!--if(<%- tradeCount2 >= tradeLimit%>)-->
+		<!--{-->
+			<!--document.querySelector('.addtradeother').disabled = true;-->
+		<!--}-->
 
 		function tradeTimeTrade()
 		{
@@ -154,16 +177,26 @@
 	<script>
 		var cardid = 0;
 		const cards = <%- JSON.stringify(cards) %>;
+		const cardsuggestions = <%- JSON.stringify(cardsuggestions) %>;
+		const cardscount = cards.length + cardsuggestions.length;
 		const cardsfriend = <%- JSON.stringify(cardsfriend) %>;
+		const cardsuggestionsfriend = <%- JSON.stringify(cardsuggestionsfriend) %>;
+		const cardscountfriend = cardsfriend.length + cardsuggestionsfriend.length;
 		var opn = document.getElementById('tradeselfinner');
 		var opnother = document.getElementById('tradeotherinner');
 
+		insertcards(cardsuggestions, opn, false, 1, "#ddffdea8", "suggestion");
 		insertcards(cards, opn, false, 1);
+		insertcards(cardsuggestionsfriend, opnother, false, 1, "#ddffdea8", "suggestion");
 		insertcards(cardsfriend, opnother, false, 1);
 	</script>
 	<script>
       $(".addtrade").click(()=>{
         var ele = document.querySelector(".addtradeform");
+        ele.submit();
+      });
+      $(".addtradeother").click(()=>{
+        var ele = document.querySelector(".addtradeotherform");
         ele.submit();
       });
       $(".oktrade").click(()=>{
@@ -173,25 +206,64 @@
 	</script>
 
 	<script>
-		 var removeForm = document.querySelector(".removetradeform")	
-		 var isOpen = false;
-         $(document).click(function(event) {
-          var ele = $(event.target);
+		var removeForm = document.querySelector(".removetradeform")	
+		var removeSuggestionForm = document.querySelector(".removesuggestionform")	
+		var removeSuggestionFormFriend = document.querySelector(".removesuggestionformfriend")	
+		var acceptSuggestionForm = document.querySelector(".acceptsuggestionform")	
+		var isOpen = false;
+		$(document).click(function(event) {
+		var ele = $(event.target);
 		
-          if(ele.is('waifu-card') && ele[0].parentElement.id == "tradeselfinner" && !isOpen)
-          {
-		    document.body.insertAdjacentHTML('afterend',
-				`<card-confirmation message="Remove From Trade?"> </card-confirmation>`);
-			  isOpen = true;
-			var conf = document.querySelector("card-confirmation");
-			conf.yesCallback = () => {
-				removeForm.cardID.value = ele[0].uuid;
-				removeForm.submit();
-				isOpen = false;
-			};
-			conf.noCallback = () => {conf.remove(); isOpen = false;};
-		  }
-	 });
+		if(ele.is('waifu-card') && !isOpen)
+		{
+			if(ele[0].parentElement.id == "tradeselfinner")
+			{
+				if(ele[0].identifier == "suggestion")
+				{
+					document.body.insertAdjacentHTML('afterend', `<card-confirmation-cancel message="Accept Suggestion?"> </card-confirmation-cancel>`);
+					isOpen = true;
+					var conf = document.querySelector("card-confirmation-cancel");
+					conf.yesCallback = () => {
+						acceptSuggestionForm.cardID.value = ele[0].uuid;
+						acceptSuggestionForm.submit();
+						isOpen = false;
+					};
+					conf.noCallback = () => 
+					{
+						removeSuggestionForm.cardID.value = ele[0].uuid;
+						removeSuggestionForm.submit();
+						isOpen = false;
+					};
+					conf.cancelCallback = () => {conf.remove(); isOpen = false;};
+				}else
+				{
+					document.body.insertAdjacentHTML('afterend', `<card-confirmation message="Remove From Trade?"> </card-confirmation>`);
+					isOpen = true;
+					var conf = document.querySelector("card-confirmation");
+					conf.yesCallback = () => {
+						removeForm.cardID.value = ele[0].uuid;
+						removeForm.submit();
+						isOpen = false;
+					};
+					conf.noCallback = () => {conf.remove(); isOpen = false;};
+				}
+			}else
+			{
+				if(ele[0].identifier == "suggestion")
+				{
+					document.body.insertAdjacentHTML('afterend', `<card-confirmation message="Delete Suggestion?"> </card-confirmation>`);
+					isOpen = true;
+					var conf = document.querySelector("card-confirmation");
+					conf.yesCallback = () => {
+						removeSuggestionFormFriend.cardID.value = ele[0].uuid;
+						removeSuggestionFormFriend.submit();
+						isOpen = false;
+					};
+					conf.noCallback = () => {conf.remove(); isOpen = false;};
+				}
+			}
+		}
+	});
 	</script>
 
 	<script>
@@ -199,11 +271,11 @@
 		var inventory = document.querySelector("#tradeselfinner");
 		var parentother = document.querySelector("#tradeother");
 		var inventoryother = document.querySelector("#tradeotherinner");
-		resize(inventory, parentself, cards);
-		resize(inventoryother, parentother, cardsfriend);
+		resize(inventory, parentself, cardscount);
+		resize(inventoryother, parentother, cardscountfriend);
 		window.onresize = function(event) {
-			resize(inventory, parentself, cards);
-			resize(inventoryother, parentother, cardsfriend);
+			resize(inventory, parentself, cardscount);
+			resize(inventoryother, parentother, cardscountfriend);
 		};
 		function resize(inv, parent, c)
 		{

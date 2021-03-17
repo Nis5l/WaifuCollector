@@ -6,18 +6,24 @@
   margin-top: 10px;
   width: 100%;
   height: 100%; }
+  .trade .trades {
+    display: inline-block;
+    width: 100%; }
+    @media screen and (min-width: 540px) {
+      .trade .trades {
+        background: linear-gradient(#fff, #fff) no-repeat center/1px 100%; } }
   .trade #tradeself {
     position: relative;
     width: 100%;
+    height: 100%;
     max-height: none;
     align-items: center;
     justify-content: center;
     min-height: 440px; }
     @media screen and (min-width: 540px) {
       .trade #tradeself {
-        border-right: 1px solid rgba(255, 255, 255, 0.5);
         float: left;
-        width: calc(50% - 1px); } }
+        width: calc(50%); } }
     @media screen and (max-width: 540px) {
       .trade #tradeself {
         border-bottom: 1px solid rgba(255, 255, 255, 0.5);
@@ -31,6 +37,7 @@
   .trade #tradeother {
     position: relative;
     width: 100%;
+    height: 100%;
     height: auto;
     align-items: center;
     justify-content: center;
@@ -38,7 +45,7 @@
     @media screen and (min-width: 540px) {
       .trade #tradeother {
         float: right;
-        width: 50%; } }
+        width: calc(50%); } }
     .trade #tradeother #tradeotherinner {
       height: auto;
       margin: auto;
@@ -47,22 +54,23 @@
     color: white;
     font-size: 20pt;
     text-align: center; }
-  .trade .addtrade {
+  .trade .addtrade, .trade .addtradeother {
     cursor: pointer;
     color: white;
     background: none;
+    display: inline-block;
     text-align: center;
     border: 2px solid white;
-    width: 70%;
+    width: 45%;
     outline: none;
     margin: auto;
     margin-top: 8px;
     padding: 10px 4px;
     border-radius: 25px; }
-    .trade .addtrade:focus {
+    .trade .addtrade:focus, .trade .addtradeother:focus {
       border-color: #555555;
       transition: border 0.2s ease-in-out; }
-    .trade .addtrade:disabled {
+    .trade .addtrade:disabled, .trade .addtradeother:disabled {
       color: gray;
       border-color: gray; }
   .trade .oktrade {
