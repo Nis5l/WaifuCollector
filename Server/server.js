@@ -1341,10 +1341,10 @@ app.post("/addtrade", (req, res) => {
 			addCardTrade(decoded.id, userID, cardID, (sc) => {
 				if (sc.status == 0)
 					database.addNotification(
-						usertwo,
+						userID,
 						"Trade Changed",
 						"A card got added to the trade, click to view!",
-						"trade?userID=" + userone,
+						"trade?userID=" + decoded.id,
 						() => {}
 					);
 				res.send(sc);
