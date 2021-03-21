@@ -19,7 +19,7 @@ module.exports = {
 		var sql = [
 			//"CREATE DATABASE IF NOT EXISTS WaifuCollector;" +
 			"USE " + config.mysql.database + ";",
-			"CREATE TABLE IF NOT EXISTS `user` ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `ranking` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `user` ( `id` INT NOT NULL AUTO_INCREMENT , `username` TEXT NOT NULL , `password` TEXT NOT NULL , `ranking` INT NOT NULL , `email` TEXT NOT NULL, `verified` INT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `card` ( `id` INT NOT NULL AUTO_INCREMENT , `cardName` TEXT NOT NULL , `typeID` INT NOT NULL, `cardImage` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `cardtype` ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `unlocked` ( `id` INT NOT NULL AUTO_INCREMENT , `userID` INT NOT NULL , `cardID` INT NOT NULL , `quality` INT NOT NULL , `level` INT NOT NULL DEFAULT '0' , `frameID` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
@@ -31,7 +31,11 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
 			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `tradesuggestion` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;"
+			"CREATE TABLE IF NOT EXISTS `tradesuggestion` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `verificationkey` ( `userID` INT NOT NULL , `key` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;"
+			//ALTER TABLE user
+			//ADD COLUMN email TEXT NOT NULL,
+			//ADD COLUMN verified INT NOT NULL;
 		];
 
 		con.connect(() => {
@@ -172,7 +176,7 @@ module.exports = {
 					return;
 				}
 
-				callback("null");
+				callback(null);
 			}
 		);
 	},
@@ -804,6 +808,73 @@ module.exports = {
 		con.query("SELECT * FROM packdata WHERE time BETWEEN " + floor + " AND " + ceil + ";", (err, result, fields) => {
 			if (callback != undefined) callback(result);
 		});
+	},
+	getMailVerified: function getMailVerified(userID, callback) {
+		con.query(
+			"SELECT email, verified FROM `user` WHERE id=" + userID,
+			function (err, result, fields) {
+				if (err) console.log(err);
+				if (
+					result != undefined &&
+					result[0] != undefined
+				) {
+					callback(result[0]);
+					return;
+				}
+				callback(null);
+			}
+		);
+	},
+	setMail: function setMail(userID, mail, callback) {
+		con.query(
+			`UPDATE user SET email="${mail}" WHERE id=${userID}`,
+			function (err, result, fields) {
+				callback();
+			}
+		);
+	},
+	setVerificationKey: function setVerificationKey(userID, key, callback) {
+		con.query(`DELETE FROM verificationkey WHERE userID=${userID}`, (err, result, fields) => {
+			con.query(`INSERT INTO verificationkey (\`userID\`, \`key\`) values (${userID}, "${key}")`, (err, result, fields) => {
+				callback();
+			});
+		});
+	},
+	deleteVerificationKey: function deleteVerificationKey(userID, callback) {
+		con.query(`DELETE FROM verificationkey WHERE userID=${userID}`, (err, result, fields) => {
+			callback();
+		});
+	},
+	getVerificationKey: function getVerificationKey(userID, callback) {
+		con.query(`SELECT \`key\` FROM verificationkey WHERE userID=${userID}`, (err, result, fields) => {
+			if (result != undefined && result[0] != undefined) {
+				callback(result[0].key);
+				return;
+			}
+			callback(null);
+		});
+	},
+	setVerified: function setVerified(userID, verified, callback) {
+		con.query(`UPDATE user SET verified=${verified} WHERE id=${userID}`, (err, result, fields) => {
+			callback();
+		});
+	},
+	mailExists: function mailExists(mail, callback) {
+		con.query(
+			`SELECT * FROM \`user\` WHERE email="${mail}"`,
+			function (err, result, fields) {
+				if (err) console.log(err);
+				if (
+					result != undefined &&
+					result[0] != undefined &&
+					result.length > 0
+				) {
+					callback(true);
+					return;
+				}
+				callback(false);
+			}
+		);
 	}
 };
 

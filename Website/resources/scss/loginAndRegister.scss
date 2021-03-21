@@ -36,9 +36,9 @@
 
         }
 
-        input[type="text"], input[type="password"]{
+        input[type="text"], input[type="password"], input[type="mail"]{
 
-            color: $inputColor;
+            color: white;
 
             background: $inputBg;
             display: block;

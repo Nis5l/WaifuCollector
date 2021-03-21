@@ -2,8 +2,10 @@ const database = require("./database");
 const cache = require("./serverCache");
 
 class Client {
-	constructor(id, username, loadedCallback) {
+	constructor(id, username, mail, verified, loadedCallback) {
 		this.id = id;
+		this.verified = verified;
+		this.mail = mail;
 		this.packTime = -1;
 		this.tradeTime = -1;
 		this.username = username;
@@ -32,7 +34,7 @@ class Client {
 		database.getInventory(this.id, (inventory) => {
 			this.inventory = inventory;
 			for (var i = 0; i < this.inventory.length; i++) delete this.inventory[i].userID;
-			this.sortInv();
+			//this.sortInv();
 			this.refreshCardTypeAmount();
 			operationFinished();
 		});
@@ -169,7 +171,7 @@ class Client {
 	getInventory(page, amount, ids, exclude, level, sortMethod, friend) {
 		this.startDecay(this.time, this.callback);
 		if (sortMethod != undefined) this.inventorySort = sortMethod;
-		this.sortInv();
+		this.sortInv(friend);
 		this.lastids = ids;
 		this.lastexclude = exclude;
 		this.lastlevel = level;
@@ -234,7 +236,7 @@ class Client {
 		var sortinv = this.inventory;
 		if (friend) sortinv = this.friendinventory.inventory;
 
-		if (this.inventorySort != 0 && this.inventorySort != 1)
+		if (this.inventorySort < 0 || this.inventorySort > 2)
 			this.inventorySort = 0;
 
 		switch (this.inventorySort) {
@@ -246,6 +248,11 @@ class Client {
 			case 1:
 				{
 					this.sortInvLevel(sortinv);
+				}
+				break;
+			case 2:
+				{
+					this.sortInvUUID(sortinv);
 				}
 				break;
 		}
@@ -306,6 +313,25 @@ class Client {
 							swap(inv, i);
 						}
 					}
+				}
+			}
+			if (sorted) return;
+		}
+		function swap(inventory, i) {
+			var t = inventory[i];
+			inventory[i] = inventory[i + 1];
+			inventory[i + 1] = t;
+		}
+	}
+
+	sortInvUUID(inv) {
+		this.startDecay(this.time, this.callback);
+		while (true) {
+			var sorted = true;
+			for (var i = 0; i < inv.length - 1; i++) {
+				if (inv[i].id < inv[i + 1].id) {
+					sorted = false;
+					swap(inv, i);
 				}
 			}
 			if (sorted) return;

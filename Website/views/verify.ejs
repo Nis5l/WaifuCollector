@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <%- include('partials/standard_header.ejs') %>
+
+        <title>WaifuCollector | Verify</title>
+		
+        <link rel="stylesheet" href="<%= url %>/resources/css/index.css">
+        <link rel="stylesheet" href="<%= url %>/resources/css/verify.css">
+
+        <style>
+			.nav{
+
+				background-color: transparent;
+
+			}
+        </style>
+
+
+    </head>
+
+    <body>
+        <div class="home">
+			<%- include('partials/nav.ejs') %>
+            <div class="mailbox box">
+                <h2 class="info">The verification email sent to <%-mail%> needs to be accepted.</h2>
+                <a style="margin-top: 50px" class="links" href="<%-url%>/verify/resend">Click to send again.</h3>
+                <a class="links" href="<%-url%>/verify/delete">Click to change email.</h3>
+            </div>
+		</div>
+	</body>
+	<script src="../resources/components.js"></script> 
+</html>

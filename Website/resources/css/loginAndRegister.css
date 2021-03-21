@@ -19,8 +19,8 @@
       margin-top: 20px;
       color: white;
       display: block; }
-    .content .card input[type="text"], .content .card input[type="password"] {
-      color: #0a0909;
+    .content .card input[type="text"], .content .card input[type="password"], .content .card input[type="mail"] {
+      color: white;
       background: none;
       display: block;
       text-align: center;
@@ -31,9 +31,9 @@
       padding: 10px 4px;
       border-radius: 25px; }
       @media screen and (max-width: 400px) {
-        .content .card input[type="text"], .content .card input[type="password"] {
+        .content .card input[type="text"], .content .card input[type="password"], .content .card input[type="mail"] {
           width: 180px; } }
-      .content .card input[type="text"]:hover, .content .card input[type="password"]:hover {
+      .content .card input[type="text"]:hover, .content .card input[type="password"]:hover, .content .card input[type="mail"]:hover {
         border-color: #f7f7f7;
         transition: border 0.2s ease-in-out; }
     .content .card .wrong {
