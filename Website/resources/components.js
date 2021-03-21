@@ -487,6 +487,7 @@ class Card extends HTMLElement {
 		$(this.shadow).find(".anime-name").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".quality").css("transform", "rotateY(0deg)");
 		$(this.shadow).find(".level").css("transform", "rotateY(0deg)");
+		$(this.shadow).find(".card-effect").css("transform", "rotateY(0deg)");
 		this.turned = false;
 	}
 }

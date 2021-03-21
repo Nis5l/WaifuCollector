@@ -20,7 +20,7 @@
       color: white;
       display: block; }
     .content .card input[type="text"], .content .card input[type="password"], .content .card input[type="mail"] {
-      color: #0a0909;
+      color: white;
       background: none;
       display: block;
       text-align: center;

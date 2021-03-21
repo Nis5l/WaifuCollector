@@ -86,6 +86,29 @@ const redirectIfNotAdmin = (req, res, next) => {
 	});
 };
 
+function redirect(error, response, path, res) {
+	if (error || response.statusCode != 200) {
+		res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+		return 100;
+	}
+
+	switch (response.body.status) {
+		case 10:
+			{
+				res.redirect("/verify");
+			} return 10;
+		case 11:
+			{
+				res.redirect("/verifymail");
+			} return 11;
+	}
+	if (response.body.status) {
+		res.redirect(path + "?errorCode=" + response.body.status + "&errorMessage=" + response.body.message);
+		return response.body.status;
+	}
+	return 0;
+}
+
 app.use(
 	bodyParser.urlencoded({
 		extended: true,
@@ -130,6 +153,151 @@ app.get("/privacy", function (req, res) {
 	res.render("privacy", {ishome: true});
 });
 
+app.get("/verify", function (req, res) {
+	request.get(
+		getHttpLocal() + API_HOST_LOCAL + "/verified",
+		{
+			json: {token: req.cookies.token},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (redirect(error, response, "/logout", res)) return;
+
+			if (body.verified == 1) {
+				if (req.query.key) {
+					request.post(
+						getHttpLocal() + API_HOST_LOCAL + "/verify",
+						{
+							json: {
+								token: req.cookies.token,
+								key: req.query.key
+							},
+							rejectUnauthorized: false,
+							requestCert: false,
+							agent: false,
+						},
+						(error, response, body) => {
+							if (redirect(error, response, "/verify", res)) return;
+							res.redirect("dashboard");
+							return;
+						});
+				} else {
+					res.render("verify", {ishome: true, mail: body.mail});
+					return;
+				}
+			} else if (body.verified == 2) {
+				res.redirect("/verifymail");
+				return
+			} else {
+				res.redirect("/dashboard");
+			}
+		}
+	);
+});
+
+app.get("/verify/resend", function (req, res) {
+	request.get(
+		getHttpLocal() + API_HOST_LOCAL + "/verified",
+		{
+			json: {token: req.cookies.token},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (redirect(error, response, "/logout", res)) return;
+
+			if (body.verified == 1) {
+				request.post(
+					getHttpLocal() + API_HOST_LOCAL + "/verify/resend",
+					{
+						json: {
+							token: req.cookies.token,
+						},
+						rejectUnauthorized: false,
+						requestCert: false,
+						agent: false,
+					},
+					(error, response, body) => {
+						res.redirect("/verify");
+						return;
+					});
+			} else if (body.verified == 2) {
+				res.redirect("/verifymail");
+				return
+			} else {
+				res.redirect("/dashboard");
+			}
+		}
+	);
+});
+
+app.get("/verify/delete", function (req, res) {
+	request.get(
+		getHttpLocal() + API_HOST_LOCAL + "/verified",
+		{
+			json: {token: req.cookies.token},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (redirect(error, response, "/logout", res)) return;
+
+			if (body.verified == 1) {
+				request.post(
+					getHttpLocal() + API_HOST_LOCAL + "/deleteMail",
+					{
+						json: {
+							token: req.cookies.token,
+						},
+						rejectUnauthorized: false,
+						requestCert: false,
+						agent: false,
+					},
+					(error, response, body) => {
+						res.redirect("/verifyMail");
+						return;
+					});
+			} else if (body.verified == 2) {
+				res.redirect("/verifymail");
+				return
+			} else {
+				res.redirect("/dashboard");
+			}
+		}
+	);
+});
+
+app.get("/verifymail", function (req, res) {
+	request.get(
+		getHttpLocal() + API_HOST_LOCAL + "/verified",
+		{
+			json: {token: req.cookies.token},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		(error, response, body) => {
+			if (redirect(error, response, "/logout", res)) return;
+
+			if (body.verified == 2) {
+				res.render("verifymail", {ishome: true, mail: body.mail});
+				return;
+			}
+
+			if (body.verified == 1) {
+				res.redirect("/verify");
+				return
+			}
+
+			res.redirect("/dashboard");
+		}
+	);
+});
+
 app.post("/cookie", function (req, res) {
 	const expirationdate = new Date();
 	expirationdate.setTime(expirationdate.getTime() + 315532800000);
@@ -153,33 +321,22 @@ app.post("/login", redirectDashboard, function (req, res) {
 				agent: false,
 			},
 			(error, response, body) => {
-				if (!error && response.statusCode == 200) {
-					if (body.status == 0) {
-						const expirationdate = new Date();
-						expirationdate.setTime(expirationdate.getTime() + 315532800000);
+				if (redirect(error, response, "/login", res)) return;
 
-						res.cookie("token", body.token, {expires: expirationdate});
+				const expirationdate = new Date();
+				expirationdate.setTime(expirationdate.getTime() + 315532800000);
 
-						userID = body.userID;
+				res.cookie("token", body.token, {expires: expirationdate});
 
-						res.cookie("userID", userID, {expires: expirationdate});
+				userID = body.userID;
 
-						req.session.save((err) => {
-							if (err) console.log(err);
-						});
+				res.cookie("userID", userID, {expires: expirationdate});
 
-						res.redirect("/dashboard");
-					} else {
-						res.redirect(
-							"/login?errorCode=" +
-							body.status +
-							"&errorMessage=" +
-							body.message
-						);
-					}
-				} else {
-					res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-				}
+				req.session.save((err) => {
+					if (err) console.log(err);
+				});
+
+				res.redirect("/dashboard");
 			}
 		);
 	} else {
@@ -202,15 +359,9 @@ app.post("/passchange", function (req, res) {
 				},
 			},
 			(error, response, body) => {
-				if (!error && response.statusCode == 200) {
-					if (body.status == 0) {
-						res.redirect("/dashboard");
-						//alert("Password Changed");
-					} else
-						res.redirect(
-							"/settings?errorCode=2&errorMessage=password empty or dont match"
-						);
-				}
+				if (redirect(error, response, "/settings", res)) return;
+
+				res.redirect("/dashboard");
 			}
 		);
 	} else {
@@ -218,6 +369,25 @@ app.post("/passchange", function (req, res) {
 			"/settings?errorCode=2&errorMessage=password empty or dont match"
 		);
 	}
+});
+
+app.post("/setMail", function (req, res) {
+	const mail = req.body.mail;
+
+	request.post(
+		getHttpLocal() + API_HOST_LOCAL + "/setMail",
+		{
+			json: {
+				token: req.cookies.token,
+				mail: mail,
+			},
+		},
+		(error, response, body) => {
+			if (redirect(error, response, "/verifymail", res)) return;
+
+			res.redirect("/verify");
+		}
+	);
 });
 
 app.get("/register", redirectDashboard, function (req, res) {
@@ -234,7 +404,7 @@ app.get("/register", redirectDashboard, function (req, res) {
 
 app.post("/register", redirectDashboard, function (req, res) {
 	res.locals.message = req.query.errorMessage;
-	const {username, password} = req.body;
+	const {username, password, mail} = req.body;
 
 	if (username && password) {
 		request.post(
@@ -243,26 +413,16 @@ app.post("/register", redirectDashboard, function (req, res) {
 				json: {
 					username: username,
 					password: password,
+					mail: mail,
 				},
 				rejectUnauthorized: false,
 				requestCert: false,
 				agent: false,
 			},
 			(error, response, body) => {
-				if (!error && response.statusCode == 200) {
-					if (body.status == 0) {
-						res.redirect("/login");
-					} else {
-						res.redirect(
-							"/register?errorCode=" +
-							body.status +
-							"&errorMessage=" +
-							body.message
-						);
-					}
-				} else {
-					res.redirect("/register?errorCode=3&errorMessage=Wrong response");
-				}
+				if (redirect(error, response, "/register", res)) return;
+
+				res.redirect("/login");
 			}
 		);
 	} else {
@@ -312,21 +472,18 @@ function getDashboard(req, res) {
 				agent: false,
 			},
 			(error, response, body) => {
-				if (error) {
-					res.clearCookie("userID");
-					res.clearCookie("token");
-					res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-					return;
-				}
-				if (body.status != 0) {
-					res.clearCookie("userID");
-					res.clearCookie("token");
-					res.redirect("/login")
-					return;
-				}
+				try {
+					if ((body.status == 10 || body.status == 11) && redirect(error, response, "/login", res)) return;
+					if (error || body.status != 0) {
+						res.clearCookie("userID");
+						res.clearCookie("token");
+						res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+						throw new Error();
+					}
 
-				resolve(body);
-				return;
+					resolve(body);
+					return;
+				} catch (ex) {}
 			}
 		);
 	});
@@ -361,15 +518,12 @@ app.get("/adminpanel", redirectIfNotAdmin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				console.log(body.log);
-				res.render("adminpanel/adminpanel",
-					{
-						log: body.log,
-					});
-			} else {
-				res.render("adminpanel/adminpanel");
-			}
+			if (redirect(error, response, "adminpanel/adminpanel", res)) return;
+
+			res.render("adminpanel/adminpanel",
+				{
+					log: body.log,
+				});
 		}
 	);
 });
@@ -379,18 +533,10 @@ app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
 		{
 			url: getHttpLocal() + API_HOST_LOCAL + "/display/cards",
 		},
-		function (err, res) {
-			var data = JSON.parse(res.body);
-
-			if (data.status != undefined) {
-				if (data.status == 1) {
-					response.render("adminpanel/adminpanel_cards", {cards: data.cards});
-
-					return;
-				}
-			}
-
-			response.redirect("/dashboard");
+		function (error, response, body) {
+			if (body.status != 1 && redirect(error, response, "/dashboard", res)) return;
+			response.render("adminpanel/adminpanel_cards", {cards: data.cards});
+			return;
 		}
 	);
 });
@@ -507,23 +653,17 @@ app.get("/pack", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		async (error, response, body) => {
-			if (!error && response.statusCode == 200) {
-				if (body.packTime == "0") {
-					for (var i = 0; i < body.cards.length; i++) {
-						addPathCard(body.cards[i].card);
-					}
-					var dashboard = await getDashboard(req, res);
-					res.render("pack", {
-						userID: req.cookies.userID,
-						cards: body.cards,
-						dashboard: dashboard,
-					});
-				} else {
-					res.redirect("/dashboard?errorMessage=" + body.message);
-				}
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			if (redirect(error, response, "/dashboard", res)) return;
+
+			for (var i = 0; i < body.cards.length; i++) {
+				addPathCard(body.cards[i].card);
 			}
+			var dashboard = await getDashboard(req, res);
+			res.render("pack", {
+				userID: req.cookies.userID,
+				cards: body.cards,
+				dashboard: dashboard,
+			});
 		}
 	);
 });
@@ -554,15 +694,14 @@ app.post("/inventory", redirectLogin, function (req, res) {
 		req.body.userID,
 		req.body.sortType,
 		req.body.friend,
+		res,
 		(data) => {
-			if (data.status == 0)
-				res.send({
-					status: data.status,
-					cards: data.cards,
-					page: data.page,
-					pagemax: data.pagemax,
-				});
-			else res.send({userID: req.cookies.userID, status: 1});
+			res.send({
+				status: data.status,
+				cards: data.cards,
+				page: data.page,
+				pagemax: data.pagemax,
+			});
 		}
 	);
 });
@@ -575,6 +714,7 @@ function getInventoryData(
 	userID,
 	sortType,
 	friend,
+	res,
 	callback
 ) {
 	if (next == "0") next = 0;
@@ -601,19 +741,16 @@ function getInventoryData(
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				for (var i = 0; i < body.inventory.length; i++) {
-					addPathCard(body.inventory[i].card);
-				}
-				callback({
-					status: 0,
-					cards: body.inventory,
-					page: body.page,
-					pagemax: body.pagemax,
-				});
-			} else {
-				callback({status: 1});
+			if (redirect(error, response, "/dashboard", res)) return;
+			for (var i = 0; i < body.inventory.length; i++) {
+				addPathCard(body.inventory[i].card);
 			}
+			callback({
+				status: 0,
+				cards: body.inventory,
+				page: body.page,
+				pagemax: body.pagemax,
+			});
 		}
 	);
 }
@@ -645,24 +782,21 @@ app.post("/card", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				for (var i = 0; i < body.inventory.length; i++) {
-					addPathCard(body.inventory[i].card);
-				}
-
-				addPathCard(body.card.card);
-
-				res.send({
-					status: 0,
-					userID: req.cookies.userID,
-					maincard: body.card,
-					cards: body.inventory,
-					page: body.page,
-					pagemax: body.pagemax,
-				});
-			} else {
-				res.send({status: 1});
+			if (redirect(error, response, "/dashboard", res)) return;
+			for (var i = 0; i < body.inventory.length; i++) {
+				addPathCard(body.inventory[i].card);
 			}
+
+			addPathCard(body.card.card);
+
+			res.send({
+				status: 0,
+				userID: req.cookies.userID,
+				maincard: body.card,
+				cards: body.inventory,
+				page: body.page,
+				pagemax: body.pagemax,
+			});
 		}
 	);
 });
@@ -694,11 +828,8 @@ app.get("/upgrade", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/card?uuid=" + body.uuid);
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/card?uuid=" + body.uuid);
 		}
 	);
 });
@@ -716,22 +847,18 @@ app.get("/friends", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		async (error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				var dashboard = await getDashboard(req, res);
-				res.render("friends", {
-					friends: body.friends,
-					userID: req.cookies.userID,
-					dashboard: dashboard,
-				});
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
+			if (redirect(error, response, "/dashboard", res)) return;
+			var dashboard = await getDashboard(req, res);
+			res.render("friends", {
+				friends: body.friends,
+				userID: req.cookies.userID,
+				dashboard: dashboard,
+			});
 		}
 	);
 });
 
 app.post("/addfriend", redirectLogin, function (req, res) {
-	//console.log("TESTSFD");
 	var username = req.body.username;
 	if (username == undefined) {
 		res.redirect("/friends");
@@ -749,13 +876,8 @@ app.post("/addfriend", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			//console.log(body);
-			//console.log(error);
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/friends");
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/friends");
 		}
 	);
 });
@@ -780,11 +902,8 @@ app.post("/managefriend", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/friends");
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/friends");
 		}
 	);
 });
@@ -805,38 +924,36 @@ app.get("/trade", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		async (error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				for (var i = 0; i < body.cards.length; i++) {
-					addPathCard(body.cards[i].card);
-				}
-				for (var i = 0; i < body.cardsfriend.length; i++) {
-					addPathCard(body.cardsfriend[i].card);
-				}
-				for (var i = 0; i < body.cardsuggestions.length; i++) {
-					addPathCard(body.cardsuggestions[i].card);
-				}
-				for (var i = 0; i < body.cardsuggestionsfriend.length; i++) {
-					addPathCard(body.cardsuggestionsfriend[i].card);
-				}
-				var dashboard = await getDashboard(req, res);
-				res.render("trade", {
-					userID: userID,
-					cards: body.cards,
-					cardsfriend: body.cardsfriend,
-					cardsuggestions: body.cardsuggestions,
-					cardsuggestionsfriend: body.cardsuggestionsfriend,
-					username: body.username,
-					statusone: body.statusone,
-					statustwo: body.statustwo,
-					dashboard: dashboard,
-					tradeCount1: body.tradeCount1,
-					tradeCount2: body.tradeCount2,
-					tradeLimit: body.tradeLimit,
-					tradeTimeFriend: body.tradeTimeFriend,
-				});
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
+			if (redirect(error, response, "/dashboard", res)) return;
+
+			for (var i = 0; i < body.cards.length; i++) {
+				addPathCard(body.cards[i].card);
 			}
+			for (var i = 0; i < body.cardsfriend.length; i++) {
+				addPathCard(body.cardsfriend[i].card);
+			}
+			for (var i = 0; i < body.cardsuggestions.length; i++) {
+				addPathCard(body.cardsuggestions[i].card);
+			}
+			for (var i = 0; i < body.cardsuggestionsfriend.length; i++) {
+				addPathCard(body.cardsuggestionsfriend[i].card);
+			}
+			var dashboard = await getDashboard(req, res);
+			res.render("trade", {
+				userID: userID,
+				cards: body.cards,
+				cardsfriend: body.cardsfriend,
+				cardsuggestions: body.cardsuggestions,
+				cardsuggestionsfriend: body.cardsuggestionsfriend,
+				username: body.username,
+				statusone: body.statusone,
+				statustwo: body.statustwo,
+				dashboard: dashboard,
+				tradeCount1: body.tradeCount1,
+				tradeCount2: body.tradeCount2,
+				tradeLimit: body.tradeLimit,
+				tradeTimeFriend: body.tradeTimeFriend,
+			});
 		}
 	);
 });
@@ -858,11 +975,8 @@ app.post("/addTrade", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/trade?userID=" + userID);
-			} else {
-				res.redirect("/trade?userID=" + userID);
-			}
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/trade?userID=" + userID);
 		}
 	);
 });
@@ -884,11 +998,8 @@ app.post("/suggesttrade", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/trade?userID=" + userID);
-			} else {
-				res.redirect("/trade?userID=" + userID);
-			}
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/trade?userID=" + userID);
 		}
 	);
 });
@@ -912,13 +1023,9 @@ app.post("/removesuggestion", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/trade?userID=" + userID);
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
-		}
-	);
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/trade?userID=" + userID);
+		});
 });
 
 app.post("/acceptsuggestion", redirectLogin, function (req, res) {
@@ -938,13 +1045,9 @@ app.post("/acceptsuggestion", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/trade?userID=" + userID);
-			} else {
-				res.redirect("/trade?userID=" + userID);
-			}
-		}
-	);
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/trade?userID=" + userID);
+		});
 });
 
 app.get("/tradeinventory", redirectLogin, async function (req, res) {
@@ -982,13 +1085,9 @@ app.post("/removeTrade", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/trade?userID=" + userID);
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
-		}
-	);
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/trade?userID=" + userID);
+		});
 });
 
 app.post("/okTrade", redirectLogin, function (req, res) {
@@ -1006,13 +1105,9 @@ app.post("/okTrade", redirectLogin, function (req, res) {
 			agent: false,
 		},
 		(error, response, body) => {
-			if (!error && response.statusCode == 200 && body.status == 0) {
-				res.redirect("/trade?userID=" + userID);
-			} else {
-				res.redirect("/login?errorCode=3&errorMessage=Wrong response");
-			}
-		}
-	);
+			if (redirect(error, response, "/dashboard", res)) return;
+			res.redirect("/trade?userID=" + userID);
+		});
 });
 
 app.post("/deleteNotification", redirectLogin, function (req, res) {

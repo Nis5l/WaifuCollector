@@ -6,6 +6,8 @@ const cache = require("./serverCache");
 const utils = require("./utils");
 const logger = require("./logger");
 const Client = require("./cache");
+const crypto = require('crypto');
+const mail = require('./mail');
 
 const jwtSecret = "yCSgVxmL9I";
 
@@ -14,8 +16,10 @@ const frameBase = "Frame/";
 const effectBase = "Effect/";
 const userRegex = /^[a-zA-Z0-9_]+$/;
 const passRegex = /^[a-zA-Z0-9_.]+$/;
+const mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 const cacheTime = 900000;
+//const cacheTime = 3000;
 const cardCashInterval = 3600000;
 
 const tradeCooldown = config.tradecooldown;
@@ -35,14 +39,19 @@ const port = config.port;
 
 var clients = {};
 
-function createCache(userIDV, username, callback) {
-	if (!clients[userIDV]) {
+function createCache(userID, username, res) {
+	return new Promise((resolve, reject) => {
+		if (clients[userID]) {
+			clients[userID].refresh();
+			resolve(userID);
+		}
+
 		if (username == undefined) {
-			database.getUserName(userIDV, (_usr) => {
+			database.getUserName(userID, (_usr) => {
 				username = _usr;
-				if (username == "null") {
-					callback(-1);
-					return;
+				if (username == null) {
+					res.send({status: 1, message: "User not found"});
+					return reject(new Error("EarlyExit"));
 				} else {
 					run();
 				}
@@ -50,15 +59,25 @@ function createCache(userIDV, username, callback) {
 		} else {
 			run();
 		}
+
 		function run() {
-			clients[userIDV] = new Client(userIDV, username, callback);
-			clients[userIDV].startDecay(cacheTime, clearCache);
+			database.getMailVerified(userID, (mv) => {
+				var client = new Client(userID, username, mv.email, mv.verified, () => {
+					if (!clients[userID]) {
+						client.startDecay(cacheTime, clearCache);
+						clients[userID] = client;
+					}
+					resolve(userID);
+				});
+			});
 		}
-	}
+	});
 }
 function clearCache(userID) {
-	clients[userID].save();
-	delete clients[userID];
+	if (clients[userID]) {
+		clients[userID].save();
+		delete clients[userID];
+	}
 }
 function setTrade(userone, usertwo, status, callback) {
 	database.getTradeManager(userone, usertwo, (tm) => {
@@ -302,32 +321,40 @@ function addCardTrade(userone, usertwo, uuid, callback) {
 	});
 }
 function standardroutine(token, res) {
-	return new Promise((resolve) => {
-		try {
-			var decoded = jwt.verify(token, jwtSecret);
-		} catch (JsonWebTokenError) {
-			res.send({status: 1, message: "Identification Please"});
-			return;
-		}
-
-		if (clients[decoded.id] != undefined) {
-			clients[decoded.id].refresh();
-			isVerified();
-		}
-
-		createCache(decoded.id, decoded.username, (ret) => {
-			if (ret == -1) {
-				res.send({status: 2, message: "Cant find User"});
-				return;
+	return new Promise(
+		async (resolve, reject) => {
+			try {
+				var decoded = jwt.verify(token, jwtSecret);
+			} catch (JsonWebTokenError) {
+				res.send({status: 1, message: "Identification Please"});
+				return reject(new Error("EarlyExit"));
 			}
-			isVerified();
-		});
 
-		function isVerified() {
-			//if(clients[i])
-			resolve(decoded);
-		}
-	});
+			if (clients[decoded.id] != undefined) {
+				clients[decoded.id].refresh();
+				isVerified();
+			}
+
+			await createCache(decoded.id, decoded.username, res);
+
+			try {
+				isVerified();
+			} catch (ex) {
+				return reject(ex);
+			}
+
+			function isVerified() {
+				if (clients[decoded.id].verified == 1) return resolve(decoded);
+
+				if (clients[decoded.id].mail.length == 0) {
+					res.send({status: 11, message: "Account needs to be verified"});
+					return reject(new Error("EarlyExit"));
+				}
+
+				res.send({status: 10, message: "Account needs to be verified"});
+				return reject(new Error("EarlyExit"));
+			}
+		});
 }
 function removeTrade(carduuid, mainuuid, callback) {
 	database.getTradesCard(carduuid, (ts) => {
@@ -417,6 +444,37 @@ function getPackTime(userID) {
 		return packDate.diff(nowDate).seconds();
 	}
 }
+function sendVerification(userID, email, callback) {
+	var key = crypto.randomBytes(20).toString('hex');
+	database.setVerificationKey(userID, key, () => {
+		mail.send(email, key);
+		callback();
+	});
+}
+function checkMail(mail) {
+	return mailRegex.test(mail);
+}
+function handleException(ex, res) {
+	if (ex.message == "EarlyExit") return;
+	logger.write(ex);
+	res.send({status: 1, message: "Internal error"});
+}
+function verifyMail(userID, key, res) {
+	database.getVerificationKey(userID, (_key) => {
+		if (_key == null) {
+			res.send({status: 2, message: "no key"});
+			return;
+		}
+		if (_key == key) {
+			database.setVerified(userID, 1, () => {
+				if (clients[userID]) clients[userID].verified = 1;
+				res.send({status: 0});
+			});
+			return;
+		}
+		res.send({status: 1, message: "keys dont match"});
+	});
+}
 function getPort() {
 	return port;
 }
@@ -500,5 +558,9 @@ module.exports =
 	standardroutine: standardroutine,
 	removeTrade: removeTrade,
 	getTradeTime: getTradeTime,
-	getPackTime: getPackTime
+	getPackTime: getPackTime,
+	handleException: handleException,
+	sendVerification: sendVerification,
+	checkMail: checkMail,
+	verifyMail: verifyMail
 };

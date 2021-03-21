@@ -13,7 +13,7 @@ function send(mail, key) {
     from: 'verify.waifucollector@gmail.com',
     to: mail,
     subject: 'WaifuCollector Verify',
-    text: `
+    html: `
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<div style="
 		resize: none;
@@ -45,7 +45,7 @@ function send(mail, key) {
 			margin-top: 50px;
 			padding-bottom: 50px;
 			text-align: center;
-            text-shadow: 2px 2px black" target="_blank" href="https://verify.waifucollector.com/verify?key=${key}">Click to verify</a>
+            text-shadow: 2px 2px black" target="_blank" href="https://waifucollector.com/verify?key=${key}">Click to verify</a>
 	</div>`
   };
 
@@ -57,4 +57,9 @@ function send(mail, key) {
       logger.write(error);
     }
   });
+}
+
+module.exports =
+{
+  send: send,
 }
