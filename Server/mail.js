@@ -15,6 +15,7 @@ function send(mail, key) {
     subject: 'WaifuCollector Verify',
     html: `
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<p>https://waifucollector.com/verify?key=${key}</p>
 	<div style="
 		resize: none;
 		background-image: url('https://waifucollector.com/assets/homeBackground.png');
