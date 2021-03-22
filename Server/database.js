@@ -1130,6 +1130,28 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tou', '95', 'Card_Tou.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mamiya', '95', 'Card_Mamiya.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ilulu', '48', 'Card_Ilulu.jpg');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuno Gasai', '96', 'Card_YunoGasai.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Minene Uryuu', '96', 'Card_MineneUryuu.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yin', '97', 'Card_Yin.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Amber', '97', 'Card_Amber.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Misaki Kirihara', '97', 'Card_MisakiKirihara.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mumei', '98', 'Card_Mumei.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kotoko Iwanaga', '99', 'Card_KotokoIwanaga.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Saki Yumihara', '99', 'Card_SakiYumihara.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Misaki Nakahara', '100', 'Card_MisakiNakahara.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ayame Kajou', '101', 'Card_AyameKajou.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Anna Nishikinomiya', '101', 'Card_AnnaNishikinomiya.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mikoto Urabe', '102', 'Card_MikotoUrabe.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Koko Hekmatyar', '103', 'Card_KokoHekmatyar.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sakura Hibiki', '104', 'Card_SakuraHibiki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Soryuin Akemi', '104', 'Card_SoryuinAkemi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Zina Void', '104', 'Card_ZinaVoid.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Uehara Ayaka', '104', 'Card_UeharaAyaka.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Akiko Yosano', '105', 'Card_AkikoYosano.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kyoko Izumi', '105', 'Card_KyokoIzumi.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Naomi Tanizaki', '105', 'Card_NaomiTanizaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ichiyo Higuchi', '105', 'Card_IchiyoHiguchi.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1241,6 +1263,17 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('93', 'Wonder Egg Priority');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('94', 'Spice and Wolf');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('95', 'Hokuto no Ken');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('96', 'Mirai Nikki');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('97', 'Darker than Black');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('98', 'Kabaneri of the Iron Fortress');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('99', 'Kyokou Suiri');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('100', 'Welcome to the N.H.K.');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('101', 'Shimoneta');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('102', 'Mysterious Girlfriend X');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('103', 'Jormungand');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('104', 'How Heavy are the Dumbbells You Lift?');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('105', 'Bungo Stray Dogs');",
 	];
 
 	con.connect(() => {

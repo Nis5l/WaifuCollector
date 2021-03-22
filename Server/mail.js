@@ -1,20 +1,21 @@
 var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'verify.waifucollector@gmail.com',
-    pass: 'WaifuCollectorX3645!'
-  }
+	service: 'gmail',
+	auth: {
+		user: 'verify.waifucollector@gmail.com',
+		pass: 'WaifuCollectorX3645!'
+	}
 });
 
 function send(mail, key) {
-  var mailOptions = {
-    from: 'verify.waifucollector@gmail.com',
-    to: mail,
-    subject: 'WaifuCollector Verify',
-    html: `
+	var mailOptions = {
+		from: 'verify.waifucollector@gmail.com',
+		to: mail,
+		subject: 'WaifuCollector Verify',
+		html: `
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<p>https://waifucollector.com/verify?key=${key}</p>
 	<div style="
 		resize: none;
 		background-image: url('https://waifucollector.com/assets/homeBackground.png');
@@ -47,19 +48,19 @@ function send(mail, key) {
 			text-align: center;
             text-shadow: 2px 2px black" target="_blank" href="https://waifucollector.com/verify?key=${key}">Click to verify</a>
 	</div>`
-  };
+	};
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(mail);
-      console.log(error);
-      logger.write(mail);
-      logger.write(error);
-    }
-  });
+	transporter.sendMail(mailOptions, function (error, info) {
+		if (error) {
+			console.log(mail);
+			console.log(error);
+			logger.write(mail);
+			logger.write(error);
+		}
+	});
 }
 
 module.exports =
 {
-  send: send,
+	send: send,
 }
