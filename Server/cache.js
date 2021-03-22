@@ -98,6 +98,7 @@ class Client {
 
 	addCardFriend(card) {
 		this.startDecay(this.time, this.callback);
+		if(this.friendinventory == undefined) return;
 		this.friendinventory.inventory.push(card);
 		this.sortInv(true);
 	}
@@ -176,7 +177,11 @@ class Client {
 		this.lastlevel = level;
 
 		var inv = this.inventory;
-		if (friend) inv = this.friendinventory.inventory;
+		if (friend)
+		{
+			if(this.friendinventory == undefined) return;
+			inv = this.friendinventory.inventory;
+		}
 
 		var ret = [];
 		var newinv = [];

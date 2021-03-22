@@ -1,0 +1,620 @@
+[03/17/2021, 18:24] Alpha_0315 Upgrade lvl:0 Failed
+[03/17/2021, 18:39] SantosUwa Pulled a lvl1
+[03/17/2021, 18:48] Login BigFella
+[03/17/2021, 19:00] Nissl Upgrade lvl:0 Succeded
+[03/17/2021, 19:01] SmallCode Upgrade lvl:0 Succeded
+[03/17/2021, 19:02] Login Nissl
+[03/17/2021, 19:04] Jorenaldo Upgrade lvl:0 Succeded
+[03/17/2021, 19:11] haselnusse Upgrade lvl:0 Succeded
+[03/17/2021, 19:11] haselnusse Upgrade lvl:1 Succeded
+[03/17/2021, 19:28] Login Jesus
+[03/17/2021, 19:28] Login SamuArgo
+[03/17/2021, 19:30] BigFella Upgrade lvl:0 Failed
+[03/17/2021, 19:37] Alpha_0315 Upgrade lvl:0 Failed
+[03/17/2021, 19:48] SantosUwa Upgrade lvl:0 Failed
+[03/17/2021, 20:03] SuperLucky10 Upgrade lvl:0 Failed
+[03/17/2021, 20:04] SamuArgo Upgrade lvl:0 Failed
+[03/17/2021, 20:04] Login Jesus
+[03/17/2021, 20:04] Login SamuArgo
+[03/17/2021, 20:08] Jorenaldo Upgrade lvl:0 Succeded
+[03/17/2021, 20:08] Jorenaldo Upgrade lvl:1 Failed
+[03/17/2021, 20:17] haselnusse Upgrade lvl:0 Succeded
+[03/17/2021, 20:31] DMTaoman Pulled a lvl1
+[03/17/2021, 20:52] Nissl Upgrade lvl:0 Failed
+[03/17/2021, 20:56] SamuArgo Upgrade lvl:0 Succeded
+[03/17/2021, 20:56] Login Jesus
+[03/17/2021, 20:58] Nissl Upgrade lvl:0 Failed
+[03/17/2021, 20:59] SmallCode Upgrade lvl:0 Failed
+[03/17/2021, 21:13] haselnusse Upgrade lvl:0 Failed
+[03/17/2021, 21:23] Jorenaldo Upgrade lvl:0 Succeded
+[03/17/2021, 21:24] Jorenaldo Upgrade lvl:1 Failed
+[03/17/2021, 21:29] SmallCode Upgrade lvl:0 Failed
+[03/17/2021, 21:33] Login SmallCode
+[03/17/2021, 21:35] Login SmallCode
+[03/17/2021, 21:35] Login SmallCode
+[03/17/2021, 21:36] Login SmallCode
+[03/17/2021, 21:37] Login SmallCode
+[03/17/2021, 21:37] Login SmallCode
+[03/17/2021, 21:39] Login SmallCode
+[03/17/2021, 21:43] Login SmallCode
+[03/17/2021, 21:43] Login SmallCode
+[03/17/2021, 21:44] haselnusse Upgrade lvl:0 Failed
+[03/17/2021, 21:56] sqnick Pulled a lvl1
+[03/17/2021, 21:59] Nissl Upgrade lvl:0 Succeded
+[03/17/2021, 21:59] Nissl Upgrade lvl:1 Failed
+[03/17/2021, 22:00] SmallCode Upgrade lvl:0 Succeded
+[03/17/2021, 22:00] Login SmallCode
+[03/17/2021, 22:06] Login Jesus
+[03/17/2021, 22:07] Jesus Upgrade lvl:0 Failed
+[03/17/2021, 22:07] Login SamuArgo
+[03/17/2021, 22:22] haselnusse Upgrade lvl:0 Succeded
+[03/17/2021, 22:34] Nissl Upgrade lvl:0 Succeded
+[03/17/2021, 22:34] Nissl Upgrade lvl:1 Succeded
+[03/17/2021, 22:37] Login Nissl
+[03/17/2021, 22:48] Nissl Upgrade lvl:0 Failed
+[03/17/2021, 22:48] Jorenaldo Upgrade lvl:0 Failed
+[03/17/2021, 22:57] Alpha_0315 Upgrade lvl:0 Succeded
+[03/17/2021, 23:18] Login NekoLoli420
+[03/17/2021, 23:18] NekoLoli420 Pulled a lvl2
+[03/17/2021, 23:21] Jorenaldo Upgrade lvl:0 Succeded
+[03/17/2021, 23:21] Jorenaldo Upgrade lvl:1 Failed
+[03/17/2021, 23:57] Login Jesus
+[03/17/2021, 23:57] Jesus Upgrade lvl:0 Failed
+[03/17/2021, 23:57] Login SamuArgo
+[03/17/2021, 23:58] haselnusse Pulled a lvl2
+[03/17/2021, 23:59] haselnusse Upgrade lvl:2 Failed
+[03/18/2021, 00:28] SamuArgo Upgrade lvl:0 Succeded
+[03/18/2021, 00:28] Login Jesus
+[03/18/2021, 01:32] Tikel Upgrade lvl:0 Succeded
+[03/18/2021, 01:32] Tikel Upgrade lvl:0 Succeded
+[03/18/2021, 02:05] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 08:07] Nissl Upgrade lvl:0 Succeded
+[03/18/2021, 08:07] Nissl Upgrade lvl:1 Succeded
+[03/18/2021, 08:07] Nissl Upgrade lvl:2 Failed
+[03/18/2021, 08:10] Login SmallCode
+[03/18/2021, 08:28] SmallCode Upgrade lvl:0 Failed
+[03/18/2021, 08:30] SmallCode Upgrade lvl:1 Failed
+[03/18/2021, 08:31] SmallCode Upgrade lvl:0 Failed
+[03/18/2021, 08:45] NightKru Upgrade lvl:0 Succeded
+[03/18/2021, 08:46] NightKru Upgrade lvl:0 Failed
+[03/18/2021, 08:51] Login rrikka_tokisaki
+[03/18/2021, 08:51] Login uuseless
+[03/18/2021, 08:51] Login uuseless
+[03/18/2021, 08:51] Login rikka
+[03/18/2021, 08:51] Login rrikka
+[03/18/2021, 08:52] Login raphtalia
+[03/18/2021, 08:53] Login rrikka_tokisaki
+[03/18/2021, 09:21] Login LuKaS0473
+[03/18/2021, 09:22] Login LuKaS0473
+[03/18/2021, 09:23] Login iceeye
+[03/18/2021, 09:31] haselnusse Upgrade lvl:0 Succeded
+[03/18/2021, 09:31] haselnusse Upgrade lvl:1 Failed
+[03/18/2021, 09:32] iceeye Upgrade lvl:0 Succeded
+[03/18/2021, 09:33] iceeye Upgrade lvl:0 Succeded
+[03/18/2021, 10:04] haselnusse Upgrade lvl:0 Succeded
+[03/18/2021, 10:49] haselnusse Upgrade lvl:0 Failed
+[03/18/2021, 10:50] Nissl Upgrade lvl:0 Failed
+[03/18/2021, 10:52] Jesus Upgrade lvl:0 Succeded
+[03/18/2021, 10:53] Login SamuArgo
+[03/18/2021, 10:53] SamuArgo Upgrade lvl:0 Failed
+[03/18/2021, 10:53] SamuArgo Upgrade lvl:0 Failed
+[03/18/2021, 10:57] haselnusse Upgrade lvl:0 Failed
+[03/18/2021, 10:57] haselnusse Upgrade lvl:0 Succeded
+[03/18/2021, 10:58] Traded: Nissl haselnusse
+[03/18/2021, 11:00] Nissl Upgrade lvl:1 Failed
+[03/18/2021, 11:01] Nissl Upgrade lvl:0 Succeded
+[03/18/2021, 11:01] Nissl Upgrade lvl:1 Succeded
+[03/18/2021, 11:03] SamuArgo Upgrade lvl:0 Succeded
+[03/18/2021, 11:35] haselnusse Upgrade lvl:0 Failed
+[03/18/2021, 11:37] Login SamuArgo
+[03/18/2021, 11:37] SamuArgo Upgrade lvl:0 Succeded
+[03/18/2021, 11:37] SamuArgo Upgrade lvl:1 Succeded
+[03/18/2021, 11:37] SamuArgo Upgrade lvl:2 Succeded
+[03/18/2021, 11:38] Login Jesus
+[03/18/2021, 11:51] jorenaldo Upgrade lvl:0 Failed
+[03/18/2021, 12:43] haselnusse Upgrade lvl:0 Succeded
+[03/18/2021, 12:47] Login BigFella
+[03/18/2021, 12:53] Login SamuArgo
+[03/18/2021, 12:54] SamuArgo Upgrade lvl:0 Succeded
+[03/18/2021, 13:02] Nissl Pulled a lvl2
+[03/18/2021, 13:22] haselnusse Upgrade lvl:0 Failed
+[03/18/2021, 13:40] SmallCode Pulled a lvl1
+[03/18/2021, 13:49] SamuArgo Upgrade lvl:0 Succeded
+[03/18/2021, 13:49] SamuArgo Upgrade lvl:1 Failed
+[03/18/2021, 13:49] Login Jesus
+[03/18/2021, 13:50] Jesus Upgrade lvl:0 Succeded
+[03/18/2021, 13:50] Login SamuArgo
+[03/18/2021, 13:53] jorenaldo Upgrade lvl:0 Failed
+[03/18/2021, 13:59] Login rrikka_tokisaki
+[03/18/2021, 13:59] Login raphtalia
+[03/18/2021, 13:59] Login rrikka
+[03/18/2021, 14:00] Login rikka
+[03/18/2021, 14:00] Login rikka
+[03/18/2021, 14:01] Login rrikka_tokisaki
+[03/18/2021, 14:04] Nissl Upgrade lvl:0 Succeded
+[03/18/2021, 14:04] Nissl Upgrade lvl:1 Succeded
+[03/18/2021, 14:04] Nissl Upgrade lvl:2 Succeded
+[03/18/2021, 14:09] Traded: rrikka_tokisaki bones_the_duck
+[03/18/2021, 14:24] haselnusse Upgrade lvl:0 Failed
+[03/18/2021, 14:36] Nissl Upgrade lvl:0 Succeded
+[03/18/2021, 15:12] Login iceeye
+[03/18/2021, 15:12] Login iceeye
+[03/18/2021, 15:14] Login Nissl
+[03/18/2021, 15:14] Login iceeye
+[03/18/2021, 15:14] Login XoNi
+[03/18/2021, 15:14] Login iceeye
+[03/18/2021, 15:16] Login XoNi
+[03/18/2021, 15:16] Traded: XoNi iceeye
+[03/18/2021, 15:31] haselnusse Upgrade lvl:0 Failed
+[03/18/2021, 15:45] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 15:46] Jorenaldo Upgrade lvl:1 Succeded
+[03/18/2021, 16:16] Jorenaldo Upgrade lvl:0 Failed
+[03/18/2021, 16:46] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 16:46] Jorenaldo Upgrade lvl:1 Succeded
+[03/18/2021, 17:00] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 17:01] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 17:01] SmallCode Upgrade lvl:1 Failed
+[03/18/2021, 17:49] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 17:59] haselnusse Upgrade lvl:0 Succeded
+[03/18/2021, 18:16] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 18:16] SmallCode Upgrade lvl:1 Succeded
+[03/18/2021, 18:16] SmallCode Upgrade lvl:2 Succeded
+[03/18/2021, 18:18] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 18:18] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 18:18] SmallCode Upgrade lvl:1 Succeded
+[03/18/2021, 18:18] SmallCode Upgrade lvl:2 Succeded
+[03/18/2021, 18:21] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 18:28] Alpha_0315 Upgrade lvl:0 Succeded
+[03/18/2021, 18:40] SmallCode Pulled a lvl1
+[03/18/2021, 19:01] Login SmallCode
+[03/18/2021, 19:02] bones_the_duck Pulled a lvl1
+[03/18/2021, 19:07] Login Jesus
+[03/18/2021, 19:07] Login Jesus
+[03/18/2021, 19:20] Login SamuArgo
+[03/18/2021, 19:20] Login Jesus
+[03/18/2021, 19:22] Traded: sqnick Jorenaldo
+[03/18/2021, 19:22] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 19:22] Jorenaldo Upgrade lvl:1 Succeded
+[03/18/2021, 19:40] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 19:53] Jorenaldo Upgrade lvl:0 Failed
+[03/18/2021, 20:00] Login SamuArgo
+[03/18/2021, 20:13] ChizuruBestWaifu Pulled a lvl1
+[03/18/2021, 20:16] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 20:16] SmallCode Upgrade lvl:1 Succeded
+[03/18/2021, 20:23] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 20:26] Nissl Upgrade lvl:0 Failed
+[03/18/2021, 20:41] haselnusse Upgrade lvl:0 Failed
+[03/18/2021, 20:55] Jorenaldo Upgrade lvl:0 Failed
+[03/18/2021, 20:55] Login Jesus
+[03/18/2021, 20:55] Login Jesus
+[03/18/2021, 20:57] Nissl Upgrade lvl:0 Succeded
+[03/18/2021, 20:57] Nissl Upgrade lvl:1 Failed
+[03/18/2021, 21:01] SuperLucky10 Upgrade lvl:0 Succeded
+[03/18/2021, 21:31] SmallCode Upgrade lvl:0 Succeded
+[03/18/2021, 21:31] SmallCode Upgrade lvl:1 Failed
+[03/18/2021, 21:42] sqnick Pulled a lvl1
+[03/18/2021, 21:48] Alpha_0315 Pulled a lvl1
+[03/18/2021, 21:51] Nissl Upgrade lvl:0 Succeded
+[03/18/2021, 21:55] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 21:55] Jorenaldo Upgrade lvl:1 Succeded
+[03/18/2021, 22:59] Jorenaldo Upgrade lvl:0 Succeded
+[03/18/2021, 23:11] SuperLucky10 Upgrade lvl:0 Succeded
+[03/18/2021, 23:14] sqnick Upgrade lvl:0 Failed
+[03/18/2021, 23:23] haselnusse Upgrade lvl:0 Succeded
+[03/18/2021, 23:23] haselnusse Upgrade lvl:1 Failed
+[03/18/2021, 23:29] Jorenaldo Upgrade lvl:0 Failed
+[03/19/2021, 01:38] Jorenaldo Pulled a lvl1
+[03/19/2021, 02:02] BigFella Pulled a lvl1
+[03/19/2021, 03:17] NightKru Upgrade lvl:0 Succeded
+[03/19/2021, 03:19] Tikel Upgrade lvl:0 Failed
+[03/19/2021, 05:13] NightKru Pulled a lvl1
+[03/19/2021, 05:15] SantosUwa Upgrade lvl:0 Failed
+[03/19/2021, 05:33] Alpha_0315 Upgrade lvl:0 Succeded
+[03/19/2021, 06:10] Alpha_0315 Upgrade lvl:1 Succeded
+[03/19/2021, 06:11] Alpha_0315 Upgrade lvl:0 Succeded
+[03/19/2021, 06:12] Alpha_0315 Upgrade lvl:0 Succeded
+[03/19/2021, 06:30] Tikel Pulled a lvl1
+[03/19/2021, 06:30] NightKru Upgrade lvl:0 Succeded
+[03/19/2021, 07:00] haselnusse Upgrade lvl:0 Failed
+[03/19/2021, 07:28] Login rikka
+[03/19/2021, 07:28] Login rikka
+[03/19/2021, 07:28] Login rrikka
+[03/19/2021, 07:28] rrikka Pulled a lvl1
+[03/19/2021, 07:28] Login raphtalia
+[03/19/2021, 07:28] Login rikka
+[03/19/2021, 07:29] Login uuseless
+[03/19/2021, 07:59] ChizuruBestWaifu Pulled a lvl1
+[03/19/2021, 08:16] Nissl Upgrade lvl:0 Failed
+[03/19/2021, 08:24] SmallCode Upgrade lvl:0 Failed
+[03/19/2021, 09:45] ChizuruBestWaifu Pulled a lvl1
+[03/19/2021, 09:53] Login rrikka_tokisaki
+[03/19/2021, 09:53] Login uuseless
+[03/19/2021, 09:53] Login uuseless
+[03/19/2021, 09:53] Login rikka
+[03/19/2021, 09:54] Login raphtalia
+[03/19/2021, 09:54] Login rrikka
+[03/19/2021, 09:55] Login rrikka_tokisaki
+[03/19/2021, 09:56] Traded: rrikka_tokisaki rrikka
+[03/19/2021, 10:18] haselnusse Upgrade lvl:0 Failed
+[03/19/2021, 10:19] Login iceeye
+[03/19/2021, 10:19] iceeye Pulled a lvl1
+[03/19/2021, 10:39] Login BigFella
+[03/19/2021, 10:58] Nissl Upgrade lvl:0 Succeded
+[03/19/2021, 11:08] SmallCode Upgrade lvl:0 Succeded
+[03/19/2021, 11:08] SmallCode Upgrade lvl:1 Failed
+[03/19/2021, 11:38] Jorenaldo Upgrade lvl:0 Failed
+[03/19/2021, 11:38] Alpha_0315 Upgrade lvl:0 Failed
+[03/19/2021, 11:44] Login BigFella
+[03/19/2021, 11:57] haselnusse Upgrade lvl:0 Succeded
+[03/19/2021, 12:15] jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 12:15] jorenaldo Upgrade lvl:1 Failed
+[03/19/2021, 12:36] Alpha_0315 Upgrade lvl:0 Succeded
+[03/19/2021, 12:41] Login rrikka
+[03/19/2021, 12:41] Login raphtalia
+[03/19/2021, 12:41] Login rikka
+[03/19/2021, 12:41] Login uuseless
+[03/19/2021, 12:41] Login rrikka_tokisaki
+[03/19/2021, 13:27] Login SmallCode
+[03/19/2021, 14:19] jorenaldo Pulled a lvl2
+[03/19/2021, 14:36] Nissl Upgrade lvl:0 Failed
+[03/19/2021, 14:46] SkullSharks Pulled a lvl1
+[03/19/2021, 15:23] SmallCode Upgrade lvl:0 Succeded
+[03/19/2021, 15:23] SmallCode Upgrade lvl:0 Failed
+[03/19/2021, 15:23] SmallCode Upgrade lvl:0 Failed
+[03/19/2021, 15:23] SmallCode Upgrade lvl:0 Failed
+[03/19/2021, 15:34] Jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 15:58] SmallCode Pulled a lvl1
+[03/19/2021, 16:15] BigFella Upgrade lvl:0 Failed
+[03/19/2021, 16:29] ChizuruBestWaifu Pulled a lvl1
+[03/19/2021, 16:35] haselnusse Upgrade lvl:0 Succeded
+[03/19/2021, 16:38] Jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 17:11] haselnusse Upgrade lvl:0 Failed
+[03/19/2021, 17:41] SantosUwa Upgrade lvl:0 Succeded
+[03/19/2021, 18:27] SantosUwa Upgrade lvl:0 Succeded
+[03/19/2021, 18:39] SmallCode Upgrade lvl:0 Failed
+[03/19/2021, 18:40] SmallCode Upgrade lvl:0 Succeded
+[03/19/2021, 18:40] SmallCode Upgrade lvl:0 Succeded
+[03/19/2021, 18:40] SmallCode Upgrade lvl:1 Failed
+[03/19/2021, 18:40] SmallCode Upgrade lvl:0 Failed
+[03/19/2021, 18:41] SmallCode Upgrade lvl:1 Succeded
+[03/19/2021, 18:41] SmallCode Upgrade lvl:0 Succeded
+[03/19/2021, 19:12] Jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 19:55] Login Alpha_0315
+[03/19/2021, 19:58] Alpha_0315 Upgrade lvl:0 Succeded
+[03/19/2021, 19:59] haselnusse Upgrade lvl:0 Succeded
+[03/19/2021, 20:12] Jorenaldo Pulled a lvl1
+[03/19/2021, 20:12] Jorenaldo Upgrade lvl:1 Succeded
+[03/19/2021, 20:44] Jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 20:46] Nissl Upgrade lvl:0 Succeded
+[03/19/2021, 20:46] Nissl Upgrade lvl:1 Failed
+[03/19/2021, 20:47] haselnusse Upgrade lvl:0 Failed
+[03/19/2021, 21:05] Alpha_0315 Upgrade lvl:0 Succeded
+[03/19/2021, 21:14] Jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 21:19] haselnusse Pulled a lvl1
+[03/19/2021, 21:29] sqnick Pulled a lvl1
+[03/19/2021, 22:11] haselnusse Upgrade lvl:0 Succeded
+[03/19/2021, 22:11] haselnusse Upgrade lvl:1 Succeded
+[03/19/2021, 22:18] Jorenaldo Upgrade lvl:0 Failed
+[03/19/2021, 22:36] Register SuperGod
+[03/19/2021, 22:36] Login SuperGod
+[03/19/2021, 22:55] Jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 23:49] Jorenaldo Upgrade lvl:0 Succeded
+[03/19/2021, 23:50] haselnusse Upgrade lvl:0 Succeded
+[03/20/2021, 00:33] Login BigFella
+[03/20/2021, 00:53] SantosUwa Upgrade lvl:0 Failed
+[03/20/2021, 00:59] Jorenaldo Pulled a lvl1
+[03/20/2021, 01:28] SmallCode Pulled a lvl1
+[03/20/2021, 01:31] Jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 02:23] Jorenaldo Pulled a lvl1
+[03/20/2021, 03:33] Jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 03:33] Jorenaldo Upgrade lvl:1 Succeded
+[03/20/2021, 05:45] NightKru Upgrade lvl:0 Failed
+[03/20/2021, 07:31] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 07:32] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 07:40] Tikel Upgrade lvl:0 Succeded
+[03/20/2021, 07:40] Tikel Upgrade lvl:0 Failed
+[03/20/2021, 07:45] Tikel Upgrade lvl:0 Failed
+[03/20/2021, 08:05] Login Sundara
+[03/20/2021, 08:56] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 08:59] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 08:59] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 09:00] SmallCode Upgrade lvl:1 Succeded
+[03/20/2021, 09:02] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 09:02] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 09:02] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 09:02] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 09:02] SmallCode Upgrade lvl:1 Succeded
+[03/20/2021, 09:02] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 09:03] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 09:03] SmallCode Upgrade lvl:1 Failed
+[03/20/2021, 09:21] SuperLucky10 Upgrade lvl:0 Succeded
+[03/20/2021, 09:30] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 09:30] SmallCode Upgrade lvl:1 Failed
+[03/20/2021, 10:01] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 10:01] SmallCode Upgrade lvl:1 Failed
+[03/20/2021, 10:05] Jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 10:05] Jorenaldo Upgrade lvl:1 Succeded
+[03/20/2021, 10:10] haselnusse Pulled a lvl1
+[03/20/2021, 10:36] Jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 10:36] Jorenaldo Upgrade lvl:1 Failed
+[03/20/2021, 10:40] haselnusse Upgrade lvl:0 Succeded
+[03/20/2021, 11:06] Jorenaldo Upgrade lvl:0 Failed
+[03/20/2021, 11:46] Jorenaldo Upgrade lvl:0 Failed
+[03/20/2021, 12:03] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 12:03] SmallCode Upgrade lvl:1 Succeded
+[03/20/2021, 12:24] haselnusse Upgrade lvl:0 Failed
+[03/20/2021, 12:29] Nissl Upgrade lvl:0 Failed
+[03/20/2021, 12:56] Login SamuArgo
+[03/20/2021, 12:56] SamuArgo Upgrade lvl:0 Succeded
+[03/20/2021, 12:56] SamuArgo Upgrade lvl:1 Succeded
+[03/20/2021, 13:17] jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 13:20] BigFella Upgrade lvl:0 Succeded
+[03/20/2021, 13:27] SamuArgo Upgrade lvl:0 Failed
+[03/20/2021, 13:27] SamuArgo Upgrade lvl:0 Succeded
+[03/20/2021, 13:27] Login Jesus
+[03/20/2021, 13:28] Login SamuArgo
+[03/20/2021, 13:47] jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 14:47] jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 15:13] BigFella Upgrade lvl:0 Succeded
+[03/20/2021, 15:24] Login lucacheachirini@gmail.com
+[03/20/2021, 15:24] Login lucacheachirini@gmail.com
+[03/20/2021, 15:24] Login LucaPietro07
+[03/20/2021, 15:49] jorenaldo Pulled a lvl1
+[03/20/2021, 15:49] jorenaldo Upgrade lvl:1 Failed
+[03/20/2021, 15:59] haselnusse Pulled a lvl1
+[03/20/2021, 16:19] jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 16:20] jorenaldo Upgrade lvl:1 Failed
+[03/20/2021, 16:36] DMTaoman Upgrade lvl:0 Failed
+[03/20/2021, 16:36] DMTaoman Upgrade lvl:0 Failed
+[03/20/2021, 16:36] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 16:39] Login Guddino
+[03/20/2021, 16:43] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 16:48] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 16:48] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 16:48] DMTaoman Upgrade lvl:1 Failed
+[03/20/2021, 16:49] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 16:49] jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 16:55] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 16:55] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 16:56] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 16:56] DMTaoman Upgrade lvl:1 Failed
+[03/20/2021, 17:04] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 17:05] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 17:09] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 17:10] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 17:16] haselnusse Upgrade lvl:0 Succeded
+[03/20/2021, 17:16] haselnusse Upgrade lvl:1 Failed
+[03/20/2021, 17:21] Jorenaldo Upgrade lvl:0 Failed
+[03/20/2021, 17:29] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 17:32] SmallCode Pulled a lvl1
+[03/20/2021, 17:59] Jorenaldo Upgrade lvl:0 Failed
+[03/20/2021, 18:00] DMTaoman Upgrade lvl:0 Succeded
+[03/20/2021, 18:02] Login SmallCode
+[03/20/2021, 18:29] Nissl Upgrade lvl:0 Succeded
+[03/20/2021, 18:29] Traded: Nissl Jesus
+[03/20/2021, 18:33] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:34] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:36] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:37] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:37] SmallCode Upgrade lvl:1 Failed
+[03/20/2021, 18:37] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:38] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:39] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:40] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:41] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:41] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:42] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:42] SmallCode Upgrade lvl:1 Succeded
+[03/20/2021, 18:42] SmallCode Upgrade lvl:2 Succeded
+[03/20/2021, 18:43] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:44] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:44] SmallCode Upgrade lvl:1 Failed
+[03/20/2021, 18:45] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:45] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:46] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:47] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 18:48] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:48] SmallCode Upgrade lvl:1 Failed
+[03/20/2021, 18:48] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:49] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 18:49] SmallCode Upgrade lvl:1 Failed
+[03/20/2021, 18:49] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 19:03] Jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 19:41] Jorenaldo Upgrade lvl:0 Succeded
+[03/20/2021, 20:32] SmallCode Pulled a lvl1
+[03/20/2021, 20:49] haselnusse Upgrade lvl:0 Failed
+[03/20/2021, 20:49] haselnusse Upgrade lvl:0 Failed
+[03/20/2021, 20:49] haselnusse Upgrade lvl:0 Failed
+[03/20/2021, 20:51] Nissl Upgrade lvl:0 Succeded
+[03/20/2021, 20:51] Nissl Upgrade lvl:1 Failed
+[03/20/2021, 21:05] SamuArgo Upgrade lvl:0 Succeded
+[03/20/2021, 21:05] Login Jesus
+[03/20/2021, 21:08] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 21:09] SmallCode Upgrade lvl:0 Failed
+[03/20/2021, 21:10] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 21:10] SmallCode Upgrade lvl:1 Succeded
+[03/20/2021, 21:11] SmallCode Upgrade lvl:0 Succeded
+[03/20/2021, 21:13] Login Kyubi09
+[03/20/2021, 21:20] SantosUwa Upgrade lvl:0 Failed
+[03/20/2021, 21:27] Nissl Upgrade lvl:0 Succeded
+[03/20/2021, 21:58] Nissl Upgrade lvl:0 Succeded
+[03/20/2021, 22:04] Alpha_0315 Upgrade lvl:0 Failed
+[03/20/2021, 22:06] Alpha_0315 Upgrade lvl:0 Failed
+[03/20/2021, 22:07] Jorenaldo Upgrade lvl:0 Failed
+[03/20/2021, 22:09] H3ntaiS3npai Upgrade lvl:0 Succeded
+[03/20/2021, 22:09] H3ntaiS3npai Upgrade lvl:1 Succeded
+[03/20/2021, 22:10] H3ntaiS3npai Upgrade lvl:0 Failed
+[03/20/2021, 22:15] SantosUwa Upgrade lvl:0 Failed
+[03/20/2021, 22:19] haselnusse Upgrade lvl:0 Failed
+[03/20/2021, 22:47] BigFella Pulled a lvl1
+[03/20/2021, 22:51] SuperLucky10 Upgrade lvl:0 Succeded
+[03/20/2021, 22:51] SuperLucky10 Upgrade lvl:1 Succeded
+[03/20/2021, 23:33] SantosUwa Upgrade lvl:0 Failed
+[03/20/2021, 23:48] Jesus Upgrade lvl:0 Succeded
+[03/20/2021, 23:48] Login SamuArgo
+[03/21/2021, 00:05] SantosUwa Upgrade lvl:0 Succeded
+[03/21/2021, 00:21] Nissl Upgrade lvl:0 Succeded
+[03/21/2021, 00:25] SuperLucky10 Upgrade lvl:0 Succeded
+[03/21/2021, 00:36] Jorenaldo Upgrade lvl:0 Succeded
+[03/21/2021, 00:45] SamuArgo Upgrade lvl:0 Failed
+[03/21/2021, 00:45] Login Jesus
+[03/21/2021, 00:45] Jesus Pulled a lvl1
+[03/21/2021, 00:45] Login SamuArgo
+[03/21/2021, 00:58] SantosUwa Upgrade lvl:0 Succeded
+[03/21/2021, 00:58] SantosUwa Upgrade lvl:1 Succeded
+[03/21/2021, 01:17] Login Jesus
+[03/21/2021, 01:17] Login SamuArgo
+[03/21/2021, 01:23] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 02:37] Jorenaldo Upgrade lvl:0 Succeded
+[03/21/2021, 02:51] SuperLucky10 Upgrade lvl:0 Succeded
+[03/21/2021, 02:52] Register TheKip11
+[03/21/2021, 02:52] Login TheKip11
+[03/21/2021, 02:56] Traded: TheKip11 SuperLucky10
+[03/21/2021, 03:01] Register Kazidrake
+[03/21/2021, 03:02] Login Kazidrake
+[03/21/2021, 03:18] sqnick Pulled a lvl1
+[03/21/2021, 03:26] SuperLucky10 Upgrade lvl:0 Succeded
+[03/21/2021, 05:33] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 06:56] SuperLucky10 Upgrade lvl:0 Succeded
+[03/21/2021, 07:50] NightKru Upgrade lvl:0 Failed
+[03/21/2021, 09:42] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 09:42] SmallCode Upgrade lvl:1 Succeded
+[03/21/2021, 09:43] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 09:43] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 09:44] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 09:45] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 09:45] SmallCode Upgrade lvl:1 Succeded
+[03/21/2021, 09:45] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 09:46] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 09:46] SmallCode Upgrade lvl:1 Failed
+[03/21/2021, 09:47] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 09:47] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 09:48] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 10:22] haselnusse Upgrade lvl:0 Succeded
+[03/21/2021, 10:37] SuperLucky10 Upgrade lvl:0 Succeded
+[03/21/2021, 10:45] DMTaoman Upgrade lvl:0 Failed
+[03/21/2021, 11:38] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 11:39] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 12:24] haselnusse Upgrade lvl:0 Succeded
+[03/21/2021, 13:10] SantosUwa Upgrade lvl:0 Succeded
+[03/21/2021, 13:11] BigFella Pulled a lvl1
+[03/21/2021, 13:11] Login Jesus
+[03/21/2021, 13:12] Login SamuArgo
+[03/21/2021, 13:15] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 13:35] Login Phossi
+[03/21/2021, 13:35] Login Phossi
+[03/21/2021, 13:36] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 13:40] Jorenaldo Upgrade lvl:0 Succeded
+[03/21/2021, 13:49] DMTaoman Pulled a lvl1
+[03/21/2021, 13:57] Login supermathdx
+[03/21/2021, 13:57] Login supermathdx
+[03/21/2021, 13:57] Login supermathdx
+[03/21/2021, 13:59] Login supermathdx
+[03/21/2021, 14:00] Login supermathdx
+[03/21/2021, 14:00] Login supermathdx
+[03/21/2021, 14:02] Login supermathdx
+[03/21/2021, 14:07] Login SamuArgo
+[03/21/2021, 14:13] Login Jesus
+[03/21/2021, 14:13] Login SamuArgo
+[03/21/2021, 14:15] Login Test123
+[03/21/2021, 14:16] Login Nissl
+[03/21/2021, 14:21] Sundara Pulled a lvl1
+[03/21/2021, 14:23] BigFella Upgrade lvl:0 Failed
+[03/21/2021, 14:30] Login Test123
+[03/21/2021, 14:31] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 14:31] SamuArgo Upgrade lvl:0 Failed
+[03/21/2021, 14:31] SamuArgo Upgrade lvl:0 Failed
+[03/21/2021, 14:31] SamuArgo Upgrade lvl:0 Succeded
+[03/21/2021, 14:31] Login Jesus
+[03/21/2021, 14:31] Login Nissl
+[03/21/2021, 14:32] Nissl Upgrade lvl:0 Succeded
+[03/21/2021, 14:32] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 14:33] Login Jesus
+[03/21/2021, 14:33] BigFella Upgrade lvl:0 Succeded
+[03/21/2021, 14:34] Login Jesus
+[03/21/2021, 14:35] Login Jesus
+[03/21/2021, 14:35] Login Jesus
+[03/21/2021, 14:36] Login SamuArgo
+[03/21/2021, 14:45] Traded: Jorenaldo BigFella
+[03/21/2021, 14:46] Jorenaldo Upgrade lvl:0 Succeded
+[03/21/2021, 14:46] Jorenaldo Upgrade lvl:1 Succeded
+[03/21/2021, 14:46] Jorenaldo Upgrade lvl:0 Succeded
+[03/21/2021, 14:46] Jorenaldo Upgrade lvl:1 Succeded
+[03/21/2021, 14:49] BigFella Upgrade lvl:1 Failed
+[03/21/2021, 14:49] BigFella Upgrade lvl:0 Succeded
+[03/21/2021, 15:02] Nissl Upgrade lvl:0 Failed
+[03/21/2021, 15:03] Jorenaldo Upgrade lvl:0 Succeded
+[03/21/2021, 15:03] Login SmallCode
+[03/21/2021, 15:04] Login SmallCode
+[03/21/2021, 15:22] haselnusse Upgrade lvl:0 Succeded
+[03/21/2021, 15:22] haselnusse Upgrade lvl:1 Failed
+[03/21/2021, 15:43] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 15:44] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 15:45] SmallCode Upgrade lvl:1 Failed
+[03/21/2021, 15:45] SamuArgo Upgrade lvl:0 Failed
+[03/21/2021, 15:45] SamuArgo Upgrade lvl:0 Succeded
+[03/21/2021, 15:45] Login Jesus
+[03/21/2021, 15:45] Jesus Upgrade lvl:0 Succeded
+[03/21/2021, 15:45] Login SamuArgo
+[03/21/2021, 15:46] Login ChizuruBestWaifu
+[03/21/2021, 16:02] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 16:03] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 16:03] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 16:06] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 16:08] Jorenaldo Pulled a lvl1
+[03/21/2021, 16:48] Nissl Upgrade lvl:0 Failed
+[03/21/2021, 16:49] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 16:49] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 16:49] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 16:49] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 16:49] SmallCode Upgrade lvl:1 Succeded
+[03/21/2021, 16:51] BigFella Upgrade lvl:0 Failed
+[03/21/2021, 16:59] Jorenaldo Pulled a lvl1
+[03/21/2021, 17:42] haselnusse Upgrade lvl:0 Succeded
+[03/21/2021, 17:42] haselnusse Upgrade lvl:1 Succeded
+[03/21/2021, 17:42] haselnusse Upgrade lvl:2 Succeded
+[03/21/2021, 17:54] SamuArgo Upgrade lvl:0 Failed
+[03/21/2021, 17:54] SamuArgo Upgrade lvl:0 Succeded
+[03/21/2021, 17:54] SamuArgo Upgrade lvl:1 Failed
+[03/21/2021, 17:54] Login Jesus
+[03/21/2021, 18:14] haselnusse Upgrade lvl:0 Succeded
+[03/21/2021, 18:28] Login SamuArgo
+[03/21/2021, 18:39] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 18:49] Nissl Pulled a lvl1
+[03/21/2021, 18:50] haselnusse Pulled a lvl1
+[03/21/2021, 19:00] SamuArgo Upgrade lvl:0 Succeded
+[03/21/2021, 19:00] Login Jesus
+[03/21/2021, 19:00] Jesus Upgrade lvl:0 Succeded
+[03/21/2021, 19:00] Jesus Upgrade lvl:1 Succeded
+[03/21/2021, 19:00] Login SamuArgo
+[03/21/2021, 19:11] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 19:38] BigFella Upgrade lvl:0 Succeded
+[03/21/2021, 19:41] Login aidansayles@gmail.com
+[03/21/2021, 19:43] Login WaffleKitty74
+[03/21/2021, 19:43] Login WaffleKitty74
+[03/21/2021, 19:57] DMTaoman Upgrade lvl:0 Succeded
+[03/21/2021, 20:01] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 20:02] haselnusse Upgrade lvl:0 Failed
+[03/21/2021, 20:09] BigFella Upgrade lvl:0 Succeded
+[03/21/2021, 20:16] Jorenaldo Upgrade lvl:0 Succeded
+[03/21/2021, 20:16] Jorenaldo Upgrade lvl:1 Succeded
+[03/21/2021, 20:20] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 20:27] Alpha_0315 Upgrade lvl:0 Failed
+[03/21/2021, 20:28] Alpha_0315 Upgrade lvl:0 Succeded
+[03/21/2021, 20:29] Alpha_0315 Upgrade lvl:0 Succeded
+[03/21/2021, 20:29] Alpha_0315 Upgrade lvl:0 Succeded
+[03/21/2021, 20:41] SmallCode Upgrade lvl:0 Failed
+[03/21/2021, 20:52] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 21:01] SantosUwa Upgrade lvl:0 Failed
+[03/21/2021, 21:39] SantosUwa Upgrade lvl:0 Succeded
+[03/21/2021, 21:45] Login LucaPietro07
+[03/21/2021, 21:46] Login LucaPietro07
+[03/21/2021, 21:54] haselnusse Upgrade lvl:0 Succeded
+[03/21/2021, 22:04] Jorenaldo Upgrade lvl:0 Failed
+[03/21/2021, 22:10] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 22:11] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 22:11] SmallCode Upgrade lvl:1 Failed
+[03/21/2021, 22:11] SmallCode Upgrade lvl:0 Succeded
+[03/21/2021, 22:11] SmallCode Upgrade lvl:1 Succeded
+[03/21/2021, 22:21] H3ntaiS3npai Upgrade lvl:0 Succeded
+[03/21/2021, 22:35] Jorenaldo Upgrade lvl:0 Failed
