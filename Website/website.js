@@ -528,14 +528,18 @@ app.get("/adminpanel", redirectIfNotAdmin, function (req, res) {
 	);
 });
 
-app.get("/adminpanel/cards", redirectIfNotAdmin, function (req, response) {
+app.get("/adminpanel/cards", redirectIfNotAdmin, (req, res) => {
 	request.get(
 		{
 			url: getHttpLocal() + API_HOST_LOCAL + "/display/cards",
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
 		},
-		function (error, response, body) {
+		(error, response, body) => {
 			if (body.status != 1 && redirect(error, response, "/dashboard", res)) return;
-			response.render("adminpanel/adminpanel_cards", {cards: data.cards});
+			var data = JSON.parse(body);
+			res.render("adminpanel/adminpanel_cards", {cards: data.cards});
 			return;
 		}
 	);
