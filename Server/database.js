@@ -41,6 +41,7 @@ module.exports = {
 			* ALTER TABLE user
 			* ADD COLUMN email TEXT NOT NULL,
 			* ADD COLUMN verified INT NOT NULL;
+			*
 			* ALTER TABLE trademanager 
 			* ADD COLUMN cooldown TEXT NOT NULL;
 			*/
@@ -570,11 +571,11 @@ module.exports = {
 	},
 	addTradeManager: function addTradeManager(userone, usertwo, callback) {
 		con.query(
-			"INSERT INTO `trademanager` (`userone`, `usertwo`, `statusone`, `statustwo`) VALUES ('" +
+			"INSERT INTO `trademanager` (`userone`, `usertwo`, `statusone`, `statustwo`, `cooldown`) VALUES ('" +
 			userone +
 			"', '" +
 			usertwo +
-			"', '0', '0')",
+			"', '0', '0', '0')",
 			function (err, result, fields) {
 				callback(result);
 			}
