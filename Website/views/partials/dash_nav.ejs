@@ -18,11 +18,12 @@
 			var time = parseInt("<%= dashboard.packTime %>");
 			var fulltime = parseInt("<%= dashboard.fullTime %>");
 
-			var tradeTime = parseInt("<%= dashboard.tradeTime %>");
+			<!--var tradeTime = parseInt("<%= dashboard.tradeTime %>");-->
 
 			const interval = setInterval(() => {
 				updateTime();
-				if(time == 0 && tradeTime == 0)
+				<!--if(time == 0 && tradeTime == 0)-->
+				if(time == 0)
 				{
 					clearInterval(interval);
 				}
@@ -31,13 +32,13 @@
 			function updateTime()
 			{
 				time -= update;
-				tradeTime -= update;
+				<!--tradeTime -= update;-->
 
 				if (time <= 0) time = 0;
-				if (tradeTime <= 0) tradeTime = 0;
+				<!--if (tradeTime <= 0) tradeTime = 0;-->
 
 				if (typeof updateTimeDash !== "undefined") updateTimeDash();
-				if (typeof tradeTimeTrade !== "undefined") tradeTimeTrade();
+				<!--if (typeof tradeTimeTrade !== "undefined") tradeTimeTrade();-->
 
 				if (time == 0)
 				{
@@ -98,16 +99,16 @@
 			  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			  xhttp.send(JSON.stringify());
 
-			  var xtradehttp = new XMLHttpRequest();
-			  xtradehttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					var json = JSON.parse(this.response);
-					tradeTime = json.tradeTime;
-				}
-			  }
-			  xtradehttp.open("POST", "/tradeTime", true);
-			  xtradehttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			  xtradehttp.send(JSON.stringify());
+			  <!--var xtradehttp = new XMLHttpRequest();-->
+			  <!--xtradehttp.onreadystatechange = function() {-->
+				<!--if (this.readyState == 4 && this.status == 200) {-->
+					<!--var json = JSON.parse(this.response);-->
+					<!--tradeTime = json.tradeTime;-->
+				<!--}-->
+			  <!--}-->
+			  <!--xtradehttp.open("POST", "/tradeTime", true);-->
+			  <!--xtradehttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");-->
+			  <!--xtradehttp.send(JSON.stringify());-->
 			});
 		</script>
 

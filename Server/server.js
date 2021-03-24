@@ -13,6 +13,7 @@ const logic = require("./logic");
 const upload = require("express-fileupload");
 const csv = require("csv-string");
 const {createCache} = require("./logic");
+var errorHandler = require('errorhandler')
 
 app.use(upload());
 app.use(express.static("Data"));
@@ -365,6 +366,8 @@ app.post("/getDashboard", async (req, res) => {
 			name: username,
 			friendcount: friendcount,
 			maxfriendcount: maxfriendcount,
+			tradeCooldownCount: logic.getClients()[decoded.id].getTradeCooldownCount(),
+			tradeCooldownMax: logic.getTradeCooldownMax(),
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
@@ -547,6 +550,8 @@ app.post("/inventory", async (req, res) => {
 				});
 				return;
 			}
+			//console.log("");
+			//console.log(moment().valueOf() - start.valueOf());
 			logic.getCards(inventory, () => {
 				res.send({
 					status: 0,
@@ -882,6 +887,8 @@ app.post("/trade", async (req, res) => {
 								logic.getCards(cardsuggestionsfriend, () => {
 									logic.getCards(cards, () => {
 										logic.getCards(cardsfriend, () => {
+											var tradeTime = logic.getClients()[decoded.id].getTradeTime(userID) - moment().valueOf();
+											if (tradeTime < 0) tradeTime = 0;
 											res.send({
 												status: 0,
 												cards: cards,
@@ -894,7 +901,7 @@ app.post("/trade", async (req, res) => {
 												tradeCount1: cards.length,
 												tradeCount2: cardsfriend.length,
 												tradeLimit: logic.getTradeLimit(),
-												tradeTimeFriend: logic.getTradeTime(userID),
+												tradeTime: tradeTime
 											});
 										});
 									});
@@ -1091,97 +1098,97 @@ app.post("/okTrade", async (req, res) => {
 
 		var nowDate = moment();
 		var date = moment(nowDate).add(logic.getTradeCooldown(), "seconds");
-		var tradeDate = moment(parseInt(logic.getClients()[decoded.id].tradeTime));
+		var tradeDate = moment(parseInt(logic.getClients()[decoded.id].getTradeTime(userID)));
 
-		if (
-			logic.getClients()[decoded.id] == null ||
-			logic.getClients()[decoded.id].tradeTime == "null" ||
-			nowDate.isAfter(tradeDate) ||
-			!tradeDate.isValid()
-		) {
-			logic.setTrade(decoded.id, userID, 1, () => {
-				database.getTradeManager(decoded.id, userID, (tm) => {
-					if (
-						tm != undefined &&
-						tm[0].statusone == 1 &&
-						tm[0].statustwo == 1
-					) {
-						transfer(decoded.id, userID, () => {
-							transfer(userID, decoded.id, () => {
-								logic.setTrade(decoded.id, userID, 0, () => {
-									logic.setTrade(userID, decoded.id, 0, () => {
-										logger.write("Traded: " + logic.getClients()[decoded.id].username + " " + logic.getClients()[userID].username);
-										database.addNotification(
-											userID,
-											"Trade Complete",
-											"A trade has been complete, click to view!",
-											"trade?userID=" + decoded.id,
-											() => {}
-										);
-										logic.getClients()[decoded.id].tradeTime = date.valueOf();
-										logic.getClients()[userID].tradeTime = date.valueOf();
-										res.send({status: 0});
-										return;
-									});
-								});
-							});
-						});
-						function transfer(userone, usertwo, callback) {
-							database.getTrade(userone, usertwo, (cards) => {
-								database.getTradeSuggestions(userone, usertwo, (suggestions) => {
-									for (var i = 0; i < cards.length; i++) {
-										var c = logic.getClients()[userone].getCard(cards[i].card);
-										logic.addCardToUserCache(
-											usertwo,
-											cards[i].card,
-											c.cardID,
-											c.quality,
-											c.level,
-											c.frameID,
-										);
-										logic.getClients()[userone].deleteCard(cards[i].card);
-									}
-									run2(0);
-									function run2(idx) {
-										if (idx == cards.length) {
-											run3(0);
-											return;
-										}
-										database.removeTrade(cards[idx].card, () => {
-											database.changeCardUser(cards[idx].card, usertwo, () => {
-												run2(idx + 1);
-											});
-										});
-									}
-									function run3(idx) {
-										if (idx == suggestions.length) {
-											callback();
-											return;
-										}
-										database.removeSuggestion(suggestions[idx].card, () => {
-											run3(idx + 1);
-										});
-									}
-								});
-							});
-						}
-					} else {
-						database.addNotification(
-							userID,
-							"Trade Confirmed",
-							"A trade has been confirmed, click to view!",
-							"trade?userID=" + decoded.id,
-							() => {}
-						);
-						res.send({status: 0});
-						return;
-					}
-				});
-			});
-		} else {
+		if (tradeDate.isValid() && !nowDate.isAfter(tradeDate)) {
 			res.send({status: 1, message: "Wait"});
 			return;
 		}
+
+		if (logic.getClients()[decoded.id].getTradeCooldownCount() >= logic.getTradeCooldownMax()) {
+			res.send({status: 1, message: "TradeLimit reached"});
+			return;
+		}
+
+		logic.setTrade(decoded.id, userID, 1, () => {
+			database.getTradeManager(decoded.id, userID, (tm) => {
+				if (
+					tm != undefined &&
+					tm[0].statusone == 1 &&
+					tm[0].statustwo == 1
+				) {
+					transfer(decoded.id, userID, () => {
+						transfer(userID, decoded.id, () => {
+							logic.setTrade(decoded.id, userID, 0, () => {
+								logic.setTrade(userID, decoded.id, 0, () => {
+									logger.write("Traded: " + logic.getClients()[decoded.id].username + " " + logic.getClients()[userID].username);
+									database.addNotification(
+										userID,
+										"Trade Complete",
+										"A trade has been complete, click to view!",
+										"trade?userID=" + decoded.id,
+										() => {}
+									);
+									logic.getClients()[decoded.id].setTradeTime(userID, date.valueOf());
+									logic.getClients()[userID].setTradeTime(decoded.id, date.valueOf());
+									res.send({status: 0});
+									return;
+								});
+							});
+						});
+					});
+					function transfer(userone, usertwo, callback) {
+						database.getTrade(userone, usertwo, (cards) => {
+							database.getTradeSuggestions(userone, usertwo, (suggestions) => {
+								for (var i = 0; i < cards.length; i++) {
+									var c = logic.getClients()[userone].getCard(cards[i].card);
+									logic.addCardToUserCache(
+										usertwo,
+										cards[i].card,
+										c.cardID,
+										c.quality,
+										c.level,
+										c.frameID,
+									);
+									logic.getClients()[userone].deleteCard(cards[i].card);
+								}
+								run2(0);
+								function run2(idx) {
+									if (idx == cards.length) {
+										run3(0);
+										return;
+									}
+									database.removeTrade(cards[idx].card, () => {
+										database.changeCardUser(cards[idx].card, usertwo, () => {
+											run2(idx + 1);
+										});
+									});
+								}
+								function run3(idx) {
+									if (idx == suggestions.length) {
+										callback();
+										return;
+									}
+									database.removeSuggestion(suggestions[idx].card, () => {
+										run3(idx + 1);
+									});
+								}
+							});
+						});
+					}
+				} else {
+					database.addNotification(
+						userID,
+						"Trade Confirmed",
+						"A trade has been confirmed, click to view!",
+						"trade?userID=" + decoded.id,
+						() => {}
+					);
+					res.send({status: 0});
+					return;
+				}
+			});
+		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
@@ -1190,18 +1197,25 @@ app.get("/tradeTime", async (req, res) => {
 		var userID = parseInt(req.body.userID);
 
 		var decoded = await logic.standardroutine(req.body.token, res);
-		if (isNaN(userID)) userID = decoded.id;
+		//if (isNaN(userID)) userID = decoded.id;
+		if (isNaN(userID)) {
+			res.send({status: 1, message: "No userID provided"});
+			return;
+		}
 
 		await logic.createCache(userID, undefined, res);
 
-		if (
-			userID != decoded.id &&
-			!logic.getClients()[decoded.id].hasFriendAdded(userID)
-		) {
-			res.send({status: 1, message: "User is not your Friend"});
-			return;
-		}
-		res.send({status: 0, tradeTime: logic.getTradeTime(userID)});
+		//if (
+		//userID != decoded.id &&
+		//!logic.getClients()[decoded.id].hasFriendAdded(userID)
+		//) {
+		//res.send({status: 1, message: "User is not your Friend"});
+		//return;
+		//}
+		//
+		var tradeTime = logic.getClients()[decoded.id].getTradeTime(userID) - moment().valueOf();
+		if (tradeTime < 0) tradeTime = 0;
+		res.send({status: 0, tradeTime: tradeTime});
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
@@ -1368,6 +1382,15 @@ app.post("/verify/resend", async (req, res) => {
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
+
+process.on('uncaughtException', function (exception) {
+	console.log(exception);
+});
+
+app.use(function (err, req, res, next) {
+	console.error(err.stack)
+	res.status(500).send('Internal error!')
+})
 
 console.log("Initializing DataBase");
 logger.init(logic.getLogfile());

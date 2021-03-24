@@ -690,6 +690,7 @@ app.get("/inventory", redirectLogin, async function (req, res) {
 });
 
 app.post("/inventory", redirectLogin, function (req, res) {
+	console.log("sent");
 	getInventoryData(
 		req.cookies.token,
 		req.body.next,
@@ -700,6 +701,7 @@ app.post("/inventory", redirectLogin, function (req, res) {
 		req.body.friend,
 		res,
 		(data) => {
+			console.log("rec");
 			res.send({
 				status: data.status,
 				cards: data.cards,
@@ -956,7 +958,7 @@ app.get("/trade", redirectLogin, function (req, res) {
 				tradeCount1: body.tradeCount1,
 				tradeCount2: body.tradeCount2,
 				tradeLimit: body.tradeLimit,
-				tradeTimeFriend: body.tradeTimeFriend,
+				tradeTime: body.tradeTime,
 			});
 		}
 	);
@@ -1184,6 +1186,15 @@ app.post("/packData", (req, res) => {
 	);
 });
 
+process.on('uncaughtException', function (exception) {
+	console.log(exception);
+});
+
+app.use(function (err, req, res, next) {
+	console.error(err.stack)
+	res.status(500).send('Internal error!')
+})
+
 function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
@@ -1196,12 +1207,6 @@ function addPathCard(card) {
 	)
 		card.effect = getHttp() + API_HOST + "/" + card.effect;
 }
-
-//https.createServer(options, app).listen(port);
-//console.log("Server started at port %s", port);
-app.listen(port, function () {
-	console.log("Server started at port %s", port);
-});
 
 function renderUserView(req, res, next) {
 	var userID = undefined;
@@ -1285,3 +1290,9 @@ function getNotifications(token, callback) {
 		);
 	} else callback(undefined);
 }
+
+//https.createServer(options, app).listen(port);
+//console.log("Server started at port %s", port);
+app.listen(port, function () {
+	console.log("Server started at port %s", port);
+});

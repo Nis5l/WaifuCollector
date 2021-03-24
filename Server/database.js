@@ -1,6 +1,8 @@
 const sql = require("mysql");
 const bcrypt = require("bcrypt");
 
+const moment = require("moment");
+
 const packTime = "PACKTIME";
 const tradeTime = "TRADETIME";
 
@@ -27,15 +29,23 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `frame` ( `id` INT NOT NULL , `name` TEXT NOT NULL , `path_front` TEXT NOT NULL, `path_back` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `friend_status` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL, `cooldown` TEXT NOT NULL) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
 			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `tradesuggestion` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `verificationkey` ( `userID` INT NOT NULL , `key` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;"
-			//ALTER TABLE user
-			//ADD COLUMN email TEXT NOT NULL,
-			//ADD COLUMN verified INT NOT NULL;
+
+			/*
+			* FOR OLDER VERSIONS
+			*
+			* ALTER TABLE user
+			* ADD COLUMN email TEXT NOT NULL,
+			* ADD COLUMN verified INT NOT NULL;
+
+			* ALTER TABLE trademanager 
+			* ADD COLUMN cooldown TEXT NOT NULL;
+			*/
 		];
 
 		con.connect(() => {
@@ -248,9 +258,11 @@ module.exports = {
 	},
 
 	getCard: function getCard(cardID, callback) {
+		var start = moment();
 		con.query(
 			"SELECT * FROM card WHERE id=" + cardID,
 			(err, result, fields) => {
+				console.log("data for cardID-" + cardID + ": " + (moment().valueOf() - start.valueOf()) + "ms");
 				if (result != undefined) {
 					callback(result[0]);
 				} else {
@@ -772,17 +784,19 @@ module.exports = {
 	},
 	getTradeTime: function getTradeTime(userID, callback) {
 		con.query(
-			"SELECT * FROM data WHERE `userID` = " +
-			userID +
-			' AND `key` = "' +
-			tradeTime +
-			'"',
+			`SELECT * FROM trademanager WHERE userone = ${userID} OR usertwo = ${userID}`,
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
-					callback(null);
+					callback([]);
 					return;
 				}
-				callback(result[0].value);
+				var ret = [];
+				for (var i = 0; i < result.length; i++) {
+					var id = result[i].userone == userID ? result[i].usertwo : result[i].userone;
+					var cooldown = result[i].cooldown != "" ? result[i].cooldown : 0;
+					ret.push({id: id, cooldown: cooldown});
+				}
+				callback(ret);
 			}
 		);
 	},
