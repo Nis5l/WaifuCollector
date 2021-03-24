@@ -1,5 +1,6 @@
 const database = require("./database");
 const cache = require("./serverCache");
+const moment = require("moment");
 
 class Client {
 	constructor(id, username, mail, verified, loadedCallback) {
@@ -7,7 +8,7 @@ class Client {
 		this.verified = verified;
 		this.mail = mail;
 		this.packTime = -1;
-		this.tradeTime = -1;
+		this.tradeTime = new Map();
 		this.username = username;
 		this.inventorySort = 0;
 		this.inventory = [];
@@ -27,7 +28,8 @@ class Client {
 		});
 
 		database.getTradeTime(this.id, (time) => {
-			this.tradeTime = time;
+			for (var i = 0; i < time.length; i++)
+				this.tradeTime.set(time[i].id, {time: parseInt(time[i].cooldown)});
 			operationFinished();
 		});
 
@@ -98,7 +100,7 @@ class Client {
 
 	addCardFriend(card) {
 		this.startDecay(this.time, this.callback);
-		if(this.friendinventory == undefined) return;
+		if (this.friendinventory == undefined) return;
 		this.friendinventory.inventory.push(card);
 		this.sortInv(true);
 	}
@@ -177,9 +179,8 @@ class Client {
 		this.lastlevel = level;
 
 		var inv = this.inventory;
-		if (friend)
-		{
-			if(this.friendinventory == undefined) return;
+		if (friend) {
+			if (this.friendinventory == undefined) return;
 			inv = this.friendinventory.inventory;
 		}
 
@@ -382,6 +383,34 @@ class Client {
 
 	getCardTypeAmount() {
 		return this.cardTypeAmount;
+	}
+
+	setTradeTime(userID, time) {
+		this.startDecay(this.time, this.callback);
+		if (this.tradeTime.has(userID)) {
+			this.tradeTime.get(userID).time = time;
+			return;
+		}
+
+		this.tradeTime.set(userID, {time: time});
+	}
+
+	getTradeTime(userID) {
+		this.startDecay(this.time, this.callback);
+		if (this.tradeTime.has(userID)) return this.tradeTime.get(userID).time;
+		return 0;
+	}
+
+	getTradeCooldownCount() {
+		this.startDecay(this.time, this.callback);
+		var ret = 0;
+		var keys = this.tradeTime.keys();
+		var now = moment();
+
+		//Deprecation warning
+		for (const key of keys) if (moment(this.tradeTime.get(key).time).isAfter(now)) ret++;
+
+		return ret;
 	}
 }
 module.exports = Client;

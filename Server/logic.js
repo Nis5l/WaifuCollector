@@ -30,6 +30,7 @@ const packDateSpan = config.packDateSpan;
 const tradeLimit = config.tradeLimit;
 const friendLimit = config.friendLimit;
 const inventorySendAmount = config.inventorySendAmount;
+const tradeCooldownMax = config.tradeCooldownLimit;
 
 const qualityRange = [1, 5];
 const packSize = [1, 1];
@@ -523,6 +524,9 @@ function getCardCacheInterval() {
 function getJWTSecret() {
 	return jwtSecret;
 }
+function getTradeCooldownMax() {
+	return tradeCooldownMax;
+}
 module.exports =
 {
 	getPort: getPort,
@@ -562,5 +566,6 @@ module.exports =
 	handleException: handleException,
 	sendVerification: sendVerification,
 	checkMail: checkMail,
-	verifyMail: verifyMail
+	verifyMail: verifyMail,
+	getTradeCooldownMax: getTradeCooldownMax
 };

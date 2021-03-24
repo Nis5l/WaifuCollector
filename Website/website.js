@@ -956,7 +956,7 @@ app.get("/trade", redirectLogin, function (req, res) {
 				tradeCount1: body.tradeCount1,
 				tradeCount2: body.tradeCount2,
 				tradeLimit: body.tradeLimit,
-				tradeTimeFriend: body.tradeTimeFriend,
+				tradeTime: body.tradeTime,
 			});
 		}
 	);
@@ -1184,6 +1184,21 @@ app.post("/packData", (req, res) => {
 	);
 });
 
+process.on('uncaughtException', function (exception) {
+	console.log(exception);
+});
+
+app.use(function (err, req, res, next) {
+	console.log(err.stack)
+	res.status(500).send('Internal error!')
+});
+
+//https.createServer(options, app).listen(port);
+//console.log("Server started at port %s", port);
+app.listen(port, function () {
+	console.log("Server started at port %s", port);
+});
+
 function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;
 	card.frame.path_front = getHttp() + API_HOST + "/" + card.frame.path_front;
@@ -1196,12 +1211,6 @@ function addPathCard(card) {
 	)
 		card.effect = getHttp() + API_HOST + "/" + card.effect;
 }
-
-//https.createServer(options, app).listen(port);
-//console.log("Server started at port %s", port);
-app.listen(port, function () {
-	console.log("Server started at port %s", port);
-});
 
 function renderUserView(req, res, next) {
 	var userID = undefined;
