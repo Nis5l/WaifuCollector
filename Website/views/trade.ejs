@@ -110,33 +110,41 @@
 			if (typeof tradeTime !== "undefined") updateTradeTimeIndication();
             return 0;
         }
+
 		if(<%- tradeCount1 >= tradeLimit%>)
 		{
 			document.querySelector('.addtrade').disabled = true;
 		}
+
 		<!--if(<%- tradeCount2 >= tradeLimit%>)-->
 		<!--{-->
 			<!--document.querySelector('.addtradeother').disabled = true;-->
 		<!--}-->
 		function updateTradeTimeIndication()
 		{
+			var disabled = false;
+			var message = "Confirm";
+
+			if(<%=tradeLimitReached%>)
+			{
+				message = "Tradelimit Reached";
+				disabled = true;
+			}
+
 			if(tradeTime != 0)
 			{
-				document.querySelector('.oktrade').value = formatTime(tradeTime);
-				document.querySelector('.oktrade').disabled = true;
-				return;
+				message = formatTime(tradeTime);
+				disabled = true;
 			}
-			
-			if(cs == 0)
+	
+			if(cs != 0)
 			{
-				document.querySelector('.oktrade').value = "Confirm";
-				document.querySelector('.oktrade').disabled = false;
+				disabled = true;
+				message = "Already Confirmed";
 			}
-			else
-			{
-				document.querySelector('.oktrade').disabled = true;
-				document.querySelector('.oktrade').value = "Already Confirmed";
-			}
+
+			document.querySelector('.oktrade').disabled = disabled;
+			document.querySelector('.oktrade').value = message;
 		}
 		onloadFuncs.push(() => {
 		  var xtradehttp = new XMLHttpRequest();

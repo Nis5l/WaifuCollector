@@ -957,6 +957,7 @@ app.get("/trade", redirectLogin, function (req, res) {
 				tradeCount2: body.tradeCount2,
 				tradeLimit: body.tradeLimit,
 				tradeTime: body.tradeTime,
+				tradeLimitReached: body.tradeLimitReached,
 			});
 		}
 	);

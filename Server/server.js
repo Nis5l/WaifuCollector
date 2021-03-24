@@ -885,6 +885,10 @@ app.post("/trade", async (req, res) => {
 										logic.getCards(cardsfriend, () => {
 											var tradeTime = logic.getClients()[decoded.id].getTradeTime(userID) - moment().valueOf();
 											if (tradeTime < 0) tradeTime = 0;
+
+											var tradeLimitReached = logic.getClients()[decoded.id].getTradeCooldownCount() >= logic.getTradeCooldownMax() ||
+												logic.getClients()[userID].getTradeCooldownCount() >= logic.getTradeCooldownMax();
+
 											res.send({
 												status: 0,
 												cards: cards,
@@ -898,6 +902,7 @@ app.post("/trade", async (req, res) => {
 												tradeCount2: cardsfriend.length,
 												tradeLimit: logic.getTradeLimit(),
 												tradeTime: tradeTime,
+												tradeLimitReached: tradeLimitReached
 											});
 										});
 									});
