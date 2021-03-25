@@ -1291,7 +1291,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('106', 'Hanasaku Iroha');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('107', 'Problem Children are Coming from Another World Arent They?');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('108', 'Space Dandy');",
-		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('109', 'Higurashi When They Cry');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('109', 'Higurashi');",
 	];
 
 	con.connect(() => {
