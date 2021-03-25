@@ -646,7 +646,8 @@ app.post("/upgrade", async (req, res) => {
 					newlevel = cardresult.level;
 					newquality = Math.round(
 						(cardresult.quality + mainresult.quality) / 2
-					);
+					) + 1;
+					if (newquality > logic.getQualityRange()[1]) newquality = logic.getQualityRange()[1];
 				}
 				logic.getClients()[decoded.id].deleteCard(carduuid);
 				logic.getClients()[decoded.id].deleteCard(mainuuid);

@@ -1111,7 +1111,7 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kaede Azusagawa', '60', 'Card_KaedeAzusagawa.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Onna Shinkan', '90', 'Card_OnnaShinkan.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Erufu', '90', 'Card_Erufu.jpg');",
-		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shalltear Bloodfallen', '91', 'Card_ShalltearBloodfallen.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shalltear Bloodfallen', '83', 'Card_ShalltearBloodfallen.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Reimi Sugimoto', '80', 'Card_ReimiSugimoto.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Erina Pendleton', '80', 'Card_ErinaPendleton.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Suzie Q', '80', 'Card_SuzieQ.jpg');",
@@ -1147,6 +1147,22 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kyoko Izumi', '105', 'Card_KyokoIzumi.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Naomi Tanizaki', '105', 'Card_NaomiTanizaki.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ichiyo Higuchi', '105', 'Card_IchiyoHiguchi.jpg');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Clementine', '83', 'Card_Clementine.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Special Week', '91', 'Card_SpecialWeek.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Vodka', '91', 'Card_Vodka.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Silence Suzuka', '91', 'Card_SilenceSuzuka.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tokai Teio', '91', 'Card_TokaiTeio.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Gold Ship', '91', 'Card_GoldShip.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Daiwa Scarlet', '91', 'Card_DaiwaScarlet.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ohana Matsumae', '106', 'Card_OhanaMatsumae.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Black Rabbit', '107', 'Card_BlackRabbit.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Honey', '108', 'Card_Honey.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rena Ryuuguu', '109', 'Card_RenaRyuuguu.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mion Sonozaki', '109', 'Card_MionSonozaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shion Sonozaki', '109', 'Card_ShionSonozaki.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Satoko Houjou', '109', 'Card_SatokoHoujou.jpg');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rika Furude', '109', 'Card_RikaFurude.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1253,7 +1269,9 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('88', 'Another');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('89', 'Oreshura');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('90', 'Goblin Slayer');",
-		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('91', 'Overlord');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('91', 'Uma Musume');",
+
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('92', 'Back Arrow');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('93', 'Wonder Egg Priority');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('94', 'Spice and Wolf');",
@@ -1269,6 +1287,11 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('103', 'Jormungand');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('104', 'How Heavy are the Dumbbells You Lift?');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('105', 'Bungo Stray Dogs');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('106', 'Hanasaku Iroha');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('107', 'Problem Children are Coming from Another World Arent They?');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('108', 'Space Dandy');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('109', 'Higurashi When They Cry');",
 	];
 
 	con.connect(() => {
