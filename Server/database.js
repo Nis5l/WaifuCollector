@@ -1,9 +1,5 @@
 const sql = require("mysql");
 const bcrypt = require("bcrypt");
-const moment = require("moment");
-
-const packTime = "PACKTIME";
-const tradeTime = "TRADETIME";
 
 const config = require("./config.json");
 
@@ -33,7 +29,8 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `tradesuggestion` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `verificationkey` ( `userID` INT NOT NULL , `key` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;"
+			"CREATE TABLE IF NOT EXISTS `verificationkey` ( `userID` INT NOT NULL , `key` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `packTime` ( `userID` INT NOT NULL , `time` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;"
 
 			/*
 			* FOR OLDER VERSIONS
@@ -111,43 +108,26 @@ module.exports = {
 
 	getPackTime: function getPackTime(userID, callback) {
 		con.query(
-			"SELECT * FROM data WHERE `userID` = " +
-			userID +
-			' AND `key` = "' +
-			packTime +
-			'"',
+			`SELECT time FROM packTime WHERE userID = ${userID};`,
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
 					callback(null);
 					return;
 				}
-				callback(result[0].value);
+				callback(result[0].time);
 			}
 		);
 	},
 
 	setPackTime: function setPackTime(userID, time) {
 		con.query(
-			"UPDATE `data` SET `value` = '" +
-			time +
-			"' WHERE `data`.`userID` = " +
-			userID +
-			' AND `data`.`key` = "' +
-			packTime +
-			'"',
+			`UPDATE packTime SET time = ${time} WHERE userID = ${userID};`,
 			function (err, result, fields) {
 				if (result == undefined || result.affectedRows == 0) {
 					con.query(
-						"INSERT INTO `data`(`userID`, `key`, `value`) VALUES (" +
-						userID +
-						", '" +
-						packTime +
-						"', '" +
-						time +
-						"')",
+						`INSERT INTO packTime (\`userID\`, \`time\`) VALUES ( ${userID}, ${time});`,
 						function (err, result, fields) {}
 					);
-				} else {
 				}
 			}
 		);
@@ -757,7 +737,7 @@ module.exports = {
 		var keys = time.keys();
 		for (const key of keys) {
 			con.query(
-				`UPDATE trademanager SET cooldown=${time.get(key).time} WHERE userone = ${userID} and usertwo = ${key} OR userone = ${key} and usertwo = ${userID};`,
+				`UPDATE trademanager SET cooldown = ${time.get(key).time} WHERE userone = ${userID} and usertwo = ${key} OR userone = ${key} and usertwo = ${userID}; `,
 				function (err, result, fields) {
 				}
 			);
@@ -765,7 +745,7 @@ module.exports = {
 	},
 	getTradeTime: function getTradeTime(userID, callback) {
 		con.query(
-			`SELECT * FROM trademanager WHERE userone = ${userID} OR usertwo = ${userID}`,
+			`SELECT * FROM trademanager WHERE userone = ${userID} OR usertwo = ${userID} `,
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
 					callback([]);
@@ -822,15 +802,15 @@ module.exports = {
 	},
 	setMail: function setMail(userID, mail, callback) {
 		con.query(
-			`UPDATE user SET email="${mail}" WHERE id=${userID}`,
+			`UPDATE user SET email = "${mail}" WHERE id = ${userID} `,
 			function (err, result, fields) {
 				callback();
 			}
 		);
 	},
 	setVerificationKey: function setVerificationKey(userID, key, callback) {
-		con.query(`DELETE FROM verificationkey WHERE userID=${userID}`, (err, result, fields) => {
-			con.query(`INSERT INTO verificationkey (\`userID\`, \`key\`) values (${userID}, "${key}")`, (err, result, fields) => {
+		con.query(`DELETE FROM verificationkey WHERE userID = ${userID} `, (err, result, fields) => {
+			con.query(`INSERT INTO verificationkey(\`userID\`, \`key\`) values (${userID}, "${key}")`, (err, result, fields) => {
 				callback();
 			});
 		});
