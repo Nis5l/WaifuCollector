@@ -29,7 +29,8 @@ class Client {
 
 		database.getTradeTime(this.id, (time) => {
 			for (var i = 0; i < time.length; i++)
-				this.tradeTime.set(time[i].id, {time: time[i].cooldown});
+				this.tradeTime.set(time[i].id, {time: parseInt(time[i].cooldown)});
+				
 			operationFinished();
 		});
 
@@ -412,9 +413,8 @@ class Client {
 		var keys = this.tradeTime.keys();
 		var now = moment();
 
-		for (var i = 0; i < keys.length; i++) {
-			if (now.isAfter(moment(this.tradeTime.get(keys[i].time)))) ret++;
-		}
+		//Deprecation warning
+		for (const key of keys) if (moment(this.tradeTime.get(key).time).isAfter(now)) ret++;
 
 		return ret;
 	}

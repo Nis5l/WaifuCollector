@@ -11,17 +11,12 @@
         <link rel="stylesheet" href="<%= url %>/resources/css/dashboard_sidebar.css">
 
         <style>
-
             .nav{
-
                 position: fixed;
                 top: 0;
                 left: 0;
-
                 box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5);
-
             }
-
         </style>
 
 
@@ -100,7 +95,6 @@
 	<script>
 	 	const cs = <%- JSON.stringify(statusone) %>;
 		const co = <%- JSON.stringify(statustwo) %>;
-
         var tradeTime = <%-tradeTime%>
         const tradeinterval = setInterval(() => {
             updateTradeTime();
@@ -109,15 +103,13 @@
                 clearInterval(tradeinterval);
             }
         }, update);
-
         function updateTradeTime()
         {
             tradeTime -= update;
 
             if (tradeTime <= 0) tradeTime = 0;
-
 			if (typeof tradeTime !== "undefined") updateTradeTimeIndication();
-
+			
             return 0;
         }
 
@@ -130,6 +122,7 @@
 		<!--{-->
 			<!--document.querySelector('.addtradeother').disabled = true;-->
 		<!--}-->
+<<<<<<< HEAD
 
 		function updateTradeTimeIndication()
 		{
@@ -144,14 +137,32 @@
 			{
 				document.querySelector('.oktrade').value = "Confirm";
 				document.querySelector('.oktrade').disabled = false;
-			}
-			else
-			{
-				document.querySelector('.oktrade').disabled = true;
-				document.querySelector('.oktrade').value = "Already Confirmed";
-			}
-		}
+		function updateTradeTimeIndication()
+		{
+			var disabled = false;
+			var message = "Confirm";
 
+			if(<%=tradeLimitReached%>)
+			{
+				message = "Tradelimit Reached";
+				disabled = true;
+			}
+
+			if(tradeTime != 0)
+			{
+				message = formatTime(tradeTime);
+				disabled = true;
+			}
+	
+			if(cs != 0)
+			{
+				disabled = true;
+				message = "Already Confirmed";
+			}
+
+			document.querySelector('.oktrade').disabled = disabled;
+			document.querySelector('.oktrade').value = message;
+		}
 		onloadFuncs.push(() => {
 		  var xtradehttp = new XMLHttpRequest();
 		  xtradehttp.onreadystatechange = function() {
@@ -178,7 +189,6 @@
 		const cardscountfriend = cardsfriend.length + cardsuggestionsfriend.length;
 		var opn = document.getElementById('tradeselfinner');
 		var opnother = document.getElementById('tradeotherinner');
-
 		insertcards(cardsuggestions, opn, false, 1, "#ddffdea8", "suggestion");
 		insertcards(cards, opn, false, 1);
 		insertcards(cardsuggestionsfriend, opnother, false, 1, "#ddffdea8", "suggestion");
@@ -288,7 +298,6 @@
 	<script>
 		var csf = document.querySelector(".confirmationself");
 		var cof = document.querySelector(".confirmationother");
-
 		if(cs == 0)
 			csf.innerHTML = "Not Confirmed";
 		else

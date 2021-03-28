@@ -959,6 +959,7 @@ app.get("/trade", redirectLogin, function (req, res) {
 				tradeCount2: body.tradeCount2,
 				tradeLimit: body.tradeLimit,
 				tradeTime: body.tradeTime,
+				tradeLimitReached: body.tradeLimitReached,
 			});
 		}
 	);
@@ -1191,9 +1192,15 @@ process.on('uncaughtException', function (exception) {
 });
 
 app.use(function (err, req, res, next) {
-	console.error(err.stack)
+	console.log(err.stack)
 	res.status(500).send('Internal error!')
-})
+});
+
+//https.createServer(options, app).listen(port);
+//console.log("Server started at port %s", port);
+app.listen(port, function () {
+	console.log("Server started at port %s", port);
+});
 
 function addPathCard(card) {
 	card.cardImage = getHttp() + API_HOST + "/" + card.cardImage;

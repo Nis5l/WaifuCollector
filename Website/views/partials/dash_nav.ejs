@@ -14,12 +14,11 @@
 		<script>
 			const update = 10;
 			var packSpan = document.querySelector("#packSpan")
-
 			var time = parseInt("<%= dashboard.packTime %>");
 			var fulltime = parseInt("<%= dashboard.fullTime %>");
 
 			<!--var tradeTime = parseInt("<%= dashboard.tradeTime %>");-->
-
+			
 			const interval = setInterval(() => {
 				updateTime();
 				<!--if(time == 0 && tradeTime == 0)-->
@@ -28,7 +27,6 @@
 					clearInterval(interval);
 				}
 			}, update);
-
 			function updateTime()
 			{
 				time -= update;
@@ -36,10 +34,8 @@
 
 				if (time <= 0) time = 0;
 				<!--if (tradeTime <= 0) tradeTime = 0;-->
-
 				if (typeof updateTimeDash !== "undefined") updateTimeDash();
 				<!--if (typeof tradeTimeTrade !== "undefined") tradeTimeTrade();-->
-
 				if (time == 0)
 				{
 					packSpan.innerText = "Pack";
@@ -77,10 +73,8 @@
 					return formatTime;
 			}
 		</script>
-
 		<script>
 			var onloadFuncs = [];
-
 			window.onfocus = () => {
 			 for(var i in this.onloadFuncs)
 			 {
@@ -111,7 +105,6 @@
 			  <!--xtradehttp.send(JSON.stringify());-->
 			});
 		</script>
-
 		<script>
 			function onPack()
 			{
@@ -119,7 +112,6 @@
 					window.location.href = "<%= url %>/pack"
 			}
 		</script>
-
 	<% } %>
 
 </ul>

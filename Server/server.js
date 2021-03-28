@@ -359,7 +359,6 @@ app.post("/getDashboard", async (req, res) => {
 		res.send({
 			status: 0,
 			packTime: logic.getPackTime(decoded.id),
-			tradeTime: logic.getTradeTime(decoded.id),
 			fullTime: logic.getPackCooldown() * 1000,
 			cardCount: cardCount,
 			cardMax: cardMax,
@@ -368,6 +367,8 @@ app.post("/getDashboard", async (req, res) => {
 			maxfriendcount: maxfriendcount,
 			tradeCooldownCount: logic.getClients()[decoded.id].getTradeCooldownCount(),
 			tradeCooldownMax: logic.getTradeCooldownMax(),
+			tradesAvailavble: logic.getTradeCooldownMax() - logic.getClients()[decoded.id].getTradeCooldownCount(),
+			tradesAvailavbleMax: logic.getTradeCooldownMax(),
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
@@ -650,7 +651,8 @@ app.post("/upgrade", async (req, res) => {
 					newlevel = cardresult.level;
 					newquality = Math.round(
 						(cardresult.quality + mainresult.quality) / 2
-					);
+					) + 1;
+					if (newquality > logic.getQualityRange()[1]) newquality = logic.getQualityRange()[1];
 				}
 				logic.getClients()[decoded.id].deleteCard(carduuid);
 				logic.getClients()[decoded.id].deleteCard(mainuuid);
@@ -889,6 +891,10 @@ app.post("/trade", async (req, res) => {
 										logic.getCards(cardsfriend, () => {
 											var tradeTime = logic.getClients()[decoded.id].getTradeTime(userID) - moment().valueOf();
 											if (tradeTime < 0) tradeTime = 0;
+
+											var tradeLimitReached = logic.getClients()[decoded.id].getTradeCooldownCount() >= logic.getTradeCooldownMax() ||
+												logic.getClients()[userID].getTradeCooldownCount() >= logic.getTradeCooldownMax();
+
 											res.send({
 												status: 0,
 												cards: cards,
@@ -901,7 +907,8 @@ app.post("/trade", async (req, res) => {
 												tradeCount1: cards.length,
 												tradeCount2: cardsfriend.length,
 												tradeLimit: logic.getTradeLimit(),
-												tradeTime: tradeTime
+												tradeTime: tradeTime,
+												tradeLimitReached: tradeLimitReached
 											});
 										});
 									});
@@ -1105,7 +1112,8 @@ app.post("/okTrade", async (req, res) => {
 			return;
 		}
 
-		if (logic.getClients()[decoded.id].getTradeCooldownCount() >= logic.getTradeCooldownMax()) {
+		if (logic.getClients()[decoded.id].getTradeCooldownCount() >= logic.getTradeCooldownMax() ||
+			logic.getClients()[userID].getTradeCooldownCount() >= logic.getTradeCooldownMax()) {
 			res.send({status: 1, message: "TradeLimit reached"});
 			return;
 		}
@@ -1388,8 +1396,8 @@ process.on('uncaughtException', function (exception) {
 });
 
 app.use(function (err, req, res, next) {
-	console.error(err.stack)
-	res.status(500).send('Internal error!')
+	console.log(err.stack);
+	res.status(500).send('Internal error!');
 })
 
 console.log("Initializing DataBase");
