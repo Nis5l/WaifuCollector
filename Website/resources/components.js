@@ -7,13 +7,16 @@ class ProgressRing extends HTMLElement {
 		const normalizedRadius = radius - stroke * 2;
 		this.time = this.getAttribute("time");
 		this._circumference = normalizedRadius * 2 * Math.PI;
+		this.onopen = undefined;
 
 		this._root = this.attachShadow({mode: "open"});
 		this._root.innerHTML = `
+
       <svg
         height="${radius * 2}"
         width="${radius * 2}"
        >
+    	 <text font-size=${radius / 3}px x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">${this.time}</text>
          <style>
           margin: auto;
           padding: auto;
@@ -28,8 +31,6 @@ class ProgressRing extends HTMLElement {
            cx= 50%
            cy= 50%
         />
-        <text font-size=32pt x="50%" y="50%" text-anchor="middle" fill="#fff" dy=".38em">${this.time
-			}</text>
       </svg>
       
       <style>
@@ -40,6 +41,7 @@ class ProgressRing extends HTMLElement {
           position: relative;
         }
         circle {
+		  cursor: pointer;
           transition: stroke-dashoffset 0.35s;
 
 		  transition: fill-opacity 0.25s linear; 
@@ -59,6 +61,12 @@ class ProgressRing extends HTMLElement {
         }
       </style>
     `;
+
+		const circle = this._root.querySelector("circle");
+		circle.onclick = () => {
+			if (this.time != 0 && this.time != "Open") return;
+			if (this.onopen != undefined) this.onopen();
+		}
 	}
 
 	setProgress(percent) {
@@ -95,28 +103,6 @@ class ProgressRing extends HTMLElement {
 
 	isReady() {
 		return this.time == 0 || this.time == "Open";
-	}
-
-	isClicked(x, y) {
-		if (this.time != 0 && this.time != "Open") return;
-		const circle = this._root.querySelector("circle");
-		const circleX =
-			circle.getBoundingClientRect().right -
-			(circle.getBoundingClientRect().right -
-				circle.getBoundingClientRect().left) /
-			2;
-		const circleY =
-			circle.getBoundingClientRect().top -
-			(circle.getBoundingClientRect().top -
-				circle.getBoundingClientRect().bottom) /
-			2;
-		const ret =
-			Math.sqrt((circleX - x) * (circleX - x) + (circleY - y) * (circleY - y)) <
-			this.radius;
-		if (ret) {
-			circle.style.fillOpacity = "0.5";
-			return ret;
-		}
 	}
 
 	setFocused(b) {

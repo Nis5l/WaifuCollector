@@ -30,7 +30,9 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `tradesuggestion` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `verificationkey` ( `userID` INT NOT NULL , `key` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `packTime` ( `userID` INT NOT NULL , `time` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;"
+			"CREATE TABLE IF NOT EXISTS `packTime` ( `userID` INT NOT NULL , `time` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `animePackTime` ( `userID` INT NOT NULL , `time` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `animePool` ( `id` INT NOT NULL , `animeID` TEXT NOT NULL) ENGINE = InnoDB;"
 
 			/*
 			* FOR OLDER VERSIONS
@@ -111,7 +113,7 @@ module.exports = {
 			`SELECT time FROM packTime WHERE userID = ${userID};`,
 			function (err, result, fields) {
 				if (result == undefined || result.length == 0) {
-					callback(null);
+					callback(0);
 					return;
 				}
 				callback(result[0].time);
@@ -850,7 +852,32 @@ module.exports = {
 				callback(false);
 			}
 		);
-	}
+	},
+	getAnimePackTime: function getAnimePackTime(userID, callback) {
+		con.query(
+			`SELECT time FROM animePackTime WHERE userID = ${userID};`,
+			function (err, result, fields) {
+				if (result == undefined || result.length == 0) {
+					callback(0);
+					return;
+				}
+				callback(result[0].time);
+			}
+		);
+	},
+	setAnimePackTime: function setAnimePackTime(userID, time) {
+		con.query(
+			`UPDATE animePackTime SET time = ${time} WHERE userID = ${userID};`,
+			function (err, result, fields) {
+				if (result == undefined || result.affectedRows == 0) {
+					con.query(
+						`INSERT INTO animePackTime (\`userID\`, \`time\`) VALUES ( ${userID}, ${time});`,
+						function (err, result, fields) {}
+					);
+				}
+			}
+		);
+	},
 };
 
 function cards(callback) {
@@ -989,6 +1016,7 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Venessa Anoteca', '65', 'Card_VenessaAnoteca.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Elaina', '66', 'Card_Elaina.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Echidna', '1', 'Card_Echidna.jpg');",
+
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Noelle Silva', '65', 'Card_NoelleSilva.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Charlotte Roselei', '65', 'Card_CharlotteRoselei.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Nero', '65', 'Card_Nero.jpg');",
@@ -1072,6 +1100,7 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Charlotte Pudding', '21', 'Card_CharlottePudding.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kozuki Hiyori', '21', 'Card_KozukiHiyori.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Marguerite', '21', 'Card_Marguerite.jpg');",
+
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tomoko Kuroki', '84', 'Card_TomokoKuroki.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuu Naruse', '84', 'Card_YuuNaruse.jpg');",
 
@@ -1143,9 +1172,12 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shion Sonozaki', '109', 'Card_ShionSonozaki.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Satoko Houjou', '109', 'Card_SatokoHoujou.jpg');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rika Furude', '109', 'Card_RikaFurude.jpg');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Inori Yuzuriha', '49', 'Card_InoriYuzuriha.jpg');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
+
 			con.query(
 				"CREATE TABLE IF NOT EXISTS card ( `id` INT NOT NULL AUTO_INCREMENT , `cardName` TEXT NOT NULL , `typeID` INT NOT NULL, `cardImage` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 				() => {

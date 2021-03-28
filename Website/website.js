@@ -1185,6 +1185,33 @@ app.post("/packData", (req, res) => {
 	);
 });
 
+app.get("/animePack", redirectLogin, function (req, res) {
+	res.locals.message = req.query.errorMessage;
+	request.post(
+		getHttpLocal() + API_HOST_LOCAL + "/animePack",
+		{
+			json: {token: req.cookies.token},
+			rejectUnauthorized: false,
+			requestCert: false,
+			agent: false,
+		},
+		async (error, response, body) => {
+			if (redirect(error, response, "/dashboard", res)) return;
+
+			for (var i = 0; i < body.cards.length; i++) {
+				addPathCard(body.cards[i].card);
+			}
+
+			var dashboard = await getDashboard(req, res);
+			res.render("pack", {
+				userID: req.cookies.userID,
+				cards: body.cards,
+				dashboard: dashboard,
+			});
+		}
+	);
+});
+
 process.on('uncaughtException', function (exception) {
 	console.log(exception);
 });

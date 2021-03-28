@@ -359,6 +359,8 @@ app.post("/getDashboard", async (req, res) => {
 			status: 0,
 			packTime: logic.getPackTime(decoded.id),
 			fullTime: logic.getPackCooldown() * 1000,
+			packTimeAnime: logic.getAnimePackTime(decoded.id),
+			fullTimeAnime: logic.getAnimePackCooldown(decoded.id),
 			cardCount: cardCount,
 			cardMax: cardMax,
 			name: username,
@@ -384,56 +386,45 @@ app.post("/pack", async (req, res) => {
 		var date = moment(nowDate).add(logic.getPackCooldown(), "seconds");
 		var packDate = moment(parseInt(logic.getClients()[decoded.id].packTime));
 
-		if (
-			logic.getClients()[decoded.id] == null ||
-			logic.getClients()[decoded.id].packTime == "null" ||
-			nowDate.isAfter(packDate) ||
-			!packDate.isValid()
-		) {
-
-			var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % logic.getPackDateSpan()) + logic.getPackDateSpan();
-			database.addPackData(packdatadate);
-			cache.addPackData(packdatadate);
-
-			logic.getClients()[decoded.id].packTime = date.valueOf();
-			var cardamount = utils.getRandomInt(logic.getPackSize()[0], logic.getPackSize()[1]);
-
-			//(highest-level)^3 * 0.5
-
-			logic.getRandomCards(cardamount, (cards) => {
-				addToDB(0);
-				function addToDB(j) {
-					if (cards[j].level == 1)
-						logger.write(decoded.username + " Pulled a lvl1");
-					if (cards[j].level == 2)
-						logger.write(decoded.username + " Pulled a lvl2");
-					logic.addCardToUser(
-						decoded.id,
-						cards[j].card.id,
-						cards[j].quality,
-						cards[j].level,
-						cards[j].frameID
-						, (insertID) => {
-							cards[j].id = insertID;
-							if (j == cards.length - 1) {
-								res.send({status: 0, packTime: "0", message: "OK", cards: cards});
-								return;
-							} else {
-								addToDB(j + 1);
-							}
-						}
-					);
-				}
-			});
-		} else {
-			res.send({
-				status: 1,
-				packTime: packDate.diff(nowDate).seconds(),
-				message: "WAIT",
-				cards: [],
-			});
+		if (!nowDate.isAfter(packDate)) {
+			res.send({status: 1, message: "Wait"});
 			return;
 		}
+
+		var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % logic.getPackDateSpan()) + logic.getPackDateSpan();
+		database.addPackData(packdatadate);
+		cache.addPackData(packdatadate);
+
+		logic.getClients()[decoded.id].packTime = date.valueOf();
+		var cardamount = utils.getRandomInt(logic.getPackSize()[0], logic.getPackSize()[1]);
+
+		//(highest-level)^3 * 0.5
+
+		logic.getRandomCards(cardamount, (cards) => {
+			addToDB(0);
+			function addToDB(j) {
+				if (cards[j].level == 1)
+					logger.write(decoded.username + " Pulled a lvl1");
+				if (cards[j].level == 2)
+					logger.write(decoded.username + " Pulled a lvl2");
+				logic.addCardToUser(
+					decoded.id,
+					cards[j].card.id,
+					cards[j].quality,
+					cards[j].level,
+					cards[j].frameID
+					, (insertID) => {
+						cards[j].id = insertID;
+						if (j == cards.length - 1) {
+							res.send({status: 0, packTime: "0", message: "OK", cards: cards});
+							return;
+						} else {
+							addToDB(j + 1);
+						}
+					}
+				);
+			}
+		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
@@ -1386,6 +1377,61 @@ app.post("/verify/resend", async (req, res) => {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
+app.post("/animePack", async (req, res) => {
+	try {
+		var decoded = await logic.standardroutine(req.body.token, res);
+
+		var nowDate = moment();
+		var date = moment(nowDate).add(logic.getAnimePackCooldown(), "seconds");
+		var packDate = moment(parseInt(logic.getClients()[decoded.id].animePackTime));
+
+		if (!nowDate.isAfter(packDate)) {
+			res.send({status: 1, message: "Wait"});
+			return;
+		}
+
+		var packdatadate = nowDate.valueOf() - (nowDate.valueOf() % logic.getPackDateSpan()) + logic.getPackDateSpan();
+		database.addPackData(packdatadate);
+		cache.addPackData(packdatadate);
+
+		logic.getClients()[decoded.id].animePackTime = date.valueOf();
+		var cardamount = utils.getRandomInt(logic.getAnimePackSize()[0], logic.getAnimePackSize()[1]);
+
+		logic.getRandomCards(cardamount, (cards) => {
+			addToDB(0);
+			function addToDB(j) {
+				if (cards[j].level == 1)
+					logger.write(decoded.username + " Pulled a lvl1");
+				if (cards[j].level == 2)
+					logger.write(decoded.username + " Pulled a lvl2");
+				logic.addCardToUser(
+					decoded.id,
+					cards[j].card.id,
+					cards[j].quality,
+					cards[j].level,
+					cards[j].frameID
+					, (insertID) => {
+						cards[j].id = insertID;
+						if (j == cards.length - 1) {
+							res.send({status: 0, packTime: "0", message: "OK", cards: cards});
+							return;
+						} else {
+							addToDB(j + 1);
+						}
+					}
+				);
+			}
+		});
+	} catch (ex) {logic.handleException(ex, res);}
+});
+
+app.get("/animePackTime", async (req, res) => {
+	try {
+		var decoded = await logic.standardroutine(req.body.token, res);
+		res.send({status: 0, packTime: logic.getAnimePackTime(decoded.id)});
+	} catch (ex) {logic.handleException(ex, res);}
+});
+
 process.on('uncaughtException', function (exception) {
 	console.log(exception);
 });
@@ -1393,7 +1439,7 @@ process.on('uncaughtException', function (exception) {
 app.use(function (err, req, res, next) {
 	console.log(err.stack)
 	res.status(500).send('Internal error!')
-})
+});
 
 console.log("Initializing DataBase");
 logger.init(logic.getLogfile());

@@ -2,6 +2,7 @@
 
     <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/dashboard"><span>Dashboard</span></a></li>
     <li class="sidebar-nav-item"><a class="sidebar-nav-link" onclick=onPack()><span id="packSpan">Pack</span></a></li>
+    <li class="sidebar-nav-item"><a class="sidebar-nav-link" ><span id="packSpan">AnimePack</span></a></li>
     <li class="sidebar-nav-item"><a class="sidebar-nav-link" href="<%= url %>/Inventory">
 	<span>Inventory <%=(dashboard.cardCount && dashboard.cardMax) ? "(" + dashboard.cardCount + "/" + dashboard.cardMax + ")" : "" %></span>
 	</a></li>
@@ -15,30 +16,46 @@
 			const update = 10;
 			var packSpan = document.querySelector("#packSpan")
 			var time = parseInt("<%= dashboard.packTime %>");
-			var fulltime = parseInt("<%= dashboard.fullTime %>");
+			var animeTime = parseInt("<%= dashboard.packTimeAnime %>");
+			var fullTime = parseInt("<%= dashboard.fullTime %>");
+			var fullTimeAnime = parseInt("<%= dashboard.fullTimeAnime %>");
 			<!--var tradeTime = parseInt("<%= dashboard.tradeTime %>");-->
 			const interval = setInterval(() => {
 				updateTime();
-				<!--if(time == 0 && tradeTime == 0)-->
-				if(time == 0)
+				updateAnimeTime();
+				if(time == 0 && animeTime == 0)
 				{
 					clearInterval(interval);
 				}
 			}, update);
+			
 			function updateTime()
 			{
 				time -= update;
-				<!--tradeTime -= update;-->
 				if (time <= 0) time = 0;
-				<!--if (tradeTime <= 0) tradeTime = 0;-->
 				if (typeof updateTimeDash !== "undefined") updateTimeDash();
-				<!--if (typeof tradeTimeTrade !== "undefined") tradeTimeTrade();-->
 				if (time == 0)
+				{
+					packSpan.innerText = "AnimePack";
+				}else
+				{
+					var ft = formatTime(time);
+					packSpan.innerText = `AnimePack (${ft})`;
+				}
+				return 0;
+			}
+
+			function updateAnimeTime()
+			{
+				animeTime -= update;
+				if (animeTime <= 0) animeTime = 0;
+				if (typeof updateAnimeTimeDash !== "undefined") updateAnimeTimeDash();
+				if (animeTime == 0)
 				{
 					packSpan.innerText = "Pack";
 				}else
 				{
-					var ft = formatTime(time);
+					var ft = formatTime(animeTime);
 					packSpan.innerText = `Pack (${ft})`;
 				}
 				return 0;
@@ -106,6 +123,12 @@
 			{
 				if(time == 0)
 					window.location.href = "<%= url %>/pack"
+			}
+
+			function onAnimePack()
+			{
+				if(animeTime == 0)
+					window.location.href = "<%= url %>/animePack"
 			}
 		</script>
 	<% } %>

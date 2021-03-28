@@ -46,29 +46,56 @@
                     <a id="settings" href="/settings"><i class="fas fa-cog fa-2x"></i></a>
 				</div>
 				<div class="progress_wrapper">
-						<progress-ring name="progress" stroke="4" radius="130" progress=<%= 100 - dashboard.packTime /  dashboard.fullTime %>) time=<%=dashboard.packTime <= 0 ? 0 : dashboard.packTime %>></progress-ring>
-				</div>
+                    <progress-ring
+                        id="openpack"
+                        name="progress"
+                        stroke="4"
+                        radius="130"
+                        progress=<%= 100 - dashboard.packTime / dashboard.fullTime %>
+                        time=<%=dashboard.packTime <= 0 ? 0 : dashboard.packTime %>
+                    >
+                    </progress-ring>
+                    <div class="progress_wrapper_anime">
+                        <progress-ring
+                            id="openanimepack"
+                            name="progress"
+                            stroke="4"
+                            radius="90"
+                            progress=100
+                            time=99
+                        >
+                        </progress-ring>
+                    </div>
+                </div>
 			</div>
         </div>
 
 		<script>
-			const progress_el = document.querySelector('progress-ring');
+			const progressel = document.querySelector('#openpack');
 			function updateTimeDash()
 			{
-                var perc = 100 - (time / fulltime * 100);
-				progress_el.setAttribute('progress', perc);
-				progress_el.setAttribute('time', time);
+                var perc = 100 - (time / fullTime * 100);
+				progressel.setAttribute('progress', perc);
+				progressel.setAttribute('time', time);
 			}
+
+			const progressanimeel = document.querySelector('#openanimepack');
+            function updateAnimeTimeDash()
+            {
+                var perc = 100 - (animeTime / fullTimeAnime * 100);
+                progressanimeel.setAttribute('progress', perc);
+                progressanimeel.setAttribute('time', animeTime);
+            }
 		</script>
 
+        <script src="../resources/components.js"></script>
 		<script>
-			$(".progress_wrapper").mouseenter(() => {
-				progress_el.setFocused(true);
-			}).mouseleave(() => {
-				progress_el.setFocused(false);
-			}).click(() => {
-				if(onPack != undefined) onPack();
-			});
+            progressel.onopen = () => {
+                if(onPack != undefined) onPack();
+            };
+            progressanimeel.onopen = () => {
+                if(onAnimePack != undefined) onAnimePack();
+            };
 		</script>
 
         <script
@@ -76,7 +103,6 @@
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous"></script>
 
-        <script src="../resources/components.js"></script>
         
         <%- include('partials/error.ejs') %>
     </body>
