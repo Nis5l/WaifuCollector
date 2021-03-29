@@ -13,22 +13,22 @@ function PackProgressRing(props) {
     }, [progress]);
 
     return (
-            <svg className={`packProgressRing ${props.className}`} viewBox="0 0 100 100">
-                <text fontSize={radius/3} x="50%" y="50%" textAnchor="middle" fill="#fff" dy=".38em">123</text>
-                <circle
-                    stroke="white"
-                    strokeDasharray="315"
-                    strokeDashoffset={progress}
-                    strokeWidth="2"
-                    fill="transparent"
-                    r={radius}
-                    cx="50"
-                    cy="50"
+        <svg className={`packProgressRing ${props.className}`} viewBox="0 0 100 100">
+            <text fontSize={radius / 3} x="50%" y="50%" textAnchor="middle" fill="#fff" dy=".38em">123</text>
+            <circle
+                stroke="white"
+                strokeDasharray="315"
+                strokeDashoffset={progress}
+                strokeWidth="2"
+                fill="transparent"
+                r={radius}
+                cx="50"
+                cy="50"
 
-                    transform="rotate(-90, 50, 50)"
+                transform="rotate(-90, 50, 50)"
 
-                />
-            </svg>
+            />
+        </svg>
     )
 }
 
