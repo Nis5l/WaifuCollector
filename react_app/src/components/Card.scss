@@ -1,0 +1,32 @@
+@import "../scss/__base.scss";
+
+.card{
+
+    background-color: $background-primary;
+
+    box-sizing: border-box;
+
+    padding: 15px;
+
+    border-radius: 5px;
+
+    width: 100%;
+    height: 100%;
+
+    .card-title{
+
+        font-size: 18px;
+
+        border-bottom: 2px solid $background-secondary;
+
+    }
+
+    .card-content{
+
+        box-sizing: border-box;
+
+        margin-top: 10px;
+
+    }
+
+}
