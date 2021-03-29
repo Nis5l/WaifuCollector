@@ -12,7 +12,6 @@ function Home() {
             <Card
                 title="Packs Opened"
                 styleClassName="packGraphWrapper"
-                full="true"
             >
                 <PackGraph
                     styleClassName="packGraph"
