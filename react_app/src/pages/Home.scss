@@ -1,0 +1,34 @@
+@import "../scss/__base.scss";
+
+#root main.content{
+
+    box-sizing: border-box;
+
+    padding: 4%;
+
+    height: 100vh;
+
+}
+
+.container_home{
+    display: grid;
+
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 100%;
+
+    grid-template-columns: 25% auto 25%;
+    grid-template-rows: 50% 50%;
+
+    column-gap: 25px;
+    row-gap: 25px;
+
+    grid-template-areas: 
+        "packGraph"
+        "notifications packs friends";
+
+    .packGraph{
+        grid-area: packGraph;
+    }
+}

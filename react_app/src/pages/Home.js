@@ -1,11 +1,19 @@
 import React from 'react'
+import Card from '../components/Card'
+import PackGraph from '../components/PackGraph'
+
+import "./Home.scss"
 
 function Home() {
     return (
 
-        <div>
+        <div className="container_home">
 
-            <h1>Hallo</h1>
+            <Card
+                title="Packs Opened"
+                styleClassName="packGraph"
+            >
+            </Card>
 
         </div>
 
