@@ -6,7 +6,7 @@ function Card(props) {
     
     return (
 
-        <div className={`card ${props.styleClassName}`}>
+        <div className={"card " + props.styleClassName }>
 
             <h1 className="card-title">{props.title}</h1>
 

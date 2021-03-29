@@ -50,8 +50,6 @@ class Navbar extends React.Component {
 
     componentDidMount() {
 
-        console.log("Hello");
-
         this.handleResize();
 
         document.addEventListener('mousedown', this.handleClickOutside);
@@ -110,6 +108,7 @@ class Navbar extends React.Component {
                                     <img 
                                         src="/assets/Icon.png"
                                         className="headerIcon"
+                                        alt="Icon"
                                     />
                                     
                                     <span>WaifuCollector</span>
