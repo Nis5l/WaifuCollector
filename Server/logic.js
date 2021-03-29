@@ -31,9 +31,11 @@ const tradeLimit = config.tradeLimit;
 const friendLimit = config.friendLimit;
 const inventorySendAmount = config.inventorySendAmount;
 const tradeCooldownMax = config.tradeCooldownLimit;
+const animePackCooldown = config.animePackCooldown;
 
 const qualityRange = [1, 5];
 const packSize = [1, 1];
+const animePackSize = [1, 1];
 const passLen = [8, 30];
 const userLen = [4, 20];
 const port = config.port;
@@ -407,7 +409,11 @@ function removeTrade(carduuid, mainuuid, callback) {
 				function run5() {
 					database.removeTrade(mainuuid, () => {
 						database.removeTrade(carduuid, () => {
-							callback();
+							database.removeSuggestion(mainuuid, () => {
+								database.removeSuggestion(carduuid, () => {
+									callback();
+								});
+							});
 						});
 					});
 				}
@@ -476,6 +482,21 @@ function verifyMail(userID, key, res) {
 		res.send({status: 1, message: "keys dont match"});
 	});
 }
+function getAnimePackTime(userID) {
+	var nowDate = moment();
+	var packDate = moment(parseInt(clients[userID].animePackTime));
+
+	if (
+		clients[userID] == undefined ||
+		clients[userID].packTime == "null" ||
+		nowDate.isAfter(packDate) ||
+		!packDate.isValid()
+	) {
+		return 0;
+	} else {
+		return packDate.diff(nowDate).seconds();
+	}
+}
 function getPort() {
 	return port;
 }
@@ -527,6 +548,12 @@ function getJWTSecret() {
 function getTradeCooldownMax() {
 	return tradeCooldownMax;
 }
+function getAnimePackCooldown() {
+	return animePackCooldown;
+}
+function getAnimePackSize() {
+	return animePackSize;
+}
 module.exports =
 {
 	getPort: getPort,
@@ -567,5 +594,8 @@ module.exports =
 	sendVerification: sendVerification,
 	checkMail: checkMail,
 	verifyMail: verifyMail,
-	getTradeCooldownMax: getTradeCooldownMax
+	getTradeCooldownMax: getTradeCooldownMax,
+	getAnimePackCooldown: getAnimePackCooldown,
+	getAnimePackSize: getAnimePackSize,
+	getAnimePackTime: getAnimePackTime,
 };

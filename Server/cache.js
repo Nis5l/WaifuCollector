@@ -7,7 +7,7 @@ class Client {
 		this.id = id;
 		this.verified = verified;
 		this.mail = mail;
-		this.packTime = -1;
+		this.packTime = 0;
 		this.tradeTime = new Map();
 		this.username = username;
 		this.inventorySort = 0;
@@ -19,11 +19,18 @@ class Client {
 		this.cardTypeAmount = 0;
 		this.lastsearch = undefined;
 		this.friendinventory = undefined;
-		var operations = 4;
+		this.animePackTime = 0;
+
+		var operations = 5;
 		var operationsComplete = 0;
 
 		database.getPackTime(this.id, (time) => {
 			this.packTime = time;
+			operationFinished();
+		});
+
+		database.getAnimePackTime(this.id, (time) => {
+			this.animePackTime = time;
 			operationFinished();
 		});
 
@@ -76,6 +83,7 @@ class Client {
 	save() {
 		database.setPackTime(this.id, this.packTime);
 		database.setTradeTime(this.id, this.tradeTime);
+		database.setAnimePackTime(this.id, this.animePackTime);
 	}
 
 	startDecay(time, callback) {

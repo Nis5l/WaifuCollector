@@ -86,13 +86,19 @@
           .dashboard_content .dashboard_content_wrapper .dashboard_stats #dashboard_cards {
             font-size: 10pt; } }
     .dashboard_content .dashboard_content_wrapper .progress_wrapper {
-      cursor: pointer;
       position: absolute;
       top: 50%;
-      left: 50%;
+      left: calc(50% - 35px);
       width: 260px;
       height: 260px;
       transform: translate(-50%, -50%); }
       @media screen and (max-width: 800px) {
         .dashboard_content .dashboard_content_wrapper .progress_wrapper {
-          top: 60%; } }
+          top: 55%; } }
+      .dashboard_content .dashboard_content_wrapper .progress_wrapper .progress_wrapper_anime {
+        position: absolute;
+        left: 90%;
+        top: 90%;
+        width: 190px;
+        height: 190px;
+        transform: translate(-50%, -50%); }
