@@ -56,13 +56,12 @@ class PackGraph extends Component {
     }
 
     async loadGraph() {
-        console.log(this.ctx);
         this.chart = new Chart(this.ctx.current, config);
     }
 
     render() {
         return (
-            <div className={`${this.props.styleClassName}-container`}>
+            <div className={`graphContainer ${this.props.styleClassName}-container`}>
                 <canvas ref={this.ctx} className={`graph ${this.props.styleClassName}`}></canvas>
             </div>
         )
