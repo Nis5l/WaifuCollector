@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom';
 
 import {
     ProSidebar,
@@ -14,7 +15,7 @@ import {Link} from 'react-router-dom';
 
 import './Navbar.scss'
 
-export class Navbar extends Component {
+class Navbar extends React.Component {
 
     constructor(props){
 
@@ -26,6 +27,37 @@ export class Navbar extends Component {
             toggled: false
 
         };
+
+        const handleResize = () => { this.handleResize(); }
+
+        window.addEventListener('resize', handleResize);
+
+    }
+
+    handleResize(){
+
+        let size = window.innerWidth;
+
+        let state = Object.assign({}, this.state);
+
+        if(size < 576){
+
+            state['collapsed'] = false;
+            state['toggled'] = true;
+
+        }else if(size < 768){
+
+            state['collapsed'] = true;
+            state['toggled'] = false;
+
+        }else{
+
+            state['collapsed'] = false;
+            state['toggled'] = false;
+
+        }
+
+        this.setState(state);
 
     }
 
@@ -46,8 +78,12 @@ export class Navbar extends Component {
                         <div
                             className="sidebar-title"
                         >
-                                <i className="headerIcon fas fa-home"></i>
-                                WaifuCollector
+                                <img 
+                                    src="/assets/Icon.png"
+                                    className="headerIcon"
+                                />
+                                
+                                <span>WaifuCollector</span>
                             
                         </div>
                     </Link>
@@ -72,7 +108,7 @@ export class Navbar extends Component {
                                 <Link
                                     to="/dashboard"
                                 >
-                                    Menu
+                                    Home
                                 </Link>
                             </MenuItem>
                             <MenuItem>Pack</MenuItem>

@@ -16,6 +16,36 @@
 
     font-family: 'Epilogue';
 
+    &.toggled{
+
+        display: none;
+
+    }
+
+    &.collapsed{
+
+        .sidebar-title{
+        
+            span{
+
+                display: none;
+
+            }
+
+            .headerIcon{
+
+                display: block;
+                margin-right: 0;
+
+                width: 100%;
+                height: 100%;
+
+            }
+
+        }
+
+    }
+
 }
 
 .pro-sidebar-footer span{
@@ -38,6 +68,21 @@
     text-overflow: ellipsis;
 
     white-space: nowrap;
+
+    .headerIcon{
+
+        height: 20px;
+        width: 23;
+
+    }
+
+    span, .headerIcon{
+
+        display: flex;
+
+        float: left;
+
+    }
 
 }
 
