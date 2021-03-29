@@ -32,6 +32,12 @@
             height: 50%;
             width: 100%;
 
+            @media screen and (max-width: $breakpoint-md){
+
+                max-height: 400px;
+
+            }
+
             img{
 
                 border-radius: 100%;
@@ -39,6 +45,15 @@
 
                 height: 100%;
                 width: auto;
+
+                @media screen and (max-width: $breakpoint-md){
+
+                    width: 100%;
+                    height: auto;
+
+                    max-width: 200px;
+    
+                }
 
             }
 
@@ -68,6 +83,16 @@
             td:nth-child(2){
 
                 text-align: right;
+
+            }
+
+        }
+
+        @media screen and (max-width: $breakpoint-md){
+
+            .card-content{
+
+                height: auto;
 
             }
 
@@ -194,7 +219,6 @@
     @media screen and (max-width: $breakpoint-xl) {
         
         grid-template-columns: 30% 30% 30%;
-        grid-template-rows: 50% 50%;
 
         grid-template-areas: 
         "packs packs packs"
@@ -205,7 +229,7 @@
     @media screen and (max-width: $breakpoint-md){
         
         grid-template-columns: 100%;
-        grid-template-rows: 100% 50% 50% 50%;
+        grid-template-rows: 100% auto 100% 100%;
 
         grid-template-areas: 
         "packs"
