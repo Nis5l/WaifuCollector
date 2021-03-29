@@ -25,7 +25,7 @@
     row-gap: 25px;
 
     grid-template-areas: 
-        "packGraph"
+        "packGraph packGraph packGraph"
         "notifications packs friends";
 
     .packGraph{
