@@ -11,8 +11,11 @@ function Home() {
 
             <Card
                 title="Packs Opened"
-                styleClassName="packGraph"
+                styleClassName="packGraphWrapper"
             >
+                <PackGraph
+                    styleClassName="packGraph"
+                />
             </Card>
 
         </div>
