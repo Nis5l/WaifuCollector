@@ -1324,9 +1324,3 @@ function getNotifications(token, callback) {
 		);
 	} else callback(undefined);
 }
-
-//https.createServer(options, app).listen(port);
-//console.log("Server started at port %s", port);
-app.listen(port, function () {
-	console.log("Server started at port %s", port);
-});
