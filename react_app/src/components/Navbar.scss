@@ -14,13 +14,24 @@
 
 .pro-sidebar{
 
-    font-family: 'Epilogue';
+    @media screen and(max-width: $breakpoint-sm) {
+        
+        position: fixed;
 
-    &.toggled{
+        top: 0;
+        left: 0;
 
         display: none;
 
+        &.toggled{
+
+            display: block;
+    
+        }
+
     }
+
+    font-family: 'Epilogue';
 
     &.collapsed{
 
@@ -45,6 +56,19 @@
         }
 
     }
+
+}
+
+.menu-toggle{
+
+    position: fixed;
+
+    top: 10px;
+    right: 10px;
+
+    color: #fff;
+
+    font-size: 32px;
 
 }
 
