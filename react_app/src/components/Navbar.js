@@ -36,7 +36,7 @@ class Navbar extends React.Component {
     
             this.setState({collapsed: false, mobile: true});
 
-        }else if(size < 768){
+        }else if(size < 1200){
     
              this.setState({collapsed: true, mobile: false});
     
