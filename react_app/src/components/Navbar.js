@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom';
+import React from 'react'
 
 import {
     ProSidebar,
@@ -21,43 +20,67 @@ class Navbar extends React.Component {
 
         super(props);
 
-        this.state = {
+        this.state = {};
 
-            collapsed: false,
-            toggled: false
+        window.addEventListener('resize', () => this.handleResize());
 
-        };
-
-        const handleResize = () => { this.handleResize(); }
-
-        window.addEventListener('resize', handleResize);
+        this.box = React.createRef();
 
     }
 
     handleResize(){
 
         let size = window.innerWidth;
-
-        let state = Object.assign({}, this.state);
-
+    
         if(size < 576){
-
-            state['collapsed'] = false;
-            state['toggled'] = true;
+    
+            this.setState({collapsed: false, mobile: true});
 
         }else if(size < 768){
-
-            state['collapsed'] = true;
-            state['toggled'] = false;
-
+    
+             this.setState({collapsed: true, mobile: false});
+    
         }else{
-
-            state['collapsed'] = false;
-            state['toggled'] = false;
-
+    
+            this.setState({collapsed: false, mobile: false});
+    
         }
 
-        this.setState(state);
+    }
+
+    componentDidMount() {
+
+        console.log("Hello");
+
+        this.handleResize();
+
+        document.addEventListener('mousedown', this.handleClickOutside);
+
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    /**
+     * Close sidebar if clicked outside
+     */
+    handleClickOutside = (event) => {
+
+        if ((this.state.mobile && this.state.toggled) && this.box && !this.box.current.contains(event.target)) {
+            
+            this.setState({toggled: false});
+
+        }
+    }
+
+    toggleMenu(){
+
+        let toggled = Object.assign({}, this.state.toggled);
+
+        toggled = !this.state.toggled;
+
+        this.setState({toggled});
 
     }
 
@@ -65,87 +88,95 @@ class Navbar extends React.Component {
 
         return (
 
-            <ProSidebar
-            
-                collapsed={this.state.collapsed}
-                toggled={this.state.toggled}
-            
-            >
-                <SidebarHeader>
-                    <Link
-                            to="/"
-                    >
-                        <div
-                            className="sidebar-title"
-                        >
-                                <img 
-                                    src="/assets/Icon.png"
-                                    className="headerIcon"
-                                />
-                                
-                                <span>WaifuCollector</span>
-                            
-                        </div>
-                    </Link>
-                </SidebarHeader>
+            <div>
 
-                <SidebarContent>
-                    <Menu iconShape="circle">
-                        <MenuItem
-                            icon={<i className="fas fa-clipboard-list"></i>}
+                {(this.state.mobile && !this.state.toggled) && <i className="menu-toggle fas fa-bars" onClick={ () => this.toggleMenu() }></i>}
+
+                <ProSidebar
+                
+                    collapsed={this.state.collapsed}
+                    toggled={this.state.toggled}
+                    ref={this.box}
+                
+                >
+
+                    <SidebarHeader>
+                        <Link
+                                to="/"
                         >
-                            <Link
-                                to="/leaderboard"
+                            <div
+                                className="sidebar-title"
                             >
-                                Leaderboard
-                            </Link>
-                        </MenuItem>
-                        <SubMenu
-                            title="Dashboard"
-                            icon={<i className="fas fa-home"></i>}
-                        >
-                            <MenuItem>
+                                    <img 
+                                        src="/assets/Icon.png"
+                                        className="headerIcon"
+                                    />
+                                    
+                                    <span>WaifuCollector</span>
+                                
+                            </div>
+                        </Link>
+                    </SidebarHeader>
+
+                    <SidebarContent>
+                        <Menu iconShape="circle">
+                            <MenuItem
+                                icon={<i className="fas fa-clipboard-list"></i>}
+                            >
                                 <Link
-                                    to="/dashboard"
+                                    to="/leaderboard"
                                 >
-                                    Home
+                                    Leaderboard
                                 </Link>
                             </MenuItem>
-                            <MenuItem>Pack</MenuItem>
-                            <MenuItem>Inventory</MenuItem>
-                            <MenuItem>Friends</MenuItem>
-                        </SubMenu>
-                        <SubMenu
-                            title="Adminpanel"
-                            icon={<i className="fas fa-user"></i>}
+                            <SubMenu
+                                title="Dashboard"
+                                icon={<i className="fas fa-home"></i>}
+                            >
+                                <MenuItem>
+                                    <Link
+                                        to="/dashboard"
+                                    >
+                                        Home
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem>Pack</MenuItem>
+                                <MenuItem>Inventory</MenuItem>
+                                <MenuItem>Friends</MenuItem>
+                            </SubMenu>
+                            <SubMenu
+                                title="Adminpanel"
+                                icon={<i className="fas fa-user"></i>}
+                            >
+                                <MenuItem>Stats</MenuItem>
+                                <MenuItem>Cards</MenuItem>
+                                <MenuItem>Anime</MenuItem>
+                                <MenuItem>Users</MenuItem>
+                            </SubMenu>
+                        </Menu>
+                    </SidebarContent>
+
+                    <SidebarFooter style={{ textAlign: 'center' }}>
+                        <div
+                            className="sidebar-btn-wrapper"
+                            style={{
+                                padding: '20px 24px',
+                            }}
                         >
-                            <MenuItem>Stats</MenuItem>
-                            <MenuItem>Cards</MenuItem>
-                            <MenuItem>Anime</MenuItem>
-                            <MenuItem>Users</MenuItem>
-                        </SubMenu>
-                    </Menu>
-                </SidebarContent>
+                        <a
+                            href="https://github.com/azouaoui-med/react-pro-sidebar"
+                            target="_blank"
+                            className="sidebar-btn"
+                            rel="noopener noreferrer"
+                        >
+                            <span>Settings</span>
+                        </a>
+                        </div>
+                    </SidebarFooter>
 
-                <SidebarFooter style={{ textAlign: 'center' }}>
-                    <div
-                        className="sidebar-btn-wrapper"
-                        style={{
-                            padding: '20px 24px',
-                        }}
-                    >
-                    <a
-                        href="https://github.com/azouaoui-med/react-pro-sidebar"
-                        target="_blank"
-                        className="sidebar-btn"
-                        rel="noopener noreferrer"
-                    >
-                        <span>Settings</span>
-                    </a>
-                    </div>
-                </SidebarFooter>
+                </ProSidebar>
 
-            </ProSidebar>
+            </div>
 
         )
     }
