@@ -85,6 +85,65 @@
 
         grid-area: packs;
 
+        .packs-grid{
+
+            display: grid;
+
+            width: 100%;
+            height: 100%;
+
+            grid-template-columns: 100%;
+
+            column-gap: 25px;
+            row-gap: 25px;
+
+            grid-template-areas: 
+                "pack1"
+                "pack2";
+
+            .pack1{
+
+                grid-area: pack1;
+
+                height: 100%;
+                width: auto;
+
+                margin: 0 auto;
+
+            }
+
+            .pack2{
+
+                grid-area: pack2;
+
+                height: 100%;
+                width: auto;
+
+                margin: 0 auto;
+
+            }
+
+            @media screen and (max-width: $breakpoint-xl) {
+        
+                grid-template-columns: 50% 50%;
+        
+                grid-template-areas: 
+                "pack1 pack2";
+        
+            }
+
+            @media screen and (max-width: $breakpoint-md){
+        
+                grid-template-columns: 100%;
+        
+                grid-template-areas: 
+                "pack1"
+                "pack2";
+        
+            }
+
+        }
+
     }
 
     .friends{

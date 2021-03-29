@@ -56,7 +56,6 @@ class PackGraph extends Component {
     }
 
     async loadGraph() {
-        console.log(this.ctx);
         this.chart = new Chart(this.ctx.current, config);
     }
 

@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Card from '../components/Card'
+import PackProgressRing from '../components/PackProgressRing'
 
 import "./Dashboard.scss"
 
@@ -18,7 +19,7 @@ function Dashboard() {
                     <img src="/assets/Icon.png" alt="Avatar" />
 
                 </div>
-
+                
                 <h1 className="profileName">SmallCode</h1>
 
                 <table className="stats">
@@ -63,7 +64,14 @@ function Dashboard() {
                 title="Packs"
                 styleClassName="packs"
             >
-                <h1>Packs</h1>
+
+                <div className="packs-grid">
+                
+                    <PackProgressRing className="pack1" />
+                    <PackProgressRing className="pack2" />
+
+                </div>
+
             </Card>
 
             <Card
