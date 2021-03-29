@@ -23,26 +23,30 @@ function Dashboard() {
 
                 <table className="stats">
 
-                    <tr>
+                    <tbody>
 
-                        <td>Friends:</td>
-                        <td>15/50</td>
+                        <tr>
 
-                    </tr>
+                            <td>Friends:</td>
+                            <td>15/50</td>
 
-                    <tr>
+                        </tr>
 
-                        <td>Waifus:</td>
-                        <td>256/280</td>
+                        <tr>
 
-                    </tr>
+                            <td>Waifus:</td>
+                            <td>256/280</td>
 
-                    <tr>
+                        </tr>
 
-                        <td>Trades:</td>
-                        <td>3/3</td>
+                        <tr>
 
-                    </tr>
+                            <td>Trades:</td>
+                            <td>3/3</td>
+
+                        </tr>
+
+                    </tbody>
 
                 </table>
 
@@ -147,7 +151,7 @@ function Friend(props){
 
     return(
 
-        <li class="friend">
+        <li className="friend">
 
             <img src={props.avatar} alt="Friend Avatar" />
 
