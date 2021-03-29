@@ -23,6 +23,52 @@
 
         grid-area: account;
 
+        .avatar{
+
+            display: flex;
+
+            justify-content: center;
+
+            height: 50%;
+
+            img{
+
+                border-radius: 100%;
+                border: 1px solid #fff;
+
+            }
+
+        }
+
+        .profileName{
+
+            text-align: center;
+
+            margin-top: 10px;
+
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: normal;
+            letter-spacing: 0.1em;
+
+        }
+
+        .stats{
+
+            margin-top: 10px;
+
+            width: 100%;
+
+            letter-spacing: 0.05em;
+
+            td:nth-child(2){
+
+                text-align: right;
+
+            }
+
+        }
+
     }
 
     .notifications{
@@ -40,6 +86,45 @@
     .friends{
 
         grid-area: friends;
+
+        overflow: hidden;
+
+        ul{
+
+            height: 100%;
+
+            list-style-type: none;
+            overflow-y: auto;
+
+        }
+
+        .friend{
+
+            margin: 10px 0;
+
+            display: flex;
+            align-items: center;
+
+            height: 50px;
+            width: 100%;
+
+            img{
+
+                height: 100%;
+                width: auto;
+
+                border-radius: 100%;
+                border: 1px solid #fff;
+
+            }
+
+            p{
+
+                margin-left: 10px;
+
+            }
+
+        }
 
     }
 

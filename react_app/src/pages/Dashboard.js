@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Card from '../components/Card'
 
 import "./Dashboard.scss"
@@ -12,7 +12,40 @@ function Dashboard() {
                 title="Account Info"
                 styleClassName="accountInfo"
             >
-                <h1>SmallCode</h1>
+                
+                <div className="avatar">
+
+                    <img src="/assets/Icon.png" alt="Avatar" />
+
+                </div>
+
+                <h1 className="profileName">SmallCode</h1>
+
+                <table className="stats">
+
+                    <tr>
+
+                        <td>Friends:</td>
+                        <td>15/50</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Waifus:</td>
+                        <td>256/280</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Trades:</td>
+                        <td>3/3</td>
+
+                    </tr>
+
+                </table>
+
             </Card>
 
             <Card
@@ -33,12 +66,97 @@ function Dashboard() {
                 title="Friends"
                 styleClassName="friends"
             >
-                <h1>Friends</h1>
+                
+                <ul>
+
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                    <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+                                        <Friend
+                        avatar="/assets/Icon.png"
+                        name="SmallCode"
+                    />
+
+                </ul>
+
             </Card>
 
         </div>
 
     )
+}
+
+function Friend(props){
+
+    return(
+
+        <li class="friend">
+
+            <img src={props.avatar} alt="Friend Avatar" />
+
+            <p>{props.name}</p>
+
+        </li>
+
+    )
+
 }
 
 export default Dashboard
