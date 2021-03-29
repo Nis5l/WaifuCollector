@@ -61,7 +61,7 @@ class PackGraph extends Component {
 
     render() {
         return (
-            <div className={`${this.props.styleClassName}-container`}>
+            <div className={`graphContainer ${this.props.styleClassName}-container`}>
                 <canvas ref={this.ctx} className={`graph ${this.props.styleClassName}`}></canvas>
             </div>
         )
