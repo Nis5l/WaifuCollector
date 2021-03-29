@@ -23,21 +23,23 @@
 
     .card-title{
         display: table-row;
+        height: fit-content;
         font-size: 18px;
 
         border-bottom: 2px solid $background-secondary;
 
     }
 
-    .card-content{
+    .card-content-fill{
         display: table-row;
-        $mgn: 10px;
+        .card-content{
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
 
-        width: 100%;
-        //height: calc(100% - #{$mgn * 2});
-        box-sizing: border-box;
-
-        margin: $mgn 0 $mgn 0;
+            margin-top: 10px;
+        }
     }
+
 
 }
