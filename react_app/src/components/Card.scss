@@ -1,7 +1,7 @@
 @import "../scss/__base.scss";
 
 .card{
-
+    display: table;
     background-color: $background-primary;
 
     box-sizing: border-box;
@@ -22,7 +22,7 @@
     /* Not sure */
 
     .card-title{
-
+        display: table-row;
         font-size: 18px;
 
         border-bottom: 2px solid $background-secondary;
@@ -30,11 +30,14 @@
     }
 
     .card-content{
+        display: table-row;
+        $mgn: 10px;
 
+        width: 100%;
+        //height: calc(100% - #{$mgn * 2});
         box-sizing: border-box;
 
-        margin-top: 10px;
-
+        margin: $mgn 0 $mgn 0;
     }
 
 }
