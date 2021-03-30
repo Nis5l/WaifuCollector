@@ -1,6 +1,7 @@
 import React from 'react'
 import Card from '../components/Card'
 import PackProgressRing from '../components/PackProgressRing'
+import ProfileName from '../components/ProfileName'
 
 import "./Dashboard.scss"
 
@@ -19,8 +20,14 @@ function Dashboard() {
                     <img src="/assets/Icon.png" alt="Avatar" />
 
                 </div>
-                
-                <h1 className="profileName">SmallCode</h1>
+
+                <div className="profilename_container">
+
+                    <ProfileName
+                        name="SmallCode"
+                    />
+
+                </div>
 
                 <table className="stats">
 
@@ -54,10 +61,10 @@ function Dashboard() {
             </Card>
 
             <Card
-                title="Notifications"
-                styleClassName="notifications"
+                title="Badges"
+                styleClassName="badges"
             >
-                <h1>Notifications</h1>
+                <h1>Badges</h1>
             </Card>
 
             <Card
@@ -163,7 +170,9 @@ function Friend(props){
 
             <img src={props.avatar} alt="Friend Avatar" />
 
-            <p>{props.name}</p>
+            <ProfileName
+                name={props.name}
+            />
 
         </li>
 
