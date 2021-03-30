@@ -19,16 +19,20 @@
     width: 100%;
     height: 100%;
 
-    grid-template-columns: 25% auto 25%;
-    grid-template-rows: 70% minmax(min-content, max-content) minmax(min-content, max-content);
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 70% minmax(min-content, max-content);
+
+    @media screen and (max-width: $breakpoint-sm)
+    {
+        grid-template-rows: 60% minmax(min-content, max-content) minmax(min-content, max-content);
+    }
 
     column-gap: 25px;
     row-gap: 25px;
 
     grid-template-areas: 
-        "packGraph packGraph packGraph"
-        "tutorial tutorial tutorial"
-        "copyright copyright copyright";
+        "packGraph packGraph"
+        "tutorial copyright";
 
     .packGraphWrapper {
         grid-area: packGraph;
@@ -42,6 +46,5 @@
     .copyright
     {
         grid-area: copyright;
-        margin-bottom: 20px;
     }
 }
