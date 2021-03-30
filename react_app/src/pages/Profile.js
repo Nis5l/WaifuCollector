@@ -3,12 +3,23 @@ import Card from '../components/Card'
 import PackProgressRing from '../components/PackProgressRing'
 import ProfileName from '../components/ProfileName'
 
-import "./Dashboard.scss"
+import "./Profile.scss"
 
-function Dashboard() {
+function Profile(props) {
+
+    const id = props.match.params.id;
+
+    if(!Number.isInteger(parseInt(id, 10))){
+
+        return(
+            <h1>Invalid this id is!</h1>
+        );
+
+    }
+
     return (
 
-        <div className="container">
+        <div className="container_profile">
 
             <Card
                 title="Account Info"
@@ -24,7 +35,7 @@ function Dashboard() {
                 <div className="profilename_container">
 
                     <ProfileName
-                        name="SmallCode"
+                        name={props.match.params.id}
                     />
 
                 </div>
@@ -180,4 +191,4 @@ function Friend(props){
 
 }
 
-export default Dashboard
+export default Profile
