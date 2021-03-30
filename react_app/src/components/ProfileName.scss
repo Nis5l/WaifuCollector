@@ -22,6 +22,8 @@
 
         display: inline-block;
 
+        margin-left: 5px;
+
         .badge{
 
             display: inline;
@@ -32,6 +34,11 @@
 
                 height: 1em;
                 width: auto;
+
+                -webkit-backface-visibility: hidden;
+                -ms-transform: translateZ(0); /* IE 9 */
+                -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
+                transform: translateZ(0);
 
             }
 

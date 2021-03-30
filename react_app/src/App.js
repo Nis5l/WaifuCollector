@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import Dashboard from './pages/dashboard/Dashboard';
 import Profile from './pages/Profile';
 
+import Login from './pages/loggedout/Login';
+
 import './App.scss';
 
 function App() {
@@ -21,13 +23,14 @@ function App() {
 
           <Switch>
 
-            <Route path="/" exact component={Home}/>
+            <Route path="/" exact component={Home} />
+            <Route path="/login" component={Login} />
 
             {/*Dashboard */ }
-            <Route path="/dashboard" component={Dashboard}/>
+            <Route path="/dashboard" component={Dashboard} />
 
             { /* Profile others */ }
-            <Route path="/profile/:id" component={Profile}/>
+            <Route path="/profile/:id" component={Profile} />
 
           </Switch>
 

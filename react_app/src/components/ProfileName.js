@@ -14,17 +14,12 @@ function ProfileName(props) {
             <div className="badges">
 
                 <Badge 
-                    img={"/assets/badges/donaldPepe.png"}
-                    name="Donald Pepe"
-                />
-
-                <Badge 
                     img={"/assets/badges/crown.png"}
                     name="Supporter"
                 />
 
                 <Badge 
-                    img={"/assets/badges/dev.png"}
+                    img={"/assets/badges/dev.jpg"}
                     name="Developer"
                 />
 
@@ -40,7 +35,19 @@ function Badge(props){
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const toggle = () => setTooltipOpen(!tooltipOpen);
 
-    const badgeID = (`badge_${props.name}`).replaceAll(" ", "_");
+    const makeID = (length) => {
+
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+           result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+
+    }
+
+    const[badgeID] = useState(makeID(30));
 
     return(
 

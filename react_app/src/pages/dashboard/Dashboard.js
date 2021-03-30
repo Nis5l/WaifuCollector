@@ -14,7 +14,7 @@ function Dashboard() {
                 title="Account Info"
                 styleClassName="accountInfo"
             >
-                
+
                 <div className="avatar">
 
                     <img src="/assets/Icon.png" alt="Avatar" />
@@ -90,67 +90,12 @@ function Dashboard() {
 
                     <Friend
                         avatar="/assets/Icon.png"
-                        name="SmallCode"
+                        name="Nissl"
                     />
+
                     <Friend
                         avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                                        <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
+                        name="haselnusse"
                     />
 
                 </ul>

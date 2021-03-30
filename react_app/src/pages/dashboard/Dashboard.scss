@@ -6,14 +6,13 @@
 
     box-sizing: border-box;
 
-    width: 100%;
+    width: 1fr;
     height: 100%;
 
-    grid-template-columns: 25% auto 25%;
-    grid-template-rows: 50% 50%;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
 
-    column-gap: 25px;
-    row-gap: 25px;
+    grid-gap: 20px;
 
     grid-template-areas: 
         "account packs friends"
@@ -46,16 +45,22 @@
                 height: 100%;
                 width: auto;
 
+                -webkit-backface-visibility: hidden;
+                -ms-transform: translateZ(0); /* IE 9 */
+                -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
+                transform: translateZ(0);
+
                 @media screen and (max-width: $breakpoint-md){
 
                     width: 100%;
                     height: auto;
 
                     max-width: 200px;
-    
+        
                 }
 
             }
+
 
         }
 
@@ -95,9 +100,9 @@
 
         @media screen and (max-width: $breakpoint-md){
 
-            .card-content{
+            &{
 
-                height: auto;
+                height: fit-content;
 
             }
 
@@ -108,6 +113,16 @@
     .badges{
 
         grid-area: badges;
+
+        @media screen and (max-width: $breakpoint-md){
+
+            &{
+
+                height: fit-content;
+
+            }
+
+        }
 
     }
 
@@ -212,6 +227,11 @@
                 border-radius: 100%;
                 border: 1px solid #fff;
 
+                -webkit-backface-visibility: hidden;
+                -ms-transform: translateZ(0); /* IE 9 */
+                -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
+                transform: translateZ(0);
+
             }
 
             .profileName{
@@ -226,11 +246,21 @@
 
         }
 
+        @media screen and (max-width: $breakpoint-md){
+
+            &{
+
+                height: fit-content;
+
+            }
+
+        }
+
     }
 
     @media screen and (max-width: $breakpoint-xl) {
         
-        grid-template-columns: 30% 30% 30%;
+        grid-template-columns: 1fr 1fr 1fr;
 
         grid-template-areas: 
         "packs packs packs"
@@ -240,8 +270,10 @@
 
     @media screen and (max-width: $breakpoint-md){
         
-        grid-template-columns: 100%;
-        grid-template-rows: 100% auto 100% 100%;
+        grid-template-columns: 1fr;
+        grid-template-rows: 100% auto auto auto;
+
+        box-sizing: unset;
 
         grid-template-areas: 
         "packs"
