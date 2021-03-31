@@ -44,21 +44,36 @@ function Home() {
                     </WaifuCard>
                 </div>
                 <h5>Upgrading</h5>
-                <p>By Combining 2 Cards of the same Character and Level you can Upgrade them.
-				<br />The Chance for the Upgrade to succeede in % is (Quality1 + Quality2) * 10.</p>
-                <p>If the Upgrade succeedes the new Cards Level will be one higher and the Quality will be random from 1-5.
-				<br />If the Upgrade fails the new Cards Level will stay the same, and the Quality will be the avarage of the two plus 1.</p>
+                <p>By Combining 2 Cards of the same Character and Level you can Upgrade them.</p>
+                <p>The Chance for the Upgrade to succeede in %:<br />(Quality1 + Quality2) * 10.</p>
+                <p>If the Upgrade succeedes:<br />
+                    &emsp;Level will incremented by one.<br />
+                    &emsp;Quality will be random from 1-5.
+                </p>
+                <p>If the Upgrade fails:<br />
+                    &emsp;Level will stay the same<br />
+                    &emsp;Quality will be the avarage of the two plus 1.
+                </p>
 
                 <h5>Trading</h5>
-                <p>You can add Waifu-Cards to the Trade and when both Users hit accept the Trade is complete.</p>
+                <p>You can trade with your friends.<br />
+                    You can add and suggest Waifu-Cards when trading.<br />
+                    When both Users hit accept the Trade is complete.</p>
             </Foldable>
             <Foldable
                 title="Copyright"
                 styleClassName="copyright"
             >
-                <p>If you have any copyright related issues please contact me (contact.waifucollector@gmail.com), I will happily resolve the issue.</p>
-                <p>Everything is nonprofit, so I would be thankful if we could solve the problems together without any sort of legal process.</p>
+                <p style={{paddingTop: "10px"}}>If you have any copyright related issues please contact me.<br />
+                    (contact.waifucollector@gmail.com).</p>
+                <p>I will happily resolve the issue.</p>
+                <p>Everything is nonprofit, so I would be thankful if we could solve the problems without any sort of legal process.</p>
             </Foldable>
+            <Card
+                title=""
+                styleClassName="privacy"
+            >
+            </Card>
         </div >
 
     )

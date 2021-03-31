@@ -41,24 +41,31 @@
             padding-left: 0;
         }
     }
-    
-    .tutorial
-    {
-        grid-area: tutorial;
 
+    .tutorial, .copyright
+    {
         .card-content>div
         {
-            margin-left: 13px;
+            width: fit-content;
+            margin: 10px auto;
         }
         h5
         {
             font-size: 18pt;
+            padding-bottom: 5px;
+            padding-top: 5px;
         }
         p
         {
             padding: 1px;
             padding-left: 15px;
+            padding-bottom: 5px;
         }
+    }
+    
+    .tutorial
+    {
+        grid-area: tutorial;
     }
 
     .copyright
