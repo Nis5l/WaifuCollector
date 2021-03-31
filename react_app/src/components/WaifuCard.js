@@ -24,6 +24,7 @@ class WaifuCard extends Component {
         this.cardID = props.cardID;
         this.cardcolor = props.cardcolor;
         this.identifier = props.identifier;
+        this.clickable = props.clickable === "false" ? false : true;
 
         this.state = {
             turned: props.turned === "true"
@@ -40,6 +41,7 @@ class WaifuCard extends Component {
                 className="waifucard"
                 onClick={() => {this.onTurn()}}
                 style={{
+                    cursor: `${this.clickable === true ? "pointer" : "default"}`,
                     width: `${WaifuCard.DEFWIDTH * this.size}px`,
                     height: `${WaifuCard.DEFHEIGTH * this.size}px`
                 }}

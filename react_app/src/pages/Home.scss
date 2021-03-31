@@ -45,6 +45,20 @@
     .tutorial
     {
         grid-area: tutorial;
+
+        div
+        {
+            margin-left: 10px;
+        }
+        h5
+        {
+            font-size: 18pt;
+        }
+        p
+        {
+            padding: 1px;
+            padding-left: 15px;
+        }
     }
 
     .copyright

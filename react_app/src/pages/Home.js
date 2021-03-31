@@ -17,30 +17,32 @@ function Home() {
                 <PackGraph styleClassName="packGraph" />
             </Card>
 
-            <WaifuCard
-                img="http://localhost:10001/Card/Card_Ichigo.jpg"
-                framefront="http://localhost:10001/Frame/Frame_Silver_Front.png"
-                frameback="http://localhost:10001/Frame/Frame_Silver_Back.png"
-                effect="http://localhost:10001/Effect/Effect1.gif"
-                cardname="Ichigo"
-                animename="Darling In The FranXX"
-                size="1"
-                quality="5"
-                level="1"
-                turned="true"
-                effectopacity="0.5"
-                cardcolor="#ddffdea8"
-            >
-            </WaifuCard>
-
             <Foldable
                 title="Tutorial"
                 styleClassName="tutorial"
             >
                 <h5>Packs</h5>
                 <p>In this game you can collect, upgrade and trade Waifu-Cards.</p>
-                <p>Every 30 minutes you can pull a Waifu-Card.
-				<br />Each Waifu-Card starts with Level 1 and a random Quality from 1-5 (X: Quality, Y: Level).</p>
+                <p>Every 30 minutes you can pull a Waifu-Card.</p>
+                <p>Waifu-Cards starts with Level 1 and a Quality from 1-5.</p>
+                <p>X: Level, Y: Quality</p>
+                <div>
+                    <WaifuCard
+                        img="http://localhost:10001/Card/Card_Ichigo.jpg"
+                        framefront="http://localhost:10001/Frame/Frame_Silver_Front.png"
+                        frameback="http://localhost:10001/Frame/Frame_Silver_Back.png"
+                        effect="http://localhost:10001/Effect/Effect1.gif"
+                        cardname="Ichigo"
+                        animename="Darling In The FranXX"
+                        size="0.8"
+                        quality="Y"
+                        level="X"
+                        effectopacity="0.5"
+                        cardcolor="#ddffdea8"
+                        clickable="false"
+                    >
+                    </WaifuCard>
+                </div>
                 <h5>Upgrading</h5>
                 <p>By Combining 2 Cards of the same Character and Level you can Upgrade them.
 				<br />The Chance for the Upgrade to succeede in % is (Quality1 + Quality2) * 10.</p>
