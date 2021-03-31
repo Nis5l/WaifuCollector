@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CollapsibleContent from 'react-collapsible-content';
 
 import "./Foldable.scss"
+import "../scss/effects.scss"
 
 class Foldable extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class Foldable extends Component {
         return (
             <div onClick={() => {this.onopen()}} className={`card fold-card ${this.props.styleClassName}`}>
 
-                <h1 className="card-title">{this.props.title}</h1>
+                <h1 className="card-title shake-small">{this.props.title}</h1>
 
                 <CollapsibleContent expanded={this.state.expanded} className="card-content">
 

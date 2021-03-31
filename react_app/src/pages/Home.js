@@ -5,6 +5,7 @@ import Foldable from '../components/Foldable'
 import WaifuCard from '../components/WaifuCard'
 
 import "./Home.scss"
+import "../scss/effects.scss"
 
 function Home() {
     return (
@@ -79,9 +80,9 @@ function Home() {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <img id="discordhref" src="/assets/discordicon.png" alt="Discord" />
+                        <img id="discordhref" className="shake" src="/assets/discordicon.png" alt="Discord" />
                     </a>
-                    <a href="/privacy" id="privacyhref">Privacy</a>
+                    <a href="/privacy" id="privacyhref" className="shake">Privacy</a>
                 </div>
             </Card>
         </div >

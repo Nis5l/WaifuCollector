@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Dashboard from './pages/dashboard/Dashboard';
 import Profile from './pages/Profile';
+import Pack from './pages/Pack';
 
 import Login from './pages/loggedout/Login';
 
@@ -14,7 +15,7 @@ function App() {
   return (
 
     <>
-    
+
       <Router>
 
         <Navbar />
@@ -25,11 +26,12 @@ function App() {
 
             <Route path="/" exact component={Home} />
             <Route path="/login" component={Login} />
+            <Route path="/pack" component={Pack} />
 
-            {/*Dashboard */ }
+            {/*Dashboard */}
             <Route path="/dashboard" component={Dashboard} />
 
-            { /* Profile others */ }
+            { /* Profile others */}
             <Route path="/profile/:id" component={Profile} />
 
           </Switch>
