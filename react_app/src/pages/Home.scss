@@ -10,27 +10,29 @@
     height: 100%;
 
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 500px minmax(min-content, max-content) ;
+    grid-template-rows: 500px minmax(min-content, max-content) 100px;
 
     column-gap: 25px;
     row-gap: 25px;
 
     grid-template-areas: 
         "packGraph packGraph"
-        "tutorial copyright";
+        "tutorial copyright"
+        "privacy privacy";
 
     @media screen and (max-width: $breakpoint-lg)
     {
-        grid-template-rows: 400px minmax(min-content, max-content) minmax(min-content, max-content);
+        grid-template-rows: 400px minmax(min-content, max-content) minmax(min-content, max-content) 100px;
         grid-template-areas: 
             "packGraph packGraph"
             "tutorial tutorial"
-            "copyright copyright";
+            "copyright copyright"
+            "privacy privacy";
     }
 
     @media screen and (max-width: $breakpoint-sm)
     {
-        grid-template-rows: 300px minmax(min-content, max-content) minmax(min-content, max-content);
+        grid-template-rows: 300px minmax(min-content, max-content) minmax(min-content, max-content) 100px;
     }
 
 
@@ -71,5 +73,42 @@
     .copyright
     {
         grid-area: copyright;
+    }
+    
+    .privacy
+    {
+        grid-area: privacy;
+
+        .card-content
+        {
+            padding-top: 0;
+            text-align:center;
+            height: 100%;
+
+            &>div
+            {
+                height: 100%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+
+                #discordhrefwrapper
+                {
+                    height: 100%;
+                    #discordhref
+                    {
+                        height: 100%;
+                        width: auto;
+                    }
+                }
+                #privacyhref
+                {
+                    font-size: 16pt;
+                    color: $sidebar-color;
+                    display: flex;
+                    vertical-align: middle;
+                }
+            }
+        }
     }
 }

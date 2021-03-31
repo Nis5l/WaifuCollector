@@ -28,17 +28,17 @@ function Home() {
                 <p>X: Level, Y: Quality</p>
                 <div>
                     <WaifuCard
-                        img="http://localhost:10001/Card/Card_Ichigo.jpg"
-                        framefront="http://localhost:10001/Frame/Frame_Silver_Front.png"
-                        frameback="http://localhost:10001/Frame/Frame_Silver_Back.png"
-                        effect="http://localhost:10001/Effect/Effect1.gif"
+                        img="http://127.0.0.1:10001/Card/Card_Ichigo.jpg"
+                        framefront="http://127.0.0.1:10001/Frame/Frame_Silver_Front.png"
+                        frameback="http://127.0.0.1:10001/Frame/Frame_Silver_Back.png"
+                        effect="http://127.0.0.1:10001/Effect/Effect2.gif"
                         cardname="Ichigo"
                         animename="Darling In The FranXX"
                         size="0.8"
                         quality="Y"
                         level="X"
                         effectopacity="0.5"
-                        cardcolor="#ddffdea8"
+                        cardcolor="transparent"
                         clickable="false"
                     >
                     </WaifuCard>
@@ -70,9 +70,19 @@ function Home() {
                 <p>Everything is nonprofit, so I would be thankful if we could solve the problems without any sort of legal process.</p>
             </Foldable>
             <Card
-                title=""
                 styleClassName="privacy"
             >
+                <div>
+                    <a
+                        id="discordhrefwrapper"
+                        href="https://discord.gg/hftNUqNgRj"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <img id="discordhref" src="/assets/discordicon.png" alt="Discord" />
+                    </a>
+                    <a href="/privacy" id="privacyhref">Privacy</a>
+                </div>
             </Card>
         </div >
 
