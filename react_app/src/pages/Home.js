@@ -28,17 +28,17 @@ function Home() {
                 <p>X: Level, Y: Quality</p>
                 <div>
                     <WaifuCard
-                        img="http://localhost:10001/Card/Card_Ichigo.jpg"
-                        framefront="http://localhost:10001/Frame/Frame_Silver_Front.png"
-                        frameback="http://localhost:10001/Frame/Frame_Silver_Back.png"
-                        effect="http://localhost:10001/Effect/Effect1.gif"
+                        img="http://192.168.1.40:10001/Card/Card_Ichigo.jpg"
+                        framefront="http://192.168.1.40:10001/Frame/Frame_Silver_Front.png"
+                        frameback="http://192.168.1.40:10001/Frame/Frame_Silver_Back.png"
+                        effect="http://192.168.1.40:10001/Effect/Effect2.gif"
                         cardname="Ichigo"
                         animename="Darling In The FranXX"
                         size="0.8"
                         quality="Y"
                         level="X"
                         effectopacity="0.5"
-                        cardcolor="#ddffdea8"
+                        cardcolor="transparent"
                         clickable="false"
                     >
                     </WaifuCard>
@@ -59,6 +59,7 @@ function Home() {
                 <p>If you have any copyright related issues please contact me (contact.waifucollector@gmail.com), I will happily resolve the issue.</p>
                 <p>Everything is nonprofit, so I would be thankful if we could solve the problems together without any sort of legal process.</p>
             </Foldable>
+
         </div >
 
     )
