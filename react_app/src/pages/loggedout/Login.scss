@@ -1,0 +1,20 @@
+@import "../../scss/__base.scss";
+
+.login{
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    max-width: 400px;
+    max-height: 600px;
+
+    width: inherit;
+    height: inherit;
+
+    background-color: $background-primary;
+
+}

@@ -1,6 +1,6 @@
 @import "../scss/__base.scss";
 
-.container{
+.container_profile{
 
     display: grid;
 
@@ -17,7 +17,7 @@
 
     grid-template-areas: 
         "account packs friends"
-        "notifications packs friends";
+        "badges packs friends";
 
     .accountInfo{
 
@@ -32,6 +32,12 @@
             height: 50%;
             width: 100%;
 
+            @media screen and (max-width: $breakpoint-md){
+
+                max-height: 400px;
+
+            }
+
             img{
 
                 border-radius: 100%;
@@ -40,20 +46,34 @@
                 height: 100%;
                 width: auto;
 
+                @media screen and (max-width: $breakpoint-md){
+
+                    width: 100%;
+                    height: auto;
+
+                    max-width: 200px;
+    
+                }
+
             }
 
         }
 
-        .profileName{
+        .profilename_container{
 
-            text-align: center;
+            display: flex;
+            justify-content: center;
 
             margin-top: 10px;
 
-            font-size: 18px;
-            text-transform: uppercase;
-            font-weight: normal;
-            letter-spacing: 0.1em;
+            text-align: center;
+
+            .profileName{
+
+                font-size: 18px;
+                letter-spacing: 0.1em;
+
+            }
 
         }
 
@@ -73,11 +93,21 @@
 
         }
 
+        @media screen and (max-width: $breakpoint-md){
+
+            .card-content{
+
+                height: auto;
+
+            }
+
+        }
+
     }
 
-    .notifications{
+    .badges{
 
-        grid-area: notifications;
+        grid-area: badges;
 
     }
 
@@ -166,12 +196,15 @@
             margin: 10px 0;
 
             display: flex;
+
             align-items: center;
 
             height: 50px;
             width: 100%;
 
-            img{
+            &>img{
+
+                display: inline-block;
 
                 height: 100%;
                 width: auto;
@@ -181,7 +214,11 @@
 
             }
 
-            p{
+            .profileName{
+
+                font-size: 18px;
+
+                display: inline-block;
 
                 margin-left: 10px;
 
@@ -194,24 +231,23 @@
     @media screen and (max-width: $breakpoint-xl) {
         
         grid-template-columns: 30% 30% 30%;
-        grid-template-rows: 50% 50%;
 
         grid-template-areas: 
         "packs packs packs"
-        "account notifications friends";
+        "account badges friends";
 
     }
 
     @media screen and (max-width: $breakpoint-md){
         
         grid-template-columns: 100%;
-        grid-template-rows: 100% 50% 50% 50%;
+        grid-template-rows: 100% auto 100% 100%;
 
         grid-template-areas: 
         "packs"
         "account"
-        "friends"
-        "notifications";
+        "badges"
+        "friends";
 
     }
 

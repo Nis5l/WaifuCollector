@@ -12,7 +12,8 @@
   .waifucard-name,
   .waifucard-anime,
   .waifucard-quality,
-  .waifucard-level
+  .waifucard-level,
+  .waifucard-color
   {
     backface-visibility: hidden;
     position: absolute;
@@ -22,7 +23,7 @@
     left: 0;
     transition-duration: 1s;
 
-    &.waifucard-inner{
+    &.waifucard-inner, &.waifucard-color{
       margin: 12% 10%;
       width: 80%;
       height: 84%;

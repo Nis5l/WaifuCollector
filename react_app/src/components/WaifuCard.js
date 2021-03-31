@@ -22,7 +22,7 @@ class WaifuCard extends Component {
         this.level = props.level;
         this.uuid = props.uuid;
         this.cardID = props.cardID;
-        this.backcolor = props.backcolor;
+        this.cardcolor = props.cardcolor;
         this.identifier = props.identifier;
 
         this.state = {
@@ -57,6 +57,13 @@ class WaifuCard extends Component {
                         backgroundImage: `url(${this.effect})`,
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
                         opacity: `${this.effectopacity}`
+                    }}
+                />
+                <div
+                    className="waifucard-color"
+                    style={{
+                        transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
+                        backgroundColor: `${this.cardcolor}`,
                     }}
                 />
                 <div

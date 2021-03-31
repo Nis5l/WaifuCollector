@@ -1,13 +1,25 @@
 import React from 'react'
 import Card from '../components/Card'
 import PackProgressRing from '../components/PackProgressRing'
+import ProfileName from '../components/ProfileName'
 
-import "./Dashboard.scss"
+import "./Profile.scss"
 
-function Dashboard() {
+function Profile(props) {
+
+    const id = props.match.params.id;
+
+    if(!Number.isInteger(parseInt(id, 10))){
+
+        return(
+            <h1>Invalid this id is!</h1>
+        );
+
+    }
+
     return (
 
-        <div className="container">
+        <div className="container_profile">
 
             <Card
                 title="Account Info"
@@ -19,8 +31,14 @@ function Dashboard() {
                     <img src="/assets/Icon.png" alt="Avatar" />
 
                 </div>
-                
-                <h1 className="profileName">SmallCode</h1>
+
+                <div className="profilename_container">
+
+                    <ProfileName
+                        name={props.match.params.id}
+                    />
+
+                </div>
 
                 <table className="stats">
 
@@ -54,10 +72,10 @@ function Dashboard() {
             </Card>
 
             <Card
-                title="Notifications"
-                styleClassName="notifications"
+                title="Badges"
+                styleClassName="badges"
             >
-                <h1>Notifications</h1>
+                <h1>Badges</h1>
             </Card>
 
             <Card
@@ -163,7 +181,9 @@ function Friend(props){
 
             <img src={props.avatar} alt="Friend Avatar" />
 
-            <p>{props.name}</p>
+            <ProfileName
+                name={props.name}
+            />
 
         </li>
 
@@ -171,4 +191,4 @@ function Friend(props){
 
 }
 
-export default Dashboard
+export default Profile

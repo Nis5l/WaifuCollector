@@ -1,15 +1,5 @@
 @import "../scss/__base.scss";
 
-#root main.content{
-
-    box-sizing: border-box;
-
-    padding: 4%;
-
-    height: 100vh;
-
-}
-
 .container_home{
 
     display: grid;
@@ -19,13 +9,8 @@
     width: 100%;
     height: 100%;
 
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 70% minmax(min-content, max-content);
-
-    @media screen and (max-width: $breakpoint-sm)
-    {
-        grid-template-rows: 60% minmax(min-content, max-content) minmax(min-content, max-content);
-    }
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 500px minmax(min-content, max-content) ;
 
     column-gap: 25px;
     row-gap: 25px;
@@ -34,8 +19,27 @@
         "packGraph packGraph"
         "tutorial copyright";
 
+    @media screen and (max-width: $breakpoint-lg)
+    {
+        grid-template-rows: 400px minmax(min-content, max-content) minmax(min-content, max-content);
+        grid-template-areas: 
+            "packGraph packGraph"
+            "tutorial tutorial"
+            "copyright copyright";
+    }
+
+    @media screen and (max-width: $breakpoint-sm)
+    {
+        grid-template-rows: 300px minmax(min-content, max-content) minmax(min-content, max-content);
+    }
+
+
     .packGraphWrapper {
         grid-area: packGraph;
+        .card-content
+        {
+            padding-left: 0;
+        }
     }
     
     .tutorial

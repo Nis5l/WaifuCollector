@@ -9,7 +9,25 @@ function PackProgressRing(props) {
     const radius = 46;
 
     useEffect(() => {
-        progress > 0 && setTimeout(() => setProgress(progress - 1), 1000);
+
+        let running = true;
+
+        progress > 0 && setTimeout(() =>{
+
+            if(!running)
+                return;
+
+            setProgress(progress - 1)
+        
+        }, 1000);
+
+        return function cleanup(){
+
+            running = false;
+
+        }
+
+
     }, [progress]);
 
     return (

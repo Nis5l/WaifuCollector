@@ -29,6 +29,7 @@ function Home() {
                 level="1"
                 turned="true"
                 effectopacity="0.5"
+                cardcolor="#ddffdea8"
             >
             </WaifuCard>
 
