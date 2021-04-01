@@ -8,7 +8,7 @@ function Card(props) {
 
         <div className={"card " + props.styleClassName }>
 
-            { props.title && <h1 className="card-title">{props.title}</h1> }
+            { props.title && <h2 className="card-title">{props.title}</h2> }
 
             <div className="card-content">
 

@@ -7,14 +7,32 @@
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 80%;
 
     max-width: 400px;
     max-height: 600px;
 
-    width: inherit;
-    height: inherit;
+    transform: translate(-50%, -50%);
 
-    background-color: $background-primary;
+    @media screen and (max-width: $breakpoint-sm) {
+        
+        width: 100%;
+        min-height: 100%;
+
+        max-width: none;
+        max-height: none;
+
+        height: auto;
+
+    }
+
+    h1{
+
+        width: fit-content;
+        
+        margin: 10px auto;
+
+    }
 
 }
