@@ -25,12 +25,21 @@ function Login(props) {
     return (
         <Card styleClassName="login">
             
-            <h1>Login</h1>
+            <img
+                src="/assets/Icon.png"
+                alt="Logo"
+                className="logo"
+            ></img>
 
             <form onSubmit={handleSubmit}> 
 
-                <input type="text" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
-                <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <div>
+
+                    <input type="text" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                    <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+
+                </div>
+
                 <input type="submit" name="submit" value="Login" />
 
             </form>

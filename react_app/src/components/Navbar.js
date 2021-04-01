@@ -119,6 +119,37 @@ class Navbar extends React.Component {
 
                     <SidebarContent>
                         <Menu iconShape="circle">
+
+                            {!this.props.token && 
+
+                            <MenuItem
+                                icon={<i className="fas fa-sign-in-alt"></i>}
+                            >
+                                    <Link
+                                        to="/login"
+                                    >
+                                        Login
+                                    </Link>
+                            
+                            </MenuItem>
+                            
+                            }
+
+                            {!this.props.token &&
+                            
+                                <MenuItem
+                                    icon={<i className="fas fa-registered"></i>}
+                                >
+                                    <Link
+                                        to="/register"
+                                    >
+                                        Register
+                                    </Link>
+
+                                </MenuItem>
+                            
+                            }
+
                             <MenuItem
                                 icon={<i className="fas fa-clipboard-list"></i>}
                             >
@@ -128,7 +159,8 @@ class Navbar extends React.Component {
                                     Leaderboard
                                 </Link>
                             </MenuItem>
-                            <SubMenu
+
+                            {this.props.token && <SubMenu
                                 title="Dashboard"
                                 icon={<i className="fas fa-home"></i>}
                             >
@@ -148,8 +180,9 @@ class Navbar extends React.Component {
                                 </MenuItem>
                                 <MenuItem>Inventory</MenuItem>
                                 <MenuItem>Friends</MenuItem>
-                            </SubMenu>
-                            <SubMenu
+                            </SubMenu> }
+
+                            { this.props.token && <SubMenu
                                 title="Adminpanel"
                                 icon={<i className="fas fa-user"></i>}
                             >
@@ -157,7 +190,18 @@ class Navbar extends React.Component {
                                 <MenuItem>Cards</MenuItem>
                                 <MenuItem>Anime</MenuItem>
                                 <MenuItem>Users</MenuItem>
-                            </SubMenu>
+                            </SubMenu> }
+
+                            { this.props.token && <MenuItem
+                                icon={<i className="fas fa-sign-out-alt"></i>}
+                            >
+                                <Link
+                                    to="/logout"
+                                >
+                                    Logout
+                                </Link>
+                            </MenuItem> }
+
                         </Menu>
                     </SidebarContent>
 

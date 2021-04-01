@@ -7,6 +7,8 @@ import WaifuCard from '../components/WaifuCard'
 import "./Home.scss"
 import "../scss/effects.scss"
 
+import Config from '../config.json'
+
 function Home() {
     return (
 
@@ -29,10 +31,10 @@ function Home() {
                 <p>X: Level, Y: Quality</p>
                 <div>
                     <WaifuCard
-                        img="http://127.0.0.1:10001/Card/Card_Ichigo.jpg"
-                        framefront="http://127.0.0.1:10001/Frame/Frame_Silver_Front.png"
-                        frameback="http://127.0.0.1:10001/Frame/Frame_Silver_Back.png"
-                        effect="http://127.0.0.1:10001/Effect/Effect2.gif"
+                        img={`${Config.API_HOST}/Card/Card_Ichigo.jpg`}
+                        framefront={`${Config.API_HOST}/Frame/Frame_Silver_Front.png`}
+                        frameback={`${Config.API_HOST}/Frame/Frame_Silver_Back.png`}
+                        effect={`${Config.API_HOST}/Effect/Effect2.gif`}
                         cardname="Ichigo"
                         animename="Darling In The FranXX"
                         size="0.8"

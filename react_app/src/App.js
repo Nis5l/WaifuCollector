@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
 import Navbar from './components/Navbar';
@@ -16,22 +16,9 @@ import './App.scss';
 
 function App() {
 
-  const requireAuth = (nextState, replace) => {
-
-    if(!token){
-
-      replace({
-        pathname: "/login",
-        state: { nextPathname: nextState.location.pathname }
-      });
-
-    }
-  
-  }
-
   const [token, setToken] = useState(Cookies.get("token"));
 
-  let setTokenHandler = (newToken) => { setToken(newToken); Cookies.set("token", token, { expires: 30 * 12 * 30 }) };
+  let setTokenHandler = (newToken) => { setToken(newToken); Cookies.set("token", newToken, { expires: 30 * 12 * 30 }) };
 
   return (
 
@@ -39,7 +26,7 @@ function App() {
 
       <Router>
 
-        <Navbar />
+        <Navbar token={token} />
 
         <main className="content">
 
@@ -66,12 +53,18 @@ function App() {
 
             <Route path="/pack">
 
-              {!token ? <Redirect to="/login" /> : <Dashboard />}
+              {!token ? <Redirect to="/login" /> : <Pack />}
 
             </Route>
 
             { /* Profile others */}
             <Route path="/profile/:id" component={Profile} />
+
+            <Route path="/logout">
+
+              {!token ? <Redirect to="/login" /> : () => { setToken(""); Cookies.remove("token"); }}
+
+            </Route>
 
           </Switch>
 
