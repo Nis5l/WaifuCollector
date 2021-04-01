@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Dashboard from './pages/dashboard/Dashboard';
 import Profile from './pages/Profile';
+import Pack from './pages/Pack';
 
 import Login from './pages/loggedout/Login';
 
@@ -35,7 +36,7 @@ function App() {
   return (
 
     <>
-    
+
       <Router>
 
         <Navbar />
@@ -56,14 +57,20 @@ function App() {
 
             </Route>
 
-            {/*Dashboard */ }
+            {/* Logged in User */ }
             <Route path="/dashboard">
 
               {!token ? <Redirect to="/login" /> : <Dashboard />}
 
             </Route>
 
-            { /* Profile others */ }
+            <Route path="/pack">
+
+              {!token ? <Redirect to="/login" /> : <Dashboard />}
+
+            </Route>
+
+            { /* Profile others */}
             <Route path="/profile/:id" component={Profile} />
 
           </Switch>

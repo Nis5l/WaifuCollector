@@ -16,7 +16,7 @@ import './Navbar.scss'
 
 class Navbar extends React.Component {
 
-    constructor(props){
+    constructor(props) {
 
         super(props);
 
@@ -28,22 +28,22 @@ class Navbar extends React.Component {
 
     }
 
-    handleResize(){
+    handleResize() {
 
         let size = window.innerWidth;
-    
-        if(size < 576){
-    
+
+        if (size < 576) {
+
             this.setState({collapsed: false, mobile: true});
 
-        }else if(size < 1200){
-    
-             this.setState({collapsed: true, mobile: false});
-    
-        }else{
-    
+        } else if (size < 1200) {
+
+            this.setState({collapsed: true, mobile: false});
+
+        } else {
+
             this.setState({collapsed: false, mobile: false});
-    
+
         }
 
     }
@@ -66,13 +66,13 @@ class Navbar extends React.Component {
     handleClickOutside = (event) => {
 
         if ((this.state.mobile && this.state.toggled) && this.box && !this.box.current.contains(event.target)) {
-            
+
             this.setState({toggled: false});
 
         }
     }
 
-    toggleMenu(){
+    toggleMenu() {
 
         let toggled = Object.assign({}, this.state.toggled);
 
@@ -88,31 +88,31 @@ class Navbar extends React.Component {
 
             <div>
 
-                {(this.state.mobile && !this.state.toggled) && <i className="menu-toggle fas fa-bars" onClick={ () => this.toggleMenu() }></i>}
+                {(this.state.mobile && !this.state.toggled) && <i className="menu-toggle fas fa-bars" onClick={() => this.toggleMenu()}></i>}
 
                 <ProSidebar
-                
+
                     collapsed={this.state.collapsed}
                     toggled={this.state.toggled}
                     ref={this.box}
-                
+
                 >
 
                     <SidebarHeader>
                         <Link
-                                to="/"
+                            to="/"
                         >
                             <div
                                 className="sidebar-title"
                             >
-                                    <img 
-                                        src="/assets/Icon.png"
-                                        className="headerIcon"
-                                        alt="Icon"
-                                    />
-                                    
-                                    <span>WaifuCollector</span>
-                                
+                                <img
+                                    src="/assets/Icon.png"
+                                    className="headerIcon"
+                                    alt="Icon"
+                                />
+
+                                <span>WaifuCollector</span>
+
                             </div>
                         </Link>
                     </SidebarHeader>
@@ -139,7 +139,13 @@ class Navbar extends React.Component {
                                         Home
                                     </Link>
                                 </MenuItem>
-                                <MenuItem>Pack</MenuItem>
+                                <MenuItem>
+                                    <Link
+                                        to="/pack"
+                                    >
+                                        Pack
+                                    </Link>
+                                </MenuItem>
                                 <MenuItem>Inventory</MenuItem>
                                 <MenuItem>Friends</MenuItem>
                             </SubMenu>
@@ -155,21 +161,21 @@ class Navbar extends React.Component {
                         </Menu>
                     </SidebarContent>
 
-                    <SidebarFooter style={{ textAlign: 'center' }}>
+                    <SidebarFooter style={{textAlign: 'center'}}>
                         <div
                             className="sidebar-btn-wrapper"
                             style={{
                                 padding: '20px 24px',
                             }}
                         >
-                        <a
-                            href="https://github.com/azouaoui-med/react-pro-sidebar"
-                            target="_blank"
-                            className="sidebar-btn"
-                            rel="noopener noreferrer"
-                        >
-                            <span>Settings</span>
-                        </a>
+                            <a
+                                href="https://github.com/azouaoui-med/react-pro-sidebar"
+                                target="_blank"
+                                className="sidebar-btn"
+                                rel="noopener noreferrer"
+                            >
+                                <span>Settings</span>
+                            </a>
                         </div>
                     </SidebarFooter>
 
