@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import Chart from 'chart.js'
 
 import "./PackGraph.scss"
+import axios from 'axios';
+import Config from '../config.json';
 
 const config = {
     type: 'line',
@@ -44,19 +46,83 @@ const config = {
     }
 };
 
+const refreshTime = 1000 * 60;
+
 class PackGraph extends Component {
+
     constructor(props) {
-        super();
-        this.props = props;
+
+        super(props);
+
         this.ctx = React.createRef();
         this.chart = undefined;
+
     }
+
     componentDidMount() {
+
         this.loadGraph();
+        this.updateChart();
+
+        this.interval = setInterval(() => this.updateChart(), refreshTime);
+
+    }
+
+    componentWillUnmount(){
+
+        clearInterval(this.interval);
+
     }
 
     async loadGraph() {
+
         this.chart = new Chart(this.ctx.current, config);
+
+    }
+
+    async loadData(){
+
+        try{
+
+            const res = await axios.get(`${Config.API_HOST}/packData`);
+
+            if(res && res.data && res.data.status === 0){
+
+                return res.data.packData;
+
+            }
+
+        }catch(ex){
+
+            console.log("Couldn't connect to API Server!");
+
+        }
+
+        return [];
+
+    }
+
+    async updateChart(){
+
+        const options = { hourCycle: "h23", weekday: 'short', hour: 'numeric', minute: '2-digit' };
+
+        const packData = await this.loadData();
+
+        this.chart.data.datasets[0].data = [];
+        this.chart.data.labels = [];
+
+        for(let i = 0; i < packData.length; i++){
+
+            let date = new Date(packData[i].time);
+            let timeString = date.toLocaleDateString("en-US", options);
+
+            this.chart.data.labels.push(timeString);
+            this.chart.data.datasets[0].data.push(packData[i].amount);
+
+        }
+
+        this.chart.update();
+
     }
 
     render() {

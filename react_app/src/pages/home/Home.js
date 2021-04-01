@@ -10,6 +10,7 @@ import "../../scss/effects.scss"
 import Config from '../../config.json'
 
 function Home() {
+
     return (
 
         <div className="container_home">
