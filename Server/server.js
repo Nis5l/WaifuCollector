@@ -19,6 +19,15 @@ app.use(upload());
 app.use(express.static("Data"));
 app.use(bodyParser.json());
 
+app.use(function (req, res, next) {
+
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+	next();
+	
+});
+
 app.get("/", function (req, res) {
 	try {
 		res.send("WaifuCollector");
@@ -243,10 +252,12 @@ app.post("/notifications", async (req, res) => {
 
 app.post("/login", async (req, res) => {
 	try {
+
 		var username = req.body.username;
 		var password = req.body.password;
-		logger.write("Login " + username);
+
 		database.login(username, password, async (b, messageV, userIDV) => {
+
 			var tokenV = "";
 			if (b) tokenV = jwt.sign({username: username, id: userIDV}, logic.getJWTSecret(), {expiresIn: 30 * 24 * 60 * 60});
 
