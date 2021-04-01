@@ -1,7 +1,7 @@
 import React from 'react'
-import Card from '../components/Card'
-import PackProgressRing from '../components/PackProgressRing'
-import ProfileName from '../components/ProfileName'
+import Card from '../../components/Card'
+import PackProgressRing from '../../components/PackProgressRing'
+import ProfileName from '../../components/ProfileName'
 
 import "./Profile.scss"
 
@@ -9,9 +9,9 @@ function Profile(props) {
 
     const id = props.match.params.id;
 
-    if(!Number.isInteger(parseInt(id, 10))){
+    if (!Number.isInteger(parseInt(id, 10))) {
 
-        return(
+        return (
             <h1>Invalid this id is!</h1>
         );
 
@@ -25,7 +25,7 @@ function Profile(props) {
                 title="Account Info"
                 styleClassName="accountInfo"
             >
-                
+
                 <div className="avatar">
 
                     <img src="/assets/Icon.png" alt="Avatar" />
@@ -84,7 +84,7 @@ function Profile(props) {
             >
 
                 <div className="packs-grid">
-                
+
                     <PackProgressRing className="pack1" />
                     <PackProgressRing className="pack2" />
 
@@ -96,7 +96,7 @@ function Profile(props) {
                 title="Friends"
                 styleClassName="friends"
             >
-                
+
                 <ul>
 
                     <Friend
@@ -131,35 +131,35 @@ function Profile(props) {
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
-                                        <Friend
+                    <Friend
                         avatar="/assets/Icon.png"
                         name="SmallCode"
                     />
@@ -173,9 +173,9 @@ function Profile(props) {
     )
 }
 
-function Friend(props){
+function Friend(props) {
 
-    return(
+    return (
 
         <li className="friend">
 

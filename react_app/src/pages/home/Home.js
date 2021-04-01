@@ -1,13 +1,13 @@
 import React from 'react'
-import Card from '../components/Card'
-import PackGraph from '../components/PackGraph'
-import Foldable from '../components/Foldable'
-import WaifuCard from '../components/WaifuCard'
+import Card from '../../components/Card'
+import PackGraph from '../../components/PackGraph'
+import Foldable from '../../components/Foldable'
+import WaifuCard from '../../components/WaifuCard'
 
 import "./Home.scss"
-import "../scss/effects.scss"
+import "../../scss/effects.scss"
 
-import Config from '../config.json'
+import Config from '../../config.json'
 
 function Home() {
     return (

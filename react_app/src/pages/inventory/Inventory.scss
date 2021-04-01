@@ -1,0 +1,30 @@
+@import "../../scss/__base.scss";
+
+.inventory_wrapper
+{
+    display: grid;
+    width: 100%;
+    height: 100%;
+
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 5fr 1fr;
+
+    grid-template-areas:
+        "... ... ..."
+        "inventory inventory inventory"
+        "... ... ...";
+
+
+    .card_wrapper
+    {
+        grid-area: inventory;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .inventory_card_wrapper
+        {
+            margin: 10px;
+        }
+    }
+}

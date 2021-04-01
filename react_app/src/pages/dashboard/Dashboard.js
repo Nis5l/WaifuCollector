@@ -73,7 +73,7 @@ function Dashboard() {
             >
 
                 <div className="packs-grid">
-                
+
                     <PackProgressRing className="pack1" />
                     <PackProgressRing className="pack2" />
 
@@ -85,7 +85,7 @@ function Dashboard() {
                 title="Friends"
                 styleClassName="friends"
             >
-                
+
                 <ul>
 
                     <Friend
@@ -107,9 +107,9 @@ function Dashboard() {
     )
 }
 
-function Friend(props){
+function Friend(props) {
 
-    return(
+    return (
 
         <li className="friend">
 

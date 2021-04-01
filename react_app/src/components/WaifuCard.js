@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import ResizeText from "./ResizeText"
 
+import Config from '../config.json'
+
 import './WaifuCard.scss'
 
 class WaifuCard extends Component {
@@ -21,7 +23,8 @@ class WaifuCard extends Component {
         this.size = parseFloat(props.size);
         this.level = props.level;
         this.uuid = props.uuid;
-        this.cardID = props.cardID;
+        this.cardid = props.cardid;
+        this.typeid = props.typeid;
         this.cardcolor = props.cardcolor;
         this.identifier = props.identifier;
         this.clickable = props.clickable === "false" ? false : true;
@@ -124,9 +127,19 @@ class WaifuCard extends Component {
         );
     }
 }
-
 WaifuCard.DEFWIDTH = 253;
 WaifuCard.DEFHEIGTH = 365;
 WaifuCard.DEFFONT = 50;
 
+function parseCards(cards) {
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].card.cardImage = `${Config.API_HOST}/${cards[i].card.cardImage}`;
+        cards[i].card.frame.path_front = `${Config.API_HOST}/${cards[i].card.frame.path_front}`;
+        cards[i].card.frame.path_back = `${Config.API_HOST}/${cards[i].card.frame.path_back}`;
+        if (cards[i].card.effect != null)
+            cards[i].card.effect = `${Config.API_HOST}/${cards[i].card.effect}`;
+    }
+}
+
 export default WaifuCard;
+export {parseCards};
