@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import React, {useState} from 'react'
+import React from 'react'
 import Card from '../../components/Card'
 import PackProgressRing from '../../components/PackProgressRing'
 import ProfileName from '../../components/ProfileName'
@@ -95,11 +95,13 @@ function Dashboard() {
                     <Friend
                         avatar="/assets/Icon.png"
                         name="Nissl"
+                        userID="2"
                     />
 
                     <Friend
                         avatar="/assets/Icon.png"
                         name="haselnusse"
+                        userID="3"
                     />
 
                 </ul>

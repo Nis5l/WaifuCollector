@@ -18,8 +18,6 @@ function ProfileName(props) {
         axios.get(`${Config.API_HOST}/user/${props.userID}`)
         .then((res) => {
 
-            console.log(res);
-
             if(res && res.data && res.data.status === 0){
 
                 setUsername(res.data.username);
@@ -28,7 +26,7 @@ function ProfileName(props) {
 
         });
 
-    }, []);
+    });
 
     return (
         
