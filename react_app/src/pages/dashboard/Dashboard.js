@@ -1,4 +1,5 @@
-import React from 'react'
+import Cookies from 'js-cookie'
+import React, {useState} from 'react'
 import Card from '../../components/Card'
 import PackProgressRing from '../../components/PackProgressRing'
 import ProfileName from '../../components/ProfileName'
@@ -6,6 +7,9 @@ import ProfileName from '../../components/ProfileName'
 import "./Dashboard.scss"
 
 function Dashboard() {
+
+    const userID = Cookies.get('userID');
+
     return (
 
         <div className="container">
@@ -24,7 +28,7 @@ function Dashboard() {
                 <div className="profilename_container">
 
                     <ProfileName
-                        name="SmallCode"
+                        userID={userID}
                     />
 
                 </div>
@@ -117,6 +121,7 @@ function Friend(props) {
 
             <ProfileName
                 name={props.name}
+                userID={props.userID}
             />
 
         </li>

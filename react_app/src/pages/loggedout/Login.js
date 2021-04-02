@@ -5,6 +5,7 @@ import axios from 'axios'
 import "./Login.scss"
 
 import Config from '../../config.json'
+import Cookies from 'js-cookie'
 
 function Login(props) {
 
@@ -41,6 +42,8 @@ function Login(props) {
                     if(res.data && res.data.status === 0){
 
                         updateToken(res.data.token);
+
+                        Cookies.set("userID", res.data.userID, {expires: 30 * 12 * 30});
 
                     }
 

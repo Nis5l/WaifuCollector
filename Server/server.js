@@ -344,6 +344,47 @@ app.post("/register", (req, res) => {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
+app.get("/user/:id", async (req, res) => {
+
+	try{
+
+		/*
+		
+		await createCache(decoded.id, decoded.username, res);
+		
+		*/
+
+		let userID = req.params.id;
+
+		if(!userID)
+			return;
+
+		if(!(logic.getClients()[userID] && logic.getClients()[userID].username))
+			await createCache(userID, undefined, res);
+
+		username = logic.getClients()[userID].username;
+
+		if (!username || username == "null" || username == null) {
+			res.send({
+				status: 1,
+				message: "User with userID " + userID + " not found!",
+			});
+			return;
+		}
+
+		res.send({
+			status: 0,
+			username: username
+		});
+
+	}catch(ex){
+
+		logic.handleException(ex, res);
+
+	}
+
+});
+
 app.post("/getDashboard", async (req, res) => {
 	try {
 		var decoded = await logic.standardroutine(req.body.token, res);

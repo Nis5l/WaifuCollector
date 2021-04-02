@@ -69,7 +69,7 @@ function App() {
 
             <Route path="/logout">
 
-              {!token ? <Redirect to="/login" /> : () => {setToken(""); Cookies.remove("token");}}
+              {!token ? <Redirect to="/login" /> : () => {setToken(""); Cookies.remove("token"); Cookies.remove("userID"); return null;}}
 
             </Route>
 
