@@ -12,6 +12,9 @@ class Inventory extends Component {
     this.props = props;
 
     this.card_wrapper = React.createRef();
+    this.key = 0;
+    this.loading = false;
+    this.scrollpadding = 500;
     this.state =
     {
       cards: []
@@ -19,27 +22,25 @@ class Inventory extends Component {
   }
 
   isBottom(el) {
-    return el.getBoundingClientRect().bottom <= window.innerHeight;
-  }
-
-  componentDidMount() {
-    document.addEventListener('scroll', this.trackScrolling);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('scroll', this.trackScrolling);
+    return el.scrollHeight - el.scrollTop - this.scrollpadding <= el.clientHeight;
   }
 
   trackScrolling = () => {
     if (this.card_wrapper == null) return;
-    if (this.isBottom(this.card_wrapper)) {
-      axios.post(`${Config.API_HOST}/inventory`, {token: Cookies.get("token"), page: 0})
+    if (this.loading === false && this.isBottom(this.card_wrapper)) {
+      this.loading = true;
+      let data;
+      if (this.key === 0)
+        data = {token: Cookies.get("token"), page: 0};
+      else
+        data = {token: Cookies.get("token"), next: 0};
+      axios.post(`${Config.API_HOST}/inventory`, data)
         .then(res => {
           if (res && res.status === 200) {
             if (res.data && res.data.status === 0) {
               parseCards(res.data.inventory);
               this.setState({cards: [...this.state.cards, ...res.data.inventory]});
-              console.log(this.state.cards);
+              this.loading = false;
             }
           }
         });
@@ -49,12 +50,15 @@ class Inventory extends Component {
   render() {
     return (
       <div className="inventory_wrapper">
-        <div ref={(el) => {this.card_wrapper = el; this.trackScrolling();}} className="card_wrapper">
+        <div
+          ref={(el) => {this.card_wrapper = el; this.trackScrolling();}}
+          onScroll={this.trackScrolling}
+          className="card_wrapper"
+        >
           {
             this.state.cards.map((card) => (
-              <div className="inventory_card_wrapper">
+              <div className="inventory_card_wrapper" key={this.key++}>
                 <WaifuCard
-                  key={card.id}
                   uuid={card.id}
                   cardid={card.card.id}
                   typeid={card.card.type.id}
