@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
 import Navbar from './components/Navbar';
@@ -19,7 +19,13 @@ function App() {
 
   const [token, setToken] = useState(Cookies.get("token"));
 
-  let setTokenHandler = (newToken) => {setToken(newToken); Cookies.set("token", newToken, {expires: 30 * 12 * 30})};
+  let setTokenHandler = (newToken) => {
+
+    setToken(newToken);
+
+    Cookies.set("token", newToken, {expires: 30 * 12 * 30})
+  
+  };
 
   return (
 
@@ -69,7 +75,7 @@ function App() {
 
             <Route path="/logout">
 
-              {!token ? <Redirect to="/login" /> : () => {setToken(""); Cookies.remove("token"); Cookies.remove("userID"); return null;}}
+              {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler}/>}
 
             </Route>
 
@@ -82,6 +88,23 @@ function App() {
     </>
 
   );
+}
+
+function LogOut(props){
+
+  useEffect(() => props.setToken(""));
+
+  Cookies.remove("token");
+  Cookies.remove("userID");
+
+  return(
+
+    <Redirect
+      to="/"
+    />
+
+  );
+
 }
 
 export default App;
