@@ -1,15 +1,38 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Tooltip } from 'reactstrap'
+
+import Config from '../config.json'
+import axios from 'axios'
 
 import "./ProfileName.scss"
 
 function ProfileName(props) {
 
-    return (
+    const [username, setUsername] = useState("Username");
 
+    useEffect(() => {
+
+        if(props.userID === undefined)
+            return;
+
+        axios.get(`${Config.API_HOST}/user/${props.userID}`)
+        .then((res) => {
+
+            if(res && res.data && res.data.status === 0){
+
+                setUsername(res.data.username);
+
+            }
+
+        });
+
+    });
+
+    return (
+        
         <div className="profileName">
             
-            <h2 className="name">{props.name}</h2>
+            <h2 className="name">{username}</h2>
 
             <div className="badges">
 

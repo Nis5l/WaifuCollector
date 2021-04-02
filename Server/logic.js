@@ -323,6 +323,7 @@ function addCardTrade(userone, usertwo, uuid, callback) {
 		});
 	});
 }
+
 function standardroutine(token, res) {
 	return new Promise(
 		async (resolve, reject) => {

@@ -1,4 +1,5 @@
-import React from 'react'
+import Cookies from 'js-cookie'
+import React, {useState, useEffect} from 'react'
 import Card from '../../components/Card'
 import PackProgressRing from '../../components/PackProgressRing'
 import ProfileName from '../../components/ProfileName'
@@ -6,6 +7,16 @@ import ProfileName from '../../components/ProfileName'
 import "./Dashboard.scss"
 
 function Dashboard() {
+
+    const [userID, setUserID] = useState(Cookies.get('userID'));
+
+    useEffect(() => {
+
+        if(userID == undefined)
+            setUserID(Cookies.get('userID'));
+
+    });
+
     return (
 
         <div className="container">
@@ -24,7 +35,7 @@ function Dashboard() {
                 <div className="profilename_container">
 
                     <ProfileName
-                        name="SmallCode"
+                        userID={userID}
                     />
 
                 </div>
@@ -91,11 +102,13 @@ function Dashboard() {
                     <Friend
                         avatar="/assets/Icon.png"
                         name="Nissl"
+                        userID="2"
                     />
 
                     <Friend
                         avatar="/assets/Icon.png"
                         name="haselnusse"
+                        userID="3"
                     />
 
                 </ul>
@@ -117,6 +130,7 @@ function Friend(props) {
 
             <ProfileName
                 name={props.name}
+                userID={props.userID}
             />
 
         </li>
