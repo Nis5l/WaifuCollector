@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Card from '../../components/Card'
 import PackProgressRing from '../../components/PackProgressRing'
 import ProfileName from '../../components/ProfileName'
@@ -8,7 +8,14 @@ import "./Dashboard.scss"
 
 function Dashboard() {
 
-    const userID = Cookies.get('userID');
+    const [userID, setUserID] = useState(Cookies.get('userID'));
+
+    useEffect(() => {
+
+        if(userID == undefined)
+            setUserID(Cookies.get('userID'));
+
+    });
 
     return (
 
