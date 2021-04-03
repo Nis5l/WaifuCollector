@@ -56,20 +56,20 @@
 {
   0% 
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulseone rgba(255,255,255,0.75);
     box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulseone rgba(255,255,255,0.75);
   }
   50%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulsetwo rgba(255,255,255,0.75);
+    -moz-box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulsetwo rgba(255,255,255,0.75);
     box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulsetwo rgba(255,255,255,0.75);
   }
   100%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulseone rgba(255,255,255,0.75);
     box-shadow: 0px -25px 0px 25px $pack-background, 0px 3px $pack-pulseone rgba(255,255,255,0.75);
   }
 }
@@ -78,20 +78,20 @@
 {
   0% 
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulseone rgba(255,255,255,0.75);
     box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulseone rgba(255,255,255,0.75);
   }
   50%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulsetwo rgba(255,255,255,0.75);
+    -moz-box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulsetwo rgba(255,255,255,0.75);
     box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulsetwo rgba(255,255,255,0.75);
   }
   100%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulseone rgba(255,255,255,0.75);
     box-shadow: 0px 25px 0px 25px $pack-background, 0px -3px $pack-pulseone rgba(255,255,255,0.75);
   }
 }
@@ -100,20 +100,20 @@
 {
   0% 
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulseone rgba(255,255,255,0.75);
     box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulseone rgba(255,255,255,0.75);
   }
   50%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulsetwo rgba(255,255,255,0.75);
+    -moz-box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulsetwo rgba(255,255,255,0.75);
     box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulsetwo rgba(255,255,255,0.75);
   }
   100%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulseone rgba(255,255,255,0.75);
     box-shadow: -25px 0px 0px 25px $pack-background, 3px 0px $pack-pulseone rgba(255,255,255,0.75);
   }
 }
@@ -122,20 +122,42 @@
 {
   0% 
   {
+    -webkit-box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+  }
+  50%
+  {
+    -webkit-box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulsetwo rgba(255,255,255,0.75);
+    -moz-box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulsetwo rgba(255,255,255,0.75);
+    box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulsetwo rgba(255,255,255,0.75);
+  }
+  100%
+  {
+    -webkit-box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    -moz-box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+  }
+}
+
+@keyframes pulseinputshadow
+{
+  0% 
+  {
     -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    box-shadow: 0 0 1px 1px white;
   }
   50%
   {
     -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulsetwo rgba(255,255,255,0.75);
+    box-shadow: 0 0 3px 1px white;
   }
   100%
   {
     -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    box-shadow: 25px 0px 0px 25px $pack-background, -3px 0px $pack-pulseone rgba(255,255,255,0.75);
+    box-shadow: 0 0 1px 1px white;
   }
 }

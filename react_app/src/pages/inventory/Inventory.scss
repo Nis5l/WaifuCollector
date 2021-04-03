@@ -7,13 +7,11 @@
     height: 100%;
 
     grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr 5fr 1fr;
+    grid-template-rows: 1fr 5fr;
 
     grid-template-areas:
-        "... ... ..."
-        "inventory inventory inventory"
-        "... ... ...";
-
+        "search search search"
+        "inventory inventory inventory";
 
     .card_wrapper
     {
@@ -26,6 +24,26 @@
         .inventory_card_wrapper
         {
             margin: 10px;
+        }
+    }
+
+    .inventory_input
+    {
+        grid-area: search;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+
+        .text_input
+        {
+            margin-bottom: 10px;
+            width: 50%;
+        }
+
+        .inventory_select
+        {
+            width: 40%;
         }
     }
 }

@@ -30,5 +30,20 @@ main.content{
     background-color: $background-secondary;
 
     color: #D8D8D8;
+}
 
+.text_input
+{
+    color: $input-text-color;
+    background-color: $input-background;
+    border: 1px solid $input-border-color;
+    outline: none;
+    border-radius: 5px;
+    height: 35px;
+    text-align: center;
+    &:focus
+    {
+        border-color: $input-border-color-selected;
+        animation: pulseinputshadow 2s ease-out infinite;
+    }
 }

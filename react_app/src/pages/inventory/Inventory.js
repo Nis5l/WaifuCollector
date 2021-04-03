@@ -3,6 +3,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie';
 import WaifuCard, {parseCards} from '../../components/WaifuCard';
 import InfiniteScroll from 'react-infinite-scroller';
+import Select from 'react-select'
 
 import "./Inventory.scss"
 import Config from '../../config.json'
@@ -18,8 +19,14 @@ class Inventory extends Component {
     this.scrollpadding = 500;
     this.state =
     {
-      cards: []
+      cards: [],
     };
+    this.options =
+      [
+        {value: 0, label: 'Name'},
+        {value: 1, label: 'Level'},
+        {value: 2, label: 'Recent'}
+      ];
   }
 
   trackScrolling = () => {
@@ -35,17 +42,49 @@ class Inventory extends Component {
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {
             parseCards(res.data.inventory);
+            let cards = [...this.state.cards, ...res.data.inventory];
             this.key = 0;
-            this.setState({cards: [...this.state.cards, ...res.data.inventory]});
+            this.setState({cards: cards});
             this.loading = false;
           }
         }
       });
   }
 
+  onFilter() {
+
+  }
+
   render() {
     return (
       <div className="inventory_wrapper">
+        <form action={this.onFilter} className="inventory_input">
+          <input type="text" className="text_input" />
+          <Select
+            className="inventory_select"
+            options={this.options}
+            defaultValue={this.options[0]}
+            theme={theme => ({
+              ...theme,
+              borderRadius: 5,
+              colors: {
+                ...theme.colors,
+                /* Outline SelectHighlight */
+                primary: '#d8d8d8',
+                /* Background */
+                neutral0: '#1E1E1E',
+                /* Text */
+                neutral80: '#d8d8d8',
+                /* Highlight */
+                primary25: '#252525',
+                /* ClickHighlight */
+                primary50: 'gray',
+                /* Border */
+                neutral20: '#9d9d9d',
+              },
+            })}
+          />
+        </form>
         <div
           className="card_wrapper"
         >
