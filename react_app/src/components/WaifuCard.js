@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import ResizeText from "./ResizeText"
+import {LoopCircleLoading} from 'react-loadingg';
 
 import Config from '../config.json'
 
@@ -161,5 +162,27 @@ function parseCards(cards) {
     }
 }
 
+class WaifuCardLoad extends Component {
+    constructor(props) {
+        super();
+        this.size = props.size;
+    }
+
+    render() {
+        return (
+            <div className="waifucard_load"
+                style=
+                {{
+                    width: `${WaifuCard.DEFWIDTH * this.size}px`,
+                    height: `${WaifuCard.DEFHEIGTH * this.size}px`,
+                }}
+            >
+                <LoopCircleLoading
+                    color="#d8d8d8" />
+            </div>
+        )
+    }
+}
+
 export default WaifuCard;
-export {parseCards};
+export {parseCards, WaifuCardLoad};

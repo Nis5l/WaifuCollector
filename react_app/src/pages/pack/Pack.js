@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import WaifuCard, {parseCards} from "../../components/WaifuCard"
+import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
 import Cookies from 'js-cookie'
 import {withRouter} from 'react-router-dom';
 
@@ -19,18 +19,17 @@ class Pack extends Component {
         }
     }
 
-    componentWillMount() {
-        alert(0);
-        //let res = axios.post(`${Config.API_HOST}/pack`, {token: Cookies.get('token')});
-        //console.log(res);
-
-        //if (res && res.status === 200 && res && res.data && res.data.status === 0) {
-        //let cards = res.data.cards;
-        //parseCards(cards);
-        //this.setState({cards: cards});
-        //} else {
-        //this.props.history.push('/dashboard');
-        //}
+    componentDidMount() {
+        axios.post(`${Config.API_HOST}/pack`, {token: Cookies.get('token')})
+            .then((res) => {
+                if (res && res.status === 200 && res && res.data && res.data.status === 0) {
+                    let cards = res.data.cards;
+                    parseCards(cards);
+                    this.setState({cards: cards});
+                } else {
+                    this.props.history.push('/dashboard');
+                }
+            });
     }
 
     render() {
@@ -58,7 +57,7 @@ class Pack extends Component {
                     <div className="packtopleftcorner" />
                     <div className="packbottomrightcorner" />
                     {
-                        this.state.cards.map((card) => (
+                        this.state.cards.length > 0 ? this.state.cards.map((card) => (
                             <div className="packcard">
                                 <WaifuCard
                                     card={card}
@@ -70,6 +69,13 @@ class Pack extends Component {
                                 </WaifuCard>
                             </div>
                         ))
+                            :
+                            (
+                                <div className="pack_load">
+                                    <WaifuCardLoad size="1">
+                                    </WaifuCardLoad>
+                                </div>
+                            )
                     }
                 </div>
             </div>
