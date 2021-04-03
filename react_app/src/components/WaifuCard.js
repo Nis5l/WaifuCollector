@@ -11,20 +11,36 @@ class WaifuCard extends Component {
 
         this.props = props;
 
-        this.img = props.img;
-        this.effect = props.effect;
-        this.effectopacity = props.effectopacity;
-        this.framefront = props.framefront;
-        this.frameback = props.frameback;
-        this.cardname = props.cardname;
-        this.animename = props.animename;
-        this.quality = props.quality;
-        this.level = props.level;
+        if (props.card !== undefined) {
+            let card = props.card;
+
+            this.uuid = card.id;
+            this.cardid = card.card.id;
+            this.typeid = card.card.type.id;
+            this.img = card.card.cardImage;
+            this.framefront = card.card.frame.path_front;
+            this.frameback = card.card.frame.path_back;
+            this.effect = card.card.effect;
+            this.cardname = card.card.cardName;
+            this.animename = card.card.type.name;
+            this.quality = card.quality;
+            this.level = card.level;
+            this.effectopacity = card.card.effectopacity;
+        } else {
+            this.uuid = props.uuid;
+            this.cardid = props.cardid;
+            this.typeid = props.typeid;
+            this.img = props.img;
+            this.framefront = props.framefront;
+            this.frameback = props.frameback;
+            this.effect = props.effect;
+            this.cardname = props.cardname;
+            this.animename = props.animename;
+            this.quality = props.quality;
+            this.level = props.level;
+            this.effectopacity = props.effectopacity;
+        }
         this.size = parseFloat(props.size);
-        this.level = props.level;
-        this.uuid = props.uuid;
-        this.cardid = props.cardid;
-        this.typeid = props.typeid;
         this.cardcolor = props.cardcolor;
         this.identifier = props.identifier;
         this.clickable = props.clickable === "false" ? false : true;

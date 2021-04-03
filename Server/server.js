@@ -25,7 +25,7 @@ app.use(function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
 	next();
-	
+
 });
 
 app.get("/", function (req, res) {
@@ -346,7 +346,7 @@ app.post("/register", (req, res) => {
 
 app.get("/user/:id", async (req, res) => {
 
-	try{
+	try {
 
 		/*
 		
@@ -356,10 +356,10 @@ app.get("/user/:id", async (req, res) => {
 
 		let userID = req.params.id;
 
-		if(!userID)
+		if (!userID)
 			return;
 
-		if(!(logic.getClients()[userID] && logic.getClients()[userID].username))
+		if (!(logic.getClients()[userID] && logic.getClients()[userID].username))
 			await createCache(userID, undefined, res);
 
 		username = logic.getClients()[userID].username;
@@ -377,7 +377,7 @@ app.get("/user/:id", async (req, res) => {
 			username: username
 		});
 
-	}catch(ex){
+	} catch (ex) {
 
 		logic.handleException(ex, res);
 
@@ -427,10 +427,16 @@ app.post("/getDashboard", async (req, res) => {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
-app.get("/packTime", async (req, res) => {
+app.post("/packTime", async (req, res) => {
 	try {
 		var decoded = await logic.standardroutine(req.body.token, res);
 		res.send({status: 0, packTime: logic.getPackTime(decoded.id)});
+	} catch (ex) {logic.handleException(ex, res);}
+});
+
+app.get("/packTimeMax", async (req, res) => {
+	try {
+		res.send({status: 0, packTimeMax: logic.getPackCooldown() * 1000});
 	} catch (ex) {logic.handleException(ex, res);}
 });
 

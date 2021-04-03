@@ -113,19 +113,8 @@ class Inventory extends Component {
               this.state.cards.map((card) => (
                 < div className="inventory_card_wrapper" key={"card-" + this.key++}>
                   <WaifuCard
-                    uuid={card.id}
-                    cardid={card.card.id}
-                    typeid={card.card.type.id}
-                    img={card.card.cardImage}
-                    framefront={card.card.frame.path_front}
-                    frameback={card.card.frame.path_back}
-                    effect={card.card.effect}
-                    cardname={card.card.cardName}
-                    animename={card.card.type.name}
+                    card={card}
                     size="1"
-                    quality={card.quality}
-                    level={card.level}
-                    effectopacity="0.5"
                     cardcolor="transparent"
                     clickable="false"
                   >

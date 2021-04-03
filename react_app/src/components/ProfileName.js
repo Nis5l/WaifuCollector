@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Tooltip } from 'reactstrap'
+import {Tooltip} from 'reactstrap'
 
 import Config from '../config.json'
 import axios from 'axios'
@@ -12,36 +12,37 @@ function ProfileName(props) {
 
     useEffect(() => {
 
-        if(props.userID === undefined)
+        if (props.userID === undefined)
             return;
 
         axios.get(`${Config.API_HOST}/user/${props.userID}`)
-        .then((res) => {
+            .then((res) => {
+                if (res && res.status === 200) {
+                    if (res && res.data && res.data.status === 0) {
 
-            if(res && res.data && res.data.status === 0){
+                        setUsername(res.data.username);
 
-                setUsername(res.data.username);
+                    }
+                }
 
-            }
-
-        });
+            });
 
     });
 
     return (
-        
+
         <div className="profileName">
-            
+
             <h2 className="name">{username}</h2>
 
             <div className="badges">
 
-                <Badge 
+                <Badge
                     img={"/assets/badges/crown.png"}
                     name="Supporter"
                 />
 
-                <Badge 
+                <Badge
                     img={"/assets/badges/dev.jpg"}
                     name="Developer"
                 />
@@ -53,35 +54,35 @@ function ProfileName(props) {
     )
 }
 
-function Badge(props){
+function Badge(props) {
 
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const toggle = () => setTooltipOpen(!tooltipOpen);
 
     const makeID = (length) => {
 
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-           result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
 
     }
 
-    const[badgeID] = useState(makeID(30));
+    const [badgeID] = useState(makeID(30));
 
-    return(
+    return (
 
         <div className="badge">
 
-            <img src={props.img} alt={props.name} id={badgeID}/>
+            <img src={props.img} alt={props.name} id={badgeID} />
             <Tooltip placement="bottom" isOpen={tooltipOpen} target={badgeID} toggle={toggle}>
                 {props.name}
             </Tooltip>
 
-    </div>
+        </div>
 
     );
 

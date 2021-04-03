@@ -1,53 +1,88 @@
-import React, {useState, useEffect} from 'react'
+import React, {Component} from 'react'
+import axios from 'axios'
+import Config from '../config.json'
+import Cookies from 'js-cookie';
+import {formatTime} from '../Utils'
+import {withRouter} from 'react-router-dom';
 
 import './PackProgressRing.scss'
 
-function PackProgressRing(props) {
-
-    const [progress, setProgress] = useState(315);
-
-    const radius = 46;
-
-    useEffect(() => {
-
-        let running = true;
-
-        progress > 0 && setTimeout(() =>{
-
-            if(!running)
-                return;
-
-            setProgress(progress - 1)
-        
-        }, 1000);
-
-        return function cleanup(){
-
-            running = false;
-
+class PackProgressRing extends Component {
+    constructor(props) {
+        super();
+        this.props = props;
+        this.radius = 46;
+        this.strokeDashes = 315;
+        this.update = 50;
+        this.packTime = 0;
+        this.packTimeMax = 100;
+        this.state =
+        {
+            progress: this.strokeDashes,
+            text: 'Pack'
         }
+    }
 
+    componentDidMount() {
+        axios.get(`${Config.API_HOST}/packTimeMax`)
+            .then((res) => {
+                if (res && res.status === 200) {
+                    if (res && res.data && res.data.status === 0) {
+                        this.packTimeMax = res.data.packTimeMax;
+                    }
+                }
+            })
+        axios.post(`${Config.API_HOST}/packtime`, {token: Cookies.get('token')})
+            .then((res) => {
+                if (res && res.status === 200) {
+                    if (res && res.data && res.data.status === 0) {
+                        this.packTime = res.data.packTime;
+                    }
+                }
+            })
+        this.interval = setInterval(() => {
+            this.packTime -= this.update;
+            if (this.packTime < 0) this.packTime = 0;
 
-    }, [progress]);
+            const progress = this.packTime / this.packTimeMax * this.strokeDashes;
 
-    return (
-        <svg className={`packProgressRing ${props.className}`} viewBox="0 0 100 100">
-            <text fontSize={radius / 3} x="50%" y="50%" textAnchor="middle" fill="#fff" dy=".38em">123</text>
-            <circle
-                stroke="white"
-                strokeDasharray="315"
-                strokeDashoffset={progress}
-                strokeWidth="2"
-                fill="transparent"
-                r={radius}
-                cx="50"
-                cy="50"
+            let text = 'Open';
+            if (this.packTime !== 0) text = formatTime(this.packTime)
 
-                transform="rotate(-90, 50, 50)"
+            this.setState({progress: progress, text: text});
+        }, this.update);
+    }
 
-            />
-        </svg>
-    )
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    onClick(obj) {
+        if (obj.packTime === 0)
+            this.props.history.push('/pack');
+    }
+
+    render() {
+        return (
+            <svg className={`packProgressRing ${this.props.className}`} viewBox="0 0 100 100">
+                <text fontSize={this.radius / 3} x="50%" y="50%" textAnchor="middle" fill="#fff" dy=".38em">{this.state.text}</text>
+                <circle
+                    onClick={() => {this.onClick(this)}}
+                    stroke="white"
+                    strokeDasharray={this.strokeDashes}
+                    strokeDashoffset={this.state.progress}
+                    strokeWidth="2"
+                    fill="transparent"
+                    r={this.radius}
+                    cx="50"
+                    cy="50"
+
+                    transform="rotate(-90, 50, 50)"
+
+                />
+            </svg>
+        )
+    }
 }
 
-export default PackProgressRing
+export default withRouter(PackProgressRing)

@@ -12,7 +12,7 @@ function Dashboard() {
 
     useEffect(() => {
 
-        if(userID == undefined)
+        if (userID === undefined)
             setUserID(Cookies.get('userID'));
 
     });
