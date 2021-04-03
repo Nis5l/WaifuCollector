@@ -39,7 +39,7 @@ class WaifuCard extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return false;
+        return nextState.turned !== this.state.turned;
     }
 
     render() {

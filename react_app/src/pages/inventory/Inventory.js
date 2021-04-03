@@ -73,6 +73,7 @@ class Inventory extends Component {
             className="inventory_select"
             onChange={(sel) => {this.sortMethod = sel.value; this.onFilter(undefined, this)}}
             options={this.options}
+            threshold={500}
             defaultValue={this.options[0]}
             /* Doesnt work
             hasMore={this.state.hasMore}
