@@ -15,11 +15,11 @@ class Inventory extends Component {
 
     this.card_wrapper = React.createRef();
     this.key = 0;
-    this.loading = false;
     this.scrollpadding = 500;
     this.state =
     {
       cards: [],
+      hasMore: true
     };
     this.options =
       [
@@ -27,14 +27,18 @@ class Inventory extends Component {
         {value: 1, label: 'Level'},
         {value: 2, label: 'Recent'}
       ];
+
+    this.searchInput = React.createRef();
+    this.sortMethod = undefined;
   }
 
   trackScrolling = () => {
-    if (this.card_wrapper == null) return;
-    this.loading = true;
+    if (this.card_wrapper == null || !this.state.hasMore) return;
     let data;
+    const search = this.searchInput.current.value;
+    const sortType = this.sortMethod;
     if (this.key === 0)
-      data = {token: Cookies.get("token"), page: 0};
+      data = {token: Cookies.get("token"), page: 0, search: search, sortType: sortType};
     else
       data = {token: Cookies.get("token"), next: 0};
     axios.post(`${Config.API_HOST}/inventory`, data)
@@ -45,25 +49,34 @@ class Inventory extends Component {
             let cards = [...this.state.cards, ...res.data.inventory];
             this.key = 0;
             this.setState({cards: cards});
-            this.loading = false;
+            if (res.data.page === res.data.pagemax) {
+              this.setState({hasMore: false});
+            }
           }
         }
       });
   }
 
-  onFilter() {
-
+  onFilter(e, obj) {
+    if (e !== undefined) e.preventDefault();
+    obj.key = 0;
+    obj.setState({cards: [], hasMore: true});
   }
 
   render() {
     return (
       <div className="inventory_wrapper">
-        <form action={this.onFilter} className="inventory_input">
-          <input type="text" className="text_input" />
+        <form action="#" onSubmit={(e) => {this.onFilter(e, this);}} className="inventory_input">
+          <input ref={this.searchInput} type="text" className="text_input" />
+          <input type="submit" hidden />
           <Select
             className="inventory_select"
+            onChange={(sel) => {this.sortMethod = sel.value; this.onFilter(undefined, this)}}
             options={this.options}
             defaultValue={this.options[0]}
+            /* Doesnt work
+            hasMore={this.state.hasMore}
+             */
             theme={theme => ({
               ...theme,
               borderRadius: 5,

@@ -14,17 +14,17 @@ function Login(props) {
 
     const updateToken = (token) => props.setToken(token);
 
-    function validateForm(){
+    function validateForm() {
 
         return (username.length > 0) && (password.length > 0);
 
     }
 
-    function handleSubmit(event){
+    function handleSubmit(event) {
 
         event.preventDefault();
 
-        if(!validateForm())
+        if (!validateForm())
             return;
 
         const user = {
@@ -37,9 +37,9 @@ function Login(props) {
         axios.post(`${Config.API_HOST}/login`, user)
             .then(res => {
 
-                if(res && res.status === 200){
+                if (res && res.status === 200) {
 
-                    if(res.data && res.data.status === 0){
+                    if (res.data && res.data.status === 0) {
 
                         updateToken(res.data.token);
 
@@ -48,25 +48,25 @@ function Login(props) {
                     }
 
                 }
-        });
+            });
 
     }
 
     return (
         <Card styleClassName="login">
-            
+
             <img
                 src="/assets/Icon.png"
                 alt="Logo"
                 className="logo"
             ></img>
 
-            <form onSubmit={handleSubmit}> 
+            <form onSubmit={handleSubmit}>
 
                 <div>
 
-                    <input type="text" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
-                    <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <input type="text" className="text_input" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <input type="password" className="text_input" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
                 </div>
 
