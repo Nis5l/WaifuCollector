@@ -28,8 +28,7 @@ function Friendlist(props) {
 
             let friends = await loadFriends();
 
-            // STATUS == 1 => ACCEPTED ??? IDK LION HÄÄÄÄÄÄÄÄLLLLLPPPP
-            const filteredFriends = friends.filter((friend) => friend.status === 1);
+            const filteredFriends = friends.filter((friend) => friend.status === 2);
 
             setFriends(filteredFriends);
 
