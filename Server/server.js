@@ -344,6 +344,72 @@ app.post("/register", (req, res) => {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
+const devs = [
+	"SmallCode",
+	"Nissl"
+];
+
+app.get("/user/:id/badges", async(req, res) => {
+
+	try {
+
+		let userID = req.params.id;
+
+		if (!userID)
+			return;
+
+		if (!(logic.getClients()[userID] && logic.getClients()[userID].username))
+			await createCache(userID, undefined, res);
+
+		username = logic.getClients()[userID].username;
+
+		if (!username || username == "null" || username == null) {
+			res.send({
+				status: 1,
+				message: "User with userID " + userID + " not found!",
+			});
+			return;
+		}
+
+		//PLACEHOLDER (obv.)
+
+		if(devs.indexOf(username) !== -1){
+
+			const badges = [
+
+				{
+
+					name: "Developer",
+					asset: "http://localhost:3000/assets/badges/dev.jpg"
+
+				}
+
+			]
+
+			res.send({
+
+				status: 0,
+				badges: badges
+
+			});
+
+			return;
+
+		}
+
+		res.send({
+			status: 0,
+			badges: []
+		});
+
+	} catch (ex) {
+
+		logic.handleException(ex, res);
+
+	}
+
+});
+
 app.get("/user/:id", async (req, res) => {
 
 	try {
@@ -728,9 +794,22 @@ app.post("/upgrade", async (req, res) => {
 
 app.post("/friends", async (req, res) => {
 	try {
-		var decoded = await logic.standardroutine(req.body.token, res);
 
-		var friends = logic.getClients()[decoded.id].getFriends();
+		//var decoded = await logic.standardroutine(req.body.token, res);
+
+		let userID = req.body.id;
+
+		if (!userID){
+
+			res.send({ status: 1, message: "No userID set!" });
+			return;
+		
+		}
+
+		if (!(logic.getClients()[userID] && logic.getClients()[userID].username))
+			await createCache(userID, undefined, res);
+
+		var friends = logic.getClients()[userID].getFriends();
 		var data = [];
 		run2(0);
 		function run2(i) {

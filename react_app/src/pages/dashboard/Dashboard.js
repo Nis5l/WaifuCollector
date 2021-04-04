@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
 import React, {useState, useEffect} from 'react'
 import Card from '../../components/Card'
+import Friendlist from '../../components/Friendlist'
 import PackProgressRing from '../../components/PackProgressRing'
 import ProfileName from '../../components/ProfileName'
 
@@ -15,7 +16,7 @@ function Dashboard() {
         if (userID === undefined)
             setUserID(Cookies.get('userID'));
 
-    });
+    }, [setUserID, userID]);
 
     return (
 
@@ -97,46 +98,15 @@ function Dashboard() {
                 styleClassName="friends"
             >
 
-                <ul>
-
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="Nissl"
-                        userID="2"
-                    />
-
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="haselnusse"
-                        userID="3"
-                    />
-
-                </ul>
+                <Friendlist
+                    userID={userID}
+                />
 
             </Card>
 
         </div>
 
     )
-}
-
-function Friend(props) {
-
-    return (
-
-        <li className="friend">
-
-            <img src={props.avatar} alt="Friend Avatar" />
-
-            <ProfileName
-                name={props.name}
-                userID={props.userID}
-            />
-
-        </li>
-
-    )
-
 }
 
 export default Dashboard

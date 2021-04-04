@@ -197,55 +197,6 @@
 
         overflow: hidden;
 
-        ul{
-
-            height: 100%;
-
-            list-style-type: none;
-            overflow-y: auto;
-
-        }
-
-        .friend{
-
-            margin: 10px 0;
-
-            display: flex;
-
-            align-items: center;
-
-            height: 50px;
-            width: 100%;
-
-            &>img{
-
-                display: inline-block;
-
-                height: 100%;
-                width: auto;
-
-                border-radius: 100%;
-                border: 1px solid #fff;
-
-                -webkit-backface-visibility: hidden;
-                -ms-transform: translateZ(0); /* IE 9 */
-                -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
-                transform: translateZ(0);
-
-            }
-
-            .profileName{
-
-                font-size: 18px;
-
-                display: inline-block;
-
-                margin-left: 10px;
-
-            }
-
-        }
-
         @media screen and (max-width: $breakpoint-md){
 
             &{
