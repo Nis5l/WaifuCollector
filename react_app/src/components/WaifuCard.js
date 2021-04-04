@@ -46,12 +46,16 @@ class WaifuCard extends Component {
         this.identifier = props.identifier;
         this.clickable = props.clickable === "false" ? false : true;
 
+        this.onturn = props.onturn;
+        this.onturndata = props.onturndata;
+
         this.state = {
             turned: props.turned === "true"
         }
     }
 
     onTurn() {
+        if (this.onturn !== undefined) this.onturn(this.onturndata);
         this.setState({turned: false});
     }
 

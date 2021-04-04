@@ -12,7 +12,7 @@ class PackProgressRing extends Component {
         super();
         this.props = props;
         this.radius = 46;
-        this.strokeDashes = 315;
+        this.strokeDashes = this.radius * 2 * Math.PI;
         this.update = 50;
         this.packTime = 0;
         this.packTimeMax = 100;
@@ -23,23 +23,33 @@ class PackProgressRing extends Component {
         }
     }
 
-    componentDidMount() {
+    loadMaxPackTime(self) {
         axios.get(`${Config.API_HOST}/packTimeMax`)
             .then((res) => {
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
-                        this.packTimeMax = res.data.packTimeMax;
+                        self.packTimeMax = res.data.packTimeMax;
                     }
                 }
             })
+    }
+
+    loadPackTime(self) {
+        //console.log("LOAD");
         axios.post(`${Config.API_HOST}/packtime`, {token: Cookies.get('token')})
             .then((res) => {
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
-                        this.packTime = res.data.packTime;
+                        self.packTime = res.data.packTime;
                     }
                 }
             })
+    }
+
+    componentDidMount() {
+        this.loadMaxPackTime(this);
+        this.loadPackTime(this);
+
         this.interval = setInterval(() => {
             this.packTime -= this.update;
             if (this.packTime < 0) this.packTime = 0;
@@ -51,6 +61,8 @@ class PackProgressRing extends Component {
 
             this.setState({progress: progress, text: text});
         }, this.update);
+
+        window.addEventListener("focus", () => {this.loadPackTime(this)});
     }
 
     componentWillUnmount() {
