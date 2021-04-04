@@ -5,6 +5,7 @@ import Config from '../config.json'
 
 import './Friendlist.scss'
 import ProfileName from './ProfileName'
+import { Link } from 'react-router-dom'
 
 function Friendlist(props) {
 
@@ -52,12 +53,15 @@ function Friendlist(props) {
                 {friends.map((friend) => {
 
                     return (
-
-                        <Friend
+                        <Link
                             key={friend.userID}
-                            avatar="/assets/Icon.png"
-                            userID={friend.userID}
-                        />
+                            to={`/profile/${friend.userID}`}
+                        >
+                            <Friend
+                                avatar="/assets/Icon.png"
+                                userID={friend.userID}
+                            />
+                        </Link>
 
                     )
 

@@ -1,15 +1,15 @@
 import React from 'react'
 import Card from '../../components/Card'
-import PackProgressRing from '../../components/PackProgressRing'
+import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
 
 import "./Profile.scss"
 
 function Profile(props) {
 
-    const id = props.match.params.id;
+    const userID = props.match.params.id;
 
-    if (!Number.isInteger(parseInt(id, 10))) {
+    if (!Number.isInteger(parseInt(userID, 10))) {
 
         return (
             <h1>Invalid this id is!</h1>
@@ -35,7 +35,7 @@ function Profile(props) {
                 <div className="profilename_container">
 
                     <ProfileName
-                        name={props.match.params.id}
+                        userID={userID}
                     />
 
                 </div>
@@ -79,14 +79,13 @@ function Profile(props) {
             </Card>
 
             <Card
-                title="Packs"
-                styleClassName="packs"
+                title="Flex flex"
+                styleClassName="flexen"
             >
 
-                <div className="packs-grid">
+                <div className="flex-grid">
 
-                    <PackProgressRing className="pack1" />
-                    <PackProgressRing className="pack2" />
+                    
 
                 </div>
 
@@ -97,98 +96,15 @@ function Profile(props) {
                 styleClassName="friends"
             >
 
-                <ul>
-
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-                    <Friend
-                        avatar="/assets/Icon.png"
-                        name="SmallCode"
-                    />
-
-                </ul>
+                <Friendlist 
+                    userID={userID}
+                />
 
             </Card>
 
         </div>
 
     )
-}
-
-function Friend(props) {
-
-    return (
-
-        <li className="friend">
-
-            <img src={props.avatar} alt="Friend Avatar" />
-
-            <ProfileName
-                name={props.name}
-            />
-
-        </li>
-
-    )
-
 }
 
 export default Profile

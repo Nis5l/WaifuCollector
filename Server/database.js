@@ -158,6 +158,14 @@ module.exports = {
 	},
 
 	getUserName: function getUserName(userID, callback) {
+
+		if(!userID || userID == "undefined"){
+
+			callback(null);
+			return;
+
+		}
+
 		con.query(
 			"SELECT username FROM `user` WHERE id=" + userID,
 			function (err, result, fields) {
