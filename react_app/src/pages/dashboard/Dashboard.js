@@ -5,11 +5,45 @@ import Friendlist from '../../components/Friendlist'
 import PackProgressRing from '../../components/PackProgressRing'
 import ProfileName from '../../components/ProfileName'
 
+import axios from 'axios'
+import Config from '../../config.json'
+
 import "./Dashboard.scss"
 
 function Dashboard() {
 
     const [userID, setUserID] = useState(Cookies.get('userID'));
+    const [stats, setStats] = useState({friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0});
+
+    useEffect(() => {
+        
+        async function loadStats(userID){
+        
+            const data = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
+
+            if(data.data && data.data.status === 0){
+
+                delete data.data["status"];
+
+                return data.data;
+
+            }
+
+            return [];
+            
+        }
+
+        async function updateStats(){
+
+            const stats = await loadStats(userID);
+
+            setStats(stats);
+
+        }
+
+        updateStats();
+
+    }, [setStats, userID]);
 
     useEffect(() => {
 
@@ -48,21 +82,21 @@ function Dashboard() {
                         <tr>
 
                             <td>Friends:</td>
-                            <td>15/50</td>
+                            <td>{`${stats.friends}/${stats.maxFriends}`}</td>
 
                         </tr>
 
                         <tr>
 
                             <td>Waifus:</td>
-                            <td>256/280</td>
+                            <td>{`${stats.cards}/${stats.maxCards}`}</td>
 
                         </tr>
 
                         <tr>
 
                             <td>Trades:</td>
-                            <td>3/3</td>
+                            <td>{`${stats.trades}/${stats.maxTrades}`}</td>
 
                         </tr>
 

@@ -13,7 +13,8 @@ const logic = require("./logic");
 const upload = require("express-fileupload");
 const csv = require("csv-string");
 const {createCache} = require("./logic");
-var errorHandler = require('errorhandler')
+var errorHandler = require('errorhandler');
+const { max } = require("moment");
 
 app.use(upload());
 app.use(express.static("Data"));
@@ -344,6 +345,47 @@ app.post("/register", (req, res) => {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
+app.get("/user/:id", async (req, res) => {
+
+	try {
+
+		/*
+		
+		await createCache(decoded.id, decoded.username, res);
+		
+		*/
+
+		let userID = req.params.id;
+
+		if (!userID)
+			return;
+
+		if (!(logic.getClients()[userID] && logic.getClients()[userID].username))
+			await createCache(userID, undefined, res);
+
+		username = logic.getClients()[userID].username;
+
+		if (!username || username == "null" || username == null) {
+			res.send({
+				status: 1,
+				message: "User with userID " + userID + " not found!",
+			});
+			return;
+		}
+
+		res.send({
+			status: 0,
+			username: username
+		});
+
+	} catch (ex) {
+
+		logic.handleException(ex, res);
+
+	}
+
+});
+
 const devs = [
 	"SmallCode",
 	"Nissl"
@@ -410,15 +452,9 @@ app.get("/user/:id/badges", async(req, res) => {
 
 });
 
-app.get("/user/:id", async (req, res) => {
+app.get("/user/:id/stats", async(req, res) => {
 
 	try {
-
-		/*
-		
-		await createCache(decoded.id, decoded.username, res);
-		
-		*/
 
 		let userID = req.params.id;
 
@@ -438,9 +474,28 @@ app.get("/user/:id", async (req, res) => {
 			return;
 		}
 
+		let friends = logic.getClients()[userID].getFriends().length;
+		let maxFriends = logic.getFriendLimit();
+
+		let cards = logic.getClients()[userID].getCardTypeAmount();
+		let maxCards = cache.getCardAmount();
+		
+		let trades = logic.getTradeCooldownMax() - logic.getClients()[userID].getTradeCooldownCount();
+		let maxTrades = logic.getTradeCooldownMax();
+
 		res.send({
+
 			status: 0,
-			username: username
+
+			maxFriends: maxFriends,
+			friends: friends,
+
+			maxCards: maxCards,
+			cards: cards,
+
+			maxTrades: maxTrades,
+			trades: trades
+
 		});
 
 	} catch (ex) {
