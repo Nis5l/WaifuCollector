@@ -12,6 +12,9 @@ class Pack extends Component {
     constructor(props) {
         super();
         this.props = props;
+        this.key = 0;
+        this.quitCooldown = 800;
+        this.quittable = false;
 
         this.state =
         {
@@ -32,9 +35,20 @@ class Pack extends Component {
             });
     }
 
+    startQuitCooldown(self) {
+        setTimeout(() => {
+            self.quittable = true;
+        }, self.quitCooldown);
+    }
+
+    onQuit(e, self) {
+        if (!self.quittable) return;
+        self.props.history.push('/dashboard');
+    }
+
     render() {
         return (
-            <div className="container_pack" >
+            <div onClick={(e) => {this.onQuit(e, this)}} className="container_pack" >
 
                 <div className="packtop-wrapper">
                     <div className="packtop" />
@@ -58,13 +72,15 @@ class Pack extends Component {
                     <div className="packbottomrightcorner" />
                     {
                         this.state.cards.length > 0 ? this.state.cards.map((card) => (
-                            <div className="packcard">
+                            <div className="packcard" key={this.key++}>
                                 <WaifuCard
                                     card={card}
                                     size="1"
                                     cardcolor="transparent"
                                     clickable="true"
                                     turned="true"
+                                    onturn={this.startQuitCooldown}
+                                    onturndata={this}
                                 >
                                 </WaifuCard>
                             </div>

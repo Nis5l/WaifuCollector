@@ -5,7 +5,7 @@ import Config from '../config.json'
 
 import './Friendlist.scss'
 import ProfileName from './ProfileName'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 function Friendlist(props) {
 
@@ -13,23 +13,22 @@ function Friendlist(props) {
 
     useEffect(() => {
 
-        async function loadFriends() { 
+        async function loadFriends() {
 
-            const data = await axios.post(Config.API_HOST + "/friends", { id: props.userID});
-    
-            if(data.data.status !== 0)
+            const data = await axios.post(Config.API_HOST + "/friends", {id: props.userID});
+
+            if (data.data.status !== 0)
                 return [];
-    
+
             return data.data.friends;
-    
+
         }
 
-        async function fetchData(){
+        async function fetchData() {
 
             let friends = await loadFriends();
 
-            // STATUS == 1 => ACCEPTED ??? IDK LION HÄÄÄÄÄÄÄÄLLLLLPPPP
-            const filteredFriends = friends.filter((friend) => friend.status === 1);
+            const filteredFriends = friends.filter((friend) => friend.status === 2);
 
             setFriends(filteredFriends);
 
@@ -39,8 +38,8 @@ function Friendlist(props) {
 
     }, [props.userID]);
 
-    if(props.userID === undefined)
-        return(<div className="friendslist"></div>);
+    if (props.userID === undefined)
+        return (<div className="friendslist"></div>);
 
     return (
 
@@ -70,7 +69,7 @@ function Friendlist(props) {
             </ul>
 
         </div>
-        
+
     )
 }
 
