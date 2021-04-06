@@ -8,6 +8,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import Profile from './pages/profile/Profile';
 import Pack from './pages/pack/Pack';
 import Inventory from './pages/inventory/Inventory';
+import CardPage from './pages/card/CardPage'
 
 import Login from './pages/loggedout/Login';
 
@@ -24,7 +25,7 @@ function App() {
     setToken(newToken);
 
     Cookies.set("token", newToken, {expires: 30 * 12 * 30})
-  
+
   };
 
   return (
@@ -64,6 +65,12 @@ function App() {
 
             </Route>
 
+            <Route path="/card/:id">
+
+              {!token ? <Redirect to="/login" /> : <Route component={CardPage} />}
+
+            </Route>
+
             <Route path="/inventory">
 
               {!token ? <Redirect to="/login" /> : <Inventory />}
@@ -75,7 +82,7 @@ function App() {
 
             <Route path="/logout">
 
-              {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler}/>}
+              {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler} />}
 
             </Route>
 
@@ -90,14 +97,14 @@ function App() {
   );
 }
 
-function LogOut(props){
+function LogOut(props) {
 
   useEffect(() => props.setToken(""));
 
   Cookies.remove("token");
   Cookies.remove("userID");
 
-  return(
+  return (
 
     <Redirect
       to="/"

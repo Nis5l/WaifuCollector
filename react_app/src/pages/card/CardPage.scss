@@ -1,0 +1,38 @@
+@import '../../scss/__base.scss';
+
+.cardpage_wrapper
+{
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+
+    grid-template-columns: 7fr 3fr;
+    grid-template-rows: 1fr;
+
+    grid-template-areas:
+        "card maincard";
+
+    .card_wrapper
+    {
+        grid-area: card;    
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow: auto;
+
+        .cardpage_card_wrapper
+        {
+            margin: 10px;
+        }
+    }
+
+    .cardpage_maincard
+    {
+        grid-area: maincard;    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}

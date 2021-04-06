@@ -37,7 +37,7 @@ class Client {
 		database.getTradeTime(this.id, (time) => {
 			for (var i = 0; i < time.length; i++)
 				this.tradeTime.set(time[i].id, {time: parseInt(time[i].cooldown)});
-				
+
 			operationFinished();
 		});
 

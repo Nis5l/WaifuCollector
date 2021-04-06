@@ -37,10 +37,12 @@ class Inventory extends Component {
     let data;
     const search = this.searchInput.current.value;
     const sortType = this.sortMethod;
+
     if (this.key === 0)
       data = {token: Cookies.get("token"), page: 0, search: search, sortType: sortType};
     else
       data = {token: Cookies.get("token"), next: 0};
+
     axios.post(`${Config.API_HOST}/inventory`, data)
       .then(res => {
         if (res && res.status === 200) {
@@ -48,10 +50,8 @@ class Inventory extends Component {
             parseCards(res.data.inventory);
             let cards = [...this.state.cards, ...res.data.inventory];
             this.key = 0;
+            if (res.data.page === res.data.pagemax) this.setState({hasMore: false});
             this.setState({cards: cards});
-            if (res.data.page === res.data.pagemax) {
-              this.setState({hasMore: false});
-            }
           }
         }
       });
@@ -116,7 +116,8 @@ class Inventory extends Component {
                     card={card}
                     size="1"
                     cardcolor="transparent"
-                    clickable="false"
+                    clickable="true"
+                    redirects="true"
                   >
                   </WaifuCard>
                 </div>

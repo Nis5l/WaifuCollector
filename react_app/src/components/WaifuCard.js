@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import ResizeText from "./ResizeText"
 import {LoopCircleLoading} from 'react-loadingg';
+import {withRouter} from 'react-router-dom';
 
 import Config from '../config.json'
 
@@ -45,6 +46,7 @@ class WaifuCard extends Component {
         this.cardcolor = props.cardcolor;
         this.identifier = props.identifier;
         this.clickable = props.clickable === "false" ? false : true;
+        this.redirects = props.redirects === "true" ? true : false;
 
         this.onturn = props.onturn;
         this.onturndata = props.onturndata;
@@ -54,9 +56,11 @@ class WaifuCard extends Component {
         }
     }
 
-    onTurn() {
-        if (this.onturn !== undefined) this.onturn(this.onturndata);
+    onTurn(e, self) {
+        if (this.onturn !== undefined) this.onturn(e, this.onturndata);
         this.setState({turned: false});
+
+        if (this.redirects) self.props.history.push(`/card/${this.uuid}`);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -67,7 +71,7 @@ class WaifuCard extends Component {
         return (
             <div
                 className="waifucard"
-                onClick={() => {this.onTurn()}}
+                onClick={(e) => {this.onTurn(e, this)}}
                 style={{
                     cursor: `${this.clickable === true ? "pointer" : "default"}`,
                     width: `${WaifuCard.DEFWIDTH * this.size}px`,
@@ -188,5 +192,5 @@ class WaifuCardLoad extends Component {
     }
 }
 
-export default WaifuCard;
+export default withRouter(WaifuCard);
 export {parseCards, WaifuCardLoad};
