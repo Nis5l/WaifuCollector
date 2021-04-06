@@ -82,6 +82,14 @@ class CardPage extends Component {
               </div>
             )
           }
+          {
+            this.state.cards !== undefined && this.state.cards.length === 0 &&
+            (
+              <div className="pack_empty">
+                No Cards
+              </div>
+            )
+          }
           <InfiniteScroll
             pageStart={0}
             loadMore={this.trackScrolling}

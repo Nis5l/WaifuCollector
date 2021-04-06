@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import Card from '../../components/Card'
-import {LoopCircleLoading} from 'react-loadingg';
 
 import './NoMatch.scss'
 

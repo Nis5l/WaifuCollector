@@ -9,9 +9,20 @@
 
     grid-template-columns: 7fr 3fr;
     grid-template-rows: 1fr;
+    grid-gap: 20px;
 
     grid-template-areas:
         "card maincard";
+
+    @media screen and (max-width: $breakpoint-md)
+    {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(min-content, max-content) minmax(min-content, max-content);
+
+        grid-template-areas:
+            "maincard"
+            "card";
+    }
 
     .card_wrapper
     {
@@ -27,7 +38,7 @@
             margin: 10px;
         }
 
-        .pack_load
+        .pack_load .pack_empty
         {
             height: 100%;
             width: 100%;
@@ -35,10 +46,19 @@
             justify-content: center;
             align-items: center;
         }
+        .pack_empty
+        {
+            font-size: 14pt;
+        }
     }
 
     .cardpage_maincard
     {
+        @media screen and (max-width: $breakpoint-md)
+        {
+            margin-bottom: 10px;
+        }
+
         grid-area: maincard;    
         display: flex;
         flex-direction: column;
