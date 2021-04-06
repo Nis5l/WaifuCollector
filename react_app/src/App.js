@@ -9,6 +9,7 @@ import Profile from './pages/profile/Profile';
 import Pack from './pages/pack/Pack';
 import Inventory from './pages/inventory/Inventory';
 import CardPage from './pages/card/CardPage'
+import NoMatch from './pages/nomatch/NoMatch'
 
 import Login from './pages/loggedout/Login';
 
@@ -85,6 +86,8 @@ function App() {
               {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler} />}
 
             </Route>
+
+            <Route component={NoMatch} />
 
           </Switch>
 
