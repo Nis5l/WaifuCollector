@@ -649,6 +649,7 @@ app.post("/inventory", async (req, res) => {
 		var sortType = parseInt(req.body.sortType);
 		var exuuid = parseInt(req.body.exclude);
 		var onlyid = parseInt(req.body.id);
+		var level = parseInt(req.body.level);
 
 		var friendID = parseInt(req.body.userID);
 		var friend = req.body.friend == undefined ? false : true;
@@ -660,8 +661,10 @@ app.post("/inventory", async (req, res) => {
 		if (search == undefined) search = "";
 		if (isNaN(exuuid)) exuuid = undefined;
 		else exclude.push(exuuid);
+		if (isNaN(level)) level = undefined;
 		if (isNaN(onlyid)) onlyid = undefined;
 		if (isNaN(sortType)) sortType = undefined;
+
 
 		var decoded = await logic.standardroutine(req.body.token, res);
 
@@ -720,7 +723,7 @@ app.post("/inventory", async (req, res) => {
 					logic.getInventorySendAmount(),
 					ids,
 					exclude,
-					undefined,
+					level,
 					sortType,
 					friend
 				);

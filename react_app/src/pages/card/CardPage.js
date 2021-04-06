@@ -18,7 +18,7 @@ class CardPage extends Component {
     this.state =
     {
       maincard: undefined,
-      cards: [],
+      cards: undefined,
       hasMore: true
     }
   }
@@ -40,7 +40,14 @@ class CardPage extends Component {
     let data;
 
     if (this.key === 0)
-      data = {token: Cookies.get("token"), page: 0, exclude: this.mainuuid, id: this.state.maincard.card.id};
+      data =
+      {
+        token: Cookies.get("token"),
+        page: 0,
+        exclude: this.mainuuid,
+        id: this.state.maincard.card.id,
+        level: this.state.maincard.level
+      };
     else
       data = {token: Cookies.get("token"), next: 0};
 
@@ -49,7 +56,11 @@ class CardPage extends Component {
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {
             parseCards(res.data.inventory);
-            let cards = [...this.state.cards, ...res.data.inventory];
+            let cards;
+            if (this.state.cards !== undefined)
+              cards = [...this.state.cards, ...res.data.inventory];
+            else
+              cards = [...res.data.inventory];
             this.key = 0;
             if (res.data.page === res.data.pagemax) this.setState({hasMore: false});
             this.setState({cards: cards});
@@ -62,6 +73,15 @@ class CardPage extends Component {
     return (
       <div className="cardpage_wrapper">
         <div className="card_wrapper">
+          {
+            this.state.cards === undefined &&
+            (
+              <div className="pack_load">
+                <WaifuCardLoad size="1">
+                </WaifuCardLoad>
+              </div>
+            )
+          }
           <InfiniteScroll
             pageStart={0}
             loadMore={this.trackScrolling}
@@ -70,7 +90,7 @@ class CardPage extends Component {
             useWindow={false}
           >
             {
-              this.state.cards.map((card) => (
+              this.state.cards !== undefined && this.state.cards.map((card) => (
                 < div className="cardpage_card_wrapper" key={"card-" + this.key++}>
                   <WaifuCard
                     card={card}
