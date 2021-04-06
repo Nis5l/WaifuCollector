@@ -11,9 +11,11 @@ class ResizeText extends Component {
 
     render() {
         return (
-            <FitText className="resizetext">
-                {this.props.children}
-            </ FitText>
+            <div className="resizetext_wrapper">
+                <FitText className="resizetext">
+                    {this.props.children}
+                </ FitText>
+            </div>
         );
     }
 }

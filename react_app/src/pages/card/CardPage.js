@@ -40,7 +40,7 @@ class CardPage extends Component {
     let data;
 
     if (this.key === 0)
-      data = {token: Cookies.get("token"), page: 0, exlude: this.state.mainuuid, id: this.state.maincard.card.id};
+      data = {token: Cookies.get("token"), page: 0, exclude: this.mainuuid, id: this.state.maincard.card.id};
     else
       data = {token: Cookies.get("token"), next: 0};
 
