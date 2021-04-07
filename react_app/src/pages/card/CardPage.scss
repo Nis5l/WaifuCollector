@@ -14,7 +14,7 @@
     grid-template-areas:
         "card maincard";
 
-    @media screen and (max-width: $breakpoint-md)
+    @media screen and (max-width: $breakpoint-lg)
     {
         grid-template-columns: 1fr;
         grid-template-rows: minmax(min-content, max-content) minmax(min-content, max-content);
@@ -54,7 +54,7 @@
 
     .cardpage_maincard
     {
-        @media screen and (max-width: $breakpoint-md)
+        @media screen and (max-width: $breakpoint-lg)
         {
             margin-bottom: 10px;
         }
