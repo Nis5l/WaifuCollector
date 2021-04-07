@@ -1,8 +1,6 @@
 const sql = require("mysql");
 const bcrypt = require("bcrypt");
 
-const moment = require("moment");
-
 const packTime = "PACKTIME";
 const tradeTime = "TRADETIME";
 
@@ -157,7 +155,7 @@ module.exports = {
 
 	getUserName: function getUserName(userID, callback) {
 
-		if(!userID || userID == "undefined"){
+		if (!userID || userID == "undefined") {
 
 			callback(null);
 			return;
@@ -258,11 +256,9 @@ module.exports = {
 	},
 
 	getCard: function getCard(cardID, callback) {
-		var start = moment();
 		con.query(
 			"SELECT * FROM card WHERE id=" + cardID,
 			(err, result, fields) => {
-				console.log("data for cardID-" + cardID + ": " + (moment().valueOf() - start.valueOf()) + "ms");
 				if (result != undefined) {
 					callback(result[0]);
 				} else {

@@ -27,6 +27,7 @@ class Pack extends Component {
             .then((res) => {
                 if (res && res.status === 200 && res && res.data && res.data.status === 0) {
                     let cards = res.data.cards;
+                    console.log(cards);
                     parseCards(cards);
                     this.setState({cards: cards});
                 } else {
@@ -35,15 +36,23 @@ class Pack extends Component {
             });
     }
 
-    startQuitCooldown(self) {
-        setTimeout(() => {
-            self.quittable = true;
-        }, self.quitCooldown);
+    startQuitCooldown(e, self) {
+        if (!self.quittable) {
+            setTimeout(() => {
+                self.quittable = true;
+            }, self.quitCooldown);
+        }
+        else {
+            self.props.history.push('/inventory');
+            e.stopPropagation();
+            e.preventDefault();
+        }
     }
 
     onQuit(e, self) {
         if (!self.quittable) return;
         self.props.history.push('/dashboard');
+        e.preventDefault();
     }
 
     render() {

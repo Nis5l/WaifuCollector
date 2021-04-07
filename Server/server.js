@@ -14,7 +14,7 @@ const upload = require("express-fileupload");
 const csv = require("csv-string");
 const {createCache} = require("./logic");
 var errorHandler = require('errorhandler');
-const { max } = require("moment");
+const {max} = require("moment");
 
 app.use(upload());
 app.use(express.static("Data"));
@@ -391,7 +391,7 @@ const devs = [
 	"Nissl"
 ];
 
-app.get("/user/:id/badges", async(req, res) => {
+app.get("/user/:id/badges", async (req, res) => {
 
 	try {
 
@@ -415,7 +415,7 @@ app.get("/user/:id/badges", async(req, res) => {
 
 		//PLACEHOLDER (obv.)
 
-		if(devs.indexOf(username) !== -1){
+		if (devs.indexOf(username) !== -1) {
 
 			const badges = [
 
@@ -452,7 +452,7 @@ app.get("/user/:id/badges", async(req, res) => {
 
 });
 
-app.get("/user/:id/stats", async(req, res) => {
+app.get("/user/:id/stats", async (req, res) => {
 
 	try {
 
@@ -479,7 +479,7 @@ app.get("/user/:id/stats", async(req, res) => {
 
 		let cards = logic.getClients()[userID].getCardTypeAmount();
 		let maxCards = cache.getCardAmount();
-		
+
 		let trades = logic.getTradeCooldownMax() - logic.getClients()[userID].getTradeCooldownCount();
 		let maxTrades = logic.getTradeCooldownMax();
 
@@ -647,14 +647,24 @@ app.post("/inventory", async (req, res) => {
 		var search = req.body.search;
 		var next = req.body.next;
 		var sortType = parseInt(req.body.sortType);
+		var exuuid = parseInt(req.body.exclude);
+		var onlyid = parseInt(req.body.id);
+		var level = parseInt(req.body.level);
 
 		var friendID = parseInt(req.body.userID);
 		var friend = req.body.friend == undefined ? false : true;
 
+		var exclude = [];
+
 		if (next == undefined) next = -1;
 		if (page == undefined) page = 0;
 		if (search == undefined) search = "";
+		if (isNaN(exuuid)) exuuid = undefined;
+		else exclude.push(exuuid);
+		if (isNaN(level)) level = undefined;
+		if (isNaN(onlyid)) onlyid = undefined;
 		if (isNaN(sortType)) sortType = undefined;
+
 
 		var decoded = await logic.standardroutine(req.body.token, res);
 
@@ -665,12 +675,18 @@ app.post("/inventory", async (req, res) => {
 			res.send({status: 1, message: "Not your friend"});
 			return;
 		}
-		var ids = logic.getClients()[decoded.id].lastids;
-		if (logic.getClients()[decoded.id].lastsearch != search || (page == 0 && next != -1)) {
-			logic.getClients()[decoded.id].lastsearch = search;
-			ids = cache.getIdsByString(search);
+
+		var ids = undefined;
+		if (onlyid === undefined) {
+			ids = logic.getClients()[decoded.id].lastids;
+			if (logic.getClients()[decoded.id].lastsearch != search || (page === 0 && next === -1)) {
+				logic.getClients()[decoded.id].lastsearch = search;
+				ids = cache.getIdsByString(search);
+			}
+		} else {
+			ids = [onlyid];
 		}
-		var exclude = [];
+
 		if (!isNaN(friendID)) {
 			if (!friend) {
 				database.getTrade(userID, friendID, (ex) => {
@@ -707,7 +723,7 @@ app.post("/inventory", async (req, res) => {
 					logic.getInventorySendAmount(),
 					ids,
 					exclude,
-					undefined,
+					level,
 					sortType,
 					friend
 				);
@@ -737,24 +753,23 @@ app.post("/inventory", async (req, res) => {
 
 app.post("/card", async (req, res) => {
 	try {
-		var uuid = parseInt(req.body.uuid);
-		var next = req.body.next;
-		var page = req.body.page;
-		var sortType = parseInt(req.body.sortType);
-		if (page == undefined) page = 0;
-		if (next == undefined) next = -1;
-		if (isNaN(sortType)) sortType = undefined;
-		if (next == -1) {
-			if (uuid == undefined) {
-				res.send({status: 1, message: "Invalid data"});
-				return;
-			}
+		var cardid = parseInt(req.body.card);
+		if (cardid == undefined) {
+			res.send({status: 1, message: "Invalid data"});
+			return;
 		}
 
 		var decoded = await logic.standardroutine(req.body.token, res);
 
-		logic.getCardRequestData(decoded.id, uuid, next, page, sortType, (data) => {
-			res.send(data);
+		var card = logic.getClients()[decoded.id].getCard(cardid)
+		if (card == undefined) {
+			res.send({status: 1, message: "Card not owned"});
+			return;
+		}
+
+		logic.getCard(card.cardID, card.frameID, card.level, (carddata) => {
+			card.card = carddata;
+			res.send({status: 0, card: card});
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
@@ -854,11 +869,11 @@ app.post("/friends", async (req, res) => {
 
 		let userID = req.body.id;
 
-		if (!userID){
+		if (!userID) {
 
-			res.send({ status: 1, message: "No userID set!" });
+			res.send({status: 1, message: "No userID set!"});
 			return;
-		
+
 		}
 
 		if (!(logic.getClients()[userID] && logic.getClients()[userID].username))
