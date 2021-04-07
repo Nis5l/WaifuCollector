@@ -42,12 +42,10 @@ module.exports = {
 			/*
 			* FOR OLDER VERSIONS
 			*
-			* ALTER TABLE user
-			* ADD COLUMN email TEXT NOT NULL,
-			* ADD COLUMN verified INT NOT NULL;
-			* ALTER TABLE trademanager 
-			* ADD COLUMN cooldown TEXT NOT NULL;
+			"ALTER TABLE user ADD COLUMN email TEXT NOT NULL, ADD COLUMN verified INT NOT NULL;",
+			"ALTER TABLE trademanager ADD COLUMN cooldown TEXT NOT NULL;"
 			*/
+
 		];
 
 		con.connect(() => {
@@ -198,7 +196,16 @@ module.exports = {
 			frame +
 			");",
 			function (err, result, fields) {
-				callback(result.insertId);
+
+				if(result){
+
+					callback(result.insertId);
+					return;
+
+				}
+
+				callback(undefined);
+				
 			}
 		);
 	},

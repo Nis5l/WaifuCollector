@@ -35,9 +35,12 @@ class PackProgressRing extends Component {
     }
 
     loadPackTime(self) {
-        //console.log("LOAD");
+        console.log("LOAD");
         axios.post(`${Config.API_HOST}/packtime`, {token: Cookies.get('token')})
             .then((res) => {
+
+                console.log(res);
+
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
                         self.packTime = res.data.packTime;
