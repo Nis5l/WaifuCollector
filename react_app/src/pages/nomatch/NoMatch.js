@@ -13,7 +13,7 @@ class NoMatch extends Component {
     return (
       <div className="nopage_wrapper">
         <Card>
-          Error 404 - Page not found
+        (⌯˃̶᷄ ﹏ ˂̶᷄⌯)ﾟ <br/> <br/> This page doesn't exist
         </Card>
       </div>
     )
