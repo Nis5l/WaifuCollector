@@ -9,108 +9,221 @@ import './WaifuCard.scss'
 
 class WaifuCard extends Component {
     constructor(props) {
-        super();
+        super(props);
 
+        this.init(props);
+
+        this.upgradeEffectDelay = 100;
+        this.upgradeEffect = undefined;
+        this.upgradeEffectSize = 1.5;
+        this.effectSymbols = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    }
+
+    init(props) {
         this.props = props;
+
+        let level = "X";
+        let quality = "Y";
+        let uuid = undefined;
+        let cardid = undefined;
+        let typeid = undefined;
+        let img = undefined;
+        let framefront = undefined;
+        let frameback = undefined;
+        let effect = undefined;
+        let cardname = undefined;
+        let animename = undefined;
+        let effectopacity = undefined;
 
         if (props.card !== undefined) {
             let card = props.card;
 
-            this.uuid = card.id;
-            this.cardid = card.card.id;
-            this.typeid = card.card.type.id;
-            this.img = card.card.cardImage;
-            this.framefront = card.card.frame.path_front;
-            this.frameback = card.card.frame.path_back;
-            this.effect = card.card.effect;
-            this.cardname = card.card.cardName;
-            this.animename = card.card.type.name;
-            this.quality = card.quality;
-            this.level = card.level;
-            this.effectopacity = card.card.effectopacity;
+            uuid = card.id;
+            cardid = card.card.id;
+            typeid = card.card.type.id;
+            img = card.card.cardImage;
+            framefront = card.card.frame.path_front;
+            frameback = card.card.frame.path_back;
+            effect = card.card.effect;
+            cardname = card.card.cardName;
+            animename = card.card.type.name;
+            quality = card.quality;
+            level = card.level;
+            effectopacity = card.card.effectopacity;
         } else {
-            this.uuid = props.uuid;
-            this.cardid = props.cardid;
-            this.typeid = props.typeid;
-            this.img = props.img;
-            this.framefront = props.framefront;
-            this.frameback = props.frameback;
-            this.effect = props.effect;
-            this.cardname = props.cardname;
-            this.animename = props.animename;
-            this.quality = props.quality;
-            this.level = props.level;
-            this.effectopacity = props.effectopacity;
+            uuid = props.uuid;
+            cardid = props.cardid;
+            typeid = props.typeid;
+            img = props.img;
+            framefront = props.framefront;
+            frameback = props.frameback;
+            effect = props.effect;
+            cardname = props.cardname;
+            animename = props.animename;
+            quality = props.quality;
+            level = props.level;
+            effectopacity = props.effectopacity;
         }
-        this.size = parseFloat(props.size);
-        this.cardcolor = props.cardcolor;
-        this.identifier = props.identifier;
-        this.clickable = props.clickable === "false" ? false : true;
-        this.redirects = props.redirects === "true" ? true : false;
+
+        let size = parseFloat(props.size);
+        let cardcolor = props.cardcolor;
+        let identifier = props.identifier;
+        let clickable = props.clickable === "false" ? false : true;
+        let redirects = props.redirects === "true" ? true : false;
+
+        this.onClick = props.onClick;
+        this.onCreate = this.props.onCreate;
 
         this.onturn = props.onturn;
         this.onturndata = props.onturndata;
 
-        this.state = {
-            turned: props.turned === "true"
-        }
+        if (this.state === undefined)
+            this.state =
+            {
+                turned: this.props.turned === "true",
+                level: level,
+                quality: quality,
+                uuid: uuid,
+                cardid: cardid,
+                typeid: typeid,
+                img: img,
+                framefront: framefront,
+                frameback: frameback,
+                effect: effect,
+                cardname: cardname,
+                animename: animename,
+                effectopacity: effectopacity,
+                size: size,
+                cardcolor: cardcolor,
+                identifier: identifier,
+                clickable: clickable,
+                redirects: redirects,
+
+                sizemult: 1,
+                focus: false
+            };
+        else
+            this.setState({
+                turned: this.props.turned === "true",
+                level: level,
+                quality: quality,
+                uuid: uuid,
+                cardid: cardid,
+                typeid: typeid,
+                img: img,
+                framefront: framefront,
+                frameback: frameback,
+                effect: effect,
+                cardname: cardname,
+                animename: animename,
+                effectopacity: effectopacity,
+                size: size,
+                cardcolor: cardcolor,
+                identifier: identifier,
+                clickable: clickable,
+                redirects: redirects,
+            });
     }
 
     onTurn(e, self) {
         if (this.onturn !== undefined) this.onturn(e, this.onturndata);
         this.setState({turned: false});
 
-        if (this.redirects) self.props.history.push(`/card/${this.uuid}`);
+        if (this.onClick !== undefined) this.onClick(e, self.state.uuid);
+
+        if (this.state.redirects) self.props.history.push(`/card/${this.state.uuid}`);
+    }
+
+    componentDidMount() {
+        if (this.onCreate) this.onCreate(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextState.turned !== this.state.turned;
+        if (nextProps.card.id !== undefined &&
+            this.state !== undefined &&
+            nextProps.card.id !== this.state.uuid) {
+            this.init(nextProps);
+            return true;
+        }
+
+        return nextState.turned !== this.state.turned ||
+            nextState.level !== this.state.level ||
+            nextState.quality !== this.state.quality ||
+            nextState.uuid !== this.state.uuid;
     }
 
-    render() {
+    startUpgradeEffect() {
+        if (this.upgradeEffect !== undefined) return;
+
+        this.upgradeEffect = this.upgradeEffect = setInterval(() => {
+            if (this.upgradeEffect === undefined) return;
+            const idx = Math.floor(Math.random() * (this.effectSymbols.length + 1));
+            const idx2 = Math.floor(Math.random() * (this.effectSymbols.length + 1));
+            this.setState({level: this.effectSymbols[idx], quality: this.effectSymbols[idx2]});
+        }, this.upgradeEffectDelay)
+    }
+
+    focusCard() {
+        this.setState({focus: true, sizemult: this.upgradeEffectSize});
+    }
+
+    unFocusCard() {
+        this.setState({focus: false, sizemult: 1});
+    }
+
+    endUpgradeEffect() {
+        clearInterval(this.upgradeEffect);
+        this.upgradeEffect = undefined;
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.upgradeEffect);
+    }
+
+    render(props, ref) {
         return (
             <div
-                className="waifucard"
+                className={this.state.focus ? "waifucard waifucard_upgrade blurbackground" : "waifucard"}
                 onClick={(e) => {this.onTurn(e, this)}}
                 style={{
-                    cursor: `${this.clickable === true ? "pointer" : "default"}`,
-                    width: `${WaifuCard.DEFWIDTH * this.size}px`,
-                    height: `${WaifuCard.DEFHEIGTH * this.size}px`
+                    cursor: `${this.state.clickable === true ? "pointer" : "default"}`,
+                    width: `${WaifuCard.DEFWIDTH * this.state.size * this.state.sizemult}px`,
+                    height: `${WaifuCard.DEFHEIGTH * this.state.size * this.state.sizemult}px`
                 }}
             >
                 <div
                     className="waifucard-inner"
                     style={{
-                        backgroundImage: `url(${this.img})`,
+                        backgroundImage: `url(${this.state.img})`,
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`
                     }}
                 />
                 <div
                     className="waifucard-effect"
                     style={{
-                        backgroundImage: `url(${this.effect})`,
+                        backgroundImage: `url(${this.state.effect})`,
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
-                        opacity: `${this.effectopacity}`
+                        opacity: `${this.state.effectopacity}`
                     }}
                 />
                 <div
                     className="waifucard-color"
                     style={{
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
-                        backgroundColor: `${this.cardcolor}`,
+                        backgroundColor: `${this.state.cardcolor}`,
                     }}
                 />
                 <div
                     className="waifucard-framefront"
                     style={{
-                        backgroundImage: `url(${this.framefront})`,
+                        backgroundImage: `url(${this.state.framefront})`,
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`
                     }}
                 />
                 <div
                     className="waifucard-frameback"
                     style={{
-                        backgroundImage: `url(${this.frameback})`,
+                        backgroundImage: `url(${this.state.frameback})`,
                         transform: `rotateY(${this.state.turned ? 0 : 180}deg)`
                     }}
                 />
@@ -121,7 +234,7 @@ class WaifuCard extends Component {
                     }}
                 >
                     <ResizeText>
-                        {this.cardname}
+                        {this.state.cardname}
                     </ResizeText>
                 </div>
                 <div
@@ -131,26 +244,26 @@ class WaifuCard extends Component {
                     }}
                 >
                     <ResizeText>
-                        {this.animename}
+                        {this.state.animename}
                     </ResizeText>
                 </div>
                 <div
                     className="waifucard-quality"
                     style={{
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
-                        fontSize: `${WaifuCard.DEFFONT * this.size}px`
+                        fontSize: `${WaifuCard.DEFFONT * this.state.size * this.state.sizemult}px`
                     }}
                 >
-                    {this.quality}
+                    {this.state.quality}
                 </div>
                 <div
                     className="waifucard-level"
                     style={{
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
-                        fontSize: `${WaifuCard.DEFFONT * this.size}px`
+                        fontSize: `${WaifuCard.DEFFONT * this.state.size * this.state.sizemult}px`
                     }}
                 >
-                    {this.level}
+                    {this.state.level}
                 </div>
             </div>
         );
@@ -173,7 +286,10 @@ function parseCards(cards) {
 class WaifuCardLoad extends Component {
     constructor(props) {
         super();
-        this.size = props.size;
+        this.state =
+        {
+            size: props.size
+        }
     }
 
     render() {
@@ -181,8 +297,8 @@ class WaifuCardLoad extends Component {
             <div className="waifucard_load"
                 style=
                 {{
-                    width: `${WaifuCard.DEFWIDTH * this.size}px`,
-                    height: `${WaifuCard.DEFHEIGTH * this.size}px`,
+                    width: `${WaifuCard.DEFWIDTH * this.state.size}px`,
+                    height: `${WaifuCard.DEFHEIGTH * this.state.size}px`,
                 }}
             >
                 <LoopCircleLoading

@@ -3,6 +3,7 @@
 .waifucard
 {
   position: relative;
+  transition: position 1s linear;
 
   .waifucard-inner,
   .waifucard-framefront,
@@ -98,4 +99,12 @@
   background-size: 90% 95%;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.waifucard_upgrade
+{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }

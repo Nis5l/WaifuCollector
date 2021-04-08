@@ -851,7 +851,11 @@ app.post("/upgrade", async (req, res) => {
 								newlevel,
 								mainresult.frameID,
 								(insertID) => {
-									res.send({status: 0, uuid: insertID});
+									res.send(
+										{
+											status: 0,
+											uuid: insertID,
+										});
 								}
 							);
 						});

@@ -46,4 +46,44 @@ main.content{
         border-color: $input-border-color-selected;
         animation: pulseinputshadow 2s ease-out infinite;
     }
+
+    &:hover
+    {
+        border-color: $input-border-color-hover;
+    }
+}
+
+.button_input
+{
+    color: $input-text-color;
+    background-color: $input-background;
+    border: 1px solid $input-border-color;
+    outline: none;
+    border-radius: 5px;
+    height: 35px;
+    text-align: center;
+    &:focus
+    {
+        border-color: $input-border-color-selected;
+        animation: pulseinputshadow 2s ease-out infinite;
+    }
+
+    &:hover
+    {
+        border-color: $input-border-color-hover;
+    }
+}
+
+.blurbackground
+{
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100%;
+    background-color: #000000aa;
+    z-index: 1010;
+    overflow: hidden;
 }
