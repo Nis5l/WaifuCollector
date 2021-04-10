@@ -144,20 +144,42 @@
 {
   0% 
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0 0 1px 1px white;
+    -moz-box-shadow: 0 0 1px 1px white;
     box-shadow: 0 0 1px 1px white;
   }
   50%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0 0 3px 1px white;
+    -moz-box-shadow: 0 0 3px 1px white;
     box-shadow: 0 0 3px 1px white;
   }
   100%
   {
-    -webkit-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 4px 2px -2px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0 0 1px 1px white;
+    -moz-box-shadow: 0 0 1px 1px white;
     box-shadow: 0 0 1px 1px white;
+  }
+}
+
+@keyframes bigpulseinputshadow
+{
+  0% 
+  {
+    -webkit-box-shadow: 0 0 1px 1px white;
+    -moz-box-shadow: 0 0 1px 1px white;
+    box-shadow: 0 0 10px 10px white;
+  }
+  50%
+  {
+    -webkit-box-shadow: 0 0 3px 1px white;
+    -moz-box-shadow: 0 0 3px 1px white;
+    box-shadow: 0 0 50px 30px white;
+  }
+  100%
+  {
+    -webkit-box-shadow: 0 0 1px 1px white;
+    -moz-box-shadow: 0 0 1px 1px white;
+    box-shadow: 0 0 10px 10px white;
   }
 }

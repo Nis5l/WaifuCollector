@@ -15,7 +15,7 @@ class WaifuCard extends Component {
 
         this.upgradeEffectDelay = 100;
         this.upgradeEffect = undefined;
-        this.upgradeEffectSize = 1.5;
+        this.upgradeEffectSize = 1.2;
         this.effectSymbols = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
     }
 
@@ -131,7 +131,12 @@ class WaifuCard extends Component {
 
         if (this.onClick !== undefined) this.onClick(e, self.state.uuid);
 
-        if (this.state.redirects) self.props.history.push(`/card/${this.state.uuid}`);
+        if (this.state.redirects) self.redirect(self);
+    }
+
+    redirect(self) {
+        if (self === undefined) self = this;
+        self.props.history.push(`/card/${this.state.uuid}`)
     }
 
     componentDidMount() {
@@ -149,7 +154,8 @@ class WaifuCard extends Component {
         return nextState.turned !== this.state.turned ||
             nextState.level !== this.state.level ||
             nextState.quality !== this.state.quality ||
-            nextState.uuid !== this.state.uuid;
+            nextState.uuid !== this.state.uuid ||
+            nextState.clickable !== this.state.clickable;
     }
 
     startUpgradeEffect() {
@@ -180,15 +186,22 @@ class WaifuCard extends Component {
         clearInterval(this.upgradeEffect);
     }
 
+    setClickable(b) {
+        if (b !== true && b !== false) b = true;
+        this.setState({clickable: b});
+    }
+
     render(props, ref) {
         return (
-            <div
-                className={this.state.focus ? "waifucard waifucard_upgrade blurbackground" : "waifucard"}
-                onClick={(e) => {this.onTurn(e, this)}}
+            < div
+                className={this.state.focus ? "waifucard waifucard_upgrade" : "waifucard"}
+                onClick={(e) => {this.onTurn(e, this)}
+                }
                 style={{
                     cursor: `${this.state.clickable === true ? "pointer" : "default"}`,
                     width: `${WaifuCard.DEFWIDTH * this.state.size * this.state.sizemult}px`,
-                    height: `${WaifuCard.DEFHEIGTH * this.state.size * this.state.sizemult}px`
+                    height: `${WaifuCard.DEFHEIGTH * this.state.size * this.state.sizemult}px`,
+                    zIndex: `${this.state.focus ? "1011" : "unset"}`
                 }}
             >
                 <div
@@ -203,7 +216,8 @@ class WaifuCard extends Component {
                     style={{
                         backgroundImage: `url(${this.state.effect})`,
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
-                        opacity: `${this.state.effectopacity}`
+                        opacity: `${this.state.effectopacity}`,
+                        animation: `${this.state.focus ? "bigpulseinputshadow 4s ease-out infinite" : "unset"}`
                     }}
                 />
                 <div
@@ -265,7 +279,7 @@ class WaifuCard extends Component {
                 >
                     {this.state.level}
                 </div>
-            </div>
+            </div >
         );
     }
 }

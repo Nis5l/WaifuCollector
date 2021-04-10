@@ -821,15 +821,15 @@ app.post("/upgrade", async (req, res) => {
 
 				var chance = (cardresult.quality + mainresult.quality) * 10;
 
-				var succes = true;
+				var success = true;
 				var r = utils.getRandomInt(0, 100);
-				if (r > chance) succes = false;
+				if (r > chance) success = false;
 
-				logger.write(decoded.username + " Upgrade lvl:" + cardresult.level + (succes ? " Succeded" : " Failed"));
+				logger.write(decoded.username + " Upgrade lvl:" + cardresult.level + (success ? " Succeded" : " Failed"));
 
 				var newlevel = 0;
 				var newquality = 0;
-				if (succes) {
+				if (success) {
 					newlevel = cardresult.level + 1;
 					newquality = utils.getRandomInt(logic.getQualityRange()[0], logic.getQualityRange()[1]);
 				} else {
@@ -855,6 +855,7 @@ app.post("/upgrade", async (req, res) => {
 										{
 											status: 0,
 											uuid: insertID,
+											success: success
 										});
 								}
 							);

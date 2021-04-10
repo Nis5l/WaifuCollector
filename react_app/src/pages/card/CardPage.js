@@ -2,8 +2,9 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroller'
 import {YesNo} from '../../components/Popup'
+import {withRouter} from 'react-router-dom'
 
 import Config from '../../config.json'
 
@@ -15,16 +16,19 @@ class CardPage extends Component {
     this.props = props;
     this.mainuuid = props.match.params.id;
 
-    this.mainwaifucard = undefined;
     this.card_wrapper = React.createRef();
 
     this.key = 0;
     this.state =
     {
+      mainwaifucard: undefined,
       maincard: undefined,
       cards: undefined,
       hasMore: true,
       upgradeId: undefined,
+      focus: false,
+      upgradeSuccess: undefined,
+      upgradeColor: undefined
     }
   }
 
@@ -84,9 +88,9 @@ class CardPage extends Component {
 
   upgradeCallback = () => {
 
-    this.setState({upgradeId: undefined});
-    this.mainwaifucard.startUpgradeEffect();
-    this.mainwaifucard.focusCard();
+    this.setState({upgradeId: undefined, focus: true});
+    this.state.mainwaifucard.startUpgradeEffect();
+    this.state.mainwaifucard.focusCard();
 
     let data =
     {
@@ -96,12 +100,13 @@ class CardPage extends Component {
     }
 
     let newcard = undefined;
+    let success = undefined;
 
     axios.post(`${Config.API_HOST}/upgrade`, data)
       .then(res => {
-        console.log(res);
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {
+            success = res.data.success;
             axios.post(`${Config.API_HOST}/card`, {token: Cookies.get('token'), card: res.data.uuid})
               .then(res => {
                 if (res && res.status === 200 && res.data && res.data.status === 0) {
@@ -117,13 +122,23 @@ class CardPage extends Component {
 
     let startTimeout = (time) => {
       setTimeout(() => {
-        console.log(newcard)
         if (newcard !== undefined) {
-          this.mainwaifucard.endUpgradeEffect();
+          this.state.mainwaifucard.endUpgradeEffect();
 
           this.mainuuid = newcard.id;
 
-          this.setState({maincard: newcard});
+          let color = undefined;
+
+          if (success === false) color = "#4a0909aa";
+          else if (success === true) color = "#083200aa";
+
+          this.setState({maincard: newcard, upgradeSuccess: success, upgradeColor: color});
+
+          setTimeout(() => {
+            document.body.classList.add('clickable');
+            this.state.mainwaifucard.setClickable(true);
+            document.addEventListener('click', this.onUpgradeFinishedClick);
+          }, 300);
 
           return;
         }
@@ -131,11 +146,16 @@ class CardPage extends Component {
       }, time);
     }
 
-    startTimeout(3000);
+    startTimeout(2000);
   }
 
   cancelUpgradeCallback = () => {
     this.setState({upgradeId: undefined});
+  }
+
+  onUpgradeFinishedClick = () => {
+    this.props.history.push(`/card/${this.mainuuid}`)
+    this.props.history.go();
   }
 
   render() {
@@ -199,9 +219,19 @@ class CardPage extends Component {
             )
           }
           {
+            this.state.focus === true &&
+            <div
+              className="blurbackground"
+              style=
+              {{
+                backgroundColor: `${this.state.upgradeColor !== undefined ? this.state.upgradeColor : ""}`
+              }}
+            />
+          }
+          {
             this.state.maincard !== undefined && this.state.maincard !== -1 &&
             <WaifuCard
-              onCreate={(obj) => {this.mainwaifucard = obj}}
+              onCreate={(obj) => {this.setState({mainwaifucard: obj})}}
               card={this.state.maincard}
               size="1"
               cardcolor="transparent"
@@ -224,4 +254,4 @@ class CardPage extends Component {
   }
 }
 
-export default CardPage;
+export default withRouter(CardPage);
