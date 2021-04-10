@@ -474,7 +474,14 @@ app.get("/user/:id/stats", async (req, res) => {
 			return;
 		}
 
-		let friends = logic.getClients()[userID].getFriends().length;
+		let friends = 0;
+
+		logic.getClients()[userID].getFriends().forEach(friend => {
+
+			if(friend.friend_status == 2)
+				friends++;
+		});
+
 		let maxFriends = logic.getFriendLimit();
 
 		let cards = logic.getClients()[userID].getCardTypeAmount();
