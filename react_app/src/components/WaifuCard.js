@@ -100,7 +100,8 @@ class WaifuCard extends Component {
                 redirects: redirects,
 
                 sizemult: 1,
-                focus: false
+                focus: false,
+                upgrading: false
             };
         else
             this.setState({
@@ -126,7 +127,7 @@ class WaifuCard extends Component {
     }
 
     onTurn(e, self) {
-        if (this.onturn !== undefined) this.onturn(e, this.onturndata);
+        if (this.onturn !== undefined) this.onturn(e, self.state.uuid, this.onturndata);
         this.setState({turned: false});
 
         if (this.onClick !== undefined) this.onClick(e, self.state.uuid);
@@ -155,18 +156,26 @@ class WaifuCard extends Component {
             nextState.level !== this.state.level ||
             nextState.quality !== this.state.quality ||
             nextState.uuid !== this.state.uuid ||
-            nextState.clickable !== this.state.clickable;
+            nextState.clickable !== this.state.clickable ||
+            nextState.focus !== this.state.focus ||
+            nextState.sizemult !== this.state.sizemult ||
+            nextState.cardcolor !== this.state.cardcolor ||
+            nextState.upgrading !== this.state.upgrading ||
+            nextState.redirects !== this.state.redirects;
     }
 
     startUpgradeEffect() {
         if (this.upgradeEffect !== undefined) return;
 
-        this.upgradeEffect = this.upgradeEffect = setInterval(() => {
+        this.setState({cardcolor: "#ffffffff", upgrading: true});
+
+        this.upgradeEffect = setInterval(() => {
             if (this.upgradeEffect === undefined) return;
             const idx = Math.floor(Math.random() * (this.effectSymbols.length + 1));
             const idx2 = Math.floor(Math.random() * (this.effectSymbols.length + 1));
             this.setState({level: this.effectSymbols[idx], quality: this.effectSymbols[idx2]});
         }, this.upgradeEffectDelay)
+
     }
 
     focusCard() {
@@ -178,12 +187,13 @@ class WaifuCard extends Component {
     }
 
     endUpgradeEffect() {
-        clearInterval(this.upgradeEffect);
+        this.setState({cardcolor: "transparent", upgrading: false});
+        if (this.upgradeEffect !== undefined) clearInterval(this.upgradeEffect);
         this.upgradeEffect = undefined;
     }
 
     componentWillUnmount() {
-        clearInterval(this.upgradeEffect);
+        if (this.upgradeEffect !== undefined) clearInterval(this.upgradeEffect);
     }
 
     setClickable(b) {
@@ -225,6 +235,9 @@ class WaifuCard extends Component {
                     style={{
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
                         backgroundColor: `${this.state.cardcolor}`,
+                        transition: `${this.state.upgrading === true
+                            ? "background-color linear 2.3s" :
+                            "background-color linear 0.5s"}`
                     }}
                 />
                 <div

@@ -27,7 +27,6 @@ class Pack extends Component {
             .then((res) => {
                 if (res && res.status === 200 && res && res.data && res.data.status === 0) {
                     let cards = res.data.cards;
-                    console.log(cards);
                     parseCards(cards);
                     this.setState({cards: cards});
                 } else {
@@ -36,14 +35,14 @@ class Pack extends Component {
             });
     }
 
-    startQuitCooldown(e, self) {
+    startQuitCooldown(e, uuid, self) {
         if (!self.quittable) {
             setTimeout(() => {
                 self.quittable = true;
             }, self.quitCooldown);
         }
         else {
-            self.props.history.push('/inventory');
+            self.props.history.push(`/card/${uuid}`);
             e.stopPropagation();
             e.preventDefault();
         }

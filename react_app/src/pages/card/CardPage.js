@@ -88,7 +88,13 @@ class CardPage extends Component {
 
   upgradeCallback = () => {
 
-    this.setState({upgradeId: undefined, focus: true});
+    for (let i = 0; i < this.state.cards.length; i++) {
+      if (this.state.cards[i].id === this.state.upgradeId) {
+        this.state.cards.splice(i, 1);
+        break;
+      }
+    }
+
     this.state.mainwaifucard.startUpgradeEffect();
     this.state.mainwaifucard.focusCard();
 
@@ -98,6 +104,8 @@ class CardPage extends Component {
       mainuuid: this.mainuuid,
       carduuid: this.state.upgradeId
     }
+
+    this.setState({upgradeId: undefined, focus: true});
 
     let newcard = undefined;
     let success = undefined;
@@ -189,7 +197,7 @@ class CardPage extends Component {
           <InfiniteScroll
             pageStart={0}
             loadMore={this.trackScrolling}
-            hasMore={true || false}
+            hasMore={this.state.hasMore}
             className="card_wrapper"
             useWindow={false}
           >
