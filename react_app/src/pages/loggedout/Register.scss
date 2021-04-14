@@ -1,0 +1,86 @@
+@import "../../scss/__base.scss";
+
+.register{
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 70%;
+    height: 80%;
+
+    max-width: 400px;
+    max-height: 600px;
+
+    transform: translate(-50%, -50%);
+
+    @media screen and (max-width: $breakpoint-sm) {
+        
+        width: 100%;
+        min-height: 100%;
+
+        max-width: none;
+        max-height: none;
+
+        height: auto;
+
+    }
+
+    .logo{
+
+        display: block;
+
+        width: 60%;
+        height: auto;
+
+        margin: 0px auto;
+        margin-bottom: 20px;
+
+        border-radius: 100%;
+        border: 1px solid #fff;
+
+        @media screen and (max-height: 512px) {
+            
+            width: 20%;
+
+            max-width: 100px;
+
+        }
+
+        @media screen and (max-height: 320px) {
+            
+            width: 10%;
+
+        }
+
+    }
+
+    form{
+
+        input[type=text], input[type=password], input[type=email]{
+
+            display: block;
+
+            width: 1fr;
+            
+            padding: 5px;
+
+            margin: 10px auto;
+
+        }
+
+        input[type=submit]{
+
+            display: block;
+
+            width: 30%;
+            padding: 5px;
+
+            margin: 20px auto;
+
+        }
+
+    }
+
+}

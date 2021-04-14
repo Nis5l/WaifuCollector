@@ -17,6 +17,7 @@ import Login from './pages/loggedout/Login';
 import Cookies from 'js-cookie';
 
 import './App.scss';
+import Register from './pages/loggedout/Register';
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
           <Switch>
 
             <Route path="/" exact component={Home} />
+
             <Route
               path="/login"
             >
@@ -51,6 +53,13 @@ function App() {
                 setToken={setTokenHandler}
               />
               }
+
+            </Route>
+            <Route
+              path="/register"
+            >
+
+              {token ? <Redirect to="/dashboard" /> : <Register/>}
 
             </Route>
 
