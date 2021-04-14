@@ -175,22 +175,28 @@ function getCards(cards, callback) {
 		callback();
 		return;
 	}
-	run(0);
-	function run(iteration) {
+
+	//database.getCardFast(cards, () => {
+	//console.log(cards);
+	//});
+
+	let count = 0;
+
+	for (let i = 0; i < cards.length; i++) {
 		getCard(
-			cards[iteration].cardID,
-			cards[iteration].frameID,
-			cards[iteration].level,
+			cards[i].cardID,
+			cards[i].frameID,
+			cards[i].level,
 			(card) => {
-				cards[iteration].card = card;
-				if (iteration == cards.length - 1) {
-					callback();
-					return;
-				} else {
-					run(iteration + 1);
-				}
+				cards[i].card = card;
+				onfinish();
 			}
 		);
+	}
+
+	function onfinish() {
+		count++;
+		if (count == cards.length) callback();
 	}
 }
 function getRandomCards(amount, callback) {

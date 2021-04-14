@@ -10,16 +10,20 @@ import Config from '../../config.json'
 
 class Inventory extends Component {
   constructor(props) {
-    super();
-    this.props = props;
+    super(props);
 
     this.card_wrapper = React.createRef();
     this.key = 0;
     this.scrollpadding = 500;
+    this.friendid = props.match !== undefined &&
+      props.match.params !== undefined ? props.match.params.id : undefined;
+    this.friend = props.friend === "true" ? true : undefined;
+
     this.state =
     {
       cards: [],
-      hasMore: true
+      hasMore: true,
+      errorMessage: undefined
     };
     this.options =
       [
@@ -39,7 +43,14 @@ class Inventory extends Component {
     const sortType = this.sortMethod;
 
     if (this.key === 0)
-      data = {token: Cookies.get("token"), page: 0, search: search, sortType: sortType};
+      data = {
+        token: Cookies.get("token"),
+        page: 0,
+        search: search,
+        sortType: sortType,
+        userID: this.friendid,
+        friend: this.friend
+      };
     else
       data = {token: Cookies.get("token"), next: 0};
 
@@ -52,7 +63,11 @@ class Inventory extends Component {
             this.key = 0;
             if (res.data.page === res.data.pagemax) this.setState({hasMore: false});
             this.setState({cards: cards});
+          } else {
+            this.setState({errorMessage: res.data.message});
           }
+        } else {
+          this.setState({errorMessage: "Internal error"});
         }
       });
   }
@@ -110,7 +125,7 @@ class Inventory extends Component {
             useWindow={false}
           >
             {
-              this.state.cards.map((card) => (
+              this.state.errorMessage === undefined ? this.state.cards.map((card) => (
                 < div className="inventory_card_wrapper" key={"card-" + this.key++}>
                   <WaifuCard
                     card={card}
@@ -121,7 +136,10 @@ class Inventory extends Component {
                   >
                   </WaifuCard>
                 </div>
-              ))
+              )) :
+                (
+                  <h1> {this.state.errorMessage} </h1>
+                )
             }
           </InfiniteScroll>
         </div>

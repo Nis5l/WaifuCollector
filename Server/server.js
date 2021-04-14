@@ -478,7 +478,7 @@ app.get("/user/:id/stats", async (req, res) => {
 
 		logic.getClients()[userID].getFriends().forEach(friend => {
 
-			if(friend.friend_status == 2)
+			if (friend.friend_status == 2)
 				friends++;
 		});
 
@@ -649,6 +649,7 @@ app.post("/passchange", async (req, res) => {
 });
 
 app.post("/inventory", async (req, res) => {
+	//let start = moment();
 	try {
 		var page = req.body.page;
 		var search = req.body.search;
@@ -671,6 +672,7 @@ app.post("/inventory", async (req, res) => {
 		if (isNaN(level)) level = undefined;
 		if (isNaN(onlyid)) onlyid = undefined;
 		if (isNaN(sortType)) sortType = undefined;
+		if (isNaN(friendID)) friendID = undefined;
 
 
 		var decoded = await logic.standardroutine(req.body.token, res);
@@ -719,6 +721,7 @@ app.post("/inventory", async (req, res) => {
 			run3();
 		}
 		function run3() {
+			//console.log("1: " + (moment() - start));
 			if (friend) logic.setFriendinventory(logic.getClients()[userID], logic.getClients()[friendID]);
 			if (next == 0) {
 				var inventory = logic.getClients()[userID].nextPage(logic.getInventorySendAmount(), friend);
@@ -744,9 +747,9 @@ app.post("/inventory", async (req, res) => {
 				});
 				return;
 			}
-			//console.log("");
-			//console.log(moment().valueOf() - start.valueOf());
+			//console.log("2: " + (moment() - start));
 			logic.getCards(inventory, () => {
+				//console.log("3: " + (moment() - start));
 				res.send({
 					status: 0,
 					inventory: inventory,

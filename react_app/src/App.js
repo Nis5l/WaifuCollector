@@ -73,6 +73,17 @@ function App() {
 
             </Route>
 
+            <Route path="/inventory/:id">
+
+              {
+                !token ? <Redirect to="/login" /> :
+                  <Route
+                    render={(props) => <Inventory {...props} friend="true" />}
+                  />
+              }
+
+            </Route>
+
             <Route path="/inventory">
 
               {!token ? <Redirect to="/login" /> : <Inventory />}

@@ -1,5 +1,6 @@
 const sql = require("mysql");
 const bcrypt = require("bcrypt");
+const async = require('async');
 
 const packTime = "PACKTIME";
 const tradeTime = "TRADETIME";
@@ -11,6 +12,16 @@ var con = sql.createConnection({
 	port: config.mysql.port,
 	user: config.mysql.user,
 	password: config.mysql.password,
+});
+
+const pool = sql.createPool({
+	host: config.mysql.host,
+	port: config.mysql.port,
+	user: config.mysql.user,
+	password: config.mysql.password,
+	connectionLimit: 10,
+	dateStrings: true,
+	multipleStatements: true
 });
 
 module.exports = {
@@ -195,7 +206,7 @@ module.exports = {
 			");",
 			function (err, result, fields) {
 
-				if(result){
+				if (result) {
 
 					callback(result.insertId);
 					return;
@@ -203,7 +214,7 @@ module.exports = {
 				}
 
 				callback(undefined);
-				
+
 			}
 		);
 	},
@@ -254,7 +265,6 @@ module.exports = {
 			}
 		);
 	},
-
 	getCard: function getCard(cardID, callback) {
 		con.query(
 			"SELECT * FROM card WHERE id=" + cardID,
@@ -266,6 +276,32 @@ module.exports = {
 				}
 			}
 		);
+	},
+	getCardFast: function getCardFast(cards, callback) {
+		pool.getConnection((err, connection) => {
+			let queries = [];
+			for (let i = 0; i < cards.length; i++) {
+				queries.push(
+					(callback) => {
+						connection.query(
+							`SELECT * FROM card WHERE id=${cards[i].cardID}`,
+							(err, result, fields) => {
+								cards[i].card = result;
+								callback();
+								//if (result != undefined) {
+								//callback(result[0]);
+								//} else {
+								//callback(undefined);
+								//}
+							}
+						);
+					})
+			}
+			connection.query(`USE ${config.mysql.database}`)
+			async.parallel(queries, (err, results) => {
+				callback();
+			});
+		})
 	},
 	getCardDisplay: function getCardDisplay(cardID, callback) {
 		con.query(
