@@ -10,6 +10,7 @@ import Pack from './pages/pack/Pack';
 import Inventory from './pages/inventory/Inventory';
 import CardPage from './pages/card/CardPage'
 import NoMatch from './pages/nomatch/NoMatch'
+import Trade from './pages/trade/Trade'
 
 import Login from './pages/loggedout/Login';
 
@@ -75,6 +76,12 @@ function App() {
             <Route path="/inventory">
 
               {!token ? <Redirect to="/login" /> : <Inventory />}
+
+            </Route>
+
+            <Route path="/trade/:id">
+
+              {!token ? <Redirect to="/login" /> : <Route component={Trade} />}
 
             </Route>
 
