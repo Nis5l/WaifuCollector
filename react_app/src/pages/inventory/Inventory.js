@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import WaifuCard, {parseCards} from '../../components/WaifuCard';
 import InfiniteScroll from 'react-infinite-scroller';
 import Select from 'react-select'
+import Scrollbar from '../../components/ScrollBar';
 
 import "./Inventory.scss"
 import Config from '../../config.json'
@@ -17,7 +18,11 @@ class Inventory extends Component {
     this.scrollpadding = 500;
     this.friendid = props.match !== undefined &&
       props.match.params !== undefined ? props.match.params.id : undefined;
-    this.friend = props.friend === "true" ? true : undefined;
+    if (props.userID !== undefined) this.friendid = props.userID;
+    this.friend = props.friend === true ? true : undefined;
+
+    this.redirect = props.redirect === false ? false : "true";
+    this.onCardClick = props.onCardClick;
 
     this.state =
     {
@@ -78,6 +83,10 @@ class Inventory extends Component {
     obj.setState({cards: [], hasMore: true});
   }
 
+  onCardClick(e, card) {
+    if (this.onCardClick !== undefined) this.onCardClick(e, card);
+  }
+
   render() {
     return (
       <div className="inventory_wrapper">
@@ -117,31 +126,34 @@ class Inventory extends Component {
         <div
           className="card_wrapper"
         >
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={this.trackScrolling}
-            hasMore={true || false}
-            className="card_wrapper"
-            useWindow={false}
-          >
-            {
-              this.state.errorMessage === undefined ? this.state.cards.map((card) => (
-                < div className="inventory_card_wrapper" key={"card-" + this.key++}>
-                  <WaifuCard
-                    card={card}
-                    size="1"
-                    cardcolor="transparent"
-                    clickable="true"
-                    redirects="true"
-                  >
-                  </WaifuCard>
-                </div>
-              )) :
-                (
-                  <h1> {this.state.errorMessage} </h1>
-                )
-            }
-          </InfiniteScroll>
+          <Scrollbar>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={this.trackScrolling}
+              hasMore={true || false}
+              className="card_wrapper"
+              useWindow={false}
+            >
+              {
+                this.state.errorMessage === undefined ? this.state.cards.map((card) => (
+                  < div className="inventory_card_wrapper" key={"card-" + this.key++}>
+                    <WaifuCard
+                      onClick={this.onCardClick}
+                      card={card}
+                      size="1"
+                      cardcolor="transparent"
+                      clickable="true"
+                      redirects={this.redirect}
+                    >
+                    </WaifuCard>
+                  </div>
+                )) :
+                  (
+                    <h1> {this.state.errorMessage} </h1>
+                  )
+              }
+            </InfiniteScroll>
+          </Scrollbar>
         </div>
       </div>
     );

@@ -1,0 +1,10 @@
+.scrollbar>div:first-child
+{
+    //Fix for opera
+    margin-right: -20px !important;
+}
+
+.scroll_view
+{
+    padding-right: 15px;
+}

@@ -52,9 +52,11 @@
             {
                 grid-area: inventory;
 
+                flex-direction: row;
                 display: flex;
-                align-items: center;
                 justify-content: center;
+                flex-wrap: wrap;
+                overflow: auto;
             }
 
             .button_form
