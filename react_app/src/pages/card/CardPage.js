@@ -174,6 +174,7 @@ class CardPage extends Component {
           <YesNo
             yesCallback={this.upgradeCallback}
             noCallback={this.cancelUpgradeCallback}
+            text="Upgrade?"
           />
         }
         <div className="card_wrapper">

@@ -47,6 +47,7 @@
             grid-template-areas:
                 "inventory"
                 "input";
+            row-gap: 10px;
 
             .card_wrapper
             {
@@ -80,4 +81,9 @@
     {
         grid-area: other;
     }
+    .waifucard_wrapper
+    {
+        margin: 10px;
+    }
 }
+

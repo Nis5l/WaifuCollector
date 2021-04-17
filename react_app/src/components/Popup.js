@@ -9,6 +9,7 @@ class YesNo extends Component {
 
         this.yesCallback = props.yesCallback;
         this.noCallback = props.noCallback;
+        this.text = props.text;
     }
 
     yesClick = () => {
@@ -26,11 +27,11 @@ class YesNo extends Component {
                 <Card styleClassName="popup">
                     <div className="popup_content">
                         <div className="text_area">
-                            <p>Upgrade?</p>
+                            <p>{this.text}</p>
                         </div>
                         <div className="input_area">
-                            <input type="button" onClick={this.yesClick} className="button_input" value="Yes" />
                             <input type="button" onClick={this.noClick} className="button_input" value="No" />
+                            <input type="button" onClick={this.yesClick} className="button_input" value="Yes" />
                         </div>
                     </div>
                 </Card>

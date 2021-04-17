@@ -70,9 +70,17 @@ main.content{
         animation: pulseinputshadow 2s ease-out infinite;
     }
 
-    &:hover
+    &:hover:enabled
     {
         border-color: $input-border-color-hover;
+    }
+
+    &:disabled
+    {
+        border-color: $input-border-color-disabled;
+        color: $input-text-color-disabled;
+        animation: none;
+        cursor: default;
     }
 }
 

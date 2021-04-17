@@ -5,6 +5,7 @@ import Config from '../../config.json';
 import Cookies from 'js-cookie';
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard';
 import Scrollbar from '../../components/ScrollBar';
+import {YesNo} from '../../components/Popup';
 
 import './Trade.scss'
 
@@ -20,39 +21,97 @@ class Trade extends Component {
       friendcards: undefined,
       found: true,
       info: "",
-      friendinfo: ""
+      friendinfo: "",
+      tradeCount: 0,
+      friendTradeCount: 0,
+      tradeLimit: 0,
+
+      removeId: undefined,
+
+      disabled: undefined
     }
 
     this.friendid = props.match.params.id;
-    console.log(props.match.params)
-    console.log(this.friendid);
     this.cardfriend = React.createRef();
   }
 
   componentDidMount() {
-    let data = {token: Cookies.get('token'), userID: this.friendid};
+    const data = {token: Cookies.get('token'), userID: this.friendid};
     axios.post(`${Config.API_HOST}/trade`, data)
       .then((res) => {
         console.log(res);
         if (res && res.status === 200 && res.data && res.data.status === 0) {
           parseCards(res.data.cards);
           parseCards(res.data.cardsfriend);
+
+          this.tradeCount1 = res.data.tradeCount1;
+          this.tradeLimit = res.data.tradeLimit;
+
           this.setState({
             name: res.data.username,
             cards: res.data.cards,
             friendcards: res.data.cardsfriend,
-            info: res.data.tradeCount1 + "/" + res.data.tradeLimit,
-            friendinfo: res.data.tradeCount2 + "/" + res.data.tradeLimit,
-          });
+            tradeCount: res.data.tradeCount1,
+            friendTradeCount: res.data.tradeCount2,
+            tradeLimit: res.data.tradeLimit,
+          }, this.setInfo);
+
+          this.setInfo();
+
+          this.setDisabled();
         } else {
           this.setState({found: false});
         }
       });
   }
 
+  setInfo() {
+    this.setState({
+      info: this.state.tradeCount + "/" + this.state.tradeLimit,
+      friendinfo: this.state.friendTradeCount + "/" + this.state.tradeLimit,
+    });
+  }
+
+  setDisabled() {
+    if (this.tradeCount1 >= this.tradeLimit) {
+      this.setState({disabled: "Cardlimit Reached"});
+      return;
+    }
+  }
+
+  onCardOwnClick(e, uuid, self) {
+    self.setState({removeId: uuid});
+  }
+
+  cardOwnRemove = () => {
+    const data = {token: Cookies.get('token'), userID: this.friendid, cardID: this.state.removeId};
+
+    for (let i = 0; i < this.state.cards.length; i++) {
+      if (this.state.cards[i].id === this.state.removeId) {
+        this.state.cards.splice(i, 1);
+        break;
+      }
+    }
+    this.setState({removeId: undefined, tradeCount: this.state.tradeCount - 1}, this.setInfo);
+
+    axios.post(`${Config.API_HOST}/removetrade`, data);
+  }
+
+  cardOwnRemoveCancel = () => {
+    this.setState({removeId: undefined});
+  }
+
   render() {
     return (
       <div className="trade_wrapper_parent">
+        {
+          this.state.removeId !== undefined &&
+          <YesNo
+            yesCallback={this.cardOwnRemove}
+            noCallback={this.cardOwnRemoveCancel}
+            text="Remove?"
+          />
+        }
         {
           this.state.found ? (
             <div className="trade_wrapper">
@@ -60,8 +119,8 @@ class Trade extends Component {
                 styleClassName="trade_own"
                 title={"You " + this.state.info}
               >
-                <div className="card_wrapper">
-                  <Scrollbar>
+                <Scrollbar>
+                  <div className="card_wrapper">
                     {
                       this.state.cards === undefined ?
                         (
@@ -74,17 +133,23 @@ class Trade extends Component {
                           <div className="waifucard_wrapper" key={card.id}>
                             <WaifuCard
                               card={card}
-                              size={1}
+                              size={0.8}
+                              onClick={(e, uuid) => {this.onCardOwnClick(e, uuid, this)}}
                             >
                             </WaifuCard>
                           </div>
                         )
                         )
                     }
-                  </Scrollbar>
-                </div>
+                  </div>
+                </Scrollbar>
                 <form className="button_form" action={"/tradeinventory/" + this.friendid} method="GET">
-                  <input type="submit" className="button_input" value="Add Card" />
+                  <input
+                    type="submit"
+                    className="button_input"
+                    value={this.state.disabled !== undefined ? this.state.disabled : "Add Card"}
+                    disabled={this.state.disabled !== undefined}
+                  />
                 </form>
               </Card>
               <Card
@@ -131,7 +196,7 @@ class Trade extends Component {
               </div>
             )
         }
-      </div>
+      </div >
     );
   }
 }
