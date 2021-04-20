@@ -1,13 +1,13 @@
-import {Component} from 'react';
-import Inventory from '../inventory/Inventory';
-import {withRouter} from 'react-router-dom';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import {WaifuCardLoad} from '../../components/WaifuCard';
+import {Component} from 'react'
+import Inventory from '../inventory/Inventory'
+import {withRouter} from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import {WaifuCardLoad} from '../../components/WaifuCard'
 
-import Config from '../../config.json';
+import Config from '../../config.json'
 
-import './SuggestInventory.scss';
+import './SuggestInventory.scss'
 
 class SuggestInventory extends Component {
   constructor(props) {

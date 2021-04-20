@@ -8,9 +8,9 @@ import {
     SidebarHeader,
     SidebarFooter,
     SidebarContent,
-} from 'react-pro-sidebar';
+} from 'react-pro-sidebar'
 
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router-dom'
 
 import './Navbar.scss'
 

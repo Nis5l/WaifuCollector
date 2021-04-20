@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import Card from '../../components/Card';
-import axios from 'axios';
-import Config from '../../config.json';
-import Cookies from 'js-cookie';
-import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard';
-import Scrollbar from '../../components/ScrollBar';
-import {YesNo, YesNoCancel} from '../../components/Popup';
+import React, {Component} from 'react'
+import Card from '../../components/Card'
+import axios from 'axios'
+import Config from '../../config.json'
+import Cookies from 'js-cookie'
+import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
+import Scrollbar from '../../components/ScrollBar'
+import {YesNo, YesNoCancel} from '../../components/Popup'
 
 import './Trade.scss'
 

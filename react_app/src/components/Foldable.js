@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import CollapsibleContent from 'react-collapsible-content';
+import React, {Component} from 'react'
+import CollapsibleContent from 'react-collapsible-content'
 
 import "./Foldable.scss"
 import "../scss/effects.scss"

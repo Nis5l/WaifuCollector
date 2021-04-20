@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
 import Cookies from 'js-cookie'
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom'
 
 import Config from '../../config.json'
 

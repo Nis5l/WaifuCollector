@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import Chart from 'chart.js'
 
 import "./PackGraph.scss"
-import axios from 'axios';
-import Config from '../config.json';
+import axios from 'axios'
+import Config from '../config.json'
 
 const config = {
     type: 'line',
@@ -68,7 +68,7 @@ class PackGraph extends Component {
 
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
 
         clearInterval(this.interval);
 
@@ -80,19 +80,19 @@ class PackGraph extends Component {
 
     }
 
-    async loadData(){
+    async loadData() {
 
-        try{
+        try {
 
             const res = await axios.get(`${Config.API_HOST}/packData`);
 
-            if(res && res.data && res.data.status === 0){
+            if (res && res.data && res.data.status === 0) {
 
                 return res.data.packData;
 
             }
 
-        }catch(ex){
+        } catch (ex) {
 
             console.log("Couldn't connect to API Server!");
 
@@ -102,16 +102,16 @@ class PackGraph extends Component {
 
     }
 
-    async updateChart(){
+    async updateChart() {
 
-        const options = { hourCycle: "h23", weekday: 'short', hour: 'numeric', minute: '2-digit' };
+        const options = {hourCycle: "h23", weekday: 'short', hour: 'numeric', minute: '2-digit'};
 
         const packData = await this.loadData();
 
         this.chart.data.datasets[0].data = [];
         this.chart.data.labels = [];
 
-        for(let i = 0; i < packData.length; i++){
+        for (let i = 0; i < packData.length; i++) {
 
             let date = new Date(packData[i].time);
             let timeString = date.toLocaleDateString("en-US", options);

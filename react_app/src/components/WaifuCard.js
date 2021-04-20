@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import ResizeText from "./ResizeText"
-import {LoopCircleLoading} from 'react-loadingg';
-import {withRouter} from 'react-router-dom';
+import {LoopCircleLoading} from 'react-loadingg'
+import {withRouter} from 'react-router-dom'
 
 import Config from '../config.json'
 

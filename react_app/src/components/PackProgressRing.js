@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import Config from '../config.json'
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 import {formatTime} from '../Utils'
-import {withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom'
 
 import './PackProgressRing.scss'
 

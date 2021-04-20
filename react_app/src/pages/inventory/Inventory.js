@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie';
-import WaifuCard, {parseCards} from '../../components/WaifuCard';
-import InfiniteScroll from 'react-infinite-scroller';
+import Cookies from 'js-cookie'
+import WaifuCard, {parseCards} from '../../components/WaifuCard'
+import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
-import Scrollbar from '../../components/ScrollBar';
+import Scrollbar from '../../components/ScrollBar'
 
 import "./Inventory.scss"
 import Config from '../../config.json'

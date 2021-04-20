@@ -5,6 +5,7 @@ import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import {YesNo} from '../../components/Popup'
 import {withRouter} from 'react-router-dom'
+import Scrollbar from '../../components/ScrollBar'
 
 import Config from '../../config.json'
 
@@ -195,28 +196,30 @@ class CardPage extends Component {
               </div>
             )
           }
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={this.trackScrolling}
-            hasMore={this.state.hasMore}
-            className="card_wrapper"
-            useWindow={false}
-          >
-            {
-              this.state.cards !== undefined && this.state.cards.map((card) => (
-                < div className="cardpage_card_wrapper" key={"card-" + this.key++}>
-                  <WaifuCard
-                    card={card}
-                    size="0.8"
-                    cardcolor="transparent"
-                    clickable="true"
-                    onClick={this.onCardClick}
-                  >
-                  </WaifuCard>
-                </div>
-              ))
-            }
-          </InfiniteScroll>
+          <Scrollbar>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={this.trackScrolling}
+              hasMore={this.state.hasMore}
+              className="card_wrapper"
+              useWindow={false}
+            >
+              {
+                this.state.cards !== undefined && this.state.cards.map((card) => (
+                  < div className="cardpage_card_wrapper" key={"card-" + this.key++}>
+                    <WaifuCard
+                      card={card}
+                      size="0.8"
+                      cardcolor="transparent"
+                      clickable="true"
+                      onClick={this.onCardClick}
+                    >
+                    </WaifuCard>
+                  </div>
+                ))
+              }
+            </InfiniteScroll>
+          </Scrollbar>
         </div>
         <div className="cardpage_maincard">
           {

@@ -1,25 +1,25 @@
-import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
+import React, {useState, useEffect} from 'react'
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar'
 
-import Home from './pages/home/Home';
-import Dashboard from './pages/dashboard/Dashboard';
-import Profile from './pages/profile/Profile';
-import Pack from './pages/pack/Pack';
-import Inventory from './pages/inventory/Inventory';
-import CardPage from './pages/card/CardPage';
-import NoMatch from './pages/nomatch/NoMatch';
-import Trade from './pages/trade/Trade';
-import TradeInventory from './pages/tradeinventory/TradeInventory';
-import SuggestInventory from './pages/suggestInventory/SuggestInventory';
+import Home from './pages/home/Home'
+import Dashboard from './pages/dashboard/Dashboard'
+import Profile from './pages/profile/Profile'
+import Pack from './pages/pack/Pack'
+import Inventory from './pages/inventory/Inventory'
+import CardPage from './pages/card/CardPage'
+import NoMatch from './pages/nomatch/NoMatch'
+import Trade from './pages/trade/Trade'
+import TradeInventory from './pages/tradeinventory/TradeInventory'
+import SuggestInventory from './pages/suggestInventory/SuggestInventory'
 
-import Login from './pages/loggedout/Login';
+import Login from './pages/loggedout/Login'
 
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 
-import './App.scss';
-import Register from './pages/loggedout/Register';
+import './App.scss'
+import Register from './pages/loggedout/Register'
 
 function App() {
 
