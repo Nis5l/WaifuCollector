@@ -12,6 +12,7 @@ import CardPage from './pages/card/CardPage';
 import NoMatch from './pages/nomatch/NoMatch';
 import Trade from './pages/trade/Trade';
 import TradeInventory from './pages/tradeinventory/TradeInventory';
+import SuggestInventory from './pages/suggestInventory/SuggestInventory';
 
 import Login from './pages/loggedout/Login';
 
@@ -103,6 +104,12 @@ function App() {
             <Route path="/tradeinventory/:id">
 
               {!token ? <Redirect to="/login" /> : <Route component={TradeInventory} />}
+
+            </Route>
+
+            <Route path="/suggestcard/:id">
+
+              {!token ? <Redirect to="/login" /> : <Route component={SuggestInventory} />}
 
             </Route>
 

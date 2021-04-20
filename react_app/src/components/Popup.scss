@@ -53,12 +53,22 @@
                 align-items: center;
                 justify-content: space-evenly;
 
+                &.cancel_wrapper
+                {
+                    margin-top: 20px;
+                }
+
                 .button_input
                 {
                     grid-area: input;
                     display: block;
                     width: 40%;
                     bottom: 10px;
+
+                    &.cancel
+                    {
+                        width: 60%;
+                    }
                 }
             }
         }

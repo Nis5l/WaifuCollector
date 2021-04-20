@@ -70,7 +70,7 @@ function Login(props) {
 
                 </div>
 
-                <input type="submit" name="submit" value="Login" />
+                <input className="button_input" type="submit" name="submit" value="Login" />
 
             </form>
 
