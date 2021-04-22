@@ -326,7 +326,7 @@ app.post("/register", (req, res) => {
 				res.send({status: 2, message: "Mail already in use"});
 				return;
 			}
-			database.register(username, password, registerCallback);
+			database.register(username, password , mail, registerCallback);
 		});
 
 		function registerCallback(b, message) {

@@ -45,7 +45,11 @@ class Trade extends Component {
     const data = {token: Cookies.get('token'), userID: this.friendid};
     axios.post(`${Config.API_HOST}/trade`, data)
       .then((res) => {
+
+        console.log(res);
+
         if (res && res.status === 200 && res.data && res.data.status === 0) {
+
           parseCards(res.data.cards);
           parseCards(res.data.cardsfriend);
           parseCards(res.data.cardsuggestions);

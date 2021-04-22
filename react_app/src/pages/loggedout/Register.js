@@ -40,6 +40,8 @@ function Register(props){
         axios.post(`${Config.API_HOST}/register`, user)
             .then(res => {
 
+                console.log(res);
+
                 if (res && res.status === 200) {
 
                     if (res.data && res.data.status === 0) {
@@ -52,7 +54,6 @@ function Register(props){
                 }
 
                 console.log("Error registering!");
-                console.log(res);
 
             });
 
