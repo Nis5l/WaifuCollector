@@ -1,0 +1,18 @@
+@import '../scss/_base';
+
+.threeDotsMenu{
+
+    button{
+
+        color: $sidebar-color;
+
+    }
+
+}
+
+.MuiPaper-root.MuiMenu-paper{
+
+    color: $sidebar-color;
+    background-color: $background-secondary;
+
+}

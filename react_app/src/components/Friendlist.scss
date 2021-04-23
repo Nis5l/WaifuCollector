@@ -16,6 +16,7 @@
         margin: 10px 0;
 
         display: flex;
+        flex-wrap: wrap;
 
         align-items: center;
 
@@ -48,6 +49,12 @@
             display: inline-block;
 
             margin-left: 10px;
+
+        }
+
+        .threeDotsMenu{
+
+            margin-left: auto;
 
         }
 

@@ -20,6 +20,7 @@ import Cookies from 'js-cookie'
 
 import './App.scss'
 import Register from './pages/loggedout/Register'
+import Leaderboard from './pages/leaderboard/Leaderboard'
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
           <Switch>
 
             <Route path="/" exact component={Home} />
+            <Route path="/leaderboard" component={Leaderboard} />
 
             <Route
               path="/login"
@@ -68,7 +70,7 @@ function App() {
             {/* Logged in User */}
             <Route path="/dashboard">
 
-              {!token ? <Redirect to="/login" /> : <Dashboard />}
+              {!token ? <Redirect to="/login" /> :  <Route component={Dashboard} /> }
 
             </Route>
 
