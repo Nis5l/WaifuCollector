@@ -7,6 +7,10 @@ import './Friendlist.scss'
 import ProfileName from './ProfileName'
 import {Link} from 'react-router-dom'
 
+import {withRouter} from 'react-router-dom';
+
+import ThreeDotsMenu from './ThreeDotsMenu.js'
+
 function Friendlist(props) {
 
     const [friends, setFriends] = useState([]);
@@ -52,16 +56,11 @@ function Friendlist(props) {
                 {friends.map((friend) => {
 
                     return (
-                        <Link
+                        <FriendComponent
                             key={friend.userID}
-                            to={`/profile/${friend.userID}`}
-                        >
-                            <Friend
-                                avatar="/assets/Icon.png"
-                                userID={friend.userID}
-                            />
-                        </Link>
-
+                            avatar="/assets/Icon.png"
+                            userID={friend.userID}
+                        />
                     )
 
                 })}
@@ -73,22 +72,59 @@ function Friendlist(props) {
     )
 }
 
-function Friend(props) {
+class Friend extends React.Component {
 
-    return (
+    onClick = (link) => {
 
-        <li className="friend">
+        this.props.history.push(link);
 
-            <img src={props.avatar} alt="Friend Avatar" />
+    };
 
-            <ProfileName
-                userID={props.userID}
-            />
+    render(){
 
-        </li>
+        const options = [
 
-    )
+            {
+    
+                name: "Profile",
+                onClick: () => this.onClick("/profile/" + this.props.userID)
+    
+            },
+            {
+    
+                name: "Trade",
+                onClick: () => this.onClick("/trade/" + this.props.userID)
+    
+            }
+    
+        ];
+
+        return (
+
+            <li className="friend">
+
+                <img src={this.props.avatar} alt="Friend Avatar" />
+
+                <ProfileName
+                    userID={this.props.userID}
+                />
+
+                <ThreeDotsMenu
+                
+                    menuID={("friendMenu-" + this.props.userID)}
+                    options={options}
+
+                />
+
+            </li>
+
+        )
+
+    }
 
 }
 
-export default Friendlist
+const FriendComponent = withRouter(Friend);
+
+export default withRouter(Friendlist)
+export {FriendComponent} ;
