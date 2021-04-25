@@ -179,23 +179,6 @@ class CardPage extends Component {
           />
         }
         <div className="card_wrapper">
-          {
-            this.state.cards === undefined &&
-            (
-              <div className="pack_load">
-                <WaifuCardLoad size="1">
-                </WaifuCardLoad>
-              </div>
-            )
-          }
-          {
-            this.state.cards !== undefined && this.state.cards.length === 0 &&
-            (
-              <div className="pack_empty">
-                No Cards
-              </div>
-            )
-          }
           <Scrollbar>
             <InfiniteScroll
               pageStart={0}
@@ -204,6 +187,23 @@ class CardPage extends Component {
               className="card_wrapper"
               useWindow={false}
             >
+              {
+                this.state.cards !== undefined && this.state.cards.length === 0 &&
+                (
+                  <div className="pack_empty">
+                    No Cards
+                  </div>
+                )
+              }
+              {
+                this.state.cards === undefined &&
+                (
+                  <div className="pack_load">
+                    <WaifuCardLoad size="1">
+                    </WaifuCardLoad>
+                  </div>
+                )
+              }
               {
                 this.state.cards !== undefined && this.state.cards.map((card) => (
                   < div className="cardpage_card_wrapper" key={"card-" + this.key++}>

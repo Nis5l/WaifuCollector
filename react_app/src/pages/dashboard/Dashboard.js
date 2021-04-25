@@ -16,12 +16,14 @@ function Dashboard() {
     const [stats, setStats] = useState({friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0});
 
     useEffect(() => {
-        
-        async function loadStats(userID){
-        
+
+        async function loadStats(userID) {
+
             const data = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
 
-            if(data.data && data.data.status === 0){
+            //redirectIfNecessary(data);
+
+            if (data.data && data.data.status === 0) {
 
                 delete data.data["status"];
 
@@ -30,10 +32,10 @@ function Dashboard() {
             }
 
             return [];
-            
+
         }
 
-        async function updateStats(){
+        async function updateStats() {
 
             const stats = await loadStats(userID);
 
