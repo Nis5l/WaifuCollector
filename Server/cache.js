@@ -115,6 +115,16 @@ class Client {
 		this.sortInv(true);
 	}
 
+	deleteCardFriend(uuid) {
+		this.startDecay(this.time, this.callback);
+		for (var i = 0; i < this.friendinventory.inventory.length; i++) {
+			if (this.friendinventory.inventory[i].id == uuid) {
+				this.friendinventory.inventory.splice(i, 1);
+				return;
+			}
+		}
+	}
+
 	getFriends() {
 		this.startDecay(this.time, this.callback);
 		return this.friends;

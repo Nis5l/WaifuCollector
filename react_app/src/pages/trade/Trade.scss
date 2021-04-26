@@ -16,9 +16,11 @@
     box-sizing: border-box;
 
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: minmax(min-content, max-content) 1fr minmax(min-content, max-content);
     grid-template-areas:
-        "own other";
+        "refresh refresh"
+        "own other"
+        "confirm confirm";
 
     @media screen and (max-width: $breakpoint-md)
     {
@@ -28,6 +30,7 @@
             //"own"
             //"other";
         column-gap: 10px;
+        row-gap: 10px;
     }
 
     column-gap: 25px;
@@ -36,6 +39,8 @@
     .trade_friend.trade_own
     {
         grid-column: own / other;
+        grid-row: refresh / confirm;
+
         .card-content
         {
             display: flex;
@@ -71,7 +76,7 @@
                 overflow: auto;
             }
 
-            .button_form
+            .button_input
             {
                 grid-area: input;
             }
@@ -95,6 +100,23 @@
     .waifucard_wrapper
     {
         margin: 10px;
+    }
+
+    .button_confirm
+    {
+        grid-area: confirm;
+    }
+
+    .refresh
+    {
+        grid-area: refresh;
+
+        display: flex;
+        justify-content: flex-end;
+        @media screen and (max-width: $breakpoint-sm)
+        {
+            justify-content: flex-start;
+        }
     }
 }
 

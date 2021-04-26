@@ -289,6 +289,19 @@ function addCardToUserCache(userID, id, cardID, quality, level, frameID) {
 				});
 	}
 }
+
+function removeCardFromUserCache(userID, id) {
+	if (clients[userID] != undefined)
+		clients[userID].deleteCard(id);
+
+	var links = cache.getFriendinventorylinks(userID);
+	if (links != undefined) {
+		for (var i = 0; i < links.length; i++)
+			if (clients[links[i]] != undefined)
+				clients[links[i]].deleteCardFriend(id);
+	}
+}
+
 function addCardTrade(userone, usertwo, uuid, callback) {
 
 	if (!clients[userone].hasFriendAdded(usertwo)) {
@@ -605,4 +618,5 @@ module.exports =
 	getAnimePackCooldown: getAnimePackCooldown,
 	getAnimePackSize: getAnimePackSize,
 	getAnimePackTime: getAnimePackTime,
+	removeCardFromUserCache: removeCardFromUserCache
 };

@@ -326,7 +326,7 @@ app.post("/register", (req, res) => {
 				res.send({status: 2, message: "Mail already in use"});
 				return;
 			}
-			database.register(username, password , mail, registerCallback);
+			database.register(username, password, mail, registerCallback);
 		});
 
 		function registerCallback(b, message) {
@@ -1371,7 +1371,7 @@ app.post("/okTrade", async (req, res) => {
 										c.level,
 										c.frameID,
 									);
-									logic.getClients()[userone].deleteCard(cards[i].card);
+									logic.removeCardFromUserCache(usertwo, cards[i].card);
 								}
 								run2(0);
 								function run2(idx) {

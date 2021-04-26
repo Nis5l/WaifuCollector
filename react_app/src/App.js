@@ -70,7 +70,7 @@ function App() {
             {/* Logged in User */}
             <Route path="/dashboard">
 
-              {!token ? <Redirect to="/login" /> :  <Route component={Dashboard} /> }
+              {!token ? <Redirect to="/login" /> : <Route component={Dashboard} />}
 
             </Route>
 

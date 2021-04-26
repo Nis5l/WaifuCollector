@@ -183,3 +183,10 @@
     box-shadow: 0 0 10px 10px white;
   }
 }
+@keyframes spin
+{
+  100%
+  {
+    transform:rotate(360deg);
+  }
+}
