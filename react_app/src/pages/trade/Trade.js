@@ -46,8 +46,6 @@ class Trade extends Component {
     axios.post(`${Config.API_HOST}/trade`, data)
       .then((res) => {
 
-        console.log(res);
-
         if (res && res.status === 200 && res.data && res.data.status === 0) {
 
           parseCards(res.data.cards);
@@ -189,6 +187,12 @@ class Trade extends Component {
   }
 
   render() {
+
+    let size = 0.8;
+    if (window.screen.availWidth < 600) size = 0.7;
+    if (window.screen.availWidth < 500) size = 0.6;
+    if (window.screen.availWidth < 420) size = 0.5;
+
     return (
       <div className="trade_wrapper_parent">
         {
@@ -233,7 +237,7 @@ class Trade extends Component {
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
                             <WaifuCard
                               card={card}
-                              size={0.8}
+                              size={size}
                               onClick={(e, uuid) => {this.onCardSuggestionClick(e, uuid, this)}}
                               cardcolor={suggestCardColor}
                             >
@@ -254,7 +258,7 @@ class Trade extends Component {
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
                             <WaifuCard
                               card={card}
-                              size={0.8}
+                              size={size}
                               onClick={(e, uuid) => {this.onCardOwnClick(e, uuid, this)}}
                             >
                             </WaifuCard>
@@ -286,7 +290,7 @@ class Trade extends Component {
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
                             <WaifuCard
                               card={card}
-                              size={0.8}
+                              size={size}
                               onClick={(e, uuid) => {this.onFriendCardSuggestionClick(e, uuid, this)}}
                               cardcolor={suggestCardColor}
                             >
@@ -307,7 +311,7 @@ class Trade extends Component {
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
                             <WaifuCard
                               card={card}
-                              size={0.8}
+                              size={size}
                             >
                             </WaifuCard>
                           </div>

@@ -17,12 +17,21 @@
 
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
+    grid-template-areas:
+        "own other";
+
+    @media screen and (max-width: $breakpoint-md)
+    {
+        //grid-template-columns: 1fr;
+        //grid-template-rows: 1fr 1fr;
+        //grid-template-areas:
+            //"own"
+            //"other";
+        column-gap: 10px;
+    }
 
     column-gap: 25px;
     row-gap: 25px;
-
-    grid-template-areas:
-        "own other";
 
     .trade_friend.trade_own
     {
@@ -41,12 +50,14 @@
         .card-content
         {
             display: grid;
+            box-sizing: border-box;
+
             grid-template-columns: 1fr;
             grid-template-rows: 1fr minmax(min-content, max-content);
-            box-sizing: border-box;
             grid-template-areas:
                 "inventory"
                 "input";
+
             row-gap: 10px;
 
             .card_wrapper

@@ -1,14 +1,15 @@
 import React from 'react'
+import ResizeText from './ResizeText'
 
 import "./Card.scss"
 
 function Card(props) {
-    
+
     return (
 
-        <div className={"card " + props.styleClassName }>
+        <div className={"card " + props.styleClassName}>
 
-            { props.title && <h2 className="card-title">{props.title}</h2> }
+            { props.title && <div className="card-title"><ResizeText><h1>{props.title}</h1></ResizeText></div>}
 
             <div className="card-content">
 

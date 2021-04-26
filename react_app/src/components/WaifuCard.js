@@ -260,7 +260,7 @@ class WaifuCard extends Component {
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
                     }}
                 >
-                    <ResizeText>
+                    <ResizeText center={true}>
                         {this.state.cardname}
                     </ResizeText>
                 </div>
@@ -270,7 +270,7 @@ class WaifuCard extends Component {
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
                     }}
                 >
-                    <ResizeText>
+                    <ResizeText center={true}>
                         {this.state.animename}
                     </ResizeText>
                 </div>
