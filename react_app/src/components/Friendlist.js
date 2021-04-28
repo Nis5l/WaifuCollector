@@ -5,7 +5,6 @@ import Config from '../config.json'
 
 import './Friendlist.scss'
 import ProfileName from './ProfileName'
-import {Link} from 'react-router-dom'
 
 import {withRouter} from 'react-router-dom';
 
@@ -80,23 +79,23 @@ class Friend extends React.Component {
 
     };
 
-    render(){
+    render() {
 
         const options = [
 
             {
-    
+
                 name: "Profile",
                 onClick: () => this.onClick("/profile/" + this.props.userID)
-    
+
             },
             {
-    
+
                 name: "Trade",
                 onClick: () => this.onClick("/trade/" + this.props.userID)
-    
+
             }
-    
+
         ];
 
         return (
@@ -110,7 +109,7 @@ class Friend extends React.Component {
                 />
 
                 <ThreeDotsMenu
-                
+
                     menuID={("friendMenu-" + this.props.userID)}
                     options={options}
 
@@ -127,4 +126,4 @@ class Friend extends React.Component {
 const FriendComponent = withRouter(Friend);
 
 export default withRouter(Friendlist)
-export {FriendComponent} ;
+export {FriendComponent};

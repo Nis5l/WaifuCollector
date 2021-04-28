@@ -33,6 +33,12 @@
 
         border-bottom: 2px solid $background-secondary;
 
+        overflow: hidden;
+
+        .resizetext_wrapper
+        {
+            margin-top: 3px;
+        }
     }
 
     .card-content{

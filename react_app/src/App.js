@@ -22,6 +22,9 @@ import './App.scss'
 import Register from './pages/loggedout/Register'
 import Leaderboard from './pages/leaderboard/Leaderboard'
 
+import Verify from './pages/verify/Verify'
+import VerifyMail from './pages/verifymail/VerifyMail'
+
 function App() {
 
   const [token, setToken] = useState(Cookies.get("token"));
@@ -127,6 +130,18 @@ function App() {
             <Route path="/logout">
 
               {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler} />}
+
+            </Route>
+
+            <Route path="/verify/mail">
+
+              {!token ? <Redirect to="/login" /> : <Route component={VerifyMail} />}
+
+            </Route>
+
+            <Route path="/verify">
+
+              {!token ? <Redirect to="/login" /> : <Route component={Verify} />}
 
             </Route>
 

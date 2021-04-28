@@ -77,6 +77,9 @@ class WaifuCard extends Component {
         this.onturn = props.onturn;
         this.onturndata = props.onturndata;
 
+        /*
+         * WARNING INTENDED
+         */
         if (this.state === undefined)
             this.state =
             {

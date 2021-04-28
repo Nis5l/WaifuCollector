@@ -162,6 +162,28 @@
   }
 }
 
+@keyframes pulseinputshadowinvalid
+{
+  0% 
+  {
+    -webkit-box-shadow: 0 0 1px 1px red;
+    -moz-box-shadow: 0 0 1px 1px red;
+    box-shadow: 0 0 1px 1px red;
+  }
+  50%
+  {
+    -webkit-box-shadow: 0 0 3px 1px red;
+    -moz-box-shadow: 0 0 3px 1px red;
+    box-shadow: 0 0 3px 1px red;
+  }
+  100%
+  {
+    -webkit-box-shadow: 0 0 1px 1px red;
+    -moz-box-shadow: 0 0 1px 1px red;
+    box-shadow: 0 0 1px 1px red;
+  }
+}
+
 @keyframes bigpulseinputshadow
 {
   0% 

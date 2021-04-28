@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import CollapsibleContent from 'react-collapsible-content'
+import ResizeText from './ResizeText'
 
 import "./Foldable.scss"
 import "../scss/effects.scss"
@@ -21,7 +22,7 @@ class Foldable extends Component {
         return (
             <div onClick={() => {this.onopen()}} className={`card fold-card ${this.props.styleClassName}`}>
 
-                <h1 className="card-title shake-small">{this.props.title}</h1>
+                <div className="card-title"><ResizeText><h1 className="shake-small">{this.props.title}</h1></ResizeText></div>
 
                 <CollapsibleContent expanded={this.state.expanded} className="card-content">
 

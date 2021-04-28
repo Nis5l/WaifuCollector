@@ -52,6 +52,12 @@ main.content{
     {
         border-color: $input-border-color-hover;
     }
+
+    &.invalid
+    {
+        border-color: red;
+        animation: pulseinputshadowinvalid 2s ease-out infinite;
+    }
 }
 
 .button_input

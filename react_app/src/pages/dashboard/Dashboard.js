@@ -1,27 +1,41 @@
 import Cookies from 'js-cookie'
-import React, {useState, useEffect} from 'react'
+import React, {Component} from 'react'
 import Card from '../../components/Card'
 import Friendlist from '../../components/Friendlist'
 import PackProgressRing from '../../components/PackProgressRing'
 import ProfileName from '../../components/ProfileName'
+import redirectIfNecessary from '../../components/Redirecter'
+import {withRouter} from 'react-router-dom'
 
 import axios from 'axios'
 import Config from '../../config.json'
 
 import "./Dashboard.scss"
 
-function Dashboard() {
+class Dashboard extends Component {
 
-    const [userID, setUserID] = useState(Cookies.get('userID'));
-    const [stats, setStats] = useState({friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0});
+    constructor(props) {
+        super(props);
 
-    useEffect(() => {
+        this.state =
+        {
+            userID: Cookies.get('userID'),
+            friends: 0,
+            maxFriends: 0,
+            cards: 0,
+            maxCards: 0,
+            trades: 0,
+            maxTrades: 0
+        }
+    }
 
-        async function loadStats(userID) {
+    componentDidMount() {
+
+        async function loadStats(self, userID) {
 
             const data = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
 
-            //redirectIfNecessary(data);
+            if (redirectIfNecessary(self.props.history, data)) return;
 
             if (data.data && data.data.status === 0) {
 
@@ -32,117 +46,111 @@ function Dashboard() {
             }
 
             return [];
-
         }
 
-        async function updateStats() {
+        async function updateStats(self) {
 
-            const stats = await loadStats(userID);
+            const stats = await loadStats(self, self.state.userID);
 
-            setStats(stats);
-
+            self.setState(stats);
         }
 
-        updateStats();
+        updateStats(this);
 
-    }, [setStats, userID]);
+    }
 
-    useEffect(() => {
+    render() {
 
-        if (userID === undefined)
-            setUserID(Cookies.get('userID'));
+        return (
 
-    }, [setUserID, userID]);
+            <div className="container">
 
-    return (
+                <Card
+                    title="Account Info"
+                    styleClassName="accountInfo"
+                >
 
-        <div className="container">
+                    <div className="avatar">
 
-            <Card
-                title="Account Info"
-                styleClassName="accountInfo"
-            >
+                        <img src="/assets/Icon.png" alt="Avatar" />
 
-                <div className="avatar">
+                    </div>
 
-                    <img src="/assets/Icon.png" alt="Avatar" />
+                    <div className="profilename_container">
 
-                </div>
+                        <ProfileName
+                            userID={this.state.userID}
+                        />
 
-                <div className="profilename_container">
+                    </div>
 
-                    <ProfileName
-                        userID={userID}
+                    <table className="stats">
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>Friends:</td>
+                                <td>{`${this.state.friends}/${this.state.maxFriends}`}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Waifus:</td>
+                                <td>{`${this.state.cards}/${this.state.maxCards}`}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Trades:</td>
+                                <td>{`${this.state.trades}/${this.state.maxTrades}`}</td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </Card>
+
+                <Card
+                    title="Badges"
+                    styleClassName="badges"
+                >
+                    <h1>Badges</h1>
+                </Card>
+
+                <Card
+                    title="Packs"
+                    styleClassName="packs"
+                >
+
+                    <div className="packs-grid">
+
+                        <PackProgressRing className="pack1" />
+                        <PackProgressRing className="pack2" />
+
+                    </div>
+
+                </Card>
+
+                <Card
+                    title="Friends"
+                    styleClassName="friends"
+                >
+
+                    <Friendlist
+                        userID={this.state.userID}
                     />
 
-                </div>
+                </Card>
 
-                <table className="stats">
+            </div>
 
-                    <tbody>
-
-                        <tr>
-
-                            <td>Friends:</td>
-                            <td>{`${stats.friends}/${stats.maxFriends}`}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>Waifus:</td>
-                            <td>{`${stats.cards}/${stats.maxCards}`}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>Trades:</td>
-                            <td>{`${stats.trades}/${stats.maxTrades}`}</td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </Card>
-
-            <Card
-                title="Badges"
-                styleClassName="badges"
-            >
-                <h1>Badges</h1>
-            </Card>
-
-            <Card
-                title="Packs"
-                styleClassName="packs"
-            >
-
-                <div className="packs-grid">
-
-                    <PackProgressRing className="pack1" />
-                    <PackProgressRing className="pack2" />
-
-                </div>
-
-            </Card>
-
-            <Card
-                title="Friends"
-                styleClassName="friends"
-            >
-
-                <Friendlist
-                    userID={userID}
-                />
-
-            </Card>
-
-        </div>
-
-    )
+        )
+    }
 }
 
-export default Dashboard
+export default withRouter(Dashboard);
