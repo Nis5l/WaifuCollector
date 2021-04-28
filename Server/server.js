@@ -1476,7 +1476,7 @@ app.get("/packData", (req, res) => {
 app.get("/verified", async (req, res) => {
 	try {
 		try {
-			var decoded = jwt.verify(req.body.token, logic.getJWTSecret());
+			var decoded = jwt.verify(req.query.token, logic.getJWTSecret());
 		} catch (JsonWebTokenError) {
 			res.send({status: 1, message: "Identification Please"});
 			return;
@@ -1492,7 +1492,7 @@ app.get("/verified", async (req, res) => {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
-app.post("/setMail", async (req, res) => {
+app.post("/setmail", async (req, res) => {
 	try {
 		var mail = req.body.mail;
 		if (mail == undefined || !(typeof mail === 'string' || mail instanceof String)) {

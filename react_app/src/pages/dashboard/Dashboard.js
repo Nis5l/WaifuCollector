@@ -55,6 +55,24 @@ class Dashboard extends Component {
             self.setState(stats);
         }
 
+        axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
+            .then((res) => {
+                if (res.data && res.data.status === 0) {
+                    switch (res.data.verified) {
+                        case 1:
+                            this.props.history.push('/verify');
+                            break;
+
+                        case 2:
+                            this.props.history.push('/verify/mail');
+                            break;
+
+                        default:
+                    }
+                    return;
+                }
+            });
+
         updateStats(this);
 
     }
