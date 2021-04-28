@@ -10,6 +10,8 @@ import {withRouter} from 'react-router-dom';
 
 import ThreeDotsMenu from './ThreeDotsMenu.js'
 
+import Scrollbar from './ScrollBar'
+
 function Friendlist(props) {
 
     const [friends, setFriends] = useState([]);
@@ -49,21 +51,22 @@ function Friendlist(props) {
         <div
             className="friendslist"
         >
-
             <ul>
+                <Scrollbar>
 
-                {friends.map((friend) => {
+                    {friends.map((friend) => {
 
-                    return (
-                        <FriendComponent
-                            key={friend.userID}
-                            avatar="/assets/Icon.png"
-                            userID={friend.userID}
-                        />
-                    )
+                        return (
+                            <FriendComponent
+                                key={friend.userID}
+                                avatar="/assets/Icon.png"
+                                userID={friend.userID}
+                            />
+                        )
 
-                })}
+                    })}
 
+                </Scrollbar>
             </ul>
 
         </div>
