@@ -1,4 +1,6 @@
 function redirectIfNecessary(history, data) {
+    if (!data === undefined) return 0;
+
     if (data.status === 10) {
         history.push('/verify');
         return 1;

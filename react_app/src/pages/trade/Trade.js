@@ -8,6 +8,7 @@ import Scrollbar from '../../components/ScrollBar'
 import {YesNo, YesNoCancel} from '../../components/Popup'
 import {withRouter} from 'react-router-dom'
 import RefreshButton from '../../components/RefreshButton'
+import redirectIfNecessary from '../../components/Redirecter'
 
 import './Trade.scss'
 
@@ -53,6 +54,8 @@ class Trade extends Component {
     const data = {token: Cookies.get('token'), userID: this.friendid};
     axios.post(`${Config.API_HOST}/trade`, data)
       .then((res) => {
+
+        if (redirectIfNecessary(this.props.history, res.data)) return;
 
         if (res && res.status === 200 && res.data && res.data.status === 0) {
 
@@ -124,7 +127,9 @@ class Trade extends Component {
       () => {this.setInfo(); this.setDisabled()});
 
     axios.post(`${Config.API_HOST}/removetrade`, data)
-      .then((res) => {this.load()})
+      .then((res) => {
+        this.load()
+      });
   }
 
   cardOwnRemoveCancel = () => {
@@ -152,7 +157,10 @@ class Trade extends Component {
     this.setState({removeFriendSuggestionId: undefined});
 
     axios.post(`${Config.API_HOST}/removesuggestion`, data)
-      .then((res) => {this.load()})
+      .then((res) => {
+        if (redirectIfNecessary(this.props.history, res.data)) return;
+        this.load()
+      });
   }
 
   cardSuggestionCancel = () => {
@@ -178,7 +186,10 @@ class Trade extends Component {
       () => {this.setInfo(); this.setDisabled()});
 
     axios.post(`${Config.API_HOST}/acceptsuggestion`, data)
-      .then((res) => {this.load()});
+      .then((res) => {
+        if (redirectIfNecessary(this.props.history, res.data)) return;
+        this.load()
+      });
   }
 
   cardSuggestionNo = () => {
@@ -198,7 +209,10 @@ class Trade extends Component {
     this.setState({removeSuggestionId: undefined});
 
     axios.post(`${Config.API_HOST}/removesuggestion`, data)
-      .then((res) => {this.load()})
+      .then((res) => {
+        if (redirectIfNecessary(this.props.history, res.data)) return;
+        this.load()
+      });
   }
 
   confirm = () => {
@@ -211,6 +225,9 @@ class Trade extends Component {
 
     axios.post(`${Config.API_HOST}/okTrade`, data)
       .then((res) => {
+
+        if (redirectIfNecessary(this.props.history, res.data)) return;
+
         this.load();
       })
   }
@@ -220,7 +237,7 @@ class Trade extends Component {
   }
 
   refresh = () => {
-    if(this.state.cards === undefined) return;
+    if (this.state.cards === undefined) return;
 
     this.setState({
       name: "Loading...",

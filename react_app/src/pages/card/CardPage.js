@@ -6,6 +6,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 import {YesNo} from '../../components/Popup'
 import {withRouter} from 'react-router-dom'
 import Scrollbar from '../../components/ScrollBar'
+import redirectIfNecessary from '../../components/Redirecter'
 
 import Config from '../../config.json'
 
@@ -36,6 +37,7 @@ class CardPage extends Component {
   componentDidMount() {
     axios.post(`${Config.API_HOST}/card`, {token: Cookies.get('token'), card: this.mainuuid})
       .then(res => {
+        if (redirectIfNecessary(this.props.history, res.data)) return;
         if (res && res.status === 200 && res.data && res.data.status === 0) {
           parseCards([res.data.card]);
           this.setState({maincard: res.data.card});
@@ -46,6 +48,7 @@ class CardPage extends Component {
   }
 
   trackScrolling = () => {
+    console.log("OK");
     if (this.card_wrapper == null ||
       !this.state.hasMore ||
       this.state.maincard === undefined ||
@@ -68,6 +71,9 @@ class CardPage extends Component {
     axios.post(`${Config.API_HOST}/inventory`, data)
       .then(res => {
         if (res && res.status === 200) {
+
+          if (redirectIfNecessary(this.props.history, data)) return;
+
           if (res.data && res.data.status === 0) {
             parseCards(res.data.inventory);
             let cards;
@@ -114,6 +120,9 @@ class CardPage extends Component {
     axios.post(`${Config.API_HOST}/upgrade`, data)
       .then(res => {
         if (res && res.status === 200) {
+
+          if (redirectIfNecessary(this.props.history, data)) return;
+
           if (res.data && res.data.status === 0) {
             success = res.data.success;
             axios.post(`${Config.API_HOST}/card`, {token: Cookies.get('token'), card: res.data.uuid})
@@ -168,6 +177,14 @@ class CardPage extends Component {
   }
 
   render() {
+
+    let mainsize = 1;
+    let size = 0.8;
+    if (window.screen.availWidth < 993) {
+      mainsize = 0.7;
+      size = 0.5;
+    }
+
     return (
       <div className="cardpage_wrapper">
         {
@@ -178,8 +195,8 @@ class CardPage extends Component {
             text="Upgrade?"
           />
         }
-        <div className="card_wrapper">
-          <Scrollbar>
+        <Scrollbar>
+          <div className="card_wrapper">
             <InfiniteScroll
               pageStart={0}
               loadMore={this.trackScrolling}
@@ -209,7 +226,7 @@ class CardPage extends Component {
                   < div className="cardpage_card_wrapper" key={"card-" + this.key++}>
                     <WaifuCard
                       card={card}
-                      size="0.8"
+                      size={size}
                       cardcolor="transparent"
                       clickable="true"
                       onClick={this.onCardClick}
@@ -219,8 +236,8 @@ class CardPage extends Component {
                 ))
               }
             </InfiniteScroll>
-          </Scrollbar>
-        </div>
+          </div>
+        </Scrollbar>
         <div className="cardpage_maincard">
           {
             this.state.maincard !== undefined && this.state.maincard === -1 &&
@@ -245,7 +262,7 @@ class CardPage extends Component {
             <WaifuCard
               onCreate={(obj) => {this.setState({mainwaifucard: obj})}}
               card={this.state.maincard}
-              size="1"
+              size={mainsize}
               cardcolor="transparent"
               clickable="false"
             >

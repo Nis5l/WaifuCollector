@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import {WaifuCardLoad} from '../../components/WaifuCard'
+import redirectIfNecessary from '../../components/Redirecter'
 
 import Config from '../../config.json'
 
@@ -31,6 +32,9 @@ class SuggestInventory extends Component {
     }
     axios.post(`${Config.API_HOST}/suggesttrade`, data)
       .then((res) => {
+
+        if (redirectIfNecessary(this.props.history, res.data)) return 1;
+
         this.setState({loading: false});
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {

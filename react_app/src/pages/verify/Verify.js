@@ -9,18 +9,37 @@ import {withRouter} from 'react-router-dom'
 
 import './Verify.scss'
 
+const queryString = require('query-string');
+
 class Verify extends Component {
 
   constructor(props) {
     super(props);
 
+    this.key = queryString.parse(props.location.search)['key'];
+
     this.state =
     {
-      mail: undefined
+      mail: undefined,
+      time: 0
     }
   }
 
   componentDidMount() {
+    const data =
+    {
+      token: Cookies.get('token'),
+      key: this.key
+    }
+
+    axios.post(`${Config.API_HOST}/verify`, data)
+      .then((res) => {
+        if (res.data && res.data.status === 0) {
+          this.props.history.push('/dashboard');
+          return;
+        }
+      });
+
     axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
       .then((res) => {
         if (res.data && res.data.status === 0) {
@@ -39,11 +58,68 @@ class Verify extends Component {
           return;
         }
       });
+    this.startTimer();
+  }
+
+  startTimer() {
+    clearInterval(this.timeout);
+
+    let cookiedate = new Date(0);
+    if (Cookies.get('resenttimeout') !== undefined)
+      cookiedate = new Date(Cookies.get('resenttimeout'));
+
+    let t = new Date();
+    let time = cookiedate.getTime() - t.getTime();
+    time = parseInt(time / 1000);
+    this.setState({time: time});
+
+    this.timeout = setInterval(() => {
+      time -= 1;
+      if (time <= 0) clearInterval(this.timeout);
+      this.setState({time: time});
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timeout);
+  }
+
+  resend = () => {
+    if (this.state.time > 0) return;
+    const mail = this.state.mail;
+    this.setState({mail: undefined});
+    const data = {
+      token: Cookies.get('token')
+    }
+
+    axios.post(`${Config.API_HOST}/verify/resend`, data)
+      .then((res) => {
+        if (res.data && res.data.status === 0) {
+          this.setState({mail: mail});
+          let t = new Date();
+          t.setSeconds(t.getSeconds() + 30);
+          Cookies.set('resenttimeout', t);
+          this.startTimer();
+        }
+      })
+  }
+
+  delete = () => {
+    this.setState({mail: undefined});
+    const data = {
+      token: Cookies.get('token')
+    }
+    axios.post(`${Config.API_HOST}/deletemail`, data)
+      .then((res) => {
+        if (res.data && res.data.status === 0) {
+          this.props.history.push('/verify/mail');
+        }
+      })
   }
 
   render() {
     return (
-      <Card styleClassName="verifymail">
+      <Card styleClassName="verify">
 
         <img
           src="/assets/Icon.png"
@@ -56,10 +132,15 @@ class Verify extends Component {
             <WaifuCardLoad />
             :
             (
-              <div>
-                <h2>The verification email sent to {this.state.mail} needs to be accepted.</h2>
-                <a href="<%-url%>/verify/resend">Click to send again.</a>
-                <a href="<%-url%>/verify/delete">Click to change email.</a>
+              <div className="text_wrapper">
+                <p style={{fontSize: "14pt"}}>The verification email was sent to {this.state.mail}.</p>
+                <p
+                  className={"underlined " + (this.state.time <= 0 ? "clickable" : "defaultpointer")}
+                  style={{color: this.state.time > 0 ? "gray" : ""}}
+                  onClick={this.resend}>
+                  Resend {this.state.time > 0 ? ` (${this.state.time})` : ""}
+                </p>
+                <p className="clickable underlined" onClick={this.delete}>Change E-Mail</p>
               </div>
             )
         }

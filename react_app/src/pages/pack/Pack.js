@@ -3,6 +3,7 @@ import axios from 'axios'
 import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
 import Cookies from 'js-cookie'
 import {withRouter} from 'react-router-dom'
+import redirectIfNecessary from '../../components/Redirecter'
 
 import Config from '../../config.json'
 
@@ -25,6 +26,9 @@ class Pack extends Component {
     componentDidMount() {
         axios.post(`${Config.API_HOST}/pack`, {token: Cookies.get('token')})
             .then((res) => {
+
+                if (redirectIfNecessary(this.props.history, res.data)) return;
+
                 if (res && res.status === 200 && res && res.data && res.data.status === 0) {
                     let cards = res.data.cards;
                     parseCards(cards);

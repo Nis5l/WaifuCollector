@@ -1,9 +1,7 @@
 import Cookies from 'js-cookie'
-import React, {Component} from 'react'
-import Card from '../../components/Card'
-import Friendlist from '../../components/Friendlist'
-import PackProgressRing from '../../components/PackProgressRing'
-import ProfileName from '../../components/ProfileName'
+import React, {Component, lazy, Suspense} from 'react'
+
+import Card from '../../components/Card';
 import redirectIfNecessary from '../../components/Redirecter'
 import {withRouter} from 'react-router-dom'
 
@@ -11,6 +9,12 @@ import axios from 'axios'
 import Config from '../../config.json'
 
 import "./Dashboard.scss"
+
+const Friendlist = lazy(() => import('../../components/Friendlist'));
+const PackProgressRing = lazy(() => import('../../components/PackProgressRing'));
+const ProfileName = lazy(() => import('../../components/ProfileName'));
+
+const loading = () => <p>Loading...</p>
 
 class Dashboard extends Component {
 
@@ -96,9 +100,11 @@ class Dashboard extends Component {
 
                     <div className="profilename_container">
 
-                        <ProfileName
-                            userID={this.state.userID}
-                        />
+                        <Suspense fallback={loading()}>
+                            <ProfileName
+                                userID={this.state.userID}
+                            />
+                        </Suspense>
 
                     </div>
 
@@ -147,8 +153,12 @@ class Dashboard extends Component {
 
                     <div className="packs-grid">
 
-                        <PackProgressRing className="pack1" />
-                        <PackProgressRing className="pack2" />
+                        <Suspense fallback={loading()}>
+                            <PackProgressRing className="pack1" />
+                        </Suspense>
+                        <Suspense fallback={loading()}>
+                            <PackProgressRing className="pack2" />
+                        </Suspense>
 
                     </div>
 
@@ -159,9 +169,11 @@ class Dashboard extends Component {
                     styleClassName="friends"
                 >
 
-                    <Friendlist
-                        userID={this.state.userID}
-                    />
+                    <Suspense fallback={loading()}>
+                        <Friendlist
+                            userID={this.state.userID}
+                        />
+                    </Suspense>
 
                 </Card>
 

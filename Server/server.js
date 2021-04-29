@@ -1597,6 +1597,12 @@ app.post("/verify/resend", async (req, res) => {
 		}
 
 		database.getMailVerified(decoded.id, (mv) => {
+
+			if (mv.email == "") {
+				res.send({status: 1});
+				return;
+			}
+
 			logic.sendVerification(decoded.id, mv.email, () => {
 				res.send({status: 0});
 			});

@@ -2,15 +2,16 @@
 
 .shake:hover
 {
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 1s;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
+  filter: contrast(1);
 }
 
 .shake-small:hover
 {
-  animation: shake-small 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake-small 0.5s;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
@@ -35,22 +36,16 @@
 }
 
 @keyframes shake-small {
-  10%, 90% {
-    transform: translate(-0.4px, 0);
-  }
-
-  20%, 80% {
-    transform: translate(0.5px, 0);
-  }
-
-  30%, 50%, 70% {
-    transform: translate(0.5px, 0);
-  }
-
-  40%, 60% {
-    transform: translate(-0.7px, 0);
-  }
-}
+   0%, 100% {
+     transform: translateX(0);
+   } 
+   20%, 60% {
+     transform: translateX(-3px);
+   } 
+   40%, 80% {
+     transform: translateX(3px);
+   } 
+} 
 
 @keyframes pulsepackshadow-bottom
 {
@@ -205,10 +200,23 @@
     box-shadow: 0 0 10px 10px white;
   }
 }
+
 @keyframes spin
 {
   100%
   {
     transform:rotate(360deg);
+  }
+}
+
+@keyframes text-appear
+{
+  0%
+  {
+    font-size: 0pt;
+  }
+  100%
+  {
+    font-size: 12pt;
   }
 }

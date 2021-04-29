@@ -1,14 +1,18 @@
-import React from 'react'
+import React, {lazy, Suspense} from 'react'
 import Card from '../../components/Card'
+
 import PackGraph from '../../components/PackGraph'
 import Foldable from '../../components/Foldable'
-import WaifuCard from '../../components/WaifuCard'
 import Scrollbar from '../../components/ScrollBar'
 
 import "./Home.scss"
 import "../../scss/effects.scss"
 
 import Config from '../../config.json'
+
+const WaifuCard = lazy(() => import('../../components/WaifuCard'));
+
+const loading = () => <p>Loading...</p>
 
 function Home() {
 
@@ -33,21 +37,23 @@ function Home() {
                     <p>Waifu-Cards starts with Level 1 and a Quality from 1-5.</p>
                     <p>X: Level, Y: Quality</p>
                     <div>
-                        <WaifuCard
-                            img={`${Config.API_HOST}/Card/Card_Ichigo.jpg`}
-                            framefront={`${Config.API_HOST}/Frame/Frame_Silver_Front.png`}
-                            frameback={`${Config.API_HOST}/Frame/Frame_Silver_Back.png`}
-                            effect={`${Config.API_HOST}/Effect/Effect2.gif`}
-                            cardname="Ichigo"
-                            animename="Darling In The FranXX"
-                            size="0.8"
-                            quality="Y"
-                            level="X"
-                            effectopacity="0.5"
-                            cardcolor="transparent"
-                            clickable="false"
-                        >
-                        </WaifuCard>
+                        <Suspense fallback={loading()}>
+                            <WaifuCard
+                                img={`${Config.API_HOST}/Card/Card_Ichigo.jpg`}
+                                framefront={`${Config.API_HOST}/Frame/Frame_Silver_Front.png`}
+                                frameback={`${Config.API_HOST}/Frame/Frame_Silver_Back.png`}
+                                effect={`${Config.API_HOST}/Effect/Effect2.gif`}
+                                cardname="Ichigo"
+                                animename="Darling In The FranXX"
+                                size="0.8"
+                                quality="Y"
+                                level="X"
+                                effectopacity="0.5"
+                                cardcolor="transparent"
+                                clickable="false"
+                            >
+                            </WaifuCard>
+                        </Suspense>
                     </div>
                     <h5>Upgrading</h5>
                     <p>By Combining 2 Cards of the same Character and Level you can Upgrade them.</p>

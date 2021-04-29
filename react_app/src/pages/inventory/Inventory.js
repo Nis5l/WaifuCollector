@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import {withRouter} from 'react-router-dom'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
 import Scrollbar from '../../components/ScrollBar'
+import redirectIfNecessary from '../../components/Redirecter'
 
 import "./Inventory.scss"
 import Config from '../../config.json'
@@ -62,6 +64,9 @@ class Inventory extends Component {
     axios.post(`${Config.API_HOST}/inventory`, data)
       .then(res => {
         if (res && res.status === 200) {
+
+          if (redirectIfNecessary(this.props.history, res.data)) return;
+
           if (res.data && res.data.status === 0) {
             parseCards(res.data.inventory);
             let cards = [...this.state.cards, ...res.data.inventory];
@@ -160,4 +165,4 @@ class Inventory extends Component {
   }
 }
 
-export default Inventory;
+export default withRouter(Inventory);

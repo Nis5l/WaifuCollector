@@ -110,11 +110,23 @@ main.content{
     cursor: pointer;
 }
 
+.underlined
+{
+    text-decoration: underline;
+}
+
+.defaultpointer
+{
+    cursor: default;
+}
+
 .error
 {
     margin: 10px auto;
+    font-weight: bold;
 
     color: $color-error;
-    animation: shake-small 10s cubic-bezier(.36,.07,.19,.97) both;
-    -webkit-font-smoothing: antialiased;
+    animation: shake-small 0.5s ease 0.1s, text-appear 0.3s;
+    filter: contrast(1);
+    font-size: 12pt;
 }

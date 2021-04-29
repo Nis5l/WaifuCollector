@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import React, {useState} from 'react';
+import {useHistory} from "react-router-dom";
 import Card from '../../components/Card';
 
 import axios from 'axios';
@@ -7,7 +7,7 @@ import Config from '../../config.json';
 
 import "./Register.scss"
 
-function Register(props){
+function Register(props) {
 
     const history = useHistory();
 
@@ -40,8 +40,6 @@ function Register(props){
         axios.post(`${Config.API_HOST}/register`, user)
             .then(res => {
 
-                console.log(res);
-
                 if (res && res.status === 200) {
 
                     if (res.data && res.data.status === 0) {
@@ -52,8 +50,6 @@ function Register(props){
                     }
 
                 }
-
-                console.log("Error registering!");
 
             });
 

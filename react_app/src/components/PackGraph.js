@@ -5,6 +5,7 @@ import "./PackGraph.scss"
 import axios from 'axios'
 import Config from '../config.json'
 
+
 const config = {
     type: 'line',
     data: {
