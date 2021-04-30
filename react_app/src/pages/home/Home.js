@@ -39,7 +39,7 @@ function Home() {
                     <div>
                         <Suspense fallback={loading()}>
                             <WaifuCard
-                                img={`${Config.API_HOST}/Card/Card_Ichigo.jpg`}
+                                img={`${Config.API_HOST}/Card/Card_Ichigo.webp`}
                                 framefront={`${Config.API_HOST}/Frame/Frame_Silver_Front.png`}
                                 frameback={`${Config.API_HOST}/Frame/Frame_Silver_Back.png`}
                                 effect={`${Config.API_HOST}/Effect/Effect2.gif`}
