@@ -287,7 +287,7 @@ app.post("/register", (req, res) => {
 			case 1: {
 				registerCallback(
 					false,
-					"the username length must be between " +
+					"username length must be between " +
 					logic.getUserLen()[0] +
 					" and " +
 					logic.getUserLen()[1]
@@ -297,7 +297,7 @@ app.post("/register", (req, res) => {
 			case 2: {
 				registerCallback(
 					false,
-					"the user can only contain letters, numbers and _"
+					"user can only contain letters, numbers and _"
 				);
 				return;
 			}
@@ -307,7 +307,7 @@ app.post("/register", (req, res) => {
 			case 1: {
 				registerCallback(
 					false,
-					"the password length must be between " +
+					"password length must be between " +
 					logic.getPassLen()[0] +
 					" and " +
 					logic.getPassLen()[1]
@@ -317,13 +317,13 @@ app.post("/register", (req, res) => {
 		}
 
 		if (!logic.checkMail(mail)) {
-			res.send({status: 1, message: "Invalid mail"});
+			res.send({status: 1, message: "invalid mail"});
 			return;
 		}
 
 		database.mailExists(mail, (b) => {
 			if (b) {
-				res.send({status: 2, message: "Mail already in use"});
+				res.send({status: 2, message: "mail already in use"});
 				return;
 			}
 			database.register(username, password, mail, registerCallback);

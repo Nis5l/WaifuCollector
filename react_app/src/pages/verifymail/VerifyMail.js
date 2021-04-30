@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Card from '../../components/Card'
 import {WaifuCardLoad} from '../../components/WaifuCard'
+import {checkMail} from '../../Utils'
 
 import Cookies from 'js-cookie'
 import axios from 'axios'
@@ -60,7 +61,7 @@ class VerifyMail extends Component {
   }
 
   setEmail = (self, email) => {
-    const matches = VerifyMail.REGEX.test(email);
+    const matches = !checkMail(email);
     self.setState({email: email, matches: matches});
   }
 
@@ -108,7 +109,5 @@ class VerifyMail extends Component {
     )
   }
 }
-
-VerifyMail.REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 export default VerifyMail;

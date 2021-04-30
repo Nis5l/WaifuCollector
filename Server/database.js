@@ -117,7 +117,7 @@ module.exports = {
 					);
 				});
 			} else {
-				callback(false, "error: user already exists");
+				callback(false, "user already exists");
 			}
 		});
 	},

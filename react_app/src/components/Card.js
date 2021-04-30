@@ -11,7 +11,7 @@ function Card(props) {
 
             { props.title && <div className="card-title"><ResizeText><h1>{props.title}</h1></ResizeText></div>}
 
-            <div className="card-content">
+            <div className="card-content" style={{height: !props.title ? "100%" : ""}}>
 
                 {props.children}
 

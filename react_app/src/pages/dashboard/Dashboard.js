@@ -61,6 +61,7 @@ class Dashboard extends Component {
 
         axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
             .then((res) => {
+                console.log(res);
                 if (res.data && res.data.status === 0) {
                     switch (res.data.verified) {
                         case 1:
