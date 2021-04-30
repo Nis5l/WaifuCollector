@@ -40,11 +40,9 @@ function Login(props) {
                 if (res && res.status === 200) {
 
                     if (res.data && res.data.status === 0) {
-
-                        updateToken(res.data.token);
-
                         Cookies.set("userID", res.data.userID, {expires: 30 * 12 * 30});
 
+                        updateToken(res.data.token);
                     }
 
                 }
