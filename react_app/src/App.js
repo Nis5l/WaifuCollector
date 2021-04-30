@@ -56,7 +56,7 @@ function App() {
               path="/login"
             >
 
-              {token ? <Route component={Dashboard} /> : <Login
+              {token ? <Redirect to="/dashboard" /> : <Login
                 setToken={setTokenHandler}
               />
               }
