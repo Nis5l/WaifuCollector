@@ -18,3 +18,4 @@ Fix:
 			Friend Notification
 		Beim Cardtrading, add card( keine karte zur auswahl == Stuck im auswahlscreen
 	Binder
+	do new stuff
