@@ -61,6 +61,7 @@ function Friendlist(props) {
                                 key={friend.userID}
                                 avatar="/assets/Icon.png"
                                 userID={friend.userID}
+                                status={friend.status}
                             />
                         )
 
@@ -76,34 +77,48 @@ function Friendlist(props) {
 
 class Friend extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.status = props.status;
+    }
+
     onClick = (link) => {
-
         this.props.history.push(link);
-
     };
 
     render() {
 
-        const options = [
+        let options =
+            [
+                {
+                    name: "Profile",
+                    onClick: () => this.onClick("/profile/" + this.props.userID)
+                }
+            ];
 
-            {
-
-                name: "Profile",
-                onClick: () => this.onClick("/profile/" + this.props.userID)
-
-            },
-            {
-
-                name: "Trade",
-                onClick: () => this.onClick("/trade/" + this.props.userID)
-
-            }
-
-        ];
+        switch (this.status) {
+            case 1:
+                options.push(
+                    {
+                        name: "Befriend",
+                        onClick: () => this.onClick("/trade/" + this.props.userID)
+                    }
+                )
+                break;
+            case 2:
+                options.push(
+                    {
+                        name: "Trade",
+                        onClick: () => this.onClick("/trade/" + this.props.userID)
+                    }
+                )
+                break;
+            default:
+        }
 
         return (
 
-            <li className="friend">
+            <li className="friend" >
 
                 <img src={this.props.avatar} alt="Friend Avatar" />
 

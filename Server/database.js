@@ -425,7 +425,7 @@ module.exports = {
 			}
 		);
 	},
-	getUsers: function getUsers(callback) {
+	getUsersAll: function getUsersAll(callback) {
 		con.query(
 			"SELECT id, username AS name, ranking FROM user",
 			function (err, result, fields) {
@@ -934,6 +934,14 @@ module.exports = {
 			}
 		);
 	},
+	getUsers: function getUsers(username, count, offset, callback) {
+		con.query(
+			"SELECT id, username FROM `user` WHERE LOWER(username) LIKE LOWER(CONCAT('%',?,'%')) LIMIT ? OFFSET ?;",
+			[username, count, offset],
+			(err, result, fields) => {
+				callback(result);
+			});
+	}
 };
 
 function cards(callback) {

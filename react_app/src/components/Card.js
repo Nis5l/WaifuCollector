@@ -9,7 +9,22 @@ function Card(props) {
 
         <div className={"card " + props.styleClassName}>
 
-            { props.title && <div className="card-title"><ResizeText><h1>{props.title}</h1></ResizeText></div>}
+            {
+                props.title &&
+                <div
+                    className="card-title"
+                >
+                    <ResizeText>
+                        <h1>
+                            {props.title}
+                        </h1>
+                        {
+                            props.icon &&
+                            <i onClick={props.onIconClick} className={"fas icon " + props.icon} />
+                        }
+                    </ResizeText>
+                </div>
+            }
 
             <div className="card-content" style={{height: !props.title ? "100%" : ""}}>
 

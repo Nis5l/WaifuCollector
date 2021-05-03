@@ -13,6 +13,7 @@ import NoMatch from './pages/nomatch/NoMatch'
 import Trade from './pages/trade/Trade'
 import TradeInventory from './pages/tradeinventory/TradeInventory'
 import SuggestInventory from './pages/suggestInventory/SuggestInventory'
+import Users from './pages/users/Users'
 
 import Login from './pages/loggedout/Login'
 
@@ -144,6 +145,8 @@ function App() {
               {!token ? <Redirect to="/login" /> : <Route component={Verify} />}
 
             </Route>
+
+            <Route path="/users" component={Users} />
 
             <Route component={NoMatch} />
 

@@ -61,7 +61,6 @@ class Dashboard extends Component {
 
         axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
             .then((res) => {
-                console.log(res);
                 if (res.data && res.data.status === 0) {
                     switch (res.data.verified) {
                         case 1:
@@ -80,6 +79,10 @@ class Dashboard extends Component {
 
         updateStats(this);
 
+    }
+
+    friendPopup(self) {
+        self.props.history.push("/users")
     }
 
     render() {
@@ -168,8 +171,9 @@ class Dashboard extends Component {
                 <Card
                     title="Friends"
                     styleClassName="friends"
+                    icon="fa-users"
+                    onIconClick={() => {this.friendPopup(this)}}
                 >
-
                     <Suspense fallback={loading()}>
                         <Friendlist
                             userID={this.state.userID}

@@ -1,4 +1,5 @@
 @import "../scss/__base.scss";
+@import "../scss/effects.scss";
 
 .card{
 
@@ -34,6 +35,19 @@
         border-bottom: 2px solid $background-secondary;
 
         overflow: hidden;
+
+        .icon
+        {
+            font-size: 12pt;
+            color: $sidebar-color;
+            margin-left: auto;
+            transition: rotation 1s linear;
+            &:hover
+            {
+                color: white;
+                animation: wiggle 0.5s linear;
+            }
+        }
 
         .resizetext_wrapper
         {

@@ -188,9 +188,9 @@ app.get("/animes", function (req, res) {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
-app.get("/users", function (req, res) {
+app.get("/usersall", function (req, res) {
 	try {
-		database.getUsers((users) => {
+		database.getUsersAll((users) => {
 			if (users != undefined) {
 				res.send({status: 1, users: users});
 			} else {
@@ -1495,7 +1495,7 @@ app.get("/verified", async (req, res) => {
 app.post("/setmail", async (req, res) => {
 	try {
 		var mail = req.body.mail;
-		if (mail == undefined || !(typeof mail === 'string' || mail instanceof String)) {
+		if (mail == undefined || !logic.isString(mail)) {
 			res.send({status: 1, message: "Invalid input"});
 			return;
 		}
@@ -1663,6 +1663,26 @@ app.get("/animePackTime", async (req, res) => {
 		var decoded = await logic.standardroutine(req.body.token, res);
 		res.send({status: 0, packTime: logic.getAnimePackTime(decoded.id)});
 	} catch (ex) {logic.handleException(ex, res);}
+});
+
+app.get("/users", async (req, res) => {
+	try {
+		let username = req.query.username;
+		if (!logic.isString(username)) {
+			res.send({status: 1, message: "no string"});
+			return;
+		}
+		let count = 5;
+		let page = parseInt(req.query.page) * count;
+		if (isNaN(page)) {
+			res.send({status: 1, message: "page has to be a int"});
+			return;
+		}
+
+		database.getUsers(username, count, page, (users) => {
+			res.send({status: 0, users: users});
+		})
+	} catch (ex) {console.log(ex); logic.handleException(ex, res);}
 });
 
 process.on('uncaughtException', function (exception) {

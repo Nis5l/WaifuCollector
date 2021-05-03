@@ -48,7 +48,6 @@ class CardPage extends Component {
   }
 
   trackScrolling = () => {
-    console.log("OK");
     if (this.card_wrapper == null ||
       !this.state.hasMore ||
       this.state.maincard === undefined ||
@@ -195,8 +194,8 @@ class CardPage extends Component {
             text="Upgrade?"
           />
         }
-        <Scrollbar>
-          <div className="card_wrapper">
+        <div className="card_wrapper">
+          <Scrollbar>
             <InfiniteScroll
               pageStart={0}
               loadMore={this.trackScrolling}
@@ -236,8 +235,8 @@ class CardPage extends Component {
                 ))
               }
             </InfiniteScroll>
-          </div>
-        </Scrollbar>
+          </Scrollbar>
+        </div>
         <div className="cardpage_maincard">
           {
             this.state.maincard !== undefined && this.state.maincard === -1 &&

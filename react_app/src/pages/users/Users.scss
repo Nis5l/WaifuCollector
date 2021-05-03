@@ -1,0 +1,38 @@
+@import '../../scss/__base.scss';
+
+.users_wrapper
+{
+
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(min-content, max-content) 1fr;
+
+    grid-template-areas:
+        "input"
+        "users";
+
+    .users_input
+    {
+        grid-area: input;
+        text-align: center;
+
+        input[type=text]
+        {
+            width: 50%; 
+        }
+    }
+
+    .users
+    {
+        grid-area: users;
+    }
+
+    .banner_wrapper
+    {
+        margin-top: 20px;
+    }
+}

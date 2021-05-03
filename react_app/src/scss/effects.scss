@@ -47,6 +47,18 @@
    } 
 } 
 
+@keyframes wiggle {
+   0%, 100% {
+     transform: rotateZ(0deg);
+   } 
+   20%, 60% {
+     transform: rotateZ(-10deg);
+   } 
+   40%, 80% {
+     transform: rotateZ(10deg);
+   } 
+} 
+
 @keyframes pulsepackshadow-bottom
 {
   0% 

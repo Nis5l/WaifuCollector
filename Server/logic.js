@@ -517,6 +517,9 @@ function getAnimePackTime(userID) {
 		return packDate.diff(nowDate).seconds();
 	}
 }
+function isString(str) {
+	return (typeof str === 'string' || str instanceof String);
+}
 function getPort() {
 	return port;
 }
@@ -618,5 +621,6 @@ module.exports =
 	getAnimePackCooldown: getAnimePackCooldown,
 	getAnimePackSize: getAnimePackSize,
 	getAnimePackTime: getAnimePackTime,
-	removeCardFromUserCache: removeCardFromUserCache
+	removeCardFromUserCache: removeCardFromUserCache,
+	isString: isString,
 };
