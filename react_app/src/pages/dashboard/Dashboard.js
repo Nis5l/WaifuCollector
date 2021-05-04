@@ -21,6 +21,9 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
 
+        this.lcounter = 0;
+        this.lcounterMax = 5;
+
         this.state =
         {
             userID: Cookies.get('userID'),
@@ -29,7 +32,8 @@ class Dashboard extends Component {
             cards: 0,
             maxCards: 0,
             trades: 0,
-            maxTrades: 0
+            maxTrades: 0,
+            loading: true
         }
     }
 
@@ -55,6 +59,8 @@ class Dashboard extends Component {
         async function updateStats(self) {
 
             const stats = await loadStats(self, self.state.userID);
+
+            self.incrementLCounter(self);
 
             self.setState(stats);
         }
@@ -85,11 +91,18 @@ class Dashboard extends Component {
         self.props.history.push("/users")
     }
 
+    incrementLCounter(self) {
+        self.lcounter++;
+        console.log(self.lcounter + "/" + self.lcounterMax);
+        if (self.lcounter === self.lcounterMax) self.setState({loading: false});
+    }
+
     render() {
 
         return (
 
             <div className="container">
+                {this.state.loading && <div className="blurbackground" />}
 
                 <Card
                     title="Account Info"
@@ -107,6 +120,7 @@ class Dashboard extends Component {
                         <Suspense fallback={loading()}>
                             <ProfileName
                                 userID={this.state.userID}
+                                lCallback={() => {this.incrementLCounter(this)}}
                             />
                         </Suspense>
 
@@ -158,10 +172,16 @@ class Dashboard extends Component {
                     <div className="packs-grid">
 
                         <Suspense fallback={loading()}>
-                            <PackProgressRing className="pack1" />
+                            <PackProgressRing
+                                className="pack1"
+                                lCallback={() => {this.incrementLCounter(this)}}
+                            />
                         </Suspense>
                         <Suspense fallback={loading()}>
-                            <PackProgressRing className="pack2" />
+                            <PackProgressRing
+                                className="pack2"
+                                lCallback={() => {this.incrementLCounter(this)}}
+                            />
                         </Suspense>
 
                     </div>
@@ -177,6 +197,7 @@ class Dashboard extends Component {
                     <Suspense fallback={loading()}>
                         <Friendlist
                             userID={this.state.userID}
+                            lCallback={() => {this.incrementLCounter(this)}}
                         />
                     </Suspense>
 

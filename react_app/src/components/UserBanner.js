@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import {Badge} from './ProfileName'
+import ResizeText from './ResizeText'
 
 import './UserBanner.scss'
 
@@ -6,27 +8,44 @@ class UserBanner extends Component {
     constructor(props) {
         super(props);
 
-        this.userID = this.props.userID;
-        this.username = this.props.username;
+        this.state =
+        {
+            friend: this.props.friend,
+            username: this.props.username,
+            userID: this.props.userID,
+            badges: this.props.badges
+        }
     }
 
     render() {
+        let id = 0;
         return (
             <div className="user_banner">
                 <img src="/assets/Icon.png" alt="Avatar" />
-                <a href={"/profile/" + this.userID}>{this.username}</a>
+                <div className="username">
+                    <a href={"/profile/" + this.state.userID}><ResizeText>{this.state.username}</ResizeText></a>
+                    <div className="badges">
+                        {
+                            this.state.badges.map((badge) => {
+                                return (
+                                    <Badge
+                                        key={'badge-' + id++}
+                                        img={badge.asset}
+                                        name={badge.name}
+                                    />
+                                )
+                            })
+
+                        }
+                    </div>
+                </div>
+                {
+                    this.state.friend === 2 &&
+                    <i className="fas fa-lg fa-user-friends"></i>
+                }
             </div>
         )
     }
 }
-
-//function UserBanner(props) {
-//return (
-//<div className="user_banner">
-//<img src="/assets/Icon.png" alt="Avatar" />
-//<a href={"/profile/" + props.userID}>{props.username}</a>
-//</div>
-//)
-//}
 
 export default UserBanner;

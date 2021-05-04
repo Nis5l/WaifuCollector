@@ -2,13 +2,12 @@
 
 .users_wrapper
 {
-
     width: 100%;
     height: 100%;
 
     display: grid;
 
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
     grid-template-rows: minmax(min-content, max-content) 1fr;
 
     grid-template-areas:
@@ -34,5 +33,6 @@
     .banner_wrapper
     {
         margin-top: 20px;
+        width: 100%;
     }
 }

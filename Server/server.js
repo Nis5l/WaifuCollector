@@ -386,11 +386,6 @@ app.get("/user/:id", async (req, res) => {
 
 });
 
-const devs = [
-	"SmallCode",
-	"Nissl"
-];
-
 app.get("/user/:id/badges", async (req, res) => {
 
 	try {
@@ -414,34 +409,11 @@ app.get("/user/:id/badges", async (req, res) => {
 		}
 
 		//PLACEHOLDER (obv.)
-
-		if (devs.indexOf(username) !== -1) {
-
-			const badges = [
-
-				{
-
-					name: "Developer",
-					asset: "http://localhost:3000/assets/badges/dev.jpg"
-
-				}
-
-			]
-
-			res.send({
-
-				status: 0,
-				badges: badges
-
-			});
-
-			return;
-
-		}
+		const badges = logic.getBadges(username);
 
 		res.send({
 			status: 0,
-			badges: []
+			badges: badges
 		});
 
 	} catch (ex) {
@@ -1680,6 +1652,10 @@ app.get("/users", async (req, res) => {
 		}
 
 		database.getUsers(username, count, page, (users) => {
+			for (let i = 0; i < users.length; i++) {
+				const badges = logic.getBadges(users[i].username);
+				users[i].badges = badges;
+			}
 			res.send({status: 0, users: users});
 		})
 	} catch (ex) {console.log(ex); logic.handleException(ex, res);}

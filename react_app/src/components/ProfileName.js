@@ -11,17 +11,25 @@ function ProfileName(props) {
     const [username, setUsername] = useState("Username");
     const [badges, setBadges] = useState([]);
 
+    let lcounter = 0;
+    let lcounterMax = 2;
+
     useEffect(() => {
 
         if (props.userID === undefined)
             return;
 
+        if (props.username) {
+            setUsername(props.username);
+            return;
+        }
         axios.get(`${Config.API_HOST}/user/${props.userID}`)
             .then((res) => {
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
 
                         setUsername(res.data.username);
+                        incrementLCounter();
 
                     }
                 }
@@ -30,13 +38,20 @@ function ProfileName(props) {
 
     }, [setUsername, props.userID]);
 
+    function incrementLCounter() {
+        lcounter++;
+        if (lcounter === lcounterMax && props.lCallback) props.lCallback();
+    }
+
     useEffect(() => {
-        
-        async function getBadges(userID){
+
+        async function getBadges(userID) {
+
+            if (props.badges) return props.badges;
 
             const data = await axios.get(Config.API_HOST + `/user/${userID}/badges`);
 
-            if(data.data.status === 0){
+            if (data.data.status === 0) {
 
                 return data.data.badges;
 
@@ -46,11 +61,12 @@ function ProfileName(props) {
 
         }
 
-        async function loadBadges(){
+        async function loadBadges() {
 
             const badges = await getBadges(props.userID);
 
             setBadges(badges);
+            incrementLCounter();
 
         }
 
@@ -65,19 +81,17 @@ function ProfileName(props) {
             <h2 className="name">{username}</h2>
 
             <div className="badges">
-
                 {
-                
-                    badges.map((badge) => { return(
+                    badges.map((badge) => {
+                        return (
+                            <Badge
+                                key={makeID(30)}
+                                img={badge.asset}
+                                name={badge.name}
+                            />
+                        )
+                    })
 
-                        <Badge
-                            key={makeID(30)}
-                            img={badge.asset}
-                            name={badge.name}
-                        />
-
-                    )})
-                
                 }
 
             </div>
@@ -122,3 +136,4 @@ function Badge(props) {
 }
 
 export default ProfileName
+export {Badge};

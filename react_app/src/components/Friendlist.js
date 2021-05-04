@@ -16,6 +16,9 @@ function Friendlist(props) {
 
     const [friends, setFriends] = useState([]);
 
+    let lcounter = 0;
+    let lcounterMax = 1;
+
     useEffect(() => {
 
         async function loadFriends() {
@@ -37,11 +40,17 @@ function Friendlist(props) {
 
             setFriends(filteredFriends);
 
+            incrementLCounter()
         }
 
         fetchData();
 
     }, [props.userID]);
+
+    function incrementLCounter() {
+        lcounter++;
+        if (lcounter === lcounterMax && props.lCallback) props.lCallback();
+    }
 
     if (props.userID === undefined)
         return (<div className="friendslist"></div>);
@@ -62,6 +71,7 @@ function Friendlist(props) {
                                 avatar="/assets/Icon.png"
                                 userID={friend.userID}
                                 status={friend.status}
+                                username={friend.username}
                             />
                         )
 
@@ -124,6 +134,7 @@ class Friend extends React.Component {
 
                 <ProfileName
                     userID={this.props.userID}
+                    username={this.props.username}
                 />
 
                 <ThreeDotsMenu

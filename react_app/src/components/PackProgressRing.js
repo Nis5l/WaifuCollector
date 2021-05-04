@@ -16,6 +16,10 @@ class PackProgressRing extends Component {
         this.update = 50;
         this.packTime = 0;
         this.packTimeMax = 100;
+
+        this.lcounter = 0;
+        this.lcounterMax = 2;
+
         this.state =
         {
             progress: this.strokeDashes,
@@ -29,6 +33,7 @@ class PackProgressRing extends Component {
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
                         self.packTimeMax = res.data.packTimeMax;
+                        this.incrementLCounter();
                     }
                 }
             })
@@ -37,13 +42,18 @@ class PackProgressRing extends Component {
     loadPackTime(self) {
         axios.post(`${Config.API_HOST}/packtime`, {token: Cookies.get('token')})
             .then((res) => {
-
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
                         self.packTime = res.data.packTime;
+                        this.incrementLCounter();
                     }
                 }
             })
+    }
+
+    incrementLCounter() {
+        this.lcounter++;
+        if (this.lcounter === this.lcounterMax && this.props.lCallback) this.props.lCallback();
     }
 
     componentDidMount() {

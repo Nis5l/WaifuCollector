@@ -135,7 +135,7 @@ class Inventory extends Component {
             <InfiniteScroll
               pageStart={0}
               loadMore={this.trackScrolling}
-              hasMore={true || false}
+              hasMore={true}
               className="card_wrapper"
               useWindow={false}
             >

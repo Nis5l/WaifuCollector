@@ -42,6 +42,11 @@ const port = config.port;
 
 var clients = {};
 
+const devs = [
+	"SmallCode",
+	"Nissl"
+];
+
 function createCache(userID, username, res) {
 	return new Promise((resolve, reject) => {
 		if (clients[userID]) {
@@ -517,6 +522,20 @@ function getAnimePackTime(userID) {
 		return packDate.diff(nowDate).seconds();
 	}
 }
+
+function getBadges(username) {
+	if (devs.indexOf(username) === -1) return [];
+
+	const badges = [
+		{
+			name: "Developer",
+			asset: "http://localhost:3000/assets/badges/dev.jpg"
+		}
+	]
+
+	return badges;
+}
+
 function isString(str) {
 	return (typeof str === 'string' || str instanceof String);
 }
@@ -623,4 +642,5 @@ module.exports =
 	getAnimePackTime: getAnimePackTime,
 	removeCardFromUserCache: removeCardFromUserCache,
 	isString: isString,
+	getBadges: getBadges,
 };
