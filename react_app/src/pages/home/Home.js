@@ -81,21 +81,23 @@ function Home() {
                     <p>I will happily resolve the issue.</p>
                     <p>Everything is nonprofit, so I would be thankful if we could solve the problems without any sort of legal process.</p>
                 </Foldable>
-                <Card
-                    styleClassName="privacy"
-                >
-                    <div>
-                        <a
-                            id="discordhrefwrapper"
-                            href="https://discord.gg/hftNUqNgRj"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            <img id="discordhref" className="shake" src="/assets/discordicon.png" alt="Discord" />
-                        </a>
-                        <a href="/privacy" id="privacyhref" className="shake">Privacy</a>
-                    </div>
-                </Card>
+                <div className="privacy_wrapper">
+                    <Card
+                        styleClassName="privacy"
+                    >
+                        <div>
+                            <a
+                                id="discordhrefwrapper"
+                                href="https://discord.gg/hftNUqNgRj"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                <img id="discordhref" className="shake" src="/assets/discordicon.png" alt="Discord" />
+                            </a>
+                            <a href="/privacy" id="privacyhref" className="shake">Privacy</a>
+                        </div>
+                    </Card>
+                </div>
             </div >
         </Scrollbar>
     )
