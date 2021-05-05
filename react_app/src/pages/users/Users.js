@@ -54,6 +54,7 @@ class Users extends Component {
     axios.get(`${Config.API_HOST}/users?username=${this.username}&page=${this.page}`)
       .then((res) => {
         if (res.data && res.data.status === 0) {
+          if (!this.loading) return;
           if (res.data.users.length === 0) this.hasMore = false;
           this.loading = false;
           this.page++;
@@ -97,7 +98,7 @@ class Users extends Component {
             </InfiniteScroll>
           </Scrollbar>
         </div>
-      </div>
+      </div >
     )
   }
 

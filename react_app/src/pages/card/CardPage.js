@@ -194,7 +194,7 @@ class CardPage extends Component {
             text="Upgrade?"
           />
         }
-        <div className="card_wrapper">
+        <div className="card_wrapper_wrapper">
           <Scrollbar>
             <InfiniteScroll
               pageStart={0}

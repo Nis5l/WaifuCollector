@@ -8,6 +8,7 @@ class ResizeText extends Component {
         super();
         this.props = props;
         this.center = props.center === true ? true : false;
+        this.maxSize = this.props.maxSize;
     }
 
     render() {
@@ -16,6 +17,7 @@ class ResizeText extends Component {
                 <FitText
                     className="resizetext"
                     style={{justifyContent: this.center ? "center" : "flex-start"}}
+                    maxSize={this.maxSize}
                 >
                     {this.props.children}
                 </FitText>

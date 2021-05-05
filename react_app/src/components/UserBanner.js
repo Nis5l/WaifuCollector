@@ -8,6 +8,8 @@ class UserBanner extends Component {
     constructor(props) {
         super(props);
 
+        this.username = this.props.username;
+
         this.state =
         {
             friend: this.props.friend,
@@ -17,13 +19,26 @@ class UserBanner extends Component {
         }
     }
 
+    componentDidMount() {
+        window.addEventListener('resize', () => {this.resize(this)});
+    }
+
+    resize(self) {
+        let username = self.username;
+        if (window.screen.availWidth <= 770) {
+            if (username.length > 15) username = username.slice(0, 12) + "...";
+        }
+
+        self.setState({username: username});
+    }
+
     render() {
         let id = 0;
         return (
             <div className="user_banner">
                 <img src="/assets/Icon.png" alt="Avatar" />
                 <div className="username">
-                    <a href={"/profile/" + this.state.userID}><ResizeText>{this.state.username}</ResizeText></a>
+                    <a style={{overflow: "hidden"}} href={"/profile/" + this.state.userID}>{this.state.username}</a>
                     <div className="badges">
                         {
                             this.state.badges.map((badge) => {
@@ -43,7 +58,7 @@ class UserBanner extends Component {
                     this.state.friend === 2 &&
                     <i className="fas fa-lg fa-user-friends"></i>
                 }
-            </div>
+            </div >
         )
     }
 }

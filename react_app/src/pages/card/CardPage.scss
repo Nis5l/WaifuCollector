@@ -24,15 +24,27 @@
             "card";
     }
 
+    .cardpage_wrapper_wrapper
+    {
+        height: 100%;
+        grid-area: card;
+    }
+
     .card_wrapper
     {
-        grid-area: card;
-        height: 100%;
+        width: 100%;
+        min-height: calc(100% - 30px);
+
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
         align-items: center;
+        justify-items: center;
+        justify-content: center;
+        align-content: center;
+        flex-wrap: wrap;
+
         overflow: unset;
+        margin-bottom: 30px;
+
 
         .cardpage_card_wrapper
         {
