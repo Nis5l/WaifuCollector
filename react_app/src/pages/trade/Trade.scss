@@ -69,9 +69,15 @@
             {
                 grid-area: inventory;
 
+                min-height: calc(100% - 30px);
+                padding-bottom: 30px;
+
                 flex-direction: row;
                 display: flex;
                 justify-content: center;
+                justify-items: center;
+                align-items: center;
+                align-content: center;
                 flex-wrap: wrap;
                 overflow: auto;
             }
@@ -99,6 +105,8 @@
     }
     .waifucard_wrapper
     {
+        height: fit-content;
+        width: fit-content;
         margin: 10px;
     }
 
