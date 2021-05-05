@@ -17,6 +17,7 @@ import Scrollbar from './ScrollBar'
 function Friendlist(props) {
 
     const [friends, setFriends] = useState([]);
+    const [width, setWidth] = useState(window.screen.availWidth);
 
     let lcounter = 0;
     let lcounterMax = 1;
@@ -49,6 +50,16 @@ function Friendlist(props) {
 
     }, [props.userID]);
 
+    const resizeMethod = () => {
+        setWidth(window.screen.availWidth);
+    }
+
+    useEffect(() => {
+        window.addEventListener('resize', resizeMethod);
+
+        return () => window.removeEventListener('resize', resizeMethod);
+    });
+
     function incrementLCounter() {
         lcounter++;
         if (lcounter === lcounterMax && props.lCallback) props.lCallback();
@@ -57,32 +68,38 @@ function Friendlist(props) {
     if (props.userID === undefined)
         return (<div className="friendslist"></div>);
 
+    let inner = (
+        <ul>
+            {friends.map((friend) => {
+
+                return (
+                    <FriendComponent
+                        key={friend.userID}
+                        avatar="/assets/Icon.png"
+                        userID={friend.userID}
+                        status={friend.status}
+                        username={friend.username}
+                    />
+                )
+
+            })}
+
+        </ul>
+    )
+
     return (
 
-        <div
+        < div
             className="friendslist"
         >
-            <ConditionalWrapper
-                condition={window.screen.availWidth > 768}
-                wrapper={Scrollbar}
-            >
-                <ul>
-                    {friends.map((friend) => {
-
-                        return (
-                            <FriendComponent
-                                key={friend.userID}
-                                avatar="/assets/Icon.png"
-                                userID={friend.userID}
-                                status={friend.status}
-                                username={friend.username}
-                            />
-                        )
-
-                    })}
-
-                </ul>
-            </ConditionalWrapper>
+            {
+                width > 768 ?
+                    <Scrollbar>
+                        {inner}
+                    </Scrollbar>
+                    :
+                    inner
+            }
 
         </div >
 

@@ -10,6 +10,8 @@ class UserBanner extends Component {
 
         this.username = this.props.username;
 
+        this.resizeMethod = () => {this.resize(this)};
+
         this.state =
         {
             friend: this.props.friend,
@@ -20,7 +22,11 @@ class UserBanner extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('resize', () => {this.resize(this)});
+        window.addEventListener('resize', this.resizeMethod);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resizeMethod);
     }
 
     resize(self) {
