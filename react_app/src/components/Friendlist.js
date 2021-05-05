@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
 
+import ConditionalWrapper from './ConditionalWrapper'
+
 import axios from 'axios'
 import Config from '../config.json'
 
@@ -60,9 +62,11 @@ function Friendlist(props) {
         <div
             className="friendslist"
         >
-            <ul>
-                <Scrollbar>
-
+            <ConditionalWrapper
+                condition={window.screen.availWidth > 768}
+                wrapper={Scrollbar}
+            >
+                <ul>
                     {friends.map((friend) => {
 
                         return (
@@ -77,10 +81,10 @@ function Friendlist(props) {
 
                     })}
 
-                </Scrollbar>
-            </ul>
+                </ul>
+            </ConditionalWrapper>
 
-        </div>
+        </div >
 
     )
 }

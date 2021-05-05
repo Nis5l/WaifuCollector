@@ -188,20 +188,22 @@ class Dashboard extends Component {
 
                 </Card>
 
-                <Card
-                    title="Friends"
-                    styleClassName="friends"
-                    icon="fa-users"
-                    onIconClick={() => {this.friendPopup(this)}}
-                >
-                    <Suspense fallback={loading()}>
-                        <Friendlist
-                            userID={this.state.userID}
-                            lCallback={() => {this.incrementLCounter(this)}}
-                        />
-                    </Suspense>
+                <div className="friends_wrapper">
+                    <Card
+                        title="Friends"
+                        styleClassName="friends"
+                        icon="fa-users"
+                        onIconClick={() => {this.friendPopup(this)}}
+                    >
+                        <Suspense fallback={loading()}>
+                            <Friendlist
+                                userID={this.state.userID}
+                                lCallback={() => {this.incrementLCounter(this)}}
+                            />
+                        </Suspense>
 
-                </Card>
+                    </Card>
+                </div>
 
             </div>
 
