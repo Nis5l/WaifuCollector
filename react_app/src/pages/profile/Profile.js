@@ -56,14 +56,16 @@ function Profile(props) {
     function onFriendData(data) {
         const ownID = Cookies.get('userID');
 
-        if (!ownID || ownID === userID) return;
-
         let status = -1;
+
+        if (!ownID || ownID == userID) {
+            setFriendStatus(3);
+            return;
+        }
 
         for (let i = 0; i < data.length; i++) {
             if (data[i].userID == ownID) {
                 status = data[i].status;
-                console.log(status);
                 break;
             }
         }
