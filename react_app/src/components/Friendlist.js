@@ -130,14 +130,6 @@ class Friend extends React.Component {
             ];
 
         switch (this.status) {
-            case 1:
-                options.push(
-                    {
-                        name: "Befriend",
-                        onClick: () => this.onClick("/trade/" + this.props.userID)
-                    }
-                )
-                break;
             case 2:
                 options.push(
                     {

@@ -185,7 +185,13 @@ class Navbar extends React.Component {
                                         Inventory
                                     </Link>
                                 </MenuItem>
-                                <MenuItem>Friends</MenuItem>
+                                <MenuItem>
+                                    <Link
+                                        to="/users"
+                                    >
+                                        Users
+                                    </Link>
+                                </MenuItem>
                             </SubMenu>}
 
                             {this.props.token && <SubMenu
