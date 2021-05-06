@@ -44,6 +44,8 @@ function Friendlist(props) {
             setFriends(filteredFriends);
 
             incrementLCounter()
+
+            if (props.onFriendData) props.onFriendData(friends);
         }
 
         fetchData();

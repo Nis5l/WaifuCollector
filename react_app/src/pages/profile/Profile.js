@@ -3,6 +3,8 @@ import Card from '../../components/Card'
 import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
 
+import Cookies from 'js-cookie';
+
 import axios from 'axios'
 import Config from '../../config.json'
 
@@ -12,14 +14,15 @@ function Profile(props) {
 
     const userID = props.match.params.id;
     const [stats, setStats] = useState({friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0});
+    const [friendStatus, setFriendStatus] = useState(-1);
 
     useEffect(() => {
-        
-        async function loadStats(userID){
-        
+
+        async function loadStats(userID) {
+
             const data = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
 
-            if(data.data && data.data.status === 0){
+            if (data.data && data.data.status === 0) {
 
                 delete data.data["status"];
 
@@ -28,15 +31,14 @@ function Profile(props) {
             }
 
             return [];
-            
+
         }
 
-        async function updateStats(){
+        async function updateStats() {
 
             const stats = await loadStats(userID);
 
             setStats(stats);
-
         }
 
         updateStats();
@@ -51,13 +53,34 @@ function Profile(props) {
 
     }
 
-    return (
+    function onFriendData(data) {
+        const ownID = Cookies.get('userID');
 
+        if (!ownID || ownID === userID) return;
+
+        let status = 0;
+
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].userID == ownID) {
+                status = data[i].status;
+                console.log(status);
+                break;
+            }
+        }
+
+        setFriendStatus(status);
+    }
+
+    let icon = "";
+    if (friendStatus === 0) icon = "fa-user-plus";
+
+    return (
         <div className="container_profile">
 
             <Card
                 title="Account Info"
                 styleClassName="accountInfo"
+                icon={icon}
             >
 
                 <div className="avatar">
@@ -119,7 +142,7 @@ function Profile(props) {
 
                 <div className="flex-grid">
 
-                    
+
 
                 </div>
 
@@ -130,8 +153,9 @@ function Profile(props) {
                 styleClassName="friends"
             >
 
-                <Friendlist 
+                <Friendlist
                     userID={userID}
+                    onFriendData={onFriendData}
                 />
 
             </Card>
