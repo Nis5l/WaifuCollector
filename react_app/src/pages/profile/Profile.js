@@ -58,7 +58,7 @@ function Profile(props) {
 
         if (!ownID || ownID === userID) return;
 
-        let status = 0;
+        let status = -1;
 
         for (let i = 0; i < data.length; i++) {
             if (data[i].userID == ownID) {
@@ -71,8 +71,17 @@ function Profile(props) {
         setFriendStatus(status);
     }
 
+    function onFriendAdd() {
+        const data = {
+            token: Cookies.get('token'),
+            userID: userID
+        };
+        axios.post(`${Config.API_HOST}/addfriend`, data);
+        setFriendStatus(0);
+    }
+
     let icon = "";
-    if (friendStatus === 0) icon = "fa-user-plus";
+    if (friendStatus === -1) icon = "fa-user-plus";
 
     return (
         <div className="container_profile">
@@ -81,6 +90,7 @@ function Profile(props) {
                 title="Account Info"
                 styleClassName="accountInfo"
                 icon={icon}
+                onIconClick={onFriendAdd}
             >
 
                 <div className="avatar">

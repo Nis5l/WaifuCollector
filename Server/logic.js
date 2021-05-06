@@ -536,6 +536,56 @@ function getBadges(username) {
 	return badges;
 }
 
+function sendFriendReqeust(userone, usertwo, res) {
+	if (usertwo == undefined) {
+		res.send({status: 1, message: "cant find user"});
+		return;
+	}
+	if (usertwo == userone) {
+		res.send({status: 1, message: "cant add yourself"});
+		return;
+	}
+	if (getClients()[userone].hasFriend(usertwo)) {
+		res.send({status: 1, message: "already added"});
+		return;
+	}
+	if (getClients()[userone].getFriends().length == getFriendLimit()) {
+		res.send({status: 1, message: "reached max friend count"});
+		return;
+	}
+	if (getClients()[usertwo] != undefined) {
+		if (getClients()[usertwo].hasFriend(userone)) {
+			res.send({status: 1, message: "already sent"});
+			return;
+		}
+		run2();
+	} else {
+		database.isFriendPending(userone, usertwo, (b) => {
+			if (b) {
+				res.send({status: 1, message: "already sent"});
+				return;
+			}
+			run2();
+		});
+	}
+	function run2() {
+		getClients()[userone].addFriendRequest(usertwo);
+		if (getClients()[usertwo] != undefined)
+			getClients()[usertwo].addFriendRequestIncoming(userone);
+		database.addFriendRequest(userone, usertwo, () => {
+			database.addNotification(
+				usertwo,
+				"Friend Request",
+				"You got a new friend request, click to view!",
+				"friends",
+				() => {}
+			);
+			res.send({status: 0});
+			return;
+		});
+	}
+}
+
 function isString(str) {
 	return (typeof str === 'string' || str instanceof String);
 }
@@ -643,4 +693,5 @@ module.exports =
 	removeCardFromUserCache: removeCardFromUserCache,
 	isString: isString,
 	getBadges: getBadges,
+	sendFriendReqeust: sendFriendReqeust,
 };

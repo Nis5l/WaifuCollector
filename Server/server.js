@@ -898,59 +898,25 @@ app.post("/friends", async (req, res) => {
 
 app.post("/addfriend", async (req, res) => {
 	try {
+		var userID = parseInt(req.body.userID);
 		var username = req.body.username;
 
 		var decoded = await logic.standardroutine(req.body.token, res);
 
+		if (!isNaN(userID)) {
+			logic.sendFriendReqeust(decoded.id, userID, res);
+			return;
+		}
+
+		if (!utils.isString(username)) {
+			res.send({status: 1, message: "no username or userID provided"});
+			return;
+		}
+
 		database.getUserID(username, (id) => {
-			if (id == undefined) {
-				res.send({status: 1, message: "cant find user"});
-				return;
-			}
-			if (id == decoded.id) {
-				res.send({status: 1, message: "cant add yourself"});
-				return;
-			}
-			if (logic.getClients()[decoded.id].hasFriend(id)) {
-				res.send({status: 1, message: "already added"});
-				return;
-			}
-			if (logic.getClients()[decoded.id].getFriends().length == logic.getFriendLimit()) {
-				res.send({status: 1, message: "reached max friend count"});
-				return;
-			}
-			if (logic.getClients()[id] != undefined) {
-				if (logic.getClients()[id].hasFriend(decoded.id)) {
-					res.send({status: 1, message: "already sent"});
-					return;
-				}
-				run2();
-			} else {
-				database.isFriendPending(decoded.id, id, (b) => {
-					if (b) {
-						res.send({status: 1, message: "already sent"});
-						return;
-					}
-					run2();
-				});
-			}
-			function run2() {
-				logic.getClients()[decoded.id].addFriendRequest(id);
-				if (logic.getClients()[id] != undefined)
-					logic.getClients()[id].addFriendRequestIncoming(decoded.id);
-				database.addFriendRequest(decoded.id, id, () => {
-					database.addNotification(
-						id,
-						"Friend Request",
-						"You got a new friend request, click to view!",
-						"friends",
-						() => {}
-					);
-					res.send({status: 0});
-					return;
-				});
-			}
+			logic.sendFriendReqeust(decoded.id, id, res);
 		});
+
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
