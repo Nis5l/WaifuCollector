@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react'
 
-import ConditionalWrapper from './ConditionalWrapper'
-
 import axios from 'axios'
 import Config from '../config.json'
 
@@ -17,6 +15,7 @@ import Scrollbar from './ScrollBar'
 function Friendlist(props) {
 
     const [friends, setFriends] = useState([]);
+    const [friendRequests, setFriendRequests] = useState([]);
     const [width, setWidth] = useState(window.screen.availWidth);
 
     let lcounter = 0;
@@ -42,8 +41,9 @@ function Friendlist(props) {
             const filteredFriends = friends.filter((friend) => friend.status === 2);
 
             if (props.onFriendRequests) {
-                const friendRequestCount = friends.filter((friend) => friend.status === 0).length;
-                props.onFriendRequests(friendRequestCount);
+                const friendrqs = friends.filter((friend) => friend.status === 0);
+                setFriendRequests(friendrqs);
+                props.onFriendRequests(friendrqs.length);
             }
 
             setFriends(filteredFriends);
@@ -76,22 +76,65 @@ function Friendlist(props) {
         return (<div className="friendslist"></div>);
 
     let inner = (
-        <ul>
-            {friends.map((friend) => {
+        <div className="friendRequests">
+            <ul style={{transform: props.requests ? "translateY(-100%)" : "translateY(0)"}}>
+                {friends.map((friend) => {
 
-                return (
-                    <FriendComponent
-                        key={friend.userID}
-                        avatar="/assets/Icon.png"
-                        userID={friend.userID}
-                        status={friend.status}
-                        username={friend.username}
-                    />
-                )
+                    return (
+                        <FriendComponent
+                            key={friend.userID}
+                            avatar="/assets/Icon.png"
+                            userID={friend.userID}
+                            status={friend.status}
+                            username={friend.username}
+                        />
+                    )
 
-            })}
+                })}
+                {friends.map((friend) => {
 
-        </ul>
+                    return (
+                        <FriendComponent
+                            key={friend.userID}
+                            avatar="/assets/Icon.png"
+                            userID={friend.userID}
+                            status={friend.status}
+                            username={friend.username}
+                        />
+                    )
+
+                })}
+                {friends.map((friend) => {
+
+                    return (
+                        <FriendComponent
+                            key={friend.userID}
+                            avatar="/assets/Icon.png"
+                            userID={friend.userID}
+                            status={friend.status}
+                            username={friend.username}
+                        />
+                    )
+
+                })}
+            </ul>
+            <ul style={{transform: props.requests ? "translateY(0)" : "translateY(-100%)"}}>
+                {friendRequests.map((friend) => {
+
+                    return (
+                        <FriendComponent
+                            key={friend.userID}
+                            avatar="/assets/Icon.png"
+                            userID={friend.userID}
+                            status={friend.status}
+                            username={friend.username}
+                        />
+                    )
+
+                })}
+
+            </ul>
+        </div>
     )
 
     return (

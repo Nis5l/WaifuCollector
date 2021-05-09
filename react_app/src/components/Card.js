@@ -23,7 +23,7 @@ function Card(props) {
                         props.icon &&
                         <div className="icon">
                             <i onClick={props.onIconClick} className={"fas " + props.icon} />
-                            {props.iconNum && <div><p>{props.iconNum}</p></div>}
+                            {props.iconNum !== undefined && props.iconNum !== 0 && <div><p>{props.iconNum}</p></div>}
                         </div>
                     }
                 </div>

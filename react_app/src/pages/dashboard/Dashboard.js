@@ -35,7 +35,8 @@ class Dashboard extends Component {
             trades: 0,
             maxTrades: 0,
             loading: true,
-            friendRequests: 0
+            friendRequests: 0,
+            requests: false
         }
     }
 
@@ -195,13 +196,14 @@ class Dashboard extends Component {
                         styleClassName="friends"
                         icon="fa-user-friends"
                         iconNum={this.state.friendRequests}
-                        onIconClick={() => {this.friendPopup(this)}}
+                        onIconClick={() => {this.setState({requests: !this.state.requests})}}
                     >
                         <Suspense fallback={loading()}>
                             <Friendlist
                                 userID={this.state.userID}
                                 lCallback={() => {this.incrementLCounter(this)}}
                                 onFriendRequests={(count) => {this.setState({friendRequests: count})}}
+                                requests={this.state.requests}
                             />
                         </Suspense>
 

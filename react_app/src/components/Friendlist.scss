@@ -4,9 +4,27 @@
 
     height: 100%;
 
-    ul{
+    .friendRequests
+    {
+        width: 100%;
+        height: fit-content;
 
-        height: 100%;
+        &>div
+        {
+            position: relative;
+            height: 100%;
+        }
+    }
+
+    ul{
+        width: 100%;
+        overflow: hidden;
+        transition: transform linear 0.2s;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        height: fit-content;
 
         list-style-type: none;
         overflow-y: auto;
@@ -36,6 +54,7 @@
             border: 1px solid #fff;
 
             -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
             -ms-transform: translateZ(0); /* IE 9 */
             -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
             transform: translateZ(0);
