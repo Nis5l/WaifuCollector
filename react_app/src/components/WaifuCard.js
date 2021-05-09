@@ -148,7 +148,7 @@ class WaifuCard extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.card.id !== undefined &&
+        if (nextProps.card && nextProps.card.id !== undefined &&
             this.state !== undefined &&
             nextProps.card.id !== this.state.uuid) {
             this.init(nextProps);

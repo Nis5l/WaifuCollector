@@ -3,6 +3,7 @@ import React, {Component, lazy, Suspense} from 'react'
 
 import Card from '../../components/Card';
 import redirectIfNecessary from '../../components/Redirecter'
+import Loading from '../../components/Loading'
 import {withRouter} from 'react-router-dom'
 
 import axios from 'axios'
@@ -33,7 +34,8 @@ class Dashboard extends Component {
             maxCards: 0,
             trades: 0,
             maxTrades: 0,
-            loading: true
+            loading: true,
+            friendRequests: 0
         }
     }
 
@@ -93,7 +95,6 @@ class Dashboard extends Component {
 
     incrementLCounter(self) {
         self.lcounter++;
-        console.log(self.lcounter + "/" + self.lcounterMax);
         if (self.lcounter === self.lcounterMax) self.setState({loading: false});
     }
 
@@ -102,7 +103,7 @@ class Dashboard extends Component {
         return (
 
             <div className="container">
-                {this.state.loading && <div className="blurbackground" />}
+                <Loading loading={this.state.loading} />
 
                 <Card
                     title="Account Info"
@@ -192,13 +193,15 @@ class Dashboard extends Component {
                     <Card
                         title="Friends"
                         styleClassName="friends"
-                        icon="fa-users"
+                        icon="fa-user-friends"
+                        iconNum={this.state.friendRequests}
                         onIconClick={() => {this.friendPopup(this)}}
                     >
                         <Suspense fallback={loading()}>
                             <Friendlist
                                 userID={this.state.userID}
                                 lCallback={() => {this.incrementLCounter(this)}}
+                                onFriendRequests={(count) => {this.setState({friendRequests: count})}}
                             />
                         </Suspense>
 

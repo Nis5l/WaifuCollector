@@ -100,9 +100,10 @@ main.content{
     top: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #000000aa;
+    background-color: #000000bb;
     z-index: 1010;
     overflow: hidden;
+    backdrop-filter: blur(10px);
 }
 
 .clickable

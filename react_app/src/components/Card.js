@@ -18,11 +18,14 @@ function Card(props) {
                         <h1>
                             {props.title}
                         </h1>
-                        {
-                            props.icon &&
-                            <i onClick={props.onIconClick} className={"fas icon " + props.icon} />
-                        }
                     </ResizeText>
+                    {
+                        props.icon &&
+                        <div className="icon">
+                            <i onClick={props.onIconClick} className={"fas " + props.icon} />
+                            {props.iconNum && <div><p>{props.iconNum}</p></div>}
+                        </div>
+                    }
                 </div>
             }
 

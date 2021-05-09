@@ -41,6 +41,11 @@ function Friendlist(props) {
 
             const filteredFriends = friends.filter((friend) => friend.status === 2);
 
+            if (props.onFriendRequests) {
+                const friendRequestCount = friends.filter((friend) => friend.status === 0).length;
+                props.onFriendRequests(friendRequestCount);
+            }
+
             setFriends(filteredFriends);
 
             incrementLCounter()

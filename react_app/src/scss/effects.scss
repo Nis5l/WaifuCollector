@@ -221,6 +221,14 @@
   }
 }
 
+@keyframes spincenter
+{
+  100%
+  {
+    transform: translate(50%, -50%) rotate(360deg);
+  }
+}
+
 @keyframes text-appear
 {
   0%
