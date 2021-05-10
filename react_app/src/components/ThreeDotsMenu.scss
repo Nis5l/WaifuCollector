@@ -3,9 +3,7 @@
 .threeDotsMenu{
 
     button{
-
         color: $sidebar-color;
-
     }
 
 }
@@ -14,5 +12,5 @@
 
     color: $sidebar-color;
     background-color: $background-secondary;
-
+    filter: contrast(1);
 }

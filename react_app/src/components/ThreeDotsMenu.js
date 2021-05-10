@@ -9,7 +9,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import './ThreeDotsMenu.scss'
 
 export default function ThreeDotsMenu(props) {
-    
+
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -23,10 +23,10 @@ export default function ThreeDotsMenu(props) {
         setAnchorEl(null);
 
     }
-    
+
     return (
         <div className="threeDotsMenu">
-            
+
             <Button aria-controls={props.menuID} aria-haspopup="true" onClick={handleClick}>
                 <MoreVertIcon />
             </Button>
@@ -38,9 +38,17 @@ export default function ThreeDotsMenu(props) {
                 onClose={handleClose}
             >
 
-                {props.options && props.options.map((option, i) => {               
-                     
-                    return (<MenuItem onClick={option.onClick} key={i}>{option.name}</MenuItem>);
+                {props.options && props.options.map((option, i) => {
+
+                    return (
+                        <MenuItem
+                            style={{color: option.color}}
+                            onClick={() => {handleClose(); option.onClick()}}
+                            key={i}
+                        >
+                            {option.name}
+                        </MenuItem>
+                    );
 
                 })}
 

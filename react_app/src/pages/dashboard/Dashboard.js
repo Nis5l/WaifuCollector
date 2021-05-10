@@ -195,7 +195,7 @@ class Dashboard extends Component {
                         title="Friends"
                         styleClassName="friends"
                         icon={this.state.requests ? "fa-user-friends" : "fa-user"}
-                        iconNum={this.state.friendRequests}
+                        iconNum={this.state.requests ? 0 : this.state.friendRequests}
                         onIconClick={() => {this.setState({requests: !this.state.requests})}}
                     >
                         <Suspense fallback={loading()}>
