@@ -78,7 +78,7 @@ function ProfileName(props) {
 
         <div className="profileName">
 
-            <h2 className="name">{username}</h2>
+            <a href={`/profile/${props.userID}`} className="name">{username}</a>
 
             <div className="badges">
                 {

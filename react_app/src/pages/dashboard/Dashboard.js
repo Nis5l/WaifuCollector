@@ -194,7 +194,7 @@ class Dashboard extends Component {
                     <Card
                         title="Friends"
                         styleClassName="friends"
-                        icon="fa-user-friends"
+                        icon={this.state.requests ? "fa-user-friends" : "fa-user"}
                         iconNum={this.state.friendRequests}
                         onIconClick={() => {this.setState({requests: !this.state.requests})}}
                     >
