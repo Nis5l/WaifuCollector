@@ -46,6 +46,7 @@
             font-size: 12pt;
             color: $sidebar-color;
             transition: rotation 1s linear;
+            width: 30px;
 
             &:hover
             {
@@ -57,7 +58,7 @@
             {
                 display: flex;
                 position: absolute;
-                left: 80%;
+                left: 50%;
                 top: -20%;
                 background-color: #c00202c2;
                 border-radius: 100%;

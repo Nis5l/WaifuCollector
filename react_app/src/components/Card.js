@@ -21,9 +21,12 @@ function Card(props) {
                     </ResizeText>
                     {
                         props.icon &&
-                        <div className="icon">
-                            <i onClick={props.onIconClick} className={"fas " + props.icon} />
-                            {props.iconNum !== undefined && props.iconNum !== 0 && <div><p>{props.iconNum}</p></div>}
+                        <div onClick={props.onIconClick} className="icon">
+                            <i className={"fas " + props.icon + " unselectable"} />
+                            {
+                                props.iconNum !== undefined && props.iconNum !== 0 &&
+                                <div><p className="unselectable">{props.iconNum}</p></div>
+                            }
                         </div>
                     }
                 </div>
