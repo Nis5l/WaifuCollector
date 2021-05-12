@@ -6,7 +6,7 @@ class Loading extends Component {
     render() {
         return (
             <div
-                style={{top: this.props.loading ? 0 : "-100vw"}}
+                style={{top: this.props.loading ? 0 : "-100vh"}}
                 className="loading_wrapper blurbackground"
             >
                 <div className="loader" />

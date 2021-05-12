@@ -8,29 +8,27 @@ import "./ProfileName.scss"
 
 function ProfileName(props) {
 
-    const [username, setUsername] = useState("Username");
+    const [username, setUsername] = useState(props.username);
     const [badges, setBadges] = useState([]);
 
     let lcounter = 0;
     let lcounterMax = 2;
 
+    if (props.username !== undefined && props.username !== username) {
+        setUsername(props.username);
+    }
+
     useEffect(() => {
 
-        if (props.userID === undefined)
-            return;
+        if (props.userID === undefined) return;
 
-        if (props.username) {
-            setUsername(props.username);
-            return;
-        }
+        if (props.username !== undefined) return;
         axios.get(`${Config.API_HOST}/user/${props.userID}`)
             .then((res) => {
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
-
                         setUsername(res.data.username);
                         incrementLCounter();
-
                     }
                 }
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {Component, useState, useEffect, createRef} from 'react'
 
 import {YesNo} from './Popup'
 
@@ -15,21 +15,32 @@ import ThreeDotsMenu from './ThreeDotsMenu.js'
 
 import Scrollbar from './ScrollBar'
 
-function Friendlist(props) {
+class Friendlist extends Component {
 
-    const [friends, setFriends] = useState([]);
-    const [friendRequests, setFriendRequests] = useState([]);
-    const [width, setWidth] = useState(window.screen.availWidth);
-    const [deleteUser, setDeleteUser] = useState(undefined);
+    constructor(props) {
+        super(props);
 
-    let lcounter = 0;
-    let lcounterMax = 1;
+        this.lcounter = 0;
+        this.lcounterMax = 1;
 
-    useEffect(() => {
+        this.resizeMethod = () => {
+            this.setState({width: window.screen.availWidth});
+        }
 
-        async function loadFriends() {
+        this.state =
+        {
+            friends: [],
+            friendRequests: [],
+            width: window.screen.availWidth,
+            deleteUser: undefined
+        }
+    }
 
-            const data = await axios.post(Config.API_HOST + "/friends", {id: props.userID});
+    componentDidMount() {
+
+        async function loadFriends(self) {
+
+            const data = await axios.post(Config.API_HOST + "/friends", {id: self.props.userID});
 
             if (data.data.status !== 0)
                 return [];
@@ -38,45 +49,40 @@ function Friendlist(props) {
 
         }
 
-        async function fetchData() {
+        async function fetchData(self) {
 
-            let friends = await loadFriends();
+            let friends = await loadFriends(self);
 
             const filteredFriends = friends.filter((friend) => friend.status === 2);
 
-            if (props.onFriendRequests) {
+            if (self.props.onFriendRequests) {
                 const friendrqs = friends.filter((friend) => friend.status === 0);
-                setFriendRequests(friendrqs);
-                props.onFriendRequests(friendrqs.length);
+                self.setState({friendRequests: friendrqs});
+                self.props.onFriendRequests(friendrqs.length);
             }
 
-            setFriends(filteredFriends);
+            self.setState({friends: filteredFriends});
 
-            incrementLCounter()
+            self.incrementLCounter()
 
-            if (props.onFriendData) props.onFriendData(friends);
+            if (self.props.onFriendData) self.props.onFriendData(friends);
         }
 
-        fetchData();
+        fetchData(this);
 
-    }, [props.userID]);
-
-    const resizeMethod = () => {
-        setWidth(window.screen.availWidth);
+        window.addEventListener('resize', this.resizeMethod);
     }
 
-    useEffect(() => {
-        window.addEventListener('resize', resizeMethod);
-
-        return () => window.removeEventListener('resize', resizeMethod);
-    });
-
-    function incrementLCounter() {
-        lcounter++;
-        if (lcounter === lcounterMax && props.lCallback) props.lCallback();
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resizeMethod);
     }
 
-    function deleteFriend(userID) {
+    incrementLCounter() {
+        this.lcounter++;
+        if (this.lcounter === this.lcounterMax && this.props.lCallback) this.props.lCallback();
+    }
+
+    deleteFriend(userID) {
         const data = {
             token: Cookies.get('token'),
             userID: userID,
@@ -85,86 +91,122 @@ function Friendlist(props) {
         }
         axios.post(`${Config.API_HOST}/managefriend`, data);
 
-        const input = [{users: friends, set: setFriends}, {users: friendRequests, set: setFriendRequests}];
-        for (let j = 0; j < input.length; j++) {
-            let userarr = input[j];
-            for (let i = 0; i < userarr.users.length; i++) {
-                if (userarr.users[i].userID === userID) {
-                    userarr.users.splice(i, 1);
-                    userarr.set([...userarr.users]);
-                    break;
-                }
+        for (let i = 0; i < this.state.friends.length; i++) {
+            if (this.state.friends[i].userID === userID) {
+                this.state.friends.splice(i, 1);
+                this.setState({friends: [...this.state.friends]});
+                break;
+            }
+        }
+
+        for (let i = 0; i < this.state.friendRequests.length; i++) {
+            if (this.state.friendRequests[i].userID === userID) {
+                this.state.friendRequests.splice(i, 1);
+                this.setState({friendRequests: [...this.state.friendRequests]});
+                break;
             }
         }
     }
 
-    if (props.userID === undefined)
-        return (<div className="friendslist"></div>);
+    onDecline(userID) {
+        this.deleteFriend(userID);
+        if (this.props.decrementRequests) this.props.decrementRequests();
+    }
 
-    let inner = (
-        <div className="friendRequests">
-            <ul style={{transform: props.requests ? "translateY(-100%)" : "translateY(0)"}}>
-                {friends.map((friend) => {
+    onAccept(userID) {
+        const data = {
+            token: Cookies.get('token'),
+            userID: userID,
+            //Add Command
+            command: 0
+        }
+        axios.post(`${Config.API_HOST}/managefriend`, data);
 
-                    return (
-                        <FriendComponent
-                            key={friend.userID}
-                            avatar="/assets/Icon.png"
-                            userID={friend.userID}
-                            status={friend.status}
-                            username={friend.username}
-                            onDelete={(userID, username) => {setDeleteUser({userID: userID, username: username})}}
-                        />
-                    )
-
-                })}
-            </ul>
-            <ul style={{transform: props.requests ? "translateY(0)" : "translateY(-100%)"}}>
-                {friendRequests.map((friend) => {
-
-                    return (
-                        <FriendComponent
-                            key={friend.userID}
-                            avatar="/assets/Icon.png"
-                            userID={friend.userID}
-                            status={friend.status}
-                            username={friend.username}
-                        />
-                    )
-
-                })}
-
-            </ul>
-        </div>
-    )
-
-    return (
-
-        < div
-            className="friendslist"
-        >
-
-            {
-                deleteUser !== undefined &&
-                <YesNo
-                    text={`Remove ${deleteUser.username}?`}
-                    yesCallback={() => {deleteFriend(deleteUser.userID); setDeleteUser(undefined);}}
-                    noCallback={() => setDeleteUser(undefined)}
-                />
+        for (let i = 0; i < this.state.friendRequests.length; i++) {
+            if (this.state.friendRequests[i].userID === userID) {
+                this.state.friends.push(this.state.friendRequests[i])
+                let newreq = this.state.friendRequests[i];
+                newreq.status = 2;
+                this.state.friendRequests.splice(i, 1);
+                this.setState({friends: [...this.state.friends], friendRequests: [...this.state.friendRequests]});
+                break;
             }
+        }
 
-            {
-                width > 768 ?
-                    <Scrollbar>
-                        {inner}
-                    </Scrollbar>
-                    :
-                    inner
-            }
+        if (this.props.decrementRequests) this.props.decrementRequests();
+    }
 
-        </div >
+    render() {
 
-    )
+        if (this.props.userID === undefined) return (<div className="friendslist"></div>);
+
+        let inner = (
+            <div className="friendRequests">
+                <ul className={this.props.requests ? "hideFriends" : "showFriends"}>
+                    {this.state.friends.map((friend) => {
+
+                        return (
+                            <FriendComponent
+                                key={friend.userID}
+                                avatar="/assets/Icon.png"
+                                userID={friend.userID}
+                                status={friend.status}
+                                username={friend.username}
+                                onDelete={(userID, username) => {this.setState({deleteUser: {userID: userID, username: username}})}}
+                            />
+                        )
+
+                    })}
+                </ul>
+                <ul className={this.props.requests ? "showFriends" : "hideFriends"}>
+                    {this.state.friendRequests.map((friend) => {
+
+                        return (
+                            <FriendComponent
+                                key={friend.userID}
+                                avatar="/assets/Icon.png"
+                                userID={friend.userID}
+                                status={friend.status}
+                                username={friend.username}
+                                onAccept={(userID) => this.onAccept(userID)}
+                                onDecline={(userID) => this.onDecline(userID)}
+                            />
+                        )
+
+                    })}
+
+                </ul>
+            </div >
+        )
+
+        return (
+
+            < div
+                className="friendslist"
+            >
+
+                {
+                    this.state.deleteUser !== undefined &&
+                    <YesNo
+                        text={`Remove ${this.state.deleteUser.username}?`}
+                        yesCallback={() => {this.deleteFriend(this.state.deleteUser.userID); this.setState({deleteUser: undefined});}}
+                        noCallback={() => this.setState({deleteUser: undefined})}
+                    />
+                }
+
+                {
+                    this.state.width > 768 ?
+                        <Scrollbar>
+                            {inner}
+                        </Scrollbar>
+                        :
+                        inner
+                }
+
+            </div >
+
+        )
+    }
 }
 
 class Friend extends React.Component {
@@ -173,11 +215,39 @@ class Friend extends React.Component {
         super(props);
         this.status = props.status;
         this.onDelete = props.onDelete;
+
+        this.onAccept = props.onAccept;
+        this.onDecline = props.onDecline;
+
+        this.resizeMethod = () => {this.resize(this)};
+
+        this.friendlist = createRef();
+
+        this.state = {username: this.props.username}
     }
 
     onClick = (link) => {
         this.props.history.push(link);
     };
+
+    componentDidMount() {
+        window.addEventListener('resize', this.resizeMethod);
+        window.addEventListener('load', this.resizeMethod);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resizeMethod);
+        window.removeEventListener('load', this.resizeMethod);
+    }
+
+    resize(self) {
+        let username = self.props.username;
+        //username = "Test1234567123456712";
+        if (this.friendlist.current.clientWidth <= 770) {
+            if (username.length > 15) username = username.slice(0, 12) + "...";
+        }
+        self.setState({username: username});
+    }
 
     render() {
 
@@ -206,21 +276,28 @@ class Friend extends React.Component {
 
         return (
 
-            <li className="friend" >
+            <li className="friend" ref={this.friendlist}>
 
                 <img src={this.props.avatar} alt="Friend Avatar" />
 
                 <ProfileName
                     userID={this.props.userID}
-                    username={this.props.username}
+                    username={this.state.username}
                 />
 
-                <ThreeDotsMenu
-
-                    menuID={("friendMenu-" + this.props.userID)}
-                    options={options}
-
-                />
+                {
+                    options.length > 0 ?
+                        < ThreeDotsMenu
+                            menuID={("friendMenu-" + this.props.userID)}
+                            options={options}
+                        />
+                        : (
+                            <div className="icons">
+                                <i className="fas fa-times" onClick={() => this.onDecline(this.props.userID)} />
+                                <i className="fas fa-check" onClick={() => this.onAccept(this.props.userID)} />
+                            </div>
+                        )
+                }
 
             </li>
 

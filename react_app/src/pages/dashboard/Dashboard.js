@@ -197,6 +197,7 @@ class Dashboard extends Component {
                         icon={this.state.requests ? "fa-user-friends" : "fa-user"}
                         iconNum={this.state.requests ? 0 : this.state.friendRequests}
                         onIconClick={() => {this.setState({requests: !this.state.requests})}}
+
                     >
                         <Suspense fallback={loading()}>
                             <Friendlist
@@ -204,6 +205,7 @@ class Dashboard extends Component {
                                 lCallback={() => {this.incrementLCounter(this)}}
                                 onFriendRequests={(count) => {this.setState({friendRequests: count})}}
                                 requests={this.state.requests}
+                                decrementRequests={() => {this.setState({friendRequests: this.state.friendRequests - 1})}}
                             />
                         </Suspense>
 

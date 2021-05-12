@@ -198,6 +198,11 @@
 
         overflow: hidden;
 
+        .card-content
+        {
+            overflow: hidden;
+        }
+
         @media screen and (max-width: $breakpoint-md){
 
             &{
