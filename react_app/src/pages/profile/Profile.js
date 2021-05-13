@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import {useHistory} from "react-router";
 import Card from '../../components/Card'
 import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
@@ -15,6 +16,8 @@ function Profile(props) {
     const userID = props.match.params.id;
     const [stats, setStats] = useState({friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0});
     const [friendStatus, setFriendStatus] = useState(-1);
+
+    const history = useHistory();
 
     useEffect(() => {
 
@@ -83,7 +86,16 @@ function Profile(props) {
     }
 
     let icon = "";
-    if (friendStatus === -1) icon = "fa-user-plus";
+    let onIconClick = () => {}
+
+    if (friendStatus === -1) {
+        icon = "fa-user-plus";
+        onIconClick = onFriendAdd;
+    }
+    else if (friendStatus === 2) {
+        icon = "fa-handshake";
+        onIconClick = () => {history.push(`/trade/${userID}`)}
+    }
 
     return (
         <div className="container_profile">
@@ -92,7 +104,7 @@ function Profile(props) {
                 title="Account Info"
                 styleClassName="accountInfo"
                 icon={icon}
-                onIconClick={onFriendAdd}
+                onIconClick={onIconClick}
             >
 
                 <div className="avatar">
