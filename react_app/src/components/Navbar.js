@@ -106,7 +106,7 @@ class Navbar extends React.Component {
                                 className="sidebar-title"
                             >
                                 <img
-                                    src="/assets/Icon.png"
+                                    src="/assets/IconWhite.png"
                                     className="headerIcon"
                                     alt="Icon"
                                 />
