@@ -57,7 +57,7 @@
 
             display: inline-block;
 
-            height: 100%;
+            height: calc(100% - 2px);
             width: auto;
 
             border-radius: 100%;
@@ -73,10 +73,7 @@
 
         .profileName
         {
-
             color: $sidebar-color;
-
-            font-size: 18px;
 
             display: inline-block;
 
@@ -91,7 +88,7 @@
         .fa-times, .fa-check
         {
             width: 30px;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-size: 24px;
         }
 

@@ -242,9 +242,8 @@ class Friend extends React.Component {
 
     resize(self) {
         let username = self.props.username;
-        //username = "Test1234567123456712";
         if (this.friendlist.current.clientWidth <= 770) {
-            if (username.length > 15) username = username.slice(0, 12) + "...";
+            if (username.length > 10) username = username.slice(0, 7) + "...";
         }
         self.setState({username: username});
     }
@@ -276,9 +275,17 @@ class Friend extends React.Component {
 
         return (
 
-            <li className="friend" ref={this.friendlist}>
+            <li
+                className="friend"
+                ref={this.friendlist}
+                style={{fontSize: this.friendlist.current !== null ? `min(18px, ${this.friendlist.current.clientWidth / 15}px)` : "18px"}}
+            >
 
-                <img src={this.props.avatar} alt="Friend Avatar" />
+                <img
+                    src={this.props.avatar}
+                    alt="Friend Avatar"
+                    style={{height: this.friendlist.current !== null ? `min(90%, ${this.friendlist.current.clientWidth / 5}px)` : "18px"}}
+                />
 
                 <ProfileName
                     userID={this.props.userID}
