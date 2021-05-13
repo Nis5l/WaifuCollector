@@ -9,6 +9,8 @@
 
     margin-right: 10px;
 
+    border: white solid 1px;
+    border-radius: 50%;
 }
 
 .pro-sidebar{
@@ -47,12 +49,8 @@
                 display: block;
                 margin-right: 0;
                 
-                border: white solid 1px;
-                border-radius: 50%;
-
                 width: 100%;
                 height: calc(100% - 2px);
-
             }
 
         }
@@ -112,6 +110,10 @@
 
     }
 
+    span
+    {
+        margin-top: 3px;
+    }
 }
 
 .pro-sidebar-header a{ color: $sidebar-color; text-decoration: none; border: none; }
