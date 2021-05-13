@@ -7,6 +7,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
 import Scrollbar from '../../components/ScrollBar'
 import redirectIfNecessary from '../../components/Redirecter'
+import Loading from '../../components/Loading'
 
 import "./Inventory.scss"
 import Config from '../../config.json'
@@ -26,11 +27,15 @@ class Inventory extends Component {
     this.redirect = props.redirect === false ? false : "true";
     this.onCardClick = props.onCardClick;
 
+    this.lCounter = 0;
+    this.lCounterMax = 1;
+
     this.state =
     {
       cards: [],
       hasMore: true,
-      errorMessage: undefined
+      errorMessage: undefined,
+      loading: true
     };
     this.options =
       [
@@ -66,6 +71,7 @@ class Inventory extends Component {
         if (res && res.status === 200) {
 
           if (redirectIfNecessary(this.props.history, res.data)) return;
+          this.incrementLCounter();
 
           if (res.data && res.data.status === 0) {
             parseCards(res.data.inventory);
@@ -82,6 +88,11 @@ class Inventory extends Component {
       });
   }
 
+  incrementLCounter() {
+    this.lCounter++;
+    if (this.lCounter === this.lCounterMax) this.setState({loading: false});
+  }
+
   onFilter(e, obj) {
     if (e !== undefined) e.preventDefault();
     obj.key = 0;
@@ -95,6 +106,7 @@ class Inventory extends Component {
   render() {
     return (
       <div className="inventory_wrapper">
+        <Loading loading={this.state.loading} />
         <form action="#" onSubmit={(e) => {this.onFilter(e, this);}} className="inventory_input">
           <input ref={this.searchInput} type="text" className="text_input" />
           <input type="submit" hidden />

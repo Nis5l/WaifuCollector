@@ -9,6 +9,7 @@ import {YesNo, YesNoCancel} from '../../components/Popup'
 import {withRouter} from 'react-router-dom'
 import RefreshButton from '../../components/RefreshButton'
 import redirectIfNecessary from '../../components/Redirecter'
+import Loading from '../../components/Loading'
 
 import './Trade.scss'
 
@@ -18,6 +19,9 @@ class Trade extends Component {
 
   constructor(props) {
     super(props);
+
+    this.lCounter = 0;
+    this.lCounterMax = 1;
 
     this.state =
     {
@@ -39,7 +43,9 @@ class Trade extends Component {
       removeFriendSuggestionId: undefined,
       removeSuggestionId: undefined,
 
-      disabled: undefined
+      disabled: undefined,
+
+      loading: true
     }
 
     this.friendid = props.match.params.id;
@@ -56,6 +62,7 @@ class Trade extends Component {
       .then((res) => {
 
         if (redirectIfNecessary(this.props.history, res.data)) return;
+        this.incrementLCounter();
 
         if (res && res.status === 200 && res.data && res.data.status === 0) {
 
@@ -66,8 +73,6 @@ class Trade extends Component {
 
           this.tradeCount1 = res.data.tradeCount1;
           this.tradeLimit = res.data.tradeLimit;
-
-          console.log(res.data);
 
           this.setState({
             name: res.data.username,
@@ -92,6 +97,11 @@ class Trade extends Component {
       info: this.state.tradeCount + "/" + this.state.tradeLimit + (this.state.confirmed === 1 ? " ✔" : " 🗙"),
       friendinfo: this.state.friendTradeCount + "/" + this.state.tradeLimit + (this.state.friendConfirmed === 1 ? " ✔" : " 🗙"),
     });
+  }
+
+  incrementLCounter() {
+    this.lCounter++;
+    if (this.lCounter === this.lCounterMax) this.setState({loading: false});
   }
 
   setDisabled() {
@@ -148,7 +158,7 @@ class Trade extends Component {
       friend: true
     }
 
-    for (let i = 0; i < this.state.cards.length; i++) {
+    for (let i = 0; i < this.state.friendCardSuggestions.length; i++) {
       if (this.state.friendCardSuggestions[i].id === this.state.removeFriendSuggestionId) {
         this.state.friendCardSuggestions.splice(i, 1);
         break;
@@ -239,6 +249,8 @@ class Trade extends Component {
   refresh = () => {
     if (this.state.cards === undefined) return;
 
+    this.lCounter = 0;
+
     this.setState({
       name: "Loading...",
       cards: undefined,
@@ -258,7 +270,9 @@ class Trade extends Component {
       removeFriendSuggestionId: undefined,
       removeSuggestionId: undefined,
 
-      disabled: undefined
+      disabled: undefined,
+
+      loading: true
     })
 
     this.load();
@@ -274,6 +288,7 @@ class Trade extends Component {
 
     return (
       <div className="trade_wrapper_parent">
+        <Loading loading={this.state.loading} />
         {
           this.state.removeSuggestionId !== undefined &&
           <YesNoCancel

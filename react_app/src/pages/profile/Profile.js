@@ -3,6 +3,7 @@ import {useHistory} from "react-router";
 import Card from '../../components/Card'
 import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
+import Loading from '../../components/Loading'
 
 import Cookies from 'js-cookie';
 
@@ -17,7 +18,12 @@ function Profile(props) {
     const [stats, setStats] = useState({friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0});
     const [friendStatus, setFriendStatus] = useState(-1);
 
+    const [loading, setLoading] = useState(true);
+
     const history = useHistory();
+
+    let lcounter = 0;
+    let lcounterMax = 2;
 
     useEffect(() => {
 
@@ -42,6 +48,7 @@ function Profile(props) {
             const stats = await loadStats(userID);
 
             setStats(stats);
+            incrementLCounter();
         }
 
         updateStats();
@@ -57,6 +64,8 @@ function Profile(props) {
     }
 
     function onFriendData(data) {
+        incrementLCounter();
+
         const ownID = Cookies.get('userID');
 
         let status = -1;
@@ -85,6 +94,11 @@ function Profile(props) {
         setFriendStatus(0);
     }
 
+    function incrementLCounter() {
+        lcounter++;
+        if (lcounter === lcounterMax) setLoading(false);
+    }
+
     let icon = "";
     let onIconClick = () => {}
 
@@ -99,6 +113,8 @@ function Profile(props) {
 
     return (
         <div className="container_profile">
+
+            <Loading loading={loading} />
 
             <Card
                 title="Account Info"

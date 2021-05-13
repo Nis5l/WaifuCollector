@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import InfiniteScroll from 'react-infinite-scroller'
 import Scrollbar from '../../components/ScrollBar'
 import UserBanner from '../../components/UserBanner'
+import Loading from '../../components/Loading'
 
 import Config from '../../config.json'
 
@@ -22,7 +23,8 @@ class Users extends Component {
     this.state =
     {
       users: [],
-      friends: {}
+      friends: {},
+      loading: true
     }
   }
 
@@ -37,6 +39,7 @@ class Users extends Component {
   componentDidMount() {
     axios.post(Config.API_HOST + "/friends", {id: Cookies.get('userID'), })
       .then((res) => {
+        this.setState({loading: false});
         if (res.data && res.data.status === 0) {
           let friends = {};
           for (let i = 0; i < res.data.friends.length; i++) {
@@ -73,6 +76,7 @@ class Users extends Component {
 
     return (
       <div className="users_wrapper">
+        <Loading loading={this.state.loading} />
         <div className="users_input">
           <input onChange={(e) => {this.search(e, this)}} type="text" className="text_input" placeholder="Username" />
         </div>

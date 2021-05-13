@@ -7,6 +7,7 @@ import {YesNo} from '../../components/Popup'
 import {withRouter} from 'react-router-dom'
 import Scrollbar from '../../components/ScrollBar'
 import redirectIfNecessary from '../../components/Redirecter'
+import Loading from '../../components/Loading'
 
 import Config from '../../config.json'
 
@@ -21,6 +22,10 @@ class CardPage extends Component {
     this.card_wrapper = React.createRef();
 
     this.key = 0;
+
+    this.lCounter = 0;
+    this.lCounterMax = 2;
+
     this.state =
     {
       mainwaifucard: undefined,
@@ -30,7 +35,8 @@ class CardPage extends Component {
       upgradeId: undefined,
       focus: false,
       upgradeSuccess: undefined,
-      upgradeColor: undefined
+      upgradeColor: undefined,
+      loading: true
     }
   }
 
@@ -38,6 +44,7 @@ class CardPage extends Component {
     axios.post(`${Config.API_HOST}/card`, {token: Cookies.get('token'), card: this.mainuuid})
       .then(res => {
         if (redirectIfNecessary(this.props.history, res.data)) return;
+        this.incrementLCounter();
         if (res && res.status === 200 && res.data && res.data.status === 0) {
           parseCards([res.data.card]);
           this.setState({maincard: res.data.card});
@@ -45,6 +52,13 @@ class CardPage extends Component {
         }
         this.setState({maincard: -1});
       });
+
+    this.trackScrolling();
+  }
+
+  incrementLCounter() {
+    this.lCounter++;
+    if (this.lCounter === this.lCounterMax) this.setState({loading: false});
   }
 
   trackScrolling = () => {
@@ -72,6 +86,7 @@ class CardPage extends Component {
         if (res && res.status === 200) {
 
           if (redirectIfNecessary(this.props.history, data)) return;
+          this.incrementLCounter();
 
           if (res.data && res.data.status === 0) {
             parseCards(res.data.inventory);
@@ -186,6 +201,7 @@ class CardPage extends Component {
 
     return (
       <div className="cardpage_wrapper">
+        <Loading loading={this.state.loading} />
         {
           this.state.upgradeId !== undefined &&
           <YesNo

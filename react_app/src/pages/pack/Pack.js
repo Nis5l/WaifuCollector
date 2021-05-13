@@ -4,6 +4,7 @@ import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
 import Cookies from 'js-cookie'
 import {withRouter} from 'react-router-dom'
 import redirectIfNecessary from '../../components/Redirecter'
+import Loading from '../../components/Loading'
 
 import Config from '../../config.json'
 
@@ -19,7 +20,8 @@ class Pack extends Component {
 
         this.state =
         {
-            cards: []
+            cards: [],
+            loading: true
         }
     }
 
@@ -28,6 +30,7 @@ class Pack extends Component {
             .then((res) => {
 
                 if (redirectIfNecessary(this.props.history, res.data)) return;
+                this.setState({loading: false});
 
                 if (res && res.status === 200 && res && res.data && res.data.status === 0) {
                     let cards = res.data.cards;
@@ -61,6 +64,7 @@ class Pack extends Component {
     render() {
         return (
             <div onClick={(e) => {this.onQuit(e, this)}} className="container_pack" >
+                <Loading loading={this.state.loading} />
 
                 <div className="packtop-wrapper">
                     <div className="packtop" />

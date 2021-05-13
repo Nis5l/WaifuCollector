@@ -66,7 +66,6 @@ class PackGraph extends Component {
         this.updateChart();
 
         this.interval = setInterval(() => this.updateChart(), refreshTime);
-
     }
 
     componentWillUnmount() {
@@ -108,6 +107,8 @@ class PackGraph extends Component {
         const options = {hourCycle: "h23", weekday: 'short', hour: 'numeric', minute: '2-digit'};
 
         const packData = await this.loadData();
+
+        if (this.props.onLoad) this.props.onLoad();
 
         this.chart.data.datasets[0].data = [];
         this.chart.data.labels = [];

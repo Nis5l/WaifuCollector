@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Card from '../../components/Card'
 import {WaifuCardLoad} from '../../components/WaifuCard'
+import Loading from '../../components/Loading'
 
 import Config from '../../config.json'
 import Cookies from 'js-cookie'
@@ -18,10 +19,14 @@ class Verify extends Component {
 
     this.key = queryString.parse(props.location.search)['key'];
 
+    this.lCount = 0;
+    this.lCountMax = 2;
+
     this.state =
     {
       mail: undefined,
-      time: 0
+      time: 0,
+      loading: true
     }
   }
 
@@ -34,6 +39,7 @@ class Verify extends Component {
 
     axios.post(`${Config.API_HOST}/verify`, data)
       .then((res) => {
+        this.incrementLCounter();
         if (res.data && res.data.status === 0) {
           this.props.history.push('/dashboard');
           return;
@@ -42,6 +48,7 @@ class Verify extends Component {
 
     axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
       .then((res) => {
+        this.incrementLCounter();
         if (res.data && res.data.status === 0) {
           switch (res.data.verified) {
             case 1:
@@ -59,6 +66,11 @@ class Verify extends Component {
         }
       });
     this.startTimer();
+  }
+
+  incrementLCounter() {
+    this.lCount++;
+    if (this.lCount === this.lCountMax) this.setState({loading: false});
   }
 
   startTimer() {
@@ -119,34 +131,37 @@ class Verify extends Component {
 
   render() {
     return (
-      <Card styleClassName="verify">
+      <div>
+        <Loading loading={this.state.loading} />
+        <Card styleClassName="verify">
 
-        <img
-          src="/assets/Icon.png"
-          alt="Logo"
-          className="logo"
-        ></img>
+          <img
+            src="/assets/Icon.png"
+            alt="Logo"
+            className="logo"
+          ></img>
 
-        {
-          this.state.mail === undefined ?
-            <WaifuCardLoad />
-            :
-            (
-              <div className="text_wrapper">
-                <p style={{fontSize: "14pt"}}>The verification email was sent to {this.state.mail}.</p>
-                <p
-                  className={"underlined " + (this.state.time <= 0 ? "clickable" : "defaultpointer")}
-                  style={{color: this.state.time > 0 ? "gray" : ""}}
-                  onClick={this.resend}>
-                  Resend {this.state.time > 0 ? ` (${this.state.time})` : ""}
-                </p>
-                <p className="clickable underlined" onClick={this.delete}>Change E-Mail</p>
-              </div>
-            )
-        }
+          {
+            this.state.mail === undefined ?
+              <WaifuCardLoad />
+              :
+              (
+                <div className="text_wrapper">
+                  <p style={{fontSize: "14pt"}}>The verification email was sent to {this.state.mail}.</p>
+                  <p
+                    className={"underlined " + (this.state.time <= 0 ? "clickable" : "defaultpointer")}
+                    style={{color: this.state.time > 0 ? "gray" : ""}}
+                    onClick={this.resend}>
+                    Resend {this.state.time > 0 ? ` (${this.state.time})` : ""}
+                  </p>
+                  <p className="clickable underlined" onClick={this.delete}>Change E-Mail</p>
+                </div>
+              )
+          }
 
 
-      </Card>
+        </Card>
+      </div>
     )
   }
 }

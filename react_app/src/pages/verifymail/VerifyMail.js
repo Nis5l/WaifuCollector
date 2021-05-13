@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Card from '../../components/Card'
 import {WaifuCardLoad} from '../../components/WaifuCard'
 import {checkMail} from '../../Utils'
+import Loading from '../../components/Loading'
 
 import Cookies from 'js-cookie'
 import axios from 'axios'
@@ -18,13 +19,15 @@ class VerifyMail extends Component {
       matches: false,
       email: "",
       loaded: false,
-      error: undefined
+      error: undefined,
+      loading: true
     }
   }
 
   componentDidMount() {
     axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
       .then((res) => {
+        this.setState({loading: false});
         if (res.data && res.data.status === 0) {
           switch (res.data.verified) {
             case 1:
@@ -67,45 +70,48 @@ class VerifyMail extends Component {
 
   render() {
     return (
-      <Card styleClassName="verifymail">
+      <div>
+        <Loading loading={this.state.loading} />
+        <Card styleClassName="verifymail">
 
-        <img
-          src="/assets/Icon.png"
-          alt="Logo"
-          className="logo"
-        ></img>
+          <img
+            src="/assets/Icon.png"
+            alt="Logo"
+            className="logo"
+          ></img>
 
-        { this.state.loaded === true ?
-          <div className="input_wrapper">
+          {this.state.loaded === true ?
+            <div className="input_wrapper">
 
-            {
-              this.state.error !== undefined &&
-              <p className="error">{this.state.error}</p>
-            }
+              {
+                this.state.error !== undefined &&
+                <p className="error">{this.state.error}</p>
+              }
 
-            <input
-              type="text"
-              className={"text_input " + (this.state.matches === false ? "invalid" : "")}
-              name="email"
-              placeholder="E-Mail"
-              value={this.state.email}
-              onChange={(e) => this.setEmail(this, e.target.value)}
-            />
+              <input
+                type="text"
+                className={"text_input " + (this.state.matches === false ? "invalid" : "")}
+                name="email"
+                placeholder="E-Mail"
+                value={this.state.email}
+                onChange={(e) => this.setEmail(this, e.target.value)}
+              />
 
-            <input
-              className="button_input"
-              onClick={this.onSubmit}
-              type="submit"
-              name="submit"
-              value="Verify"
-              disabled={!this.state.matches}
-            />
-          </div>
-          :
-          <WaifuCardLoad />
-        }
+              <input
+                className="button_input"
+                onClick={this.onSubmit}
+                type="submit"
+                name="submit"
+                value="Verify"
+                disabled={!this.state.matches}
+              />
+            </div>
+            :
+            <WaifuCardLoad />
+          }
 
-      </Card>
+        </Card>
+      </div>
     )
   }
 }

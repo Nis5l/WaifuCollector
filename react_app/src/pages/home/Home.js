@@ -1,5 +1,6 @@
-import React, {lazy, Suspense} from 'react'
+import React, {lazy, Suspense, useState} from 'react'
 import Card from '../../components/Card'
+import Loading from '../../components/Loading'
 
 import PackGraph from '../../components/PackGraph'
 import Foldable from '../../components/Foldable'
@@ -16,15 +17,18 @@ const loading = () => <p>Loading...</p>
 
 function Home() {
 
+    const [loadingState, setLoadingState] = useState(true);
+
     return (
 
         <Scrollbar>
+            <Loading loading={loadingState} />
             <div className="container_home">
                 <Card
                     title="Packs Opened"
                     styleClassName="packGraphWrapper"
                 >
-                    <PackGraph styleClassName="packGraph" />
+                    <PackGraph styleClassName="packGraph" onLoad={() => {setLoadingState(false)}} />
                 </Card>
 
                 <Foldable
