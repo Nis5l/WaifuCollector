@@ -20,10 +20,64 @@ function formatTime(t) {
   return formatTime;
 }
 
+function timeSince(date){
+
+  let seconds = Math.floor((new Date() - date) / 1000);
+        
+  let interval = seconds / 31536000;
+    
+  if (interval > 1) {
+
+      return Math.floor(interval) + " years";
+
+  }
+
+  interval = seconds / 2592000;
+
+  if (interval > 1) {
+
+      return Math.floor(interval) + " months";
+
+  }
+
+  interval = seconds / 86400;
+
+  if (interval > 1) {
+
+      return Math.floor(interval) + " days";
+
+  }
+
+  interval = seconds / 3600;
+
+  if (interval > 1) {
+
+      return Math.floor(interval) + " hours";
+
+  }
+
+  interval = seconds / 60;
+
+  if (interval > 1) {
+
+      return Math.floor(interval) + " minutes";
+
+  }
+
+  if(seconds == 0)
+      return "Just now";
+
+  if(seconds < 0)
+    return "How tf are you in the future?!";
+
+  return Math.floor(seconds) + " seconds";
+
+}
+
 const MAILREGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 function checkMail(mail) {
   return !MAILREGEX.test(mail);
 }
 
-export {formatTime, checkMail};
+export {formatTime, checkMail, timeSince};

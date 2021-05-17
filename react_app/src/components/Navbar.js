@@ -156,7 +156,7 @@ class Navbar extends React.Component {
                                 icon={<NotificationBell />}
                             >
                                 <Link
-                                    to="/leaderboard"
+                                    to="/notifications"
                                 >
                                     Notifications
                                 </Link>
