@@ -31,7 +31,6 @@ class TradeInventory extends Component {
     }
     axios.post(`${Config.API_HOST}/addtrade`, data)
       .then((res) => {
-        this.setState({loading: false});
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {
             self.props.history.push(`/trade/${this.id}`);
@@ -48,15 +47,13 @@ class TradeInventory extends Component {
     return (
       <div className="tradeinventory_wrapper">
         {
-          this.state.error === undefined && this.state.loading === false &&
+          this.state.error === undefined &&
           < Inventory
             redirect={false}
             userID={this.id}
+            loading={this.state.loading}
             onCardClick={(e, card) => {this.onCardClick(this, e, card)}}
           />
-        }
-        {
-          this.state.error === undefined && this.state.loading && <WaifuCardLoad />
         }
         {
           this.state.error !== undefined && <h1>{this.state.error}</h1>

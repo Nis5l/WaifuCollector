@@ -30,10 +30,12 @@ class Inventory extends Component {
     this.lCounter = 0;
     this.lCounterMax = 1;
 
+    this.hasMore = true;
+    this.loadingCards = false;
+
     this.state =
     {
       cards: [],
-      hasMore: true,
       errorMessage: undefined,
       loading: true
     };
@@ -49,7 +51,8 @@ class Inventory extends Component {
   }
 
   trackScrolling = () => {
-    if (this.card_wrapper == null || !this.state.hasMore) return;
+    if (this.card_wrapper == null || !this.hasMore || this.loadingCards) return;
+    this.loadingCards = true;
     let data;
     const search = this.searchInput.current.value;
     const sortType = this.sortMethod;
@@ -76,8 +79,9 @@ class Inventory extends Component {
           if (res.data && res.data.status === 0) {
             parseCards(res.data.inventory);
             let cards = [...this.state.cards, ...res.data.inventory];
-            this.key = 0;
-            if (res.data.page === res.data.pagemax) this.setState({hasMore: false});
+            this.key++;
+            this.loadingCards = false;
+            if (res.data.page === res.data.pagemax) this.hasMore = false;
             this.setState({cards: cards});
           } else {
             this.setState({errorMessage: res.data.message});
@@ -96,7 +100,8 @@ class Inventory extends Component {
   onFilter(e, obj) {
     if (e !== undefined) e.preventDefault();
     obj.key = 0;
-    obj.setState({cards: [], hasMore: true});
+    this.hasMore = true;
+    obj.setState({cards: []});
   }
 
   onCardClick(e, card) {
@@ -106,7 +111,7 @@ class Inventory extends Component {
   render() {
     return (
       <div className="inventory_wrapper">
-        <Loading loading={this.state.loading} />
+        <Loading loading={this.state.loading || this.props.loading === true} />
         <form action="#" onSubmit={(e) => {this.onFilter(e, this);}} className="inventory_input">
           <input ref={this.searchInput} type="text" className="text_input" />
           <input type="submit" hidden />
@@ -153,7 +158,7 @@ class Inventory extends Component {
             >
               {
                 this.state.errorMessage === undefined ? this.state.cards.map((card) => (
-                  < div className="inventory_card_wrapper" key={"card-" + this.key++}>
+                  < div className="inventory_card_wrapper" key={"card-" + card.id}>
                     <WaifuCard
                       onClick={this.onCardClick}
                       card={card}

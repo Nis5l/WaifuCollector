@@ -1,5 +1,7 @@
 import React from 'react'
 
+import NotificationBell from './NotificationBell'
+
 import {
     ProSidebar,
     Menu,
@@ -151,12 +153,12 @@ class Navbar extends React.Component {
                             }
 
                             <MenuItem
-                                icon={<i className="fas fa-clipboard-list"></i>}
+                                icon={<NotificationBell />}
                             >
                                 <Link
                                     to="/leaderboard"
                                 >
-                                    Leaderboard
+                                    Notifications
                                 </Link>
                             </MenuItem>
 
@@ -203,6 +205,16 @@ class Navbar extends React.Component {
                                 <MenuItem>Anime</MenuItem>
                                 <MenuItem>Users</MenuItem>
                             </SubMenu>}
+
+                            <MenuItem
+                                icon={<i className="fas fa-clipboard-list"></i>}
+                            >
+                                <Link
+                                    to="/leaderboard"
+                                >
+                                    Leaderboard
+                                </Link>
+                            </MenuItem>
 
                             {this.props.token && <MenuItem
                                 icon={<i className="fas fa-sign-out-alt"></i>}
