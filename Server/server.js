@@ -947,9 +947,9 @@ app.post("/managefriend", async (req, res) => {
 			database.acceptFriendRequest(userID, decoded.id, () => {
 				database.addNotification(
 					decoded.id,
-					"Friend Accepted",
+					`${logic.getClients()[userID].username} accepted your friendrequest!`,
 					"You friend request got accepted, click to view!",
-					"friends",
+					"dashboard",
 					() => {}
 				);
 				res.send({status: 0});
@@ -1089,9 +1089,9 @@ app.post("/addtrade", async (req, res) => {
 			if (sc.status == 0)
 				database.addNotification(
 					userID,
-					"Trade Changed",
-					"A card got added to the trade, click to view!",
-					"trade?userID=" + decoded.id,
+					`${logic.getClients[decoded.id].username} changed the Trade`,
+					"The trade got changed, click to view!",
+					`trade/${decoded.id}`,
 					() => {}
 				);
 			res.send(sc);
@@ -1137,9 +1137,9 @@ app.post("/suggesttrade", async (req, res) => {
 					database.addTradeSuggestion(decoded.id, userID, cardID, () => {
 						database.addNotification(
 							userID,
-							"Trade Suggestion",
-							"A friend changed the card suggestions, click to view!",
-							"trade?userID=" + decoded.id,
+							`${logic.getClients[decoded.id].username} changed the Trade`,
+							"The trade got changed, click to view!",
+							`trade/${decoded.id}`,
 							() => {}
 						);
 						res.send({status: 0});
@@ -1168,9 +1168,9 @@ app.post("/removetrade", async (req, res) => {
 				logic.setTrade(userID, decoded.id, 0, () => {
 					database.addNotification(
 						userID,
-						"Trade Changed",
-						"A card got removed from the trade, click to view!",
-						"trade?userID=" + decoded.id,
+						`${logic.getClients[decoded.id].username} changed the Trade`,
+						"The trade got changed, click to view!",
+						`trade/${decoded.id}`,
 						() => {}
 					);
 					res.send({status: 0});
@@ -1202,9 +1202,9 @@ app.post("/removesuggestion", async (req, res) => {
 		database.removeSuggestionUser(uo, ut, cardID, () => {
 			database.addNotification(
 				userID,
-				"Trade Suggestion",
-				"A friend changed the card suggestions, click to view!",
-				"trade?userID=" + decoded.id,
+				`${logic.getClients[decoded.id].username} changed the Trade`,
+				"The trade got changed, click to view!",
+				`trade/${decoded.id}`,
 				() => {}
 			);
 			res.send({status: 0});
@@ -1229,9 +1229,9 @@ app.post("/acceptsuggestion", async (req, res) => {
 			if (sc.status == 0)
 				database.addNotification(
 					userID,
-					"Trade Suggestion",
-					"A friend accepted a card suggestion, click to view!",
-					"trade?userID=" + decoded.id,
+					`${logic.getClients[decoded.id].username} changed the Trade`,
+					"The trade got changed, click to view!",
+					`trade/${decoded.id}`,
 					() => {}
 				);
 			res.send(sc);
@@ -1283,9 +1283,9 @@ app.post("/okTrade", async (req, res) => {
 									logger.write("Traded: " + logic.getClients()[decoded.id].username + " " + logic.getClients()[userID].username);
 									database.addNotification(
 										userID,
-										"Trade Complete",
-										"A trade has been complete, click to view!",
-										"trade?userID=" + decoded.id,
+										`${logic.getClients[decoded.id].username} completed the Trade`,
+										"The trade got completed, click to view!",
+										`trade/${decoded.id}`,
 										() => {}
 									);
 									logic.getClients()[decoded.id].setTradeTime(userID, date.valueOf());
@@ -1338,9 +1338,9 @@ app.post("/okTrade", async (req, res) => {
 				} else {
 					database.addNotification(
 						userID,
-						"Trade Confirmed",
-						"A trade has been confirmed, click to view!",
-						"trade?userID=" + decoded.id,
+						`${logic.getClients[decoded.id].username} changed the Trade`,
+						"The trade got changed, click to view!",
+						`trade/${decoded.id}`,
 						() => {}
 					);
 					res.send({status: 0});

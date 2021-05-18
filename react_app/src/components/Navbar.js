@@ -1,6 +1,7 @@
 import React from 'react'
 
 import NotificationBell from './NotificationBell'
+import Notifications from './Notifications'
 
 import {
     ProSidebar,
@@ -22,7 +23,10 @@ class Navbar extends React.Component {
 
         super(props);
 
-        this.state = {};
+        this.state =
+        {
+            notification: false
+        };
 
         window.addEventListener('resize', () => this.handleResize());
 
@@ -85,10 +89,21 @@ class Navbar extends React.Component {
     }
 
     render() {
-
         return (
 
             <div>
+
+                <div
+                    className="blurbackground notification_wrapper"
+                    style={{top: this.state.notification ? 0 : "-100vh"}}
+                    onClick={() => {this.setState({notification: false})}}
+                >
+                    <Notifications
+                        onHide={() => {
+                            this.setState({notification: false});
+                        }}
+                    />
+                </div>
 
                 {(this.state.mobile && !this.state.toggled) && <i className="menu-toggle fas fa-bars" onClick={() => this.toggleMenu()}></i>}
 
@@ -153,10 +168,13 @@ class Navbar extends React.Component {
                             }
 
                             <MenuItem
-                                icon={<NotificationBell />}
+                                icon=
+                                {
+                                    <NotificationBell />
+                                }
                             >
                                 <Link
-                                    to="/notifications"
+                                    onClick={() => {this.setState({notification: true})}}
                                 >
                                     Notifications
                                 </Link>

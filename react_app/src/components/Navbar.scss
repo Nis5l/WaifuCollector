@@ -2,6 +2,13 @@
 
 @import '~react-pro-sidebar/dist/scss/styles.scss';
 
+.notification_wrapper
+{
+    display: flex;
+    color: white;
+    transition: top 1s;
+}
+
 .headerIcon{
 
     height: 100%;

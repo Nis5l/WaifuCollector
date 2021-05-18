@@ -28,7 +28,7 @@
     .card-title{
 
         display: flex;
-        padding: 0 15px 10px 15px;
+        padding: 0 15px 6px 15px;
         font-size: 18px;
 
         height: $titleHeight;
@@ -46,7 +46,6 @@
             font-size: 12pt;
             color: $sidebar-color;
             transition: rotation 1s linear;
-            width: 30px;
 
             &:hover
             {

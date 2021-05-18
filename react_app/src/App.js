@@ -25,7 +25,6 @@ import Leaderboard from './pages/leaderboard/Leaderboard'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
-import Notifications from './pages/notifications/Notifications'
 
 function App() {
 
@@ -76,12 +75,6 @@ function App() {
             <Route path="/dashboard">
 
               {!token ? <Redirect to="/login" /> : <Route component={Dashboard} />}
-
-            </Route>
-
-            <Route path="/notifications">
-
-              {!token ? <Redirect to="/login" /> : <Route component={Notifications} />}
 
             </Route>
 

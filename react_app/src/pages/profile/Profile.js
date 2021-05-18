@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {useHistory} from "react-router";
+import React, {Component} from 'react'
+import {withRouter} from "react-router";
 import Card from '../../components/Card'
 import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
@@ -12,20 +12,26 @@ import Config from '../../config.json'
 
 import "./Profile.scss"
 
-function Profile(props) {
+class Profile extends Component {
 
-    const userID = props.match.params.id;
-    const [stats, setStats] = useState({friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0});
-    const [friendStatus, setFriendStatus] = useState(-1);
+    constructor(props) {
+        super(props);
 
-    const [loading, setLoading] = useState(true);
+        this.userID = props.match.params.id;
 
-    const history = useHistory();
 
-    let lcounter = 0;
-    let lcounterMax = 2;
+        this.lcounter = 0;
+        this.lcounterMax = 2;
 
-    useEffect(() => {
+        this.state =
+        {
+            stats: {friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0},
+            friendStatus: -1,
+            loading: true
+        }
+    }
+
+    componentDidMount() {
 
         async function loadStats(userID) {
 
@@ -43,35 +49,27 @@ function Profile(props) {
 
         }
 
-        async function updateStats() {
+        async function updateStats(self) {
 
-            const stats = await loadStats(userID);
+            const stats = await loadStats(self.userID);
 
-            setStats(stats);
-            incrementLCounter();
+            self.setState({stats: stats});
+            self.incrementLCounter();
         }
 
-        updateStats();
-
-    }, [setStats, userID]);
-
-    if (!Number.isInteger(parseInt(userID, 10))) {
-
-        return (
-            <h1>Invalid this id is!</h1>
-        );
+        updateStats(this);
 
     }
 
-    function onFriendData(data) {
-        incrementLCounter();
+    onFriendData(data) {
+        this.incrementLCounter();
 
         const ownID = Cookies.get('userID');
 
         let status = -1;
 
-        if (!ownID || ownID == userID) {
-            setFriendStatus(3);
+        if (!ownID || ownID == this.userID) {
+            this.setState({friendStatus: 3});
             return;
         }
 
@@ -82,127 +80,137 @@ function Profile(props) {
             }
         }
 
-        setFriendStatus(status);
+        this.setState({friendStatus: status});
     }
 
-    function onFriendAdd() {
+    onFriendAdd() {
         const data = {
             token: Cookies.get('token'),
-            userID: userID
+            userID: this.userID
         };
         axios.post(`${Config.API_HOST}/addfriend`, data);
-        setFriendStatus(0);
+        this.setState({friendStatus: 0});
     }
 
-    function incrementLCounter() {
-        lcounter++;
-        if (lcounter === lcounterMax) setLoading(false);
+    incrementLCounter() {
+        this.lcounter++;
+        if (this.lcounter === this.lcounterMax) this.setState({loading: false});
     }
 
-    let icon = "";
-    let onIconClick = () => {}
+    render() {
 
-    if (friendStatus === -1) {
-        icon = "fa-user-plus";
-        onIconClick = onFriendAdd;
-    }
-    else if (friendStatus === 2) {
-        icon = "fa-handshake";
-        onIconClick = () => {history.push(`/trade/${userID}`)}
-    }
+        if (!Number.isInteger(parseInt(this.userID, 10))) {
+            return (
+                <h1>Invalid this id is!</h1>
+            );
+        }
 
-    return (
-        <div className="container_profile">
+        let icon = "";
+        let onIconClick = () => {}
 
-            <Loading loading={loading} />
+        if (this.state.friendStatus === -1) {
+            icon = "fa-user-plus";
+            onIconClick = () => this.onFriendAdd();
+        }
+        else if (this.state.friendStatus === 2) {
+            icon = "fa-handshake";
+            onIconClick = () => {this.props.history.push(`/trade/${this.userID}`)}
+        }
 
-            <Card
-                title="Account Info"
-                styleClassName="accountInfo"
-                icon={icon}
-                onIconClick={onIconClick}
-            >
+        return (
+            <div className="container_profile">
 
-                <div className="avatar">
+                <Loading loading={this.state.loading} />
 
-                    <img src="/assets/Icon.png" alt="Avatar" />
+                <Card
+                    title="Account Info"
+                    styleClassName="accountInfo"
+                    icon={icon}
+                    onIconClick={onIconClick}
+                >
 
-                </div>
+                    <div className="avatar">
 
-                <div className="profilename_container">
+                        <img src="/assets/Icon.png" alt="Avatar" />
 
-                    <ProfileName
-                        userID={userID}
+                    </div>
+
+                    <div className="profilename_container">
+
+                        <ProfileName
+                            userID={this.state.userID}
+                        />
+
+                    </div>
+
+                    <table className="stats">
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>Friends:</td>
+                                <td>{`${this.state.stats.friends}/${this.state.stats.maxFriends}`}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Waifus:</td>
+                                <td>{`${this.state.stats.cards}/${this.state.stats.maxCards}`}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Trades:</td>
+                                <td>{`${this.state.stats.trades}/${this.state.stats.maxTrades}`}</td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </Card>
+
+                <Card
+                    title="Badges"
+                    styleClassName="badges"
+                >
+                    <h1>Badges</h1>
+                </Card>
+
+                <Card
+                    title="Flex flex"
+                    styleClassName="flexen"
+                >
+
+                    <div className="flex-grid">
+
+
+
+                    </div>
+
+                </Card>
+
+                <Card
+                    title="Friends"
+                    styleClassName="friends"
+                >
+
+                    <Friendlist
+                        userID={this.userID}
+                        onFriendData={(data) => this.onFriendData(data)}
                     />
 
-                </div>
+                </Card>
 
-                <table className="stats">
+            </div>
 
-                    <tbody>
+        )
 
-                        <tr>
-
-                            <td>Friends:</td>
-                            <td>{`${stats.friends}/${stats.maxFriends}`}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>Waifus:</td>
-                            <td>{`${stats.cards}/${stats.maxCards}`}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>Trades:</td>
-                            <td>{`${stats.trades}/${stats.maxTrades}`}</td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </Card>
-
-            <Card
-                title="Badges"
-                styleClassName="badges"
-            >
-                <h1>Badges</h1>
-            </Card>
-
-            <Card
-                title="Flex flex"
-                styleClassName="flexen"
-            >
-
-                <div className="flex-grid">
-
-
-
-                </div>
-
-            </Card>
-
-            <Card
-                title="Friends"
-                styleClassName="friends"
-            >
-
-                <Friendlist
-                    userID={userID}
-                    onFriendData={onFriendData}
-                />
-
-            </Card>
-
-        </div>
-
-    )
+    }
 }
 
 export default Profile

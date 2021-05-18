@@ -26,7 +26,6 @@ class NotificationBell extends Component {
         axios.post(`${Config.API_HOST}/notifications`, data)
             .then((res) => {
                 if (res.data && res.data.status === 0) {
-                    console.log(res.data.data);
                     this.setState({notifications: res.data.data});
                 }
             })
@@ -39,14 +38,14 @@ class NotificationBell extends Component {
                     {
                         this.state.notifications !== undefined &&
                         this.state.notifications.length !== 0 &&
-                        <div>
+                        <div className="circle">
                             <p className="unselectable">
                                 {this.state.notifications.length}
                             </p>
                         </div>
                     }
                 </i>
-            </div>
+            </div >
         )
     }
 }

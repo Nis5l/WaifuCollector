@@ -1,8 +1,10 @@
-@import "../../scss/__base.scss";
+@import "../scss/__base.scss";
 
 .notifications_container{
 
-    height: 100%;
+    margin: auto;
+    height: 90%;
+    width: 90%;
 
     .card-content .notification:not(:first-child){
 

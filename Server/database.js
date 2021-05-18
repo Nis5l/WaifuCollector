@@ -1,6 +1,7 @@
 const sql = require("mysql");
 const bcrypt = require("bcrypt");
 const async = require('async');
+const moment = require("moment");
 
 const packTime = "PACKTIME";
 const tradeTime = "TRADETIME";
@@ -39,7 +40,7 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `friend` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `friend_status` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trade` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `trademanager` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `statusone` INT NOT NULL , `statustwo` INT NOT NULL, `cooldown` TEXT NOT NULL) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`id`))",
+			"CREATE TABLE IF NOT EXISTS `notification` ( `id` INT NOT NULL AUTO_INCREMENT, userID INT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `url` TEXT NOT NULL, `time` BIGINT NOT NULL, PRIMARY KEY (`id`))",
 			"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `packdata` ( `amount` INT NOT NULL , `time` BIGINT NOT NULL , PRIMARY KEY (`time`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `tradesuggestion` ( `userone` INT NOT NULL , `usertwo` INT NOT NULL , `card` INT NOT NULL ) ENGINE = InnoDB;",
@@ -51,8 +52,10 @@ module.exports = {
 			/*
 			* FOR OLDER VERSIONS
 			*
-			"ALTER TABLE user ADD COLUMN email TEXT NOT NULL, ADD COLUMN verified INT NOT NULL;",
-			"ALTER TABLE trademanager ADD COLUMN cooldown TEXT NOT NULL;"
+			* "ALTER TABLE user ADD COLUMN email TEXT NOT NULL, ADD COLUMN verified INT NOT NULL;",
+			* "ALTER TABLE trademanager ADD COLUMN cooldown TEXT NOT NULL;"
+			* "ALTER TABLE trademanager ADD COLUMN cooldown TEXT NOT NULL;"
+			* "ALTER TABLE notification ADD COLUMN time TEXT NOT NULL;"
 			*/
 
 		];
@@ -732,24 +735,10 @@ module.exports = {
 		callback
 	) {
 		con.query(
-			"INSERT INTO notification(`userID`, `title`, `message`, `url`)" +
-			" SELECT '" +
-			userID +
-			"', '" +
-			title +
-			"', '" +
-			message +
-			"', '" +
-			url +
-			"' FROM dual WHERE NOT EXISTS" +
-			" ( SELECT * FROM notification WHERE" +
-			" userID = '" +
-			userID +
-			"' AND title = '" +
-			title +
-			"' AND url = '" +
-			url +
-			"');",
+			`INSERT INTO notification(userID, title, message, url, time)
+			SELECT '${userID}', '${title}', '${message}', '${url}', '${moment().valueOf()}'
+			FROM dual WHERE NOT EXISTS
+			(SELECT * FROM notification WHERE userID=${userID} AND title=${title} AND url=${url});`,
 			(err, result, fields) => {
 				if (err) console.log(err);
 				callback(result);

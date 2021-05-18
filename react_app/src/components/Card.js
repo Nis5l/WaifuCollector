@@ -7,7 +7,10 @@ function Card(props) {
 
     return (
 
-        <div className={"card " + props.styleClassName}>
+        <div
+            className={"card " + props.styleClassName}
+            onClick={(e) => {if (props.onClick) props.onClick(e)}}
+        >
 
             {
                 props.title &&
@@ -22,7 +25,7 @@ function Card(props) {
                     {
                         props.icon &&
                         <div onClick={props.onIconClick} className="icon">
-                            <i className={"fas " + props.icon + " unselectable"} />
+                            <i style={{width: props.iconNum ? "30px" : "auto"}} className={"fas " + props.icon + " unselectable"} />
                             {
                                 props.iconNum !== undefined && props.iconNum !== 0 &&
                                 <div><p className="unselectable">{props.iconNum}</p></div>

@@ -1,12 +1,12 @@
 import React from 'react'
-import Card from '../../components/Card'
+import Card from './Card'
 
 import DoneIcon from '@material-ui/icons/Done';
-import {timeSince} from '../../Utils'
+import {timeSince} from '../Utils'
 
 import "./Notifications.scss"
 
-function Notification(props){
+function Notification(props) {
 
     const timesince = timeSince(props.date);
 
@@ -18,19 +18,19 @@ function Notification(props){
 
     let classNames = "notification";
 
-    if(!props.icon)
+    if (!props.icon)
         classNames += " noIcon";
 
     return (
-    
+
         <div className={classNames}>
 
-            {props.icon && 
+            {props.icon &&
 
-            <div className="icon">
-                <img src={props.icon} alt="icon" />
-            </div>
-            
+                <div className="icon">
+                    <img src={props.icon} alt="icon" />
+                </div>
+
             }
 
             <div className="not_content">
@@ -47,23 +47,26 @@ function Notification(props){
             </div>
 
         </div>
-        
+
     );
 
 }
 
-export default function Notifications() {
+export default function Notifications(props) {
 
     const now = new Date();
 
     const hardCodedDate = new Date("Mon, 17 May 2021 17:30:10 GMT");
-    const lastYearFromNow = new Date().setFullYear(now.getFullYear() -1);
-    const yearFromNow = new Date().setFullYear(now.getFullYear() +1);
+    const lastYearFromNow = new Date().setFullYear(now.getFullYear() - 1);
+    const yearFromNow = new Date().setFullYear(now.getFullYear() + 1);
 
     return (
         <Card
-          title="Notifications"
-          styleClassName="notifications_container"
+            title="Notifications"
+            styleClassName="notifications_container"
+            onClick={(e) => e.stopPropagation()}
+            icon="fa-times"
+            onIconClick={() => {if (props.onHide) props.onHide()}}
         >
 
             <Notification
@@ -89,7 +92,7 @@ export default function Notifications() {
                 date={yearFromNow}
                 icon=""
             />
-            
+
         </Card>
     )
 }
