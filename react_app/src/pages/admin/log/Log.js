@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {withRouter} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
@@ -14,8 +15,6 @@ class AdminLog extends Component {
 	constructor(props) {
 		super(props);
 
-		console.log("DS");
-
 		this.state =
 		{
 			loading: true,
@@ -24,7 +23,6 @@ class AdminLog extends Component {
 	}
 
 	componentDidMount() {
-		console.log("OKDSf");
 		const data =
 		{
 			token: Cookies.get('token')
@@ -35,7 +33,9 @@ class AdminLog extends Component {
 				if (res.data && res.data.status === 0) {
 					res.data.log = res.data.log.split("\n").reverse().join("\n");
 					this.setState({loading: false, log: res.data.log});
+					return;
 				}
+				this.props.history.push("/dashboard");
 			})
 	}
 
@@ -53,4 +53,4 @@ class AdminLog extends Component {
 	}
 }
 
-export default AdminLog;
+export default withRouter(AdminLog);

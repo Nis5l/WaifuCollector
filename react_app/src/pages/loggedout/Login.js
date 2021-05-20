@@ -48,7 +48,6 @@ function Login(props) {
                         Cookies.set("userID", res.data.userID, {expires: 30 * 12 * 30});
                         Cookies.set("token", res.data.token, {expires: 30 * 12 * 30});
 
-                        console.log("get");
                         axios.get(`${Config.API_HOST}/${res.data.userID}/rank`)
                             .then((res) => {
                                 if (res.data && res.data.status === 0) {
