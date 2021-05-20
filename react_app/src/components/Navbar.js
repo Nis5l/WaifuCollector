@@ -25,7 +25,8 @@ class Navbar extends React.Component {
 
         this.state =
         {
-            notification: false
+            notification: false,
+            notifications: []
         };
 
         window.addEventListener('resize', () => this.handleResize());
@@ -99,9 +100,8 @@ class Navbar extends React.Component {
                     onClick={() => {this.setState({notification: false})}}
                 >
                     <Notifications
-                        onHide={() => {
-                            this.setState({notification: false});
-                        }}
+                        onHide={() => this.setState({notification: false})}
+                        onNotifications={(data) => this.setState({notifications: data})}
                     />
                 </div>
 
@@ -170,7 +170,7 @@ class Navbar extends React.Component {
                             <MenuItem
                                 icon=
                                 {
-                                    <NotificationBell />
+                                    <NotificationBell notifications={this.state.notifications.length} />
                                 }
                             >
                                 <Link

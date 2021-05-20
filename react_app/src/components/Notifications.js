@@ -1,5 +1,11 @@
-import React from 'react'
+import React, {Component} from 'react'
+import {useHistory} from 'react-router-dom'
 import Card from './Card'
+import Scrollbar from './ScrollBar'
+
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import Config from '../config.json'
 
 import DoneIcon from '@material-ui/icons/Done';
 import {timeSince} from '../Utils'
@@ -9,11 +15,14 @@ import "./Notifications.scss"
 function Notification(props) {
 
     const timesince = timeSince(props.date);
+    const history = useHistory();
 
     const done = () => {
+        if (props.onHide) props.onHide();
+    }
 
-        console.log("delete");
-
+    const remove = () => {
+        if (props.onRemove) props.onRemove(props.id);
     }
 
     let classNames = "notification";
@@ -23,7 +32,14 @@ function Notification(props) {
 
     return (
 
-        <div className={classNames}>
+        <div
+            className={classNames}
+            onClick={() => {
+                done();
+                remove();
+                history.push("/" + props.url);
+            }}
+        >
 
             {props.icon &&
 
@@ -42,7 +58,12 @@ function Notification(props) {
 
             <div className="doneButton">
 
-                <DoneIcon onClick={done} />
+                <DoneIcon onClick={
+                    (e) => {
+                        remove();
+                        e.stopPropagation();
+                    }}
+                />
 
             </div>
 
@@ -52,47 +73,84 @@ function Notification(props) {
 
 }
 
-export default function Notifications(props) {
+export default class Notifications extends Component {
 
-    const now = new Date();
+    constructor(props) {
+        super(props);
 
-    const hardCodedDate = new Date("Mon, 17 May 2021 17:30:10 GMT");
-    const lastYearFromNow = new Date().setFullYear(now.getFullYear() - 1);
-    const yearFromNow = new Date().setFullYear(now.getFullYear() + 1);
+        this.state =
+        {
+            notifications: []
+        }
+    }
 
-    return (
-        <Card
-            title="Notifications"
-            styleClassName="notifications_container"
-            onClick={(e) => e.stopPropagation()}
-            icon="fa-times"
-            onIconClick={() => {if (props.onHide) props.onHide()}}
-        >
+    componentDidMount() {
+        const data =
+        {
+            token: Cookies.get('token')
+        }
 
-            <Notification
-                message="New friend request from Haselnusse"
-                date={hardCodedDate}
-                icon="/assets/IconColor.png"
-            />
+        axios.post(`${Config.API_HOST}/notifications`, data)
+            .then((res) => {
+                if (res.data && res.data.status === 0) {
+                    res.data.data.reverse();
+                    this.setState({notifications: res.data.data});
+                    if (this.props.onNotifications) this.props.onNotifications(res.data.data);
+                }
+            })
+    }
 
-            <Notification
-                message="New friend request from Haselnusse"
-                date={now}
-                icon="/assets/IconColor.png"
-            />
+    remove(id) {
+        const data =
+        {
+            token: Cookies.get('token'),
+            notificationID: id
+        }
 
-            <Notification
-                message="New friend request from Haselnusse"
-                date={lastYearFromNow}
-                icon=""
-            />
+        for (let i = 0; i < this.state.notifications.length; i++) {
+            if (this.state.notifications[i].id === id) {
+                this.state.notifications.splice(i, 1);
+                break;
+            }
+        }
 
-            <Notification
-                message="WaifuCollector developer receives Nobel Peace Prize!"
-                date={yearFromNow}
-                icon=""
-            />
 
-        </Card>
-    )
+        if (this.props.onNotifications) this.props.onNotifications(this.state.notifications);
+        this.setState({notifications: [...this.state.notifications]});
+
+        axios.post(`${Config.API_HOST}/deleteNotification`, data);
+    }
+
+    render() {
+
+        return (
+            <Card
+                title="Notifications"
+                styleClassName="notifications_container"
+                onClick={(e) => e.stopPropagation()}
+                icon="fa-times"
+                onIconClick={() => {if (this.props.onHide) this.props.onHide()}}
+            >
+                <Scrollbar>
+                    {
+
+                        this.state.notifications.map((notification) => (
+
+                            <Notification
+                                onHide={this.props.onHide}
+                                key={`notification-${notification.id}`}
+                                message={notification.title}
+                                date={notification.time}
+                                icon="/assets/IconColor.png"
+                                url={notification.url}
+                                id={notification.id}
+                                onRemove={(id) => this.remove(id)}
+                            />
+                        ))
+                    }
+                </Scrollbar>
+
+            </Card>
+        )
+    }
 }

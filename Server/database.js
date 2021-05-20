@@ -736,9 +736,9 @@ module.exports = {
 	) {
 		con.query(
 			`INSERT INTO notification(userID, title, message, url, time)
-			SELECT '${userID}', '${title}', '${message}', '${url}', '${moment().valueOf()}'
-			FROM dual WHERE NOT EXISTS
-			(SELECT * FROM notification WHERE userID=${userID} AND title=${title} AND url=${url});`,
+SELECT '${userID}', '${title}', '${message}', '${url}', '${moment().valueOf()}'
+FROM dual WHERE NOT EXISTS
+(SELECT * FROM notification WHERE userID='${userID}' AND title='${title}' AND url='${url}');`,
 			(err, result, fields) => {
 				if (err) console.log(err);
 				callback(result);

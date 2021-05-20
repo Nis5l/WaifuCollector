@@ -6,16 +6,21 @@
     height: 90%;
     width: 90%;
 
-    .card-content .notification:not(:first-child){
+    .card-content
+    {
+        overflow: auto;
 
-        margin-top: 10px;
+        .notification:not(:first-child){
 
+            margin-top: 10px;
+        }
     }
 
 }
 
 .notification{
 
+    cursor: pointer;
     display: flex;
 
     background-color: $background-secondary;

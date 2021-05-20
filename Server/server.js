@@ -1089,7 +1089,7 @@ app.post("/addtrade", async (req, res) => {
 			if (sc.status == 0)
 				database.addNotification(
 					userID,
-					`${logic.getClients[decoded.id].username} changed the Trade`,
+					`${logic.getClients()[decoded.id].username} changed the Trade`,
 					"The trade got changed, click to view!",
 					`trade/${decoded.id}`,
 					() => {}
@@ -1137,7 +1137,7 @@ app.post("/suggesttrade", async (req, res) => {
 					database.addTradeSuggestion(decoded.id, userID, cardID, () => {
 						database.addNotification(
 							userID,
-							`${logic.getClients[decoded.id].username} changed the Trade`,
+							`${logic.getClients()[decoded.id].username} changed the Trade`,
 							"The trade got changed, click to view!",
 							`trade/${decoded.id}`,
 							() => {}
@@ -1168,7 +1168,7 @@ app.post("/removetrade", async (req, res) => {
 				logic.setTrade(userID, decoded.id, 0, () => {
 					database.addNotification(
 						userID,
-						`${logic.getClients[decoded.id].username} changed the Trade`,
+						`${logic.getClients()[decoded.id].username} changed the Trade`,
 						"The trade got changed, click to view!",
 						`trade/${decoded.id}`,
 						() => {}
@@ -1202,7 +1202,7 @@ app.post("/removesuggestion", async (req, res) => {
 		database.removeSuggestionUser(uo, ut, cardID, () => {
 			database.addNotification(
 				userID,
-				`${logic.getClients[decoded.id].username} changed the Trade`,
+				`${logic.getClients()[decoded.id].username} changed the Trade`,
 				"The trade got changed, click to view!",
 				`trade/${decoded.id}`,
 				() => {}
@@ -1229,7 +1229,7 @@ app.post("/acceptsuggestion", async (req, res) => {
 			if (sc.status == 0)
 				database.addNotification(
 					userID,
-					`${logic.getClients[decoded.id].username} changed the Trade`,
+					`${logic.getClients()[decoded.id].username} changed the Trade`,
 					"The trade got changed, click to view!",
 					`trade/${decoded.id}`,
 					() => {}
@@ -1283,7 +1283,7 @@ app.post("/okTrade", async (req, res) => {
 									logger.write("Traded: " + logic.getClients()[decoded.id].username + " " + logic.getClients()[userID].username);
 									database.addNotification(
 										userID,
-										`${logic.getClients[decoded.id].username} completed the Trade`,
+										`${logic.getClients()[decoded.id].username} completed the Trade`,
 										"The trade got completed, click to view!",
 										`trade/${decoded.id}`,
 										() => {}
@@ -1338,7 +1338,7 @@ app.post("/okTrade", async (req, res) => {
 				} else {
 					database.addNotification(
 						userID,
-						`${logic.getClients[decoded.id].username} changed the Trade`,
+						`${logic.getClients()[decoded.id].username} changed the Trade`,
 						"The trade got changed, click to view!",
 						`trade/${decoded.id}`,
 						() => {}
