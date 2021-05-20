@@ -15,6 +15,7 @@ import TradeInventory from './pages/tradeinventory/TradeInventory'
 import SuggestInventory from './pages/suggestInventory/SuggestInventory'
 import Users from './pages/users/Users'
 import AdminLog from './pages/admin/log/Log'
+import FakeAdmin from './pages/fakeAdmin/FakeAdmin'
 
 import Login from './pages/loggedout/Login'
 
@@ -150,6 +151,8 @@ function App() {
             <Route path="/users" component={Users} />
 
             <Route path="/admin/log" component={AdminLog} />
+
+            <Route path="/adminpanel" component={FakeAdmin} />
 
             <Route component={NoMatch} />
 
