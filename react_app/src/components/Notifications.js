@@ -147,7 +147,7 @@ export default class Notifications extends Component {
                                 key={`notification-${notification.id}`}
                                 message={notification.title}
                                 date={notification.time}
-                                icon="/assets/IconColor.png"
+                                icon="/assets/Icon.png"
                                 url={notification.url}
                                 id={notification.id}
                                 onRemove={(id) => this.remove(id)}

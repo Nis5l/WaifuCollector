@@ -246,38 +246,6 @@ class Trade extends Component {
     this.props.history.push(url);
   }
 
-  refresh = () => {
-    if (this.state.cards === undefined) return;
-
-    this.lCounter = 0;
-
-    this.setState({
-      name: "Loading...",
-      cards: undefined,
-      friendcards: undefined,
-      found: true,
-      info: "",
-      friendinfo: "",
-      tradeCount: 0,
-      friendTradeCount: 0,
-      tradeLimit: 0,
-      cardSuggestions: undefined,
-      friendCardSuggestions: undefined,
-      confirmed: 0,
-      friendConfirmed: 0,
-
-      removeId: undefined,
-      removeFriendSuggestionId: undefined,
-      removeSuggestionId: undefined,
-
-      disabled: undefined,
-
-      loading: true
-    })
-
-    this.load();
-  }
-
   render() {
 
     let size = 0.8;
@@ -318,11 +286,6 @@ class Trade extends Component {
         {
           this.state.found ? (
             <div className="trade_wrapper">
-              <div className="refresh">
-                <RefreshButton
-                  onRefresh={() => {this.refresh()}}
-                />
-              </div>
               <Card
                 styleClassName="trade_own"
                 title={"You " + this.state.info}

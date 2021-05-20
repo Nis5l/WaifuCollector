@@ -16,9 +16,8 @@
     box-sizing: border-box;
 
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: minmax(min-content, max-content) 1fr minmax(min-content, max-content);
+    grid-template-rows: 1fr minmax(min-content, max-content);
     grid-template-areas:
-        "refresh refresh"
         "own other"
         "confirm confirm";
 
@@ -39,7 +38,7 @@
     .trade_friend.trade_own
     {
         grid-column: own / other;
-        grid-row: refresh / confirm;
+        grid-row: confirm;
 
         .card-content
         {
@@ -115,16 +114,5 @@
         grid-area: confirm;
     }
 
-    .refresh
-    {
-        grid-area: refresh;
-
-        display: flex;
-        justify-content: flex-end;
-        @media screen and (max-width: $breakpoint-sm)
-        {
-            justify-content: flex-start;
-        }
-    }
 }
 
