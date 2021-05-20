@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import Card from './Card'
 import Scrollbar from './ScrollBar'
@@ -14,6 +14,8 @@ import "./Notifications.scss"
 
 function Notification(props) {
 
+    const fadingTime = 0.2;
+    const [fading, setFading] = useState(false);
     const timesince = timeSince(props.date);
     const history = useHistory();
 
@@ -22,7 +24,10 @@ function Notification(props) {
     }
 
     const remove = () => {
-        if (props.onRemove) props.onRemove(props.id);
+        setFading(true);
+        setTimeout(() => {
+            if (props.onRemove) props.onRemove(props.id);
+        }, fadingTime * 1000);
     }
 
     let classNames = "notification";
@@ -39,6 +44,7 @@ function Notification(props) {
                 remove();
                 history.push("/" + props.url);
             }}
+            style={{animation: fading ? `fadeout ${fadingTime}s forwards` : "none"}}
         >
 
             {props.icon &&

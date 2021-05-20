@@ -60,6 +60,10 @@
 
             font-size: 1.2em;
 
+            @media screen and (max-width: $breakpoint-md)
+            {
+                font-size: 0.9em;
+            }
         }
 
         p{
@@ -68,6 +72,11 @@
 
             color: $time-since-color;
             font-size: 0.9em;
+
+            @media screen and (max-width: $breakpoint-md)
+            {
+                font-size: 0.8em;
+            }
 
         }
 

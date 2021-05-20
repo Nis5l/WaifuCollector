@@ -240,3 +240,15 @@
     font-size: 12pt;
   }
 }
+
+@keyframes fadeout
+{
+  0%
+  {
+    opacity: 1;
+  }
+  100%
+  {
+    opacity: 0;
+  }
+}
