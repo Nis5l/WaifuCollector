@@ -14,6 +14,7 @@ import Trade from './pages/trade/Trade'
 import TradeInventory from './pages/tradeinventory/TradeInventory'
 import SuggestInventory from './pages/suggestInventory/SuggestInventory'
 import Users from './pages/users/Users'
+import AdminLog from './pages/admin/log/Log'
 
 import Login from './pages/loggedout/Login'
 
@@ -147,6 +148,8 @@ function App() {
             </Route>
 
             <Route path="/users" component={Users} />
+
+            <Route path="/admin/log" component={AdminLog} />
 
             <Route component={NoMatch} />
 

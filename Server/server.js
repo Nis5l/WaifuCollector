@@ -227,7 +227,7 @@ app.get("/:id/rank", function (req, res) {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
-app.get("/log", async (req, res) => {
+app.post("/log", async (req, res) => {
 	try {
 		var decoded = await logic.standardroutine(req.body.token, res);
 		database.getUserRank(decoded.id, (rank) => {

@@ -224,7 +224,7 @@ class Navbar extends React.Component {
                                     <Link
                                         to="/admin/log"
                                     >
-                                        Stats
+                                        Log 
                                     </Link>
                                 </MenuItem>
                                 <MenuItem>Cards</MenuItem>
