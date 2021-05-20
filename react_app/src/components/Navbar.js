@@ -1,4 +1,5 @@
 import React from 'react'
+import Cookies from 'js-cookie'
 
 import NotificationBell from './NotificationBell'
 import Notifications from './Notifications'
@@ -174,6 +175,7 @@ class Navbar extends React.Component {
                                 }
                             >
                                 <Link
+                                    to="#"
                                     onClick={() => {this.setState({notification: true})}}
                                 >
                                     Notifications
@@ -214,11 +216,17 @@ class Navbar extends React.Component {
                                 </MenuItem>
                             </SubMenu>}
 
-                            {this.props.token && <SubMenu
+                            {this.props.token && Cookies.get("rank") == 1 && <SubMenu
                                 title="Adminpanel"
                                 icon={<i className="fas fa-user"></i>}
                             >
-                                <MenuItem>Stats</MenuItem>
+                                <MenuItem>
+                                    <Link
+                                        to="/admin/log"
+                                    >
+                                        Stats
+                                    </Link>
+                                </MenuItem>
                                 <MenuItem>Cards</MenuItem>
                                 <MenuItem>Anime</MenuItem>
                                 <MenuItem>Users</MenuItem>

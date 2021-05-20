@@ -208,19 +208,19 @@ app.get("/:id/rank", function (req, res) {
 			database.getUserRank(userID, (rankID) => {
 				if (rankID != undefined) {
 					res.send({
-						status: 1,
+						status: 0,
 						rankID: rankID,
 					});
 				} else {
 					res.send({
-						status: 0,
+						status: 1,
 						message: "RankID not found",
 					});
 				}
 			});
 		} else {
 			res.send({
-				status: 0,
+				status: 1,
 				message: "Missing userID given",
 			});
 		}
@@ -233,6 +233,7 @@ app.get("/log", async (req, res) => {
 		database.getUserRank(decoded.id, (rank) => {
 			if (rank != 1) {
 				res.send({status: 1, message: "You dont have permission to view this"});
+				return;
 			}
 			logger.read((data) => {
 				res.send({status: 0, log: data});

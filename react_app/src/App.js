@@ -167,6 +167,7 @@ function LogOut(props) {
 
   Cookies.remove("token");
   Cookies.remove("userID");
+  Cookies.remove("rank");
 
   return (
 
