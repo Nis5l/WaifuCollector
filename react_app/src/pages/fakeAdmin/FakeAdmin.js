@@ -26,7 +26,7 @@ class FakeAdmin extends Component {
             Status: Running<br />
             Domain: waifucollector.com <br />
             API-Domain: api.waifucollector.com <br />
-            Current-Acces: FULL <br />
+            Current-Access: FULL <br />
             Admins: <br />
             {
               this.state.admins.map((admin) => (
@@ -39,7 +39,7 @@ class FakeAdmin extends Component {
           title="Manage"
           styleClassName="delete"
         >
-          <p>Grand admin access:</p>
+          <p>Grant admin access:</p>
           <input
             type="text"
             className="text_input"
