@@ -4,6 +4,7 @@ import Card from '../../components/Card'
 import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
+import WaifuCard, {parseCards} from '../../components/WaifuCard'
 
 import Cookies from 'js-cookie';
 
@@ -11,6 +12,7 @@ import axios from 'axios'
 import Config from '../../config.json'
 
 import "./Profile.scss"
+import Scrollbar from '../../components/ScrollBar';
 
 class Profile extends Component {
 
@@ -27,7 +29,8 @@ class Profile extends Component {
         {
             stats: {friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0},
             friendStatus: -1,
-            loading: true
+            loading: true,
+            flexCards: []
         }
     }
 
@@ -49,11 +52,24 @@ class Profile extends Component {
 
         }
 
+        async function loadFlexCards(userID) {
+            const data = await axios.get(`${Config.API_HOST}/flex?userID=${userID}`)
+
+            if (data.data && data.data.status === 0) {
+                parseCards(data.data.cards);
+                return data.data.cards;
+            }
+            return [];
+        }
+
         async function updateStats(self) {
 
             const stats = await loadStats(self.userID);
 
-            self.setState({stats: stats});
+            const cards = await loadFlexCards(self.userID);
+            console.log(cards);
+
+            self.setState({stats: stats, flexCards: cards});
             self.incrementLCounter();
         }
 
@@ -185,26 +201,36 @@ class Profile extends Component {
                     title="Flex flex"
                     styleClassName="flexen"
                 >
-
                     <div className="flex-grid">
-
-
-
+                        <Scrollbar>
+                            {
+                                this.state.flexCards.map((card) => (
+                                    <div className="waifucard_wrapper" key={"card-" + card.id}>
+                                        <WaifuCard
+                                            card={card}
+                                            size={0.54}
+                                        />
+                                    </div>
+                                ))
+                            }
+                        </Scrollbar>
                     </div>
 
                 </Card>
 
-                <Card
-                    title="Friends"
-                    styleClassName="friends"
-                >
+                <div className="friends_wrapper">
+                    <Card
+                        title="Friends"
+                        styleClassName="friends"
+                    >
 
-                    <Friendlist
-                        userID={this.userID}
-                        onFriendData={(data) => this.onFriendData(data)}
-                    />
+                        <Friendlist
+                            userID={this.userID}
+                            onFriendData={(data) => this.onFriendData(data)}
+                        />
 
-                </Card>
+                    </Card>
+                </div>
 
             </div>
 

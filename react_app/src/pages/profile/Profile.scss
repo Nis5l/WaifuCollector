@@ -20,6 +20,9 @@
 
     .accountInfo{
 
+        @media screen and (max-width: $breakpoint-sm){
+            margin-top: 40px;
+        }
         grid-area: account;
 
         .avatar{
@@ -131,30 +134,54 @@
         grid-area: packs;
 
         .flex-grid{
-
             width: 100%;
             height: 100%;
+            .scroll_view
+            {
+                overflow-x: hidden !important;
+                width: 100%;
+                height: 100%;
+                flex-direction: row;
+                display: flex;
+                justify-content: center;
+                justify-items: center;
+                flex-wrap: wrap;
+                overflow: auto;
 
+                .waifucard_wrapper
+                {
+                    width: fit-content;
+                    height: fit-content;
+                    margin: 5px;
+                }
+            }
         }
 
     }
 
-    .friends{
-
+    .friends_wrapper {
         grid-area: friends;
+        @media screen and (max-width: 768px)
+        {
+            padding-bottom: 30px;
+        }
+        .friends{
 
-        overflow: hidden;
+            height: 100%;
 
-        @media screen and (max-width: $breakpoint-md){
+            overflow: hidden;
 
-            &{
+            @media screen and (max-width: $breakpoint-md){
 
-                height: fit-content;
+                &{
+
+                    height: fit-content;
+
+                }
 
             }
 
         }
-
     }
 
     @media screen and (max-width: $breakpoint-xl) {
@@ -170,13 +197,13 @@
     @media screen and (max-width: $breakpoint-md){
         
         grid-template-columns: 1fr;
-        grid-template-rows: 100% auto auto auto;
+        grid-template-rows: auto 80% auto auto;
 
         box-sizing: unset;
 
         grid-template-areas: 
-        "packs"
         "account"
+        "packs"
         "badges"
         "friends";
 

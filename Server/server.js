@@ -1628,6 +1628,22 @@ app.get("/users", async (req, res) => {
 	} catch (ex) {console.log(ex); logic.handleException(ex, res);}
 });
 
+app.get("/flex", async (req, res) => {
+	try {
+		let userID = parseInt(req.query.userID);
+
+		if (isNaN(userID)) {
+			res.send({status: 1, message: "invalid userID"});
+			return;
+		}
+
+		logic.inventory(userID, "", 9, 0, 1, (result) => {
+			res.send({status: 0, cards: result});
+		})
+
+	} catch (ex) {console.log(ex); logic.handleException(ex, res);}
+});
+
 process.on('uncaughtException', function (exception) {
 	console.log(exception);
 });

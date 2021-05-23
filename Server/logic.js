@@ -11,7 +11,7 @@ const mail = require('./mail');
 
 const jwtSecret = "yCSgVxmL9I";
 
-const imageBase = "Card/";
+const cardBase = "Card/";
 const frameBase = "Frame/";
 const effectBase = "Effect/";
 const userRegex = /^[a-zA-Z0-9_]+$/;
@@ -158,7 +158,7 @@ function getCard(cardID, frameID, level, callback) {
 	var card;
 	database.getCard(cardID, (result) => {
 		card = result;
-		card.cardImage = imageBase + card.cardImage;
+		card.cardImage = cardBase + card.cardImage;
 		database.getCardType(card.typeID, (result2) => {
 			card.type = result2;
 			database.getFrame(frameID, (frame) => {
@@ -586,6 +586,46 @@ function sendFriendReqeust(userone, usertwo, res) {
 	}
 }
 
+function inventory(userID, name, count, offset, sortType, callback) {
+
+	database.inventory(userID, name, count, offset, sortType, (cards) => {
+		for (let i = 0; i < cards.length; i++) {
+			cards[i].card = {};
+			cards[i].card.id = cards[i].cardID;
+			cards[i].card.name = cards[i].cardName;
+			cards[i].card.image = cardBase + cards[i].cardImage;
+			delete cards[i].cardID;
+			delete cards[i].cardName;
+			delete cards[i].cardImage;
+
+			cards[i].frame = {};
+			cards[i].frame.id = cards[i].frameID;
+			cards[i].frame.name = cards[i].frameName;
+			cards[i].frame.front = frameBase + cards[i].frameFront;
+			cards[i].frame.back = frameBase + cards[i].frameBack;
+			delete cards[i].frameID;
+			delete cards[i].frameName;
+			delete cards[i].frameFront;
+			delete cards[i].frameBack;
+
+			cards[i].anime = {};
+			cards[i].anime.id = cards[i].animeID;
+			cards[i].anime.name = cards[i].animeName;
+			delete cards[i].animeID;
+			delete cards[i].animeName;
+
+			cards[i].effect = {};
+			cards[i].effect.id = cards[i].effectID;
+			cards[i].effect.image = effectBase + cards[i].effectImage;
+			cards[i].effect.opacity = cards[i].effectOpacity;
+			delete cards[i].effectID;
+			delete cards[i].effectImage;
+			delete cards[i].effectOpacity;
+		}
+		callback(cards);
+	});
+}
+
 function isString(str) {
 	return (typeof str === 'string' || str instanceof String);
 }
@@ -646,6 +686,15 @@ function getAnimePackCooldown() {
 function getAnimePackSize() {
 	return animePackSize;
 }
+function getCardBase() {
+	return cardBase;
+}
+function getFrameBase() {
+	return frameBase;
+}
+function getEffectBase() {
+	return effectBase;
+}
 module.exports =
 {
 	getPort: getPort,
@@ -694,4 +743,8 @@ module.exports =
 	isString: isString,
 	getBadges: getBadges,
 	sendFriendReqeust: sendFriendReqeust,
+	getImageBase: getCardBase,
+	getFrameBase: getFrameBase,
+	getEffectBase: getEffectBase,
+	inventory: inventory
 };

@@ -930,6 +930,63 @@ FROM dual WHERE NOT EXISTS
 			(err, result, fields) => {
 				callback(result);
 			});
+	},
+
+	inventory: function inventory(userID, name, count, offset, sortType, callback) {
+
+		name = `%${name}%`;
+
+		let sortquery =
+			`card.cardName,
+cardType.name,
+unlocked.level DESC,
+unlocked.quality DESC`;
+
+		switch (sortType) {
+			case 1:
+				sortquery =
+					`unlocked.level DESC,
+unlocked.quality DESC,
+card.cardName,
+cardType.name`
+				break;
+		}
+
+		let query =
+			`SELECT
+unlocked.id as id,
+unlocked.userID as userID,
+unlocked.level as level,
+unlocked.quality as quality,
+card.id as cardID,
+card.cardName as cardName,
+card.cardImage as cardImage,
+cardType.id as animeID,
+cardType.name as animeName,
+frame.id as frameID,
+frame.name as frameName,
+frame.path_front as frameFront,
+frame.path_back as frameBack,
+effect.id as effectID,
+effect.path as effectImage,
+effect.opacity as effectOpacity
+FROM
+card INNER JOIN unlocked, cardType, frame, effect
+WHERE
+unlocked.cardID = card.id AND
+card.typeID = cardtype.id AND
+effect.id = unlocked.level AND
+unlocked.userID = ? AND
+(card.cardName LIKE(?) OR cardType.name LIKE(?))
+ORDER BY
+${sortquery}
+LIMIT ? OFFSET ?;`;
+
+		con.query(
+			query, [userID, name, name, count, offset], (err, result, fields) => {
+				console.log(err);
+				callback(result);
+			})
 	}
 };
 

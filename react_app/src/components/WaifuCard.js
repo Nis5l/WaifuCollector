@@ -40,16 +40,16 @@ class WaifuCard extends Component {
 
             uuid = card.id;
             cardid = card.card.id;
-            typeid = card.card.type.id;
-            img = card.card.cardImage;
-            framefront = card.card.frame.path_front;
-            frameback = card.card.frame.path_back;
-            effect = card.card.effect;
-            cardname = card.card.cardName;
-            animename = card.card.type.name;
+            typeid = card.anime.id;
+            img = card.card.image;
+            framefront = card.frame.front;
+            frameback = card.frame.back;
+            effect = card.effect.image;
+            cardname = card.card.name;
+            animename = card.anime.name;
             quality = card.quality;
             level = card.level;
-            effectopacity = card.card.effectopacity;
+            effectopacity = card.effect.opacity;
         } else {
             uuid = props.uuid;
             cardid = props.cardid;
@@ -303,13 +303,23 @@ WaifuCard.DEFWIDTH = 253;
 WaifuCard.DEFHEIGTH = 365;
 WaifuCard.DEFFONT = 50;
 
-function parseCards(cards) {
+function parseCardsOld(cards) {
     for (let i = 0; i < cards.length; i++) {
         cards[i].card.cardImage = `${Config.API_HOST}/${cards[i].card.cardImage}`;
         cards[i].card.frame.path_front = `${Config.API_HOST}/${cards[i].card.frame.path_front}`;
         cards[i].card.frame.path_back = `${Config.API_HOST}/${cards[i].card.frame.path_back}`;
         if (cards[i].card.effect != null)
             cards[i].card.effect = `${Config.API_HOST}/${cards[i].card.effect}`;
+    }
+}
+
+function parseCards(cards) {
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].card.image = `${Config.API_HOST}/${cards[i].card.image}`;
+        cards[i].frame.front = `${Config.API_HOST}/${cards[i].frame.front}`;
+        cards[i].frame.back = `${Config.API_HOST}/${cards[i].frame.back}`;
+        if (cards[i].effect.image != null)
+            cards[i].effect.image = `${Config.API_HOST}/${cards[i].effect.image}`;
     }
 }
 
