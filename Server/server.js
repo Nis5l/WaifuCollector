@@ -104,9 +104,10 @@ app.post("/cards/import", function (req, res) {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
+/*
 app.get("/card/:cardID/", function (req, res) {
 	try {
-		database.getCard(req.params.cardID, (card) => {
+		database.getCard(.cardID, (card) => {
 			if (card != undefined) {
 				res.send({status: 1, card: card});
 			} else {
@@ -115,7 +116,8 @@ app.get("/card/:cardID/", function (req, res) {
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
-
+*/
+/*
 app.post("/card/:cardID/update", function (req, res) {
 	try {
 		function redirect(res, req, query) {
@@ -151,6 +153,7 @@ app.post("/card/:cardID/update", function (req, res) {
 		}
 	} catch (ex) {logic.handleException(ex, res);}
 });
+*/
 
 app.get("/display/card/:cardID/", function (req, res) {
 	try {
@@ -571,10 +574,7 @@ app.post("/pack", async (req, res) => {
 					logger.write(decoded.username + " Pulled a lvl2");
 				logic.addCardToUser(
 					decoded.id,
-					cards[j].card.id,
-					cards[j].quality,
-					cards[j].level,
-					cards[j].frameID
+					cards[j]
 					, (insertID) => {
 						cards[j].id = insertID;
 						if (j == cards.length - 1) {
@@ -621,6 +621,7 @@ app.post("/passchange", async (req, res) => {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
+/*
 app.post("/inventory", async (req, res) => {
 	//let start = moment();
 	try {
@@ -733,25 +734,17 @@ app.post("/inventory", async (req, res) => {
 		}
 	} catch (ex) {logic.handleException(ex, res);}
 });
+*/
 
-app.post("/card", async (req, res) => {
+app.get("/card/:uuid", async (req, res) => {
 	try {
-		var cardid = parseInt(req.body.card);
-		if (cardid == undefined) {
+		var uuid = parseInt(req.params.uuid);
+		if (isNaN(uuid)) {
 			res.send({status: 1, message: "Invalid data"});
 			return;
 		}
 
-		var decoded = await logic.standardroutine(req.body.token, res);
-
-		var card = logic.getClients()[decoded.id].getCard(cardid)
-		if (card == undefined) {
-			res.send({status: 1, message: "Card not owned"});
-			return;
-		}
-
-		logic.getCard(card.cardID, card.frameID, card.level, (carddata) => {
-			card.card = carddata;
+		logic.getCard(uuid, (card) => {
 			res.send({status: 0, card: card});
 		});
 	} catch (ex) {logic.handleException(ex, res);}
@@ -1365,14 +1358,6 @@ app.get("/tradeTime", async (req, res) => {
 
 		await logic.createCache(userID, undefined, res);
 
-		//if (
-		//userID != decoded.id &&
-		//!logic.getClients()[decoded.id].hasFriendAdded(userID)
-		//) {
-		//res.send({status: 1, message: "User is not your Friend"});
-		//return;
-		//}
-		//
 		var tradeTime = logic.getClients()[decoded.id].getTradeTime(userID) - moment().valueOf();
 		if (tradeTime < 0) tradeTime = 0;
 		res.send({status: 0, tradeTime: tradeTime});
@@ -1434,7 +1419,7 @@ app.get("/verified", async (req, res) => {
 app.post("/setmail", async (req, res) => {
 	try {
 		var mail = req.body.mail;
-		if (mail == undefined || !logic.isString(mail)) {
+		if (mail == undefined || !utils.isString(mail)) {
 			res.send({status: 1, message: "Invalid input"});
 			return;
 		}
@@ -1607,7 +1592,7 @@ app.get("/animePackTime", async (req, res) => {
 app.get("/users", async (req, res) => {
 	try {
 		let username = req.query.username;
-		if (!logic.isString(username)) {
+		if (!utils.isString(username)) {
 			res.send({status: 1, message: "no string"});
 			return;
 		}
@@ -1644,6 +1629,36 @@ app.get("/flex", async (req, res) => {
 	} catch (ex) {console.log(ex); logic.handleException(ex, res);}
 });
 
+app.get("/inventory", async (req, res) => {
+	try {
+		let userID = parseInt(req.query.userID);
+		let page = parseInt(req.query.page);
+		let sortType = parseInt(req.query.sortType);
+		let search = req.query.search;
+		let level = parseInt(req.query.level);
+		let cardID = parseInt(req.query.cardID);
+		let excludeuuid = parseInt(req.query.excludeuuid);
+
+		if (!utils.isString(search)) search = "";
+		if (isNaN(page)) page = 0;
+		if (isNaN(sortType)) sortType = 0;
+		if (isNaN(level)) level = undefined;
+		if (isNaN(cardID)) cardID = undefined;
+		if (isNaN(excludeuuid)) excludeuuid = undefined;
+		else excludeuuid = [excludeuuid];
+
+		if (isNaN(userID)) {
+			res.send({status: 1, message: "invalid userID"});
+			return;
+		}
+
+		logic.inventory(userID, search, -1, page, sortType, level, cardID, excludeuuid, (result) => {
+			res.send({status: 0, cards: result});
+		})
+
+	} catch (ex) {console.log(ex); logic.handleException(ex, res);}
+});
+
 process.on('uncaughtException', function (exception) {
 	console.log(exception);
 });
@@ -1656,14 +1671,14 @@ app.use(function (err, req, res, next) {
 console.log("Initializing DataBase");
 logger.init(logic.getLogfile());
 database.init(() => {
-	cache.refreshCards(() => {
-		cache.loadPackData(logic.getPackDateSpan(), logic.getPackDateSendSpan(), () => {
-			var server = app.listen(logic.getPort());
-			//var server = https.createServer(options, app).listen(port);
-			console.log("Started on port %s", logic.getPort());
-		});
+	//cache.refreshCards(() => {
+	cache.loadPackData(logic.getPackDateSpan(), logic.getPackDateSendSpan(), () => {
+		var server = app.listen(logic.getPort());
+		//var server = https.createServer(options, app).listen(port);
+		console.log("Started on port %s", logic.getPort());
 	});
+	//});
 	setInterval(() => {
-		cache.refreshCards(() => {});
+		//cache.refreshCards(() => {});
 	}, logic.getCardCacheInterval());
 });

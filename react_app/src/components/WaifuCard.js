@@ -65,6 +65,8 @@ class WaifuCard extends Component {
             effectopacity = props.effectopacity;
         }
 
+        if (effectopacity === 0) effect = undefined;
+
         let size = parseFloat(props.size);
         let cardcolor = props.cardcolor;
         let identifier = props.identifier;

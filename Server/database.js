@@ -271,15 +271,34 @@ module.exports = {
 			}
 		);
 	},
-	getCard: function getCard(cardID, callback) {
+	fillCard: function fillCard(card, callback) {
+		//CARDS
+
+		const query = `
+SELECT
+card.cardName as cardName,
+card.cardImage as cardImage,
+cardType.name as animeName,
+frame.name as frameName,
+frame.path_front as frameFront,
+frame.path_back as frameBack,
+effect.path as effectPath,
+effect.opacity as effectOpacity
+FROM card INNER JOIN cardType, frame, effect
+WHERE
+card.id=? AND
+cardType.id=? AND
+frame.id=? AND
+effect.id=?;
+`;
+
 		con.query(
-			"SELECT * FROM card WHERE id=" + cardID,
+			query, [card.card.id, card.anime.id, card.frame.id, card.level],
 			(err, result, fields) => {
-				if (result != undefined) {
-					callback(result[0]);
-				} else {
-					callback(undefined);
-				}
+				if (err) console.log(err);
+				if (result === undefined)
+					callback({});
+				else callback(result[0]);
 			}
 		);
 	},
@@ -932,24 +951,49 @@ FROM dual WHERE NOT EXISTS
 			});
 	},
 
-	inventory: function inventory(userID, name, count, offset, sortType, callback) {
+
+	/*sortType*/
+	/*1: level */
+	/*3: recent */
+	/*!: name */
+	inventory: function inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids, callback) {
 
 		name = `%${name}%`;
 
-		let sortquery =
-			`card.cardName,
-cardType.name,
-unlocked.level DESC,
-unlocked.quality DESC`;
+		let sortquery = `
+card.cardName,
+cardType.name`;
 
 		switch (sortType) {
 			case 1:
-				sortquery =
-					`unlocked.level DESC,
+				sortquery = `
+unlocked.level DESC,
 unlocked.quality DESC,
 card.cardName,
-cardType.name`
+cardType.name
+`;
 				break;
+			case 2:
+				sortquery = `
+unlocked.id DESC
+				`;
+		}
+
+		let extraConditions = "";
+
+		if (level !== undefined)
+			extraConditions += `unlocked.level = ${level} AND\n`;
+
+		if (level !== undefined)
+			extraConditions += `card.id = ${cardID} AND\n`;
+
+		if (excludeuuids !== undefined) {
+			let set = 0;
+			for (let i = 0; i < excludeuuids.length; i++) {
+				set += excludeuuids[i];
+				if (i != excludeuuids.length - 1) set += ","
+			}
+			extraConditions += `unlocked.id NOT IN (${set}) AND \n`;
 		}
 
 		let query =
@@ -977,6 +1021,7 @@ unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
 effect.id = unlocked.level AND
 unlocked.userID = ? AND
+${extraConditions}
 (card.cardName LIKE(?) OR cardType.name LIKE(?))
 ORDER BY
 ${sortquery}
@@ -984,9 +1029,46 @@ LIMIT ? OFFSET ?;`;
 
 		con.query(
 			query, [userID, name, name, count, offset], (err, result, fields) => {
-				console.log(err);
+				if (err) console.log(err);
 				callback(result);
 			})
+	},
+
+	getCards: function getCards(uuids, callback) {
+		let set = "";
+		for (let i = 0; i < uuids.length; i++) {
+			set += uuids[i];
+			if (i != uuids.length - 1) set += ", ";
+		}
+
+		const query = `
+SELECT
+unlocked.id as id,
+unlocked.userID as userID,
+unlocked.level as level,
+unlocked.quality as quality,
+card.id as cardID,
+card.cardName as cardName,
+card.cardImage as cardImage,
+cardType.id as animeID,
+cardType.name as animeName,
+frame.id as frameID,
+frame.name as frameName,
+frame.path_front as frameFront,
+frame.path_back as frameBack,
+effect.id as effectID,
+effect.path as effectImage,
+effect.opacity as effectOpacity
+FROM unlocked INNER JOIN card, cardType, frame, effect
+WHERE
+unlocked.cardID = card.id AND
+card.typeID = cardtype.id AND
+effect.id = unlocked.level AND
+unlocked.id IN(${set})`;
+		con.query(query, [uuids], (err, result) => {
+			if (err) console.log(err);
+			callback(result);
+		})
 	}
 };
 
@@ -1484,8 +1566,16 @@ function frames(callback) {
 
 function effects(callback) {
 	var sql = [
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('0', '', '0')",
 		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('1', 'Effect1.gif', '0.5')",
 		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('2', 'Effect2.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('3', 'Effect2.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('4', 'Effect2.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('5', 'Effect2.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('6', 'Effect2.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('7', 'Effect2.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('8', 'Effect2.gif', '0.5')",
+		"INSERT INTO `effect` (`id`, `path`, `opacity`) VALUES ('9', 'Effect2.gif', '0.5')"
 	];
 
 	con.connect(() => {

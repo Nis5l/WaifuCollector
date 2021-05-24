@@ -22,9 +22,12 @@ class CardPage extends Component {
     this.card_wrapper = React.createRef();
 
     this.key = 0;
+    this.page = 0;
 
     this.lCounter = 0;
     this.lCounterMax = 2;
+
+    this.loadingCards = false;
 
     this.state =
     {
@@ -41,7 +44,7 @@ class CardPage extends Component {
   }
 
   componentDidMount() {
-    axios.post(`${Config.API_HOST}/card`, {token: Cookies.get('token'), card: this.mainuuid})
+    axios.get(`${Config.API_HOST}/card/${this.mainuuid}`)
       .then(res => {
         if (redirectIfNecessary(this.props.history, res.data)) return;
         this.incrementLCounter();
@@ -65,38 +68,30 @@ class CardPage extends Component {
     if (this.card_wrapper == null ||
       !this.state.hasMore ||
       this.state.maincard === undefined ||
-      this.state.maincard === -1) return;
+      this.state.maincard === -1 ||
+      this.loadingCards === true) return;
 
-    let data;
+    this.loadingCards = true;
 
-    if (this.key === 0)
-      data =
-      {
-        token: Cookies.get("token"),
-        page: 0,
-        exclude: this.mainuuid,
-        id: this.state.maincard.card.id,
-        level: this.state.maincard.level
-      };
-    else
-      data = {token: Cookies.get("token"), next: 0};
-
-    axios.post(`${Config.API_HOST}/inventory`, data)
+    axios.get(`${Config.API_HOST}/inventory?userID=${Cookies.get('userID')}&page=${this.page}&level=${this.state.maincard.level}&cardID=${this.state.maincard.card.id}&excludeuuid=${this.mainuuid}`)
       .then(res => {
         if (res && res.status === 200) {
 
-          if (redirectIfNecessary(this.props.history, data)) return;
+          if (redirectIfNecessary(this.props.history, res.data)) return;
           this.incrementLCounter();
 
           if (res.data && res.data.status === 0) {
-            parseCards(res.data.inventory);
+            parseCards(res.data.cards);
             let cards;
             if (this.state.cards !== undefined)
-              cards = [...this.state.cards, ...res.data.inventory];
+              cards = [...this.state.cards, ...res.data.cards];
             else
-              cards = [...res.data.inventory];
-            this.key = 0;
-            if (res.data.page === res.data.pagemax) this.setState({hasMore: false});
+              cards = [...res.data.cards];
+
+            this.page++;
+            this.key++;
+            if (res.data.cards.length === 0) this.setState({hasMore: false});
+            this.loadingCards = false;
             this.setState({cards: cards});
           }
         }

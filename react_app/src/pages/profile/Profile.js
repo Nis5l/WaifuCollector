@@ -209,6 +209,7 @@ class Profile extends Component {
                                         <WaifuCard
                                             card={card}
                                             size={0.54}
+                                            clickable="false"
                                         />
                                     </div>
                                 ))

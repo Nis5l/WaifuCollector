@@ -154,46 +154,49 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 		});
 	});
 }
-function getCard(cardID, frameID, level, callback) {
-	var card;
-	database.getCard(cardID, (result) => {
-		card = result;
-		card.cardImage = cardBase + card.cardImage;
-		database.getCardType(card.typeID, (result2) => {
-			card.type = result2;
-			database.getFrame(frameID, (frame) => {
-				frame.path_front = frameBase + frame.path_front;
-				frame.path_back = frameBase + frame.path_back;
-				card.frame = frame;
-				database.getEffect(level, (ep, eo) => {
-					if (ep == null) card.effect = null;
-					else card.effect = effectBase + ep;
-					card.effectopacity = eo;
-					callback(card);
-				});
-			});
-		});
+
+function getCard(uuid, callback) {
+	database.getCards([uuid], (result) => {
+		card = result[0];
+		formatCard(card);
+		callback(card);
 	});
 }
-function getCards(cards, callback) {
+
+function getCards(uuids, callback) {
+	database.getCards(uuids, (cards) => {
+		formatCards(cards);
+		callback(cards);
+	});
+}
+
+function fillCard(card, callback) {
+	database.fillCard(card, (result) => {
+		card.card.name = result.cardName;
+		card.card.image = cardBase + result.cardImage;
+		card.anime.name = result.animeName;
+		card.frame.name = result.frameName;
+		card.frame.front = frameBase + result.frameFront;
+		card.frame.back = frameBase + result.frameBack;
+		card.effect = {};
+		card.effect.image = effectBase + result.effectPath;
+		card.effect.opacity = result.effectOpacity;
+		callback(card);
+	});
+}
+
+function fillCards(cards, callback) {
 	if (cards.length == 0) {
 		callback();
 		return;
 	}
 
-	//database.getCardFast(cards, () => {
-	//console.log(cards);
-	//});
-
 	let count = 0;
 
 	for (let i = 0; i < cards.length; i++) {
-		getCard(
-			cards[i].cardID,
-			cards[i].frameID,
-			cards[i].level,
-			(card) => {
-				cards[i].card = card;
+		fillCard(
+			cards[i],
+			() => {
 				onfinish();
 			}
 		);
@@ -204,6 +207,7 @@ function getCards(cards, callback) {
 		if (count == cards.length) callback();
 	}
 }
+
 function getRandomCards(amount, callback) {
 	var cards = [];
 	database.getRandomCard(amount, (_cards) => {
@@ -215,14 +219,17 @@ function getRandomCards(amount, callback) {
 			var r = utils.getRandomInt(0, 1000);
 			if (r <= 50) cards[j].level = 1;
 			if (r <= 5) cards[j].level = 2;
-			cards[j].cardID = _cards[j].id;
-			cards[j].typeID = _cards[j].typeID;
+			cards[j].card = {};
+			cards[j].card.id = _cards[j].id;
+			cards[j].anime = {};
+			cards[j].anime.id = _cards[j].typeID;
 		}
 		database.getRandomFrame(amount, (_frames) => {
 			for (var j = 0; j < cards.length; j++) {
-				cards[j].frameID = _frames[utils.getRandomInt(0, _frames.length - 1)].id;
+				cards[j].frame = {};
+				cards[j].frame.id = _frames[utils.getRandomInt(0, _frames.length - 1)].id;
 			}
-			getCards(cards, () => {
+			fillCards(cards, () => {
 				callback(cards);
 			})
 		});
@@ -259,15 +266,15 @@ function removeFriendinventory(userone, usertwo) {
 	userone.friendinventory = undefined;
 	cache.removeFriendinventorylink(usertwo.id, userone.id);
 }
-function addCardToUser(userID, cardID, quality, level, frameID, callback) {
+function addCardToUser(userID, card, callback) {
 	database.addCard(
 		userID,
-		cardID,
-		quality,
-		level,
-		frameID,
+		card.card.id,
+		card.quality,
+		card.level,
+		card.frame.id,
 		(insertID) => {
-			addCardToUserCache(userID, insertID, cardID, quality, level, frameID);
+			addCardToUserCache(userID, insertID, card.card.id, card.quality, card.level, card.frame.id);
 			callback(insertID);
 		});
 }
@@ -586,49 +593,57 @@ function sendFriendReqeust(userone, usertwo, res) {
 	}
 }
 
-function inventory(userID, name, count, offset, sortType, callback) {
+function inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids, callback) {
 
-	database.inventory(userID, name, count, offset, sortType, (cards) => {
-		for (let i = 0; i < cards.length; i++) {
-			cards[i].card = {};
-			cards[i].card.id = cards[i].cardID;
-			cards[i].card.name = cards[i].cardName;
-			cards[i].card.image = cardBase + cards[i].cardImage;
-			delete cards[i].cardID;
-			delete cards[i].cardName;
-			delete cards[i].cardImage;
+	if (count < 0) count = inventorySendAmount;
 
-			cards[i].frame = {};
-			cards[i].frame.id = cards[i].frameID;
-			cards[i].frame.name = cards[i].frameName;
-			cards[i].frame.front = frameBase + cards[i].frameFront;
-			cards[i].frame.back = frameBase + cards[i].frameBack;
-			delete cards[i].frameID;
-			delete cards[i].frameName;
-			delete cards[i].frameFront;
-			delete cards[i].frameBack;
+	offset *= count;
 
-			cards[i].anime = {};
-			cards[i].anime.id = cards[i].animeID;
-			cards[i].anime.name = cards[i].animeName;
-			delete cards[i].animeID;
-			delete cards[i].animeName;
-
-			cards[i].effect = {};
-			cards[i].effect.id = cards[i].effectID;
-			cards[i].effect.image = effectBase + cards[i].effectImage;
-			cards[i].effect.opacity = cards[i].effectOpacity;
-			delete cards[i].effectID;
-			delete cards[i].effectImage;
-			delete cards[i].effectOpacity;
-		}
+	database.inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids, (cards) => {
+		formatCards(cards);
 		callback(cards);
 	});
 }
 
-function isString(str) {
-	return (typeof str === 'string' || str instanceof String);
+function formatCards(cards) {
+	for (let i = 0; i < cards.length; i++)
+		formatCard(cards[i]);
 }
+
+function formatCard(card) {
+	card.card = {};
+	card.card.id = card.cardID;
+	card.card.name = card.cardName;
+	card.card.image = cardBase + card.cardImage;
+	delete card.cardID;
+	delete card.cardName;
+	delete card.cardImage;
+
+	card.frame = {};
+	card.frame.id = card.frameID;
+	card.frame.name = card.frameName;
+	card.frame.front = frameBase + card.frameFront;
+	card.frame.back = frameBase + card.frameBack;
+	delete card.frameID;
+	delete card.frameName;
+	delete card.frameFront;
+	delete card.frameBack;
+
+	card.anime = {};
+	card.anime.id = card.animeID;
+	card.anime.name = card.animeName;
+	delete card.animeID;
+	delete card.animeName;
+
+	card.effect = {};
+	card.effect.id = card.effectID;
+	card.effect.image = effectBase + card.effectImage;
+	card.effect.opacity = card.effectOpacity;
+	delete card.effectID;
+	delete card.effectImage;
+	delete card.effectOpacity;
+}
+
 function getPort() {
 	return port;
 }
@@ -717,6 +732,8 @@ module.exports =
 	getCardRequestData: getCardRequestData,
 	getCard: getCard,
 	getCards: getCards,
+	fillCard: fillCard,
+	fillCards: fillCards,
 	getRandomCards: getRandomCards,
 	checkUser: checkUser,
 	checkPass: checkPass,
@@ -740,7 +757,6 @@ module.exports =
 	getAnimePackSize: getAnimePackSize,
 	getAnimePackTime: getAnimePackTime,
 	removeCardFromUserCache: removeCardFromUserCache,
-	isString: isString,
 	getBadges: getBadges,
 	sendFriendReqeust: sendFriendReqeust,
 	getImageBase: getCardBase,

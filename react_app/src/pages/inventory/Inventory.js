@@ -18,6 +18,7 @@ class Inventory extends Component {
 
     this.card_wrapper = React.createRef();
     this.key = 0;
+    this.page = 0;
     this.scrollpadding = 500;
     this.friendid = props.match !== undefined &&
       props.match.params !== undefined ? props.match.params.id : undefined;
@@ -53,35 +54,31 @@ class Inventory extends Component {
   trackScrolling = () => {
     if (this.card_wrapper == null || !this.hasMore || this.loadingCards) return;
     this.loadingCards = true;
-    let data;
     const search = this.searchInput.current.value;
     const sortType = this.sortMethod;
 
-    if (this.key === 0)
-      data = {
-        token: Cookies.get("token"),
-        page: 0,
-        search: search,
-        sortType: sortType,
-        userID: this.friendid,
-        friend: this.friend
-      };
-    else
-      data = {token: Cookies.get("token"), next: 0};
-
-    axios.post(`${Config.API_HOST}/inventory`, data)
+    const data = {
+      page: this.page,
+      search: search,
+      sortType: sortType,
+      userID: this.friendid,
+      friend: this.friend
+    };
+    axios.get(`${Config.API_HOST}/inventory?userID=${Cookies.get("userID")}&page=${this.page}&search=${search}&sortType=${sortType}`, data)
       .then(res => {
         if (res && res.status === 200) {
 
           if (redirectIfNecessary(this.props.history, res.data)) return;
           this.incrementLCounter();
 
+          this.page++;
+
           if (res.data && res.data.status === 0) {
-            parseCards(res.data.inventory);
-            let cards = [...this.state.cards, ...res.data.inventory];
+            parseCards(res.data.cards);
+            let cards = [...this.state.cards, ...res.data.cards];
             this.key++;
             this.loadingCards = false;
-            if (res.data.page === res.data.pagemax) this.hasMore = false;
+            if (res.data.cards.length === 0) this.hasMore = false;
             this.setState({cards: cards});
           } else {
             this.setState({errorMessage: res.data.message});
@@ -101,6 +98,7 @@ class Inventory extends Component {
     if (e !== undefined) e.preventDefault();
     obj.key = 0;
     this.hasMore = true;
+    this.page = 0;
     obj.setState({cards: []});
   }
 
