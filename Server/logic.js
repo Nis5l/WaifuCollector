@@ -158,6 +158,7 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 
 async function getCard(uuid) {
 	let result = await database.getCards([uuid]);
+	if (result.length === 0) return undefined;
 	card = result[0];
 	formatCard(card);
 	return card;
@@ -642,6 +643,20 @@ function formatCard(card) {
 	delete card.effectImage;
 	delete card.effectOpacity;
 }
+async function getCardUUID(uuid, userID) {
+	let card = await database.getCardUUID(uuid, userID);
+	if (card === undefined) return undefined;
+
+	card.card = {};
+	card.card.id = card.cardID;
+	delete card.cardID;
+
+	card.frame = {};
+	card.frame.id = card.frameID;
+	delete card.frameID;
+
+	return card;
+}
 
 function getPort() {
 	return port;
@@ -762,5 +777,6 @@ module.exports =
 	getFrameBase: getFrameBase,
 	getEffectBase: getEffectBase,
 	inventory: inventory,
-	formatCards: formatCards
+	formatCards: formatCards,
+	getCardUUID: getCardUUID
 };

@@ -398,17 +398,30 @@ effect.id=?;
 			callback(result);
 		});
 	},
-	getCardUUID: function getCardUUID(uuid, userID, callback) {
-		con.query(
-			"SELECT * FROM unlocked WHERE id=" + uuid + " AND userID=" + userID,
-			(err, result, fields) => {
-				if (result == undefined || result.length == 0) {
-					callback(undefined);
-					return;
+	getCardUUID: async function getCardUUID(uuid, userID) {
+
+		const query = `SELECT
+unlocked.id as id,
+unlocked.userID as userID,
+unlocked.level as level,
+unlocked.quality as quality,
+unlocked.frameID as frameID,
+unlocked.cardID as cardID
+FROM unlocked WHERE
+unlocked.id=? AND
+unlocked.userID=?;
+`;
+
+		return new Promise((resolve) => {
+			con.query(
+				query, [uuid, userID],
+				(err, result) => {
+					if (err) console.log(err);
+					if (result == undefined || result.length == 0) return resolve(undefined);
+					return resolve(result[0]);
 				}
-				callback(result[0]);
-			}
-		);
+			);
+		});
 	},
 
 	getFriends: function getFriends(userID, callback) {

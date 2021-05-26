@@ -47,6 +47,7 @@ class CardPage extends Component {
     axios.get(`${Config.API_HOST}/card/${this.mainuuid}`)
       .then(res => {
         if (redirectIfNecessary(this.props.history, res.data)) return;
+        console.log(res.data);
         this.incrementLCounter();
         if (res && res.status === 200 && res.data && res.data.status === 0) {
           parseCards([res.data.card]);
@@ -65,10 +66,12 @@ class CardPage extends Component {
   }
 
   trackScrolling = () => {
+    if (this.state.maincard === -1) {
+      return this.incrementLCounter();
+    }
     if (this.card_wrapper == null ||
       !this.state.hasMore ||
       this.state.maincard === undefined ||
-      this.state.maincard === -1 ||
       this.loadingCards === true) return;
 
     this.loadingCards = true;
@@ -134,7 +137,7 @@ class CardPage extends Component {
 
           if (res.data && res.data.status === 0) {
             success = res.data.success;
-            axios.post(`${Config.API_HOST}/card`, {token: Cookies.get('token'), card: res.data.uuid})
+            axios.get(`${Config.API_HOST}/card/${res.data.uuid}`)
               .then(res => {
                 if (res && res.status === 200 && res.data && res.data.status === 0) {
                   parseCards([res.data.card]);
