@@ -1,4 +1,5 @@
 @import '../scss/_base';
+@import '../scss/effects.scss';
 
 @import '~react-pro-sidebar/dist/scss/styles.scss';
 
@@ -135,34 +136,60 @@
 
 .sidebar-btn{
 
-    padding: 1px 15px;
-    border-radius: 40px;
+    span
+    {
+        padding: 3px 5px 1px 0;
+        font-size: 18pt;
+    }
+
+    i
+    {
+        animation: spin 2s linear infinite;
+        animation-play-state: paused;
+        padding: 5px;
+        font-size: 30px;
+        transform-origin: center;
+
+        &.spinning
+        {
+            animation-play-state: running;
+        }
+    }
+
+    -webkit-box-shadow: 4px 4px 26px -8px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 4px 26px -8px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 26px -8px rgba(0,0,0,0.75);
+
+    border-radius: 30px;
     background: rgba(255, 255, 255, 0.05);
-    text-decoration: none;
-    margin: 0 auto;
     height: 35px;
+    width: auto;
     display: flex;
     align-items: center;
     justify-content: center;
     text-overflow: ellipsis;
     overflow: hidden;
-
+    text-decoration: none;
 }
 
-.sidebar-btn span{
-
-    margin-left: 5px;
-    font-size: 13px;
-
+.sidebar-btn div{
+    font-size: 25px;
+    color: $sidebar-color;
 }
 
 .collapsed .sidebar-btn{
 
-    display: inline-block;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    line-height: 40px;
-    padding: 0;
+    span
+    {
+        display: none;
+    }
 
+    i
+    {
+        padding: 0;
+    }
+
+    border-radius: 50%;
+    padding: 0;
+    width: 35px;
 }

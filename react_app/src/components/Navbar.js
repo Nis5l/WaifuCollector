@@ -27,7 +27,8 @@ class Navbar extends React.Component {
         this.state =
         {
             notification: false,
-            notifications: []
+            notifications: [],
+            rotatingSettings: false
         };
 
         window.addEventListener('resize', () => this.handleResize());
@@ -224,7 +225,7 @@ class Navbar extends React.Component {
                                     <Link
                                         to="/admin/log"
                                     >
-                                        Log 
+                                        Log
                                     </Link>
                                 </MenuItem>
                                 <MenuItem>Cards</MenuItem>
@@ -259,7 +260,7 @@ class Navbar extends React.Component {
                         <div
                             className="sidebar-btn-wrapper"
                             style={{
-                                padding: '20px 24px',
+                                padding: '20px 10px',
                             }}
                         >
                             <a
@@ -268,7 +269,20 @@ class Navbar extends React.Component {
                                 className="sidebar-btn"
                                 rel="noopener noreferrer"
                             >
-                                <span>Settings</span>
+                                <div
+                                    className="sidebar-btn"
+                                    onMouseEnter={() => {
+                                        this.setState({rotatingSettings: true});
+                                    }}
+                                    onMouseLeave={() => {
+                                        this.setState({rotatingSettings: false});
+                                    }}
+                                >
+                                    <i
+                                        className={"fas fa-cog" + (this.state.rotatingSettings ? " spinning" : "")}
+                                    />
+                                    <span>Settings</span>
+                                </div>
                             </a>
                         </div>
                     </SidebarFooter>
