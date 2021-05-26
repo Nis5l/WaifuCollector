@@ -97,7 +97,7 @@ function App() {
               {
                 !token ? <Redirect to="/login" /> :
                   <Route
-                    render={(props) => <Inventory {...props} friend="true" />}
+                    render={(props) => <Inventory {...props} />}
                   />
               }
 
@@ -105,7 +105,7 @@ function App() {
 
             <Route path="/inventory">
 
-              {!token ? <Redirect to="/login" /> : <Inventory />}
+              {!token ? <Redirect to="/login" /> : <Inventory userID={Cookies.get('userID')} />}
 
             </Route>
 

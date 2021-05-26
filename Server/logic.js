@@ -8,6 +8,7 @@ const logger = require("./logger");
 const Client = require("./cache");
 const crypto = require('crypto');
 const mail = require('./mail');
+const {reject} = require("async");
 
 const jwtSecret = "yCSgVxmL9I";
 
@@ -155,19 +156,17 @@ function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 	});
 }
 
-function getCard(uuid, callback) {
-	database.getCards([uuid], (result) => {
-		card = result[0];
-		formatCard(card);
-		callback(card);
-	});
+async function getCard(uuid) {
+	let result = await database.getCards([uuid]);
+	card = result[0];
+	formatCard(card);
+	return card;
 }
 
-function getCards(uuids, callback) {
-	database.getCards(uuids, (cards) => {
-		formatCards(cards);
-		callback(cards);
-	});
+async function getCards(uuids) {
+	let cards = await database.getCards(uuids);
+	formatCards(cards);
+	return cards;
 }
 
 function fillCard(card, callback) {
@@ -495,6 +494,7 @@ function checkMail(mail) {
 }
 function handleException(ex, res) {
 	if (ex.message == "EarlyExit") return;
+	console.log(ex);
 	logger.write(ex);
 	res.send({status: 1, message: "Internal error"});
 }
@@ -593,16 +593,15 @@ function sendFriendReqeust(userone, usertwo, res) {
 	}
 }
 
-function inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids, callback) {
+async function inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids) {
 
 	if (count < 0) count = inventorySendAmount;
 
 	offset *= count;
 
-	database.inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids, (cards) => {
-		formatCards(cards);
-		callback(cards);
-	});
+	let cards = await database.inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids)
+	formatCards(cards);
+	return new Promise((resolve) => {return resolve(cards)});
 }
 
 function formatCards(cards) {
@@ -762,5 +761,6 @@ module.exports =
 	getImageBase: getCardBase,
 	getFrameBase: getFrameBase,
 	getEffectBase: getEffectBase,
-	inventory: inventory
+	inventory: inventory,
+	formatCards: formatCards
 };

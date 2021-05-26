@@ -20,10 +20,13 @@ class Inventory extends Component {
     this.key = 0;
     this.page = 0;
     this.scrollpadding = 500;
-    this.friendid = props.match !== undefined &&
-      props.match.params !== undefined ? props.match.params.id : undefined;
-    if (props.userID !== undefined) this.friendid = props.userID;
-    this.friend = props.friend === true ? true : undefined;
+    this.userID = props.userID;
+    if (this.userID === undefined && this.props.match && this.props.match.params)
+      this.userID = this.props.match.params.id;
+    if (this.userID === undefined) this.userID = Cookies.get('userID');
+
+    this.friendID = props.friendID;
+    this.excludeSuggestions = this.props.excludeSuggestions === true;
 
     this.redirect = props.redirect === false ? false : "true";
     this.onCardClick = props.onCardClick;
@@ -57,14 +60,7 @@ class Inventory extends Component {
     const search = this.searchInput.current.value;
     const sortType = this.sortMethod;
 
-    const data = {
-      page: this.page,
-      search: search,
-      sortType: sortType,
-      userID: this.friendid,
-      friend: this.friend
-    };
-    axios.get(`${Config.API_HOST}/inventory?userID=${Cookies.get("userID")}&page=${this.page}&search=${search}&sortType=${sortType}`, data)
+    axios.get(`${Config.API_HOST}/inventory?userID=${this.userID}&page=${this.page}&search=${search}&sortType=${sortType}&friendID=${this.friendID}&excludeSuggestions=${this.excludeSuggestions}`)
       .then(res => {
         if (res && res.status === 200) {
 

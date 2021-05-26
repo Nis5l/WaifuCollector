@@ -515,29 +515,103 @@ effect.id=?;
 			}
 		);
 	},
-	getTrade: function getTrade(userone, usertwo, callback) {
-		con.query(
-			"SELECT * FROM trade WHERE userone=" +
-			userone +
-			" AND usertwo=" +
-			usertwo,
-			function (err, result, fields) {
-				if (err) console.log(err);
-				callback(result);
-			}
-		);
+	getTrade: async function getTrade(userone, usertwo) {
+
+		const query = `SELECT
+unlocked.id as id,
+unlocked.userID as userID,
+unlocked.level as level,
+unlocked.quality as quality,
+card.id as cardID,
+card.cardName as cardName,
+card.cardImage as cardImage,
+cardType.id as animeID,
+cardType.name as animeName,
+frame.id as frameID,
+frame.name as frameName,
+frame.path_front as frameFront,
+frame.path_back as frameBack,
+effect.id as effectID,
+effect.path as effectImage,
+effect.opacity as effectOpacity
+FROM
+trade INNER JOIN unlocked, card, cardType, frame, effect
+WHERE
+unlocked.cardID = card.id AND
+card.typeID = cardtype.id AND
+effect.id = unlocked.level AND
+unlocked.id = trade.card AND
+trade.userone=? AND trade.usertwo=?;
+`;
+
+		return new Promise((resolve, reject) => {
+			con.query(
+				query, [userone, usertwo],
+				(err, result) => {
+					if (err) return reject(err);
+					return resolve(result);
+				}
+			);
+		});
 	},
-	getTradeSuggestions: function getTradeSuggestions(userone, usertwo, callback) {
-		con.query(
-			"SELECT * FROM tradesuggestion WHERE userone=" +
-			userone +
-			" AND usertwo=" +
-			usertwo,
-			function (err, result, fields) {
-				if (err) console.log(err);
-				callback(result);
-			}
-		);
+	getTradeUUIDs: async function getTradeUUIDs(userone, usertwo) {
+		const query = "SELECT trade.card as uuid FROM trade WHERE trade.userone=? AND trade.usertwo=?;"
+
+		return new Promise((resolve, reject) => {
+			con.query(query, [userone, usertwo], (err, result) => {
+				if (err) return reject(err);
+				return resolve(result);
+			});
+		});
+	},
+	getTradeSuggestions: async function getTradeSuggestions(userone, usertwo) {
+
+		const query = `SELECT
+unlocked.id as id,
+unlocked.userID as userID,
+unlocked.level as level,
+unlocked.quality as quality,
+card.id as cardID,
+card.cardName as cardName,
+card.cardImage as cardImage,
+cardType.id as animeID,
+cardType.name as animeName,
+frame.id as frameID,
+frame.name as frameName,
+frame.path_front as frameFront,
+frame.path_back as frameBack,
+effect.id as effectID,
+effect.path as effectImage,
+effect.opacity as effectOpacity
+FROM
+tradesuggestion INNER JOIN unlocked, card, cardType, frame, effect
+WHERE
+unlocked.cardID = card.id AND
+card.typeID = cardtype.id AND
+effect.id = unlocked.level AND
+unlocked.id = tradesuggestion.card AND
+tradesuggestion.userone=? AND tradesuggestion.usertwo=?;
+`;
+
+		return new Promise((resolve, reject) => {
+			con.query(
+				query, [userone, usertwo],
+				(err, result) => {
+					if (err) return reject(err);
+					return resolve(result);
+				}
+			);
+		});
+	},
+	getTradeSuggestionUUIDs: async function getTradeSuggestionUUIDs(userone, usertwo) {
+		const query = "SELECT tradesuggestion.card as uuid FROM tradesuggestion WHERE tradesuggestion.userone=? AND tradesuggestion.usertwo=?;"
+
+		return new Promise((resolve, reject) => {
+			con.query(query, [userone, usertwo], (err, result) => {
+				if (err) return reject(err);
+				return resolve(result);
+			});
+		});
 	},
 	getTradesCard: function getTradesCard(card, callback) {
 		con.query(
@@ -641,25 +715,16 @@ effect.id=?;
 			}
 		);
 	},
-	getTradeManager: function getTradeManager(userone, usertwo, callback) {
-		con.query(
-			"SELECT * FROM trademanager WHERE (userone = " +
-			userone +
-			" AND usertwo = " +
-			usertwo +
-			") OR (userone = " +
-			usertwo +
-			" AND usertwo = " +
-			userone +
-			")",
-			function (err, result, fields) {
-				if (result != undefined && result.length == 0) {
-					callback(undefined);
-					return;
+	getTradeManager: async function getTradeManager(userone, usertwo) {
+		return new Promise((resolve) => {
+			con.query(
+				"SELECT * FROM trademanager WHERE (userone=? AND usertwo=?) OR (userone=? AND usertwo=?)", [userone, usertwo, usertwo, userone],
+				(err, result) => {
+					if (result != undefined && result.length == 0) return resolve(undefined);
+					return resolve(result);
 				}
-				callback(result);
-			}
-		);
+			);
+		});
 	},
 	setTradeStatus: function setTradeStatus(userone, usertwo, status, callback) {
 		con.query(
@@ -956,7 +1021,7 @@ FROM dual WHERE NOT EXISTS
 	/*1: level */
 	/*3: recent */
 	/*!: name */
-	inventory: function inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids, callback) {
+	inventory: async function inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids) {
 
 		name = `%${name}%`;
 
@@ -984,7 +1049,7 @@ unlocked.id DESC
 		if (level !== undefined)
 			extraConditions += `unlocked.level = ${level} AND\n`;
 
-		if (level !== undefined)
+		if (cardID !== undefined)
 			extraConditions += `card.id = ${cardID} AND\n`;
 
 		if (excludeuuids !== undefined) {
@@ -1027,14 +1092,16 @@ ORDER BY
 ${sortquery}
 LIMIT ? OFFSET ?;`;
 
-		con.query(
-			query, [userID, name, name, count, offset], (err, result, fields) => {
-				if (err) console.log(err);
-				callback(result);
-			})
+		return new Promise((resolve, reject) => {
+			con.query(
+				query, [userID, name, name, count, offset], (err, result) => {
+					if (err) return reject(err);
+					return resolve(result);
+				})
+		});
 	},
 
-	getCards: function getCards(uuids, callback) {
+	getCards: async function getCards(uuids) {
 		let set = "";
 		for (let i = 0; i < uuids.length; i++) {
 			set += uuids[i];
@@ -1065,10 +1132,12 @@ unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
 effect.id = unlocked.level AND
 unlocked.id IN(${set})`;
-		con.query(query, [uuids], (err, result) => {
-			if (err) console.log(err);
-			callback(result);
-		})
+		return new Promise((resolve, reject) => {
+			con.query(query, [uuids], (err, result) => {
+				if (err) return reject(err);
+				return resolve(result);
+			})
+		});
 	}
 };
 

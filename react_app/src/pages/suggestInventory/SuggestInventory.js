@@ -14,7 +14,7 @@ class SuggestInventory extends Component {
   constructor(props) {
     super(props);
 
-    this.id = props.match.params.id;
+    this.friendID = props.match.params.id;
 
     this.state = {
       error: undefined,
@@ -27,7 +27,7 @@ class SuggestInventory extends Component {
     let data =
     {
       token: Cookies.get('token'),
-      userID: this.id,
+      userID: this.friendID,
       cardID: card
     }
     axios.post(`${Config.API_HOST}/suggesttrade`, data)
@@ -38,7 +38,7 @@ class SuggestInventory extends Component {
         this.setState({loading: false});
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {
-            self.props.history.push(`/trade/${this.id}`);
+            self.props.history.push(`/trade/${this.friendID}`);
           } else {
             self.setState({error: "Error: " + res.data.message});
           }
@@ -52,16 +52,16 @@ class SuggestInventory extends Component {
     return (
       <div className="tradeinventory_wrapper">
         {
-          this.state.error === undefined && this.state.loading === false &&
+          this.state.error === undefined &&
           < Inventory
+            loading={this.state.loading}
             redirect={false}
-            userID={this.id}
+            userID={this.friendID}
+            friendID={Cookies.get('userID')}
+            excludeSuggestions={true}
             onCardClick={(e, card) => {this.onCardClick(this, e, card)}}
             friend={true}
           />
-        }
-        {
-          this.state.error === undefined && this.state.loading && <WaifuCardLoad />
         }
         {
           this.state.error !== undefined && <h1>{this.state.error}</h1>

@@ -38,7 +38,7 @@
     .trade_friend.trade_own
     {
         grid-column: own / other;
-        grid-row: confirm;
+        grid-row: own / confirm;
 
         .card-content
         {

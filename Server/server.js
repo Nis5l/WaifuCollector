@@ -744,9 +744,8 @@ app.get("/card/:uuid", async (req, res) => {
 			return;
 		}
 
-		logic.getCard(uuid, (card) => {
-			res.send({status: 0, card: card});
-		});
+		const card = await logic.getCard(uuid);
+		res.send({status: 0, card: card});
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
@@ -982,87 +981,50 @@ app.post("/trade", async (req, res) => {
 
 		await logic.createCache(userID, undefined, res);
 
-		var tradeok = 0;
-		var tradeokother = 0;
-		database.getTradeManager(decoded.id, userID, (tm) => {
-			if (tm != undefined) {
-				if (tm[0].userone == decoded.id) {
-					tradeok = tm[0].statusone;
-					tradeokother = tm[0].statustwo;
-				} else {
-					tradeok = tm[0].statustwo;
-					tradeokother = tm[0].statusone;
-				}
+		let tradeok = 0;
+		let tradeokother = 0;
+		let tm = await database.getTradeManager(decoded.id, userID);
+		if (tm != undefined) {
+			if (tm[0].userone == decoded.id) {
+				tradeok = tm[0].statusone;
+				tradeokother = tm[0].statustwo;
+			} else {
+				tradeok = tm[0].statustwo;
+				tradeokother = tm[0].statusone;
 			}
-			var cards = [];
-			var cardsfriend = [];
-			var cardsuggestions = [];
-			var cardsuggestionsfriend = [];
-			database.getTrade(decoded.id, userID, (uuids) => {
-				for (var i = 0; i < uuids.length; i++) {
-					cards.push(logic.getClients()[decoded.id].getCard(uuids[i].card));
-					if (cards[i] == undefined) {
-						res.send({status: 1, message: "Cant find card"});
-						return;
-					}
-				}
-				database.getTrade(userID, decoded.id, (uuidsfriend) => {
-					for (var i = 0; i < uuidsfriend.length; i++) {
-						cardsfriend.push(logic.getClients()[userID].getCard(uuidsfriend[i].card));
-						if (cardsfriend[i] == undefined) {
-							res.send({status: 1, message: "Cant find card"});
-							return;
-						}
-					}
-					database.getTradeSuggestions(userID, decoded.id, (uuidseg) => {
-						for (var i = 0; i < uuidseg.length; i++) {
-							cardsuggestions.push(logic.getClients()[decoded.id].getCard(uuidseg[i].card));
-							if (cardsuggestions[i] == undefined) {
-								res.send({status: 1, message: "Cant find card"});
-								return;
-							}
-						}
-						database.getTradeSuggestions(decoded.id, userID, (uuidsegfriend) => {
-							for (var i = 0; i < uuidsegfriend.length; i++) {
-								cardsuggestionsfriend.push(logic.getClients()[userID].getCard(uuidsegfriend[i].card));
-								if (cardsuggestionsfriend[i] == undefined) {
-									res.send({status: 1, message: "Cant find card"});
-									return;
-								}
-							}
-							logic.getCards(cardsuggestions, () => {
-								logic.getCards(cardsuggestionsfriend, () => {
-									logic.getCards(cards, () => {
-										logic.getCards(cardsfriend, () => {
-											var tradeTime = logic.getClients()[decoded.id].getTradeTime(userID) - moment().valueOf();
-											if (tradeTime < 0) tradeTime = 0;
+		}
 
-											var tradeLimitReached = logic.getClients()[decoded.id].getTradeCooldownCount() >= logic.getTradeCooldownMax() ||
-												logic.getClients()[userID].getTradeCooldownCount() >= logic.getTradeCooldownMax();
+		let cards = await database.getTrade(decoded.id, userID);
+		logic.formatCards(cards);
 
-											res.send({
-												status: 0,
-												cards: cards,
-												cardsfriend: cardsfriend,
-												cardsuggestions: cardsuggestions,
-												cardsuggestionsfriend: cardsuggestionsfriend,
-												username: logic.getClients()[userID].username,
-												statusone: tradeok,
-												statustwo: tradeokother,
-												tradeCount1: cards.length,
-												tradeCount2: cardsfriend.length,
-												tradeLimit: logic.getTradeLimit(),
-												tradeTime: tradeTime,
-												tradeLimitReached: tradeLimitReached
-											});
-										});
-									});
-								});
-							});
-						});
-					});
-				});
-			});
+		let cardsfriend = await database.getTrade(userID, decoded.id);
+		logic.formatCards(cardsfriend);
+
+		let cardsuggestions = await database.getTradeSuggestions(userID, decoded.id);
+		logic.formatCards(cardsuggestions);
+
+		let cardsuggestionsfriend = await database.getTradeSuggestions(decoded.id, userID);
+		logic.formatCards(cardsuggestionsfriend);
+
+		let tradeTime = logic.getClients()[decoded.id].getTradeTime(userID) - moment().valueOf();
+		if (tradeTime < 0) tradeTime = 0;
+
+		let tradeLimitReached = logic.getClients()[decoded.id].getTradeCooldownCount() >= logic.getTradeCooldownMax() || logic.getClients()[userID].getTradeCooldownCount() >= logic.getTradeCooldownMax();
+
+		res.send({
+			status: 0,
+			cards: cards,
+			cardsfriend: cardsfriend,
+			cardsuggestions: cardsuggestions,
+			cardsuggestionsfriend: cardsuggestionsfriend,
+			username: logic.getClients()[userID].username,
+			statusone: tradeok,
+			statustwo: tradeokother,
+			tradeCount1: cards.length,
+			tradeCount2: cardsfriend.length,
+			tradeLimit: logic.getTradeLimit(),
+			tradeTime: tradeTime,
+			tradeLimitReached: tradeLimitReached
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
@@ -1622,15 +1584,16 @@ app.get("/flex", async (req, res) => {
 			return;
 		}
 
-		logic.inventory(userID, "", 9, 0, 1, (result) => {
-			res.send({status: 0, cards: result});
-		})
+		const result = await logic.inventory(userID, "", 9, 0, 1);
+		res.send({status: 0, cards: result});
 
 	} catch (ex) {console.log(ex); logic.handleException(ex, res);}
 });
 
 app.get("/inventory", async (req, res) => {
 	try {
+		let excludeuuids = [];
+
 		let userID = parseInt(req.query.userID);
 		let page = parseInt(req.query.page);
 		let sortType = parseInt(req.query.sortType);
@@ -1638,6 +1601,8 @@ app.get("/inventory", async (req, res) => {
 		let level = parseInt(req.query.level);
 		let cardID = parseInt(req.query.cardID);
 		let excludeuuid = parseInt(req.query.excludeuuid);
+		let friendID = parseInt(req.query.friendID);
+		let excludeSuggestions = req.query.excludeSuggestions === "true";
 
 		if (!utils.isString(search)) search = "";
 		if (isNaN(page)) page = 0;
@@ -1645,16 +1610,27 @@ app.get("/inventory", async (req, res) => {
 		if (isNaN(level)) level = undefined;
 		if (isNaN(cardID)) cardID = undefined;
 		if (isNaN(excludeuuid)) excludeuuid = undefined;
-		else excludeuuid = [excludeuuid];
+		else excludeuuids.push(excludeuuid);
 
 		if (isNaN(userID)) {
 			res.send({status: 1, message: "invalid userID"});
 			return;
 		}
 
-		logic.inventory(userID, search, -1, page, sortType, level, cardID, excludeuuid, (result) => {
-			res.send({status: 0, cards: result});
-		})
+		if (!isNaN(friendID)) {
+			let uuids = await database.getTradeUUIDs(userID, friendID);
+			for (let i = 0; i < uuids.length; i++)
+				excludeuuids.push(uuids[i].uuid);
+		}
+
+		if (excludeSuggestions === true) {
+			let uuids = await database.getTradeSuggestionUUIDs(friendID, userID);
+			for (let i = 0; i < uuids.length; i++)
+				excludeuuids.push(uuids[i].uuid);
+		}
+
+		const result = await logic.inventory(userID, search, -1, page, sortType, level, cardID, excludeuuids);
+		res.send({status: 0, cards: result});
 
 	} catch (ex) {console.log(ex); logic.handleException(ex, res);}
 });

@@ -3,7 +3,6 @@ import Inventory from '../inventory/Inventory'
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import {WaifuCardLoad} from '../../components/WaifuCard'
 
 import Config from '../../config.json'
 
@@ -13,7 +12,7 @@ class TradeInventory extends Component {
   constructor(props) {
     super(props);
 
-    this.id = props.match.params.id;
+    this.friendID = props.match.params.id;
 
     this.state = {
       error: undefined,
@@ -26,14 +25,14 @@ class TradeInventory extends Component {
     let data =
     {
       token: Cookies.get('token'),
-      userID: this.id,
+      userID: this.friendID,
       cardID: card
     }
     axios.post(`${Config.API_HOST}/addtrade`, data)
       .then((res) => {
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {
-            self.props.history.push(`/trade/${this.id}`);
+            self.props.history.push(`/trade/${this.friendID}`);
           } else {
             self.setState({error: "Error: " + res.data.message});
           }
@@ -50,7 +49,8 @@ class TradeInventory extends Component {
           this.state.error === undefined &&
           < Inventory
             redirect={false}
-            userID={this.id}
+            userID={Cookies.get('userID')}
+            friendID={this.friendID}
             loading={this.state.loading}
             onCardClick={(e, card) => {this.onCardClick(this, e, card)}}
           />
