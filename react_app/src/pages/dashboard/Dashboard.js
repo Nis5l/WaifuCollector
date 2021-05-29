@@ -180,12 +180,12 @@ class Dashboard extends Component {
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
                         </Suspense>
-                        <Suspense fallback={loading()}>
+                        {false && <Suspense fallback={loading()}>
                             <PackProgressRing
                                 className="pack2"
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
-                        </Suspense>
+                        </Suspense>}
 
                     </div>
 
