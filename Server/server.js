@@ -424,7 +424,7 @@ app.get("/user/:id/stats", async (req, res) => {
 		let maxFriends = logic.getFriendLimit();
 
 		let cards = logic.getClients()[userID].getCardTypeAmount();
-		let maxCards = cache.getCardAmount();
+		let maxCards = await database.getCardAmount(); //cache.getCardAmount();
 
 		let trades = logic.getTradeCooldownMax() - logic.getClients()[userID].getTradeCooldownCount();
 		let maxTrades = logic.getTradeCooldownMax();
@@ -1513,7 +1513,7 @@ database.init(() => {
 		console.log("Started on port %s", logic.getPort());
 	});
 	//});
-	setInterval(() => {
-		//cache.refreshCards(() => {});
-	}, logic.getCardCacheInterval());
+	//setInterval(() => {
+	//cache.refreshCards(() => {});
+	//}, logic.getCardCacheInterval());
 });

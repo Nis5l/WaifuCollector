@@ -1146,6 +1146,15 @@ unlocked.id IN(${set})`;
 				return resolve(result);
 			})
 		});
+	},
+	getCardAmount: function getCardAmount() {
+		const query = "SELECT COUNT(*) as count FROM card";
+
+		return new Promise((resolve) => {
+			con.query(query, (err, result) => {
+				return resolve(result[0]['count']);
+			})
+		})
 	}
 };
 
