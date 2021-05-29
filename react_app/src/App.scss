@@ -133,6 +133,18 @@ main.content{
     font-size: 12pt;
 }
 
+.success
+{
+    text-align: center;
+    margin: 10px auto;
+    font-weight: bold;
+
+    color: $color-success;
+    animation: shake-small 0.5s ease 0.1s, text-appear 0.3s;
+    filter: contrast(1);
+    font-size: 12pt;
+}
+
 .unselectable {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

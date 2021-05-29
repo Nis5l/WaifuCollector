@@ -16,7 +16,7 @@ const cardBase = "Card/";
 const frameBase = "Frame/";
 const effectBase = "Effect/";
 const userRegex = /^[a-zA-Z0-9_]+$/;
-const passRegex = /^[a-zA-Z0-9_.]+$/;
+//const passRegex = /^[a-zA-Z0-9_.]+$/;
 const mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 const cacheTime = 900000;
@@ -252,7 +252,7 @@ function checkPass(password) {
 		password.length > passLen[1]
 	)
 		return 1;
-	if (!passRegex.test(password)) return 2;
+	//if (!passRegex.test(password)) return 2;
 	return 0;
 }
 function setFriendinventory(userone, usertwo) {

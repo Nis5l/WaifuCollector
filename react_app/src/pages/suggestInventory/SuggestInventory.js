@@ -30,8 +30,10 @@ class SuggestInventory extends Component {
       userID: this.friendID,
       cardID: card
     }
+    console.log("Now");
     axios.post(`${Config.API_HOST}/suggesttrade`, data)
       .then((res) => {
+        console.log(res.data);
 
         if (redirectIfNecessary(this.props.history, res.data)) return 1;
 

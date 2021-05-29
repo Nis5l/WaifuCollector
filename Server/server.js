@@ -986,31 +986,32 @@ app.post("/suggesttrade", async (req, res) => {
 
 		if (!logic.getClients()[decoded.id].hasFriendAdded(userID))
 			return res.send({status: 1, message: "not your friend"});
-		database.getCardUUID(cardID, userID, (result) => {
-			if (result == undefined)
-				return res.send({
-					status: 1,
-					message: "Cant find card, or it isnt his",
-				});
 
-			database.tradeExists(decoded.id, userID, cardID, (b) => {
+		const result = await database.getCardUUID(cardID, userID);
+		if (result == undefined)
+			return res.send({
+				status: 1,
+				message: "Cant find card, or it isnt his",
+			});
+
+		database.tradeExists(decoded.id, userID, cardID, (b) => {
+			if (b)
+				return res.send({status: 1, message: "Card already in trade"});
+
+			database.tradeSuggestionExists(decoded.id, userID, cardID, (b) => {
 				if (b)
-					return res.send({status: 1, message: "Card already in trade"});
+					return res.send({status: 1, message: "Card Suggestion already in trade"});
 
-				database.tradeSuggestionExists(decoded.id, userID, cardID, (b) => {
-					if (b)
-						return res.send({status: 1, message: "Card Suggestion already in trade"});
-
-					database.addTradeSuggestion(decoded.id, userID, cardID, () => {
-						database.addNotification(
-							userID,
-							`${logic.getClients()[decoded.id].username} changed the Trade`,
-							"The trade got changed, click to view!",
-							`trade/${decoded.id}`,
-							() => {}
-						);
-						return res.send({status: 0});
-					});
+				database.addTradeSuggestion(decoded.id, userID, cardID, () => {
+					database.addNotification(
+						userID,
+						`${logic.getClients()[decoded.id].username} changed the Trade`,
+						"The trade got changed, click to view!",
+						`trade/${decoded.id}`,
+						() => {}
+					);
+					console.log("worked");
+					return res.send({status: 0});
 				});
 			});
 		});
@@ -1340,6 +1341,17 @@ app.post("/verify", async (req, res) => {
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
+
+app.post("/mail", async (req, res) => {
+	try {
+		var decoded = await logic.standardroutine(req.body.token, res);
+
+		database.getMailVerified(decoded.id, (mv) => {
+			res.send({status: 0, mail: mv.email});
+		})
+
+	} catch (ex) {logic.handleException(ex, res);}
+})
 
 app.post("/verify/resend", async (req, res) => {
 	try {

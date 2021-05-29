@@ -106,13 +106,8 @@ module.exports = {
 			if (!b) {
 				bcrypt.hash(password, 10, (err, hash) => {
 					con.query(
-						"INSERT INTO user (username, password, ranking, email, verified) VALUES ('" +
-						username +
-						"', '" +
-						hash +
-						"',0, '"
-						+ email +
-						"', 0)",
+						"INSERT INTO user (username, password, ranking, email, verified) VALUES ( ?, ?, ?, ?, ?)"
+						, [username, hash, 0, email, 0],
 						function (err, result, fields) {
 
 							callback(true, "registered");

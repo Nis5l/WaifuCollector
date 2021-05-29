@@ -4,6 +4,7 @@ import Card from '../../components/Card'
 import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
+import Logo from '../../components/Logo'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 
 import Cookies from 'js-cookie';
@@ -147,14 +148,14 @@ class Profile extends Component {
 
                     <div className="avatar">
 
-                        <img src="/assets/Icon.png" alt="Avatar" />
+                        <Logo className="logo" />
 
                     </div>
 
                     <div className="profilename_container">
 
                         <ProfileName
-                            userID={this.state.userID}
+                            userID={this.userID}
                         />
 
                     </div>

@@ -4,6 +4,7 @@ import React, {Component, lazy, Suspense} from 'react'
 import Card from '../../components/Card';
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
+import Logo from '../../components/Logo'
 import {withRouter} from 'react-router-dom'
 
 import axios from 'axios'
@@ -113,7 +114,7 @@ class Dashboard extends Component {
 
                     <div className="avatar">
 
-                        <img src="/assets/Icon.png" alt="Avatar" />
+                        <Logo className="logo" />
 
                     </div>
 
