@@ -107,7 +107,7 @@ class Inventory extends Component {
       <div className="inventory_wrapper">
         <Loading loading={this.state.loading || this.props.loading === true} />
         <form action="#" onSubmit={(e) => {this.onFilter(e, this);}} className="inventory_input">
-          <input ref={this.searchInput} type="text" className="text_input" />
+          <input ref={this.searchInput} type="text" className="text_input" onChange={(e) => this.onFilter(e, this)} />
           <input type="submit" hidden />
           <Select
             className="inventory_select"
