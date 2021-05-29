@@ -256,7 +256,7 @@ class Navbar extends React.Component {
                         </Menu>
                     </SidebarContent>
 
-                    <SidebarFooter style={{textAlign: 'center'}}>
+                    {this.props.token && <SidebarFooter style={{textAlign: 'center'}}>
                         <div
                             className="sidebar-btn-wrapper"
                             style={{
@@ -284,7 +284,7 @@ class Navbar extends React.Component {
                                 </div>
                             </a>
                         </div>
-                    </SidebarFooter>
+                    </SidebarFooter>}
 
                 </ProSidebar>
 
