@@ -3,6 +3,7 @@ import Card from '../../components/Card'
 import {WaifuCardLoad} from '../../components/WaifuCard'
 import {checkMail} from '../../Utils'
 import Loading from '../../components/Loading'
+import Logo from '../../components/Logo'
 
 import Cookies from 'js-cookie'
 import axios from 'axios'
@@ -74,11 +75,7 @@ class VerifyMail extends Component {
         <Loading loading={this.state.loading} />
         <Card styleClassName="verifymail">
 
-          <img
-            src="/assets/Icon.png"
-            alt="Logo"
-            className="logo"
-          ></img>
+          <Logo className="logo" />
 
           {this.state.loaded === true ?
             <div className="input_wrapper">

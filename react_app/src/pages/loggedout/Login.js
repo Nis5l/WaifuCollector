@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import Card from '../../components/Card'
+import Logo from '../../components/Logo'
 import axios from 'axios'
 
 import "./Login.scss"
@@ -82,11 +83,7 @@ function Login(props) {
 
         <Card styleClassName="login">
 
-            <img
-                src="/assets/Icon.png"
-                alt="Logo"
-                className="logo"
-            ></img>
+            <Logo className="logo" />
 
             <form onSubmit={handleSubmit} autoComplete="false">
 

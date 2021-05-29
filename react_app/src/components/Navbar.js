@@ -264,8 +264,7 @@ class Navbar extends React.Component {
                             }}
                         >
                             <a
-                                href="https://github.com/azouaoui-med/react-pro-sidebar"
-                                target="_blank"
+                                href="/settings"
                                 className="sidebar-btn"
                                 rel="noopener noreferrer"
                             >

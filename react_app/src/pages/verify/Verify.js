@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Card from '../../components/Card'
 import {WaifuCardLoad} from '../../components/WaifuCard'
 import Loading from '../../components/Loading'
+import Logo from '../../components/Logo'
 
 import Config from '../../config.json'
 import Cookies from 'js-cookie'
@@ -135,11 +136,7 @@ class Verify extends Component {
         <Loading loading={this.state.loading} />
         <Card styleClassName="verify">
 
-          <img
-            src="/assets/Icon.png"
-            alt="Logo"
-            className="logo"
-          ></img>
+          <Logo className="logo" />
 
           {
             this.state.mail === undefined ?

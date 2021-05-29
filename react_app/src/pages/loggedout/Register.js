@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useHistory} from "react-router-dom";
 import Card from '../../components/Card';
+import Logo from '../../components/Logo';
 import {checkMail} from '../../Utils'
 
 import axios from 'axios';
@@ -78,11 +79,7 @@ function Register(props) {
 
         <Card styleClassName="register">
 
-            <img
-                src="/assets/Icon.png"
-                alt="Logo"
-                className="logo"
-            ></img>
+            <Logo className="logo" />
 
             <form onSubmit={handleSubmit}>
 
