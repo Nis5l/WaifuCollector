@@ -169,7 +169,7 @@ class Navbar extends React.Component {
 
                             }
 
-                            <MenuItem
+                            {this.props.token && <MenuItem
                                 icon=
                                 {
                                     <NotificationBell notifications={this.state.notifications.length} />
@@ -181,7 +181,7 @@ class Navbar extends React.Component {
                                 >
                                     Notifications
                                 </Link>
-                            </MenuItem>
+                            </MenuItem>}
 
                             {this.props.token && <SubMenu
                                 title="Dashboard"
@@ -233,7 +233,7 @@ class Navbar extends React.Component {
                                 <MenuItem>Users</MenuItem>
                             </SubMenu>}
 
-                            <MenuItem
+                            {false && <MenuItem
                                 icon={<i className="fas fa-clipboard-list"></i>}
                             >
                                 <Link
@@ -241,7 +241,7 @@ class Navbar extends React.Component {
                                 >
                                     Leaderboard
                                 </Link>
-                            </MenuItem>
+                            </MenuItem>}
 
                             {this.props.token && <MenuItem
                                 icon={<i className="fas fa-sign-out-alt"></i>}
