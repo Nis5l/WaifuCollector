@@ -29,7 +29,6 @@ import Leaderboard from './pages/leaderboard/Leaderboard'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
-//import Privacy from './pages/privacy/Privacy'
 
 function App() {
 
