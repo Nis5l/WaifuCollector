@@ -159,6 +159,10 @@ function App() {
 
             <Route path="/settings" component={Settings} />
 
+            <Route path="/friends">
+              <Redirect to="dashboard" />
+            </Route>
+
             <Route component={NoMatch} />
 
           </Switch>

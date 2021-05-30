@@ -88,21 +88,20 @@ function clearCache(userID) {
 		delete clients[userID];
 	}
 }
-function setTrade(userone, usertwo, status, callback) {
-	database.getTradeManager(userone, usertwo, (tm) => {
-		if (tm == undefined) {
-			database.addTradeManager(userone, usertwo, () => {
-				run2();
-			});
-		} else {
+async function setTrade(userone, usertwo, status, callback) {
+	const tm = await database.getTradeManager(userone, usertwo);
+	if (tm == undefined) {
+		database.addTradeManager(userone, usertwo, () => {
 			run2();
-		}
-		function run2() {
-			database.setTradeStatus(userone, usertwo, status, () => {
-				callback();
-			});
-		}
-	});
+		});
+	} else {
+		run2();
+	}
+	function run2() {
+		database.setTradeStatus(userone, usertwo, status, () => {
+			callback();
+		});
+	}
 }
 function getCardRequestData(userID, uuid, next, page, sortType, callback) {
 	var inventory;
@@ -314,40 +313,44 @@ function removeCardFromUserCache(userID, id) {
 	}
 }
 
-function addCardTrade(userone, usertwo, uuid, callback) {
+async function addCardTrade(userone, usertwo, uuid, callback) {
 
 	if (!clients[userone].hasFriendAdded(usertwo)) {
 		callback({status: 1, message: "not your friend"});
 		return;
 	}
 
-	database.getTrade(userone, usertwo, (cards) => {
-		if (cards.length >= tradeLimit) {
-			callback({status: 1, message: "Tradelimit reached"});
+	const cards = await database.getTrade(userone, usertwo);
+
+	if (cards.length >= tradeLimit) {
+		callback({status: 1, message: "Tradelimit reached"});
+		return;
+	}
+
+	const result = await database.getCardUUID(uuid, userone);
+
+	if (result == undefined) {
+		callback({
+			status: 1,
+			message: "Cant find card, or it isnt yours",
+		});
+		return;
+	}
+
+	database.tradeExists(userone, usertwo, uuid, (b) => {
+		if (b) {
+			callback({status: 1, message: "Card already in trade"});
 			return;
 		}
+		database.addTrade(userone, usertwo, uuid, () => {
 
-		database.getCardUUID(uuid, userone, (result) => {
-			if (result == undefined) {
-				callback({
-					status: 1,
-					message: "Cant find card, or it isnt yours",
-				});
-				return;
-			}
-			database.tradeExists(userone, usertwo, uuid, (b) => {
-				if (b) {
-					callback({status: 1, message: "Card already in trade"});
-					return;
-				}
-				database.addTrade(userone, usertwo, uuid, () => {
-					database.removeSuggestionUser(usertwo, userone, uuid, () => {
-						setTrade(userone, usertwo, 0, () => {
-							setTrade(usertwo, userone, 0, () => {
-								callback({status: 0});
-								return;
-							});
-						});
+			database.removeSuggestionUser(usertwo, userone, uuid, () => {
+
+				setTrade(userone, usertwo, 0, () => {
+					setTrade(usertwo, userone, 0, () => {
+
+						callback({status: 0});
+						return;
 					});
 				});
 			});
@@ -658,6 +661,18 @@ async function getCardUUID(uuid, userID) {
 	return card;
 }
 
+async function getTrade(userone, usertwo) {
+	let cards = await database.getTrade(userone, usertwo);
+	formatCards(cards)
+	return cards;
+}
+
+async function getTradeSuggestions(userone, usertwo) {
+	let cards = await database.getTradeSuggestions(userone, usertwo);
+	formatCard(cards);
+	return cards;
+}
+
 function getPort() {
 	return port;
 }
@@ -778,5 +793,7 @@ module.exports =
 	getEffectBase: getEffectBase,
 	inventory: inventory,
 	formatCards: formatCards,
-	getCardUUID: getCardUUID
+	getCardUUID: getCardUUID,
+	getTrade: getTrade,
+	getTradeSuggestions: getTradeSuggestions
 };
