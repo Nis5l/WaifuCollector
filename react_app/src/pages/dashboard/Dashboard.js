@@ -24,7 +24,7 @@ class Dashboard extends Component {
         super(props);
 
         this.lcounter = 0;
-        this.lcounterMax = 5;
+        this.lcounterMax = 4;
 
         this.state =
         {
@@ -56,6 +56,7 @@ class Dashboard extends Component {
                 return data.data;
 
             }
+            //self.props.history.push("/logout");
 
             return [];
         }
@@ -164,7 +165,7 @@ class Dashboard extends Component {
                     title="Badges"
                     styleClassName="badges"
                 >
-                    <h1>Badges</h1>
+                    <h1>Coming Soon</h1>
                 </Card>
 
                 <Card
@@ -180,12 +181,12 @@ class Dashboard extends Component {
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
                         </Suspense>
-                        <Suspense fallback={loading()}>
+                        {false && <Suspense fallback={loading()}>
                             <PackProgressRing
                                 className="pack2"
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
-                        </Suspense>
+                        </Suspense>}
 
                     </div>
 

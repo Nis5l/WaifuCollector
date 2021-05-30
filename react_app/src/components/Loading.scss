@@ -5,12 +5,18 @@
 {
     transition: top 0.5s;
 
+    .loader
+    {
+        width: 256px;
+        height: 256px;
+    }
+
     img, .loader
     {
         position: absolute;
 
-        width: 250px;
-        height: 250px;
+        //width: 250px;
+        //height: 250px;
         right: 50%;
         top: 50%;
 

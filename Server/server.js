@@ -1010,7 +1010,6 @@ app.post("/suggesttrade", async (req, res) => {
 						`trade/${decoded.id}`,
 						() => {}
 					);
-					console.log("worked");
 					return res.send({status: 0});
 				});
 			});
@@ -1119,82 +1118,78 @@ app.post("/okTrade", async (req, res) => {
 			logic.getClients()[userID].getTradeCooldownCount() >= logic.getTradeCooldownMax())
 			return res.send({status: 1, message: "TradeLimit reached"});
 
-		logic.setTrade(decoded.id, userID, 1, () => {
-			database.getTradeManager(decoded.id, userID, (tm) => {
-				if (
-					tm != undefined &&
-					tm[0].statusone == 1 &&
-					tm[0].statustwo == 1
-				) {
-					transfer(decoded.id, userID, () => {
-						transfer(userID, decoded.id, () => {
-							logic.setTrade(decoded.id, userID, 0, () => {
-								logic.setTrade(userID, decoded.id, 0, () => {
-									logger.write("Traded: " + logic.getClients()[decoded.id].username + " " + logic.getClients()[userID].username);
-									database.addNotification(
-										userID,
-										`${logic.getClients()[decoded.id].username} completed the Trade`,
-										"The trade got completed, click to view!",
-										`trade/${decoded.id}`,
-										() => {}
-									);
-									logic.getClients()[decoded.id].setTradeTime(userID, date.valueOf());
-									logic.getClients()[userID].setTradeTime(decoded.id, date.valueOf());
-									return res.send({status: 0});
-								});
+		logic.setTrade(decoded.id, userID, 1, async () => {
+			let tm = await database.getTradeManager(decoded.id, userID);
+			if (
+				tm != undefined &&
+				tm[0].statusone == 1 &&
+				tm[0].statustwo == 1
+			) {
+				transfer(decoded.id, userID, () => {
+					transfer(userID, decoded.id, () => {
+						logic.setTrade(decoded.id, userID, 0, () => {
+							logic.setTrade(userID, decoded.id, 0, () => {
+								logger.write("Traded: " + logic.getClients()[decoded.id].username + " " + logic.getClients()[userID].username);
+								database.addNotification(
+									userID,
+									`${logic.getClients()[decoded.id].username} completed the Trade`,
+									"The trade got completed, click to view!",
+									`trade/${decoded.id}`,
+									() => {}
+								);
+								logic.getClients()[decoded.id].setTradeTime(userID, date.valueOf());
+								logic.getClients()[userID].setTradeTime(decoded.id, date.valueOf());
+								return res.send({status: 0});
 							});
 						});
 					});
-					function transfer(userone, usertwo, callback) {
-						database.getTrade(userone, usertwo, (cards) => {
-							database.getTradeSuggestions(userone, usertwo, (suggestions) => {
-								for (var i = 0; i < cards.length; i++) {
-									var c = logic.getClients()[userone].getCard(cards[i].card);
-									logic.addCardToUserCache(
-										usertwo,
-										cards[i].card,
-										c.cardID,
-										c.quality,
-										c.level,
-										c.frameID,
-									);
-									logic.removeCardFromUserCache(usertwo, cards[i].card);
-								}
-								run2(0);
-								function run2(idx) {
-									if (idx == cards.length) {
-										run3(0);
-										return;
-									}
-									database.removeTrade(cards[idx].card, () => {
-										database.changeCardUser(cards[idx].card, usertwo, () => {
-											run2(idx + 1);
-										});
-									});
-								}
-								function run3(idx) {
-									if (idx == suggestions.length) {
-										callback();
-										return;
-									}
-									database.removeSuggestion(suggestions[idx].card, () => {
-										run3(idx + 1);
-									});
-								}
+				});
+				async function transfer(userone, usertwo, callback) {
+					let cards = await logic.getTrade(userone, usertwo);
+					let suggestions = await logic.getTradeSuggestions(userone, usertwo);
+					for (var i = 0; i < cards.length; i++) {
+						logic.addCardToUserCache(
+							usertwo,
+							cards[i].id,
+							cards[i].card.id,
+							cards[i].quality,
+							cards[i].level,
+							cards[i].frame.id,
+						);
+						logic.removeCardFromUserCache(usertwo, cards[i].id);
+					}
+					run2(0);
+					function run2(idx) {
+						if (idx == cards.length) {
+							run3(0);
+							return;
+						}
+						database.removeTrade(cards[idx].id, () => {
+							database.changeCardUser(cards[idx].id, usertwo, () => {
+								run2(idx + 1);
 							});
 						});
 					}
-				} else {
-					database.addNotification(
-						userID,
-						`${logic.getClients()[decoded.id].username} changed the Trade`,
-						"The trade got changed, click to view!",
-						`trade/${decoded.id}`,
-						() => {}
-					);
-					return res.send({status: 0});
+					function run3(idx) {
+						if (idx == suggestions.length) {
+							callback();
+							return;
+						}
+						database.removeSuggestion(suggestions[idx].id, () => {
+							run3(idx + 1);
+						});
+					}
 				}
-			});
+			} else {
+				database.addNotification(
+					userID,
+					`${logic.getClients()[decoded.id].username} changed the Trade`,
+					"The trade got changed, click to view!",
+					`trade/${decoded.id}`,
+					() => {}
+				);
+				return res.send({status: 0});
+			}
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });

@@ -114,6 +114,21 @@
 
         grid-area: badges;
 
+        .card-content
+        {
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            h1
+            {
+                font-size: 16pt;
+                color: grey;
+                //transform: rotateZ(-20deg);
+            }
+        }
+
         @media screen and (max-width: $breakpoint-md){
 
             &{

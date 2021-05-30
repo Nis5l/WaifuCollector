@@ -153,9 +153,15 @@ function App() {
 
             <Route path="/admin/log" component={AdminLog} />
 
+            <Route path="/admin/users" component={Settings} />
+
             <Route path="/adminpanel" component={FakeAdmin} />
 
             <Route path="/settings" component={Settings} />
+
+            <Route path="/friends">
+              <Redirect to="dashboard" />
+            </Route>
 
             <Route component={NoMatch} />
 

@@ -273,16 +273,16 @@ module.exports = {
 SELECT
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.name as animeName,
+cardtype.name as animeName,
 frame.name as frameName,
 frame.path_front as frameFront,
 frame.path_back as frameBack,
 effect.path as effectPath,
 effect.opacity as effectOpacity
-FROM card INNER JOIN cardType, frame, effect
+FROM card INNER JOIN cardtype, frame, effect
 WHERE
 card.id=? AND
-cardType.id=? AND
+cardtype.id=? AND
 frame.id=? AND
 effect.id=?;
 `;
@@ -533,8 +533,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -543,7 +543,7 @@ effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
 FROM
-trade INNER JOIN unlocked, card, cardType, frame, effect
+trade INNER JOIN unlocked, card, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
@@ -582,8 +582,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -592,7 +592,7 @@ effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
 FROM
-tradesuggestion INNER JOIN unlocked, card, cardType, frame, effect
+tradesuggestion INNER JOIN unlocked, card, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
@@ -1035,7 +1035,7 @@ FROM dual WHERE NOT EXISTS
 
 		let sortquery = `
 card.cardName,
-cardType.name`;
+cardtype.name`;
 
 		switch (sortType) {
 			case 1:
@@ -1043,7 +1043,7 @@ cardType.name`;
 unlocked.level DESC,
 unlocked.quality DESC,
 card.cardName,
-cardType.name
+cardtype.name
 `;
 				break;
 			case 2:
@@ -1078,8 +1078,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -1088,14 +1088,14 @@ effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
 FROM
-card INNER JOIN unlocked, cardType, frame, effect
+card INNER JOIN unlocked, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
 effect.id = unlocked.level AND
 unlocked.userID = ? AND
 ${extraConditions}
-(card.cardName LIKE(?) OR cardType.name LIKE(?))
+(card.cardName LIKE(?) OR cardtype.name LIKE(?))
 ORDER BY
 ${sortquery}
 LIMIT ? OFFSET ?;`;
@@ -1125,8 +1125,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -1134,7 +1134,7 @@ frame.path_back as frameBack,
 effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
-FROM unlocked INNER JOIN card, cardType, frame, effect
+FROM unlocked INNER JOIN card, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
@@ -1476,6 +1476,45 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Olivier Mira Armstrong', '27', 'Card_OlivierMiraArmstrong.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Izumi Curtis', '27', 'Card_IzumiCurtis.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Riza Hawkeye', '27', 'Card_RizaHawkeye.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuzu Aihara', '122', 'Card_YuzuAihara.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mei Aihara', '122', 'Card_MeiAihara.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rui Tachibana', '123', 'Card_RuiTachibana.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hina Tachibana', '123', 'Card_HinaTachibana.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Narberal Gamma', '83', 'Card_NarberalGamma.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Solution Epsilon', '83', 'Card_SolutionEpsilon.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Milim Nava', '50', 'Card_MilimNava.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shuna', '50', 'Card_Shuna.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shion', '50', 'Card_Shion.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Motoko Kusanagi', '124', 'Card_MotokoKusanagi.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Suzune Horikita', '126', 'Card_SuzuneHorikita.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kikyo Kushida', '126', 'Card_KikyoKushida.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Honami Ichinose', '126', 'Card_HonamiIchinose.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kei Karuizawa', '126', 'Card_KeiKaruizawa.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mamimi Samejima', '127', 'Card_MamimiSamejima.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Haruko Haruhara', '127', 'Card_HarukoHaruhara.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hidomi Hibajiri', '127', 'Card_HidomiHibajiri.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kana Koumoto', '127', 'Card_KanaKoumoto.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Julia Jinyu', '127', 'Card_JuliaJinyu.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hinae Hibajiri', '127', 'Card_HinaeHibajiri.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuria Harudera', '82', 'Card_YuriaHarudera.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ai Hayasaka', '3', 'Card_AiHayasaka.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Miko Iino', '3', 'Card_MikoIino.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mugino Shizuri', '44', 'Card_MuginoShizuri.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hitagi Senjougahara', '71', 'Card_HitagiSenjougahara.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Akatsuki', '128', 'Card_Akatsuki.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Henrietta', '128', 'Card_Henrietta.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Marielle', '128', 'Card_Marielle.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Fine Forte', '92', 'Card_FineForte.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Prax Conrad', '92', 'Card_PraxConrad.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shouko Nishimiya', '129', 'Card_ShoukoNishimiya.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Yuzuru Nishimiya', '129', 'Card_YuzuruNishimiya.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Naoka Ueno', '129', 'Card_NaokaUeno.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rei Hino', '125', 'Card_ReiHino.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Makoto Kino', '125', 'Card_MakotoKino.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Usagi Tsukino', '125', 'Card_UsagiTsukino.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ami Mizuno', '125', 'Card_AmiMizuno.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Minako Aino', '125', 'Card_MinakoAino.webp');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1619,6 +1658,15 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('119', 'Serial Experiments Lain');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('120', 'Sankarea');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('121', 'Magical Sempai');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('122', 'Citrus');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('123', 'Domestic Girlfriend');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('124', 'Ghost in the Shell');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('125', 'Sailor Moon');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('126', 'Classroom of the Elite');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('127', 'Fooly Cooly');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('128', 'Log Horizon');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('129', 'A Silent Voice');",
 	];
 
 	con.connect(() => {

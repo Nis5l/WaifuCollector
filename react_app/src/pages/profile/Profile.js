@@ -195,7 +195,7 @@ class Profile extends Component {
                     title="Badges"
                     styleClassName="badges"
                 >
-                    <h1>Badges</h1>
+                    <h1>Coming Soon</h1>
                 </Card>
 
                 <Card
