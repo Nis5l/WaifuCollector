@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {Badge} from './ProfileName'
 import ResizeText from './ResizeText'
 
+import Config from "../config.json"
+
 import './UserBanner.scss'
 
 class UserBanner extends Component {
@@ -31,7 +33,7 @@ class UserBanner extends Component {
 
     resize(self) {
         let username = self.username;
-        username = "TEST123123123123123";
+        //username = "TEST123123123123123";
         if (window.screen.availWidth <= 770) {
             if (username.length > 15) username = username.slice(0, 12) + "...";
         }
@@ -49,10 +51,13 @@ class UserBanner extends Component {
                     <div className="badges">
                         {
                             this.state.badges.map((badge) => {
+
+                                let badgeImage = Config.API_HOST + badge.asset;
+
                                 return (
                                     <Badge
                                         key={'badge-' + id++}
-                                        img={badge.asset}
+                                        img={badgeImage}
                                         name={badge.name}
                                     />
                                 )

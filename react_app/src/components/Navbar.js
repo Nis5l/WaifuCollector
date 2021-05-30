@@ -120,6 +120,7 @@ class Navbar extends React.Component {
                     <SidebarHeader>
                         <Link
                             to="/"
+                            onClick={ () => {this.toggleMenu(); }}
                         >
                             <div
                                 className="sidebar-title"
@@ -146,6 +147,7 @@ class Navbar extends React.Component {
                                 >
                                     <Link
                                         to="/login"
+                                        onClick={ () => {this.toggleMenu(); }}
                                     >
                                         Login
                                     </Link>
@@ -161,6 +163,7 @@ class Navbar extends React.Component {
                                 >
                                     <Link
                                         to="/register"
+                                        onClick={ () => {this.toggleMenu(); }}
                                     >
                                         Register
                                     </Link>
@@ -190,6 +193,7 @@ class Navbar extends React.Component {
                                 <MenuItem>
                                     <Link
                                         to="/dashboard"
+                                        onClick={ () => {this.toggleMenu(); }}
                                     >
                                         Home
                                     </Link>
@@ -197,6 +201,7 @@ class Navbar extends React.Component {
                                 <MenuItem>
                                     <Link
                                         to="/pack"
+                                        onClick={ () => {this.toggleMenu(); }}
                                     >
                                         Pack
                                     </Link>
@@ -204,6 +209,7 @@ class Navbar extends React.Component {
                                 <MenuItem>
                                     <Link
                                         to="/inventory"
+                                        onClick={ () => {this.toggleMenu(); }}
                                     >
                                         Inventory
                                     </Link>
@@ -211,6 +217,7 @@ class Navbar extends React.Component {
                                 <MenuItem>
                                     <Link
                                         to="/users"
+                                        onClick={ () => {this.toggleMenu(); }}
                                     >
                                         Users
                                     </Link>
@@ -224,6 +231,7 @@ class Navbar extends React.Component {
                                 <MenuItem>
                                     <Link
                                         to="/admin/log"
+                                        onClick={ () => {this.toggleMenu(); }}
                                     >
                                         Log
                                     </Link>
@@ -238,6 +246,7 @@ class Navbar extends React.Component {
                             >
                                 <Link
                                     to="/leaderboard"
+                                    onClick={ () => {this.toggleMenu(); }}
                                 >
                                     Leaderboard
                                 </Link>
@@ -248,6 +257,7 @@ class Navbar extends React.Component {
                             >
                                 <Link
                                     to="/logout"
+                                    onClick={ () => {this.toggleMenu(); }}
                                 >
                                     Logout
                                 </Link>

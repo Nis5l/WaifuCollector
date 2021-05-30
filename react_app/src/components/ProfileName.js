@@ -81,10 +81,13 @@ function ProfileName(props) {
             <div className="badges">
                 {
                     badges.map((badge) => {
+
+                        let badgeImage = Config.API_HOST + badge.asset;
+
                         return (
                             <Badge
                                 key={makeID(30)}
-                                img={badge.asset}
+                                img={badgeImage}
                                 name={badge.name}
                             />
                         )

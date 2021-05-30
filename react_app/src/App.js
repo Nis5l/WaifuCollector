@@ -17,6 +17,7 @@ import Users from './pages/users/Users'
 import AdminLog from './pages/admin/log/Log'
 import FakeAdmin from './pages/fakeAdmin/FakeAdmin'
 import Settings from './pages/settings/Settings'
+import Privacy from './pages/privacy/Privacy'
 
 import Login from './pages/loggedout/Login'
 
@@ -55,6 +56,7 @@ function App() {
 
             <Route path="/" exact component={Home} />
             <Route path="/leaderboard" component={Leaderboard} />
+            <Route path="/privacy" component={Privacy} />
 
             <Route
               path="/login"
@@ -158,6 +160,8 @@ function App() {
             <Route path="/adminpanel" component={FakeAdmin} />
 
             <Route path="/settings" component={Settings} />
+
+            <Route path="/privacy" component={Privacy} />
 
             <Route path="/friends">
               <Redirect to="dashboard" />

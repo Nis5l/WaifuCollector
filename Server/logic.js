@@ -540,7 +540,7 @@ function getBadges(username) {
 	const badges = [
 		{
 			name: "Developer",
-			asset: "http://localhost:3000/assets/badges/dev.jpg"
+			asset: "/badges/dev.jpg"
 		}
 	]
 
