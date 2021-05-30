@@ -1,14 +1,32 @@
-@import "../../scss/_base.scss";
+@import '../../scss/__base.scss';
 
-.privacy_content{
+.privacy_wrapper
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    .fold-card{
-
-        background-color: $background-secondary;
-
-        .card-title{ border-color: $background-primary; }
-        &:not(:last-child){ margin-bottom: 20px; }
-
+    .privacy_title
+    {
+        margin-bottom: 30px;
+        text-decoration: underline;
+    }
+    .card
+    {
+        width: 100%;
+        margin: 10px 0;
+        //padding-bottom: 0px;
     }
 
+    .content
+    {
+        padding: 10px;
+        font-size: 12pt;
+        line-height: 150%;
+
+        a
+        {
+            color: $sidebar-color;
+        }
+    }
 }

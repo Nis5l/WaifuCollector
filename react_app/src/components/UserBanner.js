@@ -33,7 +33,7 @@ class UserBanner extends Component {
 
     resize(self) {
         let username = self.username;
-        username = "TEST123123123123123";
+        //username = "TEST123123123123123";
         if (window.screen.availWidth <= 770) {
             if (username.length > 15) username = username.slice(0, 12) + "...";
         }

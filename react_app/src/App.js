@@ -17,6 +17,7 @@ import Users from './pages/users/Users'
 import AdminLog from './pages/admin/log/Log'
 import FakeAdmin from './pages/fakeAdmin/FakeAdmin'
 import Settings from './pages/settings/Settings'
+import Privacy from './pages/privacy/Privacy'
 
 import Login from './pages/loggedout/Login'
 
@@ -28,7 +29,7 @@ import Leaderboard from './pages/leaderboard/Leaderboard'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
-import Privacy from './pages/privacy/Privacy'
+//import Privacy from './pages/privacy/Privacy'
 
 function App() {
 
@@ -160,6 +161,8 @@ function App() {
             <Route path="/adminpanel" component={FakeAdmin} />
 
             <Route path="/settings" component={Settings} />
+
+            <Route path="/privacy" component={Privacy} />
 
             <Route path="/friends">
               <Redirect to="dashboard" />
