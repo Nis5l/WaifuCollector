@@ -199,7 +199,7 @@ class Profile extends Component {
                 </Card>
 
                 <Card
-                    title="Flex flex"
+                    title="Best Waifu"
                     styleClassName="flexen"
                 >
                     <div className="flex-grid">
