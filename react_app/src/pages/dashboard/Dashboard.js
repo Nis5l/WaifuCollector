@@ -56,6 +56,7 @@ class Dashboard extends Component {
                 return data.data;
 
             }
+            //self.props.history.push("/logout");
 
             return [];
         }

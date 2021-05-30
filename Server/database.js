@@ -273,16 +273,16 @@ module.exports = {
 SELECT
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.name as animeName,
+cardtype.name as animeName,
 frame.name as frameName,
 frame.path_front as frameFront,
 frame.path_back as frameBack,
 effect.path as effectPath,
 effect.opacity as effectOpacity
-FROM card INNER JOIN cardType, frame, effect
+FROM card INNER JOIN cardtype, frame, effect
 WHERE
 card.id=? AND
-cardType.id=? AND
+cardtype.id=? AND
 frame.id=? AND
 effect.id=?;
 `;
@@ -533,8 +533,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -543,7 +543,7 @@ effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
 FROM
-trade INNER JOIN unlocked, card, cardType, frame, effect
+trade INNER JOIN unlocked, card, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
@@ -582,8 +582,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -592,7 +592,7 @@ effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
 FROM
-tradesuggestion INNER JOIN unlocked, card, cardType, frame, effect
+tradesuggestion INNER JOIN unlocked, card, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
@@ -1035,7 +1035,7 @@ FROM dual WHERE NOT EXISTS
 
 		let sortquery = `
 card.cardName,
-cardType.name`;
+cardtype.name`;
 
 		switch (sortType) {
 			case 1:
@@ -1043,7 +1043,7 @@ cardType.name`;
 unlocked.level DESC,
 unlocked.quality DESC,
 card.cardName,
-cardType.name
+cardtype.name
 `;
 				break;
 			case 2:
@@ -1078,8 +1078,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -1088,14 +1088,14 @@ effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
 FROM
-card INNER JOIN unlocked, cardType, frame, effect
+card INNER JOIN unlocked, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
 effect.id = unlocked.level AND
 unlocked.userID = ? AND
 ${extraConditions}
-(card.cardName LIKE(?) OR cardType.name LIKE(?))
+(card.cardName LIKE(?) OR cardtype.name LIKE(?))
 ORDER BY
 ${sortquery}
 LIMIT ? OFFSET ?;`;
@@ -1125,8 +1125,8 @@ unlocked.quality as quality,
 card.id as cardID,
 card.cardName as cardName,
 card.cardImage as cardImage,
-cardType.id as animeID,
-cardType.name as animeName,
+cardtype.id as animeID,
+cardtype.name as animeName,
 frame.id as frameID,
 frame.name as frameName,
 frame.path_front as frameFront,
@@ -1134,7 +1134,7 @@ frame.path_back as frameBack,
 effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
-FROM unlocked INNER JOIN card, cardType, frame, effect
+FROM unlocked INNER JOIN card, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
