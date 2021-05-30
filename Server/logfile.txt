@@ -618,3 +618,7 @@
 [03/21/2021, 22:11] SmallCode Upgrade lvl:1 Succeded
 [03/21/2021, 22:21] H3ntaiS3npai Upgrade lvl:0 Succeded
 [03/21/2021, 22:35] Jorenaldo Upgrade lvl:0 Failed
+[05/30/2021, 00:40] Stryder1306 Upgrade lvl:0 Succeded
+[05/30/2021, 01:08] Error: ER_NO_SUCH_TABLE: Table 'WaifuCollector.cardType' doesn't exist
+[05/30/2021, 01:09] Error: ER_NO_SUCH_TABLE: Table 'WaifuCollector.cardType' doesn't exist
+[05/30/2021, 01:19] Error: ER_NO_SUCH_TABLE: Table 'WaifuCollector.cardType' doesn't exist
