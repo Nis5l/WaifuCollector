@@ -1,0 +1,14 @@
+@import "../../scss/_base.scss";
+
+.privacy_content{
+
+    .fold-card{
+
+        background-color: $background-secondary;
+
+        .card-title{ border-color: $background-primary; }
+        &:not(:last-child){ margin-bottom: 20px; }
+
+    }
+
+}

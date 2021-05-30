@@ -28,6 +28,7 @@ import Leaderboard from './pages/leaderboard/Leaderboard'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
+import Privacy from './pages/privacy/Privacy'
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
 
             <Route path="/" exact component={Home} />
             <Route path="/leaderboard" component={Leaderboard} />
+            <Route path="/privacy" component={Privacy} />
 
             <Route
               path="/login"
