@@ -1035,7 +1035,7 @@ FROM dual WHERE NOT EXISTS
 
 		let sortquery = `
 card.cardName,
-cardtype.name
+cardtype.name,
 unlocked.level DESC,
 unlocked.quality DESC`;
 
