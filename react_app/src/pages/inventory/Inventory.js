@@ -60,12 +60,9 @@ class Inventory extends Component {
     const search = this.searchInput.current.value;
     const sortType = this.sortMethod;
 
-    console.log(this.page);
-
     axios.get(`${Config.API_HOST}/inventory?userID=${this.userID}&page=${this.page}&search=${search}&sortType=${sortType}&friendID=${this.friendID}&excludeSuggestions=${this.excludeSuggestions}`)
       .then(res => {
         if (res && res.status === 200) {
-          console.log(res.data.cards);
 
           if (redirectIfNecessary(this.props.history, res.data)) return;
           this.incrementLCounter();
