@@ -1035,7 +1035,9 @@ FROM dual WHERE NOT EXISTS
 
 		let sortquery = `
 card.cardName,
-cardtype.name`;
+cardtype.name
+unlocked.level DESC,
+unlocked.quality DESC`;
 
 		switch (sortType) {
 			case 1:
@@ -1088,7 +1090,7 @@ effect.id as effectID,
 effect.path as effectImage,
 effect.opacity as effectOpacity
 FROM
-card INNER JOIN unlocked, cardtype, frame, effect
+unlocked INNER JOIN card, cardtype, frame, effect
 WHERE
 unlocked.cardID = card.id AND
 card.typeID = cardtype.id AND
@@ -1515,6 +1517,10 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Usagi Tsukino', '125', 'Card_UsagiTsukino.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ami Mizuno', '125', 'Card_AmiMizuno.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Minako Aino', '125', 'Card_MinakoAino.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shinobu Kochou', '55', 'Card_ShinobuKochou.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kanao Tsuyuri', '55', 'Card_KanaoTsuyuri.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Mitsuri Kanroji', '55', 'Card_MitsuriKanroji.webp');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
