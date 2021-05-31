@@ -47,7 +47,7 @@ class Dashboard extends Component {
 
             const data = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
 
-            if (redirectIfNecessary(self.props.history, data)) return;
+            if (redirectIfNecessary(self.props.history, data.data)) return;
 
             if (data.data && data.data.status === 0) {
 

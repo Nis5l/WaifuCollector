@@ -6,6 +6,7 @@ import {formatTime} from '../Utils'
 import {withRouter} from 'react-router-dom'
 
 import './PackProgressRing.scss'
+import redirectIfNecessary from './Redirecter'
 
 class PackProgressRing extends Component {
     constructor(props) {
@@ -42,6 +43,7 @@ class PackProgressRing extends Component {
     loadPackTime(self) {
         axios.post(`${Config.API_HOST}/packtime`, {token: Cookies.get('token')})
             .then((res) => {
+                if (redirectIfNecessary(this.props.history, res.data)) return;
                 if (res && res.status === 200) {
                     if (res && res.data && res.data.status === 0) {
                         self.packTime = res.data.packTime;

@@ -364,7 +364,7 @@ function standardroutine(token, res) {
 			try {
 				var decoded = jwt.verify(token, jwtSecret);
 			} catch (JsonWebTokenError) {
-				res.send({status: 1, message: "Identification Please"});
+				res.send({status: 12, message: "Identification Please"});
 				return reject(new Error("EarlyExit"));
 			}
 
