@@ -68,7 +68,6 @@ class Profile extends Component {
             const stats = await loadStats(self.userID);
 
             const cards = await loadFlexCards(self.userID);
-            console.log(cards);
 
             self.setState({stats: stats, flexCards: cards});
             self.incrementLCounter();
@@ -133,6 +132,11 @@ class Profile extends Component {
             icon = "fa-handshake";
             onIconClick = () => {this.props.history.push(`/trade/${this.userID}`)}
         }
+
+        let cardsize = 0.54;
+        let w = window.innerWidth;
+        if (w > 2000)
+            cardsize = 0.7;
 
         return (
             <div className="container_profile">
@@ -209,7 +213,7 @@ class Profile extends Component {
                                     <div className="waifucard_wrapper" key={"card-" + card.id}>
                                         <WaifuCard
                                             card={card}
-                                            size={0.54}
+                                            size={cardsize}
                                             clickable="false"
                                         />
                                     </div>

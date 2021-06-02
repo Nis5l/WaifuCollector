@@ -10,6 +10,7 @@ import {withRouter} from 'react-router-dom'
 import RefreshButton from '../../components/RefreshButton'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
+import {formatTime} from '../../Utils'
 
 import './Trade.scss'
 
@@ -44,6 +45,7 @@ class Trade extends Component {
       removeSuggestionId: undefined,
 
       disabled: undefined,
+      confirmdisabled: undefined,
 
       loading: true
     }
@@ -84,12 +86,28 @@ class Trade extends Component {
             cardSuggestions: res.data.cardsuggestions,
             friendCardSuggestions: res.data.cardsuggestionsfriend,
             confirmed: res.data.statusone,
-            friendConfirmed: res.data.statustwo
+            friendConfirmed: res.data.statustwo,
+            tradeTime: res.data.tradeTime
           }, () => {this.setInfo(); this.setDisabled()});
+
+          if (res.data.tradeTime !== 0) {
+            let interval = this.timeinterval = setInterval(() => {
+              let newtime = this.state.tradeTime - 1000;
+              if (newtime < 0) newtime = 0;
+              this.setState({tradeTime: newtime}, this.setDisabled)
+
+              if (newtime === 0) clearInterval(interval);
+            }, 1000)
+          }
+
         } else {
           this.setState({found: false});
         }
       });
+  }
+
+  componentWillUnmount() {
+    if (this.timeinterval) clearInterval(this.timeinterval);
   }
 
   setInfo() {
@@ -105,11 +123,16 @@ class Trade extends Component {
   }
 
   setDisabled() {
-    if (this.state.tradeCount >= this.state.tradeLimit) {
+    if (this.state.tradeCount >= this.state.tradeLimit)
       this.setState({disabled: "Cardlimit Reached"});
-      return;
-    }
-    this.setState({disabled: undefined});
+    else
+      this.setState({disabled: undefined});
+
+    if (this.state.confirmed === 1)
+      this.setState({confirmdisabled: "Already Confirmed"})
+
+    if (this.state.tradeTime !== 0)
+      this.setState({confirmdisabled: formatTime(this.state.tradeTime)})
   }
 
   onCardOwnClick(e, uuid, self) {
@@ -391,8 +414,9 @@ class Trade extends Component {
               <input
                 type="submit"
                 className="button_input button_confirm"
-                value="Confirm"
+                value={this.state.confirmdisabled === undefined ? "Confirm" : this.state.confirmdisabled}
                 onClick={this.confirm}
+                disabled={this.state.confirmdisabled !== undefined}
               />
             </div>
           ) :
