@@ -75,6 +75,28 @@ function generate(callback) {
 	});
 }
 
+function cards(callback) {
+	const getCards = (id) => {
+		return new Promise((resolve) => {
+			con.query("SELECT * FROM card WHERE typeID = ?", [id], (err, res) => {
+				if (err) console.log(err);
+				resolve(res);
+			});
+		});
+	}
+	con.query("SELECT * FROM cardType", async (err, animes) => {
+		if (err) console.log(err);
+		for (let anime of animes) {
+			console.log(anime.name + ":");
+			const cards = await getCards(anime.id)
+			for (let card of cards) {
+				console.log("\t" + card.cardName);
+			}
+		}
+		callback();
+	})
+}
+
 init(() => {
 	run();
 	function run() {
@@ -85,6 +107,11 @@ init(() => {
 			}
 			else if (query == "GENERATE") {
 				generate(() => {
+					run();
+				});
+			}
+			else if (query == "CARDS") {
+				cards(() => {
 					run();
 				});
 			} else {
