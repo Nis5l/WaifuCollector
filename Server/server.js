@@ -19,6 +19,10 @@ const {max} = require("moment");
 app.use(upload());
 app.use(express.static("Data"));
 app.use(bodyParser.json());
+app.use((err, req, res, next) => {
+	if(err)
+		return res.send({status: 100, message: "error parsing json"});
+});
 
 app.use(function (req, res, next) {
 
@@ -234,9 +238,14 @@ app.post("/notifications", async (req, res) => {
 
 app.post("/login", async (req, res) => {
 	try {
-
 		var username = req.body.username;
 		var password = req.body.password;
+
+		if(username == undefined || password == undefined)
+			return res.send({status: 1, message: "no username or password"});
+
+		if(!utils.isString(username) || !utils.isString(password))
+			return res.send({status: 1, message: "wrong datatype"});
 
 		database.login(username, password, async (b, messageV, userIDV) => {
 
