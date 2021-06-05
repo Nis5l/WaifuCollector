@@ -103,6 +103,33 @@ app.post("/cards/import", function (req, res) {
 	} catch (ex) {logic.handleException(ex, res);}
 });
 
+app.post("/card/give", async (req, res) => {
+	try {
+		let userID = parseInt(req.body.userID);
+		let cardID = parseInt(req.body.cardID);
+		let quality = parseInt(req.body.quality);
+		let level = parseInt(req.body.level);
+		let frame = parseInt(req.body.frame);
+
+		if( isNaN(userID) ||
+			isNaN(cardID) ||
+			isNaN(quality) ||
+			isNaN(level) ||
+			isNaN(frame)
+		) return res.send({status: 1, message: "wrong data"});
+
+		let decoded = await logic.standardroutine(req.body.token, res);
+
+		database.getUserRank(decoded.id, (rank) => {
+			if (rank != 1) return res.send({status: 1, message: "missing permission"});
+
+			database.addCard(userID, cardID, quality, level, frame, (id) => {
+				res.send({status: 0, uuid: id});
+			});
+		});
+	} catch (ex) {logic.handleException(ex, res);}
+})
+
 /*
 app.get("/card/:cardID/", function (req, res) {
 	try {
@@ -561,7 +588,10 @@ app.post("/passchange", async (req, res) => {
 		var decoded = await logic.standardroutine(req.body.token, res);
 		var username = decoded.username;
 		var newpassword = req.body.newpassword;
-		//console.log("Passchange: " + username + " " + newpassword);
+
+		if(!utils.isString(username) || !utils.isString(newpassword))
+			return res.send({status: 1, message: "wrong data"});
+
 		switch (logic.checkPass(newpassword)) {
 			case 1: {
 				return res.send({
@@ -714,9 +744,10 @@ app.get("/card/:uuid", async (req, res) => {
 
 app.post("/upgrade", async (req, res) => {
 	try {
-		var carduuid = req.body.carduuid;
-		var mainuuid = req.body.mainuuid;
-		if (carduuid == undefined && mainuuid == undefined)
+		var carduuid = parseInt(req.body.carduuid);
+		var mainuuid = parseInt(req.body.mainuuid);
+
+		if (isNaN(carduuid) || isNaN(mainuuid))
 			return res.send({status: 1, message: "Invalid data"});
 
 		var decoded = await logic.standardroutine(req.body.token, res);

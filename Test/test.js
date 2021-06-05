@@ -21,13 +21,19 @@ let defaultInputs =
 (async () => {
 	let user =
 	{
-		username: 'Test123',
-		password: 'Test123',
-		token: undefined
+		username: 'UnitTest',
+		password: '_UnitTest_',
+		token: undefined,
+		userID: undefined,
+		rank: undefined,
+		uuids: []
 	};
 
 	if(await login(user)) return;
 	if(await pack(user)) return;
+	if(await adminGiveCards(user)) return;
+	if(await upgrade(user)) return;
+	if(await setMail(user)) return;
 
 	console.log('tests passed!!');
 })();
@@ -45,7 +51,7 @@ async function login(user)
 			{
 				data:{username: user.username, password: user.password},
 				expect: 0,
-				execute: (body) => {user.token = body.token}
+				execute: (body) => {user.token = body.token; user.userID = body.userID; user.rank = body.rank;}
 			}
 		]
 	};
@@ -70,7 +76,7 @@ async function pack(user)
 		[
 			{data: null, expect: 100},
 			{data: {}, expect: 12},
-			{data: {token: user.token}, expect: 0},
+			{data: {token: user.token}, expect: 0}
 		]
 	};
 
@@ -84,9 +90,93 @@ async function pack(user)
 	return 0;
 }
 
+async function upgrade(user)
+{
+	let tests =
+	{
+		url: '/upgrade',
+		method: 'POST',
+		tests:
+		[
+			{data: null, expect: 100},
+			{data: {}, expect: 1},
+			{data: {token: user.token}, expect: 1},
+			{data: {token: user.token, mainuuid: user.uuids[0], carduuid: user.uuids[2]}, expect: 1},
+			{data: {token: user.token, mainuuid: user.uuids[2], carduuid: user.uuids[0]}, expect: 1},
+		]
+	};
+
+	for(input of defaultInputs)
+	{
+		tests.tests.push({data: {token: user.token, mainuuid: user.uuids[0], carduuid: input}, expect: 1});
+		tests.tests.push({data: {token: user.token, mainuuid: input, carduuid: user.uuids[0]}, expect: 1});
+		tests.tests.push({data: {token: user.token, mainuuid: input, carduuid: input}, expect: 1});
+	}
+
+	tests.tests.push(
+			{data:
+				{
+					token: user.token,
+					mainuuid: user.uuids[0],
+					carduuid: user.uuids[1]
+				}, expect: 0
+			});
+
+	if(await test(tests)) return 1;
+
+	return 0;
+}
+
+async function setMail(user)
+{
+	let tests =
+	{
+		url: '/setmail',
+		method: 'POST',
+		tests:
+		[
+			{data: null, expect: 100},
+			{data: {}, expect: 1},
+			{data: {token: user.token}, expect: 1},
+		]
+	};
+
+	for(input of defaultInputs)
+	{
+		tests.tests.push({data: {token: user.token, mail: input}, expect: 1});
+	}
+
+	let r = Math.floor(Math.random() * 1000);
+	tests.tests.push({data: {token: user.token, mail: `UnitMail${r}@unitmail.com`}, expect: 3});
+
+	if(await test(tests)) return 1;
+
+	return 0;
+}
+
+async function adminGiveCards(user)
+{
+	console.log("#giving cards");
+	for(let i = 0; i < 3; i++)
+	{
+		let cardID = 1;
+		if(i === 2) cardID = 2;
+		if(await req("/card/give",
+			{
+				token: user.token,
+				userID: user.userID,
+				cardID: cardID,
+				quality: 1,
+				level: 1,
+				frame: 0
+			}, 0, 'POST', (body) => {user.uuids.push(body.uuid)})) return 1;
+	}
+	return 0;
+}
+
 async function test(tests)
 {
-	process.stdout.write(`${tests.url}: `);
+	process.stdout.write(`${tests.method} ${tests.url}(${tests.tests.length}): `);
 	for(let test of tests.tests)
 	{
 		if(await req(tests.url, test.data, test.expect, tests.method, test.execute)) return 1;
@@ -108,6 +198,7 @@ async function req(path, data, expected, method, execute)
 			if(err)
 			{
 				console.log("\x1b[31m%s\x1b[0m", "f");
+				console.log(err);
 				console.log(data);
 				console.log(body);
 				return resolve(1);
@@ -122,6 +213,7 @@ async function req(path, data, expected, method, execute)
 			console.log("\x1b[31m%s\x1b[0m", "f");
 			console.log(data);
 			console.log(body);
+			console.log(`expected: ${expected}`);
 			return resolve(2);
 		});
 	});
