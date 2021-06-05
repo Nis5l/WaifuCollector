@@ -268,9 +268,6 @@ app.post("/login", async (req, res) => {
 		var username = req.body.username;
 		var password = req.body.password;
 
-		if(username == undefined || password == undefined)
-			return res.send({status: 1, message: "no username or password"});
-
 		if(!utils.isString(username) || !utils.isString(password))
 			return res.send({status: 1, message: "wrong datatype"});
 
@@ -298,6 +295,9 @@ app.post("/register", (req, res) => {
 		var username = req.body.username;
 		var password = req.body.password;
 		var mail = req.body.mail;
+
+		if(!utils.isString(username) || !utils.isString(password) || !utils.isString(mail))
+			return res.send({status: 1, message: "wrong data"});
 
 		logger.write("Register " + username);
 		switch (logic.checkUser(username)) {
@@ -831,10 +831,10 @@ app.post("/friends", async (req, res) => {
 
 		//var decoded = await logic.standardroutine(req.body.token, res);
 
-		let userID = req.body.id;
+		let userID = parseInt(req.body.id);
 
-		if (!userID)
-			return res.send({status: 1, message: "No userID set!"});
+		if (isNaN(userID))
+			return res.send({status: 1, message: "wrong data"});
 
 		if (!(logic.getClients()[userID] && logic.getClients()[userID].username))
 			await createCache(userID, undefined, res);
@@ -879,7 +879,7 @@ app.post("/addfriend", async (req, res) => {
 		}
 
 		if (!utils.isString(username))
-			return res.send({status: 1, message: "no username or userID provided"});
+			return res.send({status: 1, message: "wrong data"});
 
 		database.getUserID(username, (id) => {
 			logic.sendFriendReqeust(decoded.id, id, res);
@@ -1301,7 +1301,7 @@ app.get("/verified", async (req, res) => {
 app.post("/setmail", async (req, res) => {
 	try {
 		var mail = req.body.mail;
-		if (mail == undefined || !utils.isString(mail))
+		if (!utils.isString(mail))
 			return res.send({status: 1, message: "Invalid input"});
 
 		mail = mail.trim();
@@ -1362,6 +1362,8 @@ app.post("/deleteMail", async (req, res) => {
 app.post("/verify", async (req, res) => {
 	try {
 		var key = req.body.key;
+		if(!utils.isString(key))
+			return res.send({status: 1, message: "wrong data"});
 
 		try {
 			var decoded = jwt.verify(req.body.token, logic.getJWTSecret());
