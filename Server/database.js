@@ -193,31 +193,22 @@ module.exports = {
 	},
 
 	addCard: function addCard(userID, cardID, quality, level, frame, callback) {
-		con.query(
-			"INSERT INTO `unlocked` (`id`, `userID`, `cardID`, `quality`, `level`, `frameID`) VALUES (NULL, " +
-			userID +
-			", " +
-			cardID +
-			", " +
-			quality +
-			", " +
-			level +
-			", " +
-			frame +
-			");",
-			function (err, result, fields) {
-
-				if (result) {
-
-					callback(result.insertId);
-					return;
-
-				}
-
-				callback(undefined);
-
+		const query =
+`
+INSERT INTO unlocked
+(userID, cardID, quality, level, frameID)
+VALUES
+(?, ?, ?, ?, ?);
+`
+		con.query(query, [userID, cardID, quality, level, frame], (err, result, fields) => {
+			if(err) console.log(err);
+			if (result) {
+				callback(result.insertId);
+				return;
 			}
-		);
+
+			callback(undefined);
+		});
 	},
 
 	changePass: function changePass(username, newPass) {

@@ -19,6 +19,10 @@ const {max} = require("moment");
 app.use(upload());
 app.use(express.static("Data"));
 app.use(bodyParser.json());
+app.use((err, req, res, next) => {
+	if(err)
+		return res.send({status: 100, message: "error parsing json"});
+});
 
 app.use(function (req, res, next) {
 
@@ -98,6 +102,33 @@ app.post("/cards/import", function (req, res) {
 		res.redirect("/");
 	} catch (ex) {logic.handleException(ex, res);}
 });
+
+app.post("/card/give", async (req, res) => {
+	try {
+		let userID = parseInt(req.body.userID);
+		let cardID = parseInt(req.body.cardID);
+		let quality = parseInt(req.body.quality);
+		let level = parseInt(req.body.level);
+		let frame = parseInt(req.body.frame);
+
+		if( isNaN(userID) ||
+			isNaN(cardID) ||
+			isNaN(quality) ||
+			isNaN(level) ||
+			isNaN(frame)
+		) return res.send({status: 1, message: "wrong data"});
+
+		let decoded = await logic.standardroutine(req.body.token, res);
+
+		database.getUserRank(decoded.id, (rank) => {
+			if (rank != 1) return res.send({status: 1, message: "missing permission"});
+
+			database.addCard(userID, cardID, quality, level, frame, (id) => {
+				res.send({status: 0, uuid: id});
+			});
+		});
+	} catch (ex) {logic.handleException(ex, res);}
+})
 
 /*
 app.get("/card/:cardID/", function (req, res) {
@@ -234,9 +265,11 @@ app.post("/notifications", async (req, res) => {
 
 app.post("/login", async (req, res) => {
 	try {
-
 		var username = req.body.username;
 		var password = req.body.password;
+
+		if(!utils.isString(username) || !utils.isString(password))
+			return res.send({status: 1, message: "wrong datatype"});
 
 		database.login(username, password, async (b, messageV, userIDV) => {
 
@@ -262,6 +295,9 @@ app.post("/register", (req, res) => {
 		var username = req.body.username;
 		var password = req.body.password;
 		var mail = req.body.mail;
+
+		if(!utils.isString(username) || !utils.isString(password) || !utils.isString(mail))
+			return res.send({status: 1, message: "wrong data"});
 
 		logger.write("Register " + username);
 		switch (logic.checkUser(username)) {
@@ -552,7 +588,10 @@ app.post("/passchange", async (req, res) => {
 		var decoded = await logic.standardroutine(req.body.token, res);
 		var username = decoded.username;
 		var newpassword = req.body.newpassword;
-		//console.log("Passchange: " + username + " " + newpassword);
+
+		if(!utils.isString(username) || !utils.isString(newpassword))
+			return res.send({status: 1, message: "wrong data"});
+
 		switch (logic.checkPass(newpassword)) {
 			case 1: {
 				return res.send({
@@ -705,9 +744,10 @@ app.get("/card/:uuid", async (req, res) => {
 
 app.post("/upgrade", async (req, res) => {
 	try {
-		var carduuid = req.body.carduuid;
-		var mainuuid = req.body.mainuuid;
-		if (carduuid == undefined && mainuuid == undefined)
+		var carduuid = parseInt(req.body.carduuid);
+		var mainuuid = parseInt(req.body.mainuuid);
+
+		if (isNaN(carduuid) || isNaN(mainuuid))
 			return res.send({status: 1, message: "Invalid data"});
 
 		var decoded = await logic.standardroutine(req.body.token, res);
@@ -791,10 +831,10 @@ app.post("/friends", async (req, res) => {
 
 		//var decoded = await logic.standardroutine(req.body.token, res);
 
-		let userID = req.body.id;
+		let userID = parseInt(req.body.id);
 
-		if (!userID)
-			return res.send({status: 1, message: "No userID set!"});
+		if (isNaN(userID))
+			return res.send({status: 1, message: "wrong data"});
 
 		if (!(logic.getClients()[userID] && logic.getClients()[userID].username))
 			await createCache(userID, undefined, res);
@@ -839,7 +879,7 @@ app.post("/addfriend", async (req, res) => {
 		}
 
 		if (!utils.isString(username))
-			return res.send({status: 1, message: "no username or userID provided"});
+			return res.send({status: 1, message: "wrong data"});
 
 		database.getUserID(username, (id) => {
 			logic.sendFriendReqeust(decoded.id, id, res);
@@ -1261,7 +1301,7 @@ app.get("/verified", async (req, res) => {
 app.post("/setmail", async (req, res) => {
 	try {
 		var mail = req.body.mail;
-		if (mail == undefined || !utils.isString(mail))
+		if (!utils.isString(mail))
 			return res.send({status: 1, message: "Invalid input"});
 
 		mail = mail.trim();
@@ -1322,6 +1362,8 @@ app.post("/deleteMail", async (req, res) => {
 app.post("/verify", async (req, res) => {
 	try {
 		var key = req.body.key;
+		if(!utils.isString(key))
+			return res.send({status: 1, message: "wrong data"});
 
 		try {
 			var decoded = jwt.verify(req.body.token, logic.getJWTSecret());
