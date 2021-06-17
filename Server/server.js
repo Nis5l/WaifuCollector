@@ -459,7 +459,7 @@ app.get("/user/:id/stats", async (req, res) => {
 
 		let maxFriends = logic.getFriendLimit();
 
-		let cards = logic.getClients()[userID].getCardTypeAmount();
+		let cards = await database.getUserCardAmount(userID);//logic.getClients()[userID].getCardTypeAmount();
 		let maxCards = await database.getCardAmount(); //cache.getCardAmount();
 
 		let trades = logic.getTradeCooldownMax() - logic.getClients()[userID].getTradeCooldownCount();
