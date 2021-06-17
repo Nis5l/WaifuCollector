@@ -1145,9 +1145,18 @@ unlocked.id IN(${set})`;
 
 		return new Promise((resolve) => {
 			con.query(query, (err, result) => {
-				return resolve(result[0]['count']);
+				return resolve(result[0].count);
 			})
 		})
+	},
+	getUserCardAmount: function getUserCardAmount(userID) {
+		const query = "SELECT COUNT(DISTINCT cardID) as count FROM unlocked WHERE userID = ?";
+
+		return new Promise((resolve) => {
+			con.query(query, [userID], (err, result) => {
+				return resolve(result[0].count);
+			})
+		});
 	}
 };
 
