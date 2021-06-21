@@ -242,7 +242,7 @@ class Friend extends React.Component {
 
     resize(self) {
         let username = self.props.username;
-         username = "Test1231231231231231";
+         //username = "Test1231231231231231";
         if (this.friendlist.current.clientWidth <= 350) {
             if (this.friendlist.current.clientWidth <= 250) {
                 if (username.length > 11) username = username.slice(0, 8) + "...";
