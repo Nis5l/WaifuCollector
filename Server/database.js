@@ -1684,7 +1684,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('129', 'A Silent Voice');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('130', 'Higehiro');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('131', 'Fruits Basket');",
-		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('132', 'I've Been Killing Slimes for 300 Years and Maxed Out My Level');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('132', 'Ive Been Killing Slimes for 300 Years and Maxed Out My Level');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('133', 'One Punch Man');",
 	];
 
