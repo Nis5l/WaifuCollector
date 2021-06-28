@@ -1530,6 +1530,18 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tohru Honda', '131', 'Card_TohruHonda.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Azusa Aizawa', '132', 'Card_AzusaAizawa.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tornado/Tatsumaki', '133', 'Card_TornadoTatsumaki.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Rikka Takarada', '134', 'Card_RikkaTakarada.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Aisha Clanclan', '135', 'Card_AishaClanclan.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Melfina', '135', 'Card_Melfina.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Suzuka', '135', 'Card_Suzuka.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Hilda', '135', 'Card_Hilda.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Elizabeth Liones', '38', 'Card_ElizabethLiones.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Diane', '38', 'Card_Diane.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Merlin', '38', 'Card_Merlin.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Lucifer', '136', 'Card_Lucifer.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Belial', '136', 'Card_Belial.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Asmodeus', '136', 'Card_Asmodeus.webp');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1686,6 +1698,10 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('131', 'Fruits Basket');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('132', 'Ive Been Killing Slimes for 300 Years and Maxed Out My Level');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('133', 'One Punch Man');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('134', 'SSSS Gridman');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('135', 'Outlaw Star');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('136', 'Sins: The Seven Deadly Sins');",
 	];
 
 	con.connect(() => {
