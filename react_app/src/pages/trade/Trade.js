@@ -58,6 +58,37 @@ class Trade extends Component {
     this.load();
   }
 
+  componentWillReceiveProps(props) {
+    if(this.friendid == props.match.params.id) return;
+
+    this.friendid = props.match.params.id;
+
+    this.setState({
+      name: "Loading...",
+      cards: undefined,
+      friendcards: undefined,
+      found: true,
+      info: "",
+      friendinfo: "",
+      tradeCount: 0,
+      friendTradeCount: 0,
+      tradeLimit: 0,
+      cardSuggestions: undefined,
+      friendCardSuggestions: undefined,
+      confirmed: 0,
+      friendConfirmed: 0,
+
+      removeId: undefined,
+      removeFriendSuggestionId: undefined,
+      removeSuggestionId: undefined,
+
+      disabled: undefined,
+      confirmdisabled: undefined
+  });
+
+    this.load();
+  }
+
   load() {
     const data = {token: Cookies.get('token'), userID: this.friendid};
     axios.post(`${Config.API_HOST}/trade`, data)
