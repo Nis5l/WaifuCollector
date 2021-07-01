@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react'
-import {useHistory} from 'react-router-dom'
+import {useHistory, withRouter, Redirect} from 'react-router-dom'
 import Card from './Card'
 import Scrollbar from './ScrollBar'
 
@@ -79,7 +79,7 @@ function Notification(props) {
 
 }
 
-export default class Notifications extends Component {
+class Notifications extends Component {
 
     constructor(props) {
         super(props);
@@ -160,3 +160,5 @@ export default class Notifications extends Component {
         )
     }
 }
+
+export default withRouter(Notifications);
