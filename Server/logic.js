@@ -272,12 +272,49 @@ function addCardToUser(userID, card, callback) {
 		card.quality,
 		card.level,
 		card.frame.id,
-		(insertID) => {
-			addCardToUserCache(userID, insertID, card.card.id, card.quality, card.level, card.frame.id);
+		async (insertID) => {
+			await addCardToUserCache(userID, insertID, card.card.id, card.quality, card.level, card.frame.id);
 			callback(insertID);
 		});
 }
-function addCardToUserCache(userID, id, cardID, quality, level, frameID) {
+async function addCardToUserCache(userID, id, cardID, quality, level, frameID) {
+	const cardAmountToBadge = [
+		{cardAmount: 50, badge: 0},
+		{cardAmount: 100, badge: 1},
+		{cardAmount: 200, badge: 2},
+		{cardAmount: 300, badge: 3}
+	];
+
+	switch (level) {
+		case 1:
+			database.addBadge(userID, 4);
+			break;
+		case 2:
+			database.addBadge(userID, 5);
+			break;
+		case 3:
+			database.addBadge(userID, 6);
+			break;
+		case 4:
+			database.addBadge(userID, 7);
+			break;
+		case 5:
+			database.addBadge(userID, 8);
+			break;
+	}
+
+	const cardAmount = await database.getUserCardAmount(userID);
+	
+	for (const ctb of cardAmountToBadge)
+	{
+		if (cardAmount >= ctb.cardAmount)
+		{
+			database.addBadge(userID, ctb.badge);
+			continue;
+		}
+		break;
+	}
+
 	if (clients[userID] != undefined)
 		clients[userID].addCard({
 			id: id,

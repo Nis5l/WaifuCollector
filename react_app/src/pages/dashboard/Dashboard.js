@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 import React, {Component, lazy, Suspense} from 'react'
 
 import Card from '../../components/Card';
+import Badges from '../../components/Badges';
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
@@ -37,6 +38,7 @@ class Dashboard extends Component {
             maxTrades: 0,
             loading: true,
             friendRequests: 0,
+			badges: [],
             requests: false
         }
     }
@@ -54,7 +56,6 @@ class Dashboard extends Component {
                 delete data.data["status"];
 
                 return data.data;
-
             }
             //self.props.history.push("/logout");
 
@@ -165,7 +166,9 @@ class Dashboard extends Component {
                     title="Badges"
                     styleClassName="badges"
                 >
-                    <h1>Coming Soon</h1>
+					<Badges
+						badges={this.state.badges}
+					/>
                 </Card>
 
                 <Card

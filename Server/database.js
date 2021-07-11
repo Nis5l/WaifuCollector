@@ -47,7 +47,9 @@ module.exports = {
 			"CREATE TABLE IF NOT EXISTS `verificationkey` ( `userID` INT NOT NULL , `key` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `packTime` ( `userID` INT NOT NULL , `time` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;",
 			"CREATE TABLE IF NOT EXISTS `animePackTime` ( `userID` INT NOT NULL , `time` TEXT NOT NULL , PRIMARY KEY (`userID`)) ENGINE = InnoDB;",
-			"CREATE TABLE IF NOT EXISTS `animePool` ( `id` INT NOT NULL , `animeID` TEXT NOT NULL) ENGINE = InnoDB;"
+			"CREATE TABLE IF NOT EXISTS `animePool` ( `id` INT NOT NULL , `animeID` TEXT NOT NULL) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `badges` ( `id` INT NOT NULL , `image` TEXT NOT NULL, `text` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+			"CREATE TABLE IF NOT EXISTS `unlockedBadges` ( `userId` INT NOT NULL , `badgeId` INT NOT NULL) ENGINE = InnoDB;"
 
 			/*
 			* FOR OLDER VERSIONS
@@ -71,9 +73,12 @@ module.exports = {
 						frames(() => {
 							console.log("Initializing Effects");
 							effects(() => {
-								console.log("Using DB");
-								con.query("USE " + config.mysql.database + ";", () => {
-									callback();
+								console.log("Initializing Badges");
+								badges(() => {
+									console.log("Using DB");
+									con.query("USE " + config.mysql.database + ";", () => {
+										callback();
+									});
 								});
 							});
 						});
@@ -1157,6 +1162,26 @@ unlocked.id IN(${set})`;
 				return resolve(result[0].count);
 			})
 		});
+	},
+	addBadge: function addBadge(userID, badgeID) {
+		const query = "INSERT INTO `unlockedBadges` ( `userId`, `badgeId`) SELECT ?, ? FROM dual WHERE NOT EXISTS (SELECT * FROM unlockedBadges WHERE userId=? AND badgeId=?);";
+
+		return new Promise((resolve) => {
+			con.query(query, [userID, badgeID, userID, badgeID], (err, result) => {
+				if(err) console.log(err);
+				return resolve();
+			});
+		});
+	},
+	getBadges: function getBadges(userID, badgeID) {
+		const query = "SELECT badges.image as image, badges.text as text FROM unlockedBadges INNER JOIN badges WHERE badges.id = unlockedBadges.badgeId AND unlockedBadges.userId=?;";
+
+		return new Promise((resolve) => {
+			con.query(query, [userID], (err, result) => {
+				if(err) console.log(err);
+				return resolve(result);
+			});
+		});
 	}
 };
 
@@ -1751,6 +1776,33 @@ function effects(callback) {
 		con.query("DROP TABLE effect", () => {
 			con.query(
 				"CREATE TABLE IF NOT EXISTS `effect` ( `id` INT NOT NULL ,`path` TEXT NOT NULL, `opacity` FLOAT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
+				() => {
+					executeArray(sql, callback);
+				}
+			);
+		});
+	});
+}
+
+function badges(callback) {
+	var sql = [
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('0', '50.png', '50 Waifus')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('1', '100.png', '100 Waifus')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('2', '200.png', '200 Waifus')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('3', '300.png', '300 Waifus')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('4', 'lvl1.png', 'Level 1 Waifu')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('5', 'lvl2.png', 'Level 2 Waifu')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('6', 'lvl3.png', 'Level 3 Waifu')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('7', 'lvl4.png', 'Level 4 Waifu')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('8', 'lvl5.png', 'Level 5 Waifu')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('9', 'lvl1pull.png', 'Pulled a Level 1')",
+		"INSERT INTO `badges` (`id`, `image`, `text`) VALUES ('10', 'lvl2pull.png', 'Pulled a Level 2')"
+	];
+
+	con.connect(() => {
+		con.query("DROP TABLE badges", () => {
+			con.query(
+				"CREATE TABLE IF NOT EXISTS `badges` ( `id` INT NOT NULL , `image` TEXT NOT NULL, `text` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;",
 				() => {
 					executeArray(sql, callback);
 				}
