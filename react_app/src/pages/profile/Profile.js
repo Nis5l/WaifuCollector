@@ -6,6 +6,7 @@ import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
+import Badges from '../../components/Badges'
 
 import Cookies from 'js-cookie';
 
@@ -28,7 +29,7 @@ class Profile extends Component {
 
         this.state =
         {
-            stats: {friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0},
+			stats: {friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0, badges: []},
             friendStatus: -1,
             loading: true,
             flexCards: []
@@ -199,7 +200,7 @@ class Profile extends Component {
                     title="Badges"
                     styleClassName="badges"
                 >
-                    <h1>Coming Soon</h1>
+					<Badges badges={this.state.stats.badges} />
                 </Card>
 
                 <Card

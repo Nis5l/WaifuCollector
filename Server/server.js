@@ -476,8 +476,9 @@ app.get("/user/:id/stats", async (req, res) => {
 			cards: cards,
 
 			maxTrades: maxTrades,
-			trades: trades
+			trades: trades,
 
+			badges: await database.getBadges(userID)
 		});
 
 	} catch (ex) {
@@ -525,6 +526,7 @@ app.post("/getDashboard", async (req, res) => {
 			tradeCooldownMax: logic.getTradeCooldownMax(),
 			tradesAvailavble: logic.getTradeCooldownMax() - logic.getClients()[decoded.id].getTradeCooldownCount(),
 			tradesAvailavbleMax: logic.getTradeCooldownMax(),
+			badges: await database.getBadges(decoded.id)
 		});
 	} catch (ex) {logic.handleException(ex, res);}
 });
@@ -564,9 +566,15 @@ app.post("/pack", async (req, res) => {
 			addToDB(0);
 			function addToDB(j) {
 				if (cards[j].level == 1)
+				{
 					logger.write(decoded.username + " Pulled a lvl1");
+					database.addBadge(decoded.id, 9);
+				}
 				if (cards[j].level == 2)
+				{
 					logger.write(decoded.username + " Pulled a lvl2");
+					database.addBadge(decoded.id, 10);
+				}
 				logic.addCardToUser(
 					decoded.id,
 					cards[j]
