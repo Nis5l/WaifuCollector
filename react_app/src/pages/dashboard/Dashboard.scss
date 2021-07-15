@@ -118,20 +118,15 @@
             justify-content: center;
             align-items: center;
             
-            h1
-            {
-                font-size: 16pt;
-                color: grey;
-                //transform: rotateZ(-30deg);
+            @media screen and (max-width: $breakpoint-md){
+                height: 300px;
             }
         }
 
         @media screen and (max-width: $breakpoint-md){
 
             &{
-
                 height: fit-content;
-
             }
 
         }
