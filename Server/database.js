@@ -1567,6 +1567,8 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Lucifer', '136', 'Card_Lucifer.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Belial', '136', 'Card_Belial.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Asmodeus', '136', 'Card_Asmodeus.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kimura no Tsuma', '137', 'Card_KimuranoTsuma.webp');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1727,6 +1729,7 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('134', 'SSSS Gridman');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('135', 'Outlaw Star');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('136', 'Sins: The Seven Deadly Sins');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('137', 'Azumanga Daioh');",
 	];
 
 	con.connect(() => {
