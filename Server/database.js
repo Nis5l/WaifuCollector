@@ -1573,6 +1573,13 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Charlotte Hazelrink', '138', 'Card_CharlotteHazelrink.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sylvia Van Hossen', '138', 'Card_SylviaVanHossen.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Seika Hojoin', '138', 'Card_SeikaHojoin.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Georgie Saikawa', '48', 'Card_GeorgieSaikawa.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sasakibe', '48', 'Card_Sasakibe.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kobayashi-san', '48', 'Card_Kobayashi-san.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Shirley Fenette', '139', 'Card_ShirleyFenette.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kallen Kozuki', '139', 'Card_KallenKozuki.webp');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1735,6 +1742,8 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('136', 'Sins: The Seven Deadly Sins');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('137', 'Azumanga Daioh');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('138', 'Princess Lover!');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('139', 'Code Geass');",
 	];
 
 	con.connect(() => {
