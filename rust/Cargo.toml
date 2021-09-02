@@ -8,10 +8,15 @@ edition = "2018"
 
 [dependencies]
 rocket = { version = "0.5.0-rc.1", features = ["json"] }
-serde = { version = "1.0", features = ["derive"] }
-figment = { version = "0.10.6", features = ["env", "toml", "json"] }
-validator = { version = "0.14", features = ["derive"] }
 rocketjson = { path = "C:/Users/kirch/OneDrive/Dokumente/rocket-json/core" }
+serde = { version = "1.0", features = ["derive", "rc"] }
+figment = { version = "0.10.6", features = ["env", "toml", "json"] }
+validator = { version = "0.14.0", features = ["derive"] }
 regex = "1.5.4"
-mysql = "21.0.1"
 bcrypt = "0.10.1"
+diesel = { version = "1.4.4", features = ["mysql"] }
+dotenv = "0.15.0"
+
+[dependencies.rocket_sync_db_pools]
+version = "0.1.0-rc.1"
+features = ["diesel_mysql_pool"]

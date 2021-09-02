@@ -1,12 +1,16 @@
 use validator::ValidationError;
+use crate::config;
 use regex::Regex;
+use std::borrow::Cow;
 
-#[derive(serde::Deserialize, validator::Validate, rocketjson::JsonBody)]
+#[derive(Debug, serde::Deserialize, validator::Validate, rocketjson::JsonBody)]
+//#[derive(Debug, serde::Deserialize, validator::Validate)]
 pub struct RegisterRequest {
-    #[validate(custom="validate_username")]
+    #[validate(custom(function="validate_username", arg="&'v_a config::Config"))]
     pub username: String,
-    #[validate(custom="validate_password")]
+    #[validate(custom(function="validate_password", arg="&'v_a config::Config"))]
     pub password: String,
+    #[validate(email)]
     pub mail: String
 }
 
@@ -23,11 +27,13 @@ impl RegisterResponse {
     }
 }
 
-fn validate_username(username: &str) -> Result<(), ValidationError> {
-    //TODO: config
-	if username.len() < 4 || username.len() > 20 {
-        println!("username wrong");
-        return Err(ValidationError::new("username length must be between 4 and 20"));
+fn validate_username(username: &str, config: &config::Config) -> Result<(), ValidationError> {
+	if username.len() < config.username_len_min as usize || username.len() > config.username_len_max as usize {
+        let mut err = ValidationError::new("username does not fit the length constraints");
+        err.add_param(Cow::from("min"), &config.username_len_min);
+        err.add_param(Cow::from("max"), &config.username_len_max);
+
+        return Err(err);
     }
     let re = Regex::new("^[a-zA-Z0-9_]+$").unwrap();
 
@@ -38,10 +44,9 @@ fn validate_username(username: &str) -> Result<(), ValidationError> {
     Ok(())
 }
 
-fn validate_password(password: &str) -> Result<(), validator::ValidationError> {
-    //TODO: config
-	if password.len() < 8 || password.len() > 30 {
-        return Err(validator::ValidationError::new("password length must be between 8 and 30"));
+fn validate_password(password: &str, config: &config::Config) -> Result<(), validator::ValidationError> {
+	if password.len() < config.password_len_min as usize || password.len() > config.password_len_max as usize {
+        return Err(validator::ValidationError::new("password does not fit the length constraints"));
     }
 
     Ok(())

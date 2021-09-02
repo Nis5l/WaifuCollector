@@ -21,6 +21,7 @@
     .accountInfo{
 
         grid-area: account;
+		height: 1000px;
 
         .avatar{
 
@@ -50,6 +51,7 @@
                 @media screen and (max-width: $breakpoint-md){
 
                     width: 100%;
+
                     height: auto;
 
                     max-width: 200px;
@@ -240,7 +242,7 @@
     @media screen and (max-width: $breakpoint-md){
  
         grid-template-columns: 1fr;
-        grid-template-rows: 100% auto auto auto;
+        grid-template-rows: 100% min-content min-content min-content;
 
         box-sizing: unset;
 
