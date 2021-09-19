@@ -23,6 +23,8 @@ pub struct Config {
     pub password_len_min: u32,
     pub password_len_max: u32,
 
+    pub jwt_secret: String,
+
     pub databases: figment::value::Map<String, SqlConfig>
 }
 
@@ -38,6 +40,9 @@ impl Default for Config {
 
             password_len_min: 8,
             password_len_max: 30,
+
+            jwt_secret: String::from("CHANGE_THE_SECRET"),
+
             databases
         }
     }
@@ -46,9 +51,5 @@ impl Default for Config {
 pub fn get_figment() -> Result<Figment, figment::Error> {
     Ok(Figment::from(rocket::Config::default())
         .merge(Serialized::defaults(Config::default()))
-        //.merge(("databases", figment::util::map!["my_db" => db])))
         .merge(Json::file("Config.json").nested()))
-
-        //.merge(Env::prefixed("APP_").global())
-        //.select(Profile::from_env_or("APP_PROFILE", "default"));
 }

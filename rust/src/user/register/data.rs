@@ -1,27 +1,32 @@
-use validator::ValidationError;
 use crate::config;
+
+use serde::{Serialize, Deserialize};
+use validator::{ValidationError, Validate};
+use rocketjson::JsonBody;
 use regex::Regex;
 use std::borrow::Cow;
 
-#[derive(Debug, serde::Deserialize, validator::Validate, rocketjson::JsonBody)]
+#[derive(Debug, Deserialize, Validate, JsonBody)]
 //#[derive(Debug, serde::Deserialize, validator::Validate)]
 pub struct RegisterRequest {
     #[validate(custom(function="validate_username", arg="&'v_a config::Config"))]
     pub username: String,
     #[validate(custom(function="validate_password", arg="&'v_a config::Config"))]
     pub password: String,
+
+    //TODO: rename to email
     #[validate(email)]
     pub mail: String
 }
 
-#[derive(serde::Serialize)]
+#[derive(Serialize)]
 pub struct RegisterResponse {
     message: String
 }
 
 impl RegisterResponse {
     pub fn new(message: String) -> Self {
-        Self {
+        RegisterResponse {
             message
         }
     }
