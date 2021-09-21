@@ -9,6 +9,7 @@ use rocketjson::{rjtry, ApiResponseErr};
 
 #[post("/register", data="<data>")]
 pub async fn register_user(data: RegisterRequest, db: Sql) -> ApiResponseErr<RegisterResponse> {
+    //TODO: some sort of timeout
     let email_exists = rjtry!(sql::email_exists(&db, data.mail.clone()).await);
 
     if email_exists {
