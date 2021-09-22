@@ -27,9 +27,21 @@ impl<'r> FromRequest<'r> for JwtToken {
     type Error = ();
 
     async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
-        let token = req.headers().get_one("token");
+        let token = req.headers().get_one("Authorization");
         match token {
-          Some(token_str) => {
+          Some(token_str_full) => {
+            if !token_str_full.starts_with("Bearer") {
+              req.local_cache(|| JsonBodyError::CustomError(String::from("Token has to be of Bearer type")));
+              return request::Outcome::Failure((Status::BadRequest, ()));
+            }
+
+            if token_str_full.len() < 8 {
+              req.local_cache(|| JsonBodyError::CustomError(String::from("No token found")));
+              return request::Outcome::Failure((Status::BadRequest, ()));
+            }
+
+            let token_str = &token_str_full[7..];
+
             let token = jwt_verify_token(token_str, &req.rocket().state::<Config>().expect("Config not found in state").jwt_secret);
 
             if token.is_err() {
@@ -59,10 +71,11 @@ pub fn jwt_sign_token(username: &str, user_id: i32, secret: &str) -> Result<Stri
 
 pub fn jwt_verify_token(token: &str, secret: &str) -> Result<JwtToken, jwt::Error> {
     let key: Hmac<Sha256> = Hmac::new_from_slice(&bincode::serialize( secret).expect("Serializing jwt secret failed!"))?;
+
     let btree: BTreeMap<String, String> = token.verify_with_key(&key)?;
 
     let username = btree.get("username");
-    let user_id_str = btree.get("username");
+    let user_id_str = btree.get("id");
 
     if username.is_none() || user_id_str.is_none() {
         return Err(jwt::Error::Format);

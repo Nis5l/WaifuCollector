@@ -1,17 +1,15 @@
 use crate::sql::{Sql, model::Notification};
-use crate::config::Config;
 use crate::crypto::JwtToken;
 
 use super::sql;
 
-use rocketjson::{ApiResponseErr, rjtry};
+use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
 
 //TODO: change to get
 #[post("/notifications")]
-pub async fn notifications_user(sql: Sql, config: &rocket::State<Config>, token: JwtToken) -> ApiResponseErr<Vec<Notification>> {
-    //TODO: use token
-    let notifications = rjtry!(sql::get_notifications(&sql, 0).await);
+pub async fn notifications_user(sql: Sql, token: JwtToken) -> ApiResponseErr<Vec<Notification>> {
+    let notifications = rjtry!(sql::get_notifications(&sql, token.id).await);
 
     ApiResponseErr::ok(Status::Ok, notifications)
 }

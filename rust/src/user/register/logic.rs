@@ -5,7 +5,7 @@ use super::data::{RegisterRequest, RegisterResponse};
 use super::sql;
 
 use rocket::http::Status;
-use rocketjson::{rjtry, ApiResponseErr};
+use rocketjson::{rjtry, ApiResponseErr, error::ApiErrorsCreate};
 
 #[post("/register", data="<data>")]
 pub async fn register_user(data: RegisterRequest, db: Sql) -> ApiResponseErr<RegisterResponse> {
