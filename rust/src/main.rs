@@ -8,6 +8,46 @@ use rocket::fairing::AdHoc;
 mod user;
 mod sql;
 mod config;
+mod crypto;
+
+//TODO:
+// /card/give
+// /:id/rank
+// /log
+// /notifications
+// /user/:id
+// /user/:id/badges
+// /user/:id/stats
+// smth dashboard
+// /packTime
+// /packTimeMax
+// /pack
+// /passchange
+// GET /inventory
+// /card/:uuid
+// /upgrade
+// /friends
+// /addfriend
+// /managefriend
+// /trade
+// /addtrade
+// /suggesttrade
+// /removetrade
+// /removesuggestion
+// /acceptsuggestion
+// /okTrade
+// /tradeTime
+// /deleteNotification
+// /deleteAllNotifications
+// /packData
+// /verified
+// /setmail
+// /deleteMail
+// /verify
+// /mail
+// /verify/resend
+// /users
+// /flex
 
 #[get("/")]
 fn index() -> &'static str {
@@ -17,7 +57,7 @@ fn index() -> &'static str {
 #[launch]
 fn rocket() -> _ {
     rocket::custom(config::get_figment().expect("initializing config failed"))
-        .mount("/", routes![index, user::register_user])
+        .mount("/", routes![index, user::register_user, user::login_user, user::notifications_user])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
         .attach(sql::Sql::fairing())
