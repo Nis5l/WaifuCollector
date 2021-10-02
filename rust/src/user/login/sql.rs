@@ -1,16 +1,18 @@
-use crate::sql::{Sql, model::User, schema, function::*};
+use crate::sql::Sql;
+use super::data::LoginDb;
 
-use diesel::prelude::*;
+pub async fn get_user_password(sql: &Sql, in_username: String) -> Result<LoginDb, sqlx::Error> {
 
-pub async fn get_user_password(sql: &Sql, in_username: String) -> Result<(i32, String, String), diesel::result::Error> {
-    use schema::user::dsl::*;
+    let mut con = sql.get_con().await?;
 
-    let data = sql.run(|con| {
-        user
-            .filter(username.eq(in_username))
-            .select((id, username, password))
-            .first::<(i32, String, String)>(con)
-    }).await?;
+    //TODO: rename to users
+    let login_data: LoginDb = sqlx::query_as(
+        "SELECT id, username, password
+         FROM user
+         WHERE username=?;")
+        .bind(in_username)
+        .fetch_one(&mut con)
+        .await?;
 
-    Ok(data)
+    Ok(login_data)
 }

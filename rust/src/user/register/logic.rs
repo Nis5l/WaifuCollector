@@ -6,17 +6,18 @@ use super::sql;
 
 use rocket::http::Status;
 use rocketjson::{rjtry, ApiResponseErr, error::ApiErrorsCreate};
+use rocket::State;
 
 #[post("/register", data="<data>")]
-pub async fn register_user(data: RegisterRequest, db: Sql) -> ApiResponseErr<RegisterResponse> {
+pub async fn register_route(data: RegisterRequest, sql: &State<Sql>) -> ApiResponseErr<RegisterResponse> {
     //TODO: some sort of timeout
-    let email_exists = rjtry!(sql::email_exists(&db, data.mail.clone()).await);
+    let email_exists = rjtry!(sql::email_exists(&sql, data.email.clone()).await);
 
     if email_exists {
         return ApiResponseErr::ok(Status::Conflict, RegisterResponse::new(String::from("Mail already in use")));
     }
 
-    let user_exists = rjtry!(sql::user_exists(&db, data.username.clone()).await);
+    let user_exists = rjtry!(sql::user_exists(&sql, data.username.clone()).await);
 
     if user_exists {
         return ApiResponseErr::ok(Status::Conflict, RegisterResponse::new(String::from("User already exists")));
@@ -31,8 +32,9 @@ pub async fn register_user(data: RegisterRequest, db: Sql) -> ApiResponseErr<Reg
         ));
     }
 
-    let id = rjtry!(sql::register(&db, data.username, hash.unwrap(), data.mail).await);
+    let id = rjtry!(sql::register(&sql, data.username, hash.unwrap(), data.email).await);
 
     //TODO: send mail
+    
     return ApiResponseErr::api_err(Status::Ok, String::from("Register succeeded"))
 }

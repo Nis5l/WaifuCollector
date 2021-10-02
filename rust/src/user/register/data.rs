@@ -1,10 +1,10 @@
-use crate::config;
-
 use serde::{Serialize, Deserialize};
 use validator::{ValidationError, Validate};
 use rocketjson::JsonBody;
 use regex::Regex;
 use std::borrow::Cow;
+
+use crate::config;
 
 #[derive(Debug, Deserialize, Validate, JsonBody)]
 //#[derive(Debug, serde::Deserialize, validator::Validate)]
@@ -14,9 +14,8 @@ pub struct RegisterRequest {
     #[validate(custom(function="validate_password", arg="&'v_a config::Config"))]
     pub password: String,
 
-    //TODO: rename to email
     #[validate(email)]
-    pub mail: String
+    pub email: String
 }
 
 #[derive(Serialize)]

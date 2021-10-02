@@ -1,16 +1,26 @@
 #[macro_use]
 extern crate rocket;
-#[macro_use]
-extern crate diesel;
 
 use rocket::fairing::AdHoc;
+
+use sqlx::mysql::MySqlPoolOptions;
 
 mod user;
 mod sql;
 mod config;
 mod crypto;
 
-//TODO:
+//CANGES:
+///notifications POST -> GET
+///register:
+///mail -> email
+///
+///friends:
+///userID -> userId
+///ALTER TABLE friend RENAME friends;
+///ALTER TABLE friends ADD COLUMN id INTEGER PRIMARY KEY AUTO_INCREMENT FIRST;
+
+//TODO port from server.js:
 // /card/give
 // /:id/rank
 // /log
@@ -26,7 +36,6 @@ mod crypto;
 // GET /inventory
 // /card/:uuid
 // /upgrade
-// /friends
 // /addfriend
 // /managefriend
 // /trade
@@ -46,7 +55,6 @@ mod crypto;
 // /verify
 // /mail
 // /verify/resend
-// /users
 // /flex
 
 #[get("/")]
@@ -55,10 +63,27 @@ fn index() -> &'static str {
 }
 
 #[launch]
-fn rocket() -> _ {
-    rocket::custom(config::get_figment().expect("initializing config failed"))
-        .mount("/", routes![index, user::register_user, user::login_user, user::notifications_user])
+async fn rocket() -> _ {
+    let config_figment = config::get_figment().expect("Initializing config failed");
+
+    let config: config::Config = config_figment.extract().expect("Initializing config failed");
+
+    let pool = MySqlPoolOptions::new()
+        .max_connections(5)
+        .connect(&config.db_connection)
+        .await.expect("Creating DB pool failed");
+
+    rocket::custom(config_figment)
+        .mount("/", routes![
+               index,
+
+               user::register_route,
+               user::login_route,
+               user::notifications_route,
+               user::users_route
+        ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
-        .attach(sql::Sql::fairing())
+        .manage(sql::Sql(pool))
+        //.attach(sql::Sql::fairing())
 }

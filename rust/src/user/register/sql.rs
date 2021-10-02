@@ -1,58 +1,56 @@
-use crate::sql::{Sql, model, schema, function::*};
+use sqlx::mysql::MySqlQueryResult;
 
-use diesel::{insert_into, select};
-use diesel::prelude::*;
+use crate::sql::Sql;
+use crate::user::{UserVerified, UserRanking};
 
-pub async fn email_exists(sql: &Sql, in_email: String) -> Result<bool, diesel::result::Error> {
-    use schema::user::dsl::*;
+pub async fn email_exists(sql: &Sql, in_email: String) -> Result<bool, sqlx::Error> {
 
-    let count: i64 = sql.run(|con| {
-        user
-            .filter(email.eq(in_email))
-            .count()
-            .first(con)
-    }).await?;
+    let mut con = sql.get_con().await?;
 
-    Ok(count != 0)
-}
-
-pub async fn user_exists(sql: &Sql, in_username: String) -> Result<bool, diesel::result::Error> {
-    use schema::user::dsl::*;
-
-    let count: i64 = sql.run(|con| {
-        user
-            .filter(lower(username).eq(in_username))
-            .count()
-            .first(con)
-    }).await?;
+    //TODO: rename to users
+    let (count,): (i32,) = sqlx::query_as(
+        "SELECT COUNT(*)
+         FROM user
+         WHERE email=?;")
+        .bind(in_email)
+        .fetch_one(&mut con)
+        .await?;
 
     Ok(count != 0)
 }
 
-pub async fn register(sql: &Sql, in_username: String, in_password_hash: String, in_email: String) -> Result<i64, diesel::result::Error> {
-    use schema::user::dsl::*;
+pub async fn user_exists(sql: &Sql, in_username: String) -> Result<bool, sqlx::Error> {
 
-    let inserted_id: i64 = sql.run(move |con| {
-        let affected_rows = insert_into(user)
-            .values((
-                id.eq(0),
-                username.eq(in_username),
-                password.eq(in_password_hash),
-                email.eq(in_email),
-                ranking.eq(0),
-                verified.eq(0)
-            ))
-            .execute(con)?;
+    let mut con = sql.get_con().await?;
 
-        if affected_rows == 0 {
-            return Err(diesel::result::Error::DatabaseError(
-                        diesel::result::DatabaseErrorKind::UniqueViolation,
-                        Box::new(String::from("No affected rows on register"))
-                    ));
-        }
+    let (count,): (i32,) = sqlx::query_as(
+        "SELECT COUNT(*)
+         FROM user
+         WHERE LOWER(username) = LOWER(?);")
+        .bind(in_username)
+        .fetch_one(&mut con)
+        .await?;
 
-        select(last_insert_id).first(con)
-    }).await?;
 
-    Ok(inserted_id)
+    Ok(count != 0)
+}
+
+pub async fn register(sql: &Sql, in_username: String, in_password_hash: String, in_email: String) -> Result<u64, sqlx::Error> {
+
+    let mut con = sql.get_con().await?;
+
+    let result: MySqlQueryResult = sqlx::query(
+        "INSERT INTO user
+         (username, password, email, ranking, verified)
+         VALUES
+         (?, ?, ?, ?, ?);")
+        .bind(in_username)
+        .bind(in_password_hash)
+        .bind(in_email)
+        .bind(UserVerified::No as i32)
+        .bind(UserRanking::Standard as i32)
+        .execute(&mut con)
+        .await?;
+
+    Ok(result.last_insert_id())
 }

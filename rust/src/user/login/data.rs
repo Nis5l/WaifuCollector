@@ -1,6 +1,7 @@
 use serde::{Serialize, Deserialize};
 use validator::Validate;
 use rocketjson::JsonBody;
+use sqlx::FromRow;
 
 #[derive(Debug, Deserialize, Validate, JsonBody)]
 pub struct LoginRequest {
@@ -19,4 +20,11 @@ impl LoginResponse {
             token
         }
     }
+}
+
+#[derive(Debug, FromRow)]
+pub struct LoginDb {
+    pub id: i32,
+    pub username: String,
+    pub password: String
 }

@@ -1,6 +1,12 @@
-pub mod schema;
 pub mod model;
-pub mod function;
 
-#[rocket_sync_db_pools::database("my_db")]
-pub struct Sql(diesel::MysqlConnection);
+use sqlx::{Pool, MySql, pool::PoolConnection, Error};
+use core::future::Future;
+
+pub struct Sql(pub Pool<MySql>);
+
+impl Sql {
+    pub fn get_con(&self) -> impl Future<Output = Result<PoolConnection<MySql>, Error>> + 'static {
+        self.0.acquire()
+    }
+}

@@ -1,5 +1,3 @@
-use crate::config::Config;
-
 use jwt::{SignWithKey, VerifyWithKey};
 use hmac::{Hmac, NewMac};
 use sha2::Sha256;
@@ -7,6 +5,8 @@ use std::collections::BTreeMap;
 use rocket::request::{self, FromRequest, Request};
 use rocket::http::Status;
 use rocketjson::error::JsonBodyError;
+
+use crate::config::Config;
 
 pub struct JwtToken {
     pub username: String,
