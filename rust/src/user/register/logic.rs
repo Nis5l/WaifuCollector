@@ -28,8 +28,8 @@ pub async fn register_route(data: RegisterRequest, sql: &State<Sql>) -> ApiRespo
     if hash.is_err() {
         return ApiResponseErr::ok(
             Status::InternalServerError,
-            RegisterResponse::new(String::from("Internal server error")
-        ));
+            RegisterResponse::new(String::from("Internal server error"))
+        );
     }
 
     let id = rjtry!(sql::register(&sql, data.username, hash.unwrap(), data.email).await);

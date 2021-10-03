@@ -7,7 +7,6 @@ use std::borrow::Cow;
 use crate::config;
 
 #[derive(Debug, Deserialize, Validate, JsonBody)]
-//#[derive(Debug, serde::Deserialize, validator::Validate)]
 pub struct RegisterRequest {
     #[validate(custom(function="validate_username", arg="&'v_a config::Config"))]
     pub username: String,
@@ -25,9 +24,7 @@ pub struct RegisterResponse {
 
 impl RegisterResponse {
     pub fn new(message: String) -> Self {
-        RegisterResponse {
-            message
-        }
+        RegisterResponse { message }
     }
 }
 

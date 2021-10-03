@@ -3,31 +3,31 @@ use sqlx::mysql::MySqlQueryResult;
 use crate::sql::Sql;
 use crate::user::{UserVerified, UserRanking};
 
-pub async fn email_exists(sql: &Sql, in_email: String) -> Result<bool, sqlx::Error> {
+pub async fn email_exists(sql: &Sql, email: String) -> Result<bool, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
     //TODO: rename to users
     let (count,): (i32,) = sqlx::query_as(
         "SELECT COUNT(*)
-         FROM user
+         FROM users
          WHERE email=?;")
-        .bind(in_email)
+        .bind(email)
         .fetch_one(&mut con)
         .await?;
 
     Ok(count != 0)
 }
 
-pub async fn user_exists(sql: &Sql, in_username: String) -> Result<bool, sqlx::Error> {
+pub async fn user_exists(sql: &Sql, username: String) -> Result<bool, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
     let (count,): (i32,) = sqlx::query_as(
         "SELECT COUNT(*)
-         FROM user
+         FROM users
          WHERE LOWER(username) = LOWER(?);")
-        .bind(in_username)
+        .bind(username)
         .fetch_one(&mut con)
         .await?;
 
@@ -35,18 +35,18 @@ pub async fn user_exists(sql: &Sql, in_username: String) -> Result<bool, sqlx::E
     Ok(count != 0)
 }
 
-pub async fn register(sql: &Sql, in_username: String, in_password_hash: String, in_email: String) -> Result<u64, sqlx::Error> {
+pub async fn register(sql: &Sql, username: String, password_hash: String, email: String) -> Result<u64, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
     let result: MySqlQueryResult = sqlx::query(
-        "INSERT INTO user
+        "INSERT INTO users
          (username, password, email, ranking, verified)
          VALUES
          (?, ?, ?, ?, ?);")
-        .bind(in_username)
-        .bind(in_password_hash)
-        .bind(in_email)
+        .bind(username)
+        .bind(password_hash)
+        .bind(email)
         .bind(UserVerified::No as i32)
         .bind(UserRanking::Standard as i32)
         .execute(&mut con)

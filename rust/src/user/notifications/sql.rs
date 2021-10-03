@@ -1,14 +1,20 @@
 use crate::sql::{Sql, model::Notification};
 
-pub async fn get_notifications(sql: &Sql, in_user_id: i32) -> Result<Vec<Notification>, ()> {
-    /*
-    let data = sql.run(move |con| {
-       notification 
-            .filter(user_id.eq(in_user_id))
-            .limit(5)
-            .load::<Notification>(con)
-    }).await?;
-    */
+pub async fn get_notifications(sql: &Sql, user_id: i32) -> Result<Vec<Notification>, sqlx::Error> {
 
-    Ok(Vec::new())
+    let mut con = sql.get_con().await?;
+
+    println!("pre");
+
+    let notifications: Vec<Notification> = sqlx::query_as(
+        "SELECT id, userId, title, message, url, time
+         FROM notifications
+         WHERE userID = ?;")
+        .bind(user_id)
+        .fetch_all(&mut con)
+        .await?;
+
+    println!("post {}", notifications.len());
+
+    Ok(notifications)
 }

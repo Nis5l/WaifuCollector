@@ -11,20 +11,27 @@ mod config;
 mod crypto;
 
 //CANGES:
-///notifications POST -> GET
-///register:
-///mail -> email
-///
-///friends:
-///userID -> userId
-///ALTER TABLE friend RENAME friends;
-///ALTER TABLE friends ADD COLUMN id INTEGER PRIMARY KEY AUTO_INCREMENT FIRST;
+// ALTER TABLE user RENAME users;
+// /notifications POST -> GET
+// ALTER TABLE notification RENAME notifications;
+// ALTER TABLE notifications CHANGE userID userId INTEGER;
+//
+// /register:
+// mail -> email
+//
+// /friends POST -> GET -> /user/:id/friends
+// userID -> userId
+// ALTER TABLE friend RENAME friends;
+// ALTER TABLE friends ADD COLUMN id INTEGER PRIMARY KEY AUTO_INCREMENT FIRST;
+// ALTER TABLE friends CHANGE friend_status friendStatus SMALLINT;
+// UPDATE friends SET friendStatus = 1 WHERE friendStatus = 2;
+//
+// /user/:id -> /user/:id/username
 
 //TODO port from server.js:
 // /card/give
 // /:id/rank
 // /log
-// /notifications
 // /user/:id
 // /user/:id/badges
 // /user/:id/stats
@@ -80,7 +87,9 @@ async fn rocket() -> _ {
                user::register_route,
                user::login_route,
                user::notifications_route,
-               user::users_route
+               user::users_route,
+               user::info::user_username_route,
+               user::info::user_friends_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

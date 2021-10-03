@@ -12,12 +12,3 @@ pub struct UsersResponse {
     pub id: i32,
     pub username: String
 }
-
-impl UsersResponse {
-    pub fn new(username: String, id: i32) -> Self {
-        UsersResponse {
-            username,
-            id
-        }
-    }
-}

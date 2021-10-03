@@ -40,5 +40,5 @@ pub async fn login_route(data: LoginRequest, sql: &State<Sql>, config: &rocket::
         return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"));
     }
 
-    ApiResponseErr::ok(Status::Ok, LoginResponse::new(token.unwrap()))
+    ApiResponseErr::ok(Status::Ok, LoginResponse { token: token.unwrap() })
 }

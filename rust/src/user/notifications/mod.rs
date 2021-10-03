@@ -1,4 +1,4 @@
-pub mod logic;
+mod logic;
 mod sql;
 
 pub use logic::notifications_route;

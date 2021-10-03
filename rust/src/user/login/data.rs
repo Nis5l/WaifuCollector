@@ -11,15 +11,7 @@ pub struct LoginRequest {
 
 #[derive(Serialize)]
 pub struct LoginResponse {
-    token: String
-}
-
-impl LoginResponse {
-    pub fn new(token: String) -> Self {
-        LoginResponse {
-            token
-        }
-    }
+    pub token: String
 }
 
 #[derive(Debug, FromRow)]
