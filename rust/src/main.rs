@@ -32,7 +32,6 @@ mod crypto;
 // /card/give
 // /:id/rank
 // /log
-// /user/:id
 // /user/:id/badges
 // /user/:id/stats
 // smth dashboard
@@ -89,7 +88,8 @@ async fn rocket() -> _ {
                user::notifications_route,
                user::users_route,
                user::info::user_username_route,
-               user::info::user_friends_route
+               user::info::user_friends_route,
+               user::info::user_badges_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
