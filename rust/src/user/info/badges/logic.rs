@@ -1,4 +1,4 @@
-use super::data::{BadgesResponse, Badge};
+use super::data::{UserBadgesResponse, Badge};
 
 use rocketjson::ApiResponseErr;
 use rocket::http::Status;
@@ -8,7 +8,7 @@ use rocket::http::Status;
 const DEVS: [i32; 2] = [8, 3];
 
 #[get("/user/<id>/badges")]
-pub async fn user_badges_route(id: i32) -> ApiResponseErr<BadgesResponse> {
+pub async fn user_badges_route(id: i32) -> ApiResponseErr<UserBadgesResponse> {
     let mut badges = Vec::new();
 
     if DEVS.contains(&id) {
@@ -18,5 +18,5 @@ pub async fn user_badges_route(id: i32) -> ApiResponseErr<BadgesResponse> {
         });
     }
 
-    ApiResponseErr::ok(Status::Ok, BadgesResponse { badges })
+    ApiResponseErr::ok(Status::Ok, UserBadgesResponse { badges })
 }

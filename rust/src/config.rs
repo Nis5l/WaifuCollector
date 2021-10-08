@@ -27,18 +27,18 @@ pub struct Config {
 
     pub users_page_amount: u32,
 
+    pub max_friends: u32,
+    pub max_trades: u32,
+
     pub db_connection: String,
 
-    //TODO: remove once diesel is removed
-    pub databases: figment::value::Map<String, SqlConfig>
+    pub card_image_base: String,
+    pub frame_image_base: String,
+    pub effect_image_base: String
 }
 
 impl Default for Config {
     fn default() -> Self {
-        let db = SqlConfig::new(String::from("db"), 10);
-
-        let databases = figment::util::map![String::from("my_db") => db];
-
         Self {
             //NOTE: important to change
             jwt_secret: String::from("CHANGE_THE_SECRET"),
@@ -51,9 +51,14 @@ impl Default for Config {
 
             users_page_amount: 5,
 
+            max_friends: 50,
+            max_trades: 5,
+
             db_connection: String::from("mysql://root@localhost/waifucollector"),
 
-            databases
+            card_image_base: String::from("Card/"),
+            frame_image_base: String::from("Frame/"),
+            effect_image_base: String::from("Effect/")
         }
     }
 }

@@ -10,3 +10,5 @@ set env MYSQLCLIENT_LIB_DIR to mysqlclient.lib\
 linux: TODO
 
 run ```cargo install diesel_cli --no-default-features --features mysql```
+
+Change the jwt_secret in the config.

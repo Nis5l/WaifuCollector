@@ -7,6 +7,6 @@ pub struct Badge {
 }
 
 #[derive(Serialize)]
-pub struct BadgesResponse {
+pub struct UserBadgesResponse {
     pub badges: Vec<Badge>
 }

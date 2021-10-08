@@ -1023,7 +1023,7 @@ FROM dual WHERE NOT EXISTS
 
 	/*sortType*/
 	/*1: level */
-	/*3: recent */
+	/*2: recent */
 	/*!: name */
 	inventory: async function inventory(userID, name, count, offset, sortType, level, cardID, excludeuuids) {
 

@@ -9,8 +9,10 @@ mod user;
 mod sql;
 mod config;
 mod crypto;
+mod shared;
+mod action;
 
-//CANGES:
+// CANGES:
 // ALTER TABLE user RENAME users;
 // /notifications POST -> GET
 // ALTER TABLE notification RENAME notifications;
@@ -27,12 +29,29 @@ mod crypto;
 // UPDATE friends SET friendStatus = 1 WHERE friendStatus = 2;
 //
 // /user/:id -> /user/:id/username
+//
+// /user/:id/stats
+// badges -> achievements
+// ALTER TABLE unlocked CHANGE userID userId INT;
+// ALTER TABLE unlocked CHANGE cardID cardId INT;
+// ALTER TABLE unlocked CHANGE frameID frameId INT;
+//
+// card:
+// card -> cardInfo
+// frame -> cardFrame
+// type -> cardType
+// effect -> cardEffect
+//
+// /pack -> /pack/open
+//
+// ALTER TABLE packtime CHANGE time lastOpened DATETIME;
+// ALTER TABLE packtime CHANGE userID userId INT; //keeps primary on local but better check
+// UPDATE packtime SET lastOpened = NULL WHERE lastOpened = "0000-00-00 00:00:00";
 
 //TODO port from server.js:
 // /card/give
 // /:id/rank
 // /log
-// /user/:id/badges
 // /user/:id/stats
 // smth dashboard
 // /packTime
@@ -81,18 +100,20 @@ async fn rocket() -> _ {
 
     rocket::custom(config_figment)
         .mount("/", routes![
-               index,
+           index,
 
-               user::register_route,
-               user::login_route,
-               user::notifications_route,
-               user::users_route,
-               user::info::user_username_route,
-               user::info::user_friends_route,
-               user::info::user_badges_route
+           user::register_route,
+           user::login_route,
+           user::notifications_route,
+           user::users_route,
+           user::info::user_username_route,
+           user::info::user_friends_route,
+           user::info::user_badges_route,
+           user::info::user_stats_route,
+
+           action::pack::pack_open_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
         .manage(sql::Sql(pool))
-        //.attach(sql::Sql::fairing())
 }

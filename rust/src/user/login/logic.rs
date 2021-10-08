@@ -15,6 +15,7 @@ pub async fn login_route(data: LoginRequest, sql: &State<Sql>, config: &rocket::
 
     if db_result.is_err() {
         let db_err = db_result.unwrap_err();
+        //TODO: do this in sql with Err()
         if let sqlx::Error::RowNotFound = db_err {
             return ApiResponseErr::api_err(Status::Unauthorized, String::from("Wrong username or password"));
         }
