@@ -6,15 +6,6 @@ pub struct SqlConfig {
     pool_size: i32
 }
 
-impl SqlConfig {
-    pub fn new(url: String, pool_size: i32) -> Self {
-        Self {
-            url,
-            pool_size
-        }
-    }
-}
-
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct Config {
     pub jwt_secret: String,
