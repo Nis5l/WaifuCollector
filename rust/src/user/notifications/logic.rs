@@ -2,9 +2,10 @@ use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
 use rocket::State;
 
-use crate::sql::{Sql, model::Notification};
+use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use super::sql;
+use super::data::Notification;
 
 #[get("/notifications")]
 pub async fn notifications_route(sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<Vec<Notification>> {

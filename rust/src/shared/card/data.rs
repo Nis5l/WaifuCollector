@@ -1,11 +1,14 @@
 use serde::Serialize;
+use sqlx::FromRow;
 
 use crate::config::Config;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, FromRow)]
 pub struct CardInfo {
     pub id: i32,
+    #[sqlx(rename="cardName")]
     pub name: String,
+    #[sqlx(rename="cardImage")]
     pub image: String
 }
 
@@ -76,8 +79,9 @@ impl Card {
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, FromRow)]
 #[serde(rename_all="camelCase")]
+#[sqlx(rename_all = "camelCase")]
 pub struct CardDb {
     pub id: i32,
     pub user_id: i32,
@@ -99,4 +103,12 @@ pub struct CardDb {
     pub effect_id: i32,
     pub effect_image: String,
     pub effect_opacity: f32
+}
+
+#[derive(Debug, Serialize)]
+pub struct CardCreateData {
+    pub card_id: i32,
+    pub frame_id: i32,
+    pub quality: i32,
+    pub level: i32
 }

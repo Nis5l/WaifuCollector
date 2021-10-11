@@ -1,5 +1,3 @@
-pub mod model;
-
 use sqlx::{Pool, MySql, pool::PoolConnection, Error};
 use core::future::Future;
 
