@@ -47,6 +47,8 @@ mod action;
 // ALTER TABLE packtime CHANGE time lastOpened DATETIME;
 // ALTER TABLE packtime CHANGE userID userId INT; //keeps primary on local but better check
 // UPDATE packtime SET lastOpened = NULL WHERE lastOpened = "0000-00-00 00:00:00";
+//
+// POST /packtime -> GET /pack/time
 
 //TODO port from server.js:
 // /card/give
@@ -54,7 +56,6 @@ mod action;
 // /log
 // /user/:id/stats
 // smth dashboard
-// /packTime
 // /packTimeMax
 // /pack
 // /passchange
@@ -111,7 +112,8 @@ async fn rocket() -> _ {
            user::info::user_badges_route,
            user::info::user_stats_route,
 
-           action::pack::pack_open_route
+           action::pack::pack_open_route,
+           action::pack::pack_time_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

@@ -7,6 +7,7 @@ use std::ops::RangeInclusive;
 
 use super::data::{PackOpenResponse, CanOpenPack};
 use super::sql;
+use super::super::shared;
 use crate::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::config::Config;
@@ -16,7 +17,7 @@ use crate::shared::card::{self, data::CardCreateData};
 pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackOpenResponse> {
     let user_id = token.id;
 
-    let last_opened = rjtry!(sql::get_pack_time(sql, user_id).await);
+    let last_opened = rjtry!(shared::sql::get_pack_time(sql, user_id).await);
 
     if let CanOpenPack::No(next_time) = can_open_pack(last_opened, config.pack_cooldown) {
         return ApiResponseErr::api_err(Status::Conflict, format!("Wait until: {}", next_time));
