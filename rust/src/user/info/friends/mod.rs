@@ -1,5 +1,5 @@
 mod logic;
-pub mod sql;
-pub mod data;
+mod sql;
+mod data;
 
 pub use logic::user_friends_route;

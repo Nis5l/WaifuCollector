@@ -6,10 +6,10 @@ use crate::config::Config;
 use super::sql;
 use super::data::UserStatsResponse;
 
-#[get("/user/<id>/stats")]
-pub async fn user_stats_route(id: u32, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<UserStatsResponse> {
-    let friend_count = rjtry!(sql::get_user_friend_count(&sql, id).await);
-    let card_count = rjtry!(sql::get_user_card_count(&sql, id).await);
+#[get("/user/<user_id>/stats")]
+pub async fn user_stats_route(user_id: u32, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<UserStatsResponse> {
+    let friend_count = rjtry!(sql::get_user_friend_count(&sql, user_id).await);
+    let card_count = rjtry!(sql::get_user_card_count(&sql, user_id).await);
     let max_card_count = rjtry!(sql::get_max_card_count(&sql).await);
     //let trades = rjtry!(sql::get_trades(&sql).await);
 

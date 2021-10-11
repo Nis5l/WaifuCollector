@@ -36,7 +36,7 @@ mod action;
 // ALTER TABLE unlocked CHANGE cardID cardId INT;
 // ALTER TABLE unlocked CHANGE frameID frameId INT;
 //
-// card:
+// card data:
 // card -> cardInfo
 // frame -> cardFrame
 // type -> cardType
@@ -53,6 +53,9 @@ mod action;
 //
 // /packTimeMax -> /pack/time/max
 // ISO String
+//
+// /deleteNotification -> notifications/delete/:id
+// data -> notifications
 
 //TODO port from server.js:
 // /card/give
@@ -74,7 +77,6 @@ mod action;
 // /acceptsuggestion
 // /okTrade
 // /tradeTime
-// /deleteNotification
 // /deleteAllNotifications
 // /packData
 // /verified
@@ -107,16 +109,17 @@ async fn rocket() -> _ {
 
            user::register_route,
            user::login_route,
-           user::notifications_route,
            user::users_route,
+           user::notifications_route,
+           user::notifications::notifications_delete_route,
            user::info::user_username_route,
            user::info::user_friends_route,
            user::info::user_badges_route,
            user::info::user_stats_route,
 
-           action::pack::pack_open_route,
-           action::pack::pack_time_route,
-           action::pack::pack_time_max_route,
+           action::pack::open::pack_open_route,
+           action::pack::time::pack_time_route,
+           action::pack::time::max::pack_time_max_route,
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

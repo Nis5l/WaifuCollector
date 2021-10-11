@@ -1,9 +1,9 @@
+pub mod notifications;
+pub mod info;
 mod register;
 mod login;
-mod notifications;
 mod users;
 mod shared;
-pub mod info;
 
 pub use shared::UserVerified;
 pub use shared::UserRanking;

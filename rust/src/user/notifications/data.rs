@@ -11,3 +11,8 @@ pub struct Notification {
     pub url: String,
     pub time: i64
 }
+
+#[derive(Debug, Serialize)]
+pub struct NotificationResponse {
+    pub notifications: Vec<Notification>
+}

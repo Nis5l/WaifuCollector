@@ -5,11 +5,13 @@ use rocket::State;
 use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use super::sql;
-use super::data::Notification;
+use super::data::NotificationResponse;
 
 #[get("/notifications")]
-pub async fn notifications_route(sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<Vec<Notification>> {
+pub async fn notifications_route(sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<NotificationResponse> {
     let notifications = rjtry!(sql::get_notifications(&sql, token.id).await);
 
-    ApiResponseErr::ok(Status::Ok, notifications)
+    ApiResponseErr::ok(Status::Ok, NotificationResponse {
+        notifications
+    })
 }

@@ -1,5 +1,5 @@
-pub mod data;
-pub mod logic;
-pub mod sql;
+mod data;
+mod logic;
+mod sql;
 
 pub use logic::login_route;
