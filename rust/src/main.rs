@@ -56,7 +56,10 @@ mod action;
 //
 // /deleteNotification -> notifications/delete/:id
 // data -> notifications
-
+//
+// /upgrade
+//    mainuuid -> cardOne
+//    carduuid -> cardTwo
 //TODO port from server.js:
 // /card/give
 // /:id/rank
@@ -66,7 +69,6 @@ mod action;
 // /passchange
 // GET /inventory
 // /card/:uuid
-// /upgrade
 // /addfriend
 // /managefriend
 // /trade
@@ -120,6 +122,7 @@ async fn rocket() -> _ {
            action::pack::open::pack_open_route,
            action::pack::time::pack_time_route,
            action::pack::time::max::pack_time_max_route,
+           action::upgrade::upgrade_route,
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

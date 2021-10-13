@@ -33,7 +33,7 @@ pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<C
 
     rjtry!(sql::set_pack_time(&sql, user_id, Utc::now()).await);
 
-    let cards = rjtry!(card::sql::get_cards(&sql, inserted_cards_uuids, config).await);
+    let cards = rjtry!(card::sql::get_cards(&sql, inserted_cards_uuids, None, config).await);
 
     ApiResponseErr::ok(Status::Ok, PackOpenResponse {
         cards
