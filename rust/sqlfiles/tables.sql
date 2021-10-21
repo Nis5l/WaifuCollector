@@ -1,0 +1,145 @@
+CREATE TABLE IF NOT EXISTS users (
+	uid INT NOT NULL AUTO_INCREMENT,
+	uusername TINYTEXT NOT NULL,
+	upassword TINYTEXT NOT NULL,
+	uranking INT NOT NULL,
+	uemail TINYTEXT NOT NULL,
+	uverified INT NOT NULL,
+	PRIMARY KEY (uid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS cards (
+	cid INT NOT NULL AUTO_INCREMENT,
+	cname TINYTEXT NOT NULL,
+	ctid INT NOT NULL,
+	cimage TINYTEXT NOT NULL,
+	PRIMARY KEY (cid),
+	FOREIGN KEY (ctid) REFERENCES cardtypes(ctid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS cardtypes (
+	ctid INT NOT NULL AUTO_INCREMENT,
+	ctname TINYTEXT NOT NULL,
+	PRIMARY KEY (tid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS frames (
+	fid INT NOT NULL AUTO_INCREMENT,
+	fname TINYTEXT NOT NULL,
+	fimageFront TINYTEXT NOT NULL,
+	fimageBack TINYTEXT NOT NULL,
+	PRIMARY KEY (fid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS cardunlocks (
+	cuid INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	cid INT NOT NULL,
+	fid INT NOT NULL,
+	cuquality INT NOT NULL,
+	culevel INT NOT NULL,
+	PRIMARY KEY (cuid),
+	FOREIGN KEY (uid) REFERENCES users(uid),
+	FOREIGN KEY (cid) REFERENCES cards(cid),
+	FOREIGN KEY (fid) REFERENCES frames(fid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS friends (
+	frid INT AUTO_INCREMENT,
+	uidone INT NOT NULL,
+	uidtwo INT NOT NULL,
+	frstatus INT NOT NULL,
+	PRIMARY KEY (frid),
+	FOREIGN KEY (uidone) REFERENCES users(uid),
+	FOREIGN KEY (uidtwo) REFERENCES users(uid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS trades (
+	tid INT AUTO_INCREMENT,
+	uidone INT NOT NULL,
+	uidtwo INT NOT NULL,
+	cuid INT NOT NULL,
+	PRIMARY KEY (tid),
+	FOREIGN KEY (cuid) REFERENCES cardunlocks(cuid),
+	FOREIGN KEY (uidone) REFERENCES users(uid),
+	FOREIGN KEY (uidtwo) REFERENCES users(uid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS trademanagers (
+	tmid INT NOT NULL AUTO_INCREMENT,
+	uidone INT NOT NULL,
+	uidtwo INT NOT NULL,
+	tmstatusone INT NOT NULL,
+	tmstatustwo INT NOT NULL,
+	tmcooldown DATETIME NOT NULL,
+	PRIMARY KEY(tmid),
+	FOREIGN KEY (uidone) REFERENCES users(uid),
+	FOREIGN KEY (uidtwo) REFERENCES users(uid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS notifications (
+	nid INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	ntitle TINYTEXT NOT NULL,
+	nmessage TEXT NOT NULL,
+	nurl TEXT NOT NULL,
+	ntime DATETIME NOT NULL,
+	PRIMARY KEY (nid),
+	FOREIGN KEY (uid) REFERENCES users(uid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS effects (
+	eid INT NOT NULL,
+	eimage TINYTEXT NOT NULL,
+	eopacity FLOAT NOT NULL,
+	PRIMARY KEY (eid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS packdata (
+	pdid INT NOT NULL AUTO_INCREMENT,
+	pdamount INT NOT NULL,
+	pdtime DATETIME NOT NULL,
+	UNIQUE(pdtime),
+	PRIMARY KEY (pdid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS tradesuggestions (
+	tsid INT NOT NULL AUTO_INCREMENT,
+	uidone INT NOT NULL,
+	uidtwo INT NOT NULL,
+	cuid INT NOT NULL,
+	PRIMARY KEY(tsid),
+	FOREIGN KEY (uidone) REFERENCES users(uid),
+	FOREIGN KEY (uidtwo) REFERENCES users(uid),
+	FOREIGN KEY (cuid) REFERENCES cardunlocks(cuid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS verificationkeys (
+	uid INT NOT NULL,
+	vkkey TEXT NOT NULL,
+	PRIMARY KEY (uid),
+	FOREIGN KEY (uid) REFERENCES users(uid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS packtimes (
+	uid INT NOT NULL,
+	ptlastopened DATETIME,
+	PRIMARY KEY (uid),
+	FOREIGN KEY (uid) REFERENCES users(uid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS badges (
+	bid INT NOT NULL,
+	bimage TEXT NOT NULL,
+	btext TEXT NOT NULL,
+	PRIMARY KEY (bid)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS badgeunlocks (
+	buid INT NOT NULL AUTO_INCREMENT,
+	uid INT NOT NULL,
+	bid INT NOT NULL,
+	PRIMARY KEY (buid),
+	FOREIGN KEY (uid) REFERENCES users(uid),
+	FOREIGN KEY (bid) REFERENCES badges(bid)
+) ENGINE = InnoDB;

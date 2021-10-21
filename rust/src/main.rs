@@ -13,28 +13,18 @@ mod shared;
 mod action;
 
 // CANGES:
-// ALTER TABLE user RENAME users;
 // /notifications POST -> GET
-// ALTER TABLE notification RENAME notifications;
-// ALTER TABLE notifications CHANGE userID userId INTEGER;
 //
 // /register:
 // mail -> email
 //
 // /friends POST -> GET -> /user/:id/friends
 // userID -> userId
-// ALTER TABLE friend RENAME friends;
-// ALTER TABLE friends ADD COLUMN id INTEGER PRIMARY KEY AUTO_INCREMENT FIRST;
-// ALTER TABLE friends CHANGE friend_status friendStatus SMALLINT;
-// UPDATE friends SET friendStatus = 1 WHERE friendStatus = 2;
 //
 // /user/:id -> /user/:id/username
 //
 // /user/:id/stats
 // badges -> achievements
-// ALTER TABLE unlocked CHANGE userID userId INT;
-// ALTER TABLE unlocked CHANGE cardID cardId INT;
-// ALTER TABLE unlocked CHANGE frameID frameId INT;
 //
 // card data:
 // card -> cardInfo
@@ -43,10 +33,6 @@ mod action;
 // effect -> cardEffect
 //
 // /pack -> /pack/open
-//
-// ALTER TABLE packtime CHANGE time lastOpened DATETIME;
-// ALTER TABLE packtime CHANGE userID userId INT; //keeps primary on local but better check
-// UPDATE packtime SET lastOpened = NULL WHERE lastOpened = "0000-00-00 00:00:00";
 //
 // POST /packtime -> GET /pack/time
 // ISO String
@@ -60,6 +46,7 @@ mod action;
 // /upgrade
 //    mainuuid -> cardOne
 //    carduuid -> cardTwo
+
 //TODO port from server.js:
 // /card/give
 // /:id/rank
@@ -96,10 +83,12 @@ fn index() -> &'static str {
 
 #[launch]
 async fn rocket() -> _ {
+    println!("Initializing config...");
     let config_figment = config::get_figment().expect("Initializing config failed");
 
     let config: config::Config = config_figment.extract().expect("Initializing config failed");
 
+    println!("Connecting to database...");
     let pool = MySqlPoolOptions::new()
         .max_connections(5)
         .connect(&config.db_connection)
