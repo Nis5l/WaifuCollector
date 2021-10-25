@@ -46,10 +46,12 @@ mod action;
 // /upgrade
 //    mainuuid -> cardOne
 //    carduuid -> cardTwo
+//
+// /:id/rank -> /user/:id/rank
+// rankID -> rank
 
 //TODO port from server.js:
 // /card/give
-// /:id/rank
 // /log
 // /user/:id/stats
 // smth dashboard
@@ -95,20 +97,10 @@ async fn rocket() -> _ {
         .await.expect("Creating DB pool failed"));
 
     println!("Setting up database...");
-    println!("- Setting up tables...");
-    sql::setup_db(&sql, "./sqlfiles/tables.sql").await.expect("Failed setting up database");
-
-    //TODO: all of this is pretty stupid the database shouldnt be repopulated on each run.
-    println!("- Setting up cardtypes...");
-    sql::setup_db(&sql, "./sqlfiles/cardtypes.sql").await.expect("Failed setting up database");
-    println!("- Setting up cards...");
-    sql::setup_db(&sql, "./sqlfiles/cards.sql").await.expect("Failed setting up database");
-    println!("- Setting up cardframes...");
-    sql::setup_db(&sql, "./sqlfiles/cardframes.sql").await.expect("Failed setting up database");
-    println!("- Setting up cardeffects...");
-    sql::setup_db(&sql, "./sqlfiles/cardeffects.sql").await.expect("Failed setting up database");
-    println!("- Setting up badges...");
-    sql::setup_db(&sql, "./sqlfiles/badges.sql").await.expect("Failed setting up database");
+    for file in config.db_init_files.iter() {
+        println!("-{}", file);
+        sql::setup_db(&sql, file).await.expect("Failed setting up database");
+    }
 
     rocket::custom(config_figment)
         .mount("/", routes![
@@ -123,6 +115,7 @@ async fn rocket() -> _ {
            user::info::user_friends_route,
            user::info::user_badges_route,
            user::info::user_stats_route,
+           user::info::user_rank_route,
 
            action::pack::open::pack_open_route,
            action::pack::time::pack_time_route,

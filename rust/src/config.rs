@@ -1,12 +1,6 @@
 use figment::{Figment, providers::{Format, Json, Serialized}};
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
-pub struct SqlConfig {
-    url: String,
-    pool_size: i32
-}
-
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct Config {
     pub jwt_secret: String,
 
@@ -31,7 +25,9 @@ pub struct Config {
 
     pub card_image_base: String,
     pub frame_image_base: String,
-    pub effect_image_base: String
+    pub effect_image_base: String,
+
+    pub db_init_files: Vec<String>
 }
 
 impl Default for Config {
@@ -60,7 +56,16 @@ impl Default for Config {
 
             card_image_base: String::from("Card/"),
             frame_image_base: String::from("Frame/"),
-            effect_image_base: String::from("Effect/")
+            effect_image_base: String::from("Effect/"),
+
+            db_init_files: vec![
+                String::from("./sqlfiles/tables.sql"),
+                String::from("./sqlfiles/cardtypes.sql"),
+                String::from("./sqlfiles/cards.sql"),
+                String::from("./sqlfiles/cardframes.sql"),
+                String::from("./sqlfiles/cardeffects.sql"),
+                String::from("./sqlfiles/badges.sql")
+            ]
         }
     }
 }
