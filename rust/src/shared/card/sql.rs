@@ -8,8 +8,8 @@ pub async fn add_card(sql: &Sql, user_id: i32, card: &CardCreateData) -> Result<
     let mut con = sql.get_con().await?;
 
     let stmt: MySqlQueryResult = sqlx::query(
-        "INSERT INTO unlocked
-         (userId, cardId, quality, level, frameId)
+        "INSERT INTO unlockedcards 
+         (uid, cid, ucquality, uclevel, fid)
          VALUES
          (?, ?, ?, ?, ?);")
         .bind(user_id)
@@ -36,6 +36,7 @@ pub async fn get_card(sql: &Sql, card_uuid: i32, user_id: Option<i32>, config: &
 //TODO: passing the config to sql doesnt feel right, maybe add another step where the CardDbs are
 //transformed to Cards
 pub async fn get_cards(sql: &Sql, card_uuids: Vec<i32>, user_id: Option<i32>, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
+    if card_uuids.is_empty() { return Ok(Vec::new()); }
 
     let mut con = sql.get_con().await?;
 
@@ -49,35 +50,35 @@ pub async fn get_cards(sql: &Sql, card_uuids: Vec<i32>, user_id: Option<i32>, co
     }
 
     let extra_checks = if user_id.is_some() {
-        "AND unlocked.userId = ?"
+        "AND cardunlocks.uid = ?"
     } else {
         ""
     };
 
     let query = format!(
         "SELECT
-         unlocked.id as id,
-         unlocked.userId as userId,
-         unlocked.level as level,
-         unlocked.quality as quality,
-         card.id as cardId,
-         card.cardName as cardName,
-         card.cardImage as cardImage,
-         cardtype.id as typeId,
-         cardtype.name as typeName,
-         frame.id as frameId,
-         frame.name as frameName,
-         frame.path_front as frameFront,
-         frame.path_back as frameBack,
-         effect.id as effectId,
-         effect.path as effectImage,
-         effect.opacity as effectOpacity
-         FROM unlocked INNER JOIN card, cardtype, frame, effect
+         cardunlocks.cuid AS id,
+         cardunlocks.uid AS userId,
+         cardunlocks.culevel AS level,
+         cardunlocks.cuquality AS quality,
+         cards.cid AS cardId,
+         cards.cname AS cardName,
+         cards.cimage AS cardImage,
+         cardtypes.ctid AS typeId,
+         cardtypes.ctname AS typeName,
+         cardframes.cfid AS frameId,
+         cardframes.cfname AS frameName,
+         cardframes.cfimagefront AS frameFront,
+         cardframes.cfimageback AS frameBack,
+         cardeffects.ceid AS effectId,
+         cardeffects.ceimage AS effectImage,
+         cardeffects.ceopacity AS effectOpacity
+         FROM cardunlocks, cards, cardtypes, cardframes, cardeffects
          WHERE
-         unlocked.cardId = card.id AND
-         card.typeId = cardtype.id AND
-         effect.id = unlocked.level AND
-         unlocked.id IN({})
+         cardunlocks.cid = cards.cid AND
+         cards.ctid = cardtypes.ctid AND
+         cardeffects.ceid = cardunlocks.culevel AND
+         cardunlocks.cuid IN({})
          {}",
          in_statement,
          extra_checks);
@@ -103,8 +104,8 @@ pub async fn delete_card(sql: &Sql, card_uuid: i32) -> Result<u64, sqlx::Error> 
     let mut con = sql.get_con().await?;
 
     let result: MySqlQueryResult = sqlx::query(
-        "DELETE FROM unlocked
-        WHERE id=?;")
+        "DELETE FROM cardunlocks
+        WHERE cuid=?;")
         .bind(card_uuid)
         .execute(&mut con).await?;
 

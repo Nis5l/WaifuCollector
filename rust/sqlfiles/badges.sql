@@ -1,0 +1,11 @@
+INSERT INTO badges (bid, bimage, btext) VALUES (0, '50.png', '50 Waifus');
+INSERT INTO badges (bid, bimage, btext) VALUES (1, '100.png', '100 Waifus');
+INSERT INTO badges (bid, bimage, btext) VALUES (2, '200.png', '200 Waifus');
+INSERT INTO badges (bid, bimage, btext) VALUES (3, '300.png', '300 Waifus');
+INSERT INTO badges (bid, bimage, btext) VALUES (4, 'lvl1.png', 'Level 1 Waifu');
+INSERT INTO badges (bid, bimage, btext) VALUES (5, 'lvl2.png', 'Level 2 Waifu');
+INSERT INTO badges (bid, bimage, btext) VALUES (6, 'lvl3.png', 'Level 3 Waifu');
+INSERT INTO badges (bid, bimage, btext) VALUES (7, 'lvl4.png', 'Level 4 Waifu');
+INSERT INTO badges (bid, bimage, btext) VALUES (8, 'lvl5.png', 'Level 5 Waifu');
+INSERT INTO badges (bid, bimage, btext) VALUES (9, 'lvl1pull.png', 'Pulled a Level 1');
+INSERT INTO badges (bid, bimage, btext) VALUES (10, 'lvl2pull.png', 'Pulled a Level 2');

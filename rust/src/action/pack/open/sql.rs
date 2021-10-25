@@ -8,9 +8,9 @@ pub async fn set_pack_time(sql: &Sql, user_id: i32, last_opened: DateTime<Utc>) 
     let mut con = sql.get_con().await?;
 
     let result: MySqlQueryResult = sqlx::query(
-        "UPDATE packtime
-         SET lastOpened=?
-         WHERE userId=?;")
+        "UPDATE packtimes
+         SET ptlastopened=?
+         WHERE uid=?;")
         .bind(last_opened)
         .bind(user_id)
         .execute(&mut con)
@@ -18,8 +18,8 @@ pub async fn set_pack_time(sql: &Sql, user_id: i32, last_opened: DateTime<Utc>) 
 
     if result.rows_affected() == 0 {
         sqlx::query(
-            "INSERT INTO packtime
-             (userId, lastOpened)
+            "INSERT INTO packtimes
+             (uid, ptlastopened)
              VALUES
              (?, ?);")
             .bind(user_id)
@@ -36,11 +36,10 @@ pub async fn get_random_card_data(sql: &Sql, card_amount: u32) -> Result<Vec<Car
 
     let cards: Vec<CardCreateDataDb> = sqlx::query_as(
         "SELECT
-         card.id as cardId,
-         frame.id as frameId
+         cards.cid AS cardId,
+         cardframes.cfid AS frameId
          FROM
-         card,
-         frame
+         cards, cardframes
          ORDER BY
          RAND()
          LIMIT ?;")

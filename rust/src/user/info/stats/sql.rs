@@ -6,7 +6,7 @@ pub async fn get_user_friend_count(sql: &Sql, user_id: u32) -> Result<u32, sqlx:
     let (count, ): (u32, ) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM friends
-         WHERE userone=? OR usertwo=? AND friendStatus=2;")
+         WHERE uidone=? OR uidtwo=? AND frstatus=2;")
         .bind(user_id)
         .bind(user_id)
         .fetch_one(&mut con)
@@ -20,9 +20,9 @@ pub async fn get_user_card_count(sql: &Sql, user_id: u32) -> Result<u32, sqlx::E
     let mut con = sql.get_con().await?;
 
     let (count, ): (u32, ) = sqlx::query_as(
-        "SELECT COUNT(DISTINCT cardID)
-         FROM unlocked
-         WHERE userId=?;")
+        "SELECT COUNT(DISTINCT cid)
+         FROM unlockedcards
+         WHERE uid=?;")
         .bind(user_id)
         .fetch_one(&mut con)
         .await?;
@@ -35,7 +35,7 @@ pub async fn get_max_card_count(sql: &Sql) -> Result<u32, sqlx::Error> {
 
     let (count, ): (u32, ) = sqlx::query_as(
         "SELECT COUNT(*)
-         FROM card")
+         FROM cards")
         .fetch_one(&mut con)
         .await?;
 

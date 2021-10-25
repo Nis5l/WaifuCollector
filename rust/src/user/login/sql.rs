@@ -6,9 +6,9 @@ pub async fn get_user_password(sql: &Sql, username: String) -> Result<LoginDb, s
     let mut con = sql.get_con().await?;
 
     let login_data: LoginDb = sqlx::query_as(
-        "SELECT id, username, password
+        "SELECT uid AS id, uusername AS username, upassword AS password
          FROM users
-         WHERE username=?;")
+         WHERE uusername=?;")
         .bind(username)
         .fetch_one(&mut con)
         .await?;

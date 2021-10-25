@@ -5,17 +5,17 @@ pub async fn get_user_friends(sql: &Sql, sent: bool, user_id: i32) -> Result<Vec
     let mut con = sql.get_con().await?;
 
     let where_clause = if sent {
-        "WHERE friends.userone=? AND users.id=friends.usertwo;"
+        "WHERE friends.uidone=? AND users.uid=friends.uidtwo;"
     } else {
-        "WHERE friends.usertwo=? AND users.id=friends.userone;"
+        "WHERE friends.uidtwo=? AND users.uid=friends.uidone;"
     };
 
     let friends: Vec<FriendDb> = sqlx::query_as(&format!(
             "SELECT
-            users.username,
-            friends.userone,
-            friends.usertwo,
-            friends.friendStatus
+            users.uusername AS username,
+            friends.uidone AS userone,
+            friends.uidtwo AS usertwo,
+            friends.frstatus AS friendStatus
             FROM friends, users
             {}", where_clause))
         .bind(user_id)

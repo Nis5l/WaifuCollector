@@ -7,9 +7,9 @@ pub async fn get_pack_time(sql: &Sql, user_id: i32) -> Result<Option<DateTime<Ut
     let mut con = sql.get_con().await?;
 
     let stmt = sqlx::query_as(
-        "SELECT lastOpened
-         FROM packtime
-         WHERE userID=?;")
+        "SELECT ptlastopened AS lastOpened
+         FROM packtimes
+         WHERE uid=?;")
         .bind(user_id)
         .fetch_one(&mut con)
         .await;

@@ -89,10 +89,26 @@ async fn rocket() -> _ {
     let config: config::Config = config_figment.extract().expect("Initializing config failed");
 
     println!("Connecting to database...");
-    let pool = MySqlPoolOptions::new()
+    let sql = sql::Sql(MySqlPoolOptions::new()
         .max_connections(5)
         .connect(&config.db_connection)
-        .await.expect("Creating DB pool failed");
+        .await.expect("Creating DB pool failed"));
+
+    println!("Setting up database...");
+    println!("- Setting up tables...");
+    sql::setup_db(&sql, "./sqlfiles/tables.sql").await.expect("Failed setting up database");
+
+    //TODO: all of this is pretty stupid the database shouldnt be repopulated on each run.
+    println!("- Setting up cardtypes...");
+    sql::setup_db(&sql, "./sqlfiles/cardtypes.sql").await.expect("Failed setting up database");
+    println!("- Setting up cards...");
+    sql::setup_db(&sql, "./sqlfiles/cards.sql").await.expect("Failed setting up database");
+    println!("- Setting up cardframes...");
+    sql::setup_db(&sql, "./sqlfiles/cardframes.sql").await.expect("Failed setting up database");
+    println!("- Setting up cardeffects...");
+    sql::setup_db(&sql, "./sqlfiles/cardeffects.sql").await.expect("Failed setting up database");
+    println!("- Setting up badges...");
+    sql::setup_db(&sql, "./sqlfiles/badges.sql").await.expect("Failed setting up database");
 
     rocket::custom(config_figment)
         .mount("/", routes![
@@ -115,5 +131,5 @@ async fn rocket() -> _ {
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
-        .manage(sql::Sql(pool))
+        .manage(sql)
 }

@@ -5,9 +5,9 @@ pub async fn get_user_username(sql: &Sql, user_id: u32) -> Result<Option<String>
     let mut con = sql.get_con().await?;
 
     let stmt = sqlx::query_as(
-        "SELECT username
+        "SELECT uusername
          FROM users
-         WHERE id=?;")
+         WHERE uid=?;")
         .bind(user_id)
         .fetch_one(&mut con)
         .await;

@@ -30,7 +30,7 @@ ALTER TABLE users CHANGE verified uverified INT NOT NULL;
 
 ```sql
 ALTER TABLE card RENAME cards;
-ALTER TABLE cards CHANGE id cid INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE cards CHANGE id cid INT NOT NULL;
 ALTER TABLE cards CHANGE cardName cname TINYTEXT NOT NULL;
 ALTER TABLE cards CHANGE typeID ctid INT NOT NULL;
 ALTER TABLE cards CHANGE cardImage cimage TINYTEXT NOT NULL;
@@ -40,11 +40,11 @@ ALTER TABLE cards ADD FOREIGN KEY (ctid) REFERENCES cardtypes(ctid);
 ## Frames
 
 ```sql
-ALTER TABLE frame RENAME frames;
-ALTER TABLE frames CHANGE id fid INT NOT NULL AUTO_INCREMENT;
-ALTER TABLE frames CHANGE name fname TINYTEXT NOT NULL;
-ALTER TABLE frames CHANGE path_front fimageFront TINYTEXT NOT NULL;
-ALTER TABLE frames CHANGE path_back fimageBack TINYTEXT NOT NULL;
+ALTER TABLE frame RENAME cardframes;
+ALTER TABLE cardframes CHANGE id cfid INT NOT NULL;
+ALTER TABLE cardframes CHANGE name cfname TINYTEXT NOT NULL;
+ALTER TABLE cardframes CHANGE path_front cfimagefront TINYTEXT NOT NULL;
+ALTER TABLE cardframes CHANGE path_back cfimageback TINYTEXT NOT NULL;
 ```
 
 ## CardTypes
@@ -52,7 +52,7 @@ ALTER TABLE frames CHANGE path_back fimageBack TINYTEXT NOT NULL;
 ```sql
 ALTER TABLE cardtype RENAME cardtypes;
 ALTER TABLE cardtypes CHANGE name tname TINYTEXT NOT NULL;
-ALTER TABLE cardtypes CHANGE id ctid INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE cardtypes CHANGE id ctid INT NOT NULL;
 ```
 
 ## CardUnlocks
@@ -61,13 +61,13 @@ ALTER TABLE cardtypes CHANGE id ctid INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE unlocked RENAME cardunlocks;
 ALTER TABLE cardunlocks CHANGE userID uid INT NOT NULL;
 ALTER TABLE cardunlocks CHANGE cardID cid INT NOT NULL;
-ALTER TABLE cardunlocks CHANGE frameID fid INT NOT NULL;
+ALTER TABLE cardunlocks CHANGE frameID cfid INT NOT NULL;
 ALTER TABLE cardunlocks CHANGE cuid INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE cardunlocks CHANGE quality cuquality INT NOT NULL;
 ALTER TABLE cardunlocks CHANGE level culevel INT NOT NULL;
 ALTER TABLE cardunlocks ADD FOREIGN KEY (uid) REFERENCES users(uid);
 ALTER TABLE cardunlocks ADD FOREIGN KEY (cid) REFERENCES cards(cid);
-ALTER TABLE cardunlocks ADD FOREIGN KEY (fid) REFERENCES frames(fid);
+ALTER TABLE cardunlocks ADD FOREIGN KEY (fid) REFERENCES cardframes(cfid);
 ```
 
 ## Friends
@@ -125,10 +125,10 @@ ALTER TABLE notifications ADD FOREIGN KEY(uid) REFERENCES users(uid);
 ## Effects
 
 ```sql
-ALTER TABLE effect RENAME effects;
-ALTER TABLE effects CHANGE id eid INT NOT NULL;
-ALTER TABLE effects CHANGE path eimage TINYTEXT NOT NULL;
-ALTER TABLE effects CAHNGE opacity eopacity FLOAT NOT NULL;
+ALTER TABLE effect RENAME cardeffects;
+ALTER TABLE cardeffects CHANGE id ceid INT NOT NULL;
+ALTER TABLE cardeffects CHANGE path ceimage TINYTEXT NOT NULL;
+ALTER TABLE cardeffects CAHNGE opacity ceopacity FLOAT NOT NULL;
 ```
 
 ## PackData

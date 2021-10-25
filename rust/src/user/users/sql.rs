@@ -11,9 +11,9 @@ pub async fn get_users(sql: &Sql, mut username: String, amount: u32) -> Result<V
         .replace("[", "![");
 
     let users: Vec<(String, i32)> = sqlx::query_as(
-        "SELECT username, id
+        "SELECT uusername AS username, uid AS id
          FROM users
-         WHERE username LIKE CONCAT('%', ?, '%')
+         WHERE uusername LIKE CONCAT('%', ?, '%')
          LIMIT ?;")
         .bind(username)
         .bind(amount)

@@ -8,8 +8,8 @@ pub async fn delete_notification(sql: &Sql, user_id: i32, notification_id: i32) 
     let result: MySqlQueryResult = sqlx::query(
         "DELETE FROM notifications
          WHERE
-         id = ? AND
-         userId = ?;")
+         nid = ? AND
+         uid = ?;")
         .bind(notification_id)
         .bind(user_id)
         .execute(&mut con)

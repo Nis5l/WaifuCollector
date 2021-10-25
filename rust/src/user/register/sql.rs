@@ -11,7 +11,7 @@ pub async fn email_exists(sql: &Sql, email: String) -> Result<bool, sqlx::Error>
     let (count,): (i32,) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM users
-         WHERE email=?;")
+         WHERE uemail=?;")
         .bind(email)
         .fetch_one(&mut con)
         .await?;
@@ -26,7 +26,7 @@ pub async fn user_exists(sql: &Sql, username: String) -> Result<bool, sqlx::Erro
     let (count,): (i32,) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM users
-         WHERE LOWER(username) = LOWER(?);")
+         WHERE LOWER(uusername) = LOWER(?);")
         .bind(username)
         .fetch_one(&mut con)
         .await?;
@@ -41,7 +41,7 @@ pub async fn register(sql: &Sql, username: String, password_hash: String, email:
 
     let result: MySqlQueryResult = sqlx::query(
         "INSERT INTO users
-         (username, password, email, ranking, verified)
+         (uusername, upassword, uemail, uranking, uverified)
          VALUES
          (?, ?, ?, ?, ?);")
         .bind(username)
