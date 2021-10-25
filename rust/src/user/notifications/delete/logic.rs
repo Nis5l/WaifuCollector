@@ -7,7 +7,7 @@ use crate::crypto::JwtToken;
 use super::sql;
 use super::data::NotificationDeleteReponse;
 
-#[get("/notifications/delete/<notification_id>")]
+#[post("/notifications/delete/<notification_id>")]
 pub async fn notifications_delete_route(sql: &State<Sql>, notification_id: i32, token: JwtToken) -> ApiResponseErr<NotificationDeleteReponse> {
     let user_id = token.id;
 

@@ -51,13 +51,15 @@ mod action;
 // rankID -> rank
 
 //TODO port from server.js:
+// /deleteAllNotifications
+// /card/:uuid
+// /user/:id/stats
+//
 // /card/give
 // /log
-// /user/:id/stats
 // smth dashboard
 // /passchange
 // GET /inventory
-// /card/:uuid
 // /addfriend
 // /managefriend
 // /trade
@@ -68,7 +70,6 @@ mod action;
 // /acceptsuggestion
 // /okTrade
 // /tradeTime
-// /deleteAllNotifications
 // /packData
 // /verified
 // /setmail
