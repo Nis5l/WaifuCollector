@@ -41,6 +41,7 @@ mod action;
 // ISO String
 //
 // /deleteNotification -> notifications/delete/:id
+// /deleteAllNotifications -> notifications/delete/all
 // data -> notifications
 //
 // /upgrade
@@ -112,6 +113,7 @@ async fn rocket() -> _ {
            user::users_route,
            user::notifications_route,
            user::notifications::notifications_delete_route,
+           user::notifications::notifications_delete_all_route,
            user::info::user_username_route,
            user::info::user_friends_route,
            user::info::user_badges_route,
