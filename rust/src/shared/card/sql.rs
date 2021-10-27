@@ -7,9 +7,11 @@ use super::data::{CardCreateData, Card, CardDb};
 pub async fn add_card(sql: &Sql, user_id: i32, card: &CardCreateData) -> Result<i32, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
+    println!("fid: {}", card.frame_id);
+
     let stmt: MySqlQueryResult = sqlx::query(
-        "INSERT INTO unlockedcards 
-         (uid, cid, ucquality, uclevel, fid)
+        "INSERT INTO cardunlocks
+         (uid, cid, cuquality, culevel, cfid)
          VALUES
          (?, ?, ?, ?, ?);")
         .bind(user_id)
@@ -76,6 +78,7 @@ pub async fn get_cards(sql: &Sql, card_uuids: Vec<i32>, user_id: Option<i32>, co
          FROM cardunlocks, cards, cardtypes, cardframes, cardeffects
          WHERE
          cardunlocks.cid = cards.cid AND
+         cardunlocks.cfid = cardframes.cfid AND
          cards.ctid = cardtypes.ctid AND
          cardeffects.ceid = cardunlocks.culevel AND
          cardunlocks.cuid IN({})
@@ -94,6 +97,8 @@ pub async fn get_cards(sql: &Sql, card_uuids: Vec<i32>, user_id: Option<i32>, co
     }
 
     let cards_db: Vec<CardDb> = stmt.fetch_all(&mut con).await?;
+
+    println!("len: {}", cards_db.len());
 
     let cards: Vec<Card> = cards_db.into_iter().map(|card_db| { Card::from_card_db(card_db, config) }).collect();
 

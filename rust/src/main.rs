@@ -11,6 +11,7 @@ mod config;
 mod crypto;
 mod shared;
 mod action;
+mod card;
 
 // CANGES:
 // /notifications POST -> GET
@@ -52,8 +53,6 @@ mod action;
 // rankID -> rank
 
 //TODO port from server.js:
-// /deleteAllNotifications
-// /card/:uuid
 // /user/:id/stats
 //
 // /card/give
@@ -124,6 +123,8 @@ async fn rocket() -> _ {
            action::pack::time::pack_time_route,
            action::pack::time::max::pack_time_max_route,
            action::upgrade::upgrade_route,
+
+           card::uuid::card_uuid_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
