@@ -1587,6 +1587,15 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Sakura', '140', 'Card_Sakura.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'President', '140', 'Card_President.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Revy', '141', 'Card_Revy.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Komi-san', '142', 'Card_Komi-san.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Najimi Osana', '142', 'Card_NajimiOsana.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Ren Yamai', '142', 'Card_RenYamai.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Omoharu Nakanaka', '142', 'Card_OmoharuNakanaka.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Alisa', '143', 'Card_Alisa.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Katerina Solensan', '143', 'Card_KaterinaSolensan.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Coffee', '143', 'Card_Coffee.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Stella Bonnaro', '143', 'Card_StellaBonnaro.webp');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1754,6 +1763,8 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('140', 'Ijiranaide, Nagatoro-san');",
 
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('141', 'Black Lagoon');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('142', 'Komi Cant Comunicate');",
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('143', 'Cowboy Bebop');",
 	];
 
 	con.connect(() => {
