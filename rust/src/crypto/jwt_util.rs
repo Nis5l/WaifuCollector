@@ -70,6 +70,8 @@ pub fn jwt_sign_token(username: &str, user_id: i32, secret: &str) -> Result<Stri
 }
 
 pub fn jwt_verify_token(token: &str, secret: &str) -> Result<JwtToken, jwt::Error> {
+    //TODO: test for encryption (security)
+
     let key: Hmac<Sha256> = Hmac::new_from_slice(&bincode::serialize( secret).expect("Serializing jwt secret failed!"))?;
 
     let btree: BTreeMap<String, String> = token.verify_with_key(&key)?;

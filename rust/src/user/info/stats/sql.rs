@@ -1,9 +1,10 @@
 use crate::sql::Sql;
 
-pub async fn get_user_friend_count(sql: &Sql, user_id: u32) -> Result<u32, sqlx::Error> {
+//TODO: remove, use shared
+pub async fn get_user_friend_count(sql: &Sql, user_id: u32) -> Result<i64, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let (count, ): (u32, ) = sqlx::query_as(
+    let (count, ): (i64, ) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM friends
          WHERE uidone=? OR uidtwo=? AND frstatus=2;")
@@ -16,10 +17,10 @@ pub async fn get_user_friend_count(sql: &Sql, user_id: u32) -> Result<u32, sqlx:
 }
 
 
-pub async fn get_user_card_count(sql: &Sql, user_id: u32) -> Result<u32, sqlx::Error> {
+pub async fn get_user_card_count(sql: &Sql, user_id: u32) -> Result<i64, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let (count, ): (u32, ) = sqlx::query_as(
+    let (count, ): (i64, ) = sqlx::query_as(
         "SELECT COUNT(DISTINCT cid)
          FROM unlockedcards
          WHERE uid=?;")
@@ -30,10 +31,10 @@ pub async fn get_user_card_count(sql: &Sql, user_id: u32) -> Result<u32, sqlx::E
     Ok(count)
 }
 
-pub async fn get_max_card_count(sql: &Sql) -> Result<u32, sqlx::Error> {
+pub async fn get_max_card_count(sql: &Sql) -> Result<i64, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let (count, ): (u32, ) = sqlx::query_as(
+    let (count, ): (i64, ) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM cards")
         .fetch_one(&mut con)

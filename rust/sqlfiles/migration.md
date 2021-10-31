@@ -37,7 +37,7 @@ ALTER TABLE cards CHANGE cardImage cimage TINYTEXT NOT NULL;
 ALTER TABLE cards ADD FOREIGN KEY (ctid) REFERENCES cardtypes(ctid);
 ```
 
-## Frames
+## CardFrames
 
 ```sql
 ALTER TABLE frame RENAME cardframes;
@@ -67,7 +67,7 @@ ALTER TABLE cardunlocks CHANGE quality cuquality INT NOT NULL;
 ALTER TABLE cardunlocks CHANGE level culevel INT NOT NULL;
 ALTER TABLE cardunlocks ADD FOREIGN KEY (uid) REFERENCES users(uid);
 ALTER TABLE cardunlocks ADD FOREIGN KEY (cid) REFERENCES cards(cid);
-ALTER TABLE cardunlocks ADD FOREIGN KEY (fid) REFERENCES cardframes(cfid);
+ALTER TABLE cardunlocks ADD FOREIGN KEY (cfid) REFERENCES cardframes(cfid);
 ```
 
 ## Friends

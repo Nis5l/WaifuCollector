@@ -51,6 +51,9 @@ mod card;
 //
 // /:id/rank -> /user/:id/rank
 // rankID -> rank
+//
+// /addfriend -> /friend/add
+// userID -> userId
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -60,7 +63,6 @@ mod card;
 // smth dashboard
 // /passchange
 // GET /inventory
-// /addfriend
 // /managefriend
 // /trade
 // /addtrade
@@ -123,6 +125,7 @@ async fn rocket() -> _ {
            action::pack::time::pack_time_route,
            action::pack::time::max::pack_time_max_route,
            action::upgrade::upgrade_route,
+           action::friend::add::friend_add_route,
 
            card::uuid::card_uuid_route
         ])

@@ -10,13 +10,13 @@ pub struct Achievement {
 #[serde(rename_all = "camelCase")]
 pub struct UserStatsResponse {
     pub max_friends: u32,
-    pub friends: u32,
+    pub friends: i64,
 
-    pub max_cards: u32,
-    pub cards: u32,
+    pub max_cards: i64,
+    pub cards: i64,
 
-    pub max_trades: u32,
-    pub trades: u32,
+    pub max_trades: i64,
+    pub trades: i64,
 
     pub achievements: Vec<Achievement>
 }

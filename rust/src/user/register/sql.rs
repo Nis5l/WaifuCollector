@@ -1,14 +1,13 @@
 use sqlx::mysql::MySqlQueryResult;
 
 use crate::sql::Sql;
-use crate::user::{UserVerified, UserRanking};
+use crate::shared::user::data::{UserVerified, UserRanking};
 
 pub async fn email_exists(sql: &Sql, email: String) -> Result<bool, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
-    //TODO: rename to users
-    let (count,): (i32,) = sqlx::query_as(
+    let (count,): (i64,) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM users
          WHERE uemail=?;")
@@ -23,7 +22,7 @@ pub async fn user_exists(sql: &Sql, username: String) -> Result<bool, sqlx::Erro
 
     let mut con = sql.get_con().await?;
 
-    let (count,): (i32,) = sqlx::query_as(
+    let (count,): (i64,) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM users
          WHERE LOWER(uusername) = LOWER(?);")
