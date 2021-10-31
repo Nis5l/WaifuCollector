@@ -128,6 +128,7 @@ async fn rocket() -> _ {
            action::upgrade::upgrade_route,
            action::friend::add::friend_add_route,
            action::friend::accept::friend_accept_route,
+           action::friend::remove::friend_remove_route,
 
            card::uuid::card_uuid_route
         ])

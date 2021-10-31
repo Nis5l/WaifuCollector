@@ -13,6 +13,7 @@ use crate::config::Config;
 #[post("/friend/add", data="<data>")]
 pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<FriendAddResponse> {
     let user_id = token.id;
+    let username = token.username;
 
     if data.user_id.is_none() && data.username.is_none() {
         return ApiResponseErr::api_err(Status::BadRequest, String::from("One of the fields has to be set: userId, username"));
@@ -21,7 +22,7 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
     let (user_id_receiver, username_receiver) = match data.user_id {
                     Some(id) => {
                         let username = match rjtry!(user::sql::username_from_user_id(sql, id).await) {
-                            None => return ApiResponseErr::api_err(Status::Conflict, format!("User with id {} does not exist", id)),
+                            None => return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", id)),
                             Some(value) => value
                         };
                         (id, username)
@@ -53,7 +54,7 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
 
     rjtry!(notification::sql::add_notification(sql, user_id_receiver, &notification::data::NotificationCreateData {
         title: String::from("Friend Request"),
-        message: String::from("You got a new friend request, click to view!"),
+        message: format!("{} sent you a friend request, click to view!", username),
         url: String::from("friends"),
         time: Utc::now()
     }).await);
