@@ -1,10 +1,11 @@
 use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
 use rocket::State;
+use chrono::Utc;
 
 use super::data::{FriendAddResponse, FriendAddRequest};
 use super::sql;
-use crate::shared::{user, friend};
+use crate::shared::{user, friend, notification};
 use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use crate::config::Config;
@@ -49,6 +50,13 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
     }
 
     rjtry!(sql::send_friend_request(sql, user_id, user_id_receiver).await);
+
+    rjtry!(notification::sql::add_notification(sql, user_id_receiver, &notification::data::NotificationCreateData {
+        title: String::from("Friend Request"),
+        message: String::from("You got a new friend request, click to view!"),
+        url: String::from("friends"),
+        time: Utc::now()
+    }).await);
 
     ApiResponseErr::ok(Status::Ok, FriendAddResponse { message: format!("Sent friend request to {}", user_id_receiver) })
 }

@@ -7,7 +7,7 @@ pub async fn used_friend_slots(sql: &Sql, user_id: i32) -> Result<i64, sqlx::Err
     let (count, ): (i64, ) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM friends
-         WHERE uidtwo=? AND frstatus=1 OR uidone=?")
+         WHERE uidtwo=? AND frstatus=1 OR uidone=?;")
         .bind(user_id)
         .bind(user_id)
         .fetch_one(&mut con)
