@@ -18,17 +18,21 @@ pub async fn user_id_from_username(sql: &Sql, username: &str) -> Result<Option<i
     Ok(Some(stmt?.0))
 }
 
-pub async fn user_id_exists(sql: &Sql, user_id: i32) -> Result<bool, sqlx::Error> {
+pub async fn username_from_user_id(sql: &Sql, user_id: i32) -> Result<Option<String>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let (count, ): (i64, ) = sqlx::query_as(
-        "SELECT COUNT(*)
+    let stmt: Result<(String, ), sqlx::Error> = sqlx::query_as(
+        "SELECT uusername
          FROM users
          WHERE uid=?;")
         .bind(user_id)
         .fetch_one(&mut con)
-        .await.unwrap();
+        .await;
+
+    if let Err(sqlx::Error::RowNotFound) = stmt {
+        return Ok(None)
+    }
 
 
-    Ok(count != 0)
+    Ok(Some(stmt?.0))
 }

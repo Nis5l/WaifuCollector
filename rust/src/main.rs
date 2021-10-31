@@ -54,6 +54,9 @@ mod card;
 //
 // /addfriend -> /friend/add
 // userID -> userId
+//
+// /managefriend command: 0 -> /friend/accept
+// /managefriend command: 1 -> /friend/remove
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -62,9 +65,7 @@ mod card;
 // /log
 // smth dashboard
 // /passchange
-// GET /inventory
-// /managefriend
-// /trade
+// GET /inventory /trade
 // /addtrade
 // /suggesttrade
 // /removetrade
@@ -126,6 +127,7 @@ async fn rocket() -> _ {
            action::pack::time::max::pack_time_max_route,
            action::upgrade::upgrade_route,
            action::friend::add::friend_add_route,
+           action::friend::accept::friend_accept_route,
 
            card::uuid::card_uuid_route
         ])
