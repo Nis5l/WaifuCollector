@@ -1,7 +1,8 @@
-use crate::sql::Sql;
 use super::data::Notification;
+use crate::sql::Sql;
+use crate::shared::Id;
 
-pub async fn get_notifications(sql: &Sql, user_id: i32) -> Result<Vec<Notification>, sqlx::Error> {
+pub async fn get_notifications(sql: &Sql, user_id: Id) -> Result<Vec<Notification>, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 

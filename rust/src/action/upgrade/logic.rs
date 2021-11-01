@@ -46,7 +46,7 @@ pub async fn upgrade_route(sql: &State<Sql>, token: JwtToken, data: UpgradeReque
 
     ApiResponseErr::ok(Status::Ok, UpgradeResponse {
         success,
-        uuid: new_card_uuid
+        card: new_card_uuid
     })
 }
 

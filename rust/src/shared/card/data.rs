@@ -2,10 +2,11 @@ use serde::Serialize;
 use sqlx::FromRow;
 
 use crate::config::Config;
+use crate::shared::Id;
 
 #[derive(Debug, Serialize, FromRow)]
 pub struct CardInfo {
-    pub id: i32,
+    pub id: Id,
     #[sqlx(rename="cardName")]
     pub name: String,
     #[sqlx(rename="cardImage")]
@@ -14,7 +15,7 @@ pub struct CardInfo {
 
 #[derive(Debug, Serialize)]
 pub struct CardFrame {
-    pub id: i32,
+    pub id: Id,
     pub name: String,
     pub front: String,
     pub back: String
@@ -22,13 +23,13 @@ pub struct CardFrame {
 
 #[derive(Debug, Serialize)]
 pub struct CardType {
-    pub id: i32,
+    pub id: Id,
     pub name: String
 }
 
 #[derive(Debug, Serialize)]
 pub struct CardEffect {
-    pub id: i32,
+    pub id: Id,
     pub image: String,
     pub opacity: f32
 }
@@ -36,8 +37,8 @@ pub struct CardEffect {
 #[derive(Debug, Serialize)]
 #[serde(rename_all="camelCase")]
 pub struct Card {
-    pub id: i32,
-    pub user_id: i32,
+    pub id: Id,
+    pub user_id: Id,
     pub level: i32,
     pub quality: i32,
 
@@ -83,32 +84,32 @@ impl Card {
 #[serde(rename_all="camelCase")]
 #[sqlx(rename_all = "camelCase")]
 pub struct CardDb {
-    pub id: i32,
-    pub user_id: i32,
+    pub id: Id,
+    pub user_id: Id,
     pub level: i32,
     pub quality: i32,
 
-    pub card_id: i32,
+    pub card_id: Id,
     pub card_name: String,
     pub card_image: String,
 
-    pub type_id: i32,
+    pub type_id: Id,
     pub type_name: String,
 
-    pub frame_id: i32,
+    pub frame_id: Id,
     pub frame_name: String,
     pub frame_front: String,
     pub frame_back: String,
 
-    pub effect_id: i32,
+    pub effect_id: Id,
     pub effect_image: String,
     pub effect_opacity: f32
 }
 
 #[derive(Debug, Serialize)]
 pub struct CardCreateData {
-    pub card_id: i32,
-    pub frame_id: i32,
+    pub card_id: Id,
+    pub frame_id: Id,
     pub quality: i32,
     pub level: i32
 }

@@ -2,6 +2,8 @@ use serde::{Serialize, Deserialize};
 use validator::Validate;
 use rocketjson::JsonBody;
 
+use crate::shared::Id;
+
 #[derive(Debug, Deserialize, Validate, JsonBody)]
 pub struct UsersRequest {
     pub username: Option<String>
@@ -9,6 +11,6 @@ pub struct UsersRequest {
 
 #[derive(Serialize)]
 pub struct UsersResponse {
-    pub id: i32,
+    pub id: Id,
     pub username: String
 }

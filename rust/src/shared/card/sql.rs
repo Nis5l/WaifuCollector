@@ -3,8 +3,9 @@ use sqlx::mysql::MySqlQueryResult;
 use crate::sql::Sql;
 use crate::config::Config;
 use super::data::{CardCreateData, Card, CardDb};
+use crate::shared::Id;
 
-pub async fn add_card(sql: &Sql, user_id: i32, card: &CardCreateData) -> Result<i32, sqlx::Error> {
+pub async fn add_card(sql: &Sql, user_id: Id, card: &CardCreateData) -> Result<Id, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     println!("fid: {}", card.frame_id);
@@ -22,11 +23,11 @@ pub async fn add_card(sql: &Sql, user_id: i32, card: &CardCreateData) -> Result<
         .execute(&mut con)
         .await?;
 
-    Ok(stmt.last_insert_id() as i32)
+    Ok(stmt.last_insert_id() as Id)
 }
 
-pub async fn get_card(sql: &Sql, card_uuid: i32, user_id: Option<i32>, config: &Config) -> Result<Option<Card>, sqlx::Error> {
-    let mut cards = get_cards(sql, vec![card_uuid], user_id, config).await?;
+pub async fn get_card(sql: &Sql, card_unlocked_id: Id, user_id: Option<Id>, config: &Config) -> Result<Option<Card>, sqlx::Error> {
+    let mut cards = get_cards(sql, vec![card_unlocked_id], user_id, config).await?;
 
     if cards.is_empty() {
         return Ok(None);
@@ -37,16 +38,16 @@ pub async fn get_card(sql: &Sql, card_uuid: i32, user_id: Option<i32>, config: &
 
 //TODO: passing the config to sql doesnt feel right, maybe add another step where the CardDbs are
 //transformed to Cards
-pub async fn get_cards(sql: &Sql, card_uuids: Vec<i32>, user_id: Option<i32>, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
-    if card_uuids.is_empty() { return Ok(Vec::new()); }
+pub async fn get_cards(sql: &Sql, card_unlocked_ids: Vec<Id>, user_id: Option<Id>, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
+    if card_unlocked_ids.is_empty() { return Ok(Vec::new()); }
 
     let mut con = sql.get_con().await?;
 
     let mut in_statement = String::from("");
 
-    for i in 0..card_uuids.len() {
+    for i in 0..card_unlocked_ids.len() {
         in_statement += "?";
-        if i != card_uuids.len() - 1 {
+        if i != card_unlocked_ids.len() - 1 {
             in_statement += ",";
         }
     }
@@ -88,7 +89,7 @@ pub async fn get_cards(sql: &Sql, card_uuids: Vec<i32>, user_id: Option<i32>, co
 
     let mut stmt = sqlx::query_as(&query);
 
-    for uuid in card_uuids {
+    for uuid in card_unlocked_ids {
         stmt = stmt.bind(uuid);
     }
 
@@ -105,13 +106,13 @@ pub async fn get_cards(sql: &Sql, card_uuids: Vec<i32>, user_id: Option<i32>, co
     Ok(cards)
 }
 
-pub async fn delete_card(sql: &Sql, card_uuid: i32) -> Result<u64, sqlx::Error> {
+pub async fn delete_card(sql: &Sql, card_unlocked_id: Id) -> Result<u64, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let result: MySqlQueryResult = sqlx::query(
         "DELETE FROM cardunlocks
-        WHERE cuid=?;")
-        .bind(card_uuid)
+         WHERE cuid=?;")
+        .bind(card_unlocked_id)
         .execute(&mut con).await?;
 
     Ok(result.rows_affected())

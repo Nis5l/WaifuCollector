@@ -1,7 +1,9 @@
-use crate::sql::Sql;
 use sqlx::mysql::MySqlQueryResult;
 
-pub async fn accept_friend_request(sql: &Sql, user_id: i32, user_id_accept: i32) -> Result<bool, sqlx::Error> {
+use crate::sql::Sql;
+use crate::shared::Id;
+
+pub async fn accept_friend_request(sql: &Sql, user_id: Id, user_id_accept: Id) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let result: MySqlQueryResult = sqlx::query(

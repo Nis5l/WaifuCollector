@@ -1,6 +1,7 @@
 use crate::sql::Sql;
+use crate::shared::Id;
 
-pub async fn send_friend_request(sql: &Sql, user_id: i32, user_id_receiver: i32) -> Result<(), sqlx::Error> {
+pub async fn send_friend_request(sql: &Sql, user_id: Id, user_id_receiver: Id) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query(

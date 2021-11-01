@@ -1,14 +1,17 @@
 use serde::Serialize;
 use sqlx::FromRow;
 
+use crate::shared::Id;
+
 #[derive(Debug, Serialize, FromRow)]
 pub struct Notification {
-    pub id: i32,
+    pub id: Id,
     #[sqlx(rename = "userId")]
-    pub user_id: i32,
+    pub user_id: Id,
     pub title: String,
     pub message: String,
     pub url: String,
+    //TODO: ????
     pub time: i64
 }
 

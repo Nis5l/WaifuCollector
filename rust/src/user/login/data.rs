@@ -3,6 +3,8 @@ use validator::Validate;
 use rocketjson::JsonBody;
 use sqlx::FromRow;
 
+use crate::shared::Id;
+
 #[derive(Debug, Deserialize, Validate, JsonBody)]
 pub struct LoginRequest {
     pub username: String,
@@ -16,7 +18,7 @@ pub struct LoginResponse {
 
 #[derive(Debug, FromRow)]
 pub struct LoginDb {
-    pub id: i32,
+    pub id: Id,
     pub username: String,
     pub password: String
 }

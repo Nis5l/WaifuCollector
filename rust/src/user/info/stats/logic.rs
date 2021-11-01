@@ -3,12 +3,14 @@ use rocket::{State, http::Status};
 
 use crate::sql::Sql;
 use crate::config::Config;
+use crate::shared::friend;
+use crate::shared::Id;
 use super::sql;
 use super::data::UserStatsResponse;
 
 #[get("/user/<user_id>/stats")]
-pub async fn user_stats_route(user_id: u32, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<UserStatsResponse> {
-    let friend_count = rjtry!(sql::get_user_friend_count(&sql, user_id).await);
+pub async fn user_stats_route(user_id: Id, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<UserStatsResponse> {
+    let friend_count = rjtry!(friend::sql::used_friend_slots(&sql, user_id).await);
     let card_count = rjtry!(sql::get_user_card_count(&sql, user_id).await);
     let max_card_count = rjtry!(sql::get_max_card_count(&sql).await);
     //let trades = rjtry!(sql::get_trades(&sql).await);

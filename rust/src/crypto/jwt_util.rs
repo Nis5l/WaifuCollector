@@ -7,14 +7,15 @@ use rocket::http::Status;
 use rocketjson::error::JsonBodyError;
 
 use crate::config::Config;
+use crate::shared::Id;
 
 pub struct JwtToken {
     pub username: String,
-    pub id: i32
+    pub id: Id
 }
 
 impl JwtToken {
-    pub fn new(username: String, id: i32) -> Self {
+    pub fn new(username: String, id: Id) -> Self {
         JwtToken {
             username,
             id
@@ -59,7 +60,7 @@ impl<'r> FromRequest<'r> for JwtToken {
     }
 }
 
-pub fn jwt_sign_token(username: &str, user_id: i32, secret: &str) -> Result<String, jwt::Error> {
+pub fn jwt_sign_token(username: &str, user_id: Id, secret: &str) -> Result<String, jwt::Error> {
     let key: Hmac<Sha256> = Hmac::new_from_slice(&bincode::serialize(secret).expect("Serializing jwt secret failed!"))?;
     let mut btree = BTreeMap::new();
     let user_id_str = user_id.to_string();
@@ -83,7 +84,7 @@ pub fn jwt_verify_token(token: &str, secret: &str) -> Result<JwtToken, jwt::Erro
         return Err(jwt::Error::Format);
     }
 
-    let user_id = user_id_str.unwrap().parse::<i32>();
+    let user_id = user_id_str.unwrap().parse::<Id>();
 
     if user_id.is_err() {
         return Err(jwt::Error::Format);

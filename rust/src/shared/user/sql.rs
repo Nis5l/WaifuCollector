@@ -1,9 +1,10 @@
 use crate::sql::Sql;
+use crate::shared::Id;
 
-pub async fn user_id_from_username(sql: &Sql, username: &str) -> Result<Option<i32>, sqlx::Error> {
+pub async fn user_id_from_username(sql: &Sql, username: &str) -> Result<Option<Id>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let stmt: Result<(i32, ), sqlx::Error> = sqlx::query_as(
+    let stmt: Result<(Id, ), sqlx::Error> = sqlx::query_as(
         "SELECT uid
          FROM users
          WHERE uusername=?;")
@@ -18,7 +19,7 @@ pub async fn user_id_from_username(sql: &Sql, username: &str) -> Result<Option<i
     Ok(Some(stmt?.0))
 }
 
-pub async fn username_from_user_id(sql: &Sql, user_id: i32) -> Result<Option<String>, sqlx::Error> {
+pub async fn username_from_user_id(sql: &Sql, user_id: Id) -> Result<Option<String>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let stmt: Result<(String, ), sqlx::Error> = sqlx::query_as(

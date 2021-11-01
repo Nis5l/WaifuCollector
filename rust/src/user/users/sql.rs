@@ -1,6 +1,7 @@
 use crate::sql::Sql;
+use crate::shared::Id;
 
-pub async fn get_users(sql: &Sql, mut username: String, amount: u32) -> Result<Vec<(String, i32)>, sqlx::Error> {
+pub async fn get_users(sql: &Sql, mut username: String, amount: u32) -> Result<Vec<(String, Id)>, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
@@ -10,8 +11,8 @@ pub async fn get_users(sql: &Sql, mut username: String, amount: u32) -> Result<V
         .replace("_", "!_")
         .replace("[", "![");
 
-    let users: Vec<(String, i32)> = sqlx::query_as(
-        "SELECT uusername AS username, uid AS id
+    let users: Vec<(String, Id)> = sqlx::query_as(
+        "SELECT uusername, uid
          FROM users
          WHERE uusername LIKE CONCAT('%', ?, '%')
          LIMIT ?;")

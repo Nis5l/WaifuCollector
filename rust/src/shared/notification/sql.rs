@@ -1,7 +1,8 @@
 use super::data::NotificationCreateData;
 use crate::sql::Sql;
+use crate::shared::Id;
 
-pub async fn add_notification(sql: &Sql, user_id: i32, notification_create: &NotificationCreateData) -> Result<(), sqlx::Error> {
+pub async fn add_notification(sql: &Sql, user_id: Id, notification_create: &NotificationCreateData) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query(

@@ -49,6 +49,8 @@ mod card;
 //    mainuuid -> cardOne
 //    carduuid -> cardTwo
 //
+//    uuid -> card
+//
 // /:id/rank -> /user/:id/rank
 // rankID -> rank
 //

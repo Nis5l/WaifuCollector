@@ -1,6 +1,7 @@
 use crate::sql::Sql;
+use crate::shared::Id;
 
-pub async fn get_user_ranking(sql: &Sql, user_id: i32) -> Result<i32, sqlx::Error> {
+pub async fn get_user_ranking(sql: &Sql, user_id: Id) -> Result<i32, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let (rank,): (i32,) = sqlx::query_as(

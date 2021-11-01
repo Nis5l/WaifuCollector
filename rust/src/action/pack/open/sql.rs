@@ -2,9 +2,10 @@ use sqlx::mysql::MySqlQueryResult;
 use chrono::{DateTime, Utc};
 
 use crate::sql::Sql;
+use crate::shared::Id;
 use super::data::CardCreateDataDb;
 
-pub async fn set_pack_time(sql: &Sql, user_id: i32, last_opened: DateTime<Utc>) -> Result<(), sqlx::Error> {
+pub async fn set_pack_time(sql: &Sql, user_id: Id, last_opened: DateTime<Utc>) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let result: MySqlQueryResult = sqlx::query(

@@ -1,13 +1,15 @@
 use serde::Serialize;
-use crate::shared::card::data::Card;
 use sqlx::FromRow;
 use chrono::{DateTime, Utc};
+
+use crate::shared::Id;
+use crate::shared::card::data::Card;
 
 #[derive(Debug, Serialize, FromRow)]
 #[sqlx(rename_all="camelCase")]
 pub struct CardCreateDataDb {
-    pub card_id: i32,
-    pub frame_id: i32
+    pub card_id: Id,
+    pub frame_id: Id
 }
 
 #[derive(Debug, Serialize)]

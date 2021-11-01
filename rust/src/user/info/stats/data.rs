@@ -15,7 +15,7 @@ pub struct UserStatsResponse {
     pub max_cards: i64,
     pub cards: i64,
 
-    pub max_trades: i64,
+    pub max_trades: u32,
     pub trades: i64,
 
     pub achievements: Vec<Achievement>
