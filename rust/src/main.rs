@@ -45,6 +45,9 @@ mod card;
 // /deleteAllNotifications -> notifications/delete/all
 // data -> notifications
 //
+// notification:
+// time: int -> ISO
+//
 // /upgrade
 //    mainuuid -> cardOne
 //    carduuid -> cardTwo

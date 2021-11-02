@@ -54,7 +54,7 @@ CREATE TABLE friends (
 	FOREIGN KEY (uidtwo) REFERENCES users(uid)
 ) ENGINE = InnoDB;
 
-CREATE TABLE trades (
+CREATE TABLE tradecards (
 	tid INT AUTO_INCREMENT,
 	uidone INT NOT NULL,
 	uidtwo INT NOT NULL,
@@ -65,13 +65,13 @@ CREATE TABLE trades (
 	FOREIGN KEY (uidtwo) REFERENCES users(uid)
 ) ENGINE = InnoDB;
 
-CREATE TABLE trademanagers (
+CREATE TABLE trades (
 	tmid INT NOT NULL AUTO_INCREMENT,
 	uidone INT NOT NULL,
 	uidtwo INT NOT NULL,
 	tmstatusone INT NOT NULL,
 	tmstatustwo INT NOT NULL,
-	tmcooldown DATETIME NOT NULL,
+	tmlasttrade DATETIME NOT NULL,
 	PRIMARY KEY(tmid),
 	FOREIGN KEY (uidone) REFERENCES users(uid),
 	FOREIGN KEY (uidtwo) REFERENCES users(uid)
@@ -128,18 +128,18 @@ CREATE TABLE packtimes (
 	FOREIGN KEY (uid) REFERENCES users(uid)
 ) ENGINE = InnoDB;
 
-CREATE TABLE badges (
+CREATE TABLE achievements (
 	bid INT NOT NULL,
 	bimage TEXT NOT NULL,
 	btext TEXT NOT NULL,
 	PRIMARY KEY (bid)
 ) ENGINE = InnoDB;
 
-CREATE TABLE badgeunlocks (
+CREATE TABLE achievementunlocks (
 	buid INT NOT NULL AUTO_INCREMENT,
 	uid INT NOT NULL,
 	bid INT NOT NULL,
 	PRIMARY KEY (buid),
 	FOREIGN KEY (uid) REFERENCES users(uid),
-	FOREIGN KEY (bid) REFERENCES badges(bid)
+	FOREIGN KEY (bid) REFERENCES achievements(bid)
 ) ENGINE = InnoDB;

@@ -83,31 +83,31 @@ ALTER TABLE friends ADD FOREIGN KEY (uidtwo) REFERENCES users(uid)
 UPDATE friends SET friendStatus = 1 WHERE friendStatus = 2;
 ```
 
-## Trades
+## TradeCards
 
 ```sql
-ALTER TABLE trade RENAME trades;
-ALTER TABLE trades CHANGE id tid INT AUTO_INCREMENT PRIMARY KEY;
-ALTER TABLE trades CHANGE userone uidone INT NOT NULL;
-ALTER TABLE trades CHANGE usertwo uidtwo INT NOT NULL;
-ALTER TABLE trades CHANGE cardId cuid INT NOT NULL;
-ALTER TABLE trades ADD FOREIGN KEY (cuid) REFERENCES cardunlocks(cuid)
-ALTER TABLE trades ADD FOREIGN KEY (uidone) REFERENCES users(cuid)
-ALTER TABLE trades ADD FOREIGN KEY (uidtwo) REFERENCES users(cuid)
+ALTER TABLE trade RENAME tradecards;
+ALTER TABLE tradecards CHANGE id tid INT AUTO_INCREMENT PRIMARY KEY;
+ALTER TABLE tradecards CHANGE userone uidone INT NOT NULL;
+ALTER TABLE tradecards CHANGE usertwo uidtwo INT NOT NULL;
+ALTER TABLE tradecards CHANGE cardId cuid INT NOT NULL;
+ALTER TABLE tradecards ADD FOREIGN KEY (cuid) REFERENCES cardunlocks(cuid)
+ALTER TABLE tradecards ADD FOREIGN KEY (uidone) REFERENCES users(cuid)
+ALTER TABLE tradecards ADD FOREIGN KEY (uidtwo) REFERENCES users(cuid)
 ```
 
-## TrandeManager
+## Trandes
 
 ```sql
-ALTER TABLE trademanager RENAME trademanagers;
-ALTER TABLE trademanagers ADD COLUMN tmid INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
-ALTER TABLE trademanagers CHANGE userone uidone INT NOT NULL;
-ALTER TABLE trademanagers CHANGE usertwo uidtwo INT NOT NULL;
-ALTER TABLE trademanagers CHANGE statusone tmstatusone INT NOT NULL;
-ALTER TABLE trademanagers CHANGE statustwo tmstatustwo INT NOT NULL;
-ALTER TABLE trademanagers CHANGE cooldown tmcooldown DATETIME NOT NULL;
-ALTER TABLE trademanagers ADD FOREIGN KEY (uidone) REFERENCES users(uid);
-ALTER TABLE trademanagers ADD FOREIGN KEY (uidtwo) REFERENCES users(uid);
+ALTER TABLE trademanager RENAME trades;
+ALTER TABLE trades ADD COLUMN tmid INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+ALTER TABLE trades CHANGE userone uidone INT NOT NULL;
+ALTER TABLE trades CHANGE usertwo uidtwo INT NOT NULL;
+ALTER TABLE trades CHANGE statusone tmstatusone INT NOT NULL;
+ALTER TABLE trades CHANGE statustwo tmstatustwo INT NOT NULL;
+ALTER TABLE trades CHANGE cooldown tmlasttrade DATETIME NOT NULL;
+ALTER TABLE trades ADD FOREIGN KEY (uidone) REFERENCES users(uid);
+ALTER TABLE trades ADD FOREIGN KEY (uidtwo) REFERENCES users(uid);
 ```
 
 ## Notifications
@@ -172,22 +172,23 @@ ALTER TABLE packtimes CHANGE userID uid INT NOT NULL;
 UPDATE packtimes SET ptlastopened = NULL WHERE ptlastopened = "0000-00-00 00:00:00";
 ```
 
-## Badges
+## Achievements
 
 ```sql
-ALTER TABLE badges CHANGE id bid INT NOT NULL;
-ALTER TABLE badges CHANGE image bimage TEXT NOT NULL;
-ALTER TABLE badges CHANGE text btext TEXT NOT NULL;
+ALTER TABLE badges RENAME achievements;
+ALTER TABLE achievements CHANGE id aid INT NOT NULL;
+ALTER TABLE achievements CHANGE image aimage TEXT NOT NULL;
+ALTER TABLE achievements CHANGE text atext TEXT NOT NULL;
 ```
 
-## BadgeUnlocks
+## AchievementUnlocks
 
 ```sql
-ALTER TABLE unlockedBadges RENAME badgeunlocks;
-ALTER TABLE badgeunlocks DROP PRIMARY KEY;
-ALTER TABLE badgeunlocks ADD COLUMN buid INT NOT NULL PRIMARY KEY FIRST;
-ALTER TABLE badgeunlocks CHANGE userId uid INT NOT NULL;
-ALTER TABLE badgeunlocks CHANGE badgeId bid INT NOT NULL;
-ALTER TABLE badgeunlocks ADD FOREIGN KEY (uid) REFERENCES users(uid),
-ALTER TABLE badgeunlocks ADD FOREIGN KEY (bid) REFERENCES badges(bid)
+ALTER TABLE unlockedBadges RENAME achievementunlocks;
+ALTER TABLE achievementunlocks DROP PRIMARY KEY;
+ALTER TABLE achievementunlocks ADD COLUMN auid INT NOT NULL PRIMARY KEY FIRST;
+ALTER TABLE achievementunlocks CHANGE userId uid INT NOT NULL;
+ALTER TABLE achievementunlocks CHANGE badgeId aid INT NOT NULL;
+ALTER TABLE achievementunlocks ADD FOREIGN KEY (uid) REFERENCES users(uid),
+ALTER TABLE achievementunlocks ADD FOREIGN KEY (aid) REFERENCES achievements(aid)
 ```

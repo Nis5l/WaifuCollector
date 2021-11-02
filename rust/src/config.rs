@@ -21,6 +21,9 @@ pub struct Config {
     pub pack_quality_min: i32,
     pub pack_quality_max: i32,
 
+    //seconds
+    pub trade_cooldown: u32,
+
     pub db_connection: String,
 
     pub card_image_base: String,
@@ -51,6 +54,8 @@ impl Default for Config {
             pack_amount: 1,
             pack_quality_min: 1,
             pack_quality_max: 5,
+
+            trade_cooldown: 60,
 
             db_connection: String::from("mysql://root@localhost/waifucollector"),
 

@@ -1,5 +1,6 @@
 use serde::Serialize;
 use sqlx::FromRow;
+use chrono::{DateTime, Utc};
 
 use crate::shared::Id;
 
@@ -12,7 +13,7 @@ pub struct Notification {
     pub message: String,
     pub url: String,
     //TODO: ????
-    pub time: i64
+    pub time: DateTime<Utc>
 }
 
 #[derive(Debug, Serialize)]
