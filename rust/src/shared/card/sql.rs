@@ -99,8 +99,6 @@ pub async fn get_cards(sql: &Sql, card_unlocked_ids: Vec<Id>, user_id: Option<Id
 
     let cards_db: Vec<CardDb> = stmt.fetch_all(&mut con).await?;
 
-    println!("len: {}", cards_db.len());
-
     let cards: Vec<Card> = cards_db.into_iter().map(|card_db| { Card::from_card_db(card_db, config) }).collect();
 
     Ok(cards)

@@ -62,6 +62,21 @@ mod card;
 //
 // /managefriend command: 0 -> /friend/accept
 // /managefriend command: 1 -> /friend/remove
+//
+// /trade -> GET /trade/:user_id
+// response:
+//     cards -> selfCards
+//     cardsfriend -> friendCards
+//     cardsuggestions -> selfCardSuggestions
+//     cardsuggestionsfriend -> friendCardSuggestions
+//     username -> friendUsername
+//     statusone -> selfStatus
+//     statustwo -> friendStatus
+//     tradeCount1 removed (count of the cards)
+//     tradeCount2 removed (count of the cards)
+//     tradeTime ISO Date NO DURATION
+//     tradeLimit -> tradeCardLimit
+//     tradeLimitReached removed (couldnt find it beeing used)
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -70,7 +85,8 @@ mod card;
 // /log
 // smth dashboard
 // /passchange
-// GET /inventory /trade
+// GET /inventory
+// /trade
 // /addtrade
 // /suggesttrade
 // /removetrade
@@ -126,6 +142,7 @@ async fn rocket() -> _ {
            user::info::user_badges_route,
            user::info::user_stats_route,
            user::info::user_rank_route,
+           user::trade::trade_route,
 
            action::pack::open::pack_open_route,
            action::pack::time::pack_time_route,

@@ -55,24 +55,24 @@ CREATE TABLE friends (
 ) ENGINE = InnoDB;
 
 CREATE TABLE tradecards (
-	tid INT AUTO_INCREMENT,
+	tcid INT AUTO_INCREMENT,
 	uidone INT NOT NULL,
 	uidtwo INT NOT NULL,
 	cuid INT NOT NULL,
-	PRIMARY KEY (tid),
+	PRIMARY KEY (tcid),
 	FOREIGN KEY (cuid) REFERENCES cardunlocks(cuid),
 	FOREIGN KEY (uidone) REFERENCES users(uid),
 	FOREIGN KEY (uidtwo) REFERENCES users(uid)
 ) ENGINE = InnoDB;
 
 CREATE TABLE trades (
-	tmid INT NOT NULL AUTO_INCREMENT,
+	tid INT NOT NULL AUTO_INCREMENT,
 	uidone INT NOT NULL,
 	uidtwo INT NOT NULL,
-	tmstatusone INT NOT NULL,
-	tmstatustwo INT NOT NULL,
-	tmlasttrade DATETIME NOT NULL,
-	PRIMARY KEY(tmid),
+	tstatusone INT NOT NULL,
+	tstatustwo INT NOT NULL,
+	tlasttrade DATETIME,
+	PRIMARY KEY(tid),
 	FOREIGN KEY (uidone) REFERENCES users(uid),
 	FOREIGN KEY (uidtwo) REFERENCES users(uid)
 ) ENGINE = InnoDB;

@@ -87,7 +87,7 @@ UPDATE friends SET friendStatus = 1 WHERE friendStatus = 2;
 
 ```sql
 ALTER TABLE trade RENAME tradecards;
-ALTER TABLE tradecards CHANGE id tid INT AUTO_INCREMENT PRIMARY KEY;
+ALTER TABLE tradecards CHANGE id tcid INT AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE tradecards CHANGE userone uidone INT NOT NULL;
 ALTER TABLE tradecards CHANGE usertwo uidtwo INT NOT NULL;
 ALTER TABLE tradecards CHANGE cardId cuid INT NOT NULL;
@@ -96,16 +96,16 @@ ALTER TABLE tradecards ADD FOREIGN KEY (uidone) REFERENCES users(cuid)
 ALTER TABLE tradecards ADD FOREIGN KEY (uidtwo) REFERENCES users(cuid)
 ```
 
-## Trandes
+## Trades
 
 ```sql
 ALTER TABLE trademanager RENAME trades;
 ALTER TABLE trades ADD COLUMN tmid INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
 ALTER TABLE trades CHANGE userone uidone INT NOT NULL;
 ALTER TABLE trades CHANGE usertwo uidtwo INT NOT NULL;
-ALTER TABLE trades CHANGE statusone tmstatusone INT NOT NULL;
-ALTER TABLE trades CHANGE statustwo tmstatustwo INT NOT NULL;
-ALTER TABLE trades CHANGE cooldown tmlasttrade DATETIME NOT NULL;
+ALTER TABLE trades CHANGE statusone tstatusone INT NOT NULL;
+ALTER TABLE trades CHANGE statustwo tstatustwo INT NOT NULL;
+ALTER TABLE trades CHANGE cooldown tlasttrade DATETIME;
 ALTER TABLE trades ADD FOREIGN KEY (uidone) REFERENCES users(uid);
 ALTER TABLE trades ADD FOREIGN KEY (uidtwo) REFERENCES users(uid);
 ```

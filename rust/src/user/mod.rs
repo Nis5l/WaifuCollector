@@ -1,5 +1,6 @@
 pub mod notifications;
 pub mod info;
+pub mod trade;
 mod register;
 mod login;
 mod users;
