@@ -3,20 +3,20 @@ use rocket::http::Status;
 use rocket::State;
 use chrono::{Duration, DateTime, Utc};
 
-use super::data::{TradeResponse, TradeStatus};
+use super::data::TradeResponse;
 use super::sql;
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::Id;
 use crate::crypto::JwtToken;
-use crate::shared::user;
+use crate::shared::{user, friend, trade::data::TradeStatus};
 
 #[get("/trade/<user_id_friend>")]
 pub async fn trade_route(user_id_friend: Id, sql: &State<Sql>, config: &State<Config>, token: JwtToken) -> ApiResponseErr<TradeResponse> {
     let user_id = token.id;
 
-    if user_id == user_id_friend {
-        return ApiResponseErr::api_err(Status::NotFound, String::from("Can not trades with yourself"));
+    if !rjtry!(friend::sql::user_has_friend(sql, user_id, user_id_friend).await) {
+        return ApiResponseErr::api_err(Status::NotFound, format!("No friend with id {} found", user_id_friend));
     }
 
     let friend_username = if let Some(username) = rjtry!(user::sql::username_from_user_id(sql, user_id_friend).await) {

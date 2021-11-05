@@ -49,6 +49,7 @@ pub async fn user_friends_username(sql: &Sql, user_id: Id) -> Result<Vec<FriendU
     Ok(friends)
 }
 
+//TODO: return Friend not frienddb
 pub async fn user_friend(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<Option<FriendDb>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
@@ -74,4 +75,25 @@ pub async fn user_friend(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<O
     }
 
     Ok(Some(friends?))
+}
+
+pub async fn user_has_friend(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<bool, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    let (count, ): (i64, ) = sqlx::query_as(
+            "SELECT
+             COUNT(*)
+             FROM
+             friends
+             WHERE
+             (friends.uidone=? AND friends.uidtwo=?) OR
+             (friends.uidtwo=? AND friends.uidone=?);")
+        .bind(user_id)
+        .bind(user_friend_id)
+        .bind(user_id)
+        .bind(user_friend_id)
+        .fetch_one(&mut con)
+        .await?;
+
+    Ok(count != 0)
 }

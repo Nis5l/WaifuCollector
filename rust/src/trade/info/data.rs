@@ -1,27 +1,9 @@
 use serde::Serialize;
-use serde_repr::{Serialize_repr, Deserialize_repr};
 use chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
 use crate::shared::card::data::Card;
-
-#[derive(Debug, Serialize_repr, Deserialize_repr)]
-#[repr(i32)]
-pub enum TradeStatus {
-    UnConfirmed = 0,
-    Confirmed = 1
-}
-
-impl TradeStatus {
-    //TODO: there has to be a better method working with serde
-    pub fn from_int(status: i32) -> Option<Self> {
-        match status {
-            0 => Some(TradeStatus::Confirmed),
-            1 => Some(TradeStatus::UnConfirmed),
-            _ => None
-        }
-    }
-}
+use crate::shared::trade::data::TradeStatus;
 
 #[derive(Debug, FromRow)]
 pub struct TradeDb {

@@ -10,8 +10,12 @@ mod sql;
 mod config;
 mod crypto;
 mod shared;
-mod action;
 mod card;
+mod notifications;
+mod admission;
+mod pack;
+mod friend;
+mod trade;
 
 // CANGES:
 // /notifications POST -> GET
@@ -48,7 +52,7 @@ mod card;
 // notification:
 // time: int -> ISO
 //
-// /upgrade
+// /upgrade -> /card/upgrade
 //    mainuuid -> cardOne
 //    carduuid -> cardTwo
 //
@@ -77,6 +81,10 @@ mod card;
 //     tradeTime ISO Date NO DURATION
 //     tradeLimit -> tradeCardLimit
 //     tradeLimitReached removed (couldnt find it beeing used)
+//
+// /addtrade -> /trade/add
+// userID -> userId
+// cardID -> card
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -86,8 +94,6 @@ mod card;
 // smth dashboard
 // /passchange
 // GET /inventory
-// /trade
-// /addtrade
 // /suggesttrade
 // /removetrade
 // /removesuggestion
@@ -121,6 +127,7 @@ async fn rocket() -> _ {
         .connect(&config.db_connection)
         .await.expect("Creating DB pool failed"));
 
+    //TODO: paths not relative to start path
     println!("Setting up database...");
     for file in config.db_init_files.iter() {
         println!("-{}", file);
@@ -131,28 +138,33 @@ async fn rocket() -> _ {
         .mount("/", routes![
            index,
 
-           user::register_route,
-           user::login_route,
+           admission::register::register_route,
+           admission::login::login_route,
+
            user::users_route,
-           user::notifications_route,
-           user::notifications::notifications_delete_route,
-           user::notifications::notifications_delete_all_route,
            user::info::user_username_route,
            user::info::user_friends_route,
            user::info::user_badges_route,
            user::info::user_stats_route,
            user::info::user_rank_route,
-           user::trade::trade_route,
 
-           action::pack::open::pack_open_route,
-           action::pack::time::pack_time_route,
-           action::pack::time::max::pack_time_max_route,
-           action::upgrade::upgrade_route,
-           action::friend::add::friend_add_route,
-           action::friend::accept::friend_accept_route,
-           action::friend::remove::friend_remove_route,
+           notifications::notifications_route,
+           notifications::notifications_delete_route,
+           notifications::notifications_delete_all_route,
 
-           card::uuid::card_uuid_route
+           pack::open::pack_open_route,
+           pack::time::pack_time_route,
+           pack::time::max::pack_time_max_route,
+
+           friend::add::friend_add_route,
+           friend::accept::friend_accept_route,
+           friend::remove::friend_remove_route,
+
+           card::uuid::card_uuid_route,
+           card::upgrade::upgrade_route,
+
+           trade::info::trade_route,
+           trade::add::trade_add_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

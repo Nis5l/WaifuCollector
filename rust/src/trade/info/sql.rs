@@ -5,7 +5,7 @@ use crate::sql::Sql;
 use crate::shared::card::data::{CardDb, Card};
 use crate::config::Config;
 use crate::shared::Id;
-use super::data::{TradeStatus, TradeDb};
+use super::data::TradeDb;
 
 //TODO: passing the config to sql doesnt feel right, maybe add another step where the CardDbs are
 //transformed to Cards

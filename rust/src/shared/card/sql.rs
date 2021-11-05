@@ -111,7 +111,23 @@ pub async fn delete_card(sql: &Sql, card_unlocked_id: Id) -> Result<u64, sqlx::E
         "DELETE FROM cardunlocks
          WHERE cuid=?;")
         .bind(card_unlocked_id)
-        .execute(&mut con).await?;
+        .execute(&mut con)
+        .await?;
 
     Ok(result.rows_affected())
+}
+
+pub async fn user_owns_card(sql: &Sql, user_id: Id, card_unlocked_id: Id) -> Result<bool, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    let (count, ): (i64, ) = sqlx::query_as(
+        "SELECT COUNT(*)
+         FROM cardunlocks
+         WHERE uid=? AND cuid=?;")
+        .bind(user_id)
+        .bind(card_unlocked_id)
+        .fetch_one(&mut con)
+        .await?;
+
+    Ok(count != 0)
 }

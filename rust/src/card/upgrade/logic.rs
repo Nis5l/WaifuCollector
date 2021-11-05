@@ -9,7 +9,7 @@ use crate::sql::Sql;
 use crate::shared::card::{self, data::Card, data::CardCreateData};
 use crate::config::Config;
 
-#[post("/upgrade", data="<data>")]
+#[post("/card/upgrade", data="<data>")]
 pub async fn upgrade_route(sql: &State<Sql>, token: JwtToken, data: UpgradeRequest, config: &State<Config>) -> ApiResponseErr<UpgradeResponse> {
     let user_id = token.id;
 
