@@ -82,9 +82,11 @@ mod trade;
 //     tradeLimit -> tradeCardLimit
 //     tradeLimitReached removed (couldnt find it beeing used)
 //
-// /addtrade -> /trade/<user_friend_id>/add/<card_unlocked_id>
+// /addtrade -> /trade/<user_friend_id>/card/add/<card_unlocked_id>
 //
-// /removetrade -> /trade/<user_friend_id>/remove/<card_unlocked_id>
+// /removetrade -> /trade/<user_friend_id>/card/remove/<card_unlocked_id>
+//
+// /suggesttrade -> /trade/<user_friend_id>/suggestion/add/<card_unlocked_id>
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -94,7 +96,6 @@ mod trade;
 // smth dashboard
 // /passchange
 // GET /inventory
-// /suggesttrade
 // /removesuggestion
 // /acceptsuggestion
 // /okTrade
@@ -163,8 +164,9 @@ async fn rocket() -> _ {
            card::upgrade::upgrade_route,
 
            trade::info::trade_route,
-           trade::add::trade_add_route,
-           trade::remove::trade_remove_route
+           trade::card::add::trade_card_add_route,
+           trade::card::remove::trade_card_remove_route,
+           trade::suggestion::add::trade_suggestion_add_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

@@ -1,3 +1,3 @@
+pub mod card;
+pub mod suggestion;
 pub mod info;
-pub mod add;
-pub mod remove;

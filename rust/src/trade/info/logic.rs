@@ -15,15 +15,15 @@ use crate::shared::{user, friend, trade::data::TradeStatus};
 pub async fn trade_route(user_id_friend: Id, sql: &State<Sql>, config: &State<Config>, token: JwtToken) -> ApiResponseErr<TradeResponse> {
     let user_id = token.id;
 
-    if !rjtry!(friend::sql::user_has_friend(sql, user_id, user_id_friend).await) {
-        return ApiResponseErr::api_err(Status::NotFound, format!("No friend with id {} found", user_id_friend));
-    }
-
     let friend_username = if let Some(username) = rjtry!(user::sql::username_from_user_id(sql, user_id_friend).await) {
         username
     } else {
         return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", user_id_friend));
     };
+
+    if !rjtry!(friend::sql::user_has_friend(sql, user_id, user_id_friend).await) {
+        return ApiResponseErr::api_err(Status::NotFound, format!("You are not friends with {}", friend_username));
+    }
 
     let self_cards = rjtry!(sql::trade_cards(sql, user_id, user_id_friend, config).await);
     let friend_cards = rjtry!(sql::trade_cards(sql, user_id_friend, user_id, config).await);
