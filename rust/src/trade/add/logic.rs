@@ -22,7 +22,7 @@ pub async fn trade_add_route(data: TradeAddRequest, sql: &State<Sql>, config: &S
     }
 
     if !rjtry!(card::sql::user_owns_card(sql, user_id, card_unlocked_id).await) {
-        return ApiResponseErr::api_err(Status::NotFound, format!("The card with the id {} doesnt exist or is not owned by you", card_unlocked_id));
+        return ApiResponseErr::api_err(Status::NotFound, format!("The card with the id {} does not exist or is not owned by you", card_unlocked_id));
     }
 
     if rjtry!(sql::trade_card_count(sql, user_id, user_id_friend).await) >= config.trade_card_limit as i64 {
@@ -38,7 +38,7 @@ pub async fn trade_add_route(data: TradeAddRequest, sql: &State<Sql>, config: &S
     rjtry!(sql::remove_suggestions(sql, card_unlocked_id).await);
 
     rjtry!(trade::sql::set_trade_status(sql, user_id, user_id_friend, trade::data::TradeStatus::UnConfirmed).await);
-    
+
     rjtry!(notification::sql::add_notification(sql, user_id_friend, &notification::data::NotificationCreateData {
         title: String::from("Card Added To Trade"),
         message: format!("{} added a new card to the trade, click to view!", username),

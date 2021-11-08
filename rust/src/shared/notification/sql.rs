@@ -4,6 +4,7 @@ use crate::shared::Id;
 
 pub async fn add_notification(sql: &Sql, user_id: Id, notification_create: &NotificationCreateData) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
+    //TODO: if already exists
 
     sqlx::query(
         "INSERT INTO notifications

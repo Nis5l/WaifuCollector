@@ -85,6 +85,10 @@ mod trade;
 // /addtrade -> /trade/add
 // userID -> userId
 // cardID -> card
+//
+// /removetrade -> /trade/<user_friend_id>/remove/<card_unlocked_id>
+// userID -> userId
+// cardID -> card
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -95,7 +99,6 @@ mod trade;
 // /passchange
 // GET /inventory
 // /suggesttrade
-// /removetrade
 // /removesuggestion
 // /acceptsuggestion
 // /okTrade
@@ -164,7 +167,8 @@ async fn rocket() -> _ {
            card::upgrade::upgrade_route,
 
            trade::info::trade_route,
-           trade::add::trade_add_route
+           trade::add::trade_add_route,
+           trade::remove::trade_remove_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

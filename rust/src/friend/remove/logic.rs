@@ -23,6 +23,8 @@ pub async fn friend_remove_route(data: FriendRemoveRequest, sql: &State<Sql>, to
         return ApiResponseErr::api_err(Status::Conflict, format!("Not friend with {}", username_remove));
     }
 
+    //TODO: clear trade
+
     rjtry!(notification::sql::add_notification(sql, user_id_remove, &notification::data::NotificationCreateData {
         title: String::from("Friend Removed"),
         message: format!("{} removed you as a friend", username),
