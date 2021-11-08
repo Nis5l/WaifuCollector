@@ -82,13 +82,9 @@ mod trade;
 //     tradeLimit -> tradeCardLimit
 //     tradeLimitReached removed (couldnt find it beeing used)
 //
-// /addtrade -> /trade/add
-// userID -> userId
-// cardID -> card
+// /addtrade -> /trade/<user_friend_id>/add/<card_unlocked_id>
 //
 // /removetrade -> /trade/<user_friend_id>/remove/<card_unlocked_id>
-// userID -> userId
-// cardID -> card
 
 //TODO port from server.js:
 // /user/:id/stats
