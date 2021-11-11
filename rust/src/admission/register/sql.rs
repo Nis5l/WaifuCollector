@@ -1,7 +1,7 @@
 use sqlx::mysql::MySqlQueryResult;
 
 use crate::sql::Sql;
-use crate::shared::user::data::{UserVerified, UserRanking};
+use crate::shared::user::data::{UserVerifiedDb, UserRanking};
 
 pub async fn email_exists(sql: &Sql, email: String) -> Result<bool, sqlx::Error> {
 
@@ -46,7 +46,7 @@ pub async fn register(sql: &Sql, username: String, password_hash: String, email:
         .bind(username)
         .bind(password_hash)
         .bind(email)
-        .bind(UserVerified::No as i32)
+        .bind(UserVerifiedDb::No as i32)
         .bind(UserRanking::Standard as i32)
         .execute(&mut con)
         .await?;

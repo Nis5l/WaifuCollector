@@ -96,7 +96,7 @@ mod trade;
 // /verified -> /verify/check
 // mail -> email
 //
-// /verify
+// /verify -> /verify/confirm/<key>
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -148,6 +148,7 @@ async fn rocket() -> _ {
            admission::register::register_route,
            admission::login::login_route,
            admission::verify::check::verify_check_route,
+           admission::verify::confirm::verify_confirm_route,
 
            user::users_route,
            user::info::user_username_route,
