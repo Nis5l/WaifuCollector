@@ -34,7 +34,7 @@ pub async fn trade_route(user_id_friend: Id, sql: &State<Sql>, config: &State<Co
     let trade_db = rjtry!(sql::get_trade(sql, user_id, user_id_friend).await);
 
     let (self_status, friend_status) =
-        if let (Some(self_status), Some(friend_status)) = (TradeStatus::from_int(trade_db.self_status), TradeStatus::from_int(trade_db.friend_status)) {
+        if let (Ok(self_status), Ok(friend_status)) = (TradeStatus::from_int(trade_db.self_status), TradeStatus::from_int(trade_db.friend_status)) {
             (self_status, friend_status)
     } else {
         return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal Server Error"));

@@ -3,7 +3,7 @@ CREATE TABLE users (
 	uusername TINYTEXT NOT NULL,
 	upassword TINYTEXT NOT NULL,
 	uranking INT NOT NULL,
-	uemail TINYTEXT NOT NULL,
+	uemail TINYTEXT,
 	uverified INT NOT NULL,
 	PRIMARY KEY (uid)
 ) ENGINE = InnoDB;

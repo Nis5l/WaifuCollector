@@ -20,10 +20,11 @@ DROP TABLE animePool;
 ALTER TABLE user RENAME users;
 ALTER TABLE users CHANGE username uusername TINYTEXT NOT NULL;
 ALTER TABLE users CHANGE password upassword TINYTEXT NOT NULL;
-ALTER TABLE users CHANGE email uemail TINYTEXT NOT NULL;
+ALTER TABLE users CHANGE email uemail TINYTEXT;
 ALTER TABLE users CHANGE ranking uranking INT NOT NULL;
 ALTER TABLE users CHANGE email uemail TINYTEXT NOT NULL;
 ALTER TABLE users CHANGE verified uverified INT NOT NULL;
+UPDATE users SET uemail = NULL WHERE uemail = "";
 ```
 
 ## Cards

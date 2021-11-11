@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate rocket;
 
+//TODO: there are some dattimes as string in ret
+
 use rocket::fairing::AdHoc;
 
 use sqlx::mysql::MySqlPoolOptions;
@@ -90,6 +92,11 @@ mod trade;
 // /removesuggestion -> /trade/<user_friend_id>/suggestion/remove/<card_unlocked_id>
 //
 // /removed /acceptsuggestion, the notification is sent nonetheless
+//
+// /verified -> /verify/check
+// mail -> email
+//
+// /verify
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -103,10 +110,8 @@ mod trade;
 // /okTrade
 // /tradeTime
 // /packData
-// /verified
 // /setmail
 // /deleteMail
-// /verify
 // /mail
 // /verify/resend
 // /flex
@@ -142,6 +147,7 @@ async fn rocket() -> _ {
 
            admission::register::register_route,
            admission::login::login_route,
+           admission::verify::check::verify_check_route,
 
            user::users_route,
            user::info::user_username_route,

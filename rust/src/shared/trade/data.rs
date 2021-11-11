@@ -9,11 +9,11 @@ pub enum TradeStatus {
 
 impl TradeStatus {
     //TODO: there has to be a better method working with serde
-    pub fn from_int(status: i32) -> Option<Self> {
+    pub fn from_int(status: i32) -> Result<Self, ()> {
         match status {
-            0 => Some(TradeStatus::Confirmed),
-            1 => Some(TradeStatus::UnConfirmed),
-            _ => None
+            0 => Ok(TradeStatus::Confirmed),
+            1 => Ok(TradeStatus::UnConfirmed),
+            _ => Err(())
         }
     }
 }
