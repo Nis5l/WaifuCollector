@@ -88,6 +88,8 @@ mod trade;
 // /suggesttrade -> /trade/<user_friend_id>/suggestion/add/<card_unlocked_id>
 //
 // /removesuggestion -> /trade/<user_friend_id>/suggestion/remove/<card_unlocked_id>
+//
+// /removed /acceptsuggestion, the notification is sent nonetheless
 
 //TODO port from server.js:
 // /user/:id/stats

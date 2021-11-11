@@ -1,7 +1,6 @@
 use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
-use rocket::State;
-use chrono::Utc;
+use rocket::State; use chrono::Utc;
 
 use super::data::TradeCardAddResponse;
 use super::sql;
@@ -46,12 +45,21 @@ pub async fn trade_card_add_route(card_unlocked_id: Id, user_friend_id: Id, sql:
 
     rjtry!(trade::sql::set_trade_status(sql, user_id, user_friend_id, trade::data::TradeStatus::UnConfirmed).await);
 
-    rjtry!(notification::sql::add_notification(sql, user_friend_id, &notification::data::NotificationCreateData {
-        title: String::from("Card Added To Trade"),
-        message: format!("{} added a new card to the trade, click to view!", username),
-        url: format!("trade/{}", user_id),
-        time: Utc::now()
-    }).await);
+    if rjtry!(trade::sql::suggestion_in_trade(sql, user_id, user_friend_id, card_unlocked_id).await) {
+        rjtry!(notification::sql::add_notification(sql, user_friend_id, &notification::data::NotificationCreateData {
+            title: String::from("Card Suggestion Accepted"),
+            message: format!("{} accepted a card suggestion you made, click to view!", username),
+            url: format!("trade/{}", user_id),
+            time: Utc::now()
+        }).await);
+    } else {
+        rjtry!(notification::sql::add_notification(sql, user_friend_id, &notification::data::NotificationCreateData {
+            title: String::from("Card Added To Trade"),
+            message: format!("{} added a new card to the trade, click to view!", username),
+            url: format!("trade/{}", user_id),
+            time: Utc::now()
+        }).await);
+    }
 
     ApiResponseErr::ok(Status::Ok, TradeCardAddResponse {
         message: format!("Successfully added card {} to the trade", card_unlocked_id)

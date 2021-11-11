@@ -35,7 +35,7 @@ pub async fn trade_suggestion_add_route(user_friend_id: Id, card_unlocked_id: Id
         return ApiResponseErr::api_err(Status::Conflict, format!("Card with id {} is already in a trade", card_unlocked_id));
     }
 
-    if rjtry!(sql::trade_suggestion_in_trade(sql, user_id, user_friend_id, card_unlocked_id).await) {
+    if rjtry!(trade::sql::suggestion_in_trade(sql, user_id, user_friend_id, card_unlocked_id).await) {
         return ApiResponseErr::api_err(Status::Conflict, format!("Card with id {} is already suggested in the trade with {}", card_unlocked_id, user_friend_username));
     }
 
