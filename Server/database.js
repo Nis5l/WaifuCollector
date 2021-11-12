@@ -1596,6 +1596,17 @@ function cards(callback) {
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Katerina Solensan', '143', 'Card_KaterinaSolensan.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Coffee', '143', 'Card_Coffee.webp');",
 		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Stella Bonnaro', '143', 'Card_StellaBonnaro.webp');",
+
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Houki Shinonono', '144', 'Card_HoukiShinonono.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Cecilia Alcott', '144', 'Card_CeciliaAlcott.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Lingyin Huang', '144', 'Card_LingyinHuang.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Charlotte Dunois', '144', 'Card_CharlotteDunois.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Laura Bodewig', '144', 'Card_LauraBodewig.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Chifuyu Orimura', '144', 'Card_ChifuyuOrimura.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Tatenashi Sarashiki', '144', 'Card_TatenashiSarashiki.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Kanzashi Sarashiki', '144', 'Card_KanzashiSarashiki.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Madoka Orimura', '144', 'Card_MadokaOrimura.webp');",
+		"INSERT INTO `card` (`id`, `cardName`, `typeID`, `cardImage`) VALUES (NULL, 'Squall Meusel', '144', 'Card_SquallMeusel.webp');",
 	];
 	con.connect(() => {
 		con.query("DROP TABLE card", () => {
@@ -1765,6 +1776,8 @@ function cardTypes(callback) {
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('141', 'Black Lagoon');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('142', 'Komi Cant Comunicate');",
 		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('143', 'Cowboy Bebop');",
+
+		"INSERT INTO `cardtype` (`id`, `name`) VALUES ('144', 'Infinite Stratos');",
 	];
 
 	con.connect(() => {
