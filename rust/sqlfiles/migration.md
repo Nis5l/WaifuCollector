@@ -109,6 +109,7 @@ ALTER TABLE trades CHANGE statustwo tstatustwo INT NOT NULL;
 ALTER TABLE trades CHANGE cooldown tlasttrade DATETIME;
 ALTER TABLE trades ADD FOREIGN KEY (uidone) REFERENCES users(uid);
 ALTER TABLE trades ADD FOREIGN KEY (uidtwo) REFERENCES users(uid);
+ALTER TABLE trades ADD UNIQUE(uidone, uidtwo);
 ```
 
 ## Notifications

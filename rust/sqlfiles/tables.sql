@@ -74,7 +74,8 @@ CREATE TABLE trades (
 	tlasttrade DATETIME,
 	PRIMARY KEY(tid),
 	FOREIGN KEY (uidone) REFERENCES users(uid),
-	FOREIGN KEY (uidtwo) REFERENCES users(uid)
+	FOREIGN KEY (uidtwo) REFERENCES users(uid),
+	UNIQUE(uidone, uidtwo)
 ) ENGINE = InnoDB;
 
 CREATE TABLE notifications (

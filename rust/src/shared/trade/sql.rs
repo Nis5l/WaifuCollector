@@ -1,22 +1,63 @@
+use sqlx::Acquire;
+
 use crate::sql::Sql;
 use crate::shared::Id;
-use super::data::TradeStatus;
+use super::data::{TradeStatus, TradeDb};
 
-pub async fn set_trade_status(sql: &Sql, user_id: Id, user_friend_id: Id, status: TradeStatus) -> Result<(), sqlx::Error> {
+pub async fn set_trade_status(sql: &Sql, user_id: Id, user_friend_id: Id, status_self: TradeStatus, status_friend: TradeStatus) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
+    let mut transaction = con.begin().await?;
 
-    sqlx::query(
+    let query =
         "UPDATE trades
          SET tstatusone=?, tstatustwo=?
-         WHERE (uidone=? AND uidtwo=?) OR (uidtwo=? AND uidone=?);")
-        .bind(status as i32)
-        .bind(status as i32)
+         WHERE uidone=? AND uidtwo=?;";
+
+    sqlx::query(query)
+        .bind(status_self as i32)
+        .bind(status_friend as i32)
         .bind(user_id)
         .bind(user_friend_id)
-        .bind(user_id)
-        .bind(user_friend_id)
-        .execute(&mut con)
+        .execute(&mut transaction)
         .await?;
+
+    sqlx::query(query)
+        .bind(status_friend as i32)
+        .bind(status_self as i32)
+        .bind(user_friend_id)
+        .bind(user_id)
+        .execute(&mut transaction)
+        .await?;
+
+    transaction.commit().await?;
+
+    Ok(())
+}
+
+pub async fn set_trade_status_one(sql: &Sql, user_id: Id, user_friend_id: Id, status_self: TradeStatus) -> Result<(), sqlx::Error> {
+    let mut con = sql.get_con().await?;
+    let mut transaction = con.begin().await?;
+
+    let query =
+        "UPDATE trades
+         SET tstatusone=?
+         WHERE uidone=? AND uidtwo=?;";
+
+    sqlx::query(query)
+        .bind(status_self as i32)
+        .bind(user_id)
+        .bind(user_friend_id)
+        .execute(&mut transaction)
+        .await?;
+
+    sqlx::query(query)
+        .bind(status_self as i32)
+        .bind(user_friend_id)
+        .bind(user_id)
+        .execute(&mut transaction)
+        .await?;
+
+    transaction.commit().await?;
 
     Ok(())
 }
@@ -66,4 +107,55 @@ pub async fn suggestion_in_trade(sql: &Sql, user_id: Id, user_friend_id: Id, car
         .await?;
 
     Ok(count != 0)
+}
+
+//TODO: this has to be called not just by confirm
+pub async fn create_trade(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<bool, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    let (count, ): (i64, ) = sqlx::query_as(
+        "SELECT COUNT(*)
+         FROM trades
+         WHERE (uidone=? AND uidtwo=?) OR (uidtwo=? AND uidone=?);")
+        .bind(user_id)
+        .bind(user_friend_id)
+        .bind(user_id)
+        .bind(user_friend_id)
+        .fetch_one(&mut con)
+        .await?;
+
+    if count != 0 {
+        return Ok(false);
+    }
+
+    sqlx::query(
+        "INSERT INTO trades
+         (uidone, uidtwo, tstatusone, tstatustwo)
+         VALUES
+         (?, ?, 0, 0)")
+        .bind(user_id)
+        .bind(user_friend_id)
+        .execute(&mut con)
+        .await?;
+
+    Ok(true)
+}
+
+pub async fn get_trade(sql: &Sql, user_id: Id, user_id_friend: Id) -> Result<TradeDb, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    sqlx::query_as(
+        "SELECT trades.tstatusone as selfStatus, trades.tstatustwo as friendStatus, trades.tlasttrade as lastTrade
+         FROM trades
+         WHERE trades.uidone=? AND trades.uidtwo=?
+         UNION
+         SELECT trades.tstatustwo as selfStatus, trades.tstatusone as friendStatus, trades.tlasttrade as lastTrade
+         FROM trades
+         WHERE trades.uidtwo=? AND trades.uidone=?")
+        .bind(user_id)
+        .bind(user_id_friend)
+        .bind(user_id)
+        .bind(user_id_friend)
+        .fetch_one(&mut con)
+        .await
 }

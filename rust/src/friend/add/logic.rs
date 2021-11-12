@@ -20,23 +20,23 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
     }
 
     let (user_id_receiver, username_receiver) = match data.user_id {
-                    Some(id) => {
-                        let username = match rjtry!(user::sql::username_from_user_id(sql, id).await) {
-                            None => return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", id)),
-                            Some(value) => value
-                        };
-                        (id, username)
-                    },
-                    None => {
-                        let username = data.username.unwrap();
-                        let user_id_opt = rjtry!(user::sql::user_id_from_username(sql, &username).await);
+        Some(id) => {
+            let username = match rjtry!(user::sql::username_from_user_id(sql, id).await) {
+                None => return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", id)),
+                Some(value) => value
+            };
+            (id, username)
+        },
+        None => {
+            let username = data.username.unwrap();
+            let user_id_opt = rjtry!(user::sql::user_id_from_username(sql, &username).await);
 
-                        match user_id_opt {
-                            None => return ApiResponseErr::api_err(Status::NotFound, format!("User {} not found", username)),
-                            Some(id) => (id, username)
-                        }
-                    }
-                };
+            match user_id_opt {
+                None => return ApiResponseErr::api_err(Status::NotFound, format!("User {} not found", username)),
+                Some(id) => (id, username)
+            }
+        }
+    };
 
     if user_id_receiver == user_id {
         return ApiResponseErr::api_err(Status::Conflict, String::from("Can not add yourself"));

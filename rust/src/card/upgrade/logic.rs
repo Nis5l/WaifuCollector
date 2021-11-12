@@ -29,12 +29,12 @@ pub async fn upgrade_route(sql: &State<Sql>, token: JwtToken, data: UpgradeReque
 
     if card_one.card_info.id != card_two.card_info.id || card_one.level != card_two.level {
         return ApiResponseErr::api_err(Status::BadRequest,
-                                       format!("Character and level have to match: {}:{} {}:{}",
-                                               card_one.id,
-                                               card_one.level,
-                                               card_two.id,
-                                               card_two.level)
-                                       );
+                                           format!("Character and level have to match: {}:{} {}:{}",
+                                                   card_one.id,
+                                                   card_one.level,
+                                                   card_two.id,
+                                                   card_two.level)
+                                           );
     }
 
     let UpgradeCardsResult { create_card_data: new_card_data, success } = upgrade_cards(&card_one, &card_two, config);

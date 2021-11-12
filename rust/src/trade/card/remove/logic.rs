@@ -33,7 +33,9 @@ pub async fn trade_card_remove_route(user_friend_id: Id, card_unlocked_id: Id, s
                                            card_unlocked_id, user_friend_username));
     }
 
-    rjtry!(trade::sql::set_trade_status(sql, user_id, user_friend_id, trade::data::TradeStatus::UnConfirmed).await);
+    rjtry!(trade::sql::create_trade(sql, user_id, user_friend_id).await);
+
+    rjtry!(trade::sql::set_trade_status(sql, user_id, user_friend_id, trade::data::TradeStatus::UnConfirmed, trade::data::TradeStatus::UnConfirmed).await);
 
     ApiResponseErr::ok(Status::Ok, TradeCardRemoveResponse {
         message: format!("Removed card with id {} from Trade with {}", card_unlocked_id, user_friend_username)

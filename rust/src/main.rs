@@ -91,12 +91,16 @@ mod trade;
 //
 // /removesuggestion -> /trade/<user_friend_id>/suggestion/remove/<card_unlocked_id>
 //
-// /removed /acceptsuggestion, the notification is sent nonetheless
+// removed /acceptsuggestion, the notification is sent nonetheless, user trade/card/add
 //
 // /verified -> /verify/check
 // mail -> email
 //
 // /verify -> /verify/confirm/<key>
+//
+// /okTrade -> /trade/<user_friend_id>/confirm
+//
+// /tradeTime -> /trade/<user_friend_id>/time
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -106,8 +110,6 @@ mod trade;
 // smth dashboard
 // /passchange
 // GET /inventory
-// /acceptsuggestion
-// /okTrade
 // /tradeTime
 // /packData
 // /setmail
@@ -173,10 +175,12 @@ async fn rocket() -> _ {
            card::upgrade::upgrade_route,
 
            trade::info::trade_route,
+           trade::confirm::trade_confirm_route,
            trade::card::add::trade_card_add_route,
            trade::card::remove::trade_card_remove_route,
            trade::suggestion::add::trade_suggestion_add_route,
-           trade::suggestion::remove::trade_suggestion_remove_route
+           trade::suggestion::remove::trade_suggestion_remove_route,
+           trade::time::trade_time_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

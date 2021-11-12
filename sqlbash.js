@@ -1,5 +1,4 @@
-const sql = require("mysql");
-const readline = require("readline");
+const sql = require("mysql"); const readline = require("readline");
 const utils = require("./Server/utils");
 
 const rl = readline.createInterface({
@@ -20,15 +19,15 @@ function init(callback) {
 	console.log("Using");
 	con.connect((err) => {
 		if (err) console.log(err);
-		con.query("USE " + config.mysql.database + ";", () => {
-			callback();
+		con.query("USE " + config.mysql.database + ";", (err) => {
+			callback(err);
 		});
 	});
 }
 
 function generate(callback) {
 	var amount = 10;
-	con.query("SELECT * FROM cardtype", (err, anime) => {
+	con.query("SELECT * FROM cardtypes", (err, anime) => {
 		run();
 
 		var pool = 0;
@@ -60,7 +59,7 @@ function generate(callback) {
 				}
 
 				var idx = utils.getRandomInt(0, anime.length - 1);
-				con.query(`SELECT * FROM card WHERE typeID = ${anime[idx].id}`, (err, card) => {
+				con.query(`SELECT * FROM cards WHERE ctid = ${anime[idx].ctid}`, (err, card) => {
 					count += card.length;
 					var cards = [];
 					for (var j = 0; j < card.length; j++) {
@@ -78,26 +77,30 @@ function generate(callback) {
 function cards(callback) {
 	const getCards = (id) => {
 		return new Promise((resolve) => {
-			con.query("SELECT * FROM card WHERE typeID = ?", [id], (err, res) => {
+			con.query("SELECT * FROM cards WHERE ctid = ?", [id], (err, res) => {
 				if (err) console.log(err);
 				resolve(res);
 			});
 		});
 	}
-	con.query("SELECT * FROM cardType", async (err, animes) => {
+	con.query("SELECT * FROM cardtypes", async (err, animes) => {
 		if (err) console.log(err);
 		for (let anime of animes) {
-			console.log(anime.name + ":");
-			const cards = await getCards(anime.id)
+			console.log(anime.ctname + ":");
+			const cards = await getCards(anime.ctid)
 			for (let card of cards) {
-				console.log("\t" + card.cardName);
+				console.log("\t" + card.cname);
 			}
 		}
 		callback();
 	})
 }
 
-init(() => {
+init((err) => {
+	if(err) {
+		console.log(err);
+		return;
+	}
 	run();
 	function run() {
 		rl.question("#:", (query) => {
