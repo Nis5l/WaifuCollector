@@ -1,17 +1,21 @@
 use crate::sql::Sql;
 use super::data::LoginDb;
 
-pub async fn get_user_password(sql: &Sql, username: String) -> Result<LoginDb, sqlx::Error> {
+pub async fn get_user_password(sql: &Sql, username: String) -> Result<Option<LoginDb>, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
-    let login_data: LoginDb = sqlx::query_as(
+    let login_data: Result<LoginDb, sqlx::Error> = sqlx::query_as(
         "SELECT uid AS id, uusername AS username, upassword AS password
          FROM users
          WHERE uusername=?;")
         .bind(username)
         .fetch_one(&mut con)
-        .await?;
+        .await;
 
-    Ok(login_data)
+    if let Err(sqlx::Error::RowNotFound) = login_data {
+        return Ok(None);
+    }
+
+    Ok(Some(login_data?))
 }

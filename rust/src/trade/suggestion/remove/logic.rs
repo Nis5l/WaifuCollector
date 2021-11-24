@@ -7,6 +7,7 @@ use crate::shared::Id;
 use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use crate::shared::{friend, user, notification};
+use crate::verify_user;
 use super::data::TradeSuggestionRemoveResponse;
 use super::sql;
 
@@ -14,6 +15,8 @@ use super::sql;
 pub async fn trade_suggestion_remove_route(user_friend_id: Id, card_unlocked_id: Id, sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<TradeSuggestionRemoveResponse> {
     let user_id = token.id;
     let username = token.username;
+
+    verify_user!(sql, user_id);
 
     let user_friend_username = if let Some(username) = rjtry!(user::sql::username_from_user_id(sql, user_friend_id).await) {
         username

@@ -8,10 +8,13 @@ use super::sql;
 use crate::shared::Id; use crate::shared::{user, friend, trade, notification};
 use crate::crypto::JwtToken;
 use crate::sql::Sql;
+use crate::verify_user;
 
 #[post("/trade/<user_friend_id>/confirm")]
 pub async fn trade_confirm_route(user_friend_id: Id, sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<TradeConfirmReponse> {
     let user_id = token.id;
+    
+    verify_user!(sql, user_id);
 
     let user_friend_username = if let Some(username) = rjtry!(user::sql::username_from_user_id(sql, user_friend_id).await) {
         username

@@ -43,3 +43,16 @@ impl UserVerified {
     }
 }
 
+#[macro_export]
+macro_rules! verify_user {
+    ( $sql:expr, $token:expr ) => {
+        {
+            match rocketjson::rjtry!(crate::shared::user::sql::user_verified($sql, $token).await) {
+                Err(_) => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::InternalServerError, String::from("Internal server error")),
+                Ok(crate::shared::user::data::UserVerifiedDb::No) => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::Unauthorized, String::from("Not verified")),
+                Ok(crate::shared::user::data::UserVerifiedDb::Yes) => ()
+            }
+        }
+    };
+}
+

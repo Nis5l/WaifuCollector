@@ -8,11 +8,14 @@ use super::sql;
 use crate::crypto::JwtToken;
 use crate::shared::{user, notification};
 use crate::sql::Sql;
+use crate::verify_user;
 
 #[post("/friend/accept", data="<data>")]
 pub async fn friend_accept_route(data: FriendAcceptRequest, token: JwtToken, sql: &State<Sql>) -> ApiResponseErr<FriendAcceptResponse> {
     let user_id = token.id;
     let username = token.username;
+
+    verify_user!(sql, user_id);
 
     let (user_id_accept, username_accept) = match rjtry!(user::sql::username_from_user_id(sql, data.user_id).await) {
         None => return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", data.user_id)),

@@ -8,10 +8,13 @@ use crate::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::util;
+use crate::verify_user;
 
 #[get("/pack/time")]
 pub async fn pack_time_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackTimeResponse> {
     let user_id = token.id;
+
+    verify_user!(sql, user_id);
 
     let last_opened = rjtry!(shared::sql::get_pack_time(sql, user_id).await);
 

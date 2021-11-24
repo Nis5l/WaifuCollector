@@ -12,10 +12,13 @@ use crate::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::card::{self, data::CardCreateData};
+use crate::verify_user;
 
 #[post("/pack/open")]
 pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackOpenResponse> {
     let user_id = token.id;
+
+    verify_user!(sql, user_id);
 
     let last_opened = rjtry!(shared::sql::get_pack_time(sql, user_id).await);
 

@@ -1,4 +1,4 @@
-use rocketjson::{ApiResponseErr, error::{ApiErrors, ApiErrorsCreate}};
+use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
 use rocket::State;
 
@@ -11,35 +11,21 @@ use super::sql;
 #[post("/login", data="<data>")]
 pub async fn login_route(data: LoginRequest, sql: &State<Sql>, config: &rocket::State<Config>) -> ApiResponseErr<LoginResponse> {
     //TODO: some sort of timeout
-    let db_result = sql::get_user_password(&sql, data.username).await;
 
-    if db_result.is_err() {
-        let db_err = db_result.unwrap_err();
-        //TODO: do this in sql with Err()
-        if let sqlx::Error::RowNotFound = db_err {
-            return ApiResponseErr::api_err(Status::Unauthorized, String::from("Wrong username or password"));
-        }
-
-        return ApiResponseErr::err(ApiErrors::to_rocketjson_error(db_err));
-    }
-
-    let LoginDb { id: user_id, username, password: password_hash } = db_result.unwrap();
-
-    let verified = bcrypt_verify(&data.password, &password_hash);
-
-    if verified.is_err() {
-        return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"));
-    }
-
-    if !verified.unwrap() {
+    let LoginDb { id: user_id, username, password: password_hash } = if let Some(login_db) = rjtry!(sql::get_user_password(&sql, data.username).await) {
+        login_db
+    } else {
         return ApiResponseErr::api_err(Status::Unauthorized, String::from("Wrong username or password"));
+    };
+
+    match bcrypt_verify(&data.password, &password_hash) {
+        Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error")),
+        Ok(false) => return ApiResponseErr::api_err(Status::Unauthorized, String::from("Wrong username or password")),
+        Ok(_) => ()
     }
 
-    let token = jwt_sign_token(&username, user_id, &config.jwt_secret);
-
-    if token.is_err() {
-        return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"));
+    match jwt_sign_token(&username, user_id, &config.jwt_secret) {
+        Ok(token) => ApiResponseErr::ok(Status::Ok, LoginResponse { token }),
+        Err(_) => ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
     }
-
-    ApiResponseErr::ok(Status::Ok, LoginResponse { token: token.unwrap() })
 }

@@ -3,25 +3,11 @@ use sqlx::mysql::MySqlQueryResult;
 use crate::sql::Sql;
 use crate::shared::user::data::{UserVerifiedDb, UserRanking};
 
-pub async fn email_exists(sql: &Sql, email: String) -> Result<bool, sqlx::Error> {
+pub async fn user_exists(sql: &Sql, username: &str) -> Result<bool, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
-    let (count,): (i64,) = sqlx::query_as(
-        "SELECT COUNT(*)
-         FROM users
-         WHERE uemail=?;")
-        .bind(email)
-        .fetch_one(&mut con)
-        .await?;
-
-    Ok(count != 0)
-}
-
-pub async fn user_exists(sql: &Sql, username: String) -> Result<bool, sqlx::Error> {
-
-    let mut con = sql.get_con().await?;
-
+    //TODO: is it case sensitive?;
     let (count,): (i64,) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM users
@@ -34,7 +20,7 @@ pub async fn user_exists(sql: &Sql, username: String) -> Result<bool, sqlx::Erro
     Ok(count != 0)
 }
 
-pub async fn register(sql: &Sql, username: String, password_hash: String, email: String) -> Result<u64, sqlx::Error> {
+pub async fn register(sql: &Sql, username: &str, password_hash: &str, email: &str) -> Result<u64, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 

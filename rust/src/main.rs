@@ -101,6 +101,17 @@ mod trade;
 // /okTrade -> /trade/<user_friend_id>/confirm
 //
 // /tradeTime -> /trade/<user_friend_id>/time
+//
+// /mail -> GET /email
+// response:
+//   mail -> email
+//   "" -> null
+//
+// /setmail -> /email/change
+// request
+//  mail -> email
+//
+// TODO: /deleteMail -> /email/delete
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -110,13 +121,13 @@ mod trade;
 // smth dashboard
 // /passchange
 // GET /inventory
-// /tradeTime
 // /packData
 // /setmail
 // /deleteMail
-// /mail
 // /verify/resend
 // /flex
+//
+// TODO: packData process
 
 #[get("/")]
 fn index() -> &'static str {
@@ -151,6 +162,8 @@ async fn rocket() -> _ {
            admission::login::login_route,
            admission::verify::check::verify_check_route,
            admission::verify::confirm::verify_confirm_route,
+           admission::email::get::email_get_route,
+           admission::email::change::email_change_route,
 
            user::users_route,
            user::info::user_username_route,

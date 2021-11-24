@@ -8,11 +8,14 @@ use super::sql;
 use crate::shared::{user, notification};
 use crate::sql::Sql;
 use crate::crypto::JwtToken;
+use crate::verify_user;
 
 #[post("/friend/remove", data="<data>")]
 pub async fn friend_remove_route(data: FriendRemoveRequest, sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<FriendRemoveResponse> {
     let user_id = token.id;
     let username = token.username;
+
+    verify_user!(sql, user_id);
 
     let (user_id_remove, username_remove) = match rjtry!(user::sql::username_from_user_id(sql, data.user_id).await) {
         None => return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", data.user_id)),

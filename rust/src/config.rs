@@ -3,6 +3,7 @@ use figment::{Figment, providers::{Format, Json, Serialized}};
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct Config {
     pub jwt_secret: String,
+    pub verification_key_length: usize,
 
     pub username_len_min: u32,
     pub username_len_max: u32,
@@ -39,6 +40,7 @@ impl Default for Config {
         Self {
             //NOTE: important to change
             jwt_secret: String::from("CHANGE_THE_SECRET"),
+            verification_key_length: 20,
 
             username_len_min: 4,
             username_len_max: 20,
@@ -80,5 +82,5 @@ impl Default for Config {
 pub fn get_figment() -> Result<Figment, figment::Error> {
     Ok(Figment::from(rocket::Config::default())
         .merge(Serialized::defaults(Config::default()))
-        .merge(Json::file("Config.json").nested()))
+        .merge(Json::file("Config.json")))
 }

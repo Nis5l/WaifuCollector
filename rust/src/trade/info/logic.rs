@@ -9,10 +9,13 @@ use crate::config::Config;
 use crate::shared::Id;
 use crate::crypto::JwtToken;
 use crate::shared::{user, util, friend, trade};
+use crate::verify_user;
 
 #[get("/trade/<user_id_friend>")]
 pub async fn trade_route(user_id_friend: Id, sql: &State<Sql>, config: &State<Config>, token: JwtToken) -> ApiResponseErr<TradeResponse> {
     let user_id = token.id;
+
+    verify_user!(sql, user_id);
 
     if user_id == user_id_friend {
         return ApiResponseErr::api_err(Status::BadRequest, String::from("Can not trade with yourself"));

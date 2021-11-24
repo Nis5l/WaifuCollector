@@ -5,12 +5,15 @@ use rocket::State;
 use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use crate::shared::Id;
+use crate::verify_user;
 use super::sql;
 use super::data::NotificationDeleteReponse;
 
 #[post("/notifications/delete/<notification_id>")]
 pub async fn notifications_delete_route(sql: &State<Sql>, notification_id: Id, token: JwtToken) -> ApiResponseErr<NotificationDeleteReponse> {
     let user_id = token.id;
+
+    verify_user!(sql, user_id);
 
     let result = rjtry!(sql::delete_notification(sql, user_id, notification_id).await);
 

@@ -9,11 +9,14 @@ use crate::sql::Sql;
 use crate::shared::Id;
 use crate::shared::{user, friend, card, trade, notification};
 use crate::crypto::JwtToken;
+use crate::verify_user;
 
 #[post("/trade/<user_friend_id>/suggestion/add/<card_unlocked_id>")]
 pub async fn trade_suggestion_add_route(user_friend_id: Id, card_unlocked_id: Id, sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<TradeSuggestionAddResponse> {
     let user_id = token.id;
     let username = token.username;
+
+    verify_user!(sql, user_id);
 
     //NOTE: this is not necessary since the friend check should be sufficient.
     //I do like the username instead of the Id in the error message

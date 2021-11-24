@@ -9,11 +9,14 @@ use crate::shared::{user, friend, notification};
 use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use crate::config::Config;
+use crate::verify_user;
 
 #[post("/friend/add", data="<data>")]
 pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<FriendAddResponse> {
     let user_id = token.id;
     let username = token.username;
+
+    verify_user!(sql, user_id);
 
     if data.user_id.is_none() && data.username.is_none() {
         return ApiResponseErr::api_err(Status::BadRequest, String::from("One of the fields has to be set: userId, username"));
