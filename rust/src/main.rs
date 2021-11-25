@@ -111,7 +111,7 @@ mod trade;
 // request
 //  mail -> email
 //
-// TODO: /deleteMail -> /email/delete
+// /deleteMail -> /email/delete
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -164,6 +164,7 @@ async fn rocket() -> _ {
            admission::verify::confirm::verify_confirm_route,
            admission::email::get::email_get_route,
            admission::email::change::email_change_route,
+           admission::email::delete::email_delete_route,
 
            user::users_route,
            user::info::user_username_route,
