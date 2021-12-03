@@ -3,6 +3,7 @@ use rocket::State;
 use rocket::http::Status;
 
 use super::data::EmailDeleteResponse;
+use super::sql;
 use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use crate::shared::user;
@@ -18,6 +19,7 @@ pub async fn email_delete_route(sql: &State<Sql>, token: JwtToken) -> ApiRespons
     }
 
     rjtry!(user::sql::set_email(sql, user_id, None).await);
+    rjtry!(sql::delete_verification_key(sql, user_id).await);
 
     ApiResponseErr::ok(Status::Ok, EmailDeleteResponse {
         message: String::from("Deleted email")
