@@ -32,6 +32,8 @@ pub struct Config {
     pub frame_image_base: String,
     pub effect_image_base: String,
 
+    pub log_file: String,
+
     pub db_init_files: Vec<String>
 }
 
@@ -66,6 +68,8 @@ impl Default for Config {
             card_image_base: String::from("Card/"),
             frame_image_base: String::from("Frame/"),
             effect_image_base: String::from("Effect/"),
+
+            log_file: String::from("./log-file.log"),
 
             db_init_files: vec![
                 String::from("./sqlfiles/tables.sql"),

@@ -18,6 +18,7 @@ mod admission;
 mod pack;
 mod friend;
 mod trade;
+mod admin;
 
 // CANGES:
 // /notifications POST -> GET
@@ -112,18 +113,17 @@ mod trade;
 //  mail -> email
 //
 // /deleteMail -> /email/delete
+//
+// /log -> /admin/log
 
 //TODO port from server.js:
 // /user/:id/stats
 //
 // /card/give
-// /log
 // smth dashboard
 // /passchange
 // GET /inventory
 // /packData
-// /setmail
-// /deleteMail
 // /verify/resend
 // /flex
 //
@@ -194,7 +194,9 @@ async fn rocket() -> _ {
            trade::card::remove::trade_card_remove_route,
            trade::suggestion::add::trade_suggestion_add_route,
            trade::suggestion::remove::trade_suggestion_remove_route,
-           trade::time::trade_time_route
+           trade::time::trade_time_route,
+
+           admin::log::admin_log_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())

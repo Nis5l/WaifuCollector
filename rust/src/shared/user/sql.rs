@@ -3,7 +3,7 @@ use sqlx::mysql::MySqlQueryResult;
 
 use crate::sql::Sql;
 use crate::shared::Id;
-use super::data::UserVerifiedDb;
+use super::data::{UserVerifiedDb, UserRanking};
 
 pub async fn user_id_from_username(sql: &Sql, username: &str) -> Result<Option<Id>, sqlx::Error> {
     let mut con = sql.get_con().await?;
@@ -109,4 +109,18 @@ pub async fn set_verification_key(sql: &Sql, user_id: Id, key: &str) -> Result<(
     transaction.commit().await?;
 
     Ok(())
+}
+
+pub async fn get_user_rank(sql: &Sql, user_id: Id) -> Result<Result<UserRanking, ()>, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    let (ranking, ): (i32, ) = sqlx::query_as(
+        "SELECT uranking
+         FROM users
+         WHERE uid=?;")
+        .bind(user_id)
+        .fetch_one(&mut con)
+        .await?;
+
+    Ok(UserRanking::from_db(ranking))
 }

@@ -21,6 +21,16 @@ pub enum UserRanking {
     Admin = 1
 }
 
+impl UserRanking {
+    pub fn from_db(ranking: i32) -> Result<Self, ()> {
+        match ranking {
+            0 => Ok(Self::Standard),
+            1 => Ok(Self::Admin),
+            _ => Err(())
+        }
+    }
+}
+
 #[derive(Debug, Serialize_repr)]
 #[repr(u8)]
 pub enum UserVerified {
