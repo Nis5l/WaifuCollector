@@ -1,4 +1,5 @@
 use serde_repr::Serialize_repr;
+use crate::config::Config;
 
 #[derive(Debug)]
 pub enum UserVerifiedDb {
@@ -66,3 +67,10 @@ macro_rules! verify_user {
     };
 }
 
+pub fn validate_password(password: &str, config: &Config) -> Result<(), validator::ValidationError> {
+	if password.len() < config.password_len_min as usize || password.len() > config.password_len_max as usize {
+        return Err(validator::ValidationError::new("password does not fit the length constraints"));
+    }
+
+    Ok(())
+}

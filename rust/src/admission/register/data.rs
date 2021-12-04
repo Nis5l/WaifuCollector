@@ -5,6 +5,7 @@ use regex::Regex;
 use std::borrow::Cow;
 
 use crate::config;
+use crate::shared::user::data::validate_password;
 
 #[derive(Debug, Deserialize, Validate, JsonBody)]
 pub struct RegisterRequest {
@@ -40,14 +41,6 @@ fn validate_username(username: &str, config: &config::Config) -> Result<(), Vali
 
     if !re.is_match(username) {
         return Err(ValidationError::new("user can only contain letters, numbers and _"));
-    }
-
-    Ok(())
-}
-
-fn validate_password(password: &str, config: &config::Config) -> Result<(), validator::ValidationError> {
-	if password.len() < config.password_len_min as usize || password.len() > config.password_len_max as usize {
-        return Err(validator::ValidationError::new("password does not fit the length constraints"));
     }
 
     Ok(())

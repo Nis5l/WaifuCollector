@@ -20,14 +20,9 @@ pub async fn register_route(data: RegisterRequest, sql: &State<Sql>) -> ApiRespo
         return ApiResponseErr::ok(Status::Conflict, RegisterResponse::new(String::from("User already exists")));
     }
 
-    let id = if let Ok(hash) = bcrypt_hash(&data.password) {
-        rjtry!(sql::register(&sql, &data.username, &hash, &data.email).await)
-    } else {
-        return ApiResponseErr::ok(
-            Status::InternalServerError,
-            RegisterResponse::new(String::from("Internal server error"))
-        );
-    };
+    let password_hash = rjtry!(bcrypt_hash(&data.password));
+
+    rjtry!(sql::register(&sql, &data.username, &password_hash, &data.email).await);
 
     //TODO: send mail
     

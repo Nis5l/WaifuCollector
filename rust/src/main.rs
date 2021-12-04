@@ -115,13 +115,16 @@ mod admin;
 // /deleteMail -> /email/delete
 //
 // /log -> /admin/log
+//
+// /passchange
+// request
+//  newpassword -> newPassword
 
 //TODO port from server.js:
 // /user/:id/stats
 //
 // /card/give
 // smth dashboard
-// /passchange
 // GET /inventory
 // /packData
 // /verify/resend
@@ -165,6 +168,7 @@ async fn rocket() -> _ {
            admission::email::get::email_get_route,
            admission::email::change::email_change_route,
            admission::email::delete::email_delete_route,
+           admission::passchange::passchange_route,
 
            user::users_route,
            user::info::user_username_route,
