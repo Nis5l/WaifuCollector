@@ -16,24 +16,6 @@ pub async fn user_verified(sql: &Sql, user_id: Id) -> Result<i32, sqlx::Error> {
     Ok(verified)
 }
 
-pub async fn user_verification_key(sql: &Sql, user_id: Id) -> Result<Option<String>, sqlx::Error> {
-    let mut con = sql.get_con().await?;
-
-    let stmt: Result<(String, ), sqlx::Error> = sqlx::query_as(
-        "SELECT vkkey
-         FROM verificationkeys
-         WHERE uid=?;")
-        .bind(user_id)
-        .fetch_one(&mut con)
-        .await;
-
-    if let Err(sqlx::Error::RowNotFound) = stmt {
-        return Ok(None);
-    }
-
-    Ok(Some(stmt?.0))
-}
-
 pub async fn verify_user(sql: &Sql, user_id: Id) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
@@ -60,4 +42,22 @@ pub async fn delete_verification_key(sql: &Sql, user_id: Id) -> Result<(), sqlx:
         .await?;
 
     Ok(())
+}
+
+pub async fn get_verification_key(sql: &Sql, user_id: Id) -> Result<Option<String>, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    let stmt: Result<(String, ), sqlx::Error> = sqlx::query_as(
+        "SELECT vkkey
+         FROM verificationkeys
+         WHERE uid=?;")
+        .bind(user_id)
+        .fetch_one(&mut con)
+        .await;
+
+    if let Err(sqlx::Error::RowNotFound) = stmt {
+        return Ok(None);
+    }
+
+    Ok(Some(stmt?.0))
 }

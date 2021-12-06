@@ -6,7 +6,7 @@ use super::data::{EmailChangeResponse, EmailChangeRequest};
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::crypto::{JwtToken, verification_key};
-use crate::shared::user;
+use crate::shared::{user, email};
 
 #[post("/email/change", data="<data>")]
 pub async fn email_change_route(sql: &State<Sql>, config: &State<Config>, data: EmailChangeRequest, token: JwtToken) -> ApiResponseErr<EmailChangeResponse> {
@@ -24,11 +24,13 @@ pub async fn email_change_route(sql: &State<Sql>, config: &State<Config>, data: 
 
     rjtry!(user::sql::set_email(sql, user_id, Some(&data.email)).await);
 
-    rjtry!(user::sql::set_verification_key(sql, user_id, &verification_key::generate_verification_key(config.verification_key_length)).await);
+    let verification_key = verification_key::generate_verification_key(config.verification_key_length);
 
-    //TODO: send mail
+    rjtry!(user::sql::set_verification_key(sql, user_id, &verification_key).await);
+
+    email::send_email_async(config.email.clone(), config.email_password.clone(), data.email.clone(), verification_key, config.domain.clone(), config.smtp_server.clone());
 
     ApiResponseErr::ok(Status::Ok, EmailChangeResponse {
-        message: format!("Changed email to {}", data.email)
+        message: format!("Changed email to {}, verification email will be sent soon", &data.email)
     })
 }

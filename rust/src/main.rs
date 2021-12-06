@@ -119,6 +119,8 @@ mod admin;
 // /passchange
 // request
 //  newpassword -> newPassword
+//
+// /verify/resend
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -127,7 +129,6 @@ mod admin;
 // smth dashboard
 // GET /inventory
 // /packData
-// /verify/resend
 // /flex
 //
 // TODO: packData process
@@ -165,6 +166,7 @@ async fn rocket() -> _ {
            admission::login::login_route,
            admission::verify::check::verify_check_route,
            admission::verify::confirm::verify_confirm_route,
+           admission::verify::resend::verify_resend_route,
            admission::email::get::email_get_route,
            admission::email::change::email_change_route,
            admission::email::delete::email_delete_route,

@@ -11,6 +11,7 @@ serde = { version = "1.0", features = ["derive", "rc"] }
 serde_repr = "0.1.7"
 figment = { version = "0.10.6", features = ["env", "toml", "json"] }
 validator = { version = "0.14.0", features = ["derive"] }
+tokio = { version = "1.14.0", features = ["full"] }
 regex = "1.5.4"
 bcrypt = "0.10.1"
 dotenv = "0.15.0"
@@ -18,7 +19,8 @@ jwt = "0.15.0"
 hmac = "0.11.0"
 sha2 = "0.9.8"
 bincode = "1.3.3"
-sqlx = { version = "0.5", features = [ "runtime-async-std-native-tls", "mysql", "chrono" ] }
+sqlx = { version = "0.5", features = [ "runtime-tokio-rustls", "mysql", "chrono" ] }
 chrono = { version = "0.4.19", features = ["serde"] }
 rand = "0.8.4"
+lettre = "0.10.0-rc.4"
 #when rocket_db_pools is out, switch

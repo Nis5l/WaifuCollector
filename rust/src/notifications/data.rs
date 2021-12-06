@@ -12,7 +12,6 @@ pub struct Notification {
     pub title: String,
     pub message: String,
     pub url: String,
-    //TODO: ????
     pub time: DateTime<Utc>
 }
 

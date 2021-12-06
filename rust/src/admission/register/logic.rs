@@ -1,16 +1,16 @@
-use crate::sql::Sql;
-use crate::crypto::bcrypt_hash;
-
-use crate::shared::user;
-use super::data::{RegisterRequest, RegisterResponse};
-use super::sql;
-
 use rocket::http::Status;
 use rocketjson::{rjtry, ApiResponseErr, error::ApiErrorsCreate};
 use rocket::State;
 
+use crate::sql::Sql;
+use crate::config::Config;
+use crate::crypto::{bcrypt_hash, verification_key::generate_verification_key};
+use crate::shared::{user, email};
+use super::data::{RegisterRequest, RegisterResponse};
+use super::sql;
+
 #[post("/register", data="<data>")]
-pub async fn register_route(data: RegisterRequest, sql: &State<Sql>) -> ApiResponseErr<RegisterResponse> {
+pub async fn register_route(data: RegisterRequest, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<RegisterResponse> {
     //TODO: some sort of timeout
     if rjtry!(user::sql::email_exists(&sql, &data.email).await) {
         return ApiResponseErr::ok(Status::Conflict, RegisterResponse::new(String::from("Mail already in use")));
@@ -22,9 +22,13 @@ pub async fn register_route(data: RegisterRequest, sql: &State<Sql>) -> ApiRespo
 
     let password_hash = rjtry!(bcrypt_hash(&data.password));
 
-    rjtry!(sql::register(&sql, &data.username, &password_hash, &data.email).await);
+    let user_id = rjtry!(sql::register(&sql, &data.username, &password_hash, &data.email).await);
 
-    //TODO: send mail
+    let verification_key = generate_verification_key(config.verification_key_length);
+
+    rjtry!(user::sql::set_verification_key(sql, user_id, &verification_key).await);
+
+    email::send_email_async(config.email.clone(), config.email_password.clone(), data.email.clone(), verification_key, config.domain.clone(), config.smtp_server.clone());
     
-    return ApiResponseErr::api_err(Status::Ok, String::from("Register succeeded"))
+    return ApiResponseErr::api_err(Status::Ok, format!("Register succeeded, verification email will be sent to {} soon", &data.email))
 }

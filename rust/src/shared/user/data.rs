@@ -1,5 +1,8 @@
 use serde_repr::Serialize_repr;
+use sqlx::FromRow;
+
 use crate::config::Config;
+use crate::shared::DbParseError;
 
 #[derive(Debug)]
 pub enum UserVerifiedDb {
@@ -8,11 +11,11 @@ pub enum UserVerifiedDb {
 }
 
 impl UserVerifiedDb {
-    pub fn from_db(verified: i32) -> Result<Self, ()> {
+    pub fn from_db(verified: i32) -> Result<Self, DbParseError> {
         match verified {
             0 => Ok(Self::No),
             1 => Ok(Self::Yes),
-            _ => Err(())
+            _ => Err(DbParseError)
         }
     }
 }
@@ -23,11 +26,11 @@ pub enum UserRanking {
 }
 
 impl UserRanking {
-    pub fn from_db(ranking: i32) -> Result<Self, ()> {
+    pub fn from_db(ranking: i32) -> Result<Self, DbParseError> {
         match ranking {
             0 => Ok(Self::Standard),
             1 => Ok(Self::Admin),
-            _ => Err(())
+            _ => Err(DbParseError)
         }
     }
 }
@@ -41,7 +44,7 @@ pub enum UserVerified {
 }
 
 impl UserVerified {
-    pub fn from_db(email: &Option<String>, verified: i32) -> Result<Self, ()> {
+    pub fn from_db(email: &Option<String>, verified: i32) -> Result<Self, DbParseError> {
         if email.is_none() {
             Ok(Self::MailNotSet)
         } else if verified == 0 {
@@ -49,7 +52,7 @@ impl UserVerified {
         } else if verified == 1 {
             Ok(Self::Ok)
         } else {
-            Err(())
+            Err(DbParseError)
         }
     }
 }
@@ -73,4 +76,12 @@ pub fn validate_password(password: &str, config: &Config) -> Result<(), validato
     }
 
     Ok(())
+}
+
+#[derive(Debug, FromRow)]
+pub struct EmailVerifiedDb {
+    #[sqlx(rename="uverified")]
+    pub verified: i32,
+    #[sqlx(rename="uemail")]
+    pub email: Option<String>
 }

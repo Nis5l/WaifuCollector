@@ -1,6 +1,7 @@
 use sqlx::mysql::MySqlQueryResult;
 
 use crate::sql::Sql;
+use crate::shared::Id;
 use crate::shared::user::data::{UserVerifiedDb, UserRanking};
 
 pub async fn user_exists(sql: &Sql, username: &str) -> Result<bool, sqlx::Error> {
@@ -20,7 +21,7 @@ pub async fn user_exists(sql: &Sql, username: &str) -> Result<bool, sqlx::Error>
     Ok(count != 0)
 }
 
-pub async fn register(sql: &Sql, username: &str, password_hash: &str, email: &str) -> Result<u64, sqlx::Error> {
+pub async fn register(sql: &Sql, username: &str, password_hash: &str, email: &str) -> Result<Id, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
 
@@ -37,5 +38,5 @@ pub async fn register(sql: &Sql, username: &str, password_hash: &str, email: &st
         .execute(&mut con)
         .await?;
 
-    Ok(result.last_insert_id())
+    Ok(result.last_insert_id() as Id)
 }

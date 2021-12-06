@@ -3,6 +3,7 @@ use figment::{Figment, providers::{Format, Json, Serialized}};
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct Config {
     pub jwt_secret: String,
+    pub domain: String,
     pub verification_key_length: usize,
 
     pub username_len_min: u32,
@@ -34,6 +35,10 @@ pub struct Config {
 
     pub log_file: String,
 
+    pub email: String,
+    pub email_password: String,
+    pub smtp_server: String,
+
     pub db_init_files: Vec<String>
 }
 
@@ -42,6 +47,7 @@ impl Default for Config {
         Self {
             //NOTE: important to change
             jwt_secret: String::from("CHANGE_THE_SECRET"),
+            domain: String::from("https://waifucollector.com"),
             verification_key_length: 20,
 
             username_len_min: 4,
@@ -70,6 +76,10 @@ impl Default for Config {
             effect_image_base: String::from("Effect/"),
 
             log_file: String::from("./log-file.log"),
+
+            email: String::from("foo@bar.baz"),
+            email_password: String::from("EMAIL_PASSWORD"),
+            smtp_server: String::from("smtp.gmail.com"),
 
             db_init_files: vec![
                 String::from("./sqlfiles/tables.sql"),

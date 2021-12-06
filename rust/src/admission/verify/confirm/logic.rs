@@ -6,22 +6,18 @@ use super::data::VerifyConfirmResponse;
 use super::sql;
 use crate::crypto::JwtToken;
 use crate::sql::Sql;
-use crate::shared::user::data::UserVerifiedDb;
+use crate::shared::user;
 
 #[post("/verify/confirm/<key>")]
 pub async fn verify_confirm_route(key: String, sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<VerifyConfirmResponse> {
     let user_id = token.id;
     let username = token.username;
 
-    if let Ok(verified) = UserVerifiedDb::from_db(rjtry!(sql::user_verified(sql, user_id).await)) {
-        if let UserVerifiedDb::Yes = verified  {
+    if let user::data::UserVerifiedDb::Yes = rjtry!(user::data::UserVerifiedDb::from_db(rjtry!(sql::user_verified(sql, user_id).await))) {
             return ApiResponseErr::api_err(Status::Conflict, String::from("You are already verified"));
-        }
-    } else {
-        return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
     };
 
-    let verified_key = if let Some(verified_key) = rjtry!(sql::user_verification_key(sql, user_id).await) {
+    let verified_key = if let Some(verified_key) = rjtry!(sql::get_verification_key(sql, user_id).await) {
         verified_key
     } else {
         return ApiResponseErr::api_err(Status::NotFound, format!("No verification key for user {} found", username))
