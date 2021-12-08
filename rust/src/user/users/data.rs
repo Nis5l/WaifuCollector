@@ -6,6 +6,7 @@ use crate::shared::Id;
 
 #[derive(Debug, Deserialize, Validate, JsonBody)]
 pub struct UsersRequest {
+    //TODO: default?
     pub username: Option<String>
 }
 

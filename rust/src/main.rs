@@ -121,13 +121,22 @@ mod admin;
 //  newpassword -> newPassword
 //
 // /verify/resend
+//
+// GET -> POST user/:id/inventory
+// request query -> body
+//   userID remvoed
+//   excludeUUID -> exludeUuids
+//   friendID -> friend->friendId
+//   excludeSuggestions -> friend->excludeSuggestions (bool)
+//
+// response
+//   { card: [] } -> []
 
 //TODO port from server.js:
 // /user/:id/stats
 //
 // /card/give
 // smth dashboard
-// GET /inventory
 // /packData
 // /flex
 //
@@ -178,6 +187,7 @@ async fn rocket() -> _ {
            user::info::user_badges_route,
            user::info::user_stats_route,
            user::info::user_rank_route,
+           user::inventory::inventory_route,
 
            notifications::notifications_route,
            notifications::notifications_delete_route,

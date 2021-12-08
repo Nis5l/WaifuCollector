@@ -99,9 +99,7 @@ pub async fn get_cards(sql: &Sql, card_unlocked_ids: Vec<Id>, user_id: Option<Id
 
     let cards_db: Vec<CardDb> = stmt.fetch_all(&mut con).await?;
 
-    let cards: Vec<Card> = cards_db.into_iter().map(|card_db| { Card::from_card_db(card_db, config) }).collect();
-
-    Ok(cards)
+    Ok(cards_db.into_iter().map(|card_db| { Card::from_card_db(card_db, config) }).collect())
 }
 
 pub async fn delete_card(sql: &Sql, card_unlocked_id: Id) -> Result<u64, sqlx::Error> {

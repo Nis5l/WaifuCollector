@@ -10,3 +10,10 @@ pub fn time_from_db(trade_time: Option<DateTime<Utc>>, trade_cooldown: u32) -> D
         }
     }
 }
+
+pub fn escape_for_like(s: String) -> String {
+    s.replace("!", "!!")
+     .replace("%", "!%")
+     .replace("_", "!_")
+     .replace("[", "![")
+}
