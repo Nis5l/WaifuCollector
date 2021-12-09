@@ -8,8 +8,6 @@ use crate::shared::{Id, util};
 pub async fn add_card(sql: &Sql, user_id: Id, card: &CardCreateData) -> Result<Id, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    println!("fid: {}", card.frame_id);
-
     let stmt: MySqlQueryResult = sqlx::query(
         "INSERT INTO cardunlocks
          (uid, cid, cuquality, culevel, cfid)

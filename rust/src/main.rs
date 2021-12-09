@@ -132,12 +132,17 @@ mod admin;
 //   { card: [] } -> []
 //
 // /flex -> /user/:id/flex
+//
+// /card/give -> /admin/give/card
+// request:
+//      userID -> userId
+//      cardID -> cardId
+//      frame -> frameId
 
 //TODO port from server.js:
 // /user/:id/stats
 //
 // /card/give
-// smth dashboard
 // /packData
 //
 // TODO: packData process
@@ -213,7 +218,8 @@ async fn rocket() -> _ {
            trade::suggestion::remove::trade_suggestion_remove_route,
            trade::time::trade_time_route,
 
-           admin::log::admin_log_route
+           admin::log::admin_log_route,
+           admin::give::card::give_card_route
         ])
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
