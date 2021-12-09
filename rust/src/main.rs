@@ -122,15 +122,16 @@ mod admin;
 //
 // /verify/resend
 //
-// GET -> POST user/:id/inventory
+// GET -> POST /user/:id/inventory
 // request query -> body
 //   userID remvoed
 //   excludeUUID -> exludeUuids
 //   friendID -> friend->friendId
 //   excludeSuggestions -> friend->excludeSuggestions (bool)
-//
 // response
 //   { card: [] } -> []
+//
+// /flex -> /user/:id/flex
 
 //TODO port from server.js:
 // /user/:id/stats
@@ -138,7 +139,6 @@ mod admin;
 // /card/give
 // smth dashboard
 // /packData
-// /flex
 //
 // TODO: packData process
 
@@ -188,6 +188,7 @@ async fn rocket() -> _ {
            user::info::user_stats_route,
            user::info::user_rank_route,
            user::inventory::inventory_route,
+           user::flex::flex_route,
 
            notifications::notifications_route,
            notifications::notifications_delete_route,

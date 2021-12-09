@@ -1,4 +1,4 @@
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use sqlx::FromRow;
 
 use crate::config::Config;
@@ -112,4 +112,41 @@ pub struct CardCreateData {
     pub frame_id: Id,
     pub quality: i32,
     pub level: i32
+}
+
+#[derive(Debug)]
+pub enum SortType {
+    Name = 0,
+    Level = 1,
+    Recent = 2
+}
+
+impl Default for SortType {
+    fn default() -> Self {
+        Self::Name
+    }
+}
+
+impl<'de> Deserialize<'de> for SortType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+       where D: serde::Deserializer<'de> {
+            let i = i32::deserialize(deserializer)?;
+
+            Ok(match i {
+                1 => Self::Level,
+                2 => Self::Recent,
+                _ => Self::Name
+            })
+       }
+}
+
+pub struct InventoryOptions {
+    pub user_id: Id,
+    pub count: u32,
+    pub offset: u32,
+    pub search: String,
+    pub exclude_uuids: Vec<Id>,
+    pub sort_type: SortType,
+    pub level: Option<i32>,
+    pub card_id: Option<Id>
 }

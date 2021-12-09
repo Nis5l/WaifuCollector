@@ -6,8 +6,8 @@ use crate::shared::card::data::Card;
 use crate::shared::Id;
 use crate::sql::Sql;
 use crate::config::Config;
-use crate::shared::user;
-use super::data::{InventoryRequest, InventoryOptions};
+use crate::shared::{user, card};
+use super::data::InventoryRequest;
 use super::sql;
 
 #[post("/user/<user_id>/inventory", data="<data>")]
@@ -20,7 +20,7 @@ pub async fn inventory_route(user_id: Id, mut data: InventoryRequest, sql: &Stat
         data.exclude_uuids.append(&mut rjtry!(sql::get_trade_uuids(sql, user_id, friend.friend_id, friend.exclude_suggestions).await));
     }
 
-    let cards = sql::get_inventory(sql, config, &InventoryOptions {
+    let cards = rjtry!(card::sql::get_inventory(sql, config, &card::data::InventoryOptions {
         card_id: data.card_id,
         user_id,
         exclude_uuids: data.exclude_uuids,
@@ -29,7 +29,7 @@ pub async fn inventory_route(user_id: Id, mut data: InventoryRequest, sql: &Stat
         level: data.level,
         count: config.inventory_page_amount,
         offset: config.inventory_page_amount * data.page,
-    }).await.unwrap();
+    }).await);
 
     ApiResponseErr::ok(Status::Ok, cards)
 }
