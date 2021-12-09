@@ -35,7 +35,9 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
         extra_conditions += &format!("cards.cid={} AND\n", card_id);
     }
 
-    extra_conditions += &format!("cardunlocks.cuid NOT IN ({}) AND\n", options.exclude_uuids.iter().map(|i| { i.to_string() }).collect::<Vec<String>>().join(","));
+    if !options.exclude_uuids.is_empty() {
+        extra_conditions += &format!("cardunlocks.cuid NOT IN ({}) AND\n", options.exclude_uuids.iter().map(|i| { i.to_string() }).collect::<Vec<String>>().join(","));
+    }
 
     let query = format!(
         "SELECT
@@ -70,7 +72,6 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          oder_by);
 
     let cards_db: Vec<CardDb> = sqlx::query_as(&query)
-        .bind(extra_conditions)
         .bind(&search)
         .bind(&search)
         .bind(options.count)
