@@ -39,14 +39,13 @@ class Friendlist extends Component {
     componentDidMount() {
 
         async function loadFriends(self) {
-
-            const data = await axios.post(Config.API_HOST + "/friends", {id: self.props.userID});
-
-            if (data.data.status !== 0)
+			try {
+				const response = await axios.get(`${Config.API_HOST}/user/${self.props.userID}/friends`);
+				return response.data;
+			} catch (err) {
+				console.log("Unexpected /user/:id/friends error");
                 return [];
-
-            return data.data.friends;
-
+			}
         }
 
         async function fetchData(self) {
@@ -83,13 +82,15 @@ class Friendlist extends Component {
     }
 
     deleteFriend(userID) {
-        const data = {
-            token: Cookies.get('token'),
-            userID: userID,
-            //Delete Command
-            command: 1
+        const config =
+        {
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
         }
-        axios.post(`${Config.API_HOST}/managefriend`, data);
+
+        const data = {
+            userId: userID
+        }
+        axios.post(`${Config.API_HOST}/friend/remove`, data, config);
 
         for (let i = 0; i < this.state.friends.length; i++) {
             if (this.state.friends[i].userID === userID) {
@@ -114,13 +115,15 @@ class Friendlist extends Component {
     }
 
     onAccept(userID) {
-        const data = {
-            token: Cookies.get('token'),
-            userID: userID,
-            //Add Command
-            command: 0
+        const config =
+        {
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
         }
-        axios.post(`${Config.API_HOST}/managefriend`, data);
+
+        const data = {
+            userId: userID
+        }
+        axios.post(`${Config.API_HOST}/friend/add`, data, config);
 
         for (let i = 0; i < this.state.friendRequests.length; i++) {
             if (this.state.friendRequests[i].userID === userID) {

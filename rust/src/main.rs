@@ -4,8 +4,11 @@ extern crate rocket;
 //TODO: there are some dattimes as string in ret
 
 use rocket::fairing::AdHoc;
-
+use rocket_cors::{AllowedHeaders, AllowedOrigins, Guard, Responder};
+use rocket::http::Method;
 use sqlx::mysql::MySqlPoolOptions;
+use rocket::{get, options, routes};
+use rocket::fs::{FileServer, relative};
 
 mod user;
 mod sql;
@@ -114,7 +117,7 @@ mod admin;
 //
 // /deleteMail -> /email/delete
 //
-// /log -> /admin/log
+// /log -> GET /admin/log
 //
 // /passchange
 // request
@@ -138,12 +141,13 @@ mod admin;
 //      userID -> userId
 //      cardID -> cardId
 //      frame -> frameId
+//
+// /packdata -> /pack/data
 
 //TODO port from server.js:
 // /user/:id/stats
 //
-// /card/give
-// /packData
+// /packData -> /pack/data
 //
 // TODO: packData process
 
@@ -171,6 +175,24 @@ async fn rocket() -> _ {
         println!("-{}", file);
         sql::setup_db(&sql, file).await.expect("Failed setting up database");
     }
+
+    let allowed_origins = AllowedOrigins::all();
+
+    let cors = rocket_cors::CorsOptions {
+        allowed_origins,
+        allowed_methods: vec![
+		Method::Get,
+		Method::Post,
+		Method::Patch,
+		Method::Put,
+		Method::Delete,
+		Method::Head,
+		Method::Options].into_iter().map(From::from).collect(),
+        allowed_headers: AllowedHeaders::all(),
+        allow_credentials: true,
+        ..Default::default()
+    }
+    .to_cors().expect("Error initializing CORS");
 
     rocket::custom(config_figment)
         .mount("/", routes![
@@ -202,6 +224,7 @@ async fn rocket() -> _ {
            pack::open::pack_open_route,
            pack::time::pack_time_route,
            pack::time::max::pack_time_max_route,
+           pack::data::pack_data_route,
 
            friend::add::friend_add_route,
            friend::accept::friend_accept_route,
@@ -221,7 +244,13 @@ async fn rocket() -> _ {
            admin::log::admin_log_route,
            admin::give::card::give_card_route
         ])
+        .mount(format!("/{}", &config.card_image_base), FileServer::from(relative!("static/card")))
+        .mount(format!("/{}", &config.frame_image_base), FileServer::from(relative!("static/frame")))
+        .mount(format!("/{}", &config.effect_image_base), FileServer::from(relative!("static/effect")))
+        .mount(format!("/{}", &config.achievements_image_base), FileServer::from(relative!("static/achievements")))
+        .mount(format!("/{}", &config.badges_image_base), FileServer::from(relative!("static/badges")))
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
+        .attach(cors)
         .manage(sql)
 }

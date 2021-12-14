@@ -24,30 +24,22 @@ class SuggestInventory extends Component {
 
   onCardClick(self, e, card) {
     self.setState({loading: true});
-    let data =
-    {
-      token: Cookies.get('token'),
-      userID: this.friendID,
-      cardID: card
-    }
-    console.log("Now");
-    axios.post(`${Config.API_HOST}/suggesttrade`, data)
-      .then((res) => {
-        console.log(res.data);
-
-        if (redirectIfNecessary(this.props.history, res.data)) return 1;
-
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+    axios.post(`${Config.API_HOST}/trade/${this.friendID}/suggestion/add/${card}`, {}, config)
+      .then(res => {
         this.setState({loading: false});
-        if (res && res.status === 200) {
-          if (res.data && res.data.status === 0) {
-            self.props.history.push(`/trade/${this.friendID}`);
-          } else {
-            self.setState({error: "Error: " + res.data.message});
-          }
-        } else {
-          self.setState({error: "Error: Internal Error"});
-        }
-      })
+		self.props.history.push(`/trade/${this.friendID}`);
+      }).catch(err => {
+        if (redirectIfNecessary(this.props.history, err)) return 1;
+
+		if(err.response.data.error)
+			self.setState({error: "Error: " + err.response.data.error});
+		else
+			self.setState({error: "Error: Internal Error"});
+	  });
   }
 
   render() {

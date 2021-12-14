@@ -1,10 +1,6 @@
 use serde::Serialize;
 
-#[derive(Serialize)]
-pub struct Badge {
-    pub name: &'static str,
-    pub asset: &'static str
-}
+use crate::shared::user::data::Badge;
 
 #[derive(Serialize)]
 pub struct UserBadgesResponse {

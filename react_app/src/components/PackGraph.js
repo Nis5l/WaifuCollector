@@ -83,19 +83,12 @@ class PackGraph extends Component {
     async loadData() {
 
         try {
+            const res = await axios.get(`${Config.API_HOST}/pack/data`);
 
-            const res = await axios.get(`${Config.API_HOST}/packData`);
-
-            if (res && res.data && res.data.status === 0) {
-
-                return res.data.packData;
-
-            }
+			return res.data;
 
         } catch (ex) {
-
-            console.log("Couldn't connect to API Server!");
-
+            console.log("Unexpected /pack/data error");
         }
 
         return [];

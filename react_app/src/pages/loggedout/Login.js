@@ -50,28 +50,20 @@ function Login(props) {
 
         axios.post(`${Config.API_HOST}/login`, user)
             .then(res => {
+				Cookies.set("userID", res.data.userId, {expires: 30 * 12 * 30});
+				Cookies.set("token", res.data.token, {expires: 30 * 12 * 30});
 
-                if (res && res.status === 200) {
+				axios.get(`${Config.API_HOST}/user/${res.data.userId}/rank`)
+					.then((res) => {
+						Cookies.set("rank", res.data.rank);
+					}).catch(err => {
+						console.log("Unexpected /user/:id/rank error");
+					});
 
-                    if (res.data && res.data.status === 0) {
-                        Cookies.set("userID", res.data.userID, {expires: 30 * 12 * 30});
-                        Cookies.set("token", res.data.token, {expires: 30 * 12 * 30});
-
-                        axios.get(`${Config.API_HOST}/${res.data.userID}/rank`)
-                            .then((res) => {
-                                if (res.data && res.data.status === 0) {
-                                    Cookies.set("rank", res.data.rankID);
-                                }
-                            })
-
-                        updateToken(res.data.token);
-                        return;
-                    }
-
-                    setError(res.data.message);
-
-                }
-            });
+				updateToken(res.data.token);
+            }).catch(err => {
+				setError(err.response.data.error);
+			});
     }
 
     useEffect(() => {

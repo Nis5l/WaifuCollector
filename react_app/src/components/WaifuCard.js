@@ -20,6 +20,7 @@ class WaifuCard extends Component {
     }
 
     init(props) {
+		//TODO: camelcase or keep card entirely...WTF
         this.props = props;
 
         let level = "X";
@@ -39,17 +40,17 @@ class WaifuCard extends Component {
             let card = props.card;
 
             uuid = card.id;
-            cardid = card.card.id;
-            typeid = card.anime.id;
-            img = card.card.image;
-            framefront = card.frame.front;
-            frameback = card.frame.back;
-            effect = card.effect.image;
-            cardname = card.card.name;
-            animename = card.anime.name;
+            cardid = card.cardInfo.id;
+            typeid = card.cardType.id;
+            img = card.cardInfo.image;
+            framefront = card.cardFrame.front;
+            frameback = card.cardFrame.back;
+            effect = card.cardEffect.image;
+            cardname = card.cardInfo.name;
+            animename = card.cardType.name;
             quality = card.quality;
             level = card.level;
-            effectopacity = card.effect.opacity;
+            effectopacity = card.cardEffect.opacity;
         } else {
             uuid = props.uuid;
             cardid = props.cardid;
@@ -305,23 +306,13 @@ WaifuCard.DEFWIDTH = 253;
 WaifuCard.DEFHEIGTH = 365;
 WaifuCard.DEFFONT = 50;
 
-function parseCardsOld(cards) {
-    for (let i = 0; i < cards.length; i++) {
-        cards[i].card.cardImage = `${Config.API_HOST}/${cards[i].card.cardImage}`;
-        cards[i].card.frame.path_front = `${Config.API_HOST}/${cards[i].card.frame.path_front}`;
-        cards[i].card.frame.path_back = `${Config.API_HOST}/${cards[i].card.frame.path_back}`;
-        if (cards[i].card.effect != null)
-            cards[i].card.effect = `${Config.API_HOST}/${cards[i].card.effect}`;
-    }
-}
-
 function parseCards(cards) {
     for (let i = 0; i < cards.length; i++) {
-        cards[i].card.image = `${Config.API_HOST}/${cards[i].card.image}`;
-        cards[i].frame.front = `${Config.API_HOST}/${cards[i].frame.front}`;
-        cards[i].frame.back = `${Config.API_HOST}/${cards[i].frame.back}`;
-        if (cards[i].effect.image != null)
-            cards[i].effect.image = `${Config.API_HOST}/${cards[i].effect.image}`;
+        cards[i].cardInfo.image = `${Config.API_HOST}/${cards[i].cardInfo.image}`;
+        cards[i].cardFrame.front = `${Config.API_HOST}/${cards[i].cardFrame.front}`;
+        cards[i].cardFrame.back = `${Config.API_HOST}/${cards[i].cardFrame.back}`;
+        if (cards[i].cardEffect.image != null)
+            cards[i].cardEffect.image = `${Config.API_HOST}/${cards[i].cardEffect.image}`;
     }
 }
 

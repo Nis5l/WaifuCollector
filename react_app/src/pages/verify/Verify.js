@@ -32,28 +32,25 @@ class Verify extends Component {
   }
 
   componentDidMount() {
-    const data =
-    {
-      token: Cookies.get('token'),
-      key: this.key
-    }
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
 
-    axios.post(`${Config.API_HOST}/verify`, data)
-      .then((res) => {
+    axios.post(`${Config.API_HOST}/verify/confirm/${this.key}`, {}, config)
+      .then(res => {
         this.incrementLCounter();
-        if (res.data && res.data.status === 0) {
-          this.props.history.push('/dashboard');
-          return;
-        }
-      });
+	    this.props.history.push('/dashboard');
+      }).catch(err => {
+		console.log("Unexpected /verify/confirm/:key error");
+	  });;
 
-    axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
+    axios.get(`${Config.API_HOST}/verify/check`, config)
       .then((res) => {
-        this.incrementLCounter();
-        if (res.data && res.data.status === 0) {
+    	  this.incrementLCounter();
           switch (res.data.verified) {
             case 1:
-              this.setState({mail: res.data.mail});
+              this.setState({mail: res.data.email});
               break;
 
             case 2:
@@ -63,9 +60,9 @@ class Verify extends Component {
             default:
               this.props.history.push('/dashboard');
           }
-          return;
-        }
-      });
+      }).catch(err => {
+		console.log("Unexpected /verify/check error");
+	  });
     this.startTimer();
   }
 
@@ -101,32 +98,31 @@ class Verify extends Component {
     if (this.state.time > 0) return;
     const mail = this.state.mail;
     this.setState({mail: undefined});
-    const data = {
-      token: Cookies.get('token')
-    }
 
-    axios.post(`${Config.API_HOST}/verify/resend`, data)
-      .then((res) => {
-        if (res.data && res.data.status === 0) {
-          this.setState({mail: mail});
-          let t = new Date();
-          t.setSeconds(t.getSeconds() + 30);
-          Cookies.set('resenttimeout', t);
-          this.startTimer();
-        }
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+
+    axios.post(`${Config.API_HOST}/verify/resend`, {}, config)
+      .then(res => {
+		  this.setState({mail: mail});
+		  let t = new Date();
+		  t.setSeconds(t.getSeconds() + 30);
+		  Cookies.set('resenttimeout', t);
+		  this.startTimer();
       })
   }
 
   delete = () => {
     this.setState({mail: undefined});
-    const data = {
-      token: Cookies.get('token')
-    }
-    axios.post(`${Config.API_HOST}/deletemail`, data)
-      .then((res) => {
-        if (res.data && res.data.status === 0) {
-          this.props.history.push('/verify/mail');
-        }
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+    axios.post(`${Config.API_HOST}/email/delete`, {}, config)
+      .then(res => {
+         this.props.history.push('/verify/mail');
       })
   }
 

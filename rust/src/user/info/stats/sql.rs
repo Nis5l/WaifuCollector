@@ -36,7 +36,7 @@ pub async fn get_trades_on_cooldown_count(sql: &Sql, user_id: Id, cooldown: u32)
          FROM trades
          WHERE
          uidone = ? OR uidtwo = ?
-         AND DATE_ADD(tmlasttrade, INTERVAL ? SECOND) < NOW();")
+         AND DATE_ADD(tlasttrade, INTERVAL ? SECOND) < NOW();")
         .bind(user_id)
         .bind(user_id)
         .bind(cooldown)

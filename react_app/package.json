@@ -13,6 +13,7 @@
     "chart.js": "^2.9.4",
     "js-cookie": "^2.2.1",
     "little-loader": "^0.2.0",
+    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "normalize-url": "^6.1.0",
     "react": "^17.0.2",

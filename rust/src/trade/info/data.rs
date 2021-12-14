@@ -5,6 +5,7 @@ use sqlx::FromRow;
 use crate::shared::card::data::Card;
 use crate::shared::trade::data::TradeStatus;
 
+//TODO: maybe split into 2 structs
 #[derive(Debug, Serialize)]
 #[serde(rename_all="camelCase")]
 pub struct TradeResponse {

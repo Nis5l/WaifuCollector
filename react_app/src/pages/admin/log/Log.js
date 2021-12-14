@@ -23,20 +23,18 @@ class AdminLog extends Component {
 	}
 
 	componentDidMount() {
-		const data =
-		{
-			token: Cookies.get('token')
-		}
-		axios.post(`${Config.API_HOST}/log`, data)
-			.then((res) => {
-				console.log(res.data);
-				if (res.data && res.data.status === 0) {
-					res.data.log = res.data.log.split("\n").reverse().join("\n");
-					this.setState({loading: false, log: res.data.log});
-					return;
-				}
+        const config =
+        {
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+        }
+
+		axios.get(`${Config.API_HOST}/admin/log`, config)
+			.then(res => {
+				res.data.log = res.data.log.split("\n").reverse().join("\n");
+				this.setState({loading: false, log: res.data.log});
+			}).catch(err => {
 				this.props.history.push("/dashboard");
-			})
+			});
 	}
 
 	render() {

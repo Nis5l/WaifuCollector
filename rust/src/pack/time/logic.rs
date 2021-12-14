@@ -21,6 +21,6 @@ pub async fn pack_time_route(sql: &State<Sql>, token: JwtToken, config: &State<C
     let pack_time = util::time_from_db(last_opened, config.pack_cooldown);
 
     return ApiResponseErr::ok(Status::Ok, PackTimeResponse {
-        pack_time: pack_time.to_string()
+        pack_time
     })
 }

@@ -17,7 +17,7 @@ class CardPage extends Component {
   constructor(props) {
     super();
     this.props = props;
-    this.mainuuid = props.match.params.id;
+    this.mainuuid = parseInt(props.match.params.id);
 
     this.card_wrapper = React.createRef();
 
@@ -47,15 +47,12 @@ class CardPage extends Component {
     axios.get(`${Config.API_HOST}/card/${this.mainuuid}`)
       .then(res => {
         if (redirectIfNecessary(this.props.history, res.data)) return;
-        console.log(res.data);
         this.incrementLCounter();
-        if (res && res.status === 200 && res.data && res.data.status === 0) {
-          parseCards([res.data.card]);
-          this.setState({maincard: res.data.card});
-          return;
-        }
+        parseCards([res.data]);
+        this.setState({maincard: res.data});
+      }).catch(err => {
         this.setState({maincard: -1});
-      });
+	  });
 
     this.trackScrolling();
   }
@@ -76,29 +73,32 @@ class CardPage extends Component {
 
     this.loadingCards = true;
 
-    axios.get(`${Config.API_HOST}/inventory?userID=${Cookies.get('userID')}&page=${this.page}&level=${this.state.maincard.level}&cardID=${this.state.maincard.card.id}&excludeuuid=${this.mainuuid}`)
+	const data = {
+		page: this.page,
+		level: this.state.maincard.level,
+		cardId: this.state.maincard.cardInfo.id,
+		excludeUuids: [this.mainuuid]
+	};
+
+    axios.post(`${Config.API_HOST}/user/${Cookies.get('userID')}/inventory`, data)
       .then(res => {
-        if (res && res.status === 200) {
+            this.incrementLCounter();
 
-          if (redirectIfNecessary(this.props.history, res.data)) return;
-          this.incrementLCounter();
-
-          if (res.data && res.data.status === 0) {
-            parseCards(res.data.cards);
+            parseCards(res.data);
             let cards;
             if (this.state.cards !== undefined)
-              cards = [...this.state.cards, ...res.data.cards];
+              cards = [...this.state.cards, ...res.data];
             else
-              cards = [...res.data.cards];
+              cards = [...res.data];
 
             this.page++;
             this.key++;
-            if (res.data.cards.length === 0) this.setState({hasMore: false});
+            if (res.data.length === 0) this.setState({hasMore: false});
             this.loadingCards = false;
-            this.setState({cards: cards});
-          }
-        }
-      });
+        	this.setState({cards: cards});
+      }).catch(err => {
+          redirectIfNecessary(this.props.history, err);
+	  });
   }
 
   onCardClick = (e, uuid) => {
@@ -117,11 +117,15 @@ class CardPage extends Component {
     this.state.mainwaifucard.startUpgradeEffect();
     this.state.mainwaifucard.focusCard();
 
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+
     let data =
     {
-      token: Cookies.get('token'),
-      mainuuid: this.mainuuid,
-      carduuid: this.state.upgradeId
+      cardOne: this.mainuuid,
+      cardTwo: this.state.upgradeId
     }
 
     this.setState({upgradeId: undefined, focus: true});
@@ -129,26 +133,19 @@ class CardPage extends Component {
     let newcard = undefined;
     let success = undefined;
 
-    axios.post(`${Config.API_HOST}/upgrade`, data)
+    axios.post(`${Config.API_HOST}/card/upgrade`, data, config)
       .then(res => {
-        if (res && res.status === 200) {
-
-          if (redirectIfNecessary(this.props.history, data)) return;
-
-          if (res.data && res.data.status === 0) {
-            success = res.data.success;
-            axios.get(`${Config.API_HOST}/card/${res.data.uuid}`)
-              .then(res => {
-                if (res && res.status === 200 && res.data && res.data.status === 0) {
-                  parseCards([res.data.card]);
-                  newcard = res.data.card;
-                  return;
-                }
-                this.setState({maincard: -1});
-              });
-          }
-        }
-      });
+		success = res.data.success;
+		axios.get(`${Config.API_HOST}/card/${res.data.card}`)
+		  .then(res => {
+			  parseCards([res.data]);
+			  newcard = res.data;
+		  }).catch(err => {
+			  this.setState({maincard: -1});
+		  });
+      }).catch(err => {
+		  redirectIfNecessary(this.props.history, err);
+	  });
 
     let startTimeout = (time) => {
       setTimeout(() => {

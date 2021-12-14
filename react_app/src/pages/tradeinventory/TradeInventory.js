@@ -22,13 +22,13 @@ class TradeInventory extends Component {
 
   onCardClick(self, e, card) {
     self.setState({loading: true});
-    let data =
-    {
-      token: Cookies.get('token'),
-      userID: this.friendID,
-      cardID: card
-    }
-    axios.post(`${Config.API_HOST}/addtrade`, data)
+
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+
+    axios.post(`${Config.API_HOST}/trade/${this.friendID}/card/add/${card}`, {}, config)
       .then((res) => {
         if (res && res.status === 200) {
           if (res.data && res.data.status === 0) {

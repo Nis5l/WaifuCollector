@@ -29,7 +29,7 @@ class Profile extends Component {
 
         this.state =
         {
-			stats: {friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0, badges: []},
+			stats: {friends: 0, maxFriends: 0, cards: 0, maxCards: 0, trades: 0, maxTrades: 0, achievements: []},
             friendStatus: -1,
             loading: true,
             flexCards: []
@@ -39,29 +39,23 @@ class Profile extends Component {
     componentDidMount() {
 
         async function loadStats(userID) {
-
-            const data = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
-
-            if (data.data && data.data.status === 0) {
-
-                delete data.data["status"];
-
-                return data.data;
-
-            }
-
-            return [];
-
+			try {
+				const reponse = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
+                return reponse.data;
+			} catch (err) {
+				console.log("Unexpected /user/:id/stats error");
+				return [];
+			}
         }
 
         async function loadFlexCards(userID) {
-            const data = await axios.get(`${Config.API_HOST}/flex?userID=${userID}`)
-
-            if (data.data && data.data.status === 0) {
-                parseCards(data.data.cards);
-                return data.data.cards;
-            }
-            return [];
+			try {
+				const res = await axios.get(`${Config.API_HOST}/user/${userID}/flex`)
+                parseCards(res.data.cards);
+                return res.data.cards;
+			} catch (err) {
+				return [];
+			}
         }
 
         async function updateStats(self) {
@@ -101,11 +95,15 @@ class Profile extends Component {
     }
 
     onFriendAdd() {
+        const config =
+        {
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+        }
+
         const data = {
-            token: Cookies.get('token'),
-            userID: this.userID
+            userId: this.userID
         };
-        axios.post(`${Config.API_HOST}/addfriend`, data);
+        axios.post(`${Config.API_HOST}/friend/add`, data, config);
         this.setState({friendStatus: 0});
     }
 
@@ -197,10 +195,11 @@ class Profile extends Component {
                 </Card>
 
                 <Card
-                    title="Badges"
+                    title="Achievements"
                     styleClassName="badges"
                 >
-					<Badges badges={this.state.stats.badges} />
+					//TODO: RENAME TO BADGES
+					<Badges badges={this.state.stats.achievements} />
                 </Card>
 
                 <Card

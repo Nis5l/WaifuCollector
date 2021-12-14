@@ -23,16 +23,13 @@ function ProfileName(props) {
         if (props.userID === undefined) return;
 
         if (props.username !== undefined) return;
-        axios.get(`${Config.API_HOST}/user/${props.userID}`)
-            .then((res) => {
-                if (res && res.status === 200) {
-                    if (res && res.data && res.data.status === 0) {
-                        setUsername(res.data.username);
-                        incrementLCounter();
-                    }
-                }
-
-            });
+        axios.get(`${Config.API_HOST}/user/${props.userID}/username`)
+            .then(res => {
+				setUsername(res.data.username);
+				incrementLCounter();
+            }).catch(err => {
+				console.log("Unexpected /user/:id/username error");
+			});
 
     }, [setUsername, props.userID]);
 
@@ -47,16 +44,12 @@ function ProfileName(props) {
 
             if (props.badges) return props.badges;
 
-            const data = await axios.get(Config.API_HOST + `/user/${userID}/badges`);
-
-            if (data.data.status === 0) {
-
-                return data.data.badges;
-
-            }
-
-            return [];
-
+			try {
+				const res = await axios.get(Config.API_HOST + `/user/${userID}/badges`);
+                return res.data.badges;
+			} catch (err) {
+				return [];
+			}
         }
 
         async function loadBadges() {

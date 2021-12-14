@@ -60,29 +60,38 @@ class Inventory extends Component {
     const search = this.searchInput.current.value;
     const sortType = this.sortMethod;
 
-    axios.get(`${Config.API_HOST}/inventory?userID=${this.userID}&page=${this.page}&search=${search}&sortType=${sortType}&friendID=${this.friendID}&excludeSuggestions=${this.excludeSuggestions}`)
-      .then(res => {
-        if (res && res.status === 200) {
+	let data = {
+		page: this.page,
+		search: search,
+		sortType: sortType,
+	};
+	
+	if (this.friendID) {
+		data.friend = {
+			friendId: this.friendID,
+			excludeSuggestions: this.excludeSuggestions
+		};
+	}
 
-          if (redirectIfNecessary(this.props.history, res.data)) return;
+    axios.post(`${Config.API_HOST}/user/${this.userID}/inventory`, data)
+      .then(res => {
           this.incrementLCounter();
 
           this.page++;
 
-          if (res.data && res.data.status === 0) {
-            parseCards(res.data.cards);
-            let cards = [...this.state.cards, ...res.data.cards];
-            this.key++;
-            this.loadingCards = false;
-            if (res.data.cards.length === 0) this.hasMore = false;
-            this.setState({cards: cards});
-          } else {
-            this.setState({errorMessage: res.data.message});
-          }
-        } else {
-          this.setState({errorMessage: "Internal error"});
-        }
-      });
+		  parseCards(res.data);
+		  let cards = [...this.state.cards, ...res.data];
+		  this.key++;
+		  this.loadingCards = false;
+		  if (res.data.length === 0) this.hasMore = false;
+		  this.setState({cards: cards});
+      }).catch(err => {
+          if (redirectIfNecessary(this.props.history, err)) return;
+		  if(err.response)
+			  this.setState({errorMessage: err.response.data.error});
+		  else
+			  this.setState({errorMessage: "Internal error"});
+	  });
   }
 
   incrementLCounter() {

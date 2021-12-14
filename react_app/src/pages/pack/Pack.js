@@ -26,20 +26,22 @@ class Pack extends Component {
     }
 
     componentDidMount() {
-        axios.post(`${Config.API_HOST}/pack`, {token: Cookies.get('token')})
-            .then((res) => {
+        const config =
+        {
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+        }
 
-                if (redirectIfNecessary(this.props.history, res.data)) return;
+        axios.post(`${Config.API_HOST}/pack/open`, {}, config)
+            .then(res => {
                 this.setState({loading: false});
 
-                if (res && res.status === 200 && res && res.data && res.data.status === 0) {
-                    let cards = res.data.cards;
-                    parseCards(cards);
-                    this.setState({cards: cards});
-                } else {
-                    this.props.history.push('/dashboard');
-                }
-            });
+				let cards = res.data.cards;
+				parseCards(cards);
+				this.setState({cards: cards});
+            }).catch(err => {
+                if(redirectIfNecessary(this.props.history, err)) return;
+				this.props.history.push('/dashboard');
+			});
     }
 
     startQuitCooldown(e, uuid, self) {

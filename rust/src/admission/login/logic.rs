@@ -25,7 +25,7 @@ pub async fn login_route(data: LoginRequest, sql: &State<Sql>, config: &rocket::
     }
 
     match jwt_sign_token(&username, user_id, &config.jwt_secret) {
-        Ok(token) => ApiResponseErr::ok(Status::Ok, LoginResponse { token }),
+        Ok(token) => ApiResponseErr::ok(Status::Ok, LoginResponse { token, user_id }),
         Err(_) => ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
     }
 }

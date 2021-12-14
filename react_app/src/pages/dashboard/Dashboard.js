@@ -38,7 +38,7 @@ class Dashboard extends Component {
             maxTrades: 0,
             loading: true,
             friendRequests: 0,
-			badges: [],
+			achievements: [],
             requests: false
         }
     }
@@ -46,20 +46,12 @@ class Dashboard extends Component {
     componentDidMount() {
 
         async function loadStats(self, userID) {
-
-            const data = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
-
-            if (redirectIfNecessary(self.props.history, data.data)) return;
-
-            if (data.data && data.data.status === 0) {
-
-                delete data.data["status"];
-
-                return data.data;
-            }
-            //self.props.history.push("/logout");
-
-            return [];
+			try {
+				const response = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
+				return response.data;
+			} catch (err) {
+				return [];
+			}
         }
 
         async function updateStats(self) {
@@ -71,23 +63,25 @@ class Dashboard extends Component {
             self.setState(stats);
         }
 
-        axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
-            .then((res) => {
-                if (res.data && res.data.status === 0) {
-                    switch (res.data.verified) {
-                        case 1:
-                            this.props.history.push('/verify');
-                            break;
+        const config =
+        {
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+        }
 
-                        case 2:
-                            this.props.history.push('/verify/mail');
-                            break;
-
-                        default:
-                    }
-                    return;
-                }
-            });
+        axios.get(`${Config.API_HOST}/verify/check`, config)
+            .then(res => {
+				switch (res.data.verified) {
+					case 1:
+						this.props.history.push('/verify');
+						break;
+					case 2:
+						this.props.history.push('/verify/mail');
+						break;
+					default:
+				}
+            }).catch(err => {
+				console.log("Unexpected /verify/check error");
+			});;
 
         updateStats(this);
 
@@ -167,7 +161,7 @@ class Dashboard extends Component {
                     styleClassName="badges"
                 >
 					<Badges
-						badges={this.state.badges}
+						badges={this.state.achievements}
 					/>
                 </Card>
 

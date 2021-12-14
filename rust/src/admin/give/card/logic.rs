@@ -12,7 +12,7 @@ pub async fn give_card_route(data: GiveCardRequest, sql: &State<Sql>, token: Jwt
     let user_id = token.id;
 
     if !matches!(rjtry!(user::sql::get_user_rank(sql, user_id).await), Ok(user::data::UserRanking::Admin)) {
-        return ApiResponseErr::api_err(Status::Unauthorized, String::from("You need to be admin to view this"))
+        return ApiResponseErr::api_err(Status::Forbidden, String::from("You need to be admin to view this"))
     }
 
     let card_unlocked_id = rjtry!(card::sql::add_card(sql, data.user_id, &card::data::CardCreateData {

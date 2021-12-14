@@ -4,6 +4,7 @@ import Config from '../config.json'
 import Cookies from 'js-cookie'
 import {formatTime} from '../Utils'
 import {withRouter} from 'react-router-dom'
+import moment from 'moment';
 
 import './PackProgressRing.scss'
 import redirectIfNecessary from './Redirecter'
@@ -15,7 +16,7 @@ class PackProgressRing extends Component {
         this.radius = 46;
         this.strokeDashes = this.radius * 2 * Math.PI;
         this.update = 50;
-        this.packTime = 0;
+        this.packTime = undefined;
         this.packTimeMax = 100;
 
         this.lcounter = 0;
@@ -29,28 +30,29 @@ class PackProgressRing extends Component {
     }
 
     loadMaxPackTime(self) {
-        axios.get(`${Config.API_HOST}/packTimeMax`)
-            .then((res) => {
-                if (res && res.status === 200) {
-                    if (res && res.data && res.data.status === 0) {
-                        self.packTimeMax = res.data.packTimeMax;
-                        this.incrementLCounter();
-                    }
-                }
-            })
+        axios.get(`${Config.API_HOST}/pack/time/max`)
+            .then(res => {
+				self.packTimeMax = moment.duration(res.data.packTimeMax);
+				this.incrementLCounter();
+            }).catch(err => {
+				console.log("Unexpected /pack/time/max error");
+			});
     }
 
     loadPackTime(self) {
-        axios.post(`${Config.API_HOST}/packtime`, {token: Cookies.get('token')})
-            .then((res) => {
-                if (redirectIfNecessary(this.props.history, res.data)) return;
-                if (res && res.status === 200) {
-                    if (res && res.data && res.data.status === 0) {
-                        self.packTime = res.data.packTime;
-                        this.incrementLCounter();
-                    }
-                }
-            })
+        const data =
+        {
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+        }
+
+        axios.get(`${Config.API_HOST}/pack/time`, data)
+			.then(res => {
+				self.packTime = moment(res.data.packTime);
+				console.log(self.packTime);
+				this.incrementLCounter();
+            }).catch(err => {
+                redirectIfNecessary(this.props.history, err);
+			});
     }
 
     incrementLCounter() {
@@ -63,13 +65,19 @@ class PackProgressRing extends Component {
         this.loadPackTime(this);
 
         this.interval = setInterval(() => {
-            this.packTime -= this.update;
-            if (this.packTime < 0) this.packTime = 0;
+			let now = new Date();
 
-            const progress = this.packTime / this.packTimeMax * this.strokeDashes;
+			let diff = this.packTime - now;
+			if(diff < 0) diff = 0;
+
+			const progress = diff / this.packTimeMax;
+
+			console.log(progress);
+            //const progress = this.packTime / this.packTimeMax * this.strokeDashes;
 
             let text = 'Open';
-            if (this.packTime !== 0) text = formatTime(this.packTime)
+			if(diff > 0)
+				text = formatTime(diff.toString());
 
             this.setState({progress: progress, text: text});
         }, this.update);
@@ -82,7 +90,7 @@ class PackProgressRing extends Component {
     }
 
     onClick(obj) {
-        if (obj.packTime === 0)
+        if (new Date() >= obj.packTime)
             this.props.history.push('/pack');
     }
 

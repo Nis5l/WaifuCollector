@@ -37,17 +37,17 @@ class Users extends Component {
   }
 
   componentDidMount() {
-    axios.post(Config.API_HOST + "/friends", {id: Cookies.get('userID'), })
+    axios.get(`${Config.API_HOST}/user/${Cookies.get('userID')}/friends`)
       .then((res) => {
         this.setState({loading: false});
-        if (res.data && res.data.status === 0) {
-          let friends = {};
-          for (let i = 0; i < res.data.friends.length; i++) {
-            friends[res.data.friends[i].userID] = res.data.friends[i].status;
-          }
-          this.setState({friends: friends});
-        }
-      });
+		let friends = {};
+		for (let i = 0; i < res.data.friends.length; i++) {
+			friends[res.data.friends[i].userID] = res.data.friends[i].status;
+			this.setState({friends: friends});
+		}
+      }).catch(err => {
+		console.log("Unexpected /user/:id/friends error");
+	  });
   }
 
   trackScrolling = () => {
@@ -55,15 +55,13 @@ class Users extends Component {
     this.loading = true;
 
     axios.get(`${Config.API_HOST}/users?username=${this.username}&page=${this.page}`)
-      .then((res) => {
-        if (res.data && res.data.status === 0) {
+      .then(res => {
           if (!this.loading) return;
-          if (res.data.users.length === 0) this.hasMore = false;
+          if (res.data.length === 0) this.hasMore = false;
           this.loading = false;
           this.page++;
-          const users = [...this.state.users, ...res.data.users];
+          const users = [...this.state.users, ...res.data];
           this.setState({users: users});
-        }
       });
   }
 

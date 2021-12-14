@@ -130,17 +130,17 @@ CREATE TABLE packtimes (
 ) ENGINE = InnoDB;
 
 CREATE TABLE achievements (
-	bid INT NOT NULL,
-	bimage TEXT NOT NULL,
-	btext TEXT NOT NULL,
-	PRIMARY KEY (bid)
+	aid INT NOT NULL,
+	aimage TEXT NOT NULL,
+	atext TEXT NOT NULL,
+	PRIMARY KEY (aid)
 ) ENGINE = InnoDB;
 
 CREATE TABLE achievementunlocks (
-	buid INT NOT NULL AUTO_INCREMENT,
+	auid INT NOT NULL AUTO_INCREMENT,
 	uid INT NOT NULL,
-	bid INT NOT NULL,
-	PRIMARY KEY (buid),
+	aid INT NOT NULL,
+	PRIMARY KEY (auid),
 	FOREIGN KEY (uid) REFERENCES users(uid),
-	FOREIGN KEY (bid) REFERENCES achievements(bid)
+	FOREIGN KEY (aid) REFERENCES achievements(aid)
 ) ENGINE = InnoDB;

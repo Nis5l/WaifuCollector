@@ -43,31 +43,17 @@ function Register(props) {
             return;
 
         const user = {
-
-            username: username,
-            password: password,
-            mail: email
-
+            username,
+            password,
+            email
         };
 
         axios.post(`${Config.API_HOST}/register`, user)
             .then(res => {
-
-                if (res && res.status === 200) {
-
-                    if (res.data && res.data.status === 0) {
-
-                        history.push("/login");
-                        return;
-
-                    }
-
-                    setError(res.data.message);
-
-                }
-
-            });
-
+				history.push("/login");
+            }).catch(err => {
+				setError(err.response.data.message);
+			});
     }
 
     useEffect(() => {

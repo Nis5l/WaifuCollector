@@ -34,6 +34,8 @@ pub struct Config {
     pub card_image_base: String,
     pub frame_image_base: String,
     pub effect_image_base: String,
+    pub achievements_image_base: String,
+    pub badges_image_base: String,
 
     pub log_file: String,
 
@@ -75,9 +77,11 @@ impl Default for Config {
 
             db_connection: String::from("mysql://root@localhost/waifucollector"),
 
-            card_image_base: String::from("Card/"),
-            frame_image_base: String::from("Frame/"),
-            effect_image_base: String::from("Effect/"),
+            card_image_base: String::from("card"),
+            frame_image_base: String::from("frame"),
+            effect_image_base: String::from("effect"),
+            achievements_image_base: String::from("achievements"),
+            badges_image_base: String::from("badges"),
 
             log_file: String::from("./log-file.log"),
 

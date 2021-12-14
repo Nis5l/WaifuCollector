@@ -91,26 +91,27 @@ class Notifications extends Component {
     }
 
     componentDidMount() {
-        const data =
+        const config =
         {
-            token: Cookies.get('token')
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
         }
 
-        axios.post(`${Config.API_HOST}/notifications`, data)
+        axios.get(`${Config.API_HOST}/notifications`, config)
             .then((res) => {
-                if (res.data && res.data.status === 0) {
-                    res.data.data.reverse();
-                    this.setState({notifications: res.data.data});
-                    if (this.props.onNotifications) this.props.onNotifications(res.data.data);
-                }
-            })
+				res.data.notifications.reverse();
+				this.setState({notifications: res.data.notifications});
+				if (this.props.onNotifications) this.props.onNotifications(res.data.notifications);
+            }).catch(err => {
+				if(err.request.status != 401) {
+					console.log("Unexpected /notifications error");
+				}
+			});
     }
 
     remove(id) {
         const data =
         {
-            token: Cookies.get('token'),
-            notificationID: id
+			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
         }
 
         for (let i = 0; i < this.state.notifications.length; i++) {
@@ -124,7 +125,7 @@ class Notifications extends Component {
         if (this.props.onNotifications) this.props.onNotifications(this.state.notifications);
         this.setState({notifications: [...this.state.notifications]});
 
-        axios.post(`${Config.API_HOST}/deleteNotification`, data);
+        axios.post(`${Config.API_HOST}/notifications/delete/${id}`, data);
     }
 
     render() {

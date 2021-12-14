@@ -1,19 +1,20 @@
-function redirectIfNecessary(history, data) {
-    if (data === undefined) return 0;
+function redirectIfNecessary(history, err) {
+    if (err.response === undefined) return 0;
 
-    switch (data.status) {
-        case 10:
-            history.push('/verify');
-            return 1;
-        case 11:
-            history.push('/verify/mail');
-            return 2;
-        case 12:
-            history.push('/logout')
-            return 3;
-
-        default:
-    }
+	//Unathorized
+	if(err.response.status == 401) {
+		switch (err.response.error) {
+			case "Not verified":
+				history.push('/verify');
+				return 1;
+			case "Mail not set":
+				history.push('/verify/mail');
+				return 2;
+			default:
+				history.push('/logout')
+				return 3;
+		}
+	}
 
     return 0;
 }

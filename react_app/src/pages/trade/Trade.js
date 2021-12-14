@@ -90,37 +90,37 @@ class Trade extends Component {
   }
 
   load() {
-    const data = {token: Cookies.get('token'), userID: this.friendid};
-    axios.post(`${Config.API_HOST}/trade`, data)
-      .then((res) => {
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
 
-        if (redirectIfNecessary(this.props.history, res.data)) return;
+    axios.post(`${Config.API_HOST}/trade/${this.friendid}`, {}, config)
+      .then(res => {
         this.incrementLCounter();
-
-        if (res && res.status === 200 && res.data && res.data.status === 0) {
-
-          parseCards(res.data.cards);
-          parseCards(res.data.cardsfriend);
-          parseCards(res.data.cardsuggestions);
-          parseCards(res.data.cardsuggestionsfriend);
+          parseCards(res.data.selfCards);
+          parseCards(res.data.friendCards);
+          parseCards(res.data.selfCardSuggestions);
+          parseCards(res.data.friendCardSuggestions);
 
           this.tradeCount1 = res.data.tradeCount1;
           this.tradeLimit = res.data.tradeLimit;
 
           this.setState({
-            name: res.data.username,
-            cards: res.data.cards,
-            friendcards: res.data.cardsfriend,
-            tradeCount: res.data.tradeCount1,
-            friendTradeCount: res.data.tradeCount2,
-            tradeLimit: res.data.tradeLimit,
+            name: res.data.friendUsername,
+            cards: res.data.selfCards,
+            friendcards: res.data.friendCards,
+            tradeCount: res.data.selfCards.length,
+            friendTradeCount: res.data.friendCards.length,
+            tradeLimit: res.data.tradeCardLimit,
             cardSuggestions: res.data.cardsuggestions,
             friendCardSuggestions: res.data.cardsuggestionsfriend,
-            confirmed: res.data.statusone,
-            friendConfirmed: res.data.statustwo,
+            confirmed: res.data.selfStatus,
+            friendConfirmed: res.data.friendStatus,
             tradeTime: res.data.tradeTime
           }, () => {this.setInfo(); this.setDisabled()});
 
+		  //TODO: ISO no duration
           if (res.data.tradeTime !== 0) {
             let interval = this.timeinterval = setInterval(() => {
               let newtime = this.state.tradeTime - 1000;
@@ -130,11 +130,10 @@ class Trade extends Component {
               if (newtime === 0) clearInterval(interval);
             }, 1000)
           }
-
-        } else {
+      }).catch(err => {
+          if (redirectIfNecessary(this.props.history, err)) return;
           this.setState({found: false});
-        }
-      });
+	  });
   }
 
   componentWillUnmount() {
@@ -179,7 +178,10 @@ class Trade extends Component {
   }
 
   cardOwnRemove = () => {
-    const data = {token: Cookies.get('token'), userID: this.friendid, cardID: this.state.removeId};
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
 
     for (let i = 0; i < this.state.cards.length; i++) {
       if (this.state.cards[i].id === this.state.removeId) {
@@ -187,13 +189,14 @@ class Trade extends Component {
         break;
       }
     }
-    this.setState({removeId: undefined, tradeCount: this.state.tradeCount - 1, confirmed: 0, friendConfirmed: 0},
-      () => {this.setInfo(); this.setDisabled()});
 
-    axios.post(`${Config.API_HOST}/removetrade`, data)
-      .then((res) => {
+    axios.post(`${Config.API_HOST}/trade/${this.friendid}/card/remove/${this.state.removeId}`, {}, config)
+      .then(res => {
         this.load()
       });
+
+    this.setState({removeId: undefined, tradeCount: this.state.tradeCount - 1, confirmed: 0, friendConfirmed: 0},
+      () => {this.setInfo(); this.setDisabled()});
   }
 
   cardOwnRemoveCancel = () => {
@@ -205,12 +208,10 @@ class Trade extends Component {
   }
 
   cardSuggestionFriendRemove = () => {
-    const data = {
-      token: Cookies.get('token'),
-      userID: this.friendid,
-      cardID: this.state.removeFriendSuggestionId,
-      friend: true
-    }
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
 
     for (let i = 0; i < this.state.friendCardSuggestions.length; i++) {
       if (this.state.friendCardSuggestions[i].id === this.state.removeFriendSuggestionId) {
@@ -218,13 +219,15 @@ class Trade extends Component {
         break;
       }
     }
-    this.setState({removeFriendSuggestionId: undefined});
 
-    axios.post(`${Config.API_HOST}/removesuggestion`, data)
+    axios.post(`${Config.API_HOST}/trade/${this.friendid}/suggestion/remove/${this.state.removeFriendSuggestionId}`, {}, config)
       .then((res) => {
-        if (redirectIfNecessary(this.props.history, res.data)) return;
         this.load()
-      });
+      }).catch(err => {
+        if (redirectIfNecessary(this.props.history, err)) return;
+	  });
+
+    this.setState({removeFriendSuggestionId: undefined});
   }
 
   cardSuggestionCancel = () => {
@@ -232,11 +235,10 @@ class Trade extends Component {
   }
 
   cardSuggestionYes = () => {
-    const data = {
-      token: Cookies.get('token'),
-      userID: this.friendid,
-      cardID: this.state.removeSuggestionId
-    }
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
 
     for (let i = 0; i < this.state.cardSuggestions.length; i++) {
       if (this.state.cardSuggestions[i].id === this.state.removeSuggestionId) {
@@ -246,22 +248,22 @@ class Trade extends Component {
       }
     }
 
+    axios.post(`${Config.API_HOST}/trade/${this.friendid}/card/add/${this.state.removeSuggestionId}`, {}, config)
+      .then(res => {
+        this.load()
+      }).catch(err => {
+        redirectIfNecessary(this.props.history, err);
+	  });
+
     this.setState({removeSuggestionId: undefined, tradeCount: this.state.tradeCount + 1},
       () => {this.setInfo(); this.setDisabled()});
-
-    axios.post(`${Config.API_HOST}/acceptsuggestion`, data)
-      .then((res) => {
-        if (redirectIfNecessary(this.props.history, res.data)) return;
-        this.load()
-      });
   }
 
   cardSuggestionNo = () => {
-    const data = {
-      token: Cookies.get('token'),
-      userID: this.friendid,
-      cardID: this.state.removeSuggestionId
-    }
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
 
     for (let i = 0; i < this.state.cardSuggestions.length; i++) {
       if (this.state.cardSuggestions[i].id === this.state.removeSuggestionId) {
@@ -270,30 +272,30 @@ class Trade extends Component {
       }
     }
 
-    this.setState({removeSuggestionId: undefined});
-
-    axios.post(`${Config.API_HOST}/removesuggestion`, data)
-      .then((res) => {
-        if (redirectIfNecessary(this.props.history, res.data)) return;
+    axios.post(`${Config.API_HOST}/trade/${this.friendid}/suggestion/remove/${this.state.removeSuggestionId}`, {}, config)
+      .then(res => {
         this.load()
-      });
+      }).catch(err => {
+        redirectIfNecessary(this.props.history, err);
+	  });
+
+    this.setState({removeSuggestionId: undefined});
   }
 
   confirm = () => {
-    const data = {
-      token: Cookies.get('token'),
-      userID: this.friendid
-    }
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
 
     this.setState({confirmed: 1}, this.setInfo);
 
-    axios.post(`${Config.API_HOST}/okTrade`, data)
-      .then((res) => {
-
-        if (redirectIfNecessary(this.props.history, res.data)) return;
-
+    axios.post(`${Config.API_HOST}/trade/${this.friendid}/confirm`, {}, config)
+      .then(res => {
         this.load();
-      })
+      }).catch(err => {
+    	redirectIfNecessary(this.props.history, err);
+	  });
   }
 
   redirect = (url) => {

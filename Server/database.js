@@ -63,6 +63,7 @@ module.exports = {
 		];
 
 		con.connect(() => {
+
 			console.log("Initializing Tables");
 			executeArray(sql, () => {
 				console.log("Initializing Cards");

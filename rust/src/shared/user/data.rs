@@ -1,8 +1,10 @@
 use serde_repr::Serialize_repr;
 use sqlx::FromRow;
+use serde::Serialize;
 
 use crate::config::Config;
 use crate::shared::DbParseError;
+use crate::shared::Id;
 
 #[derive(Debug)]
 pub enum UserVerifiedDb {
@@ -61,10 +63,12 @@ impl UserVerified {
 macro_rules! verify_user {
     ( $sql:expr, $token:expr ) => {
         {
-            match rocketjson::rjtry!(crate::shared::user::sql::user_verified($sql, $token).await) {
-                Err(_) => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::InternalServerError, String::from("Internal server error")),
-                Ok(crate::shared::user::data::UserVerifiedDb::No) => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::Unauthorized, String::from("Not verified")),
-                Ok(crate::shared::user::data::UserVerifiedDb::Yes) => ()
+            let vd = rocketjson::rjtry!(crate::shared::user::sql::get_verify_data($sql, $token).await);
+
+            match rocketjson::rjtry!(crate::shared::user::data::UserVerified::from_db(&vd.email, vd.verified)) {
+                crate::shared::user::data::UserVerified::NotVerified => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::Unauthorized, String::from("Not verified")),
+                crate::shared::user::data::UserVerified::MailNotSet => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::Unauthorized, String::from("Mail not set")),
+                crate::shared::user::data::UserVerified::Ok => ()
             }
         }
     };
@@ -84,4 +88,25 @@ pub struct EmailVerifiedDb {
     pub verified: i32,
     #[sqlx(rename="uemail")]
     pub email: Option<String>
+}
+
+#[derive(Serialize)]
+pub struct Badge {
+    pub name: &'static str,
+    pub asset: &'static str
+}
+
+//TODO: this is obv. a placeholder and should be stored in the database!
+//8,3: Nissl and SmallCode
+const DEVS: [Id; 2] = [8, 3];
+
+pub fn get_badges(user_id: Id) -> Vec<Badge> {
+    let mut badges = Vec::new();
+    if DEVS.contains(&user_id) {
+        badges.push(Badge {
+			name: "Developer",
+			asset: "/badges/dev.jpg"
+        });
+    }
+    badges
 }

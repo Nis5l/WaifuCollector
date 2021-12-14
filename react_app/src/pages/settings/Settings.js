@@ -51,26 +51,6 @@ class Settings extends Component {
   }
 
   componentDidMount() {
-
-    //this.passInterval = setInterval(() => {
-    //let password = this.getNewPass();
-
-    //this.setState({showpass: password});
-    //}, 100);
-
-    const data =
-    {
-      token: Cookies.get("token")
-    }
-
-    axios.post(`${Config.API_HOST}/mail`, data)
-      .then((res) => {
-        if (redirectIfNecessary(this.props.history, res.data)) return;
-        this.incrementLCounter();
-
-        if (res.data.status === 0)
-          this.setState({mail: res.data.mail});
-      })
   }
 
   incrementLCounter() {
@@ -93,17 +73,19 @@ class Settings extends Component {
       passwordWrong: true
     });
 
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+
     const data =
     {
-      token: Cookies.get("token"),
-      newpassword: this.state.password
+    	newPassword: this.state.password
     }
-    axios.post(`${Config.API_HOST}/passchange`, data)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === 0) {
-          this.setState({passwordMessage: "Password changed!", passwordopen: false});
-        }
+
+    axios.post(`${Config.API_HOST}/passchange`, data, config)
+      .then(res => {
+	  	this.setState({passwordMessage: "Password changed!", passwordopen: false});
       })
   }
 

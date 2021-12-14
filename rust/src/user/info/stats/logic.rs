@@ -21,7 +21,6 @@ pub async fn user_stats_route(user_id: Id, sql: &State<Sql>, config: &State<Conf
     let achievements = rjtry!(sql::get_achievements(sql, user_id).await);
 
 
-    //TODO: come back to this when after longs have been replaced with DateTimes, start with /pack.
     ApiResponseErr::ok(Status::Ok, UserStatsResponse {
         max_friends: config.max_friends,
         friends: friend_count,

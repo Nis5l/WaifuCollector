@@ -59,13 +59,13 @@ impl Card {
             card_info: CardInfo {
                 id: card.card_id,
                 name: card.card_name,
-                image: card.card_image + &config.card_image_base
+                image: format!("{}/{}", &config.card_image_base, card.card_image)
             },
             card_frame: CardFrame {
                 id: card.frame_id,
                 name: card.frame_name,
-                front: card.frame_front + &config.frame_image_base,
-                back: card.frame_back + &config.frame_image_base
+                front: format!("{}/{}", &config.frame_image_base, card.frame_front),
+                back: format!("{}/{}", &config.frame_image_base, card.frame_back)
             },
             card_type: CardType {
                 id: card.type_id,
@@ -73,7 +73,7 @@ impl Card {
             },
             card_effect: CardEffect {
                 id: card.effect_id,
-                image: card.effect_image + &config.effect_image_base,
+                image: format!("{}/{}", &config.effect_image_base, card.effect_image),
                 opacity: card.effect_opacity
             }
         }

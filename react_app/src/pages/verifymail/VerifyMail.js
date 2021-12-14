@@ -26,42 +26,48 @@ class VerifyMail extends Component {
   }
 
   componentDidMount() {
-    axios.get(`${Config.API_HOST}/verified?token=${Cookies.get('token')}`)
-      .then((res) => {
-        this.setState({loading: false});
-        if (res.data && res.data.status === 0) {
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+
+    axios.get(`${Config.API_HOST}/verify/check`, config)
+      .then(res => {
+    	  this.setState({loading: false});
           switch (res.data.verified) {
             case 1:
               this.props.history.push('/verify');
               break;
-
             case 2:
               this.setState({loaded: true});
               break;
-
             default:
               this.props.history.push('/dashboard');
           }
-          return;
-        }
-      });
+      }).catch(err => {
+		console.log("Unexpected /verify/check error");
+	  });
   }
 
   onSubmit = () => {
     this.setState({error: undefined})
+
+	const config =
+	{
+		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+	}
+
     const data = {
-      token: Cookies.get('token'),
-      mail: this.state.email
+      email: this.state.email
     }
-    axios.post(`${Config.API_HOST}/setmail`, data)
-      .then((res) => {
-        if (res.data) {
-          if (res.data.status === 0)
-            this.props.history.push('/verify');
-          else
-            this.setState({error: res.data.message})
-        }
-      })
+
+    axios.post(`${Config.API_HOST}/email/change`, data, config)
+      .then(res => {
+    	  this.props.history.push('/verify');
+      }).catch(err => {
+		  if(err.response)
+    		this.setState({error: err.response.data.error})
+	  });
   }
 
   setEmail = (self, email) => {
