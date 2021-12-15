@@ -13,9 +13,9 @@
     "chart.js": "^2.9.4",
     "js-cookie": "^2.2.1",
     "little-loader": "^0.2.0",
+    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "normalize-url": "^6.1.0",
-	"moment": "^2.29.1",
     "react": "^17.0.2",
     "react-autocomplete": "^1.8.1",
     "react-chartjs-2": "^2.11.2",
@@ -31,12 +31,14 @@
     "react-scripts": "^4.0.3",
     "react-select": "^4.3.1",
     "reactstrap": "^8.9.0",
+    "serve": "^13.0.2",
     "use-fit-text": "^2.4.0",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "serve": "serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
