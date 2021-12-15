@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 rocket = { version = "0.5.0-rc.1", features = ["json"] }
-rocketjson = { path = "/home/nissl/projects/rocketjson/core" }
+rocketjson = "1.2.0"
 serde = { version = "1.0", features = ["derive", "rc"] }
 serde_repr = "0.1.7"
 figment = { version = "0.10.6", features = ["env", "toml", "json"] }
