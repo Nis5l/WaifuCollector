@@ -19,6 +19,7 @@ class Verify extends Component {
     super(props);
 
     this.key = queryString.parse(props.location.search)['key'];
+	  console.log(this.key);
 
     this.lCount = 0;
     this.lCountMax = 2;
@@ -39,11 +40,12 @@ class Verify extends Component {
 
     axios.post(`${Config.API_HOST}/verify/confirm/${this.key}`, {}, config)
       .then(res => {
-        this.incrementLCounter();
 	    this.props.history.push('/dashboard');
       }).catch(err => {
 		console.log("Unexpected /verify/confirm/:key error");
-	  });;
+	  }).finally(() => {
+        this.incrementLCounter();
+	  });
 
     axios.get(`${Config.API_HOST}/verify/check`, config)
       .then((res) => {

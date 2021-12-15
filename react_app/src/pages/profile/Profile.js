@@ -21,7 +21,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
 
-        this.userID = props.match.params.id;
+        this.userID = parseInt(props.match.params.id);
 
 
         this.lcounter = 0;

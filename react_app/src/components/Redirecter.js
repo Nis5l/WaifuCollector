@@ -3,7 +3,7 @@ function redirectIfNecessary(history, err) {
 
 	//Unathorized
 	if(err.response.status == 401) {
-		switch (err.response.error) {
+		switch (err.response.data.error) {
 			case "Not verified":
 				history.push('/verify');
 				return 1;

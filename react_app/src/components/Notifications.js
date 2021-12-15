@@ -2,6 +2,7 @@ import React, {Component, useState} from 'react'
 import {useHistory, withRouter, Redirect} from 'react-router-dom'
 import Card from './Card'
 import Scrollbar from './ScrollBar'
+import redirectIfNecessary from './Redirecter'
 
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -109,7 +110,7 @@ class Notifications extends Component {
     }
 
     remove(id) {
-        const data =
+        const config =
         {
 			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
         }
@@ -125,7 +126,9 @@ class Notifications extends Component {
         if (this.props.onNotifications) this.props.onNotifications(this.state.notifications);
         this.setState({notifications: [...this.state.notifications]});
 
-        axios.post(`${Config.API_HOST}/notifications/delete/${id}`, data);
+        axios.post(`${Config.API_HOST}/notifications/delete/${id}`, {}, config).catch(err => {
+			redirectIfNecessary(this.props.history, err);
+		});
     }
 
     render() {

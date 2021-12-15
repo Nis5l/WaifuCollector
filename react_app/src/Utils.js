@@ -1,28 +1,31 @@
 function formatTime(t) {
   var seconds = Math.floor((t / 1000) % 60);
-  if (("" + seconds).length === 1) seconds = "0" + seconds;
+  if (seconds < 10) seconds = "0" + seconds;
   var minutes = Math.floor((t / (60 * 1000)) % 60);
-  if (("" + minutes).length === 1) minutes = "0" + minutes;
+  if (minutes < 10) minutes = "0" + minutes;
   var hours = Math.floor((t / (60 * 60 * 1000)) % 24);
-  if (("" + hours).length === 1) hours = "0" + hours;
+  if (hours < 10) hours = "0" + hours;
   var days = Math.floor(t / (60 * 60 * 24 * 1000));
-  if (("" + days).length === 1) days = "0" + days;
+  if (days < 10) days = "0" + days;
   var formatTime = days + ":" + hours + ":" + minutes + ":" + seconds;
   if (days === "00") {
-    formatTime = hours + ":" + minutes + ":" + seconds;
     if (hours === "00") {
-      formatTime = minutes + ":" + seconds;
       if (minutes === "00") {
         formatTime = seconds;
+		return formatTime;
       }
+      formatTime = minutes + ":" + seconds;
+	  return formatTime;
     }
+    formatTime = hours + ":" + minutes + ":" + seconds;
+    return formatTime;
   }
   return formatTime;
 }
 
 function timeSince(date){
 
-  let seconds = Math.floor((new Date() - date) / 1000);
+  let seconds = Math.floor((new Date() - new Date(date)) / 1000);
         
   let interval = seconds / 31536000;
     

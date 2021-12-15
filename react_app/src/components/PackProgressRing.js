@@ -48,7 +48,6 @@ class PackProgressRing extends Component {
         axios.get(`${Config.API_HOST}/pack/time`, data)
 			.then(res => {
 				self.packTime = moment(res.data.packTime);
-				console.log(self.packTime);
 				this.incrementLCounter();
             }).catch(err => {
                 redirectIfNecessary(this.props.history, err);
@@ -65,21 +64,19 @@ class PackProgressRing extends Component {
         this.loadPackTime(this);
 
         this.interval = setInterval(() => {
+			if(this.packTime == null) return;
 			let now = new Date();
 
 			let diff = this.packTime - now;
 			if(diff < 0) diff = 0;
 
-			const progress = diff / this.packTimeMax;
-
-			console.log(progress);
-            //const progress = this.packTime / this.packTimeMax * this.strokeDashes;
+			const progress = diff / this.packTimeMax * this.strokeDashes;
 
             let text = 'Open';
 			if(diff > 0)
 				text = formatTime(diff.toString());
 
-            this.setState({progress: progress, text: text});
+            this.setState({progress, text});
         }, this.update);
 
         window.addEventListener("focus", () => {this.loadPackTime(this)});

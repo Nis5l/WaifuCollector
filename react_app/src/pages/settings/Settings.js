@@ -3,7 +3,6 @@ import Logo from '../../components/Logo'
 import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
 import Card from '../../components/Card'
-import redirectIfNecessary from '../../components/Redirecter'
 
 import Config from '../../config.json'
 import {withRouter} from 'react-router-dom'
@@ -18,7 +17,7 @@ class Settings extends Component {
     super(props);
 
     this.lCounter = 0;
-    this.lCounterMax = 2;
+    this.lCounterMax = 1;
 
     this.state =
     {

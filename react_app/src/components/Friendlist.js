@@ -52,10 +52,10 @@ class Friendlist extends Component {
 
             let friends = await loadFriends(self);
 
-            const filteredFriends = friends.filter((friend) => friend.status === 2);
+            const filteredFriends = friends.filter((friend) => friend.status === 0);
 
             if (self.props.onFriendRequests) {
-                const friendrqs = friends.filter((friend) => friend.status === 0);
+                const friendrqs = friends.filter((friend) => friend.status === 1);
                 self.setState({friendRequests: friendrqs});
                 self.props.onFriendRequests(friendrqs.length);
             }
@@ -93,7 +93,7 @@ class Friendlist extends Component {
         axios.post(`${Config.API_HOST}/friend/remove`, data, config);
 
         for (let i = 0; i < this.state.friends.length; i++) {
-            if (this.state.friends[i].userID === userID) {
+            if (this.state.friends[i].userId === userID) {
                 this.state.friends.splice(i, 1);
                 this.setState({friends: [...this.state.friends]});
                 break;
@@ -101,7 +101,7 @@ class Friendlist extends Component {
         }
 
         for (let i = 0; i < this.state.friendRequests.length; i++) {
-            if (this.state.friendRequests[i].userID === userID) {
+            if (this.state.friendRequests[i].userId === userID) {
                 this.state.friendRequests.splice(i, 1);
                 this.setState({friendRequests: [...this.state.friendRequests]});
                 break;
@@ -123,13 +123,13 @@ class Friendlist extends Component {
         const data = {
             userId: userID
         }
-        axios.post(`${Config.API_HOST}/friend/add`, data, config);
+        axios.post(`${Config.API_HOST}/friend/accept`, data, config);
 
         for (let i = 0; i < this.state.friendRequests.length; i++) {
-            if (this.state.friendRequests[i].userID === userID) {
+            if (this.state.friendRequests[i].userId === userID) {
                 this.state.friends.push(this.state.friendRequests[i])
                 let newreq = this.state.friendRequests[i];
-                newreq.status = 2;
+                newreq.status = 0;
                 this.state.friendRequests.splice(i, 1);
                 this.setState({friends: [...this.state.friends], friendRequests: [...this.state.friendRequests]});
                 break;
@@ -150,9 +150,9 @@ class Friendlist extends Component {
 
                         return (
                             <FriendComponent
-                                key={friend.userID}
+                                key={friend.userId}
                                 avatar="/assets/Icon.png"
-                                userID={friend.userID}
+                                userID={friend.userId}
                                 status={friend.status}
                                 username={friend.username}
                                 onDelete={(userID, username) => {this.setState({deleteUser: {userID: userID, username: username}})}}
@@ -166,9 +166,9 @@ class Friendlist extends Component {
 
                         return (
                             <FriendComponent
-                                key={friend.userID}
+                                key={friend.userId}
                                 avatar="/assets/Icon.png"
-                                userID={friend.userID}
+                                userID={friend.userId}
                                 status={friend.status}
                                 username={friend.username}
                                 onAccept={(userID) => this.onAccept(userID)}
@@ -260,7 +260,7 @@ class Friend extends React.Component {
         let options = [];
 
         switch (this.status) {
-            case 2:
+            case 0:
                 options.push(
                     {
                         name: "Trade",
