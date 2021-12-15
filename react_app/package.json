@@ -15,7 +15,7 @@
     "little-loader": "^0.2.0",
     "node-sass": "^5.0.0",
     "normalize-url": "^6.1.0",
-	"moment": "^2.29.1",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-autocomplete": "^1.8.1",
     "react-chartjs-2": "^2.11.2",
