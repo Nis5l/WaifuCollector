@@ -2,6 +2,9 @@ use figment::{Figment, providers::{Format, Json, Serialized}};
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct Config {
+    port: i32,
+    address: String,
+
     pub jwt_secret: String,
     pub domain: String,
     pub verification_key_length: usize,
@@ -49,6 +52,9 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
+            port: 80,
+            address: String::from("0.0.0.0"),
+
             //NOTE: important to change
             jwt_secret: String::from("CHANGE_THE_SECRET"),
             domain: String::from("https://waifucollector.com"),
