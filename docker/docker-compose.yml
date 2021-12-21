@@ -10,7 +10,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /home/waifu/WaifuCollector/docker/conf/global.conf:/etc/nginx/conf.d/global.conf
+      #- /home/waifu/WaifuCollector/docker/conf/global.conf:/etc/nginx/conf.d/global.conf
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /etc/nginx/vhost.d
       - /home/waifu/WaifuCollector/docker/certs:/etc/nginx/certs:ro
