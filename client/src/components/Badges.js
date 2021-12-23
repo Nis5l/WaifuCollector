@@ -41,7 +41,7 @@ class Badge extends Component {
                 className="badge"
             >
                 <img
-                    src={`${Config.API_HOST}/achievments/${this.props.badge.image}`}
+                    src={`${Config.API_HOST}/achievements/${this.props.badge.image}`}
                     alt="Badge"
                 />
                 <p>{this.props.badge.text}</p>
