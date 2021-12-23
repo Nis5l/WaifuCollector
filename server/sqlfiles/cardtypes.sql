@@ -136,3 +136,15 @@ INSERT INTO cardtypes (ctid, ctname) VALUES (136, 'Sins: The Seven Deadly Sins')
 INSERT INTO cardtypes (ctid, ctname) VALUES (137, 'Azumanga Daioh');
 INSERT INTO cardtypes (ctid, ctname) VALUES (138, 'Princess Lover!');
 INSERT INTO cardtypes (ctid, ctname) VALUES (139, 'Code Geass');
+INSERT INTO cardtypes (ctid, ctname) VALUES (140, 'Ijiranaide, Nagatoro-san');
+INSERT INTO cardtypes (ctid, ctname) VALUES (141, 'Black Lagoon');
+INSERT INTO cardtypes (ctid, ctname) VALUES (142, 'Komi Cant Comunicate');
+INSERT INTO cardtypes (ctid, ctname) VALUES (143, 'Cowboy Bebop');
+INSERT INTO cardtypes (ctid, ctname) VALUES (144, 'Infinite Stratos');
+INSERT INTO cardtypes (ctid, ctname) VALUES (145, 'How a Realist Hero Rebuilt the Kingdom');
+INSERT INTO cardtypes (ctid, ctname) VALUES (146, 'Cat Planet Cuties');
+INSERT INTO cardtypes (ctid, ctname) VALUES (147, 'Why the Hell are You Here, Teacher!?');
+INSERT INTO cardtypes (ctid, ctname) VALUES (148, 'Kandagawa Jet Girls');
+INSERT INTO cardtypes (ctid, ctname) VALUES (149, 'KEIJO!!!!!!!!');
+INSERT INTO cardtypes (ctid, ctname) VALUES (150, 'Ao-chan Cant Study');
+INSERT INTO cardtypes (ctid, ctname) VALUES (151, 'To Love Ru');

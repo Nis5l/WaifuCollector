@@ -209,7 +209,7 @@
     @media screen and (max-width: $breakpoint-md){
         
         grid-template-columns: 1fr;
-        grid-template-rows: auto 80% auto auto;
+        grid-template-rows: min-content 80% min-content min-content;
 
         box-sizing: unset;
 
