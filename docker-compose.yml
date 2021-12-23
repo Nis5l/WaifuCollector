@@ -1,7 +1,7 @@
 version: "3.5"
 services: 
   server:
-    build: rust/
+    build: server/
     environment:
       - VIRTUAL_HOST=api.waifucollector.com
       - LETSENCRYPT_HOST=api.waifucollector.com
@@ -10,7 +10,7 @@ services:
       - default
 
   client:
-    build: react_app/
+    build: client/
     environment:
       - VIRTUAL_HOST=waifucollector.com
       - LETSENCRYPT_HOST=waifucollector.com
