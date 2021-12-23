@@ -9,7 +9,7 @@ FROM ubuntu:latest
 RUN apt-get update -y 
 RUN apt-get install libssl-dev -y
 WORKDIR server
-COPY --from=builder /server/target/release/ ./
+COPY --from=builder /server/target/release/WaifuCollector ./WaifuCollector
 COPY ./Config.json ./Config.json
 COPY ./sqlfiles/ ./sqlfiles/
 COPY ./static/ ./static/
