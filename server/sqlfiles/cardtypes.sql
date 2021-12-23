@@ -81,18 +81,18 @@ INSERT IGNORE INTO cardtypes (ctid, ctname) VALUES
 (81, 'Yuunas Haunted Hot Springs'),
 (82, 'The Fruit of Grisaia'),
 (83, 'Overlord'),
-(84, 'Watamote')
+(84, 'Watamote'),
 (85, 'How Not to Summon a Demon Lord'),
 (86, 'Redo of Healer'),
 (87, 'Love, Chunibyo & Other Delusions!'),
 (88, 'Another'),
 (89, 'Oreshura'),
-(90, 'Goblin Slayer')
-(91, 'Uma Musume')
+(90, 'Goblin Slayer'),
+(91, 'Uma Musume'),
 (92, 'Back Arrow'),
 (93, 'Wonder Egg Priority'),
 (94, 'Spice and Wolf'),
-(95, 'Hokuto no Ken')
+(95, 'Hokuto no Ken'),
 (96, 'Mirai Nikki'),
 (97, 'Darker than Black'),
 (98, 'Kabaneri of the Iron Fortress'),
@@ -102,11 +102,11 @@ INSERT IGNORE INTO cardtypes (ctid, ctname) VALUES
 (102, 'Mysterious Girlfriend X'),
 (103, 'Jormungand'),
 (104, 'How Heavy are the Dumbbells You Lift?'),
-(105, 'Bungo Stray Dogs')
+(105, 'Bungo Stray Dogs'),
 (106, 'Hanasaku Iroha'),
 (107, 'Problem Children are Coming from Another World Arent They?'),
 (108, 'Space Dandy'),
-(109, 'Higurashi')
+(109, 'Higurashi'),
 (110, 'Rokka: Braves of the Six Flowers'),
 (111, 'Bofuri'),
 (112, 'Arcade Gamer Fubuki'),
@@ -120,7 +120,7 @@ INSERT IGNORE INTO cardtypes (ctid, ctname) VALUES
 (120, 'Sankarea'),
 (121, 'Magical Sempai'),
 (122, 'Citrus'),
-(123, 'Domestic Girlfriend')
+(123, 'Domestic Girlfriend'),
 (124, 'Ghost in the Shell'),
 (125, 'Sailor Moon'),
 (126, 'Classroom of the Elite'),
@@ -130,7 +130,7 @@ INSERT IGNORE INTO cardtypes (ctid, ctname) VALUES
 (130, 'Higehiro'),
 (131, 'Fruits Basket'),
 (132, 'Ive Been Killing Slimes for 300 Years and Maxed Out My Level'),
-(133, 'One Punch Man')
+(133, 'One Punch Man'),
 (134, 'SSSS Gridman'),
 (135, 'Outlaw Star'),
 (136, 'Sins: The Seven Deadly Sins'),
