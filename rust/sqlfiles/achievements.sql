@@ -1,0 +1,11 @@
+INSERT INTO achievements (aid, aimage, atext) VALUES (0, '50.png', '50 Waifus');
+INSERT INTO achievements (aid, aimage, atext) VALUES (1, '100.png', '100 Waifus');
+INSERT INTO achievements (aid, aimage, atext) VALUES (2, '200.png', '200 Waifus');
+INSERT INTO achievements (aid, aimage, atext) VALUES (3, '300.png', '300 Waifus');
+INSERT INTO achievements (aid, aimage, atext) VALUES (4, 'lvl1.png', 'Level 1 Waifu');
+INSERT INTO achievements (aid, aimage, atext) VALUES (5, 'lvl2.png', 'Level 2 Waifu');
+INSERT INTO achievements (aid, aimage, atext) VALUES (6, 'lvl3.png', 'Level 3 Waifu');
+INSERT INTO achievements (aid, aimage, atext) VALUES (7, 'lvl4.png', 'Level 4 Waifu');
+INSERT INTO achievements (aid, aimage, atext) VALUES (8, 'lvl5.png', 'Level 5 Waifu');
+INSERT INTO achievements (aid, aimage, atext) VALUES (9, 'lvl1pull.png', 'Pulled a Level 1');
+INSERT INTO achievements (aid, aimage, atext) VALUES (10, 'lvl2pull.png', 'Pulled a Level 2');

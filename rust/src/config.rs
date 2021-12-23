@@ -101,7 +101,7 @@ impl Default for Config {
                 String::from("./sqlfiles/cards.sql"),
                 String::from("./sqlfiles/cardframes.sql"),
                 String::from("./sqlfiles/cardeffects.sql"),
-                String::from("./sqlfiles/badges.sql")
+                String::from("./sqlfiles/achievements.sql")
             ]
         }
     }
