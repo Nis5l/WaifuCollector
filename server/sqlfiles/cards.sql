@@ -128,7 +128,7 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (127, 'Shiba Miyuki', 63, 'C
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (128, 'Sayaka Kirasaka', 64, 'Card_SayakaKirasaka.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (129, 'Vanessa Anoteca', 65, 'Card_VanessaAnoteca.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (130, 'Elaina', 66, 'Card_Elaina.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (131, 'Echidna', 1, 'Card_Echidna.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (131, 'Echidna', 1, 'Card_Echidna.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (132, 'Noelle Silva', 65, 'Card_NoelleSilva.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (133, 'Charlotte Roselei', 65, 'Card_CharlotteRoselei.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (134, 'Nero', 65, 'Card_Nero.webp');
@@ -211,9 +211,9 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (210, 'Nefertari Vivi', 21, 
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (211, 'Carrot', 21, 'Card_Carrot.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (212, 'Charlotte Pudding', 21, 'Card_CharlottePudding.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (213, 'Kozuki Hiyori', 21, 'Card_KozukiHiyori.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (214, 'Marguerite', 21, 'Card_Marguerite.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (214, 'Marguerite', 21, 'Card_Marguerite.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (215, 'Tomoko Kuroki', 84, 'Card_TomokoKuroki.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (216, 'Yuu Naruse', 84, 'Card_YuuNaruse.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (216, 'Yuu Naruse', 84, 'Card_YuuNaruse.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (217, 'Rem Galleu', 85, 'Card_RemGalleu.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (218, 'Setsuna', 86, 'Card_Setsuna.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (219, 'Rikka Takanashi', 87, 'Card_RikkaTakanashi.webp');
@@ -238,11 +238,11 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (237, 'Elsha Lean', 92, 'Car
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (238, 'Atlee Ariel', 92, 'Card_AtleeAriel.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (239, 'Ren Sin', 92, 'Card_RenSin.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (240, 'Ai Ohto', 93, 'Card_AiOhto.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (241, 'Holo', 94, 'Card_Holo.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (241, 'Holo', 94, 'Card_Holo.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (242, 'Yuria', 95, 'Card_Yuria.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (243, 'Tou', 95, 'Card_Tou.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (244, 'Mamiya', 95, 'Card_Mamiya.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (245, 'Ilulu', 48, 'Card_Ilulu.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (245, 'Ilulu', 48, 'Card_Ilulu.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (246, 'Yuno Gasai', 96, 'Card_YunoGasai.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (247, 'Minene Uryuu', 96, 'Card_MineneUryuu.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (248, 'Yin', 97, 'Card_Yin.webp');
@@ -263,7 +263,7 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (262, 'Uehara Ayaka', 104, '
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (263, 'Akiko Yosano', 105, 'Card_AkikoYosano.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (264, 'Kyoko Izumi', 105, 'Card_KyokoIzumi.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (265, 'Naomi Tanizaki', 105, 'Card_NaomiTanizaki.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (266, 'Ichiyo Higuchi', 105, 'Card_IchiyoHiguchi.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (266, 'Ichiyo Higuchi', 105, 'Card_IchiyoHiguchi.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (267, 'Clementine', 83, 'Card_Clementine.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (268, 'Special Week', 91, 'Card_SpecialWeek.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (269, 'Vodka', 91, 'Card_Vodka.webp');
@@ -278,8 +278,8 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (277, 'Rena Ryuuguu', 109, '
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (278, 'Mion Sonozaki', 109, 'Card_MionSonozaki.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (279, 'Shion Sonozaki', 109, 'Card_ShionSonozaki.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (280, 'Satoko Houjou', 109, 'Card_SatokoHoujou.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (281, 'Rika Furude', 109, 'Card_RikaFurude.webp')
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (282, 'Inori Yuzuriha', 49, 'Card_InoriYuzuriha.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (281, 'Rika Furude', 109, 'Card_RikaFurude.webp');
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (282, 'Inori Yuzuriha', 49, 'Card_InoriYuzuriha.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (283, 'Nashetania Loei Piena Augustra', 110, 'Card_NashetaniaLoeiPienaAugustra.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (284, 'Flamie Speeddraw', 110, 'Card_FlamieSpeeddraw.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (285, 'Maple', 111, 'Card_Maple.webp');
@@ -304,7 +304,7 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (303, 'Olivier Mira Armstron
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (304, 'Izumi Curtis', 27, 'Card_IzumiCurtis.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (305, 'Riza Hawkeye', 27, 'Card_RizaHawkeye.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (306, 'Yuzu Aihara', 122, 'Card_YuzuAihara.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (307, 'Mei Aihara', 122, 'Card_MeiAihara.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (307, 'Mei Aihara', 122, 'Card_MeiAihara.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (308, 'Rui Tachibana', 123, 'Card_RuiTachibana.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (309, 'Hina Tachibana', 123, 'Card_HinaTachibana.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (310, 'Narberal Gamma', 83, 'Card_NarberalGamma.webp');
@@ -340,10 +340,10 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (339, 'Rei Hino', 125, 'Card
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (340, 'Makoto Kino', 125, 'Card_MakotoKino.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (341, 'Usagi Tsukino', 125, 'Card_UsagiTsukino.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (342, 'Ami Mizuno', 125, 'Card_AmiMizuno.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (343, 'Minako Aino', 125, 'Card_MinakoAino.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (343, 'Minako Aino', 125, 'Card_MinakoAino.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (344, 'Shinobu Kochou', 55, 'Card_ShinobuKochou.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (345, 'Kanao Tsuyuri', 55, 'Card_KanaoTsuyuri.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (346, 'Mitsuri Kanroji', 55, 'Card_MitsuriKanroji.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (346, 'Mitsuri Kanroji', 55, 'Card_MitsuriKanroji.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (347, 'Sayu Ogiwara', 130, 'Card_SayuOgiwara.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (348, 'Airi Gotou', 130, 'Card_AiriGotou.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (349, 'Yuzuha Mishima', 130, 'Card_YuzuhaMishima.webp');
@@ -369,7 +369,7 @@ INSERT INTO cards (cid, cname, ctid, cimage) VALUES (368, 'Sylvia Van Hossen', 1
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (369, 'Seika Hojoin', 138, 'Card_SeikaHojoin.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (370, 'Georgie Saikawa', 48, 'Card_GeorgieSaikawa.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (371, 'Sasakibe', 48, 'Card_Sasakibe.webp');
-INSERT INTO cards (cid, cname, ctid, cimage) VALUES (372, 'Kobayashi-san', 48, 'Card_Kobayashi-san.webp')
+INSERT INTO cards (cid, cname, ctid, cimage) VALUES (372, 'Kobayashi-san', 48, 'Card_Kobayashi-san.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (373, 'Shirley Fenette', 139, 'Card_ShirleyFenette.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (374, 'Kallen Kozuki', 139, 'Card_KallenKozuki.webp');
 INSERT INTO cards (cid, cname, ctid, cimage) VALUES (375, 'Gamo-chan', 140, 'Card_Gamo-chan.webp');
