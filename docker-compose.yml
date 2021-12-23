@@ -1,0 +1,24 @@
+version: "3.5"
+services: 
+  server:
+    build: server/
+    environment:
+      - VIRTUAL_HOST=api.waifucollector.com
+      - LETSENCRYPT_HOST=api.waifucollector.com
+      - LETSENCRYPT_EMAIL=kirchler.lion@gmail.com
+    networks:
+      - default
+
+  client:
+    build: client/
+    environment:
+      - VIRTUAL_HOST=waifucollector.com
+      - LETSENCRYPT_HOST=waifucollector.com
+      - LETSENCRYPT_EMAIL=kirchler.lion@gmail.com
+    networks:
+      - default
+
+networks:
+  default:
+    external: true
+    name: proxy

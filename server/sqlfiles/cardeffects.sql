@@ -1,0 +1,10 @@
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (0, '', 0);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (1, 'Effect1.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (2, 'Effect2.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (3, 'Effect2.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (4, 'Effect2.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (5, 'Effect2.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (6, 'Effect2.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (7, 'Effect2.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (8, 'Effect2.gif', 0.5);
+INSERT INTO cardeffects (ceid, ceimage, ceopacity) VALUES (9, 'Effect2.gif', 0.5);
