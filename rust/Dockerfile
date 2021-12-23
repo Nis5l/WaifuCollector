@@ -2,7 +2,6 @@ FROM rust:1.56.1 as builder
 
 WORKDIR server
 COPY ./Cargo.toml ./Cargo.toml
-COPY ./Cargo.lock ./Cargo.lock
 COPY ./src/ ./src/
 RUN cargo build --release
 
@@ -14,5 +13,5 @@ COPY --from=builder /server/target/release/ ./
 COPY ./Config.json ./Config.json
 COPY ./sqlfiles/ ./sqlfiles/
 COPY ./static/ ./static/
-EXPOSE 80
+EXPOSE 443
 CMD ["./WaifuCollector"]
