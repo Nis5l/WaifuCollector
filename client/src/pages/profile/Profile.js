@@ -198,7 +198,6 @@ class Profile extends Component {
                     title="Achievements"
                     styleClassName="badges"
                 >
-					//TODO: RENAME TO BADGES
 					<Badges badges={this.state.stats.achievements} />
                 </Card>
 

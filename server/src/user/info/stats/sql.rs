@@ -6,7 +6,7 @@ pub async fn get_user_card_count(sql: &Sql, user_id: Id) -> Result<i64, sqlx::Er
     let mut con = sql.get_con().await?;
 
     let (count, ): (i64, ) = sqlx::query_as(
-        "SELECT COUNT(DISTINCT cuid)
+        "SELECT COUNT(DISTINCT cid)
          FROM cardunlocks
          WHERE uid=?;")
         .bind(user_id)

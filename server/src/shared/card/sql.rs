@@ -187,6 +187,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          cardunlocks.cfid = cardframes.cfid AND
          cards.ctid = cardtypes.ctid AND
          cardeffects.ceid = cardunlocks.culevel AND
+         cardunlocks.uid = ? AND
          (cards.cname LIKE CONCAT('%', ?, '%') OR cardtypes.ctname LIKE CONCAT('%', ?, '%'))
          ORDER BY
          {}
@@ -195,6 +196,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          oder_by);
 
     let cards_db: Vec<CardDb> = sqlx::query_as(&query)
+        .bind(options.user_id)
         .bind(&search)
         .bind(&search)
         .bind(options.count)
