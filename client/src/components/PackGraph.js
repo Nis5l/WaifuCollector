@@ -83,7 +83,7 @@ class PackGraph extends Component {
     async loadData() {
 
         try {
-            const res = await axios.get(`${Config.API_HOST}/pack/data`);
+            const res = await axios.get(`${Config.API_HOST}/pack/stats`);
 
 			return res.data;
 

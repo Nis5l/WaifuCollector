@@ -51,8 +51,8 @@ class Profile extends Component {
         async function loadFlexCards(userID) {
 			try {
 				const res = await axios.get(`${Config.API_HOST}/user/${userID}/flex`)
-                parseCards(res.data.cards);
-                return res.data.cards;
+                parseCards(res.data);
+                return res.data;
 			} catch (err) {
 				return [];
 			}

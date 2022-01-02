@@ -4,6 +4,8 @@ use rocket::State;
 use chrono::{DateTime, Utc, Duration};
 use rand::{thread_rng, Rng};
 use std::ops::RangeInclusive;
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
 use super::data::{PackOpenResponse, CanOpenPack};
 use super::sql;
@@ -13,9 +15,10 @@ use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::card::{self, data::CardCreateData};
 use crate::verify_user;
+use crate::shared::card::packstats::data::PackStats;
 
 #[post("/pack/open")]
-pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackOpenResponse> {
+pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>, pack_stats: &State<Arc<Mutex<PackStats>>>) -> ApiResponseErr<PackOpenResponse> {
     let user_id = token.id;
 
     verify_user!(sql, user_id);
@@ -37,6 +40,8 @@ pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<C
     rjtry!(sql::set_pack_time(&sql, user_id, Utc::now()).await);
 
     let cards = rjtry!(card::sql::get_cards(&sql, inserted_cards_uuids, None, config).await);
+
+    rjtry!(PackStats::add_pack_stats(pack_stats.inner().clone(), config.pack_amount as i32).await);
 
     ApiResponseErr::ok(Status::Ok, PackOpenResponse {
         cards

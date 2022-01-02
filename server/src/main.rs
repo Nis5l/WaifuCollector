@@ -1,14 +1,15 @@
 #[macro_use]
 extern crate rocket;
 
-//TODO: there are some dattimes as string in ret
-
 use rocket::fairing::AdHoc;
-use rocket_cors::{AllowedHeaders, AllowedOrigins, Guard, Responder};
+use rocket_cors::{AllowedHeaders, AllowedOrigins};
 use rocket::http::Method;
 use sqlx::mysql::MySqlPoolOptions;
-use rocket::{get, options, routes};
+use rocket::{get, routes};
 use rocket::fs::{FileServer, relative};
+use std::sync::Arc;
+use tokio::sync::Mutex;
+use shared::card::packstats::data::PackStats;
 
 mod user;
 mod sql;
@@ -194,6 +195,22 @@ async fn rocket() -> _ {
     }
     .to_cors().expect("Error initializing CORS");
 
+
+    println!("Initializing PackStats...");
+    //cloning should be fine because it is implemented as Arc
+    let mut pack_stats = PackStats::new(sql.clone(), &config).await.unwrap();
+    pack_stats.init().await.expect("Error initializing PackStats");
+    let pack_stats = Arc::new(Mutex::new(pack_stats));
+
+    println!("Starting PackStats Thread...");
+    {
+        let pack_stats = pack_stats.clone();
+
+        tokio::spawn(async {
+            PackStats::start_thread(pack_stats).await
+        });
+    }
+
     rocket::custom(config_figment)
         .mount("/", routes![
            index,
@@ -224,7 +241,7 @@ async fn rocket() -> _ {
            pack::open::pack_open_route,
            pack::time::pack_time_route,
            pack::time::max::pack_time_max_route,
-           pack::data::pack_data_route,
+           pack::stats::pack_stats_route,
 
            friend::add::friend_add_route,
            friend::accept::friend_accept_route,
@@ -253,4 +270,5 @@ async fn rocket() -> _ {
         .attach(AdHoc::config::<config::Config>())
         .attach(cors)
         .manage(sql)
+        .manage(pack_stats)
 }

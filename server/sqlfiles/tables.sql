@@ -96,12 +96,12 @@ CREATE TABLE cardeffects (
 	PRIMARY KEY (ceid)
 ) ENGINE = InnoDB;
 
-CREATE TABLE packdata (
-	pdid INT NOT NULL AUTO_INCREMENT,
-	pdamount INT NOT NULL,
-	pdtime DATETIME NOT NULL,
-	UNIQUE(pdtime),
-	PRIMARY KEY (pdid)
+CREATE TABLE packstats (
+	psid INT NOT NULL AUTO_INCREMENT,
+	psamount INT NOT NULL,
+	pstime DATETIME NOT NULL,
+	UNIQUE(pstime),
+	PRIMARY KEY (psid)
 ) ENGINE = InnoDB;
 
 CREATE TABLE tradesuggestions (

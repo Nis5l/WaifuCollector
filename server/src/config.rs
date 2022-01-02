@@ -6,6 +6,8 @@ pub struct Config {
     address: String,
 
     pub jwt_secret: String,
+    //seconds
+    pub jwt_duration: u32,
     pub domain: String,
     pub verification_key_length: usize,
 
@@ -32,6 +34,10 @@ pub struct Config {
     pub trade_cooldown: u32,
     pub trade_card_limit: u32,
 
+    //seconds
+    pub pack_data_span: u32,
+    pub pack_data_amount: u32,
+
     pub db_connection: String,
 
     pub card_image_base: String,
@@ -57,6 +63,7 @@ impl Default for Config {
 
             //NOTE: important to change
             jwt_secret: String::from("CHANGE_THE_SECRET"),
+            jwt_duration: 2678400,
             domain: String::from("https://waifucollector.com"),
             verification_key_length: 20,
 
@@ -80,6 +87,9 @@ impl Default for Config {
 
             trade_cooldown: 60,
             trade_card_limit: 5,
+
+            pack_data_span: 60,
+            pack_data_amount: 30,
 
             db_connection: String::from("mysql://root@localhost/waifucollector"),
 

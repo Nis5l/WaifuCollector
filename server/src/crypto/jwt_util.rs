@@ -5,6 +5,7 @@ use std::collections::BTreeMap;
 use rocket::request::{self, FromRequest, Request};
 use rocket::http::Status;
 use rocketjson::error::JsonBodyError;
+use chrono::{DateTime, Duration, Utc};
 
 use crate::config::Config;
 use crate::shared::Id;
@@ -12,6 +13,11 @@ use crate::shared::Id;
 pub struct JwtToken {
     pub username: String,
     pub id: Id
+}
+
+pub enum JwtTokenError {
+    Expired,
+    ParseError(jwt::Error)
 }
 
 impl JwtToken {
@@ -43,14 +49,19 @@ impl<'r> FromRequest<'r> for JwtToken {
 
             let token_str = &token_str_full[7..];
 
-            let token = jwt_verify_token(token_str, &req.rocket().state::<Config>().expect("Config not found in state").jwt_secret);
+            let config = req.rocket().state::<Config>().expect("Config not found in state");
 
-            if token.is_err() {
-                req.local_cache(|| JsonBodyError::CustomError(String::from("Invalid authorization token")));
-                return request::Outcome::Failure((Status::Unauthorized, ()));
+            match jwt_verify_token(token_str, &config.jwt_secret, &Duration::seconds(config.jwt_duration as _)) {
+                Ok(token) => return request::Outcome::Success(token),
+                Err(JwtTokenError::Expired) => {
+                    req.local_cache(|| JsonBodyError::CustomError(String::from("Authorization token expired")));
+                    return request::Outcome::Failure((Status::Unauthorized, ()));
+                },
+                Err(JwtTokenError::ParseError(_)) => {
+                    req.local_cache(|| JsonBodyError::CustomError(String::from("Invalid authorization token")));
+                    return request::Outcome::Failure((Status::Unauthorized, ()));
+                }
             }
-
-            request::Outcome::Success(token.unwrap())
           },
           None => {
               req.local_cache(|| JsonBodyError::CustomError(String::from("Authorization token missing")));
@@ -64,30 +75,50 @@ pub fn jwt_sign_token(username: &str, user_id: Id, secret: &str) -> Result<Strin
     let key: Hmac<Sha256> = Hmac::new_from_slice(&bincode::serialize(secret).expect("Serializing jwt secret failed!"))?;
     let mut btree = BTreeMap::new();
     let user_id_str = user_id.to_string();
+    let now_str = Utc::now().to_rfc3339();
     btree.insert("username", username);
     btree.insert("id", &user_id_str);
-    //TODO: expires in 1 month
+    btree.insert("time", &now_str);
     btree.sign_with_key(&key)
 }
 
-pub fn jwt_verify_token(token: &str, secret: &str) -> Result<JwtToken, jwt::Error> {
-    //TODO: test for encryption (security)
+pub fn jwt_verify_token(token: &str, secret: &str, jwt_duration: &Duration) -> Result<JwtToken, JwtTokenError> {
+    let key: Hmac<Sha256> = Hmac::new_from_slice(&bincode::serialize(secret).expect("Serializing jwt secret failed!")).expect("HMAC failed");
 
-    let key: Hmac<Sha256> = Hmac::new_from_slice(&bincode::serialize( secret).expect("Serializing jwt secret failed!"))?;
-
-    let btree: BTreeMap<String, String> = token.verify_with_key(&key)?;
+    let btree: BTreeMap<String, String> = match token.verify_with_key(&key) {
+        Ok(btree) => btree,
+        Err(err) => return Err(JwtTokenError::ParseError(err))
+    };
 
     let username = btree.get("username");
     let user_id_str = btree.get("id");
 
+    let time = btree.get("time");
+
+    match time {
+        Some(time_str) => {
+            let time = match DateTime::parse_from_rfc3339(time_str) {
+                Ok(time) => time,
+                Err(_) => return Err(JwtTokenError::ParseError(jwt::Error::Format))
+            };
+
+            if time + *jwt_duration < Utc::now() {
+                return Err(JwtTokenError::Expired);
+            }
+        },
+        None => {
+            return Err(JwtTokenError::ParseError(jwt::Error::Format));
+        }
+    }
+
     if username.is_none() || user_id_str.is_none() {
-        return Err(jwt::Error::Format);
+        return Err(JwtTokenError::ParseError(jwt::Error::Format));
     }
 
     let user_id = user_id_str.unwrap().parse::<Id>();
 
     if user_id.is_err() {
-        return Err(jwt::Error::Format);
+        return Err(JwtTokenError::ParseError(jwt::Error::Format));
     }
 
     Ok(JwtToken::new(username.unwrap().clone(), user_id.unwrap()))

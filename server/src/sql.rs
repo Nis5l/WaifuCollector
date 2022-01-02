@@ -2,6 +2,7 @@ use sqlx::{Pool, MySql, pool::PoolConnection, Error};
 use core::future::Future;
 use std::fs;
 
+#[derive(Debug, Clone)]
 pub struct Sql(pub Pool<MySql>);
 
 impl Sql {
