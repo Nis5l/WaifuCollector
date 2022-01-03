@@ -25,8 +25,8 @@ pub async fn send_email(from: &str, password: &str, to: &str, key: &str, domain:
 
 pub fn send_email_async(from: String, password: String, to: String, key: String, domain: String, smtp_server: String) {
     tokio::spawn(async move {
-        if send_email(&from, &password, &to, &key, &domain, &smtp_server).await.is_err() {
-            println!("Error sending mail to {}", to);
+        if let Err(err) = send_email(&from, &password, &to, &key, &domain, &smtp_server).await {
+            println!("Error sending mail to {}, {}", to, err);
         };
     });
 }
