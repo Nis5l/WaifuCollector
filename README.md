@@ -1,14 +1,30 @@
 # WaifuCollector
+https://waifucollector.com \
+Website for collecting, upgrading and trading Waifus. \
+I will be happy over every contribution, I don't care how bad the code is, we are all here to learn. \
+If you have any questions or need help contact me on [discord](https://discord.com/invite/hftNUqNgRj)
+## Setup
+MYSQL/MariaDB database.\
+For developement [XAMPP](https://www.apachefriends.org/download.html) might be an easy solution.
+### Required configurations:
+  #### Server (/server/Config.json)
+  #### JWT secret
+  - jwt_secret
+  #### Email
+  - email
+  - email_password
+  - smtp_server \
+  For gmail account activating [less secure apps](https://support.google.com/accounts/answer/6010255?hl=en) might be neccessary.
+  #### Database
+  - db_connection
 
-# Setup
-
-- mysqlclient
-download mysqlclient\
-windows:\
-[download](https://cdn.mysql.com/archives/mysql-connector-c/mysql-connector-c-6.1.11-winx64.zip)\
-set env MYSQLCLIENT_LIB_DIR to mysqlclient.lib\
-linux: TODO
-
-run ```cargo install diesel_cli --no-default-features --features mysql```
-
-Change the jwt_secret in the config.
+## Starting
+### Server (rust)
+`cargo run`
+### Client (react/js)
+`yarn start`
+## Docker
+For production docker-compose a [LetsEncrypt proxy](https://github.com/evertramos/nginx-proxy-automation/tree/master/docs) is used.
+## TODO:
+  Folder management for client. \
+  Cleanup client code.
