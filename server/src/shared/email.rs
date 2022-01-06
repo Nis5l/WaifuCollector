@@ -8,7 +8,7 @@ pub async fn send_email(from: &str, password: &str, to: &str, key: &str, domain:
         .from(format!("WaifuCollector <{}>", from).parse().unwrap())
         .to(format!("Hei <{}>", to).parse().unwrap())
         .subject("WaifuCollector verify")
-        .body(format!("{}/verify/confirm/{}", domain, key))
+        .body(format!("{}/verify?key={}", domain, key))
         .unwrap();
 
     let creds = Credentials::new(String::from(from), String::from(password));
