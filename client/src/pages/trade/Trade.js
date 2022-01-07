@@ -11,6 +11,7 @@ import RefreshButton from '../../components/RefreshButton'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 import {formatTime} from '../../Utils'
+import moment from 'moment';
 
 import './Trade.scss'
 
@@ -95,7 +96,7 @@ class Trade extends Component {
 		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
 	}
 
-    axios.post(`${Config.API_HOST}/trade/${this.friendid}`, {}, config)
+    axios.get(`${Config.API_HOST}/trade/${this.friendid}`, config)
       .then(res => {
         this.incrementLCounter();
           parseCards(res.data.selfCards);
@@ -113,21 +114,21 @@ class Trade extends Component {
             tradeCount: res.data.selfCards.length,
             friendTradeCount: res.data.friendCards.length,
             tradeLimit: res.data.tradeCardLimit,
-            cardSuggestions: res.data.cardsuggestions,
-            friendCardSuggestions: res.data.cardsuggestionsfriend,
+            cardSuggestions: res.data.friendCardSuggestions,
+            friendCardSuggestions: res.data.selfCardSuggestions,
             confirmed: res.data.selfStatus,
             friendConfirmed: res.data.friendStatus,
-            tradeTime: res.data.tradeTime
+			tradeTime: 0
           }, () => {this.setInfo(); this.setDisabled()});
 
-		  //TODO: ISO no duration
-          if (res.data.tradeTime !== 0) {
+          if (res.data.tradeTime != null) {
+			res.data.tradeTime = moment(res.data.tradeTime);
             let interval = this.timeinterval = setInterval(() => {
-              let newtime = this.state.tradeTime - 1000;
-              if (newtime < 0) newtime = 0;
-              this.setState({tradeTime: newtime}, this.setDisabled)
+			  let diff = res.data.tradeTime - new Date();
+			  if(diff < 0) diff = 0;
+              this.setState({tradeTime: diff}, this.setDisabled)
 
-              if (newtime === 0) clearInterval(interval);
+              if (diff === 0) clearInterval(interval);
             }, 1000)
           }
       }).catch(err => {
@@ -161,6 +162,7 @@ class Trade extends Component {
     if (this.state.confirmed === 1)
       this.setState({confirmdisabled: "Already Confirmed"})
 
+	  console.log(this.state);
     if (this.state.tradeTime !== 0)
       this.setState({confirmdisabled: formatTime(this.state.tradeTime)})
   }
@@ -447,7 +449,7 @@ class Trade extends Component {
               <input
                 type="submit"
                 className="button_input button_confirm"
-                value={this.state.confirmdisabled === undefined ? "Confirm" : this.state.confirmdisabled}
+                value={this.state.confirmdisabled == null ? "Confirm" : this.state.confirmdisabled}
                 onClick={this.confirm}
                 disabled={this.state.confirmdisabled !== undefined}
               />

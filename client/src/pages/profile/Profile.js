@@ -85,12 +85,13 @@ class Profile extends Component {
         }
 
         for (let i = 0; i < data.length; i++) {
-            if (data[i].userID == ownID) {
+            if (data[i].userId == ownID) {
                 status = data[i].status;
                 break;
             }
         }
 
+		console.log(status);
         this.setState({friendStatus: status});
     }
 
@@ -104,7 +105,7 @@ class Profile extends Component {
             userId: this.userID
         };
         axios.post(`${Config.API_HOST}/friend/add`, data, config);
-        this.setState({friendStatus: 0});
+        this.setState({friendStatus: 2});
     }
 
     incrementLCounter() {
@@ -127,7 +128,7 @@ class Profile extends Component {
             icon = "fa-user-plus";
             onIconClick = () => this.onFriendAdd();
         }
-        else if (this.state.friendStatus === 2) {
+        else if (this.state.friendStatus === 0) {
             icon = "fa-handshake";
             onIconClick = () => {this.props.history.push(`/trade/${this.userID}`)}
         }

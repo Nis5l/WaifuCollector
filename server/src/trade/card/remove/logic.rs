@@ -10,7 +10,7 @@ use crate::sql::Sql;
 use crate::crypto::JwtToken;
 use crate::verify_user;
 
-#[post("/trade/<user_friend_id>/remove/<card_unlocked_id>")]
+#[post("/trade/<user_friend_id>/card/remove/<card_unlocked_id>")]
 pub async fn trade_card_remove_route(user_friend_id: Id, card_unlocked_id: Id, sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<TradeCardRemoveResponse> {
     let user_id = token.id;
 

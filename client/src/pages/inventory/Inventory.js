@@ -25,7 +25,7 @@ class Inventory extends Component {
       this.userID = this.props.match.params.id;
     if (this.userID === undefined) this.userID = Cookies.get('userID');
 
-    this.friendID = props.friendID;
+    this.friendID = parseInt(props.friendID);
     this.excludeSuggestions = this.props.excludeSuggestions === true;
 
     this.redirect = props.redirect === false ? false : "true";

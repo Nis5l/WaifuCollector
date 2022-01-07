@@ -3,6 +3,7 @@ import Inventory from '../inventory/Inventory'
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import redirectIfNecessary from '../../components/Redirecter'
 
 import Config from '../../config.json'
 
@@ -29,17 +30,12 @@ class TradeInventory extends Component {
 	}
 
     axios.post(`${Config.API_HOST}/trade/${this.friendID}/card/add/${card}`, {}, config)
-      .then((res) => {
-        if (res && res.status === 200) {
-          if (res.data && res.data.status === 0) {
-            self.props.history.push(`/trade/${this.friendID}`);
-          } else {
-            self.setState({error: "Error: " + res.data.message});
-          }
-        } else {
+      .then(res => {
+    	  self.props.history.push(`/trade/${this.friendID}`);
+      }).catch(err => {
+          if (redirectIfNecessary(this.props.history, err)) return;
           self.setState({error: "Error: Internal Error"});
-        }
-      })
+	  });
   }
 
   render() {

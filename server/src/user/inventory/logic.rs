@@ -17,7 +17,7 @@ pub async fn inventory_route(user_id: Id, mut data: InventoryRequest, sql: &Stat
     }
 
     if let Some(friend) = data.friend {
-        data.exclude_uuids.append(&mut rjtry!(sql::get_trade_uuids(sql, user_id, friend.friend_id, friend.exclude_suggestions).await));
+        data.exclude_uuids.append(&mut sql::get_trade_uuids(sql, user_id, friend.friend_id, friend.exclude_suggestions).await.unwrap());
     }
 
     let cards = rjtry!(card::sql::get_inventory(sql, config, &card::data::InventoryOptions {

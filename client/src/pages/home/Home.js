@@ -90,15 +90,27 @@ function Home() {
                         styleClassName="privacy"
                     >
                         <div>
-                            <a
-                                id="discordhrefwrapper"
-                                href="https://discord.gg/hftNUqNgRj"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <img id="discordhref" className="shake" src="/assets/discordicon.png" alt="Discord" />
-                            </a>
-                            <a href="/privacy" id="privacyhref" className="shake">Privacy</a>
+                            <div>
+								<a
+									href="https://discord.gg/hftNUqNgRj"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<img className="shake" src="/assets/discordicon.png" alt="Discord" />
+								</a>
+							</div>
+                            <div>
+								<a
+									href="https://github.com/Nis5l/WaifuCollector"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<img className="shake" src="/assets/giticon.png" alt="Discord" />
+								</a>
+							</div>
+                            <div id="privacyhref">
+								<a href="/privacy" className="shake">Privacy</a>
+							</div>
                         </div>
                     </Card>
                 </div>

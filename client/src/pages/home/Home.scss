@@ -108,22 +108,24 @@
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
+				
+				&>div {
+					height: 100%;
+					flex: 1;
+				}
 
-                #discordhrefwrapper
-                {
-                    height: 100%;
-                    #discordhref
-                    {
-                        height: 100%;
-                        width: auto;
-                    }
-                }
+				img {
+					height: 100%;
+				}
                 #privacyhref
                 {
-                    font-size: 16pt;
-                    color: $sidebar-color;
-                    display: flex;
-                    vertical-align: middle;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					a {
+						font-size: 16pt;
+						color: $sidebar-color;
+					}
                 }
             }
         }
