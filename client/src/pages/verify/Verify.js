@@ -19,7 +19,6 @@ class Verify extends Component {
     super(props);
 
     this.key = queryString.parse(props.location.search)['key'];
-	  console.log(this.key);
 
     this.lCount = 0;
     this.lCountMax = 2;
