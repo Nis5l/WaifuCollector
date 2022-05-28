@@ -1,8 +1,8 @@
 from PIL import Image
 import os
 
-fin = './CardOld'
-fout = './Card'
+fin = './card-old'
+fout = './card'
 
 for filename in os.listdir(fin):
     newfilename = filename.split(".")[0] + ".webp"

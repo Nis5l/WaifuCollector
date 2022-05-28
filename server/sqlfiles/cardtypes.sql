@@ -148,4 +148,7 @@ INSERT IGNORE INTO cardtypes (ctid, ctname) VALUES
 (148, 'Kandagawa Jet Girls'),
 (149, 'KEIJO!!!!!!!!'),
 (150, 'Ao-chan Cant Study'),
-(151, 'To Love Ru');
+(151, 'To Love Ru'),
+(152, 'Komi Cant comunicate'),
+(153, 'Chainsaw man'),
+(154, 'My Senpai is Annoying');
