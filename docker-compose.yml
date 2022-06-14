@@ -18,6 +18,19 @@ services:
     networks:
       - default
 
+  mysql:
+    image: mariadb:latest
+    environment:
+      MYSQL_DATABASE: waifucollector
+      # this mysql database should only be exposed to the other services
+      MYSQL_ROOT_PASSWORD: waifu
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./mysql:/var/lib/mysql
+    networks:
+      - default
+    restart: always
+
 networks:
   default:
     external: true
