@@ -5,7 +5,7 @@ COPY ./Cargo.toml ./Cargo.toml
 COPY ./src/ ./src/
 RUN cargo build --release
 
-FROM ubuntu:latest
+FROM ubuntu:18.04
 RUN apt-get update -y 
 RUN apt-get install libssl-dev ca-certificates -y
 WORKDIR server

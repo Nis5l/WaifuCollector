@@ -1,23 +1,5 @@
 version: "3.5"
 services: 
-  server:
-    build: server/
-    environment:
-      - VIRTUAL_HOST=api.waifucollector.com
-      - LETSENCRYPT_HOST=api.waifucollector.com
-      - LETSENCRYPT_EMAIL=kirchler.lion@gmail.com
-    networks:
-      - default
-
-  client:
-    build: client/
-    environment:
-      - VIRTUAL_HOST=waifucollector.com
-      - LETSENCRYPT_HOST=waifucollector.com
-      - LETSENCRYPT_EMAIL=kirchler.lion@gmail.com
-    networks:
-      - default
-
   mysql:
     image: mariadb:latest
     environment:
@@ -30,6 +12,28 @@ services:
     networks:
       - default
     restart: always
+
+  server:
+    build: server/
+    environment:
+      - VIRTUAL_HOST=api.waifucollector.com
+      - LETSENCRYPT_HOST=api.waifucollector.com
+      - LETSENCRYPT_EMAIL=kirchler.lion@gmail.com
+    depends_on:
+      - mysql
+    networks:
+      - default
+
+  client:
+    build: client/
+    environment:
+      - VIRTUAL_HOST=waifucollector.com
+      - LETSENCRYPT_HOST=waifucollector.com
+      - LETSENCRYPT_EMAIL=kirchler.lion@gmail.com
+    depends_on:
+      - server
+    networks:
+      - default
 
 networks:
   default:
