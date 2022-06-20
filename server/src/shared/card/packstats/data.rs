@@ -65,7 +65,9 @@ impl PackStats {
     }
 
     pub async fn add_pack_stats(pack_stats: Arc<Mutex<Self>>, amount: i32) -> Result<(), sqlx::Error> {
+        println!("add_pack_stats prelock");
         let mut pack_stats = pack_stats.lock().await;
+        println!("add_pack_stats postlock");
         pack_stats.data.last_mut().unwrap().amount += amount;
 
         Ok(())
