@@ -154,6 +154,7 @@ mod admin;
 
 #[get("/")]
 fn index() -> &'static str {
+    println!("index");
     "WaifuCollector API"
 }
 
