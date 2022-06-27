@@ -2,8 +2,8 @@
 extern crate rocket;
 
 use rocket::fairing::AdHoc;
-use rocket_cors::{AllowedHeaders, AllowedOrigins};
-use rocket::http::Method;
+//use rocket_cors::{AllowedHeaders, AllowedOrigins};
+//use rocket::http::Method;
 use sqlx::mysql::MySqlPoolOptions;
 use rocket::{get, routes};
 use rocket::fs::{FileServer, relative};
@@ -14,6 +14,7 @@ use shared::card::packstats::data::PackStats;
 mod user;
 mod sql;
 mod config;
+mod cors;
 mod crypto;
 mod shared;
 mod card;
@@ -178,6 +179,7 @@ async fn rocket() -> _ {
         sql::setup_db(&sql, file).await.expect("Failed setting up database");
     }
 
+    /*
     let allowed_origins = AllowedOrigins::all();
 
     let cors = rocket_cors::CorsOptions {
@@ -195,6 +197,7 @@ async fn rocket() -> _ {
         ..Default::default()
     }
     .to_cors().expect("Error initializing CORS");
+    */
 
 
     println!("Initializing PackStats...");
@@ -269,7 +272,7 @@ async fn rocket() -> _ {
         .mount(format!("/{}", &config.badges_image_base), FileServer::from(relative!("static/badges")))
         .register("/", vec![rocketjson::error::get_catcher()])
         .attach(AdHoc::config::<config::Config>())
-        .attach(cors)
+        .attach(cors::CORS)
         .manage(sql)
         .manage(pack_stats)
 }
