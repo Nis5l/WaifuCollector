@@ -184,12 +184,13 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          FROM cardunlocks, cards, cardtypes, cardframes, cardeffects
          WHERE
          {}
-         cardunlocks.cid = cards.cid AND
-         cardunlocks.cfid = cardframes.cfid AND
-         cards.ctid = cardtypes.ctid AND
-         cardeffects.ceid = cardunlocks.culevel AND
-         cardunlocks.uid = ? AND
-         (cards.cname LIKE CONCAT('%', ?, '%') OR cardtypes.ctname LIKE CONCAT('%', ?, '%'))
+         AND cardunlocks.cid = cards.cid
+         AND cardunlocks.cfid = cardframes.cfid
+         AND cards.ctid = cardtypes.ctid
+         AND cardeffects.ceid = cardunlocks.culevel
+         AND cards.coid=?
+         AND cardunlocks.uid=?
+         AND (cards.cname LIKE CONCAT('%', ?, '%') OR cardtypes.ctname LIKE CONCAT('%', ?, '%'))
          ORDER BY
          {}
          LIMIT ? OFFSET ?;",
@@ -197,6 +198,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          oder_by);
 
     let cards_db: Vec<CardDb> = sqlx::query_as(&query)
+        .bind(&options.collector_id)
         .bind(&options.user_id)
         .bind(&search)
         .bind(&search)

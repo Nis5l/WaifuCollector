@@ -142,6 +142,7 @@ impl<'de> Deserialize<'de> for SortType {
 
 pub struct InventoryOptions {
     pub user_id: Id,
+    pub collector_id: Id,
     pub count: u32,
     pub offset: u32,
     pub search: String,

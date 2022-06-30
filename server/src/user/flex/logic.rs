@@ -7,10 +7,11 @@ use crate::shared::Id;
 use crate::config::Config;
 use crate::shared::card;
 
-#[get("/user/<user_id>/flex")]
-pub async fn flex_route(user_id: Id, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<card::data::Card>> {
+#[get("/user/<user_id>/flex/<collector_id>")]
+pub async fn flex_route(user_id: Id, collector_id: Id, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<card::data::Card>> {
     let cards = rjtry!(card::sql::get_inventory(sql, config, &card::data::InventoryOptions {
         user_id,
+        collector_id,
         count: config.flex_cards_amount,
         exclude_uuids: Vec::new(),
         offset: 0,

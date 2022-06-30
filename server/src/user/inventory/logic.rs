@@ -10,8 +10,8 @@ use crate::shared::{user, card};
 use super::data::InventoryRequest;
 use super::sql;
 
-#[post("/user/<user_id>/inventory", data="<data>")]
-pub async fn inventory_route(user_id: Id, mut data: InventoryRequest, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<Card>> {
+#[post("/user/<user_id>/inventory/<collector_id>", data="<data>")]
+pub async fn inventory_route(user_id: Id, collector_id: Id, mut data: InventoryRequest, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<Card>> {
     if rjtry!(user::sql::username_from_user_id(sql, &user_id).await).is_none() {
         return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", user_id));
     }
@@ -22,6 +22,7 @@ pub async fn inventory_route(user_id: Id, mut data: InventoryRequest, sql: &Stat
 
     let cards = rjtry!(card::sql::get_inventory(sql, config, &card::data::InventoryOptions {
         card_id: data.card_id,
+        collector_id,
         user_id,
         exclude_uuids: data.exclude_uuids,
         search: data.search,
