@@ -31,12 +31,15 @@ CREATE TABLE verificationkeys (
 CREATE TABLE notifications (
 	nid INT NOT NULL AUTO_INCREMENT,
 	uid VARCHAR(10) NOT NULL,
+	coid VARCHAR(10),
 	ntitle TINYTEXT NOT NULL,
 	nmessage TEXT NOT NULL,
 	nurl TEXT NOT NULL,
 	ntime DATETIME NOT NULL,
 	PRIMARY KEY (nid),
 	FOREIGN KEY (uid) REFERENCES users(uid)
+	ON DELETE CASCADE,
+	FOREIGN KEY (coid) REFERENCES collectors(coid)
 	ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
@@ -44,6 +47,16 @@ CREATE TABLE collectors (
 	coid VARCHAR(10) NOT NULL,
 	coname TEXT NOT NULL,
 	PRIMARY KEY (coid)
+) ENGINE = InnoDB;
+
+CREATE TABLE collectorfavorites (
+	coid VARCHAR(10) NOT NULL,
+	uid VARCHAR(10) NOT NULL,
+	PRIMARY KEY (coid, uid),
+	FOREIGN KEY (coid) REFERENCES collectors (coid)
+	ON DELETE CASCADE,
+	FOREIGN KEY (uid) REFERENCES users (uid)
+	ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE collectorsettings (
@@ -116,12 +129,15 @@ CREATE TABLE cardunlocks (
 
 CREATE TABLE trades (
 	tid VARCHAR(10) NOT NULL,
+	coid VARCHAR(10) NOT NULL,
 	uidone VARCHAR(10) NOT NULL,
 	uidtwo VARCHAR(10) NOT NULL,
 	tstatusone INT NOT NULL,
 	tstatustwo INT NOT NULL,
 	tlasttrade DATETIME,
 	PRIMARY KEY(tid),
+	FOREIGN KEY (coid) REFERENCES collectors(coid)
+	ON DELETE CASCADE,
 	FOREIGN KEY (uidone) REFERENCES users(uid)
 	ON DELETE CASCADE,
 	FOREIGN KEY (uidtwo) REFERENCES users(uid)

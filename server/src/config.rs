@@ -10,6 +10,7 @@ pub struct Config {
     pub jwt_duration: u32,
     pub domain: String,
     pub verification_key_length: usize,
+    pub id_length: usize,
 
     pub username_len_min: u32,
     pub username_len_max: u32,
@@ -66,6 +67,7 @@ impl Default for Config {
             jwt_duration: 2678400,
             domain: String::from("https://waifucollector.com"),
             verification_key_length: 20,
+            id_length: 10,
 
             username_len_min: 4,
             username_len_max: 20,

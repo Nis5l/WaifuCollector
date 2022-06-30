@@ -6,7 +6,7 @@ use crate::sql::Sql;
 use crate::shared::Id;
 
 //transfers the cards, clears the trade and sets the cooldown
-pub async fn complete_trade(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<u64, sqlx::Error> {
+pub async fn complete_trade(sql: &Sql, user_id: &Id, user_friend_id: &Id) -> Result<u64, sqlx::Error> {
     let mut con = sql.get_con().await?;
     let mut transaction = con.begin().await?;
 

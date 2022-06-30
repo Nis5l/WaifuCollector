@@ -3,6 +3,7 @@ use chrono::{DateTime, Utc};
 
 use super::data::PackStatsPair;
 
+//TODO: this is wrong
 pub async fn load_pack_stats(con: &mut PoolConnection<MySql>, start: &DateTime<Utc>, end: &DateTime<Utc>) -> Result<Vec<PackStatsPair>, sqlx::Error> {
     sqlx::query_as(
         "SELECT pstime, psamount
@@ -18,9 +19,7 @@ pub async fn add_pack_stats(con: &mut PoolConnection<MySql>, time: &DateTime<Utc
     sqlx::query_as(
         "INSERT INTO packstats
          (psamount, pstime)
-         VALUES (?, ?)
-         ON DUPLICATE KEY UPDATE
-         psamount = psamount + ?;")
+         VALUES (?, ?);")
         .bind(amount)
         .bind(time)
         .bind(amount)

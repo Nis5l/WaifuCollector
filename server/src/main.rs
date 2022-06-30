@@ -15,7 +15,6 @@ mod user;
 mod sql;
 mod config;
 mod cors;
-mod crypto;
 mod shared;
 mod card;
 mod notifications;
@@ -25,133 +24,8 @@ mod friend;
 mod trade;
 mod admin;
 
-// CANGES:
-// /notifications POST -> GET
-//
-// /register:
-// mail -> email
-//
-// /friends POST -> GET -> /user/:id/friends
-// userID -> userId
-//
-// /user/:id -> /user/:id/username
-//
-// /user/:id/stats
-// badges -> achievements
-//
-// card data:
-// card -> cardInfo
-// frame -> cardFrame
-// type -> cardType
-// effect -> cardEffect
-//
-// /pack -> /pack/open
-//
-// POST /packtime -> GET /pack/time
-// ISO String
-//
-// /packTimeMax -> /pack/time/max
-// ISO String
-//
-// /deleteNotification -> notifications/delete/:id
-// /deleteAllNotifications -> notifications/delete/all
-// data -> notifications
-//
-// notification:
-// time: int -> ISO
-//
-// /upgrade -> /card/upgrade
-//    mainuuid -> cardOne
-//    carduuid -> cardTwo
-//
-//    uuid -> card
-//
-// /:id/rank -> /user/:id/rank
-// rankID -> rank
-//
-// /addfriend -> /friend/add
-// userID -> userId
-//
-// /managefriend command: 0 -> /friend/accept
-// /managefriend command: 1 -> /friend/remove
-//
-// /trade -> GET /trade/:user_id
-// response:
-//     cards -> selfCards
-//     cardsfriend -> friendCards
-//     cardsuggestions -> selfCardSuggestions
-//     cardsuggestionsfriend -> friendCardSuggestions
-//     username -> friendUsername
-//     statusone -> selfStatus
-//     statustwo -> friendStatus
-//     tradeCount1 removed (count of the cards)
-//     tradeCount2 removed (count of the cards)
-//     tradeTime ISO Date NO DURATION
-//     tradeLimit -> tradeCardLimit
-//     tradeLimitReached removed (couldnt find it beeing used)
-//
-// /addtrade -> /trade/<user_friend_id>/card/add/<card_unlocked_id>
-//
-// /removetrade -> /trade/<user_friend_id>/card/remove/<card_unlocked_id>
-// /suggesttrade -> /trade/<user_friend_id>/suggestion/add/<card_unlocked_id>
-//
-// /removesuggestion -> /trade/<user_friend_id>/suggestion/remove/<card_unlocked_id>
-//
-// removed /acceptsuggestion, the notification is sent nonetheless, user trade/card/add
-//
-// /verified -> /verify/check
-// mail -> email
-//
-// /verify -> /verify/confirm/<key>
-//
-// /okTrade -> /trade/<user_friend_id>/confirm
-//
-// /tradeTime -> /trade/<user_friend_id>/time
-//
-// /mail -> GET /email
-// response:
-//   mail -> email
-//   "" -> null
-//
-// /setmail -> /email/change
-// request
-//  mail -> email
-//
-// /deleteMail -> /email/delete
-//
-// /log -> GET /admin/log
-//
-// /passchange
-// request
-//  newpassword -> newPassword
-//
-// /verify/resend
-//
-// GET -> POST /user/:id/inventory
-// request query -> body
-//   userID remvoed
-//   excludeUUID -> exludeUuids
-//   friendID -> friend->friendId
-//   excludeSuggestions -> friend->excludeSuggestions (bool)
-// response
-//   { card: [] } -> []
-//
-// /flex -> /user/:id/flex
-//
-// /card/give -> /admin/give/card
-// request:
-//      userID -> userId
-//      cardID -> cardId
-//      frame -> frameId
-//
-// /packdata -> /pack/data
-
-//TODO port from server.js:
-// /user/:id/stats
-//
-// /packData -> /pack/data
-//
-// TODO: packData process
+//DONE:
+// user
 
 #[get("/")]
 fn index() -> &'static str {
@@ -233,8 +107,9 @@ async fn rocket() -> _ {
            user::info::user_username_route,
            user::info::user_friends_route,
            user::info::user_badges_route,
-           user::info::user_stats_route,
            user::info::user_rank_route,
+           user::info::stats::user_stats_global_route,
+           user::info::stats::user_stats_collector_route,
            user::inventory::inventory_route,
            user::flex::flex_route,
 

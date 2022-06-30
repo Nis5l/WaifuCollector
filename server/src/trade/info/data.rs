@@ -1,6 +1,5 @@
 use serde::Serialize;
 use chrono::{DateTime, Utc};
-use sqlx::FromRow;
 
 use crate::shared::card::data::Card;
 use crate::shared::trade::data::TradeStatus;

@@ -1,15 +1,9 @@
 use serde::Serialize;
-use sqlx::FromRow;
-
-#[derive(Debug, Serialize, FromRow)]
-pub struct Achievement {
-    pub image: String,
-    pub text: String
-}
+use super::super::shared::Achievement;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct UserStatsResponse {
+pub struct UserStatsCollectorResponse {
     pub max_friends: u32,
     pub friends: i64,
 

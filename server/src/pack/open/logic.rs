@@ -10,7 +10,7 @@ use tokio::sync::Mutex;
 use super::data::{PackOpenResponse, CanOpenPack};
 use super::sql;
 use super::super::shared;
-use crate::crypto::JwtToken;
+use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::card::{self, data::CardCreateData};
@@ -21,9 +21,9 @@ use crate::shared::card::packstats::data::PackStats;
 pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>, pack_stats: &State<Arc<Mutex<PackStats>>>) -> ApiResponseErr<PackOpenResponse> {
     let user_id = token.id;
 
-    verify_user!(sql, user_id);
+    verify_user!(sql, &user_id, true);
 
-    let last_opened = rjtry!(shared::sql::get_pack_time(sql, user_id).await);
+    let last_opened = rjtry!(shared::sql::get_pack_time(sql, &user_id).await);
 
     if let CanOpenPack::No(next_time) = can_open_pack(last_opened, config.pack_cooldown) {
         return ApiResponseErr::api_err(Status::Conflict, format!("Wait until: {}", next_time));
@@ -33,11 +33,12 @@ pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<C
 
     let mut inserted_cards_uuids = Vec::new();
     for card_create_data in cards_create_data.iter() {
-        let inserted_card_uuid = rjtry!(card::sql::add_card(&sql, user_id, card_create_data).await);
+        let inserted_card_uuid = generate_random_string(config.id_length);
+        rjtry!(card::sql::add_card(&sql, &user_id, &inserted_card_uuid, card_create_data).await);
         inserted_cards_uuids.push(inserted_card_uuid);
     }
 
-    rjtry!(sql::set_pack_time(&sql, user_id, Utc::now()).await);
+    rjtry!(sql::set_pack_time(&sql, &user_id, Utc::now()).await);
 
     let cards = rjtry!(card::sql::get_cards(&sql, inserted_cards_uuids, None, config).await);
 
@@ -87,7 +88,7 @@ async fn get_random_cards(sql: &Sql, amount: u32, quality_range: RangeInclusive<
         }
 
         let card_create_data = CardCreateData {
-            card_id: card.card_id,
+            card_id: card.card_id.clone(),
             frame_id: card.frame_id,
             level,
             quality
