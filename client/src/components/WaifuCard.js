@@ -138,7 +138,7 @@ class WaifuCard extends Component {
 
         if (this.onClick !== undefined) this.onClick(e, self.state.uuid);
 
-        if (this.state.redirects) self.redirect(self);
+        if (this.state.redirects || true) self.redirect(self);
     }
 
     redirect(self) {

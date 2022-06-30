@@ -11,14 +11,22 @@ import {withRouter} from 'react-router-dom'
 
 import './Verify.scss'
 
-const queryString = require('query-string');
+function queryString(queryString) {
+  var query = {};
+  var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+  for (var i = 0; i < pairs.length; i++) {
+      var pair = pairs[i].split('=');
+      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+  }
+  return query;
+}
 
 class Verify extends Component {
 
   constructor(props) {
     super(props);
 
-    this.key = queryString.parse(props.location.search)['key'];
+    this.key = queryString(props.location.search)['key'];
 
     this.lCount = 0;
     this.lCountMax = 2;
@@ -32,10 +40,10 @@ class Verify extends Component {
   }
 
   componentDidMount() {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
+    const config =
+    {
+      headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+    }
 
     axios.post(`${Config.API_HOST}/verify/confirm/${this.key}`, {}, config)
       .then(res => {
@@ -100,10 +108,10 @@ class Verify extends Component {
     const mail = this.state.mail;
     this.setState({mail: undefined});
 
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
+    const config =
+    {
+      headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+    }
 
     axios.post(`${Config.API_HOST}/verify/resend`, {}, config)
       .then(res => {
@@ -117,10 +125,10 @@ class Verify extends Component {
 
   delete = () => {
     this.setState({mail: undefined});
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
+    const config =
+    {
+      headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
+    }
     axios.post(`${Config.API_HOST}/email/delete`, {}, config)
       .then(res => {
          this.props.history.push('/verify/mail');

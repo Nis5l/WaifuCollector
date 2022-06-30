@@ -14,8 +14,6 @@ import Trade from './pages/trade/Trade'
 import TradeInventory from './pages/tradeinventory/TradeInventory'
 import SuggestInventory from './pages/suggestInventory/SuggestInventory'
 import Users from './pages/users/Users'
-import AdminLog from './pages/admin/log/Log'
-import FakeAdmin from './pages/fakeAdmin/FakeAdmin'
 import Settings from './pages/settings/Settings'
 import Privacy from './pages/privacy/Privacy'
 
@@ -25,7 +23,6 @@ import Cookies from 'js-cookie'
 
 import './App.scss'
 import Register from './pages/loggedout/Register'
-import Leaderboard from './pages/leaderboard/Leaderboard'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
@@ -55,7 +52,6 @@ function App() {
           <Switch>
 
             <Route path="/" exact component={Home} />
-            <Route path="/leaderboard" component={Leaderboard} />
             <Route path="/privacy" component={Privacy} />
 
             <Route
@@ -153,11 +149,7 @@ function App() {
 
             <Route path="/users" component={Users} />
 
-            <Route path="/admin/log" component={AdminLog} />
-
             <Route path="/admin/users" component={Settings} />
-
-            <Route path="/adminpanel" component={FakeAdmin} />
 
             <Route path="/settings" component={Settings} />
 
