@@ -13,11 +13,9 @@ use super::data::NotificationDeleteReponse;
 pub async fn notifications_delete_route(sql: &State<Sql>, notification_id: Id, token: JwtToken) -> ApiResponseErr<NotificationDeleteReponse> {
     let user_id = token.id;
 
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, true);
 
-    let result = rjtry!(sql::delete_notification(sql, &user_id, &notification_id).await);
-
-    match result {
+    match rjtry!(sql::delete_notification(sql, &user_id, &notification_id).await) {
         true => ApiResponseErr::ok(Status::Ok, NotificationDeleteReponse {
             message: String::from("Successfully deleted notification")
         }),

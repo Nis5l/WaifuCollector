@@ -123,14 +123,20 @@ pub async fn get_user_rank(sql: &Sql, user_id: &Id) -> Result<Result<UserRanking
     Ok(UserRanking::from_db(ranking))
 }
 
-pub async fn get_verify_data(sql: &Sql, user_id: &Id) -> Result<EmailVerifiedDb, sqlx::Error> {
+pub async fn get_verify_data(sql: &Sql, user_id: &Id) -> Result<Option<EmailVerifiedDb>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    sqlx::query_as(
-        "SELECT uemail, uverified
+    let stmt: Result<EmailVerifiedDb, sqlx::Error> = sqlx::query_as(
+        "SELECT uusername, uemail, uverified
          FROM users
          WHERE uid=?;")
         .bind(user_id)
         .fetch_one(&mut con)
-        .await
+        .await;
+
+    if let Err(sqlx::Error::RowNotFound) = stmt {
+        return Ok(None)
+    }
+
+    Ok(Some(stmt?))
 }

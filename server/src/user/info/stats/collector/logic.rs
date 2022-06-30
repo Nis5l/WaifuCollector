@@ -3,17 +3,17 @@ use rocket::{State, http::Status};
 
 use crate::sql::Sql;
 use crate::config::Config;
-use crate::shared::{friend, user};
+use crate::shared::friend;
 use crate::shared::Id;
+use crate::{verify_user, verify_collector};
 use super::sql;
 use super::data::UserStatsCollectorResponse;
 use super::super::shared::sql::get_achievements;
 
-#[get("/user/<user_id>/stats/<collector_id>")]
+#[get("/user/<user_id>/<collector_id>/stats")]
 pub async fn user_stats_collector_route(user_id: Id, collector_id: Id, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<UserStatsCollectorResponse> {
-    if rjtry!(user::sql::username_from_user_id(sql, &user_id).await).is_none() {
-        return ApiResponseErr::api_err(Status::NotFound, format!("No user with id {} not found", &user_id));
-    }
+    verify_user!(sql, &user_id, false);
+    verify_collector!(sql, &collector_id);
 
     let friend_count = rjtry!(friend::sql::used_friend_slots(sql, &user_id).await);
     let card_count = rjtry!(sql::get_user_card_count(sql, &user_id, &collector_id).await);

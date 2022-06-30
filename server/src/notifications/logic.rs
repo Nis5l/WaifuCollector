@@ -12,7 +12,7 @@ use super::data::NotificationResponse;
 pub async fn notifications_route(sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<NotificationResponse> {
     let user_id = token.id;
 
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, true);
 
     let notifications = rjtry!(sql::get_notifications(&sql, &user_id).await);
 

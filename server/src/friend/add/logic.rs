@@ -15,7 +15,7 @@ use crate::verify_user;
 pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<FriendAddResponse> {
     let JwtToken { id: user_id, username } = token;
 
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, true);
 
     if data.user_id.is_none() && data.username.is_none() {
         return ApiResponseErr::api_err(Status::BadRequest, String::from("One of the fields has to be set: userId, username"));
@@ -23,10 +23,7 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
 
     let (user_id_receiver, username_receiver) = match data.user_id {
         Some(id) => {
-            let username = match rjtry!(user::sql::username_from_user_id(sql, &id).await) {
-                None => return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", id)),
-                Some(value) => value
-            };
+            let username = verify_user!(sql, &id, false);
             (id, username)
         },
         None => {
@@ -54,7 +51,7 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
 
     rjtry!(sql::send_friend_request(sql, &user_id, &user_id_receiver).await);
 
-    rjtry!(notification::sql::add_notification(sql, &user_id_receiver, &notification::data::NotificationCreateData {
+    rjtry!(notification::sql::add_notification(sql, &user_id_receiver, None, &notification::data::NotificationCreateData {
         title: String::from("Friend Request"),
         message: format!("{} sent you a friend request, click to view!", username),
         url: String::from("friends"),

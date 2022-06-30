@@ -2,18 +2,22 @@ use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
 use rocket::State;
 
-use super::data::VerifyResendResponse;
 use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::{user, email};
+use crate::verify_user;
+use super::data::VerifyResendResponse;
 
 //TODO: cooldown
 #[post("/verify/resend")]
 pub async fn verify_resend_route(token: JwtToken, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<VerifyResendResponse> {
     let user_id = token.id;
 
-    let verify_db = rjtry!(user::sql::get_verify_data(sql, &user_id).await);
+    verify_user!(sql, &user_id, false);
+
+    //NOTE: user exists
+    let verify_db = rjtry!(user::sql::get_verify_data(sql, &user_id).await).unwrap();
 
     let verified = rjtry!(user::data::UserVerified::from_db(&verify_db.email, verify_db.verified));
 

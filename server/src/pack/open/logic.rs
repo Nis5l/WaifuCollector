@@ -21,7 +21,7 @@ use crate::shared::card::packstats::data::PackStats;
 pub async fn pack_open_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>, pack_stats: &State<Arc<Mutex<PackStats>>>) -> ApiResponseErr<PackOpenResponse> {
     let user_id = token.id;
 
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, true);
 
     let last_opened = rjtry!(shared::sql::get_pack_time(sql, &user_id).await);
 

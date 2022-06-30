@@ -3,12 +3,15 @@ use rocket::http::Status;
 use rocket::State;
 
 use crate::sql::Sql;
-use super::data::FriendsResponse;
 use crate::shared::friend::{self, data::{FriendStatus, FriendUsernameDb}};
 use crate::shared::Id;
+use crate::verify_user;
+use super::data::FriendsResponse;
 
 #[get("/user/<user_id>/friends")]
 pub async fn user_friends_route(sql: &State<Sql>, user_id: Id) -> ApiResponseErr<Vec<FriendsResponse>> {
+    verify_user!(sql, &user_id, false);
+
     let friends_db = rjtry!(friend::sql::user_friends_username(&sql, &user_id).await);
 
     let friends = friends_db.into_iter().filter_map(|friend: FriendUsernameDb| {

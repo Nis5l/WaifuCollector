@@ -14,7 +14,7 @@ use crate::verify_user;
 pub async fn pack_time_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackTimeResponse> {
     let user_id = token.id;
 
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, true);
 
     let last_opened = rjtry!(shared::sql::get_pack_time(sql, &user_id).await);
 

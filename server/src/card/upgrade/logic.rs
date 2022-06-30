@@ -14,7 +14,7 @@ use crate::verify_user;
 pub async fn upgrade_route(sql: &State<Sql>, token: JwtToken, data: UpgradeRequest, config: &State<Config>) -> ApiResponseErr<UpgradeResponse> {
     let user_id = token.id;
     
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, false);
 
     let card_one: Card = match rjtry!(card::sql::get_card(sql, &data.card_one, Some(&user_id), config).await) {
         None => return ApiResponseErr::api_err(Status::NotFound, format!("Card not found: {}", data.card_one)),

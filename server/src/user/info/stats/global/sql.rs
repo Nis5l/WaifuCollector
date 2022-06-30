@@ -1,11 +1,10 @@
 use crate::sql::Sql;
-use crate::shared::Id;
-use super::data::CollectorFavorites;
+use crate::shared::{Id, collector::Collector};
 
-pub async fn get_favorite_collectors(sql: &Sql, user_id: &Id) -> Result<Vec<CollectorFavorites>, sqlx::Error> {
+pub async fn get_favorite_collectors(sql: &Sql, user_id: &Id) -> Result<Vec<Collector>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let collectors: Vec<CollectorFavorites> = sqlx::query_as(
+    let collectors: Vec<Collector> = sqlx::query_as(
         "SELECT coid AS id, coname AS name
          FROM collectors, collectorfavorites
          WHERE collectors.coid=collectorfavorites.coid

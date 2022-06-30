@@ -31,12 +31,15 @@ CREATE TABLE verificationkeys (
 CREATE TABLE notifications (
 	nid INT NOT NULL AUTO_INCREMENT,
 	uid VARCHAR(10) NOT NULL,
+	coid VARCHAR(10),
 	ntitle TINYTEXT NOT NULL,
 	nmessage TEXT NOT NULL,
 	nurl TEXT NOT NULL,
 	ntime DATETIME NOT NULL,
 	PRIMARY KEY (nid),
 	FOREIGN KEY (uid) REFERENCES users(uid)
+	ON DELETE CASCADE,
+	FOREIGN KEY (coid) REFERENCES collectors(coid)
 	ON DELETE CASCADE
 ) ENGINE = InnoDB;
 

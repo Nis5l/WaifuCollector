@@ -9,6 +9,7 @@ pub mod trade;
 pub mod util;
 pub mod email;
 pub mod crypto;
+pub mod collector;
 
 // TODO: 10 characters
 pub type Id = String;

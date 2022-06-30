@@ -114,17 +114,34 @@ pub async fn delete_card(sql: &Sql, card_unlocked_id: &Id) -> Result<u64, sqlx::
     Ok(result.rows_affected())
 }
 
-pub async fn user_owns_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id) -> Result<bool, sqlx::Error> {
+pub async fn user_owns_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id, collector_id: Option<&Id>) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let (count, ): (i64, ) = sqlx::query_as(
-        "SELECT COUNT(*)
-         FROM cardunlocks
-         WHERE uid=? AND cuid=?;")
+    let query = match collector_id {
+        None =>
+            "SELECT COUNT(*)
+             FROM cardunlocks
+             WHERE uid=?
+             AND cuid=?;",
+        Some(_) =>
+            "SELECT COUNT(*)
+             FROM cardunlocks, cards
+             WHERE cards.cid=cardunlocks.cid
+             AND cardunlocks.uid=?
+             AND cardunlocks.cuid=?
+             AND cards.coid=?;"
+    };
+
+    let mut stmt = sqlx::query_as(query)
         .bind(user_id)
-        .bind(card_unlocked_id)
-        .fetch_one(&mut con)
-        .await?;
+        .bind(card_unlocked_id);
+
+    match collector_id {
+        None => (),
+        Some(_) => { stmt = stmt.bind(collector_id); }
+    }
+
+    let (count, ): (i64, ) = stmt.fetch_one(&mut con).await?;
 
     Ok(count != 0)
 }

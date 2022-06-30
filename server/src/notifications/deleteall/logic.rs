@@ -12,7 +12,7 @@ use super::data::NotificationDeleteAllReponse;
 pub async fn notifications_delete_all_route(sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<NotificationDeleteAllReponse> {
     let user_id = token.id;
 
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, true);
 
     let deleted_notifications = rjtry!(sql::delete_all_notifications(sql, &user_id).await);
 

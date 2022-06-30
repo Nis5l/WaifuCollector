@@ -12,7 +12,7 @@ use crate::sql::Sql;
 pub async fn passchange_route(sql: &State<Sql>, data: PassChangeRequest, token: JwtToken) -> ApiResponseErr<PassChangeResponse> {
     let user_id = token.id;
 
-    verify_user!(sql, &user_id);
+    verify_user!(sql, &user_id, true);
 
     let hashed_password = rjtry!(bcrypt_hash(&data.new_password));
 
