@@ -12,12 +12,12 @@ use super::sql;
 
 #[post("/user/<user_id>/inventory", data="<data>")]
 pub async fn inventory_route(user_id: Id, mut data: InventoryRequest, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<Card>> {
-    if rjtry!(user::sql::username_from_user_id(sql, user_id).await).is_none() {
+    if rjtry!(user::sql::username_from_user_id(sql, &user_id).await).is_none() {
         return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", user_id));
     }
 
     if let Some(friend) = data.friend {
-        data.exclude_uuids.append(&mut sql::get_trade_uuids(sql, user_id, friend.friend_id, friend.exclude_suggestions).await.unwrap());
+        data.exclude_uuids.append(&mut sql::get_trade_uuids(sql, &user_id, &friend.friend_id, friend.exclude_suggestions).await.unwrap());
     }
 
     let cards = rjtry!(card::sql::get_inventory(sql, config, &card::data::InventoryOptions {

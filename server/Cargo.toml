@@ -1,5 +1,5 @@
 [package]
-name = "WaifuCollector"
+name = "waifu_collector"
 version = "0.1.0"
 authors = ["Nis5l <kirchler123@gmail.com>"]
 edition = "2018"

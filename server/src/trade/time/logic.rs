@@ -7,7 +7,7 @@ use super::sql;
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::Id;
-use crate::crypto::JwtToken;
+use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
 use crate::shared::{trade, util};
 use crate::verify_user;
 
@@ -15,15 +15,15 @@ use crate::verify_user;
 pub async fn trade_time_route(user_friend_id: Id, token: JwtToken, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<TradeTimeResponse> {
     let user_id = token.id;
     
-    verify_user!(sql, user_id);
+    verify_user!(sql, &user_id);
 
     if user_id == user_friend_id {
         return ApiResponseErr::api_err(Status::BadRequest, String::from("Can not trade with yourself"));
     }
 
-    rjtry!(trade::sql::create_trade(sql, user_id, user_friend_id).await);
+    rjtry!(trade::sql::create_trade(sql, &generate_random_string(config.id_length), &user_id, &user_friend_id).await);
 
-    let last_trade_time = rjtry!(sql::last_trade_time(sql, user_id, user_friend_id).await);
+    let last_trade_time = rjtry!(sql::last_trade_time(sql, &user_id, &user_friend_id).await);
 
     let trade_time = util::time_from_db(last_trade_time, config.trade_cooldown);
 

@@ -8,8 +8,11 @@ pub mod notification;
 pub mod trade;
 pub mod util;
 pub mod email;
+pub mod crypto;
 
-pub type Id = i64;
+// TODO: 10 characters
+pub type Id = String;
+pub type IdInt = i32;
 
 #[derive(Debug)]
 pub struct DbParseError;

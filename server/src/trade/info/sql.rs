@@ -4,7 +4,7 @@ use crate::config::Config;
 use crate::shared::Id;
 
 //TODO: passing the config to sql doesnt feel right
-pub async fn trade_cards(sql: &Sql, user_id: Id, user_id_friend: Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
+pub async fn trade_cards(sql: &Sql, user_id: &Id, user_id_friend: &Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let cards_db: Vec<CardDb> = sqlx::query_as(
@@ -43,7 +43,7 @@ pub async fn trade_cards(sql: &Sql, user_id: Id, user_id_friend: Id, config: &Co
     Ok(cards)
 }
 
-pub async fn trade_suggestions(sql: &Sql, user_id: Id, user_id_friend: Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
+pub async fn trade_suggestions(sql: &Sql, user_id: &Id, user_id_friend: &Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let cards_db: Vec<CardDb> = sqlx::query_as(

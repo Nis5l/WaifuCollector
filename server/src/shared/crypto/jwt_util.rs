@@ -71,7 +71,7 @@ impl<'r> FromRequest<'r> for JwtToken {
     }
 }
 
-pub fn jwt_sign_token(username: &str, user_id: Id, secret: &str) -> Result<String, jwt::Error> {
+pub fn jwt_sign_token(username: &str, user_id: &Id, secret: &str) -> Result<String, jwt::Error> {
     let key: Hmac<Sha256> = Hmac::new_from_slice(&bincode::serialize(secret).expect("Serializing jwt secret failed!"))?;
     let mut btree = BTreeMap::new();
     let user_id_str = user_id.to_string();

@@ -3,7 +3,7 @@ use chrono::{DateTime, Utc};
 use crate::sql::Sql;
 use crate::shared::Id;
 
-pub async fn last_trade_time(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<Option<DateTime<Utc>>, sqlx::Error> {
+pub async fn last_trade_time(sql: &Sql, user_id: &Id, user_friend_id: &Id) -> Result<Option<DateTime<Utc>>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let (last_trade_time,): (Option<DateTime<Utc>>,) = sqlx::query_as(

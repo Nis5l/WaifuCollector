@@ -98,9 +98,9 @@ pub struct Badge {
 
 //TODO: this is obv. a placeholder and should be stored in the database!
 //8,3: Nissl and SmallCode
-const DEVS: [Id; 2] = [8, 3];
+const DEVS: [Id; 0] = [];
 
-pub fn get_badges(user_id: Id) -> Vec<Badge> {
+pub fn get_badges(user_id: &Id) -> Vec<Badge> {
     let mut badges = Vec::new();
     if DEVS.contains(&user_id) {
         badges.push(Badge {

@@ -4,7 +4,7 @@ use rocket::State;
 use rand::{thread_rng, Rng};
 
 use super::data::{UpgradeResponse, UpgradeRequest, UpgradeCardsResult};
-use crate::crypto::JwtToken;
+use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
 use crate::sql::Sql;
 use crate::shared::card::{self, data::Card, data::CardCreateData};
 use crate::config::Config;
@@ -14,14 +14,14 @@ use crate::verify_user;
 pub async fn upgrade_route(sql: &State<Sql>, token: JwtToken, data: UpgradeRequest, config: &State<Config>) -> ApiResponseErr<UpgradeResponse> {
     let user_id = token.id;
     
-    verify_user!(sql, user_id);
+    verify_user!(sql, &user_id);
 
-    let card_one: Card = match rjtry!(card::sql::get_card(sql, data.card_one, Some(user_id), config).await) {
+    let card_one: Card = match rjtry!(card::sql::get_card(sql, &data.card_one, Some(&user_id), config).await) {
         None => return ApiResponseErr::api_err(Status::NotFound, format!("Card not found: {}", data.card_one)),
         Some(card) => card
     };
 
-    let card_two: Card = match rjtry!(card::sql::get_card(sql, data.card_two, Some(user_id), config).await) {
+    let card_two: Card = match rjtry!(card::sql::get_card(sql, &data.card_two, Some(&user_id), config).await) {
         None => return ApiResponseErr::api_err(Status::NotFound, format!("Card not found: {}", data.card_two)),
         Some(card) => card
     };
@@ -42,10 +42,11 @@ pub async fn upgrade_route(sql: &State<Sql>, token: JwtToken, data: UpgradeReque
 
     let UpgradeCardsResult { create_card_data: new_card_data, success } = upgrade_cards(&card_one, &card_two, config);
 
-    let new_card_uuid = rjtry!(card::sql::add_card(sql, user_id, &new_card_data).await);
+    let new_card_uuid = generate_random_string(config.id_length);
+    rjtry!(card::sql::add_card(sql, &user_id, &new_card_uuid, &new_card_data).await);
 
-    rjtry!(card::sql::delete_card(sql, card_one.id).await);
-    rjtry!(card::sql::delete_card(sql, card_two.id).await);
+    rjtry!(card::sql::delete_card(sql, &card_one.id).await);
+    rjtry!(card::sql::delete_card(sql, &card_two.id).await);
 
     ApiResponseErr::ok(Status::Ok, UpgradeResponse {
         success,
@@ -79,7 +80,7 @@ fn upgrade_cards(card_one: &Card, card_two: &Card, config: &Config) -> UpgradeCa
     }
 
     let create_card_data = CardCreateData {
-            card_id: card_one.card_info.id,
+            card_id: card_one.card_info.id.clone(),
             //TODO: if more frames are introduced change this
             frame_id: card_one.card_frame.id,
             quality: new_quality,

@@ -4,7 +4,7 @@ use crate::sql::Sql;
 use crate::shared::Id;
 use super::data::{TradeStatus, TradeDb};
 
-pub async fn set_trade_status(sql: &Sql, user_id: Id, user_friend_id: Id, status_self: TradeStatus, status_friend: TradeStatus) -> Result<(), sqlx::Error> {
+pub async fn set_trade_status(sql: &Sql, user_id: &Id, user_friend_id: &Id, status_self: TradeStatus, status_friend: TradeStatus) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
     let mut transaction = con.begin().await?;
 
@@ -34,7 +34,7 @@ pub async fn set_trade_status(sql: &Sql, user_id: Id, user_friend_id: Id, status
     Ok(())
 }
 
-pub async fn set_trade_status_one(sql: &Sql, user_id: Id, user_friend_id: Id, status_self: TradeStatus) -> Result<(), sqlx::Error> {
+pub async fn set_trade_status_one(sql: &Sql, user_id: &Id, user_friend_id: &Id, status_self: TradeStatus) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
     let mut transaction = con.begin().await?;
 
@@ -62,7 +62,7 @@ pub async fn set_trade_status_one(sql: &Sql, user_id: Id, user_friend_id: Id, st
     Ok(())
 }
 
-pub async fn card_in_trade(sql: &Sql, card_unlocked_id: Id) -> Result<bool, sqlx::Error> {
+pub async fn card_in_trade(sql: &Sql, card_unlocked_id: &Id) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let (count, ): (i64, ) = sqlx::query_as(
@@ -76,7 +76,7 @@ pub async fn card_in_trade(sql: &Sql, card_unlocked_id: Id) -> Result<bool, sqlx
     Ok(count != 0)
 }
 
-pub async fn trade_add_card(sql: &Sql, user_id: Id, user_id_friend: Id, card_unlocked_id: Id) -> Result<(), sqlx::Error> {
+pub async fn trade_add_card(sql: &Sql, user_id: &Id, user_id_friend: &Id, card_unlocked_id: &Id) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query(
@@ -93,7 +93,7 @@ pub async fn trade_add_card(sql: &Sql, user_id: Id, user_id_friend: Id, card_unl
     Ok(())
 }
 
-pub async fn suggestion_in_trade(sql: &Sql, user_id: Id, user_friend_id: Id, card_unlocked_id: Id) -> Result<bool, sqlx::Error> {
+pub async fn suggestion_in_trade(sql: &Sql, user_id: &Id, user_friend_id: &Id, card_unlocked_id: &Id) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let (count, ): (i64, ) = sqlx::query_as(
@@ -110,7 +110,7 @@ pub async fn suggestion_in_trade(sql: &Sql, user_id: Id, user_friend_id: Id, car
 }
 
 //TODO: this has to be called not just by confirm
-pub async fn create_trade(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<bool, sqlx::Error> {
+pub async fn create_trade(sql: &Sql, id: &Id, user_id: &Id, user_friend_id: &Id) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let (count, ): (i64, ) = sqlx::query_as(
@@ -130,9 +130,10 @@ pub async fn create_trade(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<
 
     sqlx::query(
         "INSERT INTO trades
-         (uidone, uidtwo, tstatusone, tstatustwo)
+         (tid, uidone, uidtwo, tstatusone, tstatustwo)
          VALUES
-         (?, ?, 0, 0)")
+         (?, ?, ?, 0, 0)")
+        .bind(id)
         .bind(user_id)
         .bind(user_friend_id)
         .execute(&mut con)
@@ -141,7 +142,7 @@ pub async fn create_trade(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<
     Ok(true)
 }
 
-pub async fn get_trade(sql: &Sql, user_id: Id, user_id_friend: Id) -> Result<TradeDb, sqlx::Error> {
+pub async fn get_trade(sql: &Sql, user_id: &Id, user_id_friend: &Id) -> Result<TradeDb, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query_as(

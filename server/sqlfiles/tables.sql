@@ -46,6 +46,16 @@ CREATE TABLE collectors (
 	PRIMARY KEY (coid)
 ) ENGINE = InnoDB;
 
+CREATE TABLE collectorfavorites (
+	coid VARCHAR(10) NOT NULL,
+	uid VARCHAR(10) NOT NULL,
+	PRIMARY KEY (coid, uid),
+	FOREIGN KEY (coid) REFERENCES collectors (coid)
+	ON DELETE CASCADE,
+	FOREIGN KEY (uid) REFERENCES users (uid)
+	ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 CREATE TABLE collectorsettings (
 	coid VARCHAR(10) NOT NULL,
 	coskey VARCHAR(255) NOT NULL,
@@ -116,12 +126,15 @@ CREATE TABLE cardunlocks (
 
 CREATE TABLE trades (
 	tid VARCHAR(10) NOT NULL,
+	coid VARCHAR(10) NOT NULL,
 	uidone VARCHAR(10) NOT NULL,
 	uidtwo VARCHAR(10) NOT NULL,
 	tstatusone INT NOT NULL,
 	tstatustwo INT NOT NULL,
 	tlasttrade DATETIME,
 	PRIMARY KEY(tid),
+	FOREIGN KEY (coid) REFERENCES collectors(coid)
+	ON DELETE CASCADE,
 	FOREIGN KEY (uidone) REFERENCES users(uid)
 	ON DELETE CASCADE,
 	FOREIGN KEY (uidtwo) REFERENCES users(uid)
