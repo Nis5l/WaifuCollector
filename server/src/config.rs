@@ -107,11 +107,11 @@ impl Default for Config {
 
             db_init_files: vec![
                 String::from("./sqlfiles/tables.sql"),
-                String::from("./sqlfiles/cardtypes.sql"),
+                /* String::from("./sqlfiles/cardtypes.sql"),
                 String::from("./sqlfiles/cards.sql"),
                 String::from("./sqlfiles/cardframes.sql"),
                 String::from("./sqlfiles/cardeffects.sql"),
-                String::from("./sqlfiles/achievements.sql")
+                String::from("./sqlfiles/achievements.sql") */
             ]
         }
     }
