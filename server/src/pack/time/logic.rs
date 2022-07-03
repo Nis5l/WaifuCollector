@@ -7,16 +7,17 @@ use super::super::shared;
 use crate::shared::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::config::Config;
-use crate::shared::util;
-use crate::verify_user;
+use crate::shared::{Id, util};
+use crate::{verify_user, verify_collector};
 
-#[get("/pack/time")]
-pub async fn pack_time_route(sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackTimeResponse> {
+#[get("/<collector_id>/pack/time")]
+pub async fn pack_time_route(sql: &State<Sql>, collector_id: Id, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackTimeResponse> {
     let user_id = token.id;
 
     verify_user!(sql, &user_id, true);
+    verify_collector!(sql, &collector_id);
 
-    let last_opened = rjtry!(shared::sql::get_pack_time(sql, &user_id).await);
+    let last_opened = rjtry!(shared::sql::get_pack_time(sql, &user_id, &collector_id).await);
 
     let pack_time = util::time_from_db(last_opened, config.pack_cooldown);
 

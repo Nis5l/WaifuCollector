@@ -17,3 +17,25 @@ macro_rules! verify_collector {
         }
     };
 }
+
+pub enum CollectorSetting {
+    PackCooldown,
+    PackAmount,
+    PackQualityMin,
+    PackQualityMax,
+    TradeCooldown,
+    TradeCardLimit
+}
+
+impl std::string::ToString for CollectorSetting {
+    fn to_string(&self) -> String {
+        String::from(match self {
+            PackCooldown => "pack_cooldown",
+            PackAmount => "pack_amount",
+            PackQualityMin => "pack_quality_min",
+            PackQualityMax => "pack_quality_max",
+            TradeCooldown => "trade_cooldown",
+            TradeCardLimit => "trade_card_limit"
+        })
+    }
+}

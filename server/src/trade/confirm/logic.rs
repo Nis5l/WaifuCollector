@@ -42,7 +42,7 @@ pub async fn trade_confirm_route(user_friend_id: Id, collector_id: Id, sql: &Sta
             url: format!("trade/{}", &user_id)
         }).await);
 
-        rjtry!(sql::complete_trade(sql, &user_id, &user_friend_id).await);
+        rjtry!(sql::complete_trade(sql, &trade_id).await);
         rjtry!(trade::sql::set_trade_status(sql, &trade_id, trade::data::TradeStatus::UnConfirmed).await);
 
         return ApiResponseErr::ok(Status::Ok, TradeConfirmReponse {

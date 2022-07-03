@@ -5,15 +5,16 @@ use crate::config::Config;
 use super::data::{CardCreateData, Card, CardDb, SortType, InventoryOptions};
 use crate::shared::{Id, util};
 
-pub async fn add_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id, card: &CardCreateData) -> Result<(), sqlx::Error> {
+pub async fn add_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id, collector_id: &Id, card: &CardCreateData) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query(
         "INSERT INTO cardunlocks
-         (cuid, uid, cid, cuquality, culevel, cfid)
+         (cuid, coid, uid, cid, cuquality, culevel, cfid)
          VALUES
-         (?, ?, ?, ?, ?);")
+         (?, ?, ?, ?, ?, ?);")
         .bind(card_unlocked_id)
+        .bind(collector_id)
         .bind(user_id)
         .bind(&card.card_id)
         .bind(card.quality)

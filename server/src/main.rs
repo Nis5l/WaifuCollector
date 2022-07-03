@@ -9,7 +9,6 @@ use rocket::{get, routes};
 use rocket::fs::{FileServer, relative};
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use shared::card::packstats::data::PackStats;
 
 mod user;
 mod sql;
@@ -74,21 +73,6 @@ async fn rocket() -> _ {
     */
 
 
-    println!("Initializing PackStats...");
-    //cloning should be fine because it is implemented as Arc
-    let mut pack_stats = PackStats::new(sql.clone(), &config).await.unwrap();
-    pack_stats.init().await.expect("Error initializing PackStats");
-    let pack_stats = Arc::new(Mutex::new(pack_stats));
-
-    println!("Starting PackStats Thread...");
-    {
-        let pack_stats = pack_stats.clone();
-
-        tokio::spawn(async {
-            PackStats::start_thread(pack_stats).await
-        });
-    }
-
     rocket::custom(config_figment)
         .mount("/", routes![
            index,
@@ -149,5 +133,4 @@ async fn rocket() -> _ {
         .attach(AdHoc::config::<config::Config>())
         .attach(cors::CORS)
         .manage(sql)
-        .manage(pack_stats)
 }
