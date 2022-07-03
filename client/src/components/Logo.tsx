@@ -3,8 +3,8 @@ import {Component} from 'react';
 import './Logo.scss'
 
 type Props = {
-    className: string,
-    size: string
+    className?: string,
+    size?: string
 }
 
 class Logo extends Component<Props> {

@@ -73,6 +73,8 @@ class WaifuCard extends Component {
         let identifier = props.identifier;
         let clickable = props.clickable === "false" ? false : true;
         let redirects = props.redirects === "true" ? true : false;
+        console.log(props.redirects);
+        console.log(props.redirects === "true" ? true : false);
 
         this.onClick = props.onClick;
         this.onCreate = this.props.onCreate;
@@ -138,7 +140,7 @@ class WaifuCard extends Component {
 
         if (this.onClick !== undefined) this.onClick(e, self.state.uuid);
 
-        if (this.state.redirects || true) self.redirect(self);
+        if (this.state.redirects) self.redirect(self);
     }
 
     redirect(self) {

@@ -7,26 +7,42 @@ import Logo from '../../components/Logo'
 import Config from '../../config.json'
 import Cookies from 'js-cookie'
 import axios from 'axios'
-import {withRouter} from 'react-router-dom'
+import {RouteChildrenProps, RouteComponentProps, withRouter} from 'react-router-dom'
 
 import './Verify.scss'
 
-function queryString(queryString) {
-  var query = {};
+function queryString(queryString: string) {
+  var query: Map<string, string> = new Map<string, string>();
   var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
   for (var i = 0; i < pairs.length; i++) {
       var pair = pairs[i].split('=');
-      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+      query.set(decodeURIComponent(pair[0]), decodeURIComponent(pair[1] || ''));
   }
   return query;
 }
 
-class Verify extends Component {
+type PropsVerify = RouteComponentProps & {
 
-  constructor(props) {
+}
+
+type StateVerify = {
+  time: number,
+  mail: string | undefined,
+  loading: boolean
+}
+
+class Verify extends Component<PropsVerify, StateVerify> {
+  private key: string = "";
+  private lCount: number;
+  private lCountMax: number;
+
+  private timeout: NodeJS.Timeout | undefined;
+
+  constructor(props: PropsVerify) {
     super(props);
 
-    this.key = queryString(props.location.search)['key'];
+    const key = queryString(props.location.search).get('key');
+    if(key != null) this.key = key;
 
     this.lCount = 0;
     this.lCountMax = 2;
@@ -84,12 +100,13 @@ class Verify extends Component {
     clearInterval(this.timeout);
 
     let cookiedate = new Date(0);
-    if (Cookies.get('resenttimeout') !== undefined)
-      cookiedate = new Date(Cookies.get('resenttimeout'));
+    const resentmentTimeout = Cookies.get('resenttimeout');
+    if (resentmentTimeout !== undefined)
+      cookiedate = new Date(resentmentTimeout);
 
     let t = new Date();
     let time = cookiedate.getTime() - t.getTime();
-    time = parseInt(time / 1000);
+    time = time / 1000;
     this.setState({time: time});
 
     this.timeout = setInterval(() => {
@@ -118,7 +135,7 @@ class Verify extends Component {
 		  this.setState({mail: mail});
 		  let t = new Date();
 		  t.setSeconds(t.getSeconds() + 30);
-		  Cookies.set('resenttimeout', t);
+		  Cookies.set('resenttimeout', t.toString());
 		  this.startTimer();
       })
   }

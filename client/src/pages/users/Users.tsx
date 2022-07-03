@@ -10,8 +10,24 @@ import Config from '../../config.json'
 
 import './Users.scss'
 
-class Users extends Component {
-  constructor(props) {
+type PropsUsers = {
+
+}
+
+type StateUsers = {
+  users: any[],
+  friends: Map<number, number>,
+  loading: boolean
+}
+
+class Users extends Component<PropsUsers, StateUsers> {
+  private page: number;
+  private loading: boolean;
+  private hasMore: boolean;
+
+  private username: string;
+
+  constructor(props: PropsUsers) {
     super(props);
 
     this.page = 0;
@@ -23,12 +39,12 @@ class Users extends Component {
     this.state =
     {
       users: [],
-      friends: {},
+      friends: new Map<number, number>(),
       loading: true
     }
   }
 
-  search(e, self) {
+  search(e: any, self: Users) {
     this.page = 0;
     this.loading = false;
     this.hasMore = true;
@@ -40,9 +56,9 @@ class Users extends Component {
     axios.get(`${Config.API_HOST}/user/${Cookies.get('userID')}/friends`)
       .then((res) => {
         this.setState({loading: false});
-		let friends = {};
+		let friends: Map<number, number> = new Map<number, number>();
 		for (let i = 0; i < res.data.friends.length; i++) {
-			friends[res.data.friends[i].userID] = res.data.friends[i].status;
+			friends.set(res.data.friends[i].userID,  res.data.friends[i].status);
 			this.setState({friends: friends});
 		}
       }).catch(err => {
@@ -65,8 +81,9 @@ class Users extends Component {
       });
   }
 
-  getFriend(id) {
-    return this.state.friends[id] !== undefined ? this.state.friends[id] : 0;
+  getFriend(id: number): number {
+    const friendId: number | undefined = this.state.friends.get(id);
+    return friendId != null ? friendId : 0;
   }
 
   render() {

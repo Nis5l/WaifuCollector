@@ -45,7 +45,7 @@ type StateTrade = {
   removeSuggestionId: number | undefined,
 
   disabled: any | undefined,
-  confirmdisabled: any | undefined,
+  confirmdisabled: string | undefined,
 
   loading: boolean
 }
@@ -167,12 +167,11 @@ class Trade extends Component<PropsTrade, StateTrade> {
           }, () => {this.setInfo(); this.setDisabled()});
 
           if (res.data.tradeTime != null) {
-			res.data.tradeTime = moment(res.data.tradeTime);
+			      res.data.tradeTime = moment(res.data.tradeTime).toDate();
             let interval = this.timeinterval = setInterval(() => {
-			  let diff = res.data.tradeTime - moment().milliseconds();
-			  if(diff < 0) diff = 0;
+              let diff = moment(res.data.tradeTime).diff(moment());
+              if(diff < 0) diff = 0;
               this.setState({tradeTime: diff}, this.setDisabled)
-
               if (diff === 0) clearInterval(interval);
             }, 1000)
           }
@@ -207,7 +206,6 @@ class Trade extends Component<PropsTrade, StateTrade> {
     if (this.state.confirmed === 1)
       this.setState({confirmdisabled: "Already Confirmed"})
 
-	  console.log(this.state);
     if (this.state.tradeTime !== 0)
       this.setState({confirmdisabled: formatTime(this.state.tradeTime)})
   }

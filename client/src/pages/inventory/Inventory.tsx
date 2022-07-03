@@ -18,11 +18,11 @@ interface InventoryParams{
 
 type PropsInventory = RouteComponentProps<InventoryParams> & {
   userID: number,
-  friendID: string,
-  excludeSuggestions: boolean,
-  redirect: boolean,
-  loading: boolean,
-  onCardClick: (e: any, card: any) => void
+  friendID?: string,
+  excludeSuggestions?: boolean,
+  redirect?: boolean,
+  loading?: boolean,
+  onCardClick?: (e: any, card: any) => void
 }
 
 type StateInventory = {
@@ -68,11 +68,11 @@ class Inventory extends Component<PropsInventory, StateInventory> {
       this.userID = this.props.match.params.id != null ? parseInt(this.props.match.params.id) : 0;
     if (this.userID === undefined && cookieUserID != null) this.userID = parseInt(cookieUserID);
 
-    this.friendID = parseInt(props.friendID);
+    this.friendID = parseInt(props.friendID != null ? props.friendID : "0");
     this.excludeSuggestions = this.props.excludeSuggestions === true;
 
     this.redirect =  props.redirect === false ? false : true;
-    this.onCardClick = props.onCardClick;
+    this.onCardClick = props.onCardClick != null ? props.onCardClick : () => {};
 
     this.lCounter = 0;
     this.lCounterMax = 1;

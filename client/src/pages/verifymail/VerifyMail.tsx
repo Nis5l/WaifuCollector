@@ -11,9 +11,22 @@ import axios from 'axios'
 import Config from '../../config.json'
 
 import './VerifyMail.scss'
+import { RouteComponentProps } from 'react-router'
 
-class VerifyMail extends Component {
-  constructor(props) {
+type PropsVerifyMail = RouteComponentProps & {
+
+}
+
+type StateVerifyMail = {
+  email: string,
+  matches: boolean,
+  loaded: boolean,
+  loading: boolean,
+  error: any
+}
+
+class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
+  constructor(props: PropsVerifyMail) {
     super(props);
     this.state =
     {
@@ -70,7 +83,7 @@ class VerifyMail extends Component {
 	  });
   }
 
-  setEmail = (self, email) => {
+  setEmail = (self: VerifyMail, email: string) => {
     const matches = !checkMail(email);
     self.setState({email: email, matches: matches});
   }

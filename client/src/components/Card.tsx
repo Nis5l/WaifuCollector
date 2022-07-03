@@ -3,12 +3,12 @@ import ResizeText from './ResizeText'
 import "./Card.scss"
 
 type Props = {
-    title: string,
-    styleClassName: string,
-    icon: string,
-    iconNum: number,
-    onIconClick: () => void,
-    onClick: (event: any) => void,
+    title?: string,
+    styleClassName?: string,
+    icon?: string,
+    iconNum?: number,
+    onIconClick?: () => void,
+    onClick?: (event: any) => void,
     children: any
 };
 

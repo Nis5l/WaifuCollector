@@ -31,13 +31,16 @@ function App() {
 
   const [token, setToken] = useState(Cookies.get("token"));
 
-  let setTokenHandler = (newToken) => {
+  let setTokenHandler = (newToken: string) => {
 
     setToken(newToken);
 
     Cookies.set("token", newToken, {expires: 30 * 12 * 30})
 
   };
+
+  const userIDRaw: string | undefined = Cookies.get('userID');
+  const userID: number = parseInt(userIDRaw != null ? userIDRaw : "0");
 
   return (
 
@@ -93,18 +96,17 @@ function App() {
 
             <Route path="/inventory/:id">
 
-              {
-                !token ? <Redirect to="/login" /> :
-                  <Route
-                    render={(props) => <Inventory {...props} />}
-                  />
-              }
+              { !token ? <Redirect to="/login" /> : <Route component={Inventory} /> }
 
             </Route>
 
             <Route path="/inventory">
 
-              {!token ? <Redirect to="/login" /> : <Inventory userID={Cookies.get('userID')} />}
+              {!token ? <Redirect to="/login" /> : <Route
+                render={(props) => 
+                  ( <Inventory userID={userID} {...props} /> )
+                }
+              />}
 
             </Route>
 
@@ -172,7 +174,7 @@ function App() {
   );
 }
 
-function LogOut(props) {
+function LogOut(props: any) {
 
   useEffect(() => props.setToken(""));
 

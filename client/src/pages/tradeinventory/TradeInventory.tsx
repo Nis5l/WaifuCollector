@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import Inventory from '../inventory/Inventory'
-import {withRouter} from 'react-router-dom'
+import {RouteComponentProps, withRouter} from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import redirectIfNecessary from '../../components/Redirecter'
@@ -9,11 +9,27 @@ import Config from '../../config.json'
 
 import './TradeInventory.scss'
 
-class TradeInventory extends Component {
-  constructor(props) {
+interface TradeInventoryParams {
+  id: string | undefined
+}
+
+type PropsTradeInventory = RouteComponentProps<TradeInventoryParams> & {
+
+}
+
+type StateTradeInventory = {
+  loading: boolean,
+  error: any
+}
+
+class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory> {
+  private friendID: string = "";
+  
+  constructor(props: PropsTradeInventory) {
     super(props);
 
-    this.friendID = props.match.params.id;
+    const friendID = props.match.params.id;
+    if(friendID != null) this.friendID = friendID;
 
     this.state = {
       error: undefined,
@@ -21,7 +37,7 @@ class TradeInventory extends Component {
     }
   }
 
-  onCardClick(self, e, card) {
+  onCardClick(self: TradeInventory, e: any, card: any) {
     self.setState({loading: true});
 
 	const config =
@@ -39,13 +55,15 @@ class TradeInventory extends Component {
   }
 
   render() {
+    const userID = Cookies.get('userID');
+    
     return (
       <div className="tradeinventory_wrapper">
         {
           this.state.error === undefined &&
           < Inventory
             redirect={false}
-            userID={Cookies.get('userID')}
+            userID={parseInt(userID != null ? userID : "0")}
             friendID={this.friendID}
             loading={this.state.loading}
             onCardClick={(e, card) => {this.onCardClick(this, e, card)}}
