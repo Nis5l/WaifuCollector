@@ -10,7 +10,7 @@ use crate::config::Config;
 use crate::shared::{Id, util};
 use crate::{verify_user, verify_collector};
 
-#[get("/<collector_id>/pack/time")]
+#[get("/pack/<collector_id>/time")]
 pub async fn pack_time_route(sql: &State<Sql>, collector_id: Id, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackTimeResponse> {
     let user_id = token.id;
 

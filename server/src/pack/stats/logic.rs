@@ -8,7 +8,7 @@ use crate::sql::Sql;
 use crate::config::Config;
 use crate::verify_collector;
 
-#[get("/<collector_id>/pack/stats")]
+#[get("/pack/<collector_id>/stats")]
 pub async fn pack_stats_route(collector_id: Id, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<PackStatsPair>> {
     verify_collector!(sql, &collector_id);
 
