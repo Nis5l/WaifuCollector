@@ -16,7 +16,7 @@
 
     grid-template-areas: 
         "account packs friends"
-        "badges packs friends";
+        "achievements packs friends";
 
     .accountInfo{
 
@@ -108,9 +108,9 @@
 
     }
 
-    .badges{
+    .achievements{
 
-        grid-area: badges;
+        grid-area: achievements;
 
         .card-content
         {
@@ -234,7 +234,7 @@
 
         grid-template-areas: 
         "packs packs packs"
-        "account badges friends";
+        "account achievements friends";
 
     }
 
@@ -248,7 +248,7 @@
         grid-template-areas: 
         "packs"
         "account"
-        "badges"
+        "achievements"
         "friends";
 
     }
