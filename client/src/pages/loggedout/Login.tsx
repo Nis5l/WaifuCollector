@@ -8,8 +8,8 @@ import "./Login.scss"
 
 import Config from '../../config.json'
 import Cookies from 'js-cookie'
-import AuthContext from '../../context/AuthProvider'
 import User from '../../shared/User'
+import useAuth from '../../hooks/useAuth'
 
 type PropsLogin = {
     setToken: (token: string) => void
@@ -17,7 +17,7 @@ type PropsLogin = {
 
 function Login(props: PropsLogin) {
 
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth } = useAuth();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
