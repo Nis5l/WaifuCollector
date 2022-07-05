@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 
+import { AuthProvider } from './context/AuthProvider'
+
 import Navbar from './components/Navbar'
 
 import Home from './pages/home/Home'
@@ -46,128 +48,131 @@ function App() {
 
     <>
 
-      <Router>
+      <AuthProvider>
 
-        <Navbar token={token} />
+        <Router>
 
-        <main className="content">
+          <Navbar token={token} />
 
-          <Switch>
+          <main className="content">
 
-            <Route path="/" exact component={Home} />
-            <Route path="/privacy" component={Privacy} />
+            <Switch>
 
-            <Route
-              path="/login"
-            >
+              <Route path="/" exact component={Home} />
+              <Route path="/privacy" component={Privacy} />
 
-              {token ? <Redirect to="/dashboard" /> : <Login
-                setToken={setTokenHandler}
-              />
-              }
+              <Route
+                path="/login"
+              >
 
-            </Route>
-            <Route
-              path="/register"
-            >
-
-              {token ? <Redirect to="/dashboard" /> : <Register />}
-
-            </Route>
-
-            {/* Logged in User */}
-            <Route path="/dashboard">
-
-              {!token ? <Redirect to="/login" /> : <Route component={Dashboard} />}
-
-            </Route>
-
-            <Route path="/pack">
-
-              {!token ? <Redirect to="/login" /> : <Pack />}
-
-            </Route>
-
-            <Route path="/card/:id">
-
-              {!token ? <Redirect to="/login" /> : <Route component={CardPage} />}
-
-            </Route>
-
-            <Route path="/inventory/:id">
-
-              { !token ? <Redirect to="/login" /> : <Route component={Inventory} /> }
-
-            </Route>
-
-            <Route path="/inventory">
-
-              {!token ? <Redirect to="/login" /> : <Route
-                render={(props) => 
-                  ( <Inventory userID={userID} {...props} /> )
+                {token ? <Redirect to="/dashboard" /> : <Login
+                  setToken={setTokenHandler}
+                />
                 }
-              />}
 
-            </Route>
+              </Route>
+              <Route
+                path="/register"
+              >
 
-            <Route path="/tradeinventory/:id">
+                {token ? <Redirect to="/dashboard" /> : <Register />}
 
-              {!token ? <Redirect to="/login" /> : <Route component={TradeInventory} />}
+              </Route>
 
-            </Route>
+              {/* Logged in User */}
+              <Route path="/dashboard">
 
-            <Route path="/suggestcard/:id">
+                {!token ? <Redirect to="/login" /> : <Route component={Dashboard} />}
 
-              {!token ? <Redirect to="/login" /> : <Route component={SuggestInventory} />}
+              </Route>
 
-            </Route>
+              <Route path="/pack">
 
-            <Route path="/trade/:id">
+                {!token ? <Redirect to="/login" /> : <Pack />}
 
-              {!token ? <Redirect to="/login" /> : <Route component={Trade} />}
+              </Route>
 
-            </Route>
+              <Route path="/card/:id">
 
-            { /* Profile others */}
-            <Route path="/profile/:id" component={Profile} />
+                {!token ? <Redirect to="/login" /> : <Route component={CardPage} />}
 
-            <Route path="/logout">
+              </Route>
 
-              {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler} />}
+              <Route path="/inventory/:id">
 
-            </Route>
+                { !token ? <Redirect to="/login" /> : <Route component={Inventory} /> }
 
-            <Route path="/verify/mail">
+              </Route>
 
-              {!token ? <Redirect to="/login" /> : <Route component={VerifyMail} />}
+              <Route path="/inventory">
 
-            </Route>
+                {!token ? <Redirect to="/login" /> : <Route
+                  render={(props) => 
+                    ( <Inventory userID={userID} {...props} /> )
+                  }
+                />}
 
-            <Route path="/verify">
+              </Route>
 
-              {!token ? <Redirect to="/login" /> : <Route component={Verify} />}
+              <Route path="/tradeinventory/:id">
 
-            </Route>
+                {!token ? <Redirect to="/login" /> : <Route component={TradeInventory} />}
 
-            <Route path="/users" component={Users} />
+              </Route>
 
-            <Route path="/admin/users" component={Settings} />
+              <Route path="/suggestcard/:id">
 
-            <Route path="/settings" component={Settings} />
+                {!token ? <Redirect to="/login" /> : <Route component={SuggestInventory} />}
 
-            <Route path="/privacy" component={Privacy} />
+              </Route>
 
-            <Route path="/friends">
-              <Redirect to="dashboard" />
-            </Route>
+              <Route path="/trade/:id">
 
-            <Route component={NoMatch} />
+                {!token ? <Redirect to="/login" /> : <Route component={Trade} />}
 
-          </Switch>
+              </Route>
 
-        </main>
+              { /* Profile others */}
+              <Route path="/profile/:id" component={Profile} />
 
-      </Router>
+              <Route path="/logout">
+
+                {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler} />}
+
+              </Route>
+
+              <Route path="/verify/mail">
+
+                {!token ? <Redirect to="/login" /> : <Route component={VerifyMail} />}
+
+              </Route>
+
+              <Route path="/verify">
+
+                {!token ? <Redirect to="/login" /> : <Route component={Verify} />}
+
+              </Route>
+
+              <Route path="/users" component={Users} />
+
+              <Route path="/admin/users" component={Settings} />
+
+              <Route path="/settings" component={Settings} />
+
+              <Route path="/privacy" component={Privacy} />
+
+              <Route path="/friends">
+                <Redirect to="dashboard" />
+              </Route>
+
+              <Route component={NoMatch} />
+
+            </Switch>
+
+          </main>
+
+        </Router>
+      </AuthProvider>
 
     </>
 

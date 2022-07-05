@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import Card from '../../components/Card'
 import Logo from '../../components/Logo'
@@ -8,12 +8,16 @@ import "./Login.scss"
 
 import Config from '../../config.json'
 import Cookies from 'js-cookie'
+import AuthContext from '../../context/AuthProvider'
+import User from '../../shared/User'
 
 type PropsLogin = {
     setToken: (token: string) => void
 }
 
 function Login(props: PropsLogin) {
+
+    const { setAuth } = useContext(AuthContext);
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -63,6 +67,17 @@ function Login(props: PropsLogin) {
 					}).catch(err => {
 						console.log("Unexpected /user/:id/rank error");
 					});
+
+                console.log(res.data);
+
+                const userId: string = res.data.userId;
+                const username: string = res.data.username;
+                const role: number = res.data.role;
+                const token: string = res.data.token;
+
+                const user: User = { id: userId, username, role, token };
+
+                setAuth(user);
 
 				updateToken(res.data.token);
             }).catch(err => {

@@ -12,7 +12,7 @@ use super::sql;
 pub async fn login_route(data: LoginRequest, sql: &State<Sql>, config: &rocket::State<Config>) -> ApiResponseErr<LoginResponse> {
     //TODO: some sort of timeout
 
-    let LoginDb { id: user_id, username, password: password_hash } = if let Some(login_db) = rjtry!(sql::get_user_password(&sql, data.username).await) {
+    let LoginDb { id: user_id, username, password: password_hash, role: role } = if let Some(login_db) = rjtry!(sql::get_user_password(&sql, data.username).await) {
         login_db
     } else {
         return ApiResponseErr::api_err(Status::Unauthorized, String::from("Wrong username or password"));
@@ -25,7 +25,7 @@ pub async fn login_route(data: LoginRequest, sql: &State<Sql>, config: &rocket::
     }
 
     match jwt_sign_token(&username, &user_id, &config.jwt_secret) {
-        Ok(token) => ApiResponseErr::ok(Status::Ok, LoginResponse { token, user_id }),
+        Ok(token) => ApiResponseErr::ok(Status::Ok, LoginResponse { token, user_id, username, role }),
         Err(_) => ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
     }
 }

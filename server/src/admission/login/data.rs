@@ -15,12 +15,15 @@ pub struct LoginRequest {
 #[serde(rename_all="camelCase")]
 pub struct LoginResponse {
     pub token: String,
-    pub user_id: Id
+    pub user_id: Id,
+    pub username: String,
+    pub role: i8
 }
 
 #[derive(Debug, FromRow)]
 pub struct LoginDb {
     pub id: Id,
     pub username: String,
-    pub password: String
+    pub password: String,
+    pub role: i8
 }
