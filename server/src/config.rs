@@ -15,6 +15,9 @@ pub struct Config {
     pub username_len_min: u32,
     pub username_len_max: u32,
 
+    pub collector_len_min: u32,
+    pub collector_len_max: u32,
+
     pub password_len_min: u32,
     pub password_len_max: u32,
 
@@ -71,6 +74,9 @@ impl Default for Config {
 
             username_len_min: 4,
             username_len_max: 20,
+
+            collector_len_min: 4,
+            collector_len_max: 20,
 
             password_len_min: 8,
             password_len_max: 30,
