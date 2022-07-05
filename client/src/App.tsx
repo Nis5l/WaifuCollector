@@ -28,6 +28,7 @@ import Register from './pages/loggedout/Register'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
+import PrivateRoute from './components/PrivateRoute'
 
 function App() {
 
@@ -61,109 +62,66 @@ function App() {
               <Route path="/" exact component={Home} />
               <Route path="/privacy" component={Privacy} />
 
-              <Route
-                path="/login"
-              >
+              <Route path="/login">{token ? <Redirect to="/dashboard" /> : <Login setToken={setTokenHandler} />}</Route>
+              <Route path="/register">{token ? <Redirect to="/dashboard" /> : <Register />}</Route>
 
-                {token ? <Redirect to="/dashboard" /> : <Login
-                  setToken={setTokenHandler}
-                />
-                }
-
-              </Route>
-              <Route
-                path="/register"
-              >
-
-                {token ? <Redirect to="/dashboard" /> : <Register />}
-
-              </Route>
-
-              {/* Logged in User */}
-              <Route path="/dashboard">
-
-                {!token ? <Redirect to="/login" /> : <Route component={Dashboard} />}
-
-              </Route>
-
-              <Route path="/pack">
-
-                {!token ? <Redirect to="/login" /> : <Pack />}
-
-              </Route>
-
-              <Route path="/card/:id">
-
-                {!token ? <Redirect to="/login" /> : <Route component={CardPage} />}
-
-              </Route>
-
-              <Route path="/inventory/:id">
-
-                { !token ? <Redirect to="/login" /> : <Route component={Inventory} /> }
-
-              </Route>
-
-              <Route path="/inventory">
-
-                {!token ? <Redirect to="/login" /> : <Route
-                  render={(props) => 
-                    ( <Inventory userID={userID} {...props} /> )
-                  }
-                />}
-
-              </Route>
-
-              <Route path="/tradeinventory/:id">
-
-                {!token ? <Redirect to="/login" /> : <Route component={TradeInventory} />}
-
-              </Route>
-
-              <Route path="/suggestcard/:id">
-
-                {!token ? <Redirect to="/login" /> : <Route component={SuggestInventory} />}
-
-              </Route>
-
-              <Route path="/trade/:id">
-
-                {!token ? <Redirect to="/login" /> : <Route component={Trade} />}
-
-              </Route>
+              <Route path="/users" component={Users} />
 
               { /* Profile others */}
               <Route path="/profile/:id" component={Profile} />
 
-              <Route path="/logout">
+              {/* Logged in User */}
+              <PrivateRoute path="/dashboard">
+                <Route component={Dashboard} />
+              </PrivateRoute>
 
-                {!token ? <Redirect to="/login" /> : <LogOut setToken={setTokenHandler} />}
+              <PrivateRoute path="/pack">
+                <Pack />
+              </PrivateRoute>
 
-              </Route>
+              <PrivateRoute path="/card/:id">
+                <Route component={CardPage} />
+              </PrivateRoute>
 
-              <Route path="/verify/mail">
+              <PrivateRoute path="/inventory/:id">
+                <Route component={Inventory} />
+              </PrivateRoute>
 
-                {!token ? <Redirect to="/login" /> : <Route component={VerifyMail} />}
+              <PrivateRoute path="/inventory">
+                <Route
+                  render={(props) => 
+                    ( <Inventory userID={userID} {...props} /> )
+                  }
+                />
+              </PrivateRoute>
 
-              </Route>
+              <PrivateRoute path="/tradeinventory/:id">
+                <Route component={TradeInventory} />
+              </PrivateRoute>
 
-              <Route path="/verify">
+              <PrivateRoute path="/suggestcard/:id">
+                <Route component={SuggestInventory} />
+              </PrivateRoute>
 
-                {!token ? <Redirect to="/login" /> : <Route component={Verify} />}
+              <PrivateRoute path="/trade/:id">
+                <Route component={Trade} />
+              </PrivateRoute>
 
-              </Route>
+              <PrivateRoute path="/logout">
+                <LogOut setToken={setTokenHandler} />
+              </PrivateRoute>
 
-              <Route path="/users" component={Users} />
+              <PrivateRoute path="/verify/mail">
+                <Route component={VerifyMail} />
+              </PrivateRoute>
 
-              <Route path="/admin/users" component={Settings} />
+              <PrivateRoute path="/verify">
+                <Route component={Verify} />
+              </PrivateRoute>
 
-              <Route path="/settings" component={Settings} />
-
-              <Route path="/privacy" component={Privacy} />
-
-              <Route path="/friends">
-                <Redirect to="dashboard" />
-              </Route>
+              <PrivateRoute path="/settings">
+                <Settings />
+              </PrivateRoute>
 
               <Route component={NoMatch} />
 
