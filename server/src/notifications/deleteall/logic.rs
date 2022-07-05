@@ -14,11 +14,8 @@ pub async fn notifications_delete_all_route(sql: &State<Sql>, token: JwtToken, c
     let user_id = token.id;
 
     verify_user!(sql, &user_id, true);
-    match collector_id {
-        None => (),
-        Some(ref collector_id) => {
-           verify_collector!(sql,collector_id); 
-        }
+    if let Some(ref collector_id) = collector_id {
+        verify_collector!(sql, collector_id);
     };
 
     let deleted_notifications = rjtry!(sql::delete_all_notifications(sql, &user_id, &collector_id).await);

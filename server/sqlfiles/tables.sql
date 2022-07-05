@@ -45,8 +45,10 @@ CREATE TABLE notifications (
 
 CREATE TABLE collectors (
 	coid VARCHAR(10) NOT NULL,
+	uid VARCHAR(10) NOT NULL,
 	coname TEXT NOT NULL,
-	PRIMARY KEY (coid)
+	PRIMARY KEY (coid),
+	FOREIGN KEY (uid) REFERENCES users (uid)
 ) ENGINE = InnoDB;
 
 CREATE TABLE collectorfavorites (

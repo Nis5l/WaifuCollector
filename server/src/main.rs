@@ -7,8 +7,6 @@ use rocket::fairing::AdHoc;
 use sqlx::mysql::MySqlPoolOptions;
 use rocket::{get, routes};
 use rocket::fs::{FileServer, relative};
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
 mod user;
 mod sql;
@@ -22,6 +20,7 @@ mod pack;
 mod friend;
 mod trade;
 mod admin;
+mod collector;
 
 //DONE:
 // user
@@ -122,7 +121,9 @@ async fn rocket() -> _ {
            trade::time::trade_time_route,
 
            admin::log::admin_log_route,
-           admin::give::card::give_card_route
+           admin::give::card::give_card_route,
+
+           collector::create::create_collector_route,
         ])
         .mount(format!("/{}", &config.card_image_base), FileServer::from(relative!("static/card")))
         .mount(format!("/{}", &config.frame_image_base), FileServer::from(relative!("static/frame")))
