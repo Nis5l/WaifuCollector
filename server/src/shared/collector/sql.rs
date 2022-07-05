@@ -6,7 +6,7 @@ pub async fn collector_exists(sql: &Sql, collector_id: &Id) -> Result<bool, sqlx
     let mut con = sql.get_con().await?;
 
     let (count, ): (i32, ) = sqlx::query_as(
-        "SELECT COUNNT(*)
+        "SELECT COUNT(*)
          FROM collectors
          WHERE coid=?;")
         .bind(collector_id)
