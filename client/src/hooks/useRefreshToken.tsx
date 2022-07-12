@@ -1,5 +1,5 @@
+import jwtDecode from "jwt-decode";
 import axios from "../api/axios";
-import User from "../shared/User";
 import useAuth from "./useAuth";
 
 const useRefreshToken = () => {
@@ -16,9 +16,15 @@ const useRefreshToken = () => {
                 let ret = undefined;
                 try{
                     const response = await axios.get("/refresh");
-                    setAuth((prev: User) => {
-                        return { ...prev, role: response.data.role, token: response.data.accessToken };
-                    });
+                    const token = response.data.accessToken;
+
+                    let decoded: any = jwtDecode(token);
+
+                    const id = decoded.id;
+                    const username = decoded.username;
+
+                    setAuth({id, username, role: response.data.role, token });
+
                     ret = response.data.accessToken;
                 }catch(err){
                     setAuth(undefined);

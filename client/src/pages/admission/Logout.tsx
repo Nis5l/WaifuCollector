@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { removeRememberMe } from "../../utils/utils";
 
 function LogOut() {
     const axios = useAxiosPrivate();
@@ -13,6 +14,7 @@ function LogOut() {
         axios.post("/logout", {}).then(() => {
             setLoggedOut(true);
             setAuth(undefined);
+            removeRememberMe();
         });
     }, [ axios, setLoggedOut, setAuth ]);
   

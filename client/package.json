@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "js-cookie": "^2.2.1",
+    "jwt-decode": "^3.1.2",
     "little-loader": "^0.2.0",
     "moment": "^2.29.1",
     "normalize-url": "^6.1.0",

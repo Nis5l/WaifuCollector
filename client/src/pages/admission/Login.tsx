@@ -8,6 +8,7 @@ import "./Login.scss"
 import User from '../../shared/User'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import { setRememberMe } from '../../utils/utils'
 
 type PropsLogin = {}
 
@@ -17,6 +18,8 @@ function Login(props: PropsLogin) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [remember, setRemember] = useState(false);
+
     const [error, setError] = useState(undefined);
     const [disabled, setDisabled] = useState(true);
 
@@ -28,18 +31,10 @@ function Login(props: PropsLogin) {
     const axios = useAxiosPrivate();
 
     function validateForm() {
-
         return (username.length > 0) && (password.length > 0);
-
     }
 
     function handleSubmit(event: any) {
-
-        if (username === "admin" && password === "WaifuAdminx324!") {
-            history.push("adminpanel");
-            return;
-        }
-
         setError(undefined);
 
         event.preventDefault();
@@ -62,6 +57,8 @@ function Login(props: PropsLogin) {
                 const user: User = { id: userId, username, role, token };
 
                 setAuth(user);
+
+                setRememberMe(remember);
 
                 history.push("/dashboard");
             }).catch(err => {
@@ -119,6 +116,11 @@ function Login(props: PropsLogin) {
                         }
                     }
                 />
+
+                <label>
+                    <input type="checkbox" checked={remember} onChange={() => setRemember(!remember)} />
+                    Remember Me
+                </label>
 
                 <input className="button_input" type="submit" name="submit" value="Login" disabled={disabled} />
 

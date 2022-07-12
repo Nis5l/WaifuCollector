@@ -28,9 +28,13 @@ import VerifyMail from './pages/verifymail/VerifyMail'
 import PrivateRoute from './components/PrivateRoute'
 import useAuth from './hooks/useAuth'
 import LogOut from './pages/admission/Logout'
+import RememberMe from './components/RememberMe'
+import { getRememberMe } from './utils/utils'
+import { useState } from 'react'
 
 function App() {
   let { auth } = useAuth();
+  let [ remembered, setRemembered ] = useState(false);
 
   return (
 
@@ -39,86 +43,85 @@ function App() {
       <AuthProvider>
         <Router>
 
-          <Navbar/>
+          { getRememberMe() && !remembered ? <RememberMe remembered={() => setRemembered(true)} /> : ( <>
+            <Navbar/>
+            <main className="content">
+              <Switch>
+                <Route path="/" exact component={Home} />
+                <Route path="/privacy" component={Privacy} />
 
-          <main className="content">
+                <Route path="/login">{auth != null ? <Redirect to="/dashboard" /> : <Login/>}</Route>
+                <Route path="/register">{auth != null ? <Redirect to="/dashboard" /> : <Register />}</Route>
 
-            <Switch>
+                <Route path="/users" component={Users} />
 
-              <Route path="/" exact component={Home} />
-              <Route path="/privacy" component={Privacy} />
+                { /* Profile others */}
+                <Route path="/profile/:id" component={Profile} />
 
-              <Route path="/login">{auth != null ? <Redirect to="/dashboard" /> : <Login/>}</Route>
-              <Route path="/register">{auth != null ? <Redirect to="/dashboard" /> : <Register />}</Route>
+                {/* Logged in User */}
+                <PrivateRoute path="/dashboard">
+                  <Route component={Dashboard} />
+                </PrivateRoute>
 
-              <Route path="/users" component={Users} />
+                <PrivateRoute path="/pack">
+                  <Pack />
+                </PrivateRoute>
 
-              { /* Profile others */}
-              <Route path="/profile/:id" component={Profile} />
+                <PrivateRoute path="/card/:id">
+                  <Route component={CardPage} />
+                </PrivateRoute>
 
-              {/* Logged in User */}
-              <PrivateRoute path="/dashboard">
-                <Route component={Dashboard} />
-              </PrivateRoute>
+                <PrivateRoute path="/inventory/:id">
+                  <Route component={Inventory} />
+                </PrivateRoute>
 
-              <PrivateRoute path="/pack">
-                <Pack />
-              </PrivateRoute>
+                <PrivateRoute path="/inventory">
+                  <Route
+                    render={(props) => {
+                      return ( <Inventory {...props} /> )
+                    }
+                    }
+                  />
+                </PrivateRoute>
 
-              <PrivateRoute path="/card/:id">
-                <Route component={CardPage} />
-              </PrivateRoute>
+                <PrivateRoute path="/tradeinventory/:id">
+                  <Route component={TradeInventory} />
+                </PrivateRoute>
 
-              <PrivateRoute path="/inventory/:id">
-                <Route component={Inventory} />
-              </PrivateRoute>
+                <PrivateRoute path="/suggestcard/:id">
+                  <Route component={SuggestInventory} />
+                </PrivateRoute>
 
-              <PrivateRoute path="/inventory">
-                <Route
-                  render={(props) => {
-                    return ( <Inventory {...props} /> )
-                  }
-                  }
-                />
-              </PrivateRoute>
+                <PrivateRoute path="/trade/:id">
+                  <Route component={Trade} />
+                </PrivateRoute>
 
-              <PrivateRoute path="/tradeinventory/:id">
-                <Route component={TradeInventory} />
-              </PrivateRoute>
+                <PrivateRoute path="/logout">
+                  <LogOut />
+                </PrivateRoute>
 
-              <PrivateRoute path="/suggestcard/:id">
-                <Route component={SuggestInventory} />
-              </PrivateRoute>
+                <PrivateRoute path="/verify/mail">
+                  <Route component={VerifyMail} />
+                </PrivateRoute>
 
-              <PrivateRoute path="/trade/:id">
-                <Route component={Trade} />
-              </PrivateRoute>
+                <PrivateRoute path="/verify">
+                  <Route component={Verify} />
+                </PrivateRoute>
 
-              <PrivateRoute path="/logout">
-                <LogOut />
-              </PrivateRoute>
+                <PrivateRoute path="/settings">
+                  <Settings />
+                </PrivateRoute>
 
-              <PrivateRoute path="/verify/mail">
-                <Route component={VerifyMail} />
-              </PrivateRoute>
+                <PrivateRoute path="/admin" allowedRoles={[1]}>
+                  <h1>Admin</h1>
+                </PrivateRoute>
 
-              <PrivateRoute path="/verify">
-                <Route component={Verify} />
-              </PrivateRoute>
+                <Route component={NoMatch} />
 
-              <PrivateRoute path="/settings">
-                <Settings />
-              </PrivateRoute>
-
-              <PrivateRoute path="/admin" allowedRoles={[1]}>
-                <h1>Admin</h1>
-              </PrivateRoute>
-
-              <Route component={NoMatch} />
-
-            </Switch>
-
-          </main>
+              </Switch>
+            </main>
+            </> )
+          }
 
         </Router>
       </AuthProvider>
