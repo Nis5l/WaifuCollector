@@ -1,3 +1,4 @@
+use rocket::time::{OffsetDateTime, Duration};
 use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::{Status, Cookie, CookieJar, SameSite};
 use rocket::State;
@@ -33,11 +34,14 @@ pub async fn login_route(cookies: &CookieJar<'_>, data: LoginRequest, sql: &Stat
         Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
     };
 
+    let expires = OffsetDateTime::now_utc() + Duration::seconds(config.refresh_token_duration.into());
+
     let refresh_token_cookie: Cookie = Cookie::build("refresh_token", refresh_token.clone())
         .path("/")
         .same_site(SameSite::None)
         .secure(true)
         .http_only(true)
+        .expires(expires)
         .finish();
 
     rjtry!(sql::insert_refresh_token(&sql, &user_id, &refresh_token).await);
