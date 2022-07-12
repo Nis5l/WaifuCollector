@@ -10,7 +10,6 @@ import "./Home.scss"
 import "../../scss/effects.scss"
 
 import Config from '../../config.json'
-import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
 const WaifuCard = lazy(() => import('../../components/WaifuCard'));
 
@@ -19,13 +18,6 @@ const loading = () => <p>Loading...</p>
 function Home() {
 
     const [loadingState, setLoadingState] = useState(true);
-
-    const axiosPrivate = useAxiosPrivate();
-
-    const getNotifications = async () => {
-        if(!axiosPrivate) return;
-        const response = await axiosPrivate.get("/notifications/xxxxxxxxxx");
-    }
 
     return (
 
@@ -42,8 +34,6 @@ function Home() {
                 >
                     <PackGraph styleClassName="packGraph" onLoad={() => {setLoadingState(false)}} />
                 </Card>
-
-                <button onClick={() => getNotifications() }>Test</button>
 
                 <Foldable
                     title="Tutorial"
