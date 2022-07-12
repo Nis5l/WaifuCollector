@@ -1,19 +1,17 @@
 import {Component} from 'react'
 import Inventory from '../inventory/Inventory'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import redirectIfNecessary from '../../components/Redirecter'
 
-import Config from '../../config.json'
-
 import './TradeInventory.scss'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
 
 interface TradeInventoryParams {
   id: string | undefined
 }
 
-type PropsTradeInventory = RouteComponentProps<TradeInventoryParams> & {
+type PropsTradeInventory = RouteComponentProps<TradeInventoryParams> & AxiosPrivateProps & AuthProps & {
 
 }
 
@@ -40,22 +38,17 @@ class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory>
   onCardClick(self: TradeInventory, e: any, card: any) {
     self.setState({loading: true});
 
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
-
-    axios.post(`${Config.API_HOST}/trade/${this.friendID}/card/add/${card}`, {}, config)
-      .then(res => {
+    this.props.axios.post(`/trade/${this.friendID}/card/add/${card}`, {})
+      .then((res: any) => {
     	  self.props.history.push(`/trade/${this.friendID}`);
-      }).catch(err => {
+      }).catch((err: any) => {
           if (redirectIfNecessary(this.props.history, err)) return;
           self.setState({error: "Error: Internal Error"});
 	  });
   }
 
   render() {
-    const userID = Cookies.get('userID');
+    const userID = this.props.auth.id;
     
     return (
       <div className="tradeinventory_wrapper">
@@ -63,10 +56,10 @@ class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory>
           this.state.error === undefined &&
           < Inventory
             redirect={false}
-            userID={parseInt(userID != null ? userID : "0")}
+            userID={parseInt(userID != null ? userID : "")}
             friendID={this.friendID}
             loading={this.state.loading}
-            onCardClick={(e, card) => {this.onCardClick(this, e, card)}}
+            onCardClick={(e: any, card: any) => {this.onCardClick(this, e, card)}}
           />
         }
         {
@@ -77,4 +70,4 @@ class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory>
   }
 }
 
-export default withRouter(TradeInventory);
+export default withAxiosPrivate(withAuth(withRouter(TradeInventory)));

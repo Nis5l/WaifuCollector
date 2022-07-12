@@ -2,10 +2,6 @@ import React, {Component, createRef, RefObject} from 'react'
 
 import {YesNo} from './Popup'
 
-import axios from 'axios'
-import Config from '../config.json'
-import Cookies from 'js-cookie'
-
 import './Friendlist.scss'
 import ProfileName from './ProfileName'
 
@@ -14,19 +10,21 @@ import {RouteComponentProps, withRouter} from 'react-router-dom';
 import ThreeDotsMenu from './ThreeDotsMenu'
 
 import Scrollbar from './ScrollBar'
+import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
+import { withAsync } from '../hooks/useAsync';
 
 interface User {
-    userID: number,
+    userID: string,
     username: string
 }
 
-type PropsFriendlist = RouteComponentProps<any> & {
-    userID: number,
-    requests: boolean,
-    onFriendRequests: (len: number) => void,
-    onFriendData: (friends: any[]) => void,
-    decrementRequests: () => void,
-    lCallback: () => void
+type PropsFriendlist = RouteComponentProps<any> & AxiosPrivateProps & {
+    userID: string,
+    requests?: boolean,
+    onFriendRequests?: (len: number) => void,
+    onFriendData?: (friends: any[]) => void,
+    decrementRequests?: () => void,
+    lCallback?: () => void
 }
 
 type StateFriendlist = {
@@ -43,6 +41,8 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
     private lcounterMax: number;
 
     private resizeMethod: () => void;
+
+    public componentMounted: boolean = false;
 
     constructor(props: PropsFriendlist) {
         super(props);
@@ -65,10 +65,11 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
     }
 
     componentDidMount() {
+        this.componentMounted = true;
 
         async function loadFriends(self: Friendlist) {
 			try {
-				const response = await axios.get(`${Config.API_HOST}/user/${self.props.userID}/friends`);
+				const response = await self.props.axios.get(`/user/${self.props.userID}/friends`);
 				return response.data;
 			} catch (err) {
 				console.log("Unexpected /user/:id/friends error");
@@ -79,18 +80,17 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
         async function fetchData(self: Friendlist) {
 
             let friends = await loadFriends(self);
-
             const filteredFriends = friends.filter((friend: any) => friend.status === 0);
-
             if (self.props.onFriendRequests) {
                 const friendrqs = friends.filter((friend: any) => friend.status === 1);
-                self.setState({friendRequests: friendrqs});
+                if(self.componentMounted) self.setState({friendRequests: friendrqs});
                 self.props.onFriendRequests(friendrqs.length);
             }
 
-            self.setState({friends: filteredFriends});
-
-            self.incrementLCounter()
+            if(self.componentMounted){
+                self.setState({friends: filteredFriends});
+                self.incrementLCounter();
+            }
 
             if (self.props.onFriendData) self.props.onFriendData(friends);
         }
@@ -101,6 +101,7 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
     }
 
     componentWillUnmount() {
+        this.componentMounted = false;
         window.removeEventListener('resize', this.resizeMethod);
     }
 
@@ -109,16 +110,11 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
         if (this.lcounter === this.lcounterMax && this.props.lCallback) this.props.lCallback();
     }
 
-    deleteFriend(userID: number) {
-        const config =
-        {
-			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-        }
-
+    deleteFriend(userID: string) {
         const data = {
             userId: userID
         }
-        axios.post(`${Config.API_HOST}/friend/remove`, data, config);
+        this.props.axios.post(`/friend/remove`, data);
 
         for (let i = 0; i < this.state.friends.length; i++) {
             if (this.state.friends[i].userId === userID) {
@@ -137,21 +133,16 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
         }
     }
 
-    onDecline(userID: number) {
+    onDecline(userID: string) {
         this.deleteFriend(userID);
         if (this.props.decrementRequests) this.props.decrementRequests();
     }
 
-    onAccept(userID: number) {
-        const config =
-        {
-			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-        }
-
+    onAccept(userID: string) {
         const data = {
             userId: userID
         }
-        axios.post(`${Config.API_HOST}/friend/accept`, data, config);
+        this.props.axios.post(`/friend/accept`, data);
 
         for (let i = 0; i < this.state.friendRequests.length; i++) {
             if (this.state.friendRequests[i].userId === userID) {
@@ -182,9 +173,7 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
                                 userID={friend.userId}
                                 status={friend.status}
                                 username={friend.username}
-                                onDelete={(userID: number, username: string) => { this.setState({ deleteUser: { userID: userID, username: username } }) } }
-                                onAccept={function (userID: number): void {} }
-                                onDecline={function (userID: number): void {} }
+                                onDelete={(userID: string, username: string) => { this.setState({ deleteUser: { userID: userID, username: username } }) } }
                                 />
                         )
 
@@ -201,9 +190,8 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
                                 userID={friend.userId}
                                 status={friend.status}
                                 username={friend.username}
-                                onAccept={(userID: number) => this.onAccept(userID)}
-                                onDecline={(userID: number) => this.onDecline(userID)}
-                                onDelete={function (userID: number, username: string): void {} }
+                                onAccept={(userID: string) => this.onAccept(userID)}
+                                onDecline={(userID: string) => this.onDecline(userID)}
                                 />
                         )
 
@@ -244,13 +232,13 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
 }
 
 type PropsFriend = RouteComponentProps<any> & {
-    userID: number,
+    userID: string,
     username: string,
     status: number,
     avatar: string
-    onDelete: (userID: number, username: string) => void,
-    onAccept: (userID: number) => void,
-    onDecline: (userID: number) => void,
+    onDelete?: (userID: string, username: string) => void,
+    onAccept?: (userID: string) => void,
+    onDecline?: (userID: string) => void,
     
     history: any
 }
@@ -262,9 +250,9 @@ type StateFriend = {
 class Friend extends React.Component<PropsFriend, StateFriend> {
     
     private status: number;
-    private onDelete: (userID: number, username: string) => void;
-    private onAccept: (userID: number) => void;
-    private onDecline: (userID: number) => void;
+    private onDelete: (userID: string, username: string) => void;
+    private onAccept: (userID: string) => void;
+    private onDecline: (userID: string) => void;
 
     private resizeMethod: () => void;
 
@@ -274,10 +262,10 @@ class Friend extends React.Component<PropsFriend, StateFriend> {
         super(props);
 
         this.status = props.status;
-        this.onDelete = props.onDelete;
+        this.onDelete = props.onDelete != null ? props.onDelete : () => {};
 
-        this.onAccept = props.onAccept;
-        this.onDecline = props.onDecline;
+        this.onAccept = props.onAccept != null ? props.onAccept : () => {};
+        this.onDecline = props.onDecline != null ? props.onDecline : () => {};
 
         this.resizeMethod = () => {this.resize(this)};
 
@@ -302,7 +290,6 @@ class Friend extends React.Component<PropsFriend, StateFriend> {
 
     resize(self: Friend) {
         let username = self.props.username;
-         //username = "Test1231231231231231";
         if (this.friendlist.current.clientWidth <= 350) {
             if (this.friendlist.current.clientWidth <= 250) {
                 if (username.length > 11) username = username.slice(0, 8) + "...";
@@ -382,5 +369,5 @@ class Friend extends React.Component<PropsFriend, StateFriend> {
 
 const FriendComponent = withRouter(Friend);
 
-export default withRouter(Friendlist);
+export default withAxiosPrivate(withRouter(Friendlist));
 export {FriendComponent};

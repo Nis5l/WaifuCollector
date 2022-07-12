@@ -3,6 +3,7 @@ import {Badge} from './ProfileName'
 import Config from "../config.json"
 
 import './UserBanner.scss'
+import { Link } from 'react-router-dom'
 
 interface BadgeData {
     name: string,
@@ -66,7 +67,7 @@ class UserBanner extends Component<PropsUserBanner, StateUserBanner> {
             <div className="user_banner">
                 <img src="/assets/Icon.png" alt="Avatar" />
                 <div className="username">
-                    <a style={{overflow: "hidden"}} href={"/profile/" + this.state.userID}>{this.state.username}</a>
+                    <Link style={{overflow: "hidden"}} to={"/profile/" + this.state.userID}>{this.state.username}</Link>
                     <div className="badges">
                         {
                             this.state.badges.map((badge) => {

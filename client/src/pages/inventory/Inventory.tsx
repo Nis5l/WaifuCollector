@@ -1,6 +1,4 @@
 import React, {Component, RefObject} from 'react'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
@@ -11,13 +9,15 @@ import Loading from '../../components/Loading'
 
 import "./Inventory.scss"
 import Config from '../../config.json'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 
 interface InventoryParams{
   id: string | undefined
 }
 
-type PropsInventory = RouteComponentProps<InventoryParams> & {
-  userID: number,
+type PropsInventory = RouteComponentProps<InventoryParams> & AuthProps & AxiosPrivateProps & {
+  userID: string,
   friendID?: string,
   excludeSuggestions?: boolean,
   redirect?: boolean,
@@ -31,12 +31,14 @@ type StateInventory = {
   loading: boolean
 }
 
+const collectorID: string = "xxxxxxxxxx";
+
 class Inventory extends Component<PropsInventory, StateInventory> {
   private key: number;
   private page: number;
   private scrollpadding: number;
-  private userID: number;
-  private friendID: number;
+  private userID: string;
+  private friendID: string | undefined;
   private excludeSuggestions: boolean;
   private redirect: boolean;
 
@@ -62,13 +64,13 @@ class Inventory extends Component<PropsInventory, StateInventory> {
     this.key = 0;
     this.page = 0;
     this.scrollpadding = 500;
-    this.userID = props.userID;
-    const cookieUserID = Cookies.get("userID");
-    if (this.userID === undefined && this.props.match && this.props.match.params)
-      this.userID = this.props.match.params.id != null ? parseInt(this.props.match.params.id) : 0;
-    if (this.userID === undefined && cookieUserID != null) this.userID = parseInt(cookieUserID);
 
-    this.friendID = parseInt(props.friendID != null ? props.friendID : "0");
+    this.userID = props.userID;
+    if (this.userID === undefined && this.props.match && this.props.match.params)
+      this.userID = this.props.match.params.id != null ? this.props.match.params.id : "";
+    if ((this.userID === undefined || this.userID === "") && props.auth != null) this.userID = props.auth.id;
+
+    this.friendID = props.friendID;
     this.excludeSuggestions = this.props.excludeSuggestions === true;
 
     this.redirect =  props.redirect === false ? false : true;
@@ -116,8 +118,8 @@ class Inventory extends Component<PropsInventory, StateInventory> {
 		};
   }
 
-    axios.post(`${Config.API_HOST}/user/${this.userID}/inventory`, data)
-      .then(res => {
+    this.props.axios.post(`${Config.API_HOST}/user/${this.userID}/${collectorID}/inventory`, data)
+      .then((res: any) => {
         this.incrementLCounter();
 
         this.page++;
@@ -128,7 +130,7 @@ class Inventory extends Component<PropsInventory, StateInventory> {
         this.loadingCards = false;
         if (res.data.length === 0) this.hasMore = false;
         this.setState({cards: cards});
-      }).catch(err => {
+      }).catch((err: any) => {
           if (redirectIfNecessary(this.props.history, err)) return;
 		  if(err.response)
 			  this.setState({errorMessage: err.response.data.error});
@@ -223,4 +225,4 @@ class Inventory extends Component<PropsInventory, StateInventory> {
   }
 }
 
-export default withRouter(Inventory);
+export default withAxiosPrivate(withAuth(withRouter(Inventory)));

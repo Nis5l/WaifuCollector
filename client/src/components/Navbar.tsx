@@ -1,5 +1,4 @@
 import React, { Component, RefObject } from 'react'
-import Cookies from 'js-cookie'
 
 import NotificationBell from './NotificationBell'
 import Notifications from './Notifications'
@@ -17,62 +16,47 @@ import {
 import {Link} from 'react-router-dom'
 
 import './Navbar.scss'
+import { AuthProps, withAuth } from '../hooks/useAuth'
 
-type Props = {
+type Props = AuthProps & {
     token: string | undefined
 }
 
-class Navbar extends Component<Props> {
-    public props: Props = { token: "" };
-    public state: any;
-
+class Navbar extends Component<Props, any> {
     private box: RefObject<any>;
 
     constructor(props: Props) {
         super(props);
-        this.props = props;
-
         this.state =
         {
             mobile: false,
             toggled: false,
             notification: false,
             notifications: [],
-            rotatingSettings: false
+            rotatingSettings: false,
+
+            loggedIn: props.auth != null,
+            role: props.auth != null ? props.auth.role : 0
         };
 
         window.addEventListener('resize', () => this.handleResize());
-
         this.box = React.createRef();
-
     }
 
     handleResize() {
-
         let size = window.innerWidth;
-
         if (size < 576) {
-
             this.setState({collapsed: false, mobile: true});
-
         } else if (size < 1200) {
-
             this.setState({collapsed: true, mobile: false});
-
         } else {
-
             this.setState({collapsed: false, mobile: false});
-
         }
-
     }
 
     componentDidMount() {
-
         this.handleResize();
-
         document.addEventListener('mousedown', this.handleClickOutside);
-
     }
 
     componentWillUnmount() {
@@ -89,20 +73,22 @@ class Navbar extends Component<Props> {
     }
 
     toggleMenu() {
-
         let toggled = Object.assign({}, this.state.toggled);
-
         toggled = !this.state.toggled;
-
         this.setState({toggled});
+    }
 
+    componentDidUpdate(prevProps: Props){
+        if(prevProps.auth !== this.props.auth){
+            this.setState({
+                loggedIn: this.props.auth != null
+            });
+        }
     }
 
     render() {
         return (
-
             <div>
-
                 <div
                     className="blurbackground notification_wrapper"
                     style={{top: this.state.notification ? 0 : "-100vh"}}
@@ -117,11 +103,9 @@ class Navbar extends Component<Props> {
                 {(this.state.mobile && !this.state.toggled) && <i className="menu-toggle fas fa-bars" onClick={() => this.toggleMenu()}></i>}
 
                 <ProSidebar
-
                     collapsed={this.state.collapsed}
                     toggled={this.state.toggled}
                     ref={this.box}
-
                 >
 
                     <SidebarHeader>
@@ -146,9 +130,7 @@ class Navbar extends Component<Props> {
 
                     <SidebarContent>
                         <Menu iconShape="circle">
-
-                            {!this.props.token &&
-
+                            {!this.state.loggedIn &&
                                 <MenuItem
                                     icon={<i className="fas fa-sign-in-alt"></i>}
                                 >
@@ -158,13 +140,10 @@ class Navbar extends Component<Props> {
                                     >
                                         Login
                                     </Link>
-
                                 </MenuItem>
-
                             }
 
-                            {!this.props.token &&
-
+                            {!this.state.loggedIn &&
                                 <MenuItem
                                     icon={<i className="fas fa-registered"></i>}
                                 >
@@ -174,12 +153,11 @@ class Navbar extends Component<Props> {
                                     >
                                         Register
                                     </Link>
-
                                 </MenuItem>
 
                             }
 
-                            {this.props.token && <MenuItem
+                            {this.state.loggedIn && <MenuItem
                                 icon=
                                 {
                                     <NotificationBell notifications={this.state.notifications.length} />
@@ -193,7 +171,7 @@ class Navbar extends Component<Props> {
                                 </Link>
                             </MenuItem>}
 
-                            {this.props.token && <SubMenu
+                            {this.state.loggedIn && <SubMenu
                                 title="Dashboard"
                                 icon={<i className="fas fa-home"></i>}
                             >
@@ -231,7 +209,7 @@ class Navbar extends Component<Props> {
                                 </MenuItem>
                             </SubMenu>}
 
-                            {this.props.token && Cookies.get("rank") === "1" && <SubMenu
+                            {this.state.loggedIn && this.state.role === 1 && <SubMenu
                                 title="Adminpanel"
                                 icon={<i className="fas fa-user"></i>}
                             >
@@ -259,7 +237,7 @@ class Navbar extends Component<Props> {
                                 </Link>
                             </MenuItem>}
 
-                            {this.props.token && <MenuItem
+                            {this.state.loggedIn && <MenuItem
                                 icon={<i className="fas fa-sign-out-alt"></i>}
                             >
                                 <Link
@@ -273,15 +251,15 @@ class Navbar extends Component<Props> {
                         </Menu>
                     </SidebarContent>
 
-                    {this.props.token && <SidebarFooter style={{textAlign: 'center'}}>
+                    {this.state.loggedIn && <SidebarFooter style={{textAlign: 'center'}}>
                         <div
                             className="sidebar-btn-wrapper"
                             style={{
                                 padding: '20px 10px',
                             }}
                         >
-                            <a
-                                href="/settings"
+                            <Link
+                                to="/settings"
                                 className="sidebar-btn"
                                 rel="noopener noreferrer"
                             >
@@ -299,7 +277,7 @@ class Navbar extends Component<Props> {
                                     />
                                     <span>Settings</span>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </SidebarFooter>}
 
@@ -311,4 +289,4 @@ class Navbar extends Component<Props> {
     }
 }
 
-export default Navbar
+export default withAuth(Navbar);

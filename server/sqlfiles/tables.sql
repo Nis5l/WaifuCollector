@@ -8,6 +8,14 @@ CREATE TABLE users (
 	PRIMARY KEY (uid)
 ) ENGINE = InnoDB;
 
+CREATE TABLE refreshtokens (
+	uid VARCHAR(10) NOT NULL,
+	rtoken TEXT(500) NOT NULL,
+	PRIMARY KEY (uid, rtoken(500)),
+	FOREIGN KEY (uid) REFERENCES users(uid)
+	ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 CREATE TABLE friends (
 	frid INT AUTO_INCREMENT,
 	uidone VARCHAR(10) NOT NULL,

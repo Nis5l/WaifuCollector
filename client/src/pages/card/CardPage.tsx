@@ -1,10 +1,9 @@
 import React, {Component, RefObject} from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import {YesNo} from '../../components/Popup'
-import {RouteChildrenProps, RouteComponentProps, withRouter} from 'react-router-dom'
+import {RouteComponentProps, withRouter} from 'react-router-dom'
 import Scrollbar from '../../components/ScrollBar'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
@@ -12,12 +11,14 @@ import Loading from '../../components/Loading'
 import Config from '../../config.json'
 
 import './CardPage.scss'
+import { AxiosPrivateProps } from '../../hooks/useAxiosPrivate'
+import { AuthProps } from '../../hooks/useAuth'
 
 interface MatchParams {
   id: string | undefined
 }
 
-type PropsCardPage = RouteComponentProps<MatchParams> & {
+type PropsCardPage = RouteComponentProps<MatchParams> & AuthProps & AxiosPrivateProps & {
   history: any
 }
 
@@ -77,13 +78,13 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
   }
 
   componentDidMount() {
-    axios.get(`${Config.API_HOST}/card/${this.mainuuid}`)
-      .then(res => {
+    this.props.axios.get(`/card/${this.mainuuid}`)
+      .then((res: any) => {
         if (redirectIfNecessary(this.props.history, res.data)) return;
         this.incrementLCounter();
         parseCards([res.data]);
         this.setState({maincard: res.data});
-      }).catch(err => {
+      }).catch((err: any) => {
         this.setState({maincard: -1});
 	  });
 
@@ -113,8 +114,8 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
 		excludeUuids: [this.mainuuid]
 	};
 
-    axios.post(`${Config.API_HOST}/user/${Cookies.get('userID')}/inventory`, data)
-      .then(res => {
+    this.props.axios.post(`/user/${this.props.auth.id}/inventory`, data)
+      .then((res: any) => {
             this.incrementLCounter();
 
             parseCards(res.data);
@@ -129,7 +130,7 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
             if (res.data.length === 0) this.setState({hasMore: false});
             this.loadingCards = false;
         	this.setState({cards: cards});
-      }).catch(err => {
+      }).catch((err: any) => {
           redirectIfNecessary(this.props.history, err);
 	  });
   }
@@ -151,13 +152,7 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
     this.state.mainwaifucard.startUpgradeEffect();
     this.state.mainwaifucard.focusCard();
 
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
-
-    let data =
-    {
+    let data ={
       cardOne: this.mainuuid,
       cardTwo: this.state.upgradeId
     }
@@ -167,19 +162,19 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
     let newcard: any = undefined;
     let success: any = undefined;
 
-    axios.post(`${Config.API_HOST}/card/upgrade`, data, config)
-      .then(res => {
-		success = res.data.success;
-		axios.get(`${Config.API_HOST}/card/${res.data.card}`)
-		  .then(res => {
-			  parseCards([res.data]);
-			  newcard = res.data;
-		  }).catch(err => {
-			  this.setState({maincard: -1});
-		  });
-      }).catch(err => {
-		  redirectIfNecessary(this.props.history, err);
-	  });
+    this.props.axios.post(`${Config.API_HOST}/card/upgrade`, data)
+      .then((res: any) => {
+        success = res.data.success;
+       this.props.axios.get(`${Config.API_HOST}/card/${res.data.card}`)
+          .then((res: any) => {
+            parseCards([res.data]);
+            newcard = res.data;
+          }).catch((err: any) => {
+            this.setState({maincard: -1});
+          });
+        }).catch((err: any) => {
+          redirectIfNecessary(this.props.history, err);
+        });
 
     let startTimeout = (time: number) => {
       setTimeout(() => {

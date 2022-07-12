@@ -1,45 +1,40 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import Card from '../../components/Card'
 import Logo from '../../components/Logo'
-import axios from 'axios'
 
 import "./Login.scss"
 
-import Config from '../../config.json'
-import Cookies from 'js-cookie'
+import User from '../../shared/User'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import { setRememberMe } from '../../utils/utils'
 
-type PropsLogin = {
-    setToken: (token: string) => void
-}
+type PropsLogin = {}
 
 function Login(props: PropsLogin) {
 
+    const { setAuth } = useAuth();
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [remember, setRemember] = useState(false);
+
     const [error, setError] = useState(undefined);
     const [disabled, setDisabled] = useState(true);
 
     const [userwrong, setUserwrong] = useState(true);
     const [passwrong, setPasswrong] = useState(true);
 
-    const updateToken = (token: string) => props.setToken(token);
-
     const history = useHistory();
 
+    const axios = useAxiosPrivate();
+
     function validateForm() {
-
         return (username.length > 0) && (password.length > 0);
-
     }
 
     function handleSubmit(event: any) {
-
-        if (username === "admin" && password === "WaifuAdminx324!") {
-            history.push("adminpanel");
-            return;
-        }
-
         setError(undefined);
 
         event.preventDefault();
@@ -52,19 +47,20 @@ function Login(props: PropsLogin) {
             password: password
         };
 
-        axios.post(`${Config.API_HOST}/login`, user)
+        axios.post(`/login`, user)
             .then(res => {
-				Cookies.set("userID", res.data.userId, {expires: 30 * 12 * 30});
-				Cookies.set("token", res.data.token, {expires: 30 * 12 * 30});
+                const userId: string = res.data.userId;
+                const username: string = res.data.username;
+                const role: number = res.data.role;
+                const token: string = res.data.accessToken;
 
-				axios.get(`${Config.API_HOST}/user/${res.data.userId}/rank`)
-					.then((res) => {
-						Cookies.set("rank", res.data.rank);
-					}).catch(err => {
-						console.log("Unexpected /user/:id/rank error");
-					});
+                const user: User = { id: userId, username, role, token };
 
-				updateToken(res.data.token);
+                setAuth(user);
+
+                setRememberMe(remember);
+
+                history.push("/dashboard");
             }).catch(err => {
 				setError(err.response.data.error);
 			});
@@ -73,7 +69,7 @@ function Login(props: PropsLogin) {
     useEffect(() => {
         const dis = userwrong || passwrong;
         if (dis !== disabled) setDisabled(dis);
-    });
+    }, [disabled, passwrong, userwrong]);
 
     return (
 
@@ -120,6 +116,11 @@ function Login(props: PropsLogin) {
                         }
                     }
                 />
+
+                <label>
+                    <input type="checkbox" checked={remember} onChange={() => setRemember(!remember)} />
+                    Remember Me
+                </label>
 
                 <input className="button_input" type="submit" name="submit" value="Login" disabled={disabled} />
 

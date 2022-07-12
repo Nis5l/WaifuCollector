@@ -4,14 +4,13 @@ import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
 import Card from '../../components/Card'
 
-import Config from '../../config.json'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 
 import './Settings.scss'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
 
-type PropsSettings = RouteComponentProps & {};
+type PropsSettings = RouteComponentProps & AxiosPrivateProps & AuthProps & {};
 
 type StateSettings = {
   loading: boolean,
@@ -90,26 +89,20 @@ class Settings extends Component<PropsSettings, StateSettings> {
       passwordWrong: true
     });
 
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
-
     const data =
     {
     	newPassword: this.state.password
     }
 
-    axios.post(`${Config.API_HOST}/passchange`, data, config)
-      .then(res => {
+    this.props.axios.post(`/passchange`, data)
+      .then((res: any) => {
 	  	this.setState({passwordMessage: "Password changed!", passwordopen: false});
       })
   }
 
   render() {
     const disabled = this.state.passwordWrong || this.state.passwordRepeatWrong;
-    const userIDData: string | undefined = Cookies.get("userID");
-    const userID: number = parseInt(userIDData != null ? userIDData : "0");
+    const userID: string = this.props.auth.id;
     return (
       <div className="settings_wrapper">
         <Card
@@ -174,4 +167,4 @@ class Settings extends Component<PropsSettings, StateSettings> {
   }
 }
 
-export default withRouter(Settings);
+export default withAxiosPrivate(withAuth(withRouter(Settings)));
