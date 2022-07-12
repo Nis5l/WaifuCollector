@@ -1,4 +1,3 @@
-import React, {useState, useEffect} from 'react'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 
 import { AuthProvider } from './context/AuthProvider'
@@ -19,17 +18,16 @@ import Users from './pages/users/Users'
 import Settings from './pages/settings/Settings'
 import Privacy from './pages/privacy/Privacy'
 
-import Login from './pages/loggedout/Login'
-
-import Cookies from 'js-cookie'
+import Login from './pages/admission/Login'
 
 import './App.scss'
-import Register from './pages/loggedout/Register'
+import Register from './pages/admission/Register'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
 import PrivateRoute from './components/PrivateRoute'
 import useAuth from './hooks/useAuth'
+import LogOut from './pages/admission/Logout'
 
 function App() {
   let { auth } = useAuth();
@@ -128,22 +126,6 @@ function App() {
     </>
 
   );
-}
-
-function LogOut() {
-
-  //TODO: send axios logout request
-
-  Cookies.remove("refresh_token");
-
-  return (
-
-    <Redirect
-      to="/"
-    />
-
-  );
-
 }
 
 export default App;

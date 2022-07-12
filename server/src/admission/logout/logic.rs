@@ -1,6 +1,6 @@
 use chrono::Duration;
 use rocketjson::{ApiResponseErr};
-use rocket::http::{Status, CookieJar};
+use rocket::http::{Status, CookieJar, Cookie};
 use rocket::State;
 
 use crate::shared::crypto::jwt_util::JwtTokenError;
@@ -14,7 +14,7 @@ use super::sql;
 #[post("/logout")]
 pub async fn logout_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &rocket::State<Config>) -> ApiResponseErr<LogoutResponse> {
     let refresh_token_cookie = cookies.get("refresh_token").ok_or("");
-    let refresh_token = match(refresh_token_cookie) {
+    let refresh_token = match refresh_token_cookie {
         Ok(token) => token.value(),
         _ => return ApiResponseErr::api_err(Status::Unauthorized, String::from("No refresh token"))
     };
@@ -24,12 +24,14 @@ pub async fn logout_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &ro
             return  ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't parse refresh token"));
         },
         _ => {
-            match(sql::delete_refresh_token(&sql, refresh_token).await) {
+            match sql::delete_refresh_token(&sql, refresh_token).await {
                 Err(_) => return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't delete refresh token")),
                 Ok(_) => {}
             }
         }
     }
+
+    cookies.remove(Cookie::named("refresh_token"));
 
     ApiResponseErr::ok(Status::Ok, LogoutResponse { message: String::from("Logged out!") })
 }
