@@ -251,15 +251,15 @@ class Navbar extends Component<Props, any> {
                         </Menu>
                     </SidebarContent>
 
-                    {this.state.loggedInn && <SidebarFooter style={{textAlign: 'center'}}>
+                    {this.state.loggedIn && <SidebarFooter style={{textAlign: 'center'}}>
                         <div
                             className="sidebar-btn-wrapper"
                             style={{
                                 padding: '20px 10px',
                             }}
                         >
-                            <a
-                                href="/settings"
+                            <Link
+                                to="/settings"
                                 className="sidebar-btn"
                                 rel="noopener noreferrer"
                             >
@@ -277,7 +277,7 @@ class Navbar extends Component<Props, any> {
                                     />
                                     <span>Settings</span>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </SidebarFooter>}
 
