@@ -1,8 +1,5 @@
 import React, {Component, RefObject} from 'react'
 import Card from '../../components/Card'
-import axios from 'axios'
-import Config from '../../config.json'
-import Cookies from 'js-cookie'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import Scrollbar from '../../components/ScrollBar'
 import {YesNo, YesNoCancel} from '../../components/Popup'
@@ -13,6 +10,8 @@ import {formatTime} from '../../Utils'
 import moment from 'moment';
 
 import './Trade.scss'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 
 const suggestCardColor = "rgb(255 255 255 / 50%)";
 
@@ -20,7 +19,7 @@ interface TradeParams {
   id: string | undefined
 }
 
-type PropsTrade = RouteComponentProps<TradeParams> & {
+type PropsTrade = RouteComponentProps<TradeParams> & AuthProps & AxiosPrivateProps & {
 
 }
 
@@ -105,7 +104,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   componentWillReceiveProps(props: PropsTrade) {
-    if(this.friendid == props.match.params.id) return;
+    if(this.friendid === props.match.params.id) return;
 
     this.friendid = props.match.params.id;
 
@@ -136,13 +135,8 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   load() {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
-
-    axios.get(`${Config.API_HOST}/trade/${this.friendid}`, config)
-      .then(res => {
+    this.props.axios.get(`/trade/${this.friendid}`)
+      .then((res: any) => {
         this.incrementLCounter();
           parseCards(res.data.selfCards);
           parseCards(res.data.friendCards);
@@ -175,7 +169,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
               if (diff === 0) clearInterval(interval);
             }, 1000)
           }
-      }).catch(err => {
+      }).catch((err: any) => {
           if (redirectIfNecessary(this.props.history, err)) return;
           this.setState({found: false});
 	  });
@@ -223,10 +217,6 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   cardOwnRemove = () => {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
 
     for (let i = 0; i < this.state.cards.length; i++) {
       if (this.state.cards[i].id === this.state.removeId) {
@@ -235,8 +225,8 @@ class Trade extends Component<PropsTrade, StateTrade> {
       }
     }
 
-    axios.post(`${Config.API_HOST}/trade/${this.friendid}/card/remove/${this.state.removeId}`, {}, config)
-      .then(res => {
+    this.props.axios.post(`/trade/${this.friendid}/card/remove/${this.state.removeId}`, {})
+      .then((res: any) => {
         this.load()
       });
 
@@ -253,10 +243,6 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   cardSuggestionFriendRemove = () => {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
 
     for (let i = 0; i < this.state.friendCardSuggestions.length; i++) {
       if (this.state.friendCardSuggestions[i].id === this.state.removeFriendSuggestionId) {
@@ -265,10 +251,10 @@ class Trade extends Component<PropsTrade, StateTrade> {
       }
     }
 
-    axios.post(`${Config.API_HOST}/trade/${this.friendid}/suggestion/remove/${this.state.removeFriendSuggestionId}`, {}, config)
-      .then((res) => {
+    this.props.axios.post(`/trade/${this.friendid}/suggestion/remove/${this.state.removeFriendSuggestionId}`, {})
+      .then((res: any) => {
         this.load()
-      }).catch(err => {
+      }).catch((err: any) => {
         if (redirectIfNecessary(this.props.history, err)) return;
 	  });
 
@@ -280,10 +266,6 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   cardSuggestionYes = () => {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
 
     for (let i = 0; i < this.state.cardSuggestions.length; i++) {
       if (this.state.cardSuggestions[i].id === this.state.removeSuggestionId) {
@@ -293,10 +275,10 @@ class Trade extends Component<PropsTrade, StateTrade> {
       }
     }
 
-    axios.post(`${Config.API_HOST}/trade/${this.friendid}/card/add/${this.state.removeSuggestionId}`, {}, config)
-      .then(res => {
+    this.props.axios.post(`/trade/${this.friendid}/card/add/${this.state.removeSuggestionId}`, {})
+      .then((res: any) => {
         this.load()
-      }).catch(err => {
+      }).catch((err: any) => {
         redirectIfNecessary(this.props.history, err);
 	  });
 
@@ -305,10 +287,6 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   cardSuggestionNo = () => {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
 
     for (let i = 0; i < this.state.cardSuggestions.length; i++) {
       if (this.state.cardSuggestions[i].id === this.state.removeSuggestionId) {
@@ -317,10 +295,10 @@ class Trade extends Component<PropsTrade, StateTrade> {
       }
     }
 
-    axios.post(`${Config.API_HOST}/trade/${this.friendid}/suggestion/remove/${this.state.removeSuggestionId}`, {}, config)
-      .then(res => {
+    this.props.axios.post(`/trade/${this.friendid}/suggestion/remove/${this.state.removeSuggestionId}`, {})
+      .then((res: any) => {
         this.load()
-      }).catch(err => {
+      }).catch((err: any) => {
         redirectIfNecessary(this.props.history, err);
 	  });
 
@@ -328,17 +306,13 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   confirm = () => {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
 
     this.setState({confirmed: 1}, this.setInfo);
 
-    axios.post(`${Config.API_HOST}/trade/${this.friendid}/confirm`, {}, config)
-      .then(res => {
+    this.props.axios.post(`/trade/${this.friendid}/confirm`, {})
+      .then((res: any) => {
         this.load();
-      }).catch(err => {
+      }).catch((err: any) => {
     	redirectIfNecessary(this.props.history, err);
 	  });
   }
@@ -526,4 +500,4 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 }
 
-export default withRouter(Trade);
+export default withAuth(withAxiosPrivate(withRouter(Trade)));

@@ -1,4 +1,5 @@
 use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::hyper::request;
 use rocket::http::{Header, Method, Status};
 use rocket::{Request, Response};
 
@@ -24,8 +25,21 @@ pub struct CORS;
                 "content-type, authorization",
             ));
         }
-        response.set_header(Header::new("Access-Control-Allow-Origin", "*"));
-        response.set_header(Header::new("Access-Control-Allow-Credentials", "true"));
-        response.set_header(Header::new("Vary", "Origin"));
+
+        let allowed_origins: Vec<String> = vec![
+            String::from("localhost:81")
+        ];
+
+        let origin = match(request.headers().get_one("origin")){
+            Some(origin)=>origin,
+            None => ""
+        };
+
+        //TODO: FILL LIST WITH ALLOWED ORIGINS
+        if allowed_origins.contains(&String::from(origin)) || true {
+            response.set_header(Header::new("Access-Control-Allow-Origin", origin));
+            response.set_header(Header::new("Access-Control-Allow-Credentials", "true"));
+            response.set_header(Header::new("Vary", "Origin"));
+        }
     }
 }

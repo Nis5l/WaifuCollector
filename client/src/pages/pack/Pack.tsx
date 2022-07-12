@@ -1,16 +1,14 @@
 import {Component} from 'react'
-import axios from 'axios'
 import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
-import Cookies from 'js-cookie'
 import { RouteComponentProps, withRouter} from 'react-router-dom'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 
-import Config from '../../config.json'
 
 import './Pack.scss'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 
-type PropsPack = RouteComponentProps & {
+type PropsPack = RouteComponentProps & AxiosPrivateProps & {
     history: any
 }
 
@@ -18,6 +16,8 @@ type StatePack = {
     loading: boolean,
     cards: any[]
 }
+
+const collector: string = "xxxxxxxxxx";
 
 class Pack extends Component<PropsPack, StatePack> {
     private key: number;
@@ -38,19 +38,14 @@ class Pack extends Component<PropsPack, StatePack> {
     }
 
     componentDidMount() {
-        const config =
-        {
-			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-        }
-
-        axios.post(`${Config.API_HOST}/pack/open`, {}, config)
-            .then(res => {
+        this.props.axios.post(`${collector}/pack/open`, {})
+            .then((res: any) => {
                 this.setState({loading: false});
 
 				let cards = res.data.cards;
 				parseCards(cards);
 				this.setState({cards: cards});
-            }).catch(err => {
+            }).catch((err: any) => {
                 if(redirectIfNecessary(this.props.history, err)) return;
 				this.props.history.push('/dashboard');
 			});
@@ -129,4 +124,4 @@ class Pack extends Component<PropsPack, StatePack> {
     }
 }
 
-export default withRouter(Pack);
+export default withAxiosPrivate(withRouter(Pack));

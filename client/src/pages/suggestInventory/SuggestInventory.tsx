@@ -1,19 +1,17 @@
 import {Component} from 'react'
 import Inventory from '../inventory/Inventory'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import redirectIfNecessary from '../../components/Redirecter'
 
-import Config from '../../config.json'
-
 import './SuggestInventory.scss'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
 
 interface SuggestInventoryParams {
   id: string | undefined
 }
 
-type PropsSuggestInventory = RouteComponentProps<SuggestInventoryParams> & {
+type PropsSuggestInventory = RouteComponentProps<SuggestInventoryParams> & AxiosPrivateProps & AuthProps & {
 
 }
 
@@ -23,12 +21,12 @@ type StateSuggestInventory = {
 }
 
 class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInventory> {
-  private friendID: number;
+  private friendID: string;
 
   constructor(props: PropsSuggestInventory) {
     super(props);
 
-    this.friendID = parseInt(props.match.params.id ? props.match.params.id : "0");
+    this.friendID = props.match.params.id != null ? props.match.params.id : "";
 
     this.state = {
       error: undefined,
@@ -38,15 +36,12 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
 
   onCardClick(self: SuggestInventory, e: any, card: any) {
     self.setState({loading: true});
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
-    axios.post(`${Config.API_HOST}/trade/${this.friendID}/suggestion/add/${card}`, {}, config)
-      .then(res => {
+
+    this.props.axios.post(`/trade/${this.friendID}/suggestion/add/${card}`, {})
+      .then((res: any) => {
         this.setState({loading: false});
-		self.props.history.push(`/trade/${this.friendID}`);
-      }).catch(err => {
+		    self.props.history.push(`/trade/${this.friendID}`);
+      }).catch((err: any) => {
         if (redirectIfNecessary(this.props.history, err)) return 1;
 
 		if(err.response.data.error)
@@ -57,8 +52,7 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
   }
 
   render() {
-    const userIDData = Cookies.get("userID");
-    const userID: string = userIDData != null ? userIDData : "0";
+    const userID: string = this.props.auth != null ? this.props.auth.id : "";
 
     return (
       <div className="tradeinventory_wrapper">
@@ -70,7 +64,7 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
             userID={this.friendID}
             friendID={userID}
             excludeSuggestions={true}
-            onCardClick={(e, card) => {this.onCardClick(this, e, card)}}
+            onCardClick={(e: any, card: any) => {this.onCardClick(this, e, card)}}
           />
         }
         {
@@ -81,4 +75,4 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
   }
 }
 
-export default withRouter(SuggestInventory);
+export default withAxiosPrivate(withAuth(withRouter(SuggestInventory)));

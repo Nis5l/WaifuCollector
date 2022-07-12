@@ -1,15 +1,14 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import Card from '../../components/Card'
 import {WaifuCardLoad} from '../../components/WaifuCard'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 
-import Config from '../../config.json'
 import Cookies from 'js-cookie'
-import axios from 'axios'
-import {RouteChildrenProps, RouteComponentProps, withRouter} from 'react-router-dom'
+import {RouteComponentProps, withRouter} from 'react-router-dom'
 
 import './Verify.scss'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 
 function queryString(queryString: string) {
   var query: Map<string, string> = new Map<string, string>();
@@ -21,7 +20,7 @@ function queryString(queryString: string) {
   return query;
 }
 
-type PropsVerify = RouteComponentProps & {
+type PropsVerify = RouteComponentProps & AxiosPrivateProps & {
 
 }
 
@@ -56,38 +55,33 @@ class Verify extends Component<PropsVerify, StateVerify> {
   }
 
   componentDidMount() {
-    const config =
-    {
-      headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-    }
-
-    axios.post(`${Config.API_HOST}/verify/confirm/${this.key}`, {}, config)
-      .then(res => {
+    this.props.axios.post(`/verify/confirm/${this.key}`, {})
+      .then((res: any) => {
 	    this.props.history.push('/dashboard');
-      }).catch(err => {
-		console.log("Unexpected /verify/confirm/:key error");
-	  }).finally(() => {
-        this.incrementLCounter();
-	  });
+      }).catch((err: any) => {
+		    console.log("Unexpected /verify/confirm/:key error");
+      }).finally(() => {
+          this.incrementLCounter();
+      });
 
-    axios.get(`${Config.API_HOST}/verify/check`, config)
-      .then((res) => {
-    	  this.incrementLCounter();
-          switch (res.data.verified) {
-            case 1:
-              this.setState({mail: res.data.email});
-              break;
+    this.props.axios.get(`/verify/check`)
+      .then((res: any) => {
+          this.incrementLCounter();
+            switch (res.data.verified) {
+              case 1:
+                this.setState({mail: res.data.email});
+                break;
 
-            case 2:
-              this.props.history.push('/verify/mail');
-              break;
+              case 2:
+                this.props.history.push('/verify/mail');
+                break;
 
-            default:
-              this.props.history.push('/dashboard');
-          }
-      }).catch(err => {
-		console.log("Unexpected /verify/check error");
-	  });
+              default:
+                this.props.history.push('/dashboard');
+            }
+      }).catch((err: any) => {
+          console.log("Unexpected /verify/check error");
+      });
     this.startTimer();
   }
 
@@ -125,29 +119,20 @@ class Verify extends Component<PropsVerify, StateVerify> {
     const mail = this.state.mail;
     this.setState({mail: undefined});
 
-    const config =
-    {
-      headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-    }
-
-    axios.post(`${Config.API_HOST}/verify/resend`, {}, config)
-      .then(res => {
-		  this.setState({mail: mail});
-		  let t = new Date();
-		  t.setSeconds(t.getSeconds() + 30);
-		  Cookies.set('resenttimeout', t.toString());
-		  this.startTimer();
+    this.props.axios.post(`/verify/resend`, {})
+      .then((res: any) => {
+        this.setState({mail: mail});
+        let t = new Date();
+        t.setSeconds(t.getSeconds() + 30);
+        Cookies.set('resenttimeout', t.toString());
+        this.startTimer();
       })
   }
 
   delete = () => {
     this.setState({mail: undefined});
-    const config =
-    {
-      headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-    }
-    axios.post(`${Config.API_HOST}/email/delete`, {}, config)
-      .then(res => {
+    this.props.axios.post(`/email/delete`, {})
+      .then((res: any) => {
          this.props.history.push('/verify/mail');
       })
   }
@@ -185,4 +170,4 @@ class Verify extends Component<PropsVerify, StateVerify> {
   }
 }
 
-export default withRouter(Verify);
+export default withRouter(withAxiosPrivate(Verify));

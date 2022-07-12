@@ -8,6 +8,8 @@ pub struct Config {
     pub jwt_secret: String,
     //seconds
     pub jwt_duration: u32,
+    pub refresh_token_secret: String,
+    pub refresh_token_duration: u32,
     pub domain: String,
     pub verification_key_length: usize,
     pub id_length: usize,
@@ -59,12 +61,17 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            port: 80,
+            port: 81,
             address: String::from("0.0.0.0"),
 
             //NOTE: important to change
             jwt_secret: String::from("CHANGE_THE_SECRET"),
-            jwt_duration: 2678400,
+            //jwt_duration: 60 * 15,
+            jwt_duration: 20,
+
+            refresh_token_secret: String::from("CHANGE_THE_SECRET"),
+            refresh_token_duration: 60 * 60 * 24,
+
             domain: String::from("https://waifucollector.com"),
             verification_key_length: 20,
             id_length: 10,

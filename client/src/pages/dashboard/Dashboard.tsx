@@ -1,18 +1,14 @@
-import Cookies from 'js-cookie'
-import React, {Component, lazy, Suspense} from 'react'
+import {Component, lazy, Suspense} from 'react'
 
 import Card from '../../components/Card';
-import Badges from '../../components/Achievements';
-import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 
-import axios from 'axios'
-import Config from '../../config.json'
-
 import "./Dashboard.scss"
 import Achievements from '../../components/Achievements';
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate';
+import { AuthProps, withAuth } from '../../hooks/useAuth';
 
 const Friendlist = lazy(() => import('../../components/Friendlist'));
 const PackProgressRing = lazy(() => import('../../components/PackProgressRing'));
@@ -20,12 +16,12 @@ const ProfileName = lazy(() => import('../../components/ProfileName'));
 
 const loading = () => <p>Loading...</p>
 
-type PropsDashboard = RouteComponentProps & {
+type PropsDashboard = RouteComponentProps & AxiosPrivateProps & AuthProps & {
 
 }
 
 type StateDashboard = {
-    userID: string | undefined,
+    userID: string,
     friends: number,
     maxFriends: number,
     cards: number,
@@ -38,9 +34,13 @@ type StateDashboard = {
     requests: boolean
 }
 
+const collectorID: string = "xxxxxxxxxx";
+
 class Dashboard extends Component<PropsDashboard, StateDashboard> {
     private lcounter: number;
     private lcounterMax: number;
+
+    public componentMounted: boolean = false;
 
     constructor(props: PropsDashboard) {
         super(props);
@@ -50,7 +50,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
         this.state =
         {
-            userID: Cookies.get('userID'),
+            userID: this.props.auth != null ? this.props.auth.id : "",
             friends: 0,
             maxFriends: 0,
             cards: 0,
@@ -65,10 +65,10 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
     }
 
     componentDidMount() {
-
-        async function loadStats(self: Dashboard, userID: number) {
+        this.componentMounted = true;
+        async function loadStats(self: Dashboard, userID: string) {
 			try {
-				const response = await axios.get(`${Config.API_HOST}/user/${userID}/stats`);
+				const response = await self.props.axios.get(`/user/${userID}/stats`);
 				return response.data;
 			} catch (err) {
 				return [];
@@ -78,20 +78,15 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
         async function updateStats(self: Dashboard) {
             if(self.state.userID == null) return;
 
-            const stats = await loadStats(self, parseInt(self.state.userID));
+            const stats = await loadStats(self, self.state.userID);
+            if(!self.componentMounted) return;
 
             self.incrementLCounter(self);
-
             self.setState(stats);
         }
 
-        const config =
-        {
-			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-        }
-
-        axios.get(`${Config.API_HOST}/verify/check`, config)
-            .then(res => {
+        this.props.axios.get(`/verify/check`)
+            .then((res: any) => {
 				switch (res.data.verified) {
 					case 1:
 						this.props.history.push('/verify');
@@ -100,13 +95,18 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 						this.props.history.push('/verify/mail');
 						break;
 					default:
+                        break;
 				}
-            }).catch(err => {
+            }).catch((err: any) => {
 				console.log("Unexpected /verify/check error");
 			});;
 
         updateStats(this);
 
+    }
+
+    componentWillUnmount(){
+        this.componentMounted = false;
     }
 
     friendPopup(self: Dashboard) {
@@ -115,7 +115,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
     incrementLCounter(self: Dashboard) {
         self.lcounter++;
-        if (self.lcounter == self.lcounterMax) self.setState({loading: false});
+        if (self.lcounter === self.lcounterMax) self.setState({loading: false});
     }
 
     render() {
@@ -128,9 +128,6 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
                 <Card
                     title="Account Info"
                     styleClassName="accountInfo"
-                    icon={''} iconNum={0}
-                    onIconClick={function (): void {} }
-                    onClick={function (event: any): void {} }
                     >
 
                     <div className="avatar">
@@ -143,8 +140,9 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
                         <Suspense fallback={loading()}>
                             <ProfileName
-                                userID={this.state.userID != null ? parseInt(this.state.userID) : 0}
-                                lCallback={() => { this.incrementLCounter(this); } } username={''} badges={undefined}                            />
+                                userID={this.state.userID != null ? this.state.userID : ""}
+                                lCallback={() => { this.incrementLCounter(this); } }
+                            />
                         </Suspense>
 
                     </div>
@@ -205,12 +203,14 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
                         <Suspense fallback={loading()}>
                             <PackProgressRing
+                                collectorID={collectorID}
                                 className="pack1"
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
                         </Suspense>
                         {false && <Suspense fallback={loading()}>
                             <PackProgressRing
+                                collectorID={collectorID}
                                 className="pack2"
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
@@ -227,16 +227,14 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
                         icon={this.state.requests ? "fa-user-friends" : "fa-user"}
                         iconNum={this.state.requests ? 0 : this.state.friendRequests}
                         onIconClick={() => { this.setState({ requests: !this.state.requests }); } }
-                        onClick={function (event: any): void {} }
                     >
                         <Suspense fallback={loading()}>
                             <Friendlist
-                                userID={this.state.userID != null ? parseInt(this.state.userID) : 0}
+                                userID={this.state.userID != null ? this.state.userID : ""}
                                 lCallback={() => { this.incrementLCounter(this); } }
-                                onFriendRequests={(count) => { this.setState({ friendRequests: count }); } }
+                                onFriendRequests={(count: number) => { if(this.componentMounted) { this.setState({ friendRequests: count }); } } }
                                 requests={this.state.requests}
-                                decrementRequests={() => { this.setState({ friendRequests: this.state.friendRequests - 1 }); } }
-                                onFriendData={function (friends: any[]): void {} }
+                                decrementRequests={() => { if(this.componentMounted) { this.setState({ friendRequests: this.state.friendRequests - 1 }); } } }
                             />
                         </Suspense>
 
@@ -249,4 +247,4 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
     }
 }
 
-export default withRouter(Dashboard);
+export default withAuth(withAxiosPrivate(withRouter(Dashboard)));

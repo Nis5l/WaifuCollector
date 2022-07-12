@@ -1,17 +1,14 @@
 import React, {Component, useState} from 'react'
-import {useHistory, withRouter, Redirect, RouteComponentProps} from 'react-router-dom'
+import {useHistory, withRouter, RouteComponentProps} from 'react-router-dom'
 import Card from './Card'
 import Scrollbar from './ScrollBar'
 import redirectIfNecessary from './Redirecter'
-
-import axios from 'axios'
-import Cookies from 'js-cookie'
-import Config from '../config.json'
 
 import DoneIcon from '@material-ui/icons/Done';
 import {timeSince} from '../Utils'
 
 import "./Notifications.scss"
+import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
 
 type PropsNotification = {
     id: number,
@@ -90,7 +87,7 @@ function Notification(props: PropsNotification) {
 
 }
 
-type PropsNotifications = RouteComponentProps & {
+type PropsNotifications = RouteComponentProps & AxiosPrivateProps & {
     onNotifications: (notifications: any) => void,
     onHide: () => void,
     history: any
@@ -112,29 +109,19 @@ class Notifications extends Component<PropsNotifications, StateNotifications>{
     }
 
     componentDidMount() {
-        const config =
-        {
-			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-        }
-
-        axios.get(`${Config.API_HOST}/notifications`, config)
-            .then((res) => {
+        this.props.axios.get(`/notifications`)
+            .then((res: any) => {
 				res.data.notifications.reverse();
 				this.setState({notifications: res.data.notifications});
 				if (this.props.onNotifications) this.props.onNotifications(res.data.notifications);
-            }).catch(err => {
-				if(err.request.status != 401) {
+            }).catch((err: any) => {
+				if(err.request.status !== 401) {
 					console.log("Unexpected /notifications error");
 				}
 			});
     }
 
     remove(id: number) {
-        const config =
-        {
-			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-        }
-
         for (let i = 0; i < this.state.notifications.length; i++) {
             if (this.state.notifications[i].id === id) {
                 this.state.notifications.splice(i, 1);
@@ -146,7 +133,7 @@ class Notifications extends Component<PropsNotifications, StateNotifications>{
         if (this.props.onNotifications) this.props.onNotifications(this.state.notifications);
         this.setState({notifications: [...this.state.notifications]});
 
-        axios.post(`${Config.API_HOST}/notifications/delete/${id}`, {}, config).catch(err => {
+        this.props.axios.post(`/notifications/delete/${id}`, {}).catch((err: any) => {
 			redirectIfNecessary(this.props.history, err);
 		});
     }
@@ -189,4 +176,4 @@ class Notifications extends Component<PropsNotifications, StateNotifications>{
     }
 }
 
-export default withRouter(Notifications);
+export default withAxiosPrivate(withRouter(Notifications));

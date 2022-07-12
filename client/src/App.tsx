@@ -29,31 +29,19 @@ import Register from './pages/loggedout/Register'
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
 import PrivateRoute from './components/PrivateRoute'
+import useAuth from './hooks/useAuth'
 
 function App() {
-
-  const [token, setToken] = useState(Cookies.get("token"));
-
-  let setTokenHandler = (newToken: string) => {
-
-    setToken(newToken);
-
-    Cookies.set("token", newToken, {expires: 30 * 12 * 30})
-
-  };
-
-  const userIDRaw: string | undefined = Cookies.get('userID');
-  const userID: number = parseInt(userIDRaw != null ? userIDRaw : "0");
+  let { auth } = useAuth();
 
   return (
 
     <>
 
       <AuthProvider>
-
         <Router>
 
-          <Navbar token={token} />
+          <Navbar/>
 
           <main className="content">
 
@@ -62,8 +50,8 @@ function App() {
               <Route path="/" exact component={Home} />
               <Route path="/privacy" component={Privacy} />
 
-              <Route path="/login">{token ? <Redirect to="/dashboard" /> : <Login setToken={setTokenHandler} />}</Route>
-              <Route path="/register">{token ? <Redirect to="/dashboard" /> : <Register />}</Route>
+              <Route path="/login">{auth != null ? <Redirect to="/dashboard" /> : <Login/>}</Route>
+              <Route path="/register">{auth != null ? <Redirect to="/dashboard" /> : <Register />}</Route>
 
               <Route path="/users" component={Users} />
 
@@ -89,8 +77,9 @@ function App() {
 
               <PrivateRoute path="/inventory">
                 <Route
-                  render={(props) => 
-                    ( <Inventory userID={userID} {...props} /> )
+                  render={(props) => {
+                    return ( <Inventory {...props} /> )
+                  }
                   }
                 />
               </PrivateRoute>
@@ -108,7 +97,7 @@ function App() {
               </PrivateRoute>
 
               <PrivateRoute path="/logout">
-                <LogOut setToken={setTokenHandler} />
+                <LogOut />
               </PrivateRoute>
 
               <PrivateRoute path="/verify/mail">
@@ -121,6 +110,10 @@ function App() {
 
               <PrivateRoute path="/settings">
                 <Settings />
+              </PrivateRoute>
+
+              <PrivateRoute path="/admin" allowedRoles={[1]}>
+                <h1>Admin</h1>
               </PrivateRoute>
 
               <Route component={NoMatch} />
@@ -137,13 +130,11 @@ function App() {
   );
 }
 
-function LogOut(props: any) {
+function LogOut() {
 
-  useEffect(() => props.setToken(""));
+  //TODO: send axios logout request
 
-  Cookies.remove("token");
-  Cookies.remove("userID");
-  Cookies.remove("rank");
+  Cookies.remove("refresh_token");
 
   return (
 

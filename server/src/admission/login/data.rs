@@ -14,7 +14,7 @@ pub struct LoginRequest {
 #[derive(Serialize)]
 #[serde(rename_all="camelCase")]
 pub struct LoginResponse {
-    pub token: String,
+    pub access_token: String,
     pub user_id: Id,
     pub username: String,
     pub role: i8

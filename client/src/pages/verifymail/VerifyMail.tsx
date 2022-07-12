@@ -1,20 +1,15 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import Card from '../../components/Card'
 import {WaifuCardLoad} from '../../components/WaifuCard'
 import {checkMail} from '../../Utils'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 
-import Cookies from 'js-cookie'
-import axios from 'axios'
-
-import Config from '../../config.json'
-
 import './VerifyMail.scss'
 import { RouteComponentProps } from 'react-router'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 
-type PropsVerifyMail = RouteComponentProps & {
-
+type PropsVerifyMail = RouteComponentProps & AxiosPrivateProps & {
 }
 
 type StateVerifyMail = {
@@ -39,13 +34,9 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
   }
 
   componentDidMount() {
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
 
-    axios.get(`${Config.API_HOST}/verify/check`, config)
-      .then(res => {
+    this.props.axios.get(`/verify/check`)
+      .then((res: any) => {
     	  this.setState({loading: false});
           switch (res.data.verified) {
             case 1:
@@ -57,30 +48,25 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
             default:
               this.props.history.push('/dashboard');
           }
-      }).catch(err => {
-		console.log("Unexpected /verify/check error");
-	  });
+      }).catch((err: any) => {
+		    console.log("Unexpected /verify/check error");
+	    });
   }
 
   onSubmit = () => {
     this.setState({error: undefined})
 
-	const config =
-	{
-		headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-	}
-
     const data = {
       email: this.state.email
     }
 
-    axios.post(`${Config.API_HOST}/email/change`, data, config)
-      .then(res => {
+    this.props.axios.post(`/email/change`, data)
+      .then((res: any) => {
     	  this.props.history.push('/verify');
-      }).catch(err => {
+      }).catch((err: any) => {
 		  if(err.response)
     		this.setState({error: err.response.data.error})
-	  });
+	    });
   }
 
   setEmail = (self: VerifyMail, email: string) => {
@@ -132,4 +118,4 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
   }
 }
 
-export default VerifyMail;
+export default withAxiosPrivate(VerifyMail);
