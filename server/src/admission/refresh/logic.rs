@@ -2,11 +2,12 @@ use chrono::{Duration};
 
 
 use rocketjson::{ApiResponseErr, rjtry,error::ApiErrorsCreate};
-use rocket::http::{Status, CookieJar};
+use rocket::http::{Status, CookieJar, Cookie};
 use rocket::{State};
 
 use crate::shared::crypto::jwt_util::JwtTokenError;
 use crate::shared::crypto::{jwt_verify_token, jwt_sign_token};
+use crate::shared::util::build_refresh_token_cookie;
 use crate::sql::Sql;
 use crate::config::Config;
 
@@ -43,7 +44,10 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
         return ApiResponseErr::api_err(Status::Unauthorized, String::from("Invalid refresh token"));
     }
 
-    let new_access_token: String = match jwt_sign_token(&token.username, &token.id, &config.jwt_secret) {
+    // GENERATE NEW ACCESS TOKEN AND REFRESH TOKEN
+
+    let username = token.username.clone();
+    let new_access_token: String = match jwt_sign_token(&username, &token.id, &config.jwt_secret) {
         Ok(token) => token,
         Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
     };
@@ -53,6 +57,19 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
     } else {
         return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't find user"));
     };
+
+    if(config.refresh_token_rotation_strategy){
+        let new_refresh_token: String = match jwt_sign_token(&username, &token.id, &config.refresh_token_secret) {
+            Ok(token) => token,
+            Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
+        };
+
+        rjtry!(delete_refresh_token(&sql, refresh_token).await);
+        rjtry!(sql::insert_refresh_token(&sql, &token.id, &new_refresh_token).await);
+
+        let refresh_token_cookie: Cookie = build_refresh_token_cookie(new_refresh_token.clone(), config.refresh_token_duration.into());
+        cookies.add(refresh_token_cookie);
+    }
 
     ApiResponseErr::ok(Status::Ok, RefreshResponse { access_token: new_access_token, role })
 }

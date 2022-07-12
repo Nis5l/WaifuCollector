@@ -10,6 +10,9 @@ pub struct Config {
     pub jwt_duration: u32,
     pub refresh_token_secret: String,
     pub refresh_token_duration: u32,
+
+    pub refresh_token_rotation_strategy: bool,
+
     pub domain: String,
     pub verification_key_length: usize,
     pub id_length: usize,
@@ -71,6 +74,8 @@ impl Default for Config {
 
             refresh_token_secret: String::from("CHANGE_THE_SECRET"),
             refresh_token_duration: 60 * 60 * 24,
+            
+            refresh_token_rotation_strategy: true,
 
             domain: String::from("https://waifucollector.com"),
             verification_key_length: 20,

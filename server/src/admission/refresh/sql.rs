@@ -28,6 +28,18 @@ pub async fn delete_refresh_token(sql: &Sql, refresh_token: &str) -> Result<u64,
     Ok(result.rows_affected())
 }
 
+pub async fn insert_refresh_token(sql: &Sql, user_id: &str, refresh_token: &str) -> Result<(), sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    sqlx::query("INSERT INTO refreshtokens (uid, rtoken) VALUES (?,?);")
+    .bind(user_id)
+    .bind(refresh_token)
+    .execute(&mut con)
+    .await?;
+
+    Ok(())
+}
+
 pub async fn get_user_role(sql: &Sql, username: String) -> Result<Option<UserRoleDb>, sqlx::Error> {
 
     let mut con = sql.get_con().await?;
