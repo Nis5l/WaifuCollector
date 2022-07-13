@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import {Tooltip} from 'reactstrap'
 
 import Config from '../config.json'
@@ -12,9 +12,9 @@ interface Badge {
 }
 
 type Props = {
-    userID: number,
-    username: string,
-    badges: Badge[] | undefined,
+    userID: string,
+    username?: string,
+    badges?: Badge[] | undefined,
     lCallback: () => void
 }
 
@@ -25,31 +25,36 @@ function ProfileName(props: Props) {
 
     let lcounter = 0;
     let lcounterMax = 2;
-    if (props.username != null && props.username != username && props.username != "") {
+    if (props.username != null && props.username !== username && props.username !== "") {
         setUsername(props.username);
     }
 
+    
+    const incrementLCounter = useCallback(() => {
+        lcounter++;
+        if (lcounter === lcounterMax && props.lCallback) props.lCallback();
+    }, [lcounter, lcounterMax, props]);
+
     useEffect(() => {
         if (props.userID == null) return;
-        if (props.username != null && props.username != ""){ incrementLCounter(); return; }
+        if (props.username != null && props.username !== ""){ incrementLCounter(); return; }
+
+        let isMounted: boolean = true;
         axios.get(`${Config.API_HOST}/user/${props.userID}/username`)
             .then(res => {
-				setUsername(res.data.username);
+                if(isMounted) setUsername(res.data.username);
 				incrementLCounter();
             }).catch(err => {
 				console.log("Unexpected /user/:id/username error");
 			});
 
-    }, [setUsername, props.userID]);
-
-    function incrementLCounter() {
-        lcounter++;
-        if (lcounter === lcounterMax && props.lCallback) props.lCallback();
-    }
+        return () => { isMounted = false; }
+    }, [setUsername, props.userID, props.username, incrementLCounter]);
 
     useEffect(() => {
+        let isMounted: boolean = true;
 
-        async function getBadges(userID: number) {
+        async function getBadges(userID: string) {
 
             if (props.badges) return props.badges;
 
@@ -65,14 +70,13 @@ function ProfileName(props: Props) {
 
             const badges = await getBadges(props.userID);
 
-            setBadges(badges);
+            if(isMounted)setBadges(badges);
             incrementLCounter();
-
         }
 
         loadBadges();
-
-    }, [setBadges, props.userID]);
+        return () => { isMounted = false; }
+    }, [setBadges, props.userID, props.badges, incrementLCounter]);
 
     return (
 

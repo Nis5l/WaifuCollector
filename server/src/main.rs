@@ -85,6 +85,8 @@ async fn rocket() -> _ {
            admission::email::change::email_change_route,
            admission::email::delete::email_delete_route,
            admission::passchange::passchange_route,
+           admission::refresh::refresh_route,
+           admission::logout::logout_route,
 
            user::users_route,
            user::info::user_username_route,

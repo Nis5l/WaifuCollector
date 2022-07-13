@@ -47,10 +47,10 @@ function Home() {
                     <div>
                         <Suspense fallback={loading()}>
                             <WaifuCard
-                                img={`${Config.API_HOST}/card/Card_Ichigo.webp`}
-                                framefront={`${Config.API_HOST}/frame/Frame_Silver_Front.png`}
-                                frameback={`${Config.API_HOST}/frame/Frame_Silver_Back.png`}
-                                effect={`${Config.API_HOST}/effect/Effect2.gif`}
+                                img={`/assets/card/Card_Ichigo.webp`}
+                                framefront={`/assets/card/Frame_Silver_Front.png`}
+                                frameback={`/assets/card/Frame_Silver_Back.png`}
+                                effect={`/assets/card/Effect2.gif`}
                                 cardname="Ichigo"
                                 animename="Darling In The FranXX"
                                 size="0.8"

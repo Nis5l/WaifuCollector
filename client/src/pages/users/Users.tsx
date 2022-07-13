@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import InfiniteScroll from 'react-infinite-scroller'
 import Scrollbar from '../../components/ScrollBar'
 import UserBanner from '../../components/UserBanner'
@@ -9,8 +8,10 @@ import Loading from '../../components/Loading'
 import Config from '../../config.json'
 
 import './Users.scss'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 
-type PropsUsers = {
+type PropsUsers = AuthProps & AxiosPrivateProps & {
 
 }
 
@@ -53,15 +54,15 @@ class Users extends Component<PropsUsers, StateUsers> {
   }
 
   componentDidMount() {
-    axios.get(`${Config.API_HOST}/user/${Cookies.get('userID')}/friends`)
-      .then((res) => {
+    this.props.axios.get(`/user/${this.props.auth.id}/friends`)
+      .then((res: any) => {
         this.setState({loading: false});
 		let friends: Map<number, number> = new Map<number, number>();
 		for (let i = 0; i < res.data.friends.length; i++) {
 			friends.set(res.data.friends[i].userID,  res.data.friends[i].status);
 			this.setState({friends: friends});
 		}
-      }).catch(err => {
+      }).catch((err: any) => {
 		console.log("Unexpected /user/:id/friends error");
 	  });
   }
@@ -123,4 +124,4 @@ class Users extends Component<PropsUsers, StateUsers> {
 
 }
 
-export default Users;
+export default withAuth(withAxiosPrivate(Users));

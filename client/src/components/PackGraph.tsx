@@ -2,7 +2,7 @@ import React, {Component, RefObject} from 'react';
 import Chart, { ChartConfiguration } from 'chart.js';
 
 import "./PackGraph.scss"
-import axios from 'axios'
+import axios from '../api/axios'
 import Config from '../config.json'
 
 const config: ChartConfiguration = {
@@ -85,7 +85,8 @@ class PackGraph extends Component<Props> {
     async loadData() {
 
         try {
-            const res = await axios.get(`${Config.API_HOST}/pack/stats`);
+            const id: string = "xxxxxxxxxx";
+            const res = await axios.get(`/pack/${id}/stats`);
 
 			return res.data;
 

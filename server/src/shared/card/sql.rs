@@ -153,7 +153,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
 
     let search = util::escape_for_like(options.search.clone());
 
-    let oder_by = match options.sort_type {
+    let order_by = match options.sort_type {
         SortType::Name => 
             "cards.cname,
              cardtypes.ctname,
@@ -202,7 +202,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          FROM cardunlocks, cards, cardtypes, cardframes, cardeffects
          WHERE
          {}
-         AND cardunlocks.cid = cards.cid
+         cardunlocks.cid = cards.cid
          AND cardunlocks.cfid = cardframes.cfid
          AND cards.ctid = cardtypes.ctid
          AND cardeffects.ceid = cardunlocks.culevel
@@ -213,7 +213,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          {}
          LIMIT ? OFFSET ?;",
          extra_conditions,
-         oder_by);
+         order_by);
 
     let cards_db: Vec<CardDb> = sqlx::query_as(&query)
         .bind(&options.collector_id)

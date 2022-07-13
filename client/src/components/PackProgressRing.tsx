@@ -1,15 +1,14 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-import Config from '../config.json'
-import Cookies from 'js-cookie'
+import {Component} from 'react'
 import {formatTime} from '../Utils'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import moment, { Duration, Moment } from 'moment';
 
 import './PackProgressRing.scss'
 import redirectIfNecessary from './Redirecter'
+import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
 
-type PropsPackProgressRing = RouteComponentProps & {
+type PropsPackProgressRing = RouteComponentProps & AxiosPrivateProps & {
+    collectorID: string,
     className: string,
     lCallback: () => void,
     history: any
@@ -51,26 +50,21 @@ class PackProgressRing extends Component<PropsPackProgressRing, StatePackProgres
     }
 
     loadMaxPackTime(self: PackProgressRing) {
-        axios.get(`${Config.API_HOST}/pack/time/max`)
-            .then(res => {
+        this.props.axios.get(`${this.props.collectorID}/pack/time/max`)
+            .then((res: any) => {
 				self.packTimeMax = moment.duration(res.data.packTimeMax);
 				this.incrementLCounter();
-            }).catch(err => {
+            }).catch((err: any) => {
 				console.log("Unexpected /pack/time/max error");
 			});
     }
 
     loadPackTime(self: PackProgressRing) {
-        const data =
-        {
-			headers: { 'Authorization': `Bearer ${Cookies.get('token')}` }
-        }
-
-        axios.get(`${Config.API_HOST}/pack/time`, data)
-			.then(res => {
+        this.props.axios.get(`/pack/${this.props.collectorID}/time`)
+			.then((res: any) => {
 				self.packTime = moment(res.data.packTime);
 				this.incrementLCounter();
-            }).catch(err => {
+            }).catch((err: any) => {
                 redirectIfNecessary(this.props.history, err);
 			});
     }
@@ -135,4 +129,4 @@ class PackProgressRing extends Component<PropsPackProgressRing, StatePackProgres
     }
 }
 
-export default withRouter(PackProgressRing)
+export default withAxiosPrivate(withRouter(PackProgressRing));
