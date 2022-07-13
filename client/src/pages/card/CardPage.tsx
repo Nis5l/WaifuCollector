@@ -1,9 +1,7 @@
 import React, {Component, RefObject} from 'react'
-import axios from 'axios'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import {YesNo} from '../../components/Popup'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 import Scrollbar from '../../components/ScrollBar'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
@@ -13,12 +11,9 @@ import Config from '../../config.json'
 import './CardPage.scss'
 import { AxiosPrivateProps } from '../../hooks/useAxiosPrivate'
 import { AuthProps } from '../../hooks/useAuth'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-interface MatchParams {
-  id: string | undefined
-}
-
-type PropsCardPage = RouteComponentProps<MatchParams> & AuthProps & AxiosPrivateProps & {
+type PropsCardPage = ReactRouterProps & AuthProps & AxiosPrivateProps & {
   history: any
 }
 
@@ -49,8 +44,8 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
 
   constructor(props: PropsCardPage) {
     super(props);
-    if(props.match.params.id != null){
-      this.mainuuid = parseInt(props.match.params.id);
+    if(props.router.params.id != null){
+      this.mainuuid = parseInt(props.router.params.id);
     }
 
     this.card_wrapper = React.createRef();

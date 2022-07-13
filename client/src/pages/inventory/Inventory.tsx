@@ -1,5 +1,4 @@
 import React, {Component, RefObject} from 'react'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
@@ -11,12 +10,9 @@ import "./Inventory.scss"
 import Config from '../../config.json'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-interface InventoryParams{
-  id: string | undefined
-}
-
-type PropsInventory = RouteComponentProps<InventoryParams> & AuthProps & AxiosPrivateProps & {
+type PropsInventory = ReactRouterProps & AuthProps & AxiosPrivateProps & {
   userID: string,
   friendID?: string,
   excludeSuggestions?: boolean,
@@ -66,8 +62,8 @@ class Inventory extends Component<PropsInventory, StateInventory> {
     this.scrollpadding = 500;
 
     this.userID = props.userID;
-    if (this.userID === undefined && this.props.match && this.props.match.params)
-      this.userID = this.props.match.params.id != null ? this.props.match.params.id : "";
+    if (this.userID === undefined)
+      this.userID = this.props.router.params.id != null ? this.props.router.params.id : "";
     if ((this.userID === undefined || this.userID === "") && props.auth != null) this.userID = props.auth.id;
 
     this.friendID = props.friendID;
@@ -131,7 +127,7 @@ class Inventory extends Component<PropsInventory, StateInventory> {
         if (res.data.length === 0) this.hasMore = false;
         this.setState({cards: cards});
       }).catch((err: any) => {
-          if (redirectIfNecessary(this.props.history, err)) return;
+          if (redirectIfNecessary(this.props.router.navigate, err)) return;
 		  if(err.response)
 			  this.setState({errorMessage: err.response.data.error});
 		  else

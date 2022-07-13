@@ -1,4 +1,4 @@
-use rocket::http::{ContentType, MediaType};
+use rocket::http::{ContentType};
 use rocket::fs::NamedFile;
 use rocketjson::error::{ApiErrors, self};
 

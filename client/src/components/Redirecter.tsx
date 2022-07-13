@@ -1,17 +1,19 @@
-function redirectIfNecessary(history: any, err: any): number {
+import { NavigateFunction } from "react-router-dom";
+
+function redirectIfNecessary(navigate: NavigateFunction, err: any): number {
     if (err.response === undefined) return 0;
 
 	//Unathorized
-	if(err.response.status == 401) {
+	if(err.response.status === 401) {
 		switch (err.response.data.error) {
 			case "Not verified":
-				history.push('/verify');
+				navigate('/verify');
 				return 1;
 			case "Mail not set":
-				history.push('/verify/mail');
+				navigate('/verify/mail');
 				return 2;
 			default:
-				history.push('/logout')
+				navigate('/logout')
 				return 3;
 		}
 	}

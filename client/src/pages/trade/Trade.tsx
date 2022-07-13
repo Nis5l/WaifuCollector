@@ -3,7 +3,6 @@ import Card from '../../components/Card'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import Scrollbar from '../../components/ScrollBar'
 import {YesNo, YesNoCancel} from '../../components/Popup'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 import {formatTime} from '../../Utils'
@@ -12,14 +11,11 @@ import moment from 'moment';
 import './Trade.scss'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
 const suggestCardColor = "rgb(255 255 255 / 50%)";
 
-interface TradeParams {
-  id: string | undefined
-}
-
-type PropsTrade = RouteComponentProps<TradeParams> & AuthProps & AxiosPrivateProps & {
+type PropsTrade = ReactRouterProps & AuthProps & AxiosPrivateProps & {
 
 }
 
@@ -95,7 +91,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
       loading: true
     }
 
-    this.friendid = props.match.params.id;
+    this.friendid = props.router.params.id;
     this.cardfriend = React.createRef();
   }
 
@@ -104,9 +100,9 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 
   componentWillReceiveProps(props: PropsTrade) {
-    if(this.friendid === props.match.params.id) return;
+    if(this.friendid === props.router.params.id) return;
 
-    this.friendid = props.match.params.id;
+    this.friendid = props.router.params.id;
 
     this.setState({
       name: "Loading...",
@@ -170,7 +166,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
             }, 1000)
           }
       }).catch((err: any) => {
-          if (redirectIfNecessary(this.props.history, err)) return;
+          if (redirectIfNecessary(this.props.router.navigate, err)) return;
           this.setState({found: false});
 	  });
   }
@@ -255,7 +251,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
       .then((res: any) => {
         this.load()
       }).catch((err: any) => {
-        if (redirectIfNecessary(this.props.history, err)) return;
+        if (redirectIfNecessary(this.props.router.navigate, err)) return;
 	  });
 
     this.setState({removeFriendSuggestionId: undefined});
@@ -279,7 +275,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
       .then((res: any) => {
         this.load()
       }).catch((err: any) => {
-        redirectIfNecessary(this.props.history, err);
+        redirectIfNecessary(this.props.router.navigate, err);
 	  });
 
     this.setState({removeSuggestionId: undefined, tradeCount: this.state.tradeCount + 1},
@@ -299,7 +295,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
       .then((res: any) => {
         this.load()
       }).catch((err: any) => {
-        redirectIfNecessary(this.props.history, err);
+        redirectIfNecessary(this.props.router.navigate, err);
 	  });
 
     this.setState({removeSuggestionId: undefined});
@@ -313,12 +309,12 @@ class Trade extends Component<PropsTrade, StateTrade> {
       .then((res: any) => {
         this.load();
       }).catch((err: any) => {
-    	redirectIfNecessary(this.props.history, err);
+    	redirectIfNecessary(this.props.router.navigate, err);
 	  });
   }
 
   redirect = (url: string) => {
-    this.props.history.push(url);
+    this.props.router.navigate(url);
   }
 
   render() {

@@ -109,33 +109,6 @@ class Sidebar extends Component<Props, any> {
 
                     <SidebarContent>
                         <Menu iconShape="circle">
-                            {!this.state.loggedIn &&
-                                <MenuItem
-                                    icon={<i className="fas fa-sign-in-alt"></i>}
-                                >
-                                    <Link
-                                        to="/login"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Login
-                                    </Link>
-                                </MenuItem>
-                            }
-
-                            {!this.state.loggedIn &&
-                                <MenuItem
-                                    icon={<i className="fas fa-registered"></i>}
-                                >
-                                    <Link
-                                        to="/register"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Register
-                                    </Link>
-                                </MenuItem>
-
-                            }
-
                             {this.state.loggedIn && <MenuItem
                                 icon=
                                 {
@@ -204,29 +177,6 @@ class Sidebar extends Component<Props, any> {
                                 <MenuItem>Anime</MenuItem>
                                 <MenuItem>Users</MenuItem>
                             </SubMenu>}
-
-                            {false && <MenuItem
-                                icon={<i className="fas fa-clipboard-list"></i>}
-                            >
-                                <Link
-                                    to="/leaderboard"
-                                    onClick={ () => {this.toggleMenu(); }}
-                                >
-                                    Leaderboard
-                                </Link>
-                            </MenuItem>}
-
-                            {this.state.loggedIn && <MenuItem
-                                icon={<i className="fas fa-sign-out-alt"></i>}
-                            >
-                                <Link
-                                    to="/logout"
-                                    onClick={ () => {this.toggleMenu(); }}
-                                >
-                                    Logout
-                                </Link>
-                            </MenuItem>}
-
                         </Menu>
                     </SidebarContent>
 

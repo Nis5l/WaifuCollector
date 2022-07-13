@@ -9,15 +9,11 @@ import Badges from '../../components/Achievements'
 
 import "./Profile.scss"
 import Scrollbar from '../../components/ScrollBar';
-import { RouteComponentProps } from 'react-router-dom'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-interface ProfileParams {
-    id: string | undefined
-}
-
-type PropsProfile = RouteComponentProps<ProfileParams> & AxiosPrivateProps & AuthProps & {
+type PropsProfile = ReactRouterProps & AxiosPrivateProps & AuthProps & {
 
 }
 
@@ -46,7 +42,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
     constructor(props: PropsProfile) {
         super(props);
 
-        this.userID = props.match.params.id != null ? props.match.params.id : "";
+        this.userID = props.router.params.id != null ? props.router.params.id : "";
 
         this.lcounter = 0;
         this.lcounterMax = 2;
@@ -143,7 +139,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
             }
             else if (this.state.friendStatus === 0) {
                 icon = "fa-handshake";
-                onIconClick = () => {this.props.history.push(`/trade/${this.userID}`)}
+                onIconClick = () => {this.props.router.navigate(`/trade/${this.userID}`)}
             }
         }
 
@@ -260,4 +256,4 @@ class Profile extends Component<PropsProfile, StateProfile> {
     }
 }
 
-export default withAxiosPrivate(withAuth(Profile));
+export default withAxiosPrivate(withAuth(withRouter(Profile)));
