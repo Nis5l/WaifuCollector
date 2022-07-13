@@ -161,13 +161,13 @@ class Inventory extends Component<PropsInventory, StateInventory> {
           <input type="submit" hidden />
           <Select
             className="inventory_select"
-            onChange={(sel) => {this.sortMethod = sel.value; this.onFilter(undefined, this)}}
+            onChange={(sel: any) => {this.sortMethod = sel.value; this.onFilter(undefined, this)}}
             options={this.options}
             defaultValue={this.options[0]}
             /* Doesnt work
             hasMore={this.state.hasMore}
              */
-            theme={theme => ({
+            theme={(theme: any) => ({
               ...theme,
               borderRadius: 5,
               colors: {
