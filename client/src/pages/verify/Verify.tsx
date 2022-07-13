@@ -5,10 +5,10 @@ import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 
 import Cookies from 'js-cookie'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 
 import './Verify.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
 function queryString(queryString: string) {
   var query: Map<string, string> = new Map<string, string>();
@@ -20,7 +20,7 @@ function queryString(queryString: string) {
   return query;
 }
 
-type PropsVerify = RouteComponentProps & AxiosPrivateProps & {
+type PropsVerify = ReactRouterProps & AxiosPrivateProps & {
 
 }
 
@@ -40,7 +40,7 @@ class Verify extends Component<PropsVerify, StateVerify> {
   constructor(props: PropsVerify) {
     super(props);
 
-    const key = queryString(props.location.search).get('key');
+    const key = queryString(props.router.location.search).get('key');
     if(key != null) this.key = key;
 
     this.lCount = 0;
@@ -57,7 +57,7 @@ class Verify extends Component<PropsVerify, StateVerify> {
   componentDidMount() {
     this.props.axios.post(`/verify/confirm/${this.key}`, {})
       .then((res: any) => {
-	    this.props.history.push('/dashboard');
+	    this.props.router.navigate('/dashboard');
       }).catch((err: any) => {
 		    console.log("Unexpected /verify/confirm/:key error");
       }).finally(() => {
@@ -73,11 +73,11 @@ class Verify extends Component<PropsVerify, StateVerify> {
                 break;
 
               case 2:
-                this.props.history.push('/verify/mail');
+                this.props.router.navigate('/verify/mail');
                 break;
 
               default:
-                this.props.history.push('/dashboard');
+                this.props.router.navigate('/dashboard');
             }
       }).catch((err: any) => {
           console.log("Unexpected /verify/check error");
@@ -133,7 +133,7 @@ class Verify extends Component<PropsVerify, StateVerify> {
     this.setState({mail: undefined});
     this.props.axios.post(`/email/delete`, {})
       .then((res: any) => {
-         this.props.history.push('/verify/mail');
+         this.props.router.navigate('/verify/mail');
       })
   }
 

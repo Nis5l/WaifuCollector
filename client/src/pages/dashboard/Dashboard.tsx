@@ -2,13 +2,13 @@ import {Component, lazy, Suspense} from 'react'
 
 import Card from '../../components/Card';
 import Loading from '../../components/Loading'
-import Logo from '../../components/Logo'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 
 import "./Dashboard.scss"
 import Achievements from '../../components/Achievements';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { AuthProps, withAuth } from '../../hooks/useAuth';
+import ProfileImage from '../../components/users/ProfileImage';
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter';
 
 const Friendlist = lazy(() => import('../../components/Friendlist'));
 const PackProgressRing = lazy(() => import('../../components/PackProgressRing'));
@@ -16,7 +16,7 @@ const ProfileName = lazy(() => import('../../components/ProfileName'));
 
 const loading = () => <p>Loading...</p>
 
-type PropsDashboard = RouteComponentProps & AxiosPrivateProps & AuthProps & {
+type PropsDashboard = ReactRouterProps & AxiosPrivateProps & AuthProps & {
 
 }
 
@@ -89,10 +89,10 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
             .then((res: any) => {
 				switch (res.data.verified) {
 					case 1:
-						this.props.history.push('/verify');
+						this.props.router.navigate('/verify');
 						break;
 					case 2:
-						this.props.history.push('/verify/mail');
+						this.props.router.navigate('/verify/mail');
 						break;
 					default:
                         break;
@@ -110,7 +110,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
     }
 
     friendPopup(self: Dashboard) {
-        self.props.history.push("/users")
+        self.props.router.navigate("/users")
     }
 
     incrementLCounter(self: Dashboard) {
@@ -132,7 +132,8 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
                     <div className="avatar">
 
-                        <Logo className="logo" size="" />
+                        { /*<Logo className="logo" size="" />*/ }
+                        <ProfileImage userID={this.props.auth.id}></ProfileImage>
 
                     </div>
 

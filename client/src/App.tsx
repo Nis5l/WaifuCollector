@@ -1,8 +1,6 @@
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-
 import { AuthProvider } from './context/AuthProvider'
 
-import Navbar from './components/Navbar'
+import Sidebar from './components/navigation/Sidebar'
 
 import Home from './pages/home/Home'
 import Dashboard from './pages/dashboard/Dashboard'
@@ -10,7 +8,6 @@ import Profile from './pages/profile/Profile'
 import Pack from './pages/pack/Pack'
 import Inventory from './pages/inventory/Inventory'
 import CardPage from './pages/card/CardPage'
-import NoMatch from './pages/nomatch/NoMatch'
 import Trade from './pages/trade/Trade'
 import TradeInventory from './pages/tradeinventory/TradeInventory'
 import SuggestInventory from './pages/suggestInventory/SuggestInventory'
@@ -25,15 +22,16 @@ import Register from './pages/admission/Register'
 
 import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
-import PrivateRoute from './components/PrivateRoute'
-import useAuth from './hooks/useAuth'
 import LogOut from './pages/admission/Logout'
 import RememberMe from './components/RememberMe'
 import { getRememberMe } from './utils/utils'
 import { useState } from 'react'
+import Navigation from './components/navigation/Navigation'
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import RequireAuth from './components/routes/RequireAuth'
+import RequireNoAuth from './components/routes/RequireNoAuth'
 
 function App() {
-  let { auth } = useAuth();
   let [ remembered, setRemembered ] = useState(false);
 
   return (
@@ -41,89 +39,78 @@ function App() {
     <>
 
       <AuthProvider>
-        <Router>
-
+        <BrowserRouter>
           { getRememberMe() && !remembered ? <RememberMe remembered={() => setRemembered(true)} /> : ( <>
-            <Navbar/>
-            <main className="content">
-              <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/privacy" component={Privacy} />
+            <Navigation />
+                <Routes>
 
-                <Route path="/login">{auth != null ? <Redirect to="/dashboard" /> : <Login/>}</Route>
-                <Route path="/register">{auth != null ? <Redirect to="/dashboard" /> : <Register />}</Route>
+                  <Route element={
+                    <div style={{height: "100%", width: "100%", display: "flex"}}>
+                      <main className='content'>
+                        <Outlet />
+                      </main>
+                    </div>
+                  }>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/privacy" element={<Privacy />} />
 
-                <Route path="/users" component={Users} />
+                    <Route path="/users" element={<Users />} />
 
-                { /* Profile others */}
-                <Route path="/profile/:id" component={Profile} />
+                    { /* Profile others */}
+                    <Route path="/profile/:id" element={<Profile />} />
 
-                {/* Logged in User */}
-                <PrivateRoute path="/dashboard">
-                  <Route component={Dashboard} />
-                </PrivateRoute>
+                    {/* Not logged in user */}
+                    <Route element={<RequireNoAuth />}>
+                      <Route path="/login" element={<Login/>} />
+                      <Route path="/register" element={<Register />}></Route>
+                    </Route>
+                  </Route>
 
-                <PrivateRoute path="/pack">
-                  <Pack />
-                </PrivateRoute>
+                  {/* Logged in User */}
+                  <Route element={<RequireAuth />}>
 
-                <PrivateRoute path="/card/:id">
-                  <Route component={CardPage} />
-                </PrivateRoute>
+                    <Route element={
+                      <div style={{height: "100%", width: "100%", display: "flex"}}>
+                        <main className='content'>
+                          <Outlet />
+                        </main>
+                      </div>
+                    }>
+                      <Route path="/logout" element={<LogOut />} />
 
-                <PrivateRoute path="/inventory/:id">
-                  <Route component={Inventory} />
-                </PrivateRoute>
+                      <Route path="/verify/mail" element={<VerifyMail />} />
+                      <Route path="/verify" element={<Verify />} />
 
-                <PrivateRoute path="/inventory">
-                  <Route
-                    render={(props) => {
-                      return ( <Inventory {...props} /> )
-                    }
-                    }
-                  />
-                </PrivateRoute>
+                      <Route path="/settings" element={<Settings />} />
+                    </Route>
 
-                <PrivateRoute path="/tradeinventory/:id">
-                  <Route component={TradeInventory} />
-                </PrivateRoute>
+                    {/* Collector Player */}
+                    <Route element={
+                      <div style={{height: "100%", width: "100%", display: "flex"}}>
+                        <Sidebar />
+                        <main className='content'>
+                          <Outlet />
+                        </main>
+                      </div>
+                    }>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/pack" element={<Pack />} />
+                      <Route path="/card/:id" element={<CardPage />} />
+                      
+                      <Route path="/inventory/:id" element={<Inventory />} />
+                      <Route path="/inventory" element={<Inventory />} />
 
-                <PrivateRoute path="/suggestcard/:id">
-                  <Route component={SuggestInventory} />
-                </PrivateRoute>
+                      <Route path="/tradeinventory/:id" element={<TradeInventory />} />
+                      <Route path="/suggestcard/:id" element={<SuggestInventory />} />
+                      <Route path="/trade/:id" element={<Trade />} />
+                    </Route>
+                  </Route>
 
-                <PrivateRoute path="/trade/:id">
-                  <Route component={Trade} />
-                </PrivateRoute>
-
-                <PrivateRoute path="/logout">
-                  <LogOut />
-                </PrivateRoute>
-
-                <PrivateRoute path="/verify/mail">
-                  <Route component={VerifyMail} />
-                </PrivateRoute>
-
-                <PrivateRoute path="/verify">
-                  <Route component={Verify} />
-                </PrivateRoute>
-
-                <PrivateRoute path="/settings">
-                  <Settings />
-                </PrivateRoute>
-
-                <PrivateRoute path="/admin" allowedRoles={[1]}>
-                  <h1>Admin</h1>
-                </PrivateRoute>
-
-                <Route component={NoMatch} />
-
-              </Switch>
-            </main>
+                </Routes>
             </> )
           }
 
-        </Router>
+        </BrowserRouter>
       </AuthProvider>
 
     </>

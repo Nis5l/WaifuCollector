@@ -1,5 +1,4 @@
 import React, {Component, useState} from 'react'
-import {useHistory, withRouter, RouteComponentProps} from 'react-router-dom'
 import Card from './Card'
 import Scrollbar from './ScrollBar'
 import redirectIfNecessary from './Redirecter'
@@ -9,6 +8,8 @@ import {timeSince} from '../Utils'
 
 import "./Notifications.scss"
 import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
+import { useNavigate } from 'react-router-dom';
+import { ReactRouterProps, withRouter } from '../hooks/withRouter';
 
 type PropsNotification = {
     id: number,
@@ -25,7 +26,7 @@ function Notification(props: PropsNotification) {
     const fadingTime = 0.2;
     const [fading, setFading] = useState(false);
     const timesince = timeSince(props.date);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const done = () => {
         if (props.onHide) props.onHide();
@@ -50,7 +51,7 @@ function Notification(props: PropsNotification) {
             onClick={() => {
                 done();
                 remove();
-                history.push("/" + props.url);
+                navigate("/" + props.url);
             }}
             style={{animation: fading ? `fadeout ${fadingTime}s forwards` : "none"}}
         >
@@ -87,10 +88,9 @@ function Notification(props: PropsNotification) {
 
 }
 
-type PropsNotifications = RouteComponentProps & AxiosPrivateProps & {
+type PropsNotifications = ReactRouterProps & AxiosPrivateProps & {
     onNotifications: (notifications: any) => void,
-    onHide: () => void,
-    history: any
+    onHide: () => void
 }
 
 type StateNotifications = {
@@ -134,7 +134,7 @@ class Notifications extends Component<PropsNotifications, StateNotifications>{
         this.setState({notifications: [...this.state.notifications]});
 
         this.props.axios.post(`/notifications/delete/${id}`, {}).catch((err: any) => {
-			redirectIfNecessary(this.props.history, err);
+			redirectIfNecessary(this.props.router.navigate, err);
 		});
     }
 

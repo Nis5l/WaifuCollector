@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react';
-import {useHistory} from "react-router-dom";
 import Card from '../../components/Card';
 import Logo from '../../components/Logo';
 import {checkMail} from '../../Utils'
@@ -8,10 +7,11 @@ import axios from 'axios';
 import Config from '../../config.json';
 
 import "./Register.scss"
+import { useNavigate } from 'react-router-dom';
 
 function Register(props: any) {
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -48,7 +48,7 @@ function Register(props: any) {
 
         axios.post(`${Config.API_HOST}/register`, user)
             .then(res => {
-				history.push("/login");
+				navigate("/login");
             }).catch(err => {
 				setError(err.response.data.message);
 			});
@@ -57,7 +57,7 @@ function Register(props: any) {
     useEffect(() => {
         const dis = userwrong || passwrong || mailwrong || passrepwrong;
         if (dis !== disabled) setDisabled(dis);
-    });
+    }, [disabled, mailwrong, passrepwrong, passwrong, setDisabled, userwrong]);
 
     return (
 

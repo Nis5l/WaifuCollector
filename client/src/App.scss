@@ -23,7 +23,7 @@ main.content{
 
     padding: clamp(10px, 4%, 40px);
 
-    height: 100vh;
+    height: calc(100vh - #{$navbar-height +1});
     width: 100%;
 
     overflow: auto;

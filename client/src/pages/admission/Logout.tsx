@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { removeRememberMe } from "../../utils/utils";
@@ -20,7 +20,7 @@ function LogOut() {
   
     return (
         <>
-            { loggedOut ? (<Redirect to="/"/>) : (<></>) }
+            { loggedOut ? (<Navigate to="/"/>) : (<></>) }
         </>
     );
   

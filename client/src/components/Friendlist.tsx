@@ -5,20 +5,18 @@ import {YesNo} from './Popup'
 import './Friendlist.scss'
 import ProfileName from './ProfileName'
 
-import {RouteComponentProps, withRouter} from 'react-router-dom';
-
 import ThreeDotsMenu from './ThreeDotsMenu'
 
 import Scrollbar from './ScrollBar'
 import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
-import { withAsync } from '../hooks/useAsync';
+import { ReactRouterProps, withRouter } from '../hooks/withRouter'
 
 interface User {
     userID: string,
     username: string
 }
 
-type PropsFriendlist = RouteComponentProps<any> & AxiosPrivateProps & {
+type PropsFriendlist = ReactRouterProps & AxiosPrivateProps & {
     userID: string,
     requests?: boolean,
     onFriendRequests?: (len: number) => void,
@@ -231,16 +229,14 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
     }
 }
 
-type PropsFriend = RouteComponentProps<any> & {
+type PropsFriend = ReactRouterProps & {
     userID: string,
     username: string,
     status: number,
     avatar: string
     onDelete?: (userID: string, username: string) => void,
     onAccept?: (userID: string) => void,
-    onDecline?: (userID: string) => void,
-    
-    history: any
+    onDecline?: (userID: string) => void
 }
 
 type StateFriend = {
@@ -275,7 +271,7 @@ class Friend extends React.Component<PropsFriend, StateFriend> {
     }
 
     onClick = (link: string) => {
-        this.props.history.push(link);
+        this.props.router.navigate(link);
     };
 
     componentDidMount() {
