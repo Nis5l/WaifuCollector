@@ -97,6 +97,7 @@ async fn rocket() -> _ {
            user::info::stats::user_stats_collector_route,
            user::inventory::inventory_route,
            user::flex::flex_route,
+           user::avatar::user_avatar,
 
            notifications::notifications_route,
            notifications::notifications_delete_route,

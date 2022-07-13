@@ -1,28 +1,27 @@
 import React, { Component, RefObject } from 'react'
 
-import NotificationBell from './NotificationBell'
-import Notifications from './Notifications'
+import NotificationBell from '../NotificationBell'
+import Notifications from '../Notifications'
 
 import {
     ProSidebar,
     Menu,
     MenuItem,
     SubMenu,
-    SidebarHeader,
     SidebarFooter,
     SidebarContent,
 } from 'react-pro-sidebar'
 
 import {Link} from 'react-router-dom'
 
-import './Navbar.scss'
-import { AuthProps, withAuth } from '../hooks/useAuth'
+import './Sidebar.scss'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
 
 type Props = AuthProps & {
     token: string | undefined
 }
 
-class Navbar extends Component<Props, any> {
+class Sidebar extends Component<Props, any> {
     private box: RefObject<any>;
 
     constructor(props: Props) {
@@ -107,26 +106,6 @@ class Navbar extends Component<Props, any> {
                     toggled={this.state.toggled}
                     ref={this.box}
                 >
-
-                    <SidebarHeader>
-                        <Link
-                            to="/"
-                            onClick={ () => {this.toggleMenu(); }}
-                        >
-                            <div
-                                className="sidebar-title"
-                            >
-                                <img
-                                    src="/assets/IconWhite.png"
-                                    className="headerIcon"
-                                    alt="Icon"
-                                />
-
-                                <span>WaifuCollector</span>
-
-                            </div>
-                        </Link>
-                    </SidebarHeader>
 
                     <SidebarContent>
                         <Menu iconShape="circle">
@@ -289,4 +268,4 @@ class Navbar extends Component<Props, any> {
     }
 }
 
-export default withAuth(Navbar);
+export default withAuth(Sidebar);

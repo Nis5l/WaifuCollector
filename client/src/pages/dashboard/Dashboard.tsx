@@ -9,6 +9,7 @@ import "./Dashboard.scss"
 import Achievements from '../../components/Achievements';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { AuthProps, withAuth } from '../../hooks/useAuth';
+import ProfileImage from '../../components/users/ProfileImage';
 
 const Friendlist = lazy(() => import('../../components/Friendlist'));
 const PackProgressRing = lazy(() => import('../../components/PackProgressRing'));
@@ -132,7 +133,8 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
                     <div className="avatar">
 
-                        <Logo className="logo" size="" />
+                        { /*<Logo className="logo" size="" />*/ }
+                        <ProfileImage userID={this.props.auth.id}></ProfileImage>
 
                     </div>
 

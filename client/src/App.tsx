@@ -2,7 +2,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom
 
 import { AuthProvider } from './context/AuthProvider'
 
-import Navbar from './components/Navbar'
+import Sidebar from './components/navigation/Sidebar'
 
 import Home from './pages/home/Home'
 import Dashboard from './pages/dashboard/Dashboard'
@@ -31,6 +31,7 @@ import LogOut from './pages/admission/Logout'
 import RememberMe from './components/RememberMe'
 import { getRememberMe } from './utils/utils'
 import { useState } from 'react'
+import Navigation from './components/navigation/Navigation'
 
 function App() {
   let { auth } = useAuth();
@@ -42,84 +43,86 @@ function App() {
 
       <AuthProvider>
         <Router>
-
           { getRememberMe() && !remembered ? <RememberMe remembered={() => setRemembered(true)} /> : ( <>
-            <Navbar/>
-            <main className="content">
-              <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/privacy" component={Privacy} />
+            <Navigation />
+            <div style={{height: "100%", width: "100%", display: "flex"}}>
+              <Sidebar/>
+              <main className="content">
+                <Switch>
+                  <Route path="/" exact component={Home} />
+                  <Route path="/privacy" component={Privacy} />
 
-                <Route path="/login">{auth != null ? <Redirect to="/dashboard" /> : <Login/>}</Route>
-                <Route path="/register">{auth != null ? <Redirect to="/dashboard" /> : <Register />}</Route>
+                  <Route path="/login">{auth != null ? <Redirect to="/dashboard" /> : <Login/>}</Route>
+                  <Route path="/register">{auth != null ? <Redirect to="/dashboard" /> : <Register />}</Route>
 
-                <Route path="/users" component={Users} />
+                  <Route path="/users" component={Users} />
 
-                { /* Profile others */}
-                <Route path="/profile/:id" component={Profile} />
+                  { /* Profile others */}
+                  <Route path="/profile/:id" component={Profile} />
 
-                {/* Logged in User */}
-                <PrivateRoute path="/dashboard">
-                  <Route component={Dashboard} />
-                </PrivateRoute>
+                  {/* Logged in User */}
+                  <PrivateRoute path="/dashboard">
+                    <Route component={Dashboard} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/pack">
-                  <Pack />
-                </PrivateRoute>
+                  <PrivateRoute path="/pack">
+                    <Pack />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/card/:id">
-                  <Route component={CardPage} />
-                </PrivateRoute>
+                  <PrivateRoute path="/card/:id">
+                    <Route component={CardPage} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/inventory/:id">
-                  <Route component={Inventory} />
-                </PrivateRoute>
+                  <PrivateRoute path="/inventory/:id">
+                    <Route component={Inventory} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/inventory">
-                  <Route
-                    render={(props) => {
-                      return ( <Inventory {...props} /> )
-                    }
-                    }
-                  />
-                </PrivateRoute>
+                  <PrivateRoute path="/inventory">
+                    <Route
+                      render={(props) => {
+                        return ( <Inventory {...props} /> )
+                      }
+                      }
+                    />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/tradeinventory/:id">
-                  <Route component={TradeInventory} />
-                </PrivateRoute>
+                  <PrivateRoute path="/tradeinventory/:id">
+                    <Route component={TradeInventory} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/suggestcard/:id">
-                  <Route component={SuggestInventory} />
-                </PrivateRoute>
+                  <PrivateRoute path="/suggestcard/:id">
+                    <Route component={SuggestInventory} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/trade/:id">
-                  <Route component={Trade} />
-                </PrivateRoute>
+                  <PrivateRoute path="/trade/:id">
+                    <Route component={Trade} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/logout">
-                  <LogOut />
-                </PrivateRoute>
+                  <PrivateRoute path="/logout">
+                    <LogOut />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/verify/mail">
-                  <Route component={VerifyMail} />
-                </PrivateRoute>
+                  <PrivateRoute path="/verify/mail">
+                    <Route component={VerifyMail} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/verify">
-                  <Route component={Verify} />
-                </PrivateRoute>
+                  <PrivateRoute path="/verify">
+                    <Route component={Verify} />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/settings">
-                  <Settings />
-                </PrivateRoute>
+                  <PrivateRoute path="/settings">
+                    <Settings />
+                  </PrivateRoute>
 
-                <PrivateRoute path="/admin" allowedRoles={[1]}>
-                  <h1>Admin</h1>
-                </PrivateRoute>
+                  <PrivateRoute path="/admin" allowedRoles={[1]}>
+                    <h1>Admin</h1>
+                  </PrivateRoute>
 
-                <Route component={NoMatch} />
+                  <Route component={NoMatch} />
 
-              </Switch>
-            </main>
+                </Switch>
+              </main>
+            </div>
             </> )
           }
 
