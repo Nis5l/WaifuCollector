@@ -4,8 +4,7 @@ use rocket::http::Status;
 
 use crate::sql::Sql;
 use crate::config::Config;
-use crate::shared::crypto::JwtToken;
-use crate::shared::crypto::random_string::generate_random_string;
+use crate::shared::{crypto::JwtToken, Id};
 use crate::verify_user;
 use super::data::{CollectorCreateRequest, CollectorCreateResponse};
 use super::sql;
@@ -21,7 +20,7 @@ pub async fn create_collector_route(data: CollectorCreateRequest, token: JwtToke
         return ApiResponseErr::api_err(Status::Conflict, format!("Collector with the name {} alread exists", &collector_name));
     }
 
-    let collector_id = generate_random_string(config.id_length);
+    let collector_id = Id::new(config.id_length);
     rjtry!(sql::create_collector(&sql, &collector_name, &collector_id, &user_id).await);
 
     ApiResponseErr::ok(Status::Ok, CollectorCreateResponse {

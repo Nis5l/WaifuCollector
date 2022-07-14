@@ -1,5 +1,3 @@
-use sqlx::Row;
-
 use crate::sql::Sql;
 
 pub async fn delete_refresh_token(sql: &Sql, refresh_token: &str) -> Result<u64, sqlx::Error> {

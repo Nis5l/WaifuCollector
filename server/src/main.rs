@@ -88,7 +88,7 @@ async fn rocket() -> _ {
            admission::refresh::refresh_route,
            admission::logout::logout_route,
 
-           user::users_route,
+           user::user_index_route,
            user::info::user_username_route,
            user::info::user_friends_route,
            user::info::user_badges_route,

@@ -2,7 +2,7 @@ use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
 use rocket::State;
 
-use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
+use crate::shared::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::shared::{Id, user, card};
 use crate::config::Config;
@@ -21,7 +21,7 @@ pub async fn give_card_route(collector_id: Id, data: GiveCardRequest, sql: &Stat
         return ApiResponseErr::api_err(Status::Forbidden, String::from("You need to be admin to view this"))
     }
 
-    let card_unlocked_id = generate_random_string(config.id_length);
+    let card_unlocked_id = Id::new(config.id_length);
 
     rjtry!(card::sql::add_card(sql, &data.user_id, &card_unlocked_id, &collector_id, &card::data::CardCreateData {
         card_id: data.card_id,

@@ -16,6 +16,8 @@ pub async fn add_pack_stats(sql: &Sql, user_id: &Id, collector_id: &Id, amount: 
              VALUES
              (?, ?, ?);")
             .bind(user_id)
+            .bind(collector_id)
+            .bind(time)
             .execute(&mut transaction)
             .await?;
     }

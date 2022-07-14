@@ -7,7 +7,7 @@ use super::sql;
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::Id;
-use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
+use crate::shared::crypto::JwtToken;
 use crate::shared::{util, friend, trade};
 use crate::{verify_user, verify_collector};
 
@@ -23,7 +23,7 @@ pub async fn trade_route(user_friend_id: Id, collector_id: Id, sql: &State<Sql>,
     if !rjtry!(friend::sql::user_has_friend(sql, &user_id, &user_friend_id).await) {
         return ApiResponseErr::api_err(Status::NotFound, format!("You are not friends with {}", friend_username));
     }
-    let trade_id = rjtry!(trade::sql::create_trade(sql, &generate_random_string(config.id_length), &user_id, &user_friend_id, &collector_id).await);
+    let trade_id = rjtry!(trade::sql::create_trade(sql, &Id::new(config.id_length), &user_id, &user_friend_id, &collector_id).await);
 
     let self_cards = rjtry!(sql::trade_cards(sql, &user_id, &trade_id, config).await);
     let friend_cards = rjtry!(sql::trade_cards(sql, &user_friend_id, &trade_id, config).await);

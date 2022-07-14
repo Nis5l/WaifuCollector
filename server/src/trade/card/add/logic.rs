@@ -4,7 +4,7 @@ use rocket::State; use chrono::Utc;
 
 use super::data::TradeCardAddResponse;
 use super::sql;
-use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
+use crate::shared::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::{friend, card, trade, notification};
@@ -24,7 +24,7 @@ pub async fn trade_card_add_route(card_unlocked_id: Id, user_friend_id: Id, coll
         return ApiResponseErr::api_err(Status::NotFound, format!("You are not a friend with {}", user_friend_username));
     }
 
-    let trade_id = rjtry!(trade::sql::create_trade(sql, &generate_random_string(config.id_length), &user_id, &user_friend_id, &collector_id).await);
+    let trade_id = rjtry!(trade::sql::create_trade(sql, &Id::new(config.id_length), &user_id, &user_friend_id, &collector_id).await);
 
     if !rjtry!(card::sql::user_owns_card(sql, &user_id, &card_unlocked_id, Some(&collector_id)).await) {
         return ApiResponseErr::api_err(Status::NotFound,

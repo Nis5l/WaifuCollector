@@ -1,6 +1,5 @@
-use rocket::time::{OffsetDateTime, Duration};
 use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
-use rocket::http::{Status, Cookie, CookieJar, SameSite};
+use rocket::http::{Status, Cookie, CookieJar};
 use rocket::State;
 
 use crate::shared::util::build_refresh_token_cookie;

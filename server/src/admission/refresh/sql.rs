@@ -8,7 +8,7 @@ pub async fn check_refresh_token(sql: &Sql, user_id: &str, refresh_token: &str) 
     let mut con = sql.get_con().await?;
 
     let found_rows = sqlx::query(
-        &"SELECT COUNT(*) FROM refreshtokens WHERE uid = ? AND rtoken = ?;"
+        "SELECT COUNT(*) FROM refreshtokens WHERE uid = ? AND rtoken = ?;"
     ).bind(user_id)
     .bind(refresh_token)
     .fetch_one(&mut con).await?;

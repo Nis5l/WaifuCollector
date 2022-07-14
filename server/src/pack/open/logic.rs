@@ -8,7 +8,7 @@ use std::ops::RangeInclusive;
 use super::data::{PackOpenResponse, CanOpenPack};
 use super::sql;
 use super::super::shared;
-use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
+use crate::shared::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::card::{self, data::CardCreateData};
@@ -38,7 +38,7 @@ pub async fn pack_open_route(collector_id: Id, sql: &State<Sql>, token: JwtToken
 
     let mut inserted_cards_uuids = Vec::new();
     for card_create_data in cards_create_data.iter() {
-        let inserted_card_uuid = generate_random_string(config.id_length);
+        let inserted_card_uuid = Id::new(config.id_length);
         rjtry!(card::sql::add_card(&sql, &user_id, &inserted_card_uuid, &collector_id, card_create_data).await);
         inserted_cards_uuids.push(inserted_card_uuid);
     }

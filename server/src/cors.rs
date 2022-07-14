@@ -1,5 +1,4 @@
 use rocket::fairing::{Fairing, Info, Kind};
-use rocket::http::hyper::request;
 use rocket::http::{Header, Method, Status};
 use rocket::{Request, Response};
 
@@ -30,7 +29,7 @@ pub struct CORS;
             String::from("localhost:81")
         ];
 
-        let origin = match(request.headers().get_one("origin")){
+        let origin = match request.headers().get_one("origin") {
             Some(origin)=>origin,
             None => ""
         };

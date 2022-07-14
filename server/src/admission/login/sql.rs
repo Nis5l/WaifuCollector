@@ -1,5 +1,3 @@
-use sqlx::Row;
-
 use crate::sql::Sql;
 use super::data::LoginDb;
 

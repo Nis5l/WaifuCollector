@@ -4,7 +4,7 @@ use rocket::State;
 use rand::{thread_rng, Rng};
 
 use super::data::{UpgradeResponse, UpgradeRequest, UpgradeCardsResult};
-use crate::shared::crypto::{JwtToken, random_string::generate_random_string};
+use crate::shared::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::shared::card::{self, data::Card, data::CardCreateData};
 use crate::config::Config;
@@ -44,7 +44,7 @@ pub async fn upgrade_route(collector_id: Id, sql: &State<Sql>, token: JwtToken, 
 
     let UpgradeCardsResult { create_card_data: new_card_data, success } = upgrade_cards(&card_one, &card_two, config);
 
-    let new_card_uuid = generate_random_string(config.id_length);
+    let new_card_uuid = Id::new(config.id_length);
     rjtry!(card::sql::add_card(sql, &user_id, &new_card_uuid, &collector_id, &new_card_data).await);
 
     rjtry!(card::sql::delete_card(sql, &card_one.id).await);

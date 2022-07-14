@@ -10,9 +10,10 @@ pub mod util;
 pub mod email;
 pub mod crypto;
 pub mod collector;
+pub mod id;
 
-// TODO: 10 characters
-pub type Id = String;
+pub use id::Id;
+
 pub type IdInt = i32;
 
 #[derive(Debug)]

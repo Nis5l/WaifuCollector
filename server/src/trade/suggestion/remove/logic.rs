@@ -6,7 +6,7 @@ use chrono::Utc;
 use crate::shared::Id;
 use crate::sql::Sql;
 use crate::shared::crypto::JwtToken;
-use crate::shared::{friend, notification, trade, crypto::random_string::generate_random_string};
+use crate::shared::{friend, notification, trade};
 use crate::{verify_user, verify_collector};
 use crate::config::Config;
 use super::data::TradeSuggestionRemoveResponse;
@@ -24,7 +24,7 @@ pub async fn trade_suggestion_remove_route(user_friend_id: Id, card_unlocked_id:
     if !rjtry!(friend::sql::user_has_friend(sql, &user_id, &user_friend_id).await) {
         return ApiResponseErr::api_err(Status::NotFound, format!("You are not friends with {}", user_friend_id));
     }
-    let trade_id = rjtry!(trade::sql::create_trade(sql, &generate_random_string(config.id_length), &user_id, &user_friend_id, &collector_id).await);
+    let trade_id = rjtry!(trade::sql::create_trade(sql, &Id::new(config.id_length), &user_id, &user_friend_id, &collector_id).await);
 
     if !rjtry!(sql::remove_suggestion(sql, &trade_id, &card_unlocked_id).await){
         return ApiResponseErr::api_err(Status::NotFound,
