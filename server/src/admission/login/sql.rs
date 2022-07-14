@@ -1,6 +1,4 @@
-use sqlx::Row;
-
-use crate::sql::Sql;
+use crate::{sql::Sql, shared::Id};
 use super::data::LoginDb;
 
 pub async fn get_user_password(sql: &Sql, username: String) -> Result<Option<LoginDb>, sqlx::Error> {
@@ -22,7 +20,7 @@ pub async fn get_user_password(sql: &Sql, username: String) -> Result<Option<Log
     Ok(Some(login_data?))
 }
 
-pub async fn insert_refresh_token(sql: &Sql, user_id: &str, refresh_token: &str) -> Result<(), sqlx::Error> {
+pub async fn insert_refresh_token(sql: &Sql, user_id: &Id, refresh_token: &str) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query("INSERT INTO refreshtokens (uid, rtoken) VALUES (?,?);")

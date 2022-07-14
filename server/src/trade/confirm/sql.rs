@@ -10,14 +10,6 @@ pub async fn complete_trade(sql: &Sql, trade_id: &Id) -> Result<u64, sqlx::Error
     let mut con = sql.get_con().await?;
     let mut transaction = con.begin().await?;
 
-    let query =
-        "UPDATE cardunlocks
-         SET uid=?
-         WHERE cuid IN (
-            SELECT cuid
-            FROM tradecards
-            WHERE tid=?);";
-
     let mut transfered_card_count = 0;
 
     transfered_card_count += (sqlx::query(

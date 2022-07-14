@@ -1,10 +1,10 @@
 use sqlx::Row;
 
-use crate::sql::Sql;
+use crate::{sql::Sql, shared::Id};
 
 use super::data::UserRoleDb;
 
-pub async fn check_refresh_token(sql: &Sql, user_id: &str, refresh_token: &str) -> Result<bool, sqlx::Error> {
+pub async fn check_refresh_token(sql: &Sql, user_id: &Id, refresh_token: &str) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let found_rows = sqlx::query(
@@ -28,7 +28,7 @@ pub async fn delete_refresh_token(sql: &Sql, refresh_token: &str) -> Result<u64,
     Ok(result.rows_affected())
 }
 
-pub async fn insert_refresh_token(sql: &Sql, user_id: &str, refresh_token: &str) -> Result<(), sqlx::Error> {
+pub async fn insert_refresh_token(sql: &Sql, user_id: &Id, refresh_token: &str) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query("INSERT INTO refreshtokens (uid, rtoken) VALUES (?,?);")

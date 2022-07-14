@@ -12,13 +12,13 @@ use crate::sql::Sql;
 use crate::config::Config;
 
 use super::data::{RefreshResponse, UserRoleDb};
-use super::sql::{self, delete_refresh_token, get_user_role};
+use super::sql;
 
 #[get("/refresh")]
 pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &rocket::State<Config>) -> ApiResponseErr<RefreshResponse>{
     let refresh_token_cookie = cookies.get("refresh_token").ok_or("");
 
-    let refresh_token = match(refresh_token_cookie) {
+    let refresh_token = match refresh_token_cookie {
         Ok(token) => token.value(),
         _ => return ApiResponseErr::api_err(Status::Unauthorized, String::from("No refresh token"))
     };
@@ -26,16 +26,16 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
     let token = match jwt_verify_token(&refresh_token, &config.refresh_token_secret, &Duration::seconds(config.refresh_token_duration as _)) {
         Ok(token) => token,
         Err(JwtTokenError::Expired) => {
-            match(delete_refresh_token(&sql, refresh_token).await) {
+            match sql::delete_refresh_token(&sql, refresh_token).await {
                 _ => return ApiResponseErr::api_err(Status::Unauthorized, String::from("Refresh token expired"))
             };
         },
         Err(JwtTokenError::ParseError(_)) => {
-            return  ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't parse refresh token"));
+            return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't parse refresh token"));
         }
     };
 
-    let refresh_token_alright = match(sql::check_refresh_token(&sql, &token.id, &refresh_token).await) {
+    let refresh_token_alright = match sql::check_refresh_token(&sql, &token.id, &refresh_token).await {
         Ok(value) => value,
         Err(_) => return ApiResponseErr::api_err(Status::Unauthorized, String::from("Wrong username or password"))
     };
@@ -58,13 +58,13 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
         return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't find user"));
     };
 
-    if(config.refresh_token_rotation_strategy){
+    if config.refresh_token_rotation_strategy {
         let new_refresh_token: String = match jwt_sign_token(&username, &token.id, &config.refresh_token_secret) {
             Ok(token) => token,
             Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
         };
 
-        rjtry!(delete_refresh_token(&sql, refresh_token).await);
+        rjtry!(sql::delete_refresh_token(&sql, refresh_token).await);
         rjtry!(sql::insert_refresh_token(&sql, &token.id, &new_refresh_token).await);
 
         let refresh_token_cookie: Cookie = build_refresh_token_cookie(new_refresh_token.clone(), config.refresh_token_duration.into());

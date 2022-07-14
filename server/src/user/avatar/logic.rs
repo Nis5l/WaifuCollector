@@ -2,10 +2,12 @@ use std::path::Path;
 
 use rocket::{fs::NamedFile, http::Status};
 
+use crate::shared::Id;
+
 use super::data::AvatarResponse;
 
 #[get("/user/<user_id>/avatar")]
-pub async fn user_avatar(user_id: String) -> AvatarResponse {
+pub async fn user_avatar(user_id: Id) -> AvatarResponse {
 
     //TODO: Check if has set custom avatar
 

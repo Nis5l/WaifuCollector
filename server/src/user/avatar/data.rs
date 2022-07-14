@@ -22,13 +22,6 @@ impl AvatarResponse {
             response: Err(error::ApiErrors::ApiError(error::ApiError::new(status, error)))
         }
     }
-    pub fn err(error: error::ApiErrors) -> Self {
-        Self {
-            status: None,
-            response: Err(error)
-        }
-    }
-
     pub fn get_status(&self) -> rocket::http::Status {
         if self.status.is_none() {
             return rocket::http::Status::InternalServerError
