@@ -82,7 +82,7 @@ impl Default for Config {
 
             domain: String::from("https://waifucollector.com"),
             verification_key_length: 20,
-            id_length: 10,
+            id_length: 13,
 
             username_len_min: 4,
             username_len_max: 20,

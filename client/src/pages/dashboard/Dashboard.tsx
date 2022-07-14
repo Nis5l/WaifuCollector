@@ -4,7 +4,7 @@ import Card from '../../components/Card';
 import Loading from '../../components/Loading'
 
 import "./Dashboard.scss"
-import Achievements from '../../components/Achievements';
+import { AchievementsComponent } from './achievements';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { AuthProps, withAuth } from '../../hooks/useAuth';
 import ProfileImage from '../../components/users/ProfileImage';
@@ -34,7 +34,7 @@ type StateDashboard = {
     requests: boolean
 }
 
-const collectorID: string = "xxxxxxxxxx";
+const collectorID: string = "xxxxxxxxxxxxx";
 
 class Dashboard extends Component<PropsDashboard, StateDashboard> {
     private lcounter: number;

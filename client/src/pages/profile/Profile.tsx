@@ -32,7 +32,7 @@ type StateProfile = {
     flexCards: any[]
 }
 
-const collector: string = "xxxxxxxxxx";
+const collector: string = "xxxxxxxxxxxxx";
 
 class Profile extends Component<PropsProfile, StateProfile> {
     private userID: string;

@@ -85,7 +85,7 @@ class PackGraph extends Component<Props> {
     async loadData() {
 
         try {
-            const id: string = "xxxxxxxxxx";
+            const id: string = "xxxxxxxxxxxxx";
             const res = await axios.get(`/pack/${id}/stats`);
 
 			return res.data;

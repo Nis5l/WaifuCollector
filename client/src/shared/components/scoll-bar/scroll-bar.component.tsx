@@ -1,10 +1,9 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import {Scrollbars} from 'react-custom-scrollbars'
 
-import './ScrollBar.scss'
+import './scroll-bar.component.scss'
 
-class Scrollbar extends Component {
-
+export class ScrollbarComponent extends Component {
     constructor(props: any) {
         super(props);
         this.renderThumb = this.renderThumb.bind(this);
@@ -39,5 +38,3 @@ class Scrollbar extends Component {
         );
     }
 }
-
-export default Scrollbar;

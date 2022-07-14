@@ -27,7 +27,7 @@ type StateInventory = {
   loading: boolean
 }
 
-const collectorID: string = "xxxxxxxxxx";
+const collectorID: string = "xxxxxxxxxxxxx";
 
 class Inventory extends Component<PropsInventory, StateInventory> {
   private key: number;

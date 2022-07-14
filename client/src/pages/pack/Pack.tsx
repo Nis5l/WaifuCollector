@@ -15,7 +15,7 @@ type StatePack = {
     cards: any[]
 }
 
-const collector: string = "xxxxxxxxxx";
+const collector: string = "xxxxxxxxxxxxx";
 
 class Pack extends Component<PropsPack, StatePack> {
     private key: number;
