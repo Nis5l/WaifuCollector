@@ -8,8 +8,7 @@ import Scrollbar from '../../components/ScrollBar'
 
 import "./Home.scss"
 import "../../scss/effects.scss"
-
-import Config from '../../config.json'
+import { Link } from 'react-router-dom'
 
 const WaifuCard = lazy(() => import('../../components/WaifuCard'));
 
@@ -118,7 +117,7 @@ function Home() {
 								</a>
 							</div>
                             <div id="privacyhref">
-								<a href="/privacy" className="shake">Privacy</a>
+								<Link to="/privacy" className="shake">Privacy</Link>
 							</div>
                         </div>
                     </Card>

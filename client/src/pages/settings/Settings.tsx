@@ -4,13 +4,12 @@ import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
 import Card from '../../components/Card'
 
-import {RouteComponentProps, withRouter} from 'react-router-dom'
-
 import './Settings.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-type PropsSettings = RouteComponentProps & AxiosPrivateProps & AuthProps & {};
+type PropsSettings = ReactRouterProps & AxiosPrivateProps & AuthProps & {};
 
 type StateSettings = {
   loading: boolean,

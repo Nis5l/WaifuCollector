@@ -37,10 +37,12 @@
 
             }
 
-            .logo{
-
+            .profile_image{
                 height: 17vh;
                 width: 17vh;
+
+                border-radius: 100%;
+                border: 1px solid white;
 
                 backface-visibility: hidden;
                 -ms-transform: translateZ(0); /* IE 9 */

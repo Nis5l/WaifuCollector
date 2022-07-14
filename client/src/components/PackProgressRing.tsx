@@ -1,17 +1,16 @@
 import {Component} from 'react'
 import {formatTime} from '../Utils'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 import moment, { Duration, Moment } from 'moment';
 
 import './PackProgressRing.scss'
 import redirectIfNecessary from './Redirecter'
 import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../hooks/withRouter';
 
-type PropsPackProgressRing = RouteComponentProps & AxiosPrivateProps & {
+type PropsPackProgressRing = ReactRouterProps & AxiosPrivateProps & {
     collectorID: string,
     className: string,
-    lCallback: () => void,
-    history: any
+    lCallback: () => void
 }
 
 type StatePackProgressRing = {
@@ -65,7 +64,7 @@ class PackProgressRing extends Component<PropsPackProgressRing, StatePackProgres
 				self.packTime = moment(res.data.packTime);
 				this.incrementLCounter();
             }).catch((err: any) => {
-                redirectIfNecessary(this.props.history, err);
+                redirectIfNecessary(this.props.router.navigate, err);
 			});
     }
 
@@ -103,7 +102,7 @@ class PackProgressRing extends Component<PropsPackProgressRing, StatePackProgres
 
     onClick(obj: any) {
         if (new Date() >= obj.packTime)
-            this.props.history.push('/pack');
+            this.props.router.navigate('/pack');
     }
 
     render() {

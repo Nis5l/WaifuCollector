@@ -1,16 +1,14 @@
 import {Component} from 'react'
 import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
-import { RouteComponentProps, withRouter} from 'react-router-dom'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 
 
 import './Pack.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-type PropsPack = RouteComponentProps & AxiosPrivateProps & {
-    history: any
-}
+type PropsPack = ReactRouterProps & AxiosPrivateProps & {}
 
 type StatePack = {
     loading: boolean,
@@ -46,8 +44,8 @@ class Pack extends Component<PropsPack, StatePack> {
 				parseCards(cards);
 				this.setState({cards: cards});
             }).catch((err: any) => {
-                if(redirectIfNecessary(this.props.history, err)) return;
-				this.props.history.push('/dashboard');
+                if(redirectIfNecessary(this.props.router.navigate, err)) return;
+				this.props.router.navigate('/dashboard');
 			});
     }
 
@@ -58,7 +56,7 @@ class Pack extends Component<PropsPack, StatePack> {
             }, self.quitCooldown);
         }
         else {
-            self.props.history.push(`/card/${uuid}`);
+            self.props.router.navigate(`/card/${uuid}`);
             e.stopPropagation();
             e.preventDefault();
         }
@@ -66,7 +64,7 @@ class Pack extends Component<PropsPack, StatePack> {
 
     onQuit(e: any, self: Pack) {
         if (!self.quittable) return;
-        self.props.history.push('/dashboard');
+        self.props.router.navigate('/dashboard');
         e.preventDefault();
     }
 

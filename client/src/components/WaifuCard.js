@@ -1,11 +1,11 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import ResizeText from "./ResizeText"
 import {LoopCircleLoading} from 'react-loadingg'
-import {withRouter} from 'react-router-dom'
 
 import Config from '../config.json'
 
 import './WaifuCard.scss'
+import { withRouter } from '../hooks/withRouter'
 
 class WaifuCard extends Component {
     constructor(props) {
@@ -143,7 +143,7 @@ class WaifuCard extends Component {
 
     redirect(self) {
         if (self === undefined) self = this;
-        self.props.history.push(`/card/${this.state.uuid}`)
+        self.props.router.navigate(`/card/${this.state.uuid}`)
     }
 
     componentDidMount() {

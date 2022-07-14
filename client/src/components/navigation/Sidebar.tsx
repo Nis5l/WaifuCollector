@@ -1,28 +1,27 @@
 import React, { Component, RefObject } from 'react'
 
-import NotificationBell from './NotificationBell'
-import Notifications from './Notifications'
+import NotificationBell from '../NotificationBell'
+import Notifications from '../Notifications'
 
 import {
     ProSidebar,
     Menu,
     MenuItem,
     SubMenu,
-    SidebarHeader,
     SidebarFooter,
     SidebarContent,
 } from 'react-pro-sidebar'
 
 import {Link} from 'react-router-dom'
 
-import './Navbar.scss'
-import { AuthProps, withAuth } from '../hooks/useAuth'
+import './Sidebar.scss'
+import { AuthProps, withAuth } from '../../hooks/useAuth'
 
 type Props = AuthProps & {
     token: string | undefined
 }
 
-class Navbar extends Component<Props, any> {
+class Sidebar extends Component<Props, any> {
     private box: RefObject<any>;
 
     constructor(props: Props) {
@@ -108,55 +107,8 @@ class Navbar extends Component<Props, any> {
                     ref={this.box}
                 >
 
-                    <SidebarHeader>
-                        <Link
-                            to="/"
-                            onClick={ () => {this.toggleMenu(); }}
-                        >
-                            <div
-                                className="sidebar-title"
-                            >
-                                <img
-                                    src="/assets/IconWhite.png"
-                                    className="headerIcon"
-                                    alt="Icon"
-                                />
-
-                                <span>WaifuCollector</span>
-
-                            </div>
-                        </Link>
-                    </SidebarHeader>
-
                     <SidebarContent>
                         <Menu iconShape="circle">
-                            {!this.state.loggedIn &&
-                                <MenuItem
-                                    icon={<i className="fas fa-sign-in-alt"></i>}
-                                >
-                                    <Link
-                                        to="/login"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Login
-                                    </Link>
-                                </MenuItem>
-                            }
-
-                            {!this.state.loggedIn &&
-                                <MenuItem
-                                    icon={<i className="fas fa-registered"></i>}
-                                >
-                                    <Link
-                                        to="/register"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Register
-                                    </Link>
-                                </MenuItem>
-
-                            }
-
                             {this.state.loggedIn && <MenuItem
                                 icon=
                                 {
@@ -225,29 +177,6 @@ class Navbar extends Component<Props, any> {
                                 <MenuItem>Anime</MenuItem>
                                 <MenuItem>Users</MenuItem>
                             </SubMenu>}
-
-                            {false && <MenuItem
-                                icon={<i className="fas fa-clipboard-list"></i>}
-                            >
-                                <Link
-                                    to="/leaderboard"
-                                    onClick={ () => {this.toggleMenu(); }}
-                                >
-                                    Leaderboard
-                                </Link>
-                            </MenuItem>}
-
-                            {this.state.loggedIn && <MenuItem
-                                icon={<i className="fas fa-sign-out-alt"></i>}
-                            >
-                                <Link
-                                    to="/logout"
-                                    onClick={ () => {this.toggleMenu(); }}
-                                >
-                                    Logout
-                                </Link>
-                            </MenuItem>}
-
                         </Menu>
                     </SidebarContent>
 
@@ -289,4 +218,4 @@ class Navbar extends Component<Props, any> {
     }
 }
 
-export default withAuth(Navbar);
+export default withAuth(Sidebar);

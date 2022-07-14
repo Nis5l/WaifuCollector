@@ -10,7 +10,7 @@ use crate::sql::Sql;
 use crate::config::Config;
 
 use super::data::{RefreshResponse, UserRoleDb};
-use super::sql::{self, delete_refresh_token};
+use super::sql;
 
 #[get("/refresh")]
 pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &rocket::State<Config>) -> ApiResponseErr<RefreshResponse>{
@@ -24,12 +24,12 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
     let token = match jwt_verify_token(&refresh_token, &config.refresh_token_secret, &Duration::seconds(config.refresh_token_duration as _)) {
         Ok(token) => token,
         Err(JwtTokenError::Expired) => {
-            match delete_refresh_token(&sql, refresh_token).await {
+            match sql::delete_refresh_token(&sql, refresh_token).await {
                 _ => return ApiResponseErr::api_err(Status::Unauthorized, String::from("Refresh token expired"))
             };
         },
         Err(JwtTokenError::ParseError(_)) => {
-            return  ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't parse refresh token"));
+            return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't parse refresh token"));
         }
     };
 
@@ -62,7 +62,7 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
             Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
         };
 
-        rjtry!(delete_refresh_token(&sql, refresh_token).await);
+        rjtry!(sql::delete_refresh_token(&sql, refresh_token).await);
         rjtry!(sql::insert_refresh_token(&sql, &token.id, &new_refresh_token).await);
 
         let refresh_token_cookie: Cookie = build_refresh_token_cookie(new_refresh_token.clone(), config.refresh_token_duration.into());

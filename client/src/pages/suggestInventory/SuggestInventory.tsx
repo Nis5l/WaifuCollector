@@ -1,17 +1,13 @@
 import {Component} from 'react'
 import Inventory from '../inventory/Inventory'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 import redirectIfNecessary from '../../components/Redirecter'
 
 import './SuggestInventory.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-interface SuggestInventoryParams {
-  id: string | undefined
-}
-
-type PropsSuggestInventory = RouteComponentProps<SuggestInventoryParams> & AxiosPrivateProps & AuthProps & {
+type PropsSuggestInventory = ReactRouterProps & AxiosPrivateProps & AuthProps & {
 
 }
 
@@ -26,7 +22,7 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
   constructor(props: PropsSuggestInventory) {
     super(props);
 
-    this.friendID = props.match.params.id != null ? props.match.params.id : "";
+    this.friendID = props.router.params.id != null ? props.router.params.id : "";
 
     this.state = {
       error: undefined,
@@ -40,9 +36,9 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
     this.props.axios.post(`/trade/${this.friendID}/suggestion/add/${card}`, {})
       .then((res: any) => {
         this.setState({loading: false});
-		    self.props.history.push(`/trade/${this.friendID}`);
+		    self.props.router.navigate(`/trade/${this.friendID}`);
       }).catch((err: any) => {
-        if (redirectIfNecessary(this.props.history, err)) return 1;
+        if (redirectIfNecessary(this.props.router.navigate, err)) return 1;
 
 		if(err.response.data.error)
 			self.setState({error: "Error: " + err.response.data.error});

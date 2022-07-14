@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react'
-import {useHistory} from 'react-router-dom'
 import Card from '../../components/Card'
 import Logo from '../../components/Logo'
 
@@ -9,6 +8,7 @@ import User from '../../shared/User'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { setRememberMe } from '../../utils/utils'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 type PropsLogin = {}
 
@@ -26,7 +26,10 @@ function Login(props: PropsLogin) {
     const [userwrong, setUserwrong] = useState(true);
     const [passwrong, setPasswrong] = useState(true);
 
-    const history = useHistory();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state as any;
+    const from = state != null && state.from != null && state.from.pathname != null ? state.from.pathname : "/dashboard";
 
     const axios = useAxiosPrivate();
 
@@ -60,7 +63,7 @@ function Login(props: PropsLogin) {
 
                 setRememberMe(remember);
 
-                history.push("/dashboard");
+                navigate(from, { replace: true });
             }).catch(err => {
 				setError(err.response.data.error);
 			});

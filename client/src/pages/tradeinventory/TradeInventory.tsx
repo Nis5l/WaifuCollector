@@ -1,17 +1,13 @@
 import {Component} from 'react'
 import Inventory from '../inventory/Inventory'
-import {RouteComponentProps, withRouter} from 'react-router-dom'
 import redirectIfNecessary from '../../components/Redirecter'
 
 import './TradeInventory.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-interface TradeInventoryParams {
-  id: string | undefined
-}
-
-type PropsTradeInventory = RouteComponentProps<TradeInventoryParams> & AxiosPrivateProps & AuthProps & {
+type PropsTradeInventory = ReactRouterProps & AxiosPrivateProps & AuthProps & {
 
 }
 
@@ -26,7 +22,7 @@ class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory>
   constructor(props: PropsTradeInventory) {
     super(props);
 
-    const friendID = props.match.params.id;
+    const friendID = props.router.params.id;
     if(friendID != null) this.friendID = friendID;
 
     this.state = {
@@ -40,9 +36,9 @@ class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory>
 
     this.props.axios.post(`/trade/${this.friendID}/card/add/${card}`, {})
       .then((res: any) => {
-    	  self.props.history.push(`/trade/${this.friendID}`);
+    	  self.props.router.navigate(`/trade/${this.friendID}`);
       }).catch((err: any) => {
-          if (redirectIfNecessary(this.props.history, err)) return;
+          if (redirectIfNecessary(this.props.router.navigate, err)) return;
           self.setState({error: "Error: Internal Error"});
 	  });
   }

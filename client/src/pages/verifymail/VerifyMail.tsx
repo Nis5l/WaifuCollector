@@ -6,11 +6,10 @@ import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 
 import './VerifyMail.scss'
-import { RouteComponentProps } from 'react-router'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
 
-type PropsVerifyMail = RouteComponentProps & AxiosPrivateProps & {
-}
+type PropsVerifyMail = ReactRouterProps & AxiosPrivateProps & {}
 
 type StateVerifyMail = {
   email: string,
@@ -40,13 +39,13 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
     	  this.setState({loading: false});
           switch (res.data.verified) {
             case 1:
-              this.props.history.push('/verify');
+              this.props.router.navigate('/verify');
               break;
             case 2:
               this.setState({loaded: true});
               break;
             default:
-              this.props.history.push('/dashboard');
+              this.props.router.navigate('/dashboard');
           }
       }).catch((err: any) => {
 		    console.log("Unexpected /verify/check error");
@@ -62,7 +61,7 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
 
     this.props.axios.post(`/email/change`, data)
       .then((res: any) => {
-    	  this.props.history.push('/verify');
+    	  this.props.router.navigate('/verify');
       }).catch((err: any) => {
 		  if(err.response)
     		this.setState({error: err.response.data.error})
@@ -118,4 +117,4 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
   }
 }
 
-export default withAxiosPrivate(VerifyMail);
+export default withAxiosPrivate(withRouter(VerifyMail));
