@@ -1,24 +1,15 @@
 import React, { Component, RefObject } from 'react'
 
-import NotificationBell from '../NotificationBell'
-import Notifications from '../Notifications'
-
 import {
     ProSidebar,
     Menu,
-    MenuItem,
-    SubMenu,
-    SidebarFooter,
     SidebarContent,
 } from 'react-pro-sidebar'
-
-import {Link} from 'react-router-dom'
+import NavigationMenuItem from '../../shared/NavigationItem'
 
 import './Sidebar.scss'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-
-type Props = AuthProps & {
-    token: string | undefined
+type Props = {
+    menuItems: NavigationMenuItem[]
 }
 
 class Sidebar extends Component<Props, any> {
@@ -33,9 +24,6 @@ class Sidebar extends Component<Props, any> {
             notification: false,
             notifications: [],
             rotatingSettings: false,
-
-            loggedIn: props.auth != null,
-            role: props.auth != null ? props.auth.role : 0
         };
 
         window.addEventListener('resize', () => this.handleResize());
@@ -77,28 +65,9 @@ class Sidebar extends Component<Props, any> {
         this.setState({toggled});
     }
 
-    componentDidUpdate(prevProps: Props){
-        if(prevProps.auth !== this.props.auth){
-            this.setState({
-                loggedIn: this.props.auth != null
-            });
-        }
-    }
-
     render() {
         return (
             <div>
-                <div
-                    className="blurbackground notification_wrapper"
-                    style={{top: this.state.notification ? 0 : "-100vh"}}
-                    onClick={() => {this.setState({notification: false})}}
-                >
-                    <Notifications
-                        onHide={() => this.setState({notification: false})}
-                        onNotifications={(data: any) => this.setState({notifications: data})}
-                    />
-                </div>
-
                 {(this.state.mobile && !this.state.toggled) && <i className="menu-toggle fas fa-bars" onClick={() => this.toggleMenu()}></i>}
 
                 <ProSidebar
@@ -109,107 +78,9 @@ class Sidebar extends Component<Props, any> {
 
                     <SidebarContent>
                         <Menu iconShape="circle">
-                            {this.state.loggedIn && <MenuItem
-                                icon=
-                                {
-                                    <NotificationBell notifications={this.state.notifications.length} />
-                                }
-                            >
-                                <Link
-                                    to="#"
-                                    onClick={() => {this.setState({notification: true})}}
-                                >
-                                    Notifications
-                                </Link>
-                            </MenuItem>}
-
-                            {this.state.loggedIn && <SubMenu
-                                title="Dashboard"
-                                icon={<i className="fas fa-home"></i>}
-                            >
-                                <MenuItem>
-                                    <Link
-                                        to="/dashboard"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Home
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem>
-                                    <Link
-                                        to="/pack"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Pack
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem>
-                                    <Link
-                                        to="/inventory"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Inventory
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem>
-                                    <Link
-                                        to="/users"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Users
-                                    </Link>
-                                </MenuItem>
-                            </SubMenu>}
-
-                            {this.state.loggedIn && this.state.role === 1 && <SubMenu
-                                title="Adminpanel"
-                                icon={<i className="fas fa-user"></i>}
-                            >
-                                <MenuItem>
-                                    <Link
-                                        to="/admin/log"
-                                        onClick={ () => {this.toggleMenu(); }}
-                                    >
-                                        Log
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem>Cards</MenuItem>
-                                <MenuItem>Anime</MenuItem>
-                                <MenuItem>Users</MenuItem>
-                            </SubMenu>}
+                            { this.props.menuItems.map((item: NavigationMenuItem) => item.build()) }
                         </Menu>
                     </SidebarContent>
-
-                    {this.state.loggedIn && <SidebarFooter style={{textAlign: 'center'}}>
-                        <div
-                            className="sidebar-btn-wrapper"
-                            style={{
-                                padding: '20px 10px',
-                            }}
-                        >
-                            <Link
-                                to="/settings"
-                                className="sidebar-btn"
-                                rel="noopener noreferrer"
-                            >
-                                <div
-                                    className="sidebar-btn"
-                                    onMouseEnter={() => {
-                                        this.setState({rotatingSettings: true});
-                                    }}
-                                    onMouseLeave={() => {
-                                        this.setState({rotatingSettings: false});
-                                    }}
-                                >
-                                    <i
-                                        className={"fas fa-cog" + (this.state.rotatingSettings ? " spinning" : "")}
-                                    />
-                                    <span>Settings</span>
-                                </div>
-                            </Link>
-                        </div>
-                    </SidebarFooter>}
-
                 </ProSidebar>
 
             </div>
@@ -218,4 +89,4 @@ class Sidebar extends Component<Props, any> {
     }
 }
 
-export default withAuth(Sidebar);
+export default Sidebar;
