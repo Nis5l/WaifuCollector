@@ -5,7 +5,8 @@ use crate::shared::Id;
 #[derive(Debug, Serialize, FromRow)]
 pub struct Collector {
     pub id: Id,
-    pub name: String
+    pub name: String,
+    pub userId: Id
 }
 
 #[macro_export]

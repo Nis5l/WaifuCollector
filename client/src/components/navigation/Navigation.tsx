@@ -34,7 +34,7 @@ class Navigation extends Component<PropsNavigation>{
                     { this.props.auth != null && (
                         <>
                             <Link
-                                to="/collectors"
+                                to="/collector"
                             >Collectors</Link>
                             <ProfileImage
                                 className={"profile"}

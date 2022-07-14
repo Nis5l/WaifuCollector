@@ -1,7 +1,5 @@
 import { AuthProvider } from './context/AuthProvider'
 
-import Sidebar from './components/navigation/Sidebar'
-
 import Home from './pages/home/Home'
 import Dashboard from './pages/dashboard/Dashboard'
 import Profile from './pages/profile/Profile'
@@ -30,6 +28,9 @@ import Navigation from './components/navigation/Navigation'
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import RequireAuth from './components/routes/RequireAuth'
 import RequireNoAuth from './components/routes/RequireNoAuth'
+import CollectorList from './pages/collector/list/CollectorList'
+import GameSidebar from './components/navigation/sidebars/GameSidebar'
+import CollectorSidebar from './components/navigation/sidebars/CollectorSidebar'
 
 function App() {
   let [ remembered, setRemembered ] = useState(false);
@@ -85,9 +86,21 @@ function App() {
                     </Route>
 
                     {/* Collector Player */}
+                    <Route path="/collector" element={
+                        <div style={{height: "100%", width: "100%", display: "flex"}}>
+                          <CollectorSidebar />
+                          <main className='content'>
+                            <Outlet />
+                          </main>
+                        </div>
+                      }>
+                        <Route index element={<CollectorList />} /> 
+                    </Route>
+
+                    {/* Game Player */}
                     <Route element={
                       <div style={{height: "100%", width: "100%", display: "flex"}}>
-                        <Sidebar />
+                        <GameSidebar />
                         <main className='content'>
                           <Outlet />
                         </main>
