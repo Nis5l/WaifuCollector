@@ -33,6 +33,7 @@ import GameSidebar from './components/navigation/sidebars/GameSidebar'
 import CollectorSidebar from './components/navigation/sidebars/CollectorSidebar'
 import UserDashboardComponent from './pages/user/dashboard/UserDashboard'
 import NoMatch from './pages/nomatch/NoMatch'
+import CollectorNewComponent from './pages/collector/new/CollectorNew'
 
 function App() {
   let [ remembered, setRemembered ] = useState(false);
@@ -98,7 +99,9 @@ function App() {
                           </main>
                         </div>
                       }>
-                        <Route index element={<CollectorList />} /> 
+                        <Route index element={<Navigate to="list" />} />
+                        <Route path="list" element={<CollectorList />} /> 
+                        <Route path="new" element={<CollectorNewComponent />} />
                     </Route>
 
                     {/* Game Player */}

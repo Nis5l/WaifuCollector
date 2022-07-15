@@ -19,7 +19,7 @@ function CollectorComponent(props: PropsCollector){
             className="collector-card-wrapper zoom"
         >  
             <div className="collector-card-image">
-                <img src="assets/placeholder.png" alt="Collector" />
+                <img src="/assets/placeholder.png" alt="Collector" />
             </div>
             <div className="collector-card-content">
                 <h2>{props.collector.name}</h2>

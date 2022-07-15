@@ -26,7 +26,7 @@ pub async fn create_collector(sql: &Sql, collector_name: &str, collector_id: &Id
         .bind(collector_id)
         .bind(user_id)
         .bind(collector_name)
-        .fetch_one(&mut con)
+        .execute(&mut con)
         .await?;
 
     Ok(())
