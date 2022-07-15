@@ -1,12 +1,12 @@
 import {Component} from 'react'
-import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
-import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
+import WaifuCard, {parseCards, WaifuCardLoad} from "../../../components/WaifuCard"
+import redirectIfNecessary from '../../../components/Redirecter'
+import Loading from '../../../components/Loading'
 
 
 import './Pack.scss'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../../hooks/withRouter'
 
 type PropsPack = ReactRouterProps & AxiosPrivateProps & {}
 
@@ -15,18 +15,20 @@ type StatePack = {
     cards: any[]
 }
 
-const collector: string = "xxxxxxxxxx";
-
 class Pack extends Component<PropsPack, StatePack> {
     private key: number;
     private quitCooldown: number;
     private quittable: boolean;
+
+    private collectorID: string;
 
     constructor(props: PropsPack) {
         super(props);
         this.key = 0;
         this.quitCooldown = 800;
         this.quittable = false;
+
+        this.collectorID = this.props.router.params.collector_id != null ? this.props.router.params.collector_id : "";
 
         this.state =
         {
@@ -36,7 +38,7 @@ class Pack extends Component<PropsPack, StatePack> {
     }
 
     componentDidMount() {
-        this.props.axios.post(`${collector}/pack/open`, {})
+        this.props.axios.post(`${this.collectorID}/pack/open`, {})
             .then((res: any) => {
                 this.setState({loading: false});
 

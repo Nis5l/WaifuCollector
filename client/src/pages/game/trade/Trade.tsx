@@ -1,17 +1,17 @@
 import React, {Component, RefObject} from 'react'
-import Card from '../../components/Card'
-import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
-import Scrollbar from '../../components/ScrollBar'
-import {YesNo, YesNoCancel} from '../../components/Popup'
-import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
-import {formatTime} from '../../Utils'
+import Card from '../../../components/Card'
+import WaifuCard, {parseCards, WaifuCardLoad} from '../../../components/WaifuCard'
+import Scrollbar from '../../../components/ScrollBar'
+import {YesNo, YesNoCancel} from '../../../components/Popup'
+import redirectIfNecessary from '../../../components/Redirecter'
+import Loading from '../../../components/Loading'
+import {formatTime} from '../../../Utils'
 import moment from 'moment';
 
 import './Trade.scss'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import { AuthProps, withAuth } from '../../../hooks/useAuth'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../../hooks/withRouter'
 
 const suggestCardColor = "rgb(255 255 255 / 50%)";
 

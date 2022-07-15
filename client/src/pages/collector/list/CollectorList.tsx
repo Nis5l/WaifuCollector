@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import CollectorComponent from "../../../components/collector/Collector";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Collector from "../../../shared/Collector";
@@ -10,6 +11,7 @@ type PropsCollectorList = {}
 function CollectorList(props: PropsCollectorList){
     const axiosPrivate = useAxiosPrivate();
     const [ collectors, setCollectors ] = useState<Collector[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axiosPrivate.get("/collector/list").then((response: any) => {
@@ -19,7 +21,7 @@ function CollectorList(props: PropsCollectorList){
     }, [ setCollectors ]);
 
     const onClick = (collector: Collector) => {
-        console.log(collector);
+        navigate(`/collector/${collector.id}/dashboard`);
     }
 
     return (

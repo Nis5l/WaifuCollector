@@ -1,11 +1,11 @@
 import {Component} from 'react'
 import Inventory from '../inventory/Inventory'
-import redirectIfNecessary from '../../components/Redirecter'
+import redirectIfNecessary from '../../../components/Redirecter'
 
 import './TradeInventory.scss'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
+import { AuthProps, withAuth } from '../../../hooks/useAuth'
+import { ReactRouterProps, withRouter } from '../../../hooks/withRouter'
 
 type PropsTradeInventory = ReactRouterProps & AxiosPrivateProps & AuthProps & {
 

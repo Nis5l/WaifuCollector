@@ -1,16 +1,16 @@
 import React, {Component, RefObject} from 'react'
-import WaifuCard, {parseCards} from '../../components/WaifuCard'
+import WaifuCard, {parseCards} from '../../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
-import Scrollbar from '../../components/ScrollBar'
-import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
+import Scrollbar from '../../../components/ScrollBar'
+import redirectIfNecessary from '../../../components/Redirecter'
+import Loading from '../../../components/Loading'
 
 import "./Inventory.scss"
-import Config from '../../config.json'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import Config from '../../../config.json'
+import { AuthProps, withAuth } from '../../../hooks/useAuth'
+import { AxiosPrivateProps, withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
+import { ReactRouterProps, withRouter } from '../../../hooks/withRouter'
 
 type PropsInventory = ReactRouterProps & AuthProps & AxiosPrivateProps & {
   userID: string,
@@ -26,8 +26,6 @@ type StateInventory = {
   errorMessage: string | undefined,
   loading: boolean
 }
-
-const collectorID: string = "xxxxxxxxxx";
 
 class Inventory extends Component<PropsInventory, StateInventory> {
   private key: number;
@@ -52,6 +50,8 @@ class Inventory extends Component<PropsInventory, StateInventory> {
 
   private card_wrapper: RefObject<any>;
   private searchInput: RefObject<any>;
+
+  private collectorID: string;
   
   constructor(props: PropsInventory) {
     super(props);
@@ -77,6 +77,8 @@ class Inventory extends Component<PropsInventory, StateInventory> {
 
     this.hasMore = true;
     this.loadingCards = false;
+
+    this.collectorID = this.props.router.params.collector_id != null ? this.props.router.params.collector_id : "";
 
     this.state =
     {
@@ -114,7 +116,7 @@ class Inventory extends Component<PropsInventory, StateInventory> {
 		};
   }
 
-    this.props.axios.post(`${Config.API_HOST}/user/${this.userID}/${collectorID}/inventory`, data)
+    this.props.axios.post(`${Config.API_HOST}/user/${this.userID}/${this.collectorID}/inventory`, data)
       .then((res: any) => {
         this.incrementLCounter();
 

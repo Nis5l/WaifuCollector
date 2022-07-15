@@ -1,17 +1,17 @@
 import React, {Component, RefObject} from 'react'
-import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
+import WaifuCard, {parseCards, WaifuCardLoad} from '../../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
-import {YesNo} from '../../components/Popup'
-import Scrollbar from '../../components/ScrollBar'
-import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
+import {YesNo} from '../../../components/Popup'
+import Scrollbar from '../../../components/ScrollBar'
+import redirectIfNecessary from '../../../components/Redirecter'
+import Loading from '../../../components/Loading'
 
-import Config from '../../config.json'
+import Config from '../../../config.json'
 
 import './CardPage.scss'
-import { AxiosPrivateProps } from '../../hooks/useAxiosPrivate'
-import { AuthProps } from '../../hooks/useAuth'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import { AxiosPrivateProps } from '../../../hooks/useAxiosPrivate'
+import { AuthProps } from '../../../hooks/useAuth'
+import { ReactRouterProps, withRouter } from '../../../hooks/withRouter'
 
 type PropsCardPage = ReactRouterProps & AuthProps & AxiosPrivateProps & {
   history: any

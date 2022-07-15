@@ -102,7 +102,7 @@ class PackProgressRing extends Component<PropsPackProgressRing, StatePackProgres
 
     onClick(obj: any) {
         if (new Date() >= obj.packTime)
-            this.props.router.navigate('/pack');
+            this.props.router.navigate('../pack');
     }
 
     render() {

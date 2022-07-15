@@ -1,18 +1,18 @@
 import {Component, lazy, Suspense} from 'react'
 
-import Card from '../../components/Card';
-import Loading from '../../components/Loading'
+import Card from '../../../components/Card';
+import Loading from '../../../components/Loading'
 
 import "./Dashboard.scss"
-import Achievements from '../../components/Achievements';
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { AuthProps, withAuth } from '../../hooks/useAuth';
-import ProfileImage from '../../components/users/ProfileImage';
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter';
+import Achievements from '../../../components/Achievements';
+import { AxiosPrivateProps, withAxiosPrivate } from '../../../hooks/useAxiosPrivate';
+import { AuthProps, withAuth } from '../../../hooks/useAuth';
+import ProfileImage from '../../../components/users/ProfileImage';
+import { ReactRouterProps, withRouter } from '../../../hooks/withRouter';
 
-const Friendlist = lazy(() => import('../../components/Friendlist'));
-const PackProgressRing = lazy(() => import('../../components/PackProgressRing'));
-const ProfileName = lazy(() => import('../../components/ProfileName'));
+const Friendlist = lazy(() => import('../../../components/Friendlist'));
+const PackProgressRing = lazy(() => import('../../../components/PackProgressRing'));
+const ProfileName = lazy(() => import('../../../components/ProfileName'));
 
 const loading = () => <p>Loading...</p>
 
@@ -34,19 +34,21 @@ type StateDashboard = {
     requests: boolean
 }
 
-const collectorID: string = "xxxxxxxxxx";
-
 class Dashboard extends Component<PropsDashboard, StateDashboard> {
     private lcounter: number;
     private lcounterMax: number;
 
     public componentMounted: boolean = false;
 
+    private collectorID: string;
+
     constructor(props: PropsDashboard) {
         super(props);
 
         this.lcounter = 0;
         this.lcounterMax = 4;
+
+        this.collectorID = this.props.router.params.collector_id != null ? this.props.router.params.collector_id : "";
 
         this.state =
         {
@@ -204,14 +206,14 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
                         <Suspense fallback={loading()}>
                             <PackProgressRing
-                                collectorID={collectorID}
+                                collectorID={this.collectorID}
                                 className="pack1"
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
                         </Suspense>
                         {false && <Suspense fallback={loading()}>
                             <PackProgressRing
-                                collectorID={collectorID}
+                                collectorID={this.collectorID}
                                 className="pack2"
                                 lCallback={() => {this.incrementLCounter(this)}}
                             />
