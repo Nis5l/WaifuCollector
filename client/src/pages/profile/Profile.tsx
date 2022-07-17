@@ -8,7 +8,7 @@ import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import Badges from '../../components/Achievements'
 
 import "./Profile.scss"
-import Scrollbar from '../../components/ScrollBar';
+import { ScrollbarComponent } from '../../shared/components/scrollbar';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
 import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
@@ -214,7 +214,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
                     onClick={function (event: any): void {} }
                 >
                     <div className="flex-grid">
-                        <Scrollbar>
+                        <ScrollbarComponent>
                             {
                                 this.state.flexCards.map((card) => (
                                     <div className="waifucard_wrapper" key={"card-" + card.id}>
@@ -226,7 +226,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
                                     </div>
                                 ))
                             }
-                        </Scrollbar>
+                        </ScrollbarComponent>
                     </div>
 
                 </Card>

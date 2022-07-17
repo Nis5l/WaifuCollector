@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import Foldable from '../../components/Foldable'
-import Scrollbar from '../../components/ScrollBar'
+import { ScrollbarComponent } from '../../shared/components/scrollbar'
 
 import './Privacy.scss'
 
@@ -10,7 +10,7 @@ class Privacy extends Component {
     return (
       <div className="privacy_wrapper">
         <h1 className="privacy_title">Privacy</h1>
-        <Scrollbar>
+        <ScrollbarComponent>
           <Foldable
               title="Data collection and usage"
               styleClassName={''}
@@ -84,7 +84,7 @@ class Privacy extends Component {
             Italy<br />
             </p>
           </Foldable>
-        </Scrollbar>
+        </ScrollbarComponent>
       </div>
     )
   }

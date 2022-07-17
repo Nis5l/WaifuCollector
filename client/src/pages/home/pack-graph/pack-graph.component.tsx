@@ -2,8 +2,8 @@ import React, {Component, RefObject} from 'react';
 import Chart, { ChartConfiguration } from 'chart.js';
 
 import "./PackGraph.scss"
-import axios from '../api/axios'
-import Config from '../config.json'
+import axios from '../../../api/axios'
+import { PackGraphProps } from './types';
 
 const config: ChartConfiguration = {
     type: 'line',
@@ -46,20 +46,15 @@ const config: ChartConfiguration = {
     }
 };
 
-type Props = {
-    styleClassName: string,
-    onLoad: () => void
-}
-
 const refreshTime = 1000 * 60;
 
-class PackGraph extends Component<Props> {
+export class PackGraphComponent extends Component<PackGraphProps> {
     private ctx: RefObject<any>;
     private chart: Chart | undefined = undefined;
 
-    private interval: any;
+    private interval?: NodeJS.Timer;
 
-    constructor(props: Props) {
+    constructor(props: PackGraphProps) {
         super(props);
         this.ctx = React.createRef();
     }
@@ -73,17 +68,13 @@ class PackGraph extends Component<Props> {
 
     componentWillUnmount() {
         clearInterval(this.interval);
-
     }
 
     async loadGraph() {
-
         this.chart = new Chart(this.ctx.current, config);
-
     }
 
     async loadData() {
-
         try {
             const id: string = "xxxxxxxxxxxxx";
             const res = await axios.get(`/pack/${id}/stats`);
@@ -95,11 +86,9 @@ class PackGraph extends Component<Props> {
         }
 
         return [];
-
     }
 
     async updateChart() {
-
         const options: any = {hourCycle: "h23", weekday: 'short', hour: 'numeric', minute: '2-digit'};
 
         const packData = await this.loadData();
@@ -124,7 +113,6 @@ class PackGraph extends Component<Props> {
         }
 
         this.chart.update();
-
     }
 
     render() {
@@ -135,5 +123,3 @@ class PackGraph extends Component<Props> {
         )
     }
 }
-
-export default PackGraph;

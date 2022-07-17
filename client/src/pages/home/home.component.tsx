@@ -1,26 +1,26 @@
-import React, {lazy, Suspense, useState} from 'react'
+import {lazy, Suspense, useState} from 'react'
 import Card from '../../components/Card'
 import Loading from '../../components/Loading'
 
-import PackGraph from '../../components/PackGraph'
+import { PackGraphComponent } from './pack-graph'
 import Foldable from '../../components/Foldable'
-import Scrollbar from '../../components/ScrollBar'
+import { ScrollbarComponent } from '../../shared/components/scrollbar'
 
-import "./Home.scss"
+import "./home.component.scss"
 import "../../scss/effects.scss"
 import { Link } from 'react-router-dom'
 
 const WaifuCard = lazy(() => import('../../components/WaifuCard'));
-
+//TODO: loading
 const loading = () => <p>Loading...</p>
 
-function Home() {
+export function HomeComponent() {
 
     const [loadingState, setLoadingState] = useState(true);
 
     return (
 
-        <Scrollbar>
+        <ScrollbarComponent>
             <Loading loading={loadingState} />
             <div className="container_home">
                 <Card
@@ -29,9 +29,9 @@ function Home() {
                     icon={''}
                     iconNum={0}
                     onIconClick={function (): void {} }
-                    onClick={function (event: any): void {} }
+                    onClick={function (_event: any): void {} }
                 >
-                    <PackGraph styleClassName="packGraph" onLoad={() => {setLoadingState(false)}} />
+                    <PackGraphComponent styleClassName="packGraph" onLoad={() => {setLoadingState(false)}} />
                 </Card>
 
                 <Foldable
@@ -95,7 +95,7 @@ function Home() {
                         icon={''}
                         iconNum={0}
                         onIconClick={function (): void {} }
-                        onClick={function (event: any): void {} }
+                        onClick={function (_event: any): void {} }
                     >
                         <div>
                             <div>
@@ -123,8 +123,6 @@ function Home() {
                     </Card>
                 </div>
             </div >
-        </Scrollbar>
+        </ScrollbarComponent>
     )
 }
-
-export default Home

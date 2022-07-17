@@ -7,7 +7,7 @@ import ProfileName from './ProfileName'
 
 import ThreeDotsMenu from './ThreeDotsMenu'
 
-import Scrollbar from './ScrollBar'
+import { ScrollbarComponent } from '../shared/components/scrollbar'
 import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
 import { ReactRouterProps, withRouter } from '../hooks/withRouter'
 
@@ -216,9 +216,9 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
 
                 {
                     this.state.width > 768 ?
-                        <Scrollbar>
+                        <ScrollbarComponent>
                             {inner}
-                        </Scrollbar>
+                        </ScrollbarComponent>
                         :
                         inner
                 }

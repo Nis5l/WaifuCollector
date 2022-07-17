@@ -1,5 +1,4 @@
-import Collector from "../../shared/Collector";
-import Card from "../Card";
+import { Collector } from "../../shared/types";
 
 import "./Collector.scss";
 

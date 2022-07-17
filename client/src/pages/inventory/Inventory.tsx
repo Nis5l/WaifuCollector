@@ -2,7 +2,7 @@ import React, {Component, RefObject} from 'react'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
-import Scrollbar from '../../components/ScrollBar'
+import { ScrollbarComponent } from '../../shared/components/scrollbar'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 
@@ -187,7 +187,7 @@ class Inventory extends Component<PropsInventory, StateInventory> {
         <div
           className="card_wrapper"
         >
-          <Scrollbar>
+          <ScrollbarComponent>
             <InfiniteScroll
               pageStart={0}
               loadMore={this.trackScrolling}
@@ -214,7 +214,7 @@ class Inventory extends Component<PropsInventory, StateInventory> {
                   )
               }
             </InfiniteScroll>
-          </Scrollbar>
+          </ScrollbarComponent>
         </div>
       </div>
     );

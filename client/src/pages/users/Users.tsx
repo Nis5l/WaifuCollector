@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import InfiniteScroll from 'react-infinite-scroller'
-import Scrollbar from '../../components/ScrollBar'
+import { ScrollbarComponent } from '../../shared/components/scrollbar'
 import UserBanner from '../../components/UserBanner'
 import Loading from '../../components/Loading'
 
@@ -97,7 +97,7 @@ class Users extends Component<PropsUsers, StateUsers> {
           <input onChange={(e) => {this.search(e, this)}} type="text" className="text_input" placeholder="Username" />
         </div>
         <div className="users">
-          <Scrollbar>
+          <ScrollbarComponent>
             <InfiniteScroll
               pageStart={0}
               loadMore={this.trackScrolling}
@@ -116,7 +116,7 @@ class Users extends Component<PropsUsers, StateUsers> {
                 ))
               }
             </InfiniteScroll>
-          </Scrollbar>
+          </ScrollbarComponent>
         </div>
       </div >
     )

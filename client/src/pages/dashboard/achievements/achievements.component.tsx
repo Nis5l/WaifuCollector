@@ -2,7 +2,7 @@ import { Component } from 'react';
 
 import { AchievementComponent } from './achievement';
 import { AchievementsProps } from './types';
-import { Scrollbar } from '../../../../shared'
+import { ScrollbarComponent } from '../../../shared/components/scrollbar'
 
 import './achievements.component.scss';
 
@@ -11,7 +11,7 @@ export class AchievementsComponent extends Component<AchievementsProps>{
 	{
 		this.props.achievements.reverse();
 		return (
-			<Scrollbar>
+			<ScrollbarComponent>
 				<ul className='achievements-inner'>
 					{
 						this.props.achievements.map((achievement: any) => (
@@ -19,7 +19,7 @@ export class AchievementsComponent extends Component<AchievementsProps>{
 						))
 					}
 				</ul>
-			</Scrollbar>
+			</ScrollbarComponent>
 		);
 	}
 }

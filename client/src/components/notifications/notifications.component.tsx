@@ -1,29 +1,18 @@
-import React, {Component, useState} from 'react'
-import Card from './Card'
-import { ScrollbarComponent } from '../shared/components/scrollbar'
-import redirectIfNecessary from './Redirecter'
+import {Component} from 'react'
+import Card from '../Card'
+import { ScrollbarComponent } from '../../shared/components/scrollbar'
+import redirectIfNecessary from '../Redirecter'
 
-import DoneIcon from '@material-ui/icons/Done';
-import {timeSince} from '../Utils'
+import "./notifications.component.scss"
+import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { withRouter } from '../../hooks/withRouter';
+import { NotificationComponent } from './notification';
 
-import "./Notifications.scss"
-import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
-import { useNavigate } from 'react-router-dom';
-import { ReactRouterProps, withRouter } from '../hooks/withRouter';
+import { NotificationsProps, NotificationsState } from './types';
 
+export class NotificationsComponent extends Component<NotificationsProps, NotificationsState>{
 
-type PropsNotifications = ReactRouterProps & AxiosPrivateProps & {
-    onNotifications: (notifications: any) => void,
-    onHide: () => void
-}
-
-type StateNotifications = {
-    notifications: any[]
-}
-
-export class NotificationsComponent extends Component<PropsNotifications, StateNotifications>{
-
-    constructor(props: PropsNotifications) {
+    constructor(props: NotificationsProps) {
         super(props);
 
         this.state =
@@ -45,7 +34,7 @@ export class NotificationsComponent extends Component<PropsNotifications, StateN
 			});
     }
 
-    remove(id: number) {
+    remove(id: string) {
         for (let i = 0; i < this.state.notifications.length; i++) {
             if (this.state.notifications[i].id === id) {
                 this.state.notifications.splice(i, 1);
@@ -84,11 +73,8 @@ export class NotificationsComponent extends Component<PropsNotifications, StateN
                             <NotificationComponent
                                 onHide={this.props.onHide}
                                 key={`notification-${notification.id}`}
-                                message={notification.title}
-                                date={notification.time}
+								notification={notification}
                                 icon="/assets/Icon.png"
-                                url={notification.url}
-                                id={notification.id}
                                 onRemove={(id) => this.remove(id)}
                             />
                         ))
@@ -100,4 +86,4 @@ export class NotificationsComponent extends Component<PropsNotifications, StateN
     }
 }
 
-export default withAxiosPrivate(withRouter(Notifications));
+export default withAxiosPrivate(withRouter(NotificationsComponent));

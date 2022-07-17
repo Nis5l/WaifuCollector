@@ -1,7 +1,7 @@
 import React, {Component, RefObject} from 'react'
 import Card from '../../components/Card'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
-import Scrollbar from '../../components/ScrollBar'
+import { ScrollbarComponent } from '../../shared/components/scrollbar'
 import {YesNo, YesNoCancel} from '../../components/Popup'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
@@ -365,7 +365,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
                 onIconClick={function (): void {} }
                 onClick={function (event: any): void {} }
               >
-                <Scrollbar>
+                <ScrollbarComponent>
                   <div className="card_wrapper">
                     {
                       this.state.cardSuggestions !== undefined &&
@@ -404,7 +404,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
                         )
                     }
                   </div>
-                </Scrollbar>
+                </ScrollbarComponent>
                 <input
                   type="submit"
                   className="button_input"
@@ -421,7 +421,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
                 onIconClick={function (): void {} }
                 onClick={function (event: any): void {} }
               >
-                <Scrollbar>
+                <ScrollbarComponent>
                   <div className="card_wrapper">
                     {
                       this.state.friendCardSuggestions !== undefined &&
@@ -459,7 +459,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
                         )
                     }
                   </div>
-                </Scrollbar>
+                </ScrollbarComponent>
                 <input
                   type="submit"
                   className="button_input"

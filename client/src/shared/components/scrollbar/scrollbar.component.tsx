@@ -1,7 +1,7 @@
 import {Component} from 'react'
 import {Scrollbars} from 'react-custom-scrollbars'
 
-import './scroll-bar.component.scss'
+import './scrollbar.component.scss'
 
 export class ScrollbarComponent extends Component {
     constructor(props: any) {

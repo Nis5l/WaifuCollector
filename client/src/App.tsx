@@ -1,6 +1,6 @@
 import { AuthProvider } from './context/AuthProvider'
 
-import Home from './pages/home/Home'
+import { HomeComponent } from './pages/home'
 import Dashboard from './pages/dashboard/Dashboard'
 import Profile from './pages/profile/Profile'
 import Pack from './pages/pack/Pack'
@@ -52,7 +52,7 @@ function App() {
                       </main>
                     </div>
                   }>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<HomeComponent />} />
                     <Route path="/privacy" element={<Privacy />} />
 
                     <Route path="/users" element={<Users />} />
