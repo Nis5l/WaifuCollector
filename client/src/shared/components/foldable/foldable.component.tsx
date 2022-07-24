@@ -1,23 +1,13 @@
 import {Component} from 'react'
 import CollapsibleContent from 'react-collapsible-content'
-import ResizeText from './ResizeText'
+import { ResizeTextComponent } from '../resize-text'
 
-import "./Foldable.scss"
+import { FoldableProps, FoldableState } from './types';
+import "./foldable.component.scss"
 import "../scss/effects.scss"
 
-type Props = {
-    styleClassName: string,
-    title: string,
-    children: any
-}
-
-type State = {
-    expanded: boolean
-}
-
-class Foldable extends Component<Props, State> {
-
-    constructor(props: Props) {
+export class FoldableComponent extends Component<FoldableProps, FoldableState> {
+    constructor(props: FoldableProps) {
         super(props);
         this.state = {
             expanded: false
@@ -31,18 +21,11 @@ class Foldable extends Component<Props, State> {
     render() {
         return (
             <div onClick={() => {this.onOpen()}} className={`card fold-card ${this.props.styleClassName}`}>
-
-                <div className="card-title"><ResizeText center={false} maxSize={0}><h1 className="shake-small">{this.props.title}</h1></ResizeText></div>
-
+                <div className="card-title"><ResizeTextComponent center={false} maxSize={0}><h1 className="shake-small">{this.props.title}</h1></ResizeTextComponent></div>
                 <CollapsibleContent expanded={this.state.expanded} className="card-content">
-
                     {this.props.children}
-
                 </CollapsibleContent>
-
             </div >
         );
     }
 }
-
-export default Foldable;

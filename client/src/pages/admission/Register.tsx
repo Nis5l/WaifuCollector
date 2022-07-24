@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import Card from '../../components/Card';
+import { CardComponent } from '../../shared/components';
 import Logo from '../../components/Logo';
 import {checkMail} from '../../Utils'
 
@@ -61,7 +61,7 @@ function Register(props: any) {
 
     return (
 
-        <Card
+        <CardComponent
             styleClassName="register"
             title={''}
             icon={''}
@@ -138,10 +138,8 @@ function Register(props: any) {
 
             </form>
 
-        </Card>
-
+        </CardComponent>
     );
-
 }
 
 export default Register

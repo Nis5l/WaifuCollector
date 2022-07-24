@@ -1,5 +1,5 @@
 import {Component} from 'react'
-import Card from '../../components/Card'
+import { CardComponent } from '../../shared/components'
 import {WaifuCardLoad} from '../../components/WaifuCard'
 import {checkMail} from '../../Utils'
 import Loading from '../../components/Loading'
@@ -77,7 +77,7 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
     return (
       <div>
         <Loading loading={this.state.loading} />
-        <Card styleClassName="verifymail">
+        <CardComponent styleClassName="verifymail">
 
           <Logo className="logo" />
 
@@ -111,7 +111,7 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
             <WaifuCardLoad />
           }
 
-        </Card>
+        </CardComponent>
       </div>
     )
   }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Card from '../../components/Card'
+import { CardComponent } from '../../shared/components'
 
 import './NoMatch.scss'
 
@@ -7,7 +7,7 @@ class NoMatch extends Component {
   render() {
     return (
       <div className="nopage_wrapper">
-        <Card
+        <CardComponent
           title={''}
           styleClassName={''}
           icon={''}
@@ -16,7 +16,7 @@ class NoMatch extends Component {
           onClick={function (event: any): void {} }
         >
         (⌯˃̶᷄ ﹏ ˂̶᷄⌯)ﾟ <br/> <br/> This page doesn't exist
-        </Card>
+        </CardComponent>
       </div>
     )
   }

@@ -1,6 +1,6 @@
 import {Component} from 'react'
-import Card from '../../components/Card'
-import {WaifuCardLoad} from '../../components/WaifuCard'
+import { CardComponent } from '../../shared/components'
+import { WaifuCardLoad } from '../../components/WaifuCard'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 
@@ -141,7 +141,7 @@ class Verify extends Component<PropsVerify, StateVerify> {
     return (
       <div>
         <Loading loading={this.state.loading} />
-        <Card styleClassName="verify">
+        <CardComponent styleClassName="verify">
 
           <Logo className="logo" />
 
@@ -164,7 +164,7 @@ class Verify extends Component<PropsVerify, StateVerify> {
           }
 
 
-        </Card>
+        </CardComponent>
       </div>
     )
   }

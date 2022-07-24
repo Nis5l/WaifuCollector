@@ -1,11 +1,11 @@
 import {Component} from 'react'
-import Card from '../../components/Card'
+import { CardComponent } from '../../shared/components'
 import Friendlist from '../../components/Friendlist'
 import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
-import Badges from '../../components/Achievements'
+import { AchievementsComponent } from '../../shared/components'
 
 import "./Profile.scss"
 import { ScrollbarComponent } from '../../shared/components/scrollbar';
@@ -153,7 +153,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
 
                 <Loading loading={this.state.loading} />
 
-                <Card
+                <CardComponent
                     title="Account Info"
                     styleClassName="accountInfo"
                     icon={icon}
@@ -192,9 +192,9 @@ class Profile extends Component<PropsProfile, StateProfile> {
 
                     </table>
 
-                </Card>
+                </CardComponent>
 
-                <Card
+                <CardComponent
                     title="Achievements"
                     styleClassName="badges"
                     icon={''}
@@ -202,10 +202,10 @@ class Profile extends Component<PropsProfile, StateProfile> {
                     onIconClick={function (): void {} }
                     onClick={function (event: any): void {} }
                 >
-					<Badges achievements={this.state.stats.achievements} />
-                </Card>
+					<AchievementsComponent achievements={this.state.stats.achievements} />
+                </CardComponent>
 
-                <Card
+                <CardComponent
                     title="Best Waifu"
                     styleClassName="flexen"
                     icon={''}
@@ -229,10 +229,10 @@ class Profile extends Component<PropsProfile, StateProfile> {
                         </ScrollbarComponent>
                     </div>
 
-                </Card>
+                </CardComponent>
 
                 <div className="friends_wrapper">
-                    <Card
+                    <CardComponent
                         title="Friends"
                         styleClassName="friends"
                         icon={''}
@@ -246,7 +246,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
                             onFriendData={(data: any) => this.onFriendData(data)}
                         />
 
-                    </Card>
+                    </CardComponent>
                 </div>
 
             </div>

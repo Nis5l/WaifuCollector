@@ -1,16 +1,10 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import FitText from '@plutonium-js/react-fit-text'
 
-import "./ResizeText.scss"
+import { ResizeTextProps } from './types';
+import "./resize-text.component.scss"
 
-type PropsResizeText = {
-    center: boolean,
-    maxSize: number,
-    children: any
-}
-
-class ResizeText extends Component<PropsResizeText> {
-
+export class ResizeTextComponent extends Component<ResizeTextProps> {
     render() {
         return (
             <div className="resizetext_wrapper">
@@ -25,5 +19,3 @@ class ResizeText extends Component<PropsResizeText> {
         );
     }
 }
-
-export default ResizeText;

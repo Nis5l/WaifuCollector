@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import Logo from '../../components/Logo'
 import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
-import Card from '../../components/Card'
+import { CardComponent } from '../../shared/components'
 
 import './Settings.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
@@ -104,7 +104,7 @@ class Settings extends Component<PropsSettings, StateSettings> {
     const userID: string = this.props.auth.id;
     return (
       <div className="settings_wrapper">
-        <Card
+        <CardComponent
           title={''}
           styleClassName={''}
           icon={''}
@@ -160,7 +160,7 @@ class Settings extends Component<PropsSettings, StateSettings> {
             /><br />
             <input type="submit" className="button_input" value="Change" disabled={disabled} />
           </form>
-        </Card>
+        </CardComponent>
       </div >
     )
   }

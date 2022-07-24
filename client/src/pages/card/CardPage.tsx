@@ -2,7 +2,7 @@ import React, {Component, RefObject} from 'react'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import {YesNo} from '../../components/Popup'
-import Scrollbar from '../../components/ScrollBar'
+import { ScrollbarComponent } from '../../shared/components/scrollbar'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 
@@ -230,7 +230,7 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
           />
         }
         <div className="card_wrapper_wrapper">
-          <Scrollbar>
+          <ScrollbarComponent>
             <InfiniteScroll
               pageStart={0}
               loadMore={this.trackScrolling}
@@ -270,7 +270,7 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
                 ))
               }
             </InfiniteScroll>
-          </Scrollbar>
+          </ScrollbarComponent>
         </div>
         <div className="cardpage_maincard">
           {

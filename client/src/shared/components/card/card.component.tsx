@@ -1,39 +1,27 @@
-import ResizeText from './ResizeText'
+import { ResizeTextComponent } from '../resize-text'
 
-import "./Card.scss"
+import { CardProps } from './types';
+import "./card.component.scss"
 
-type Props = {
-    title?: string,
-    styleClassName?: string,
-    icon?: string,
-    iconNum?: number,
-    onIconClick?: () => void,
-    onClick?: (event: any) => void,
-    children: any
-};
-
-function Card(props: Props) {
-
+export function CardComponent(props: CardProps) {
     return (
-
         <div
             className={"card " + props.styleClassName}
             onClick={(e) => {if (props.onClick) props.onClick(e)}}
         >
-
             {
                 props.title &&
                 <div
                     className="card-title"
                 >
-                    <ResizeText
+                    <ResizeTextComponent
                         center={false}
                         maxSize={0}
                     >
                         <h1>
                             {props.title}
                         </h1>
-                    </ResizeText>
+                    </ResizeTextComponent>
                     {
                         props.icon &&
                         <div onClick={props.onIconClick} className="icon">
@@ -46,17 +34,9 @@ function Card(props: Props) {
                     }
                 </div>
             }
-
             <div className="card-content" style={{height: !props.title ? "100%" : ""}}>
-
                 {props.children}
-
             </div>
-
         </div>
-
     );
-
 }
-
-export default Card

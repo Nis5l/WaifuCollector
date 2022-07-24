@@ -1,5 +1,5 @@
 import {Component} from 'react'
-import Card from '../Card'
+import { CardComponent } from '../../shared/components'
 import { ScrollbarComponent } from '../../shared/components/scrollbar'
 import redirectIfNecessary from '../Redirecter'
 
@@ -54,7 +54,7 @@ export class NotificationsComponent extends Component<NotificationsProps, Notifi
     render() {
 
         return (
-            <Card
+            <CardComponent
                 title="Notifications"
                 styleClassName="notifications_container"
                 onClick={(e) => e.stopPropagation()}
@@ -81,7 +81,7 @@ export class NotificationsComponent extends Component<NotificationsProps, Notifi
                     }
                 </ScrollbarComponent>
 
-            </Card>
+            </CardComponent>
         )
     }
 }

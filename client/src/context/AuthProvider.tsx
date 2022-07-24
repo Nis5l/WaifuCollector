@@ -1,5 +1,5 @@
 import { Context, createContext, ReactNode, useState } from "react";
-import User from "../shared/User";
+import { User } from "../shared/types";
 
 const defaultValue: User | undefined = undefined;
 

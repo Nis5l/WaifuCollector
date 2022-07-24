@@ -1,10 +1,8 @@
 import {lazy, Suspense, useState} from 'react'
-import Card from '../../components/Card'
-import Loading from '../../components/Loading'
 
+import { ScrollbarComponent, CardComponent, FoldableComponent } from '../../shared/components'
+import Loading from '../../components/Loading'
 import { PackGraphComponent } from './pack-graph'
-import Foldable from '../../components/Foldable'
-import { ScrollbarComponent } from '../../shared/components/scrollbar'
 
 import "./home.component.scss"
 import "../../scss/effects.scss"
@@ -23,7 +21,7 @@ export function HomeComponent() {
         <ScrollbarComponent>
             <Loading loading={loadingState} />
             <div className="container_home">
-                <Card
+                <CardComponent
                     title="Packs Opened"
                     styleClassName="packGraphWrapper"
                     icon={''}
@@ -32,9 +30,9 @@ export function HomeComponent() {
                     onClick={function (_event: any): void {} }
                 >
                     <PackGraphComponent styleClassName="packGraph" onLoad={() => {setLoadingState(false)}} />
-                </Card>
+                </CardComponent>
 
-                <Foldable
+                <FoldableComponent
                     title="Tutorial"
                     styleClassName="tutorial"
                 >
@@ -78,8 +76,8 @@ export function HomeComponent() {
                     <p>You can trade with your friends.<br />
                     You can add and suggest Waifu-Cards when trading.<br />
                     When both Users hit accept the Trade is complete.</p>
-                </Foldable>
-                <Foldable
+                </FoldableComponent>
+                <FoldableComponent
                     title="Copyright"
                     styleClassName="copyright"
                 >
@@ -87,9 +85,9 @@ export function HomeComponent() {
                     (contact.waifucollector@gmail.com).</p>
                     <p>I will happily resolve the issue.</p>
                     <p>Everything is nonprofit, so I would be thankful if we could solve the problems without any sort of legal process.</p>
-                </Foldable>
+                </FoldableComponent>
                 <div className="privacy_wrapper">
-                    <Card
+                    <CardComponent
                         styleClassName="privacy"
                         title={''}
                         icon={''}
@@ -120,7 +118,7 @@ export function HomeComponent() {
 								<Link to="/privacy" className="shake">Privacy</Link>
 							</div>
                         </div>
-                    </Card>
+                    </CardComponent>
                 </div>
             </div >
         </ScrollbarComponent>

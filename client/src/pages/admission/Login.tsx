@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react'
-import Card from '../../components/Card'
+import { CardComponent } from '../../shared/components'
 import Logo from '../../components/Logo'
 
 import "./Login.scss"
 
-import User from '../../shared/User'
+import { User } from '../../shared/types'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { setRememberMe } from '../../utils/utils'
@@ -76,7 +76,7 @@ function Login(props: PropsLogin) {
 
     return (
 
-        <Card styleClassName="login"
+        <CardComponent styleClassName="login"
             title={''}
             icon={''}
             iconNum={0}
@@ -129,7 +129,7 @@ function Login(props: PropsLogin) {
 
             </form>
 
-        </Card>
+        </CardComponent>
     )
 }
 

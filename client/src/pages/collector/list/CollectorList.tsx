@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CollectorComponent from "../../../components/collector/Collector";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import Collector from "../../../shared/Collector";
+import { Collector } from "../../../shared/types";
 
 import "./CollectorList.scss";
 

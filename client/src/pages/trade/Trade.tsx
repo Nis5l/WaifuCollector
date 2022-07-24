@@ -1,5 +1,5 @@
 import React, {Component, RefObject} from 'react'
-import Card from '../../components/Card'
+import { CardComponent } from '../../shared/components'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import { ScrollbarComponent } from '../../shared/components/scrollbar'
 import {YesNo, YesNoCancel} from '../../components/Popup'
@@ -357,7 +357,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
         {
           this.state.found ? (
             <div className="trade_wrapper">
-              <Card
+              <CardComponent
                 styleClassName="trade_own"
                 title={"You " + this.state.info}
                 icon={''}
@@ -412,8 +412,8 @@ class Trade extends Component<PropsTrade, StateTrade> {
                   disabled={this.state.disabled !== undefined}
                   onClick={() => {this.redirect("/tradeinventory/" + this.friendid)}}
                 />
-              </Card>
-              <Card
+              </CardComponent>
+              <CardComponent
                 styleClassName="trade_friend"
                 title={this.state.name + " " + this.state.friendinfo}
                 icon={''}
@@ -466,7 +466,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
                   value="Suggest Card"
                   onClick={() => {this.redirect("/suggestcard/" + this.friendid)}}
                 />
-              </Card>
+              </CardComponent>
               <input
                 type="submit"
                 className="button_input button_confirm"
@@ -478,7 +478,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
           ) :
             (
               <div className="trade_wrapper">
-                <Card
+                <CardComponent
                   styleClassName="trade_own trade_friend"
                   title="Error"
                   icon={''}
@@ -487,7 +487,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
                   onClick={function (event: any): void {} }
                 >
                   <h1>User not found</h1>
-                </Card>
+                </CardComponent>
               </div>
             )
         }

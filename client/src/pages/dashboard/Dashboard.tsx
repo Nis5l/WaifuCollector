@@ -1,10 +1,10 @@
 import {Component, lazy, Suspense} from 'react'
 
-import Card from '../../components/Card';
+import { CardComponent } from '../../shared/components';
 import Loading from '../../components/Loading'
 
 import "./Dashboard.scss"
-import { AchievementsComponent } from './achievements';
+import { AchievementsComponent } from '../../shared/components';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { AuthProps, withAuth } from '../../hooks/useAuth';
 import ProfileImage from '../../components/users/ProfileImage';
@@ -125,7 +125,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
             <div className="container">
                 <Loading loading={this.state.loading} />
 
-                <Card
+                <CardComponent
                     title="Account Info"
                     styleClassName="accountInfo"
                     >
@@ -177,9 +177,9 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
                     </table>
 
-                </Card>
+                </CardComponent>
 
-                <Card
+                <CardComponent
                     title="Achievements"
                     styleClassName="achievements"
                     icon={''}
@@ -187,12 +187,12 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
                     onIconClick={function (): void {}}
                     onClick={function (event: any): void {} }
                     >
-					<Achievements
+					<AchievementsComponent
 						achievements={this.state.achievements}
 					/>
-                </Card>
+                </CardComponent>
 
-                <Card
+                <CardComponent
                     title="Packs"
                     styleClassName="packs"
                     icon={''}
@@ -219,10 +219,10 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
 
                     </div>
 
-                </Card>
+                </CardComponent>
 
                 <div className="friends_wrapper">
-                    <Card
+                    <CardComponent
                         title="Friends"
                         styleClassName="friends"
                         icon={this.state.requests ? "fa-user-friends" : "fa-user"}
@@ -239,7 +239,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
                             />
                         </Suspense>
 
-                    </Card>
+                    </CardComponent>
                 </div>
 
             </div>

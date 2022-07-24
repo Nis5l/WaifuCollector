@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Card from './Card'
+import { CardComponent } from '../shared/components'
 
 import './Popup.scss'
 
@@ -35,7 +35,7 @@ class YesNo extends Component<PropsYesNo> {
         return (
             <div className="popup_wrapper">
                 <div className="blurbackground" />
-                <Card 
+                <CardComponent 
                     styleClassName="popup"
                     title="" icon=""
                     iconNum={0}
@@ -50,7 +50,7 @@ class YesNo extends Component<PropsYesNo> {
                             <input type="button" onClick={this.noClick} className="button_input" value="No" />
                         </div>
                     </div>
-                </Card>
+                </CardComponent>
             </div>
         )
     }
@@ -95,7 +95,7 @@ class YesNoCancel extends Component<PropsYesNoCancel> {
         return (
             <div className="popup_wrapper">
                 <div className="blurbackground" />
-                <Card styleClassName="popup"
+                <CardComponent styleClassName="popup"
                     title="" icon=""
                     iconNum={0}
                     onIconClick={function (): void {} } 
@@ -112,7 +112,7 @@ class YesNoCancel extends Component<PropsYesNoCancel> {
                             <input type="button" onClick={this.cancelClick} className="button_input cancel" value="Cancel" />
                         </div>
                     </div>
-                </Card>
+                </CardComponent>
             </div>
         )
     }

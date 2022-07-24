@@ -1,5 +1,5 @@
 import {Component} from 'react'
-import Foldable from '../../components/Foldable'
+import { FoldableComponent } from '../../shared/components'
 import { ScrollbarComponent } from '../../shared/components/scrollbar'
 
 import './Privacy.scss'
@@ -11,7 +11,7 @@ class Privacy extends Component {
       <div className="privacy_wrapper">
         <h1 className="privacy_title">Privacy</h1>
         <ScrollbarComponent>
-          <Foldable
+          <FoldableComponent
               title="Data collection and usage"
               styleClassName={''}
             >
@@ -29,9 +29,9 @@ class Privacy extends Component {
             Our servers are located in Italy, so be aware that your data may be transferred, stored and processed in Italy.<br />
             </p>
 
-          </Foldable>
+          </FoldableComponent>
 
-          <Foldable
+          <FoldableComponent
               title="Cookies"
               styleClassName={''}
             >
@@ -40,9 +40,9 @@ class Privacy extends Component {
             In them we store a token which will automatically log you into your account.<br />
             Because of that the cookies should not be shared with others.<br />
             </p>
-          </Foldable>
+          </FoldableComponent>
 
-          <Foldable
+          <FoldableComponent
               title="Age"
               styleClassName={''}
             >
@@ -50,9 +50,9 @@ class Privacy extends Component {
               We do not knowingly collect data from children under 13 years of age.<br />
             By using this site you confirm that you are older than 13 years of age.<br />
             </p>
-          </Foldable>
+          </FoldableComponent>
 
-          <Foldable
+          <FoldableComponent
               title="Updates"
               styleClassName={''}
             >
@@ -60,18 +60,18 @@ class Privacy extends Component {
               The privacy policy may be changed in the future to stay compliant with laws and inform you in case any other data will be processed in the future.<br />
 			Therefore we recommend you to review this privacy policy frequently<br />
             </p>
-          </Foldable>
+          </FoldableComponent>
 
-          <Foldable
+          <FoldableComponent
               title="Your Privacy Rights"
               styleClassName={''}
             >
             <p className="content">
               In case you want to review, change, or delete your data stored and processed by us you can contact us.<br />
             </p>
-          </Foldable>
+          </FoldableComponent>
 
-          <Foldable
+          <FoldableComponent
               title="Contact"
               styleClassName={''}
             >
@@ -83,7 +83,7 @@ class Privacy extends Component {
             39030 St.Peter<br />
             Italy<br />
             </p>
-          </Foldable>
+          </FoldableComponent>
         </ScrollbarComponent>
       </div>
     )
