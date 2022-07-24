@@ -1,15 +1,14 @@
-
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { AuthProps, withAuth } from "../../hooks/useAuth";
-import ProfileImage from "../users/ProfileImage";
-import "./Navigation.scss"
+
+import { AuthProps, withAuth } from "../hooks/useAuth";
+import { ProfileImageComponent } from "../shared/components";
+import { NavigationProps } from './types';
+import "./navigation.component.scss"
 
 const navprefix: string = "nav-";
 
-type PropsNavigation = AuthProps & {}
-
-class Navigation extends Component<PropsNavigation>{
+class NavigationComponent extends Component<NavigationProps>{
 
     render(): ReactNode {
         return (
@@ -36,7 +35,7 @@ class Navigation extends Component<PropsNavigation>{
                             <Link
                                 to="/collector"
                             >Collectors</Link>
-                            <ProfileImage
+                            <ProfileImageComponent
                                 className={"profile"}
                                 userID={this.props.auth.id}
                             />
@@ -50,7 +49,12 @@ class Navigation extends Component<PropsNavigation>{
                             <Link
                                 to="/register"
                             >Register</Link>
-                            <LoginButton />
+							<Link
+								to="/login"
+								className={navprefix + "login"}
+							>
+								Login
+							</Link>
                         </>
                     ) }
                 </div>
@@ -59,15 +63,6 @@ class Navigation extends Component<PropsNavigation>{
     }
 }
 
-function LoginButton(){
-    return (
-        <Link
-            to="/login"
-            className={navprefix + "login"}
-        >
-            Login
-        </Link>
-    )
-}
-
-export default withAuth(Navigation);
+//TODO: better
+const NavigationComponentWithAuth = withAuth(NavigationComponent);
+export { NavigationComponentWithAuth as NavigationComponent };

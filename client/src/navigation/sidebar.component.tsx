@@ -1,21 +1,18 @@
 import React, { Component, RefObject } from 'react'
-
 import {
     ProSidebar,
     Menu,
     SidebarContent,
 } from 'react-pro-sidebar'
-import NavigationMenuItem from '../../shared/NavigationItem'
 
-import './Sidebar.scss'
-type Props = {
-    menuItems: NavigationMenuItem[]
-}
+import { SidebarProps } from './types';
+import { NavigationMenuItem } from './navigation-items'
+import './sidebar.component.scss'
 
-class Sidebar extends Component<Props, any> {
+export class SidebarComponent extends Component<SidebarProps, any> {
     private box: RefObject<any>;
 
-    constructor(props: Props) {
+    constructor(props: SidebarProps) {
         super(props);
         this.state =
         {
@@ -88,5 +85,3 @@ class Sidebar extends Component<Props, any> {
         )
     }
 }
-
-export default Sidebar;

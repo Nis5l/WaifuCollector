@@ -7,7 +7,7 @@ import "./Login.scss"
 import { User } from '../../shared/types'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
-import { setRememberMe } from '../../utils/utils'
+import { setRememberMe } from '../../utils'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 type PropsLogin = {}

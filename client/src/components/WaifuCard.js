@@ -1,5 +1,5 @@
 import {Component} from 'react'
-import ResizeText from "./ResizeText"
+import { ResizeTextComponent } from "../shared/components"
 import {LoopCircleLoading} from 'react-loadingg'
 
 import Config from '../config.json'
@@ -266,9 +266,9 @@ class WaifuCard extends Component {
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
                     }}
                 >
-                    <ResizeText center={true}>
+                    <ResizeTextComponent center={true}>
                         {this.state.cardname}
-                    </ResizeText>
+                    </ResizeTextComponent>
                 </div>
                 <div
                     className="waifucard-anime"
@@ -276,9 +276,9 @@ class WaifuCard extends Component {
                         transform: `rotateY(${this.state.turned ? 180 : 0}deg)`,
                     }}
                 >
-                    <ResizeText center={true}>
+                    <ResizeTextComponent center={true}>
                         {this.state.animename}
-                    </ResizeText>
+                    </ResizeTextComponent>
                 </div>
                 <div
                     className="waifucard-quality"

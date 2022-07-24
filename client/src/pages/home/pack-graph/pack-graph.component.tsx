@@ -1,7 +1,7 @@
 import React, {Component, RefObject} from 'react';
 import Chart, { ChartConfiguration } from 'chart.js';
 
-import "./PackGraph.scss"
+import "./pack-graph.component.scss"
 import axios from '../../../api/axios'
 import { PackGraphProps } from './types';
 

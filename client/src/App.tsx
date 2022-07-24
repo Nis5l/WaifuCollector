@@ -22,15 +22,13 @@ import Verify from './pages/verify/Verify'
 import VerifyMail from './pages/verifymail/VerifyMail'
 import LogOut from './pages/admission/Logout'
 import RememberMe from './components/RememberMe'
-import { getRememberMe } from './utils/utils'
+import { getRememberMe } from './utils'
 import { useState } from 'react'
-import Navigation from './components/navigation/Navigation'
+import { NavigationComponent, GameSidebarComponent, CollectorSidebarComponent } from './navigation'
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import RequireAuth from './components/routes/RequireAuth'
 import RequireNoAuth from './components/routes/RequireNoAuth'
 import CollectorList from './pages/collector/list/CollectorList'
-import GameSidebar from './components/navigation/sidebars/GameSidebar'
-import CollectorSidebar from './components/navigation/sidebars/CollectorSidebar'
 
 function App() {
   let [ remembered, setRemembered ] = useState(false);
@@ -42,7 +40,7 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           { getRememberMe() && !remembered ? <RememberMe remembered={() => setRemembered(true)} /> : ( <>
-            <Navigation />
+            <NavigationComponent />
                 <Routes>
 
                   <Route element={
@@ -88,7 +86,7 @@ function App() {
                     {/* Collector Player */}
                     <Route path="/collector" element={
                         <div style={{height: "100%", width: "100%", display: "flex"}}>
-                          <CollectorSidebar />
+                          <CollectorSidebarComponent />
                           <main className='content'>
                             <Outlet />
                           </main>
@@ -100,7 +98,7 @@ function App() {
                     {/* Game Player */}
                     <Route element={
                       <div style={{height: "100%", width: "100%", display: "flex"}}>
-                        <GameSidebar />
+                        <GameSidebarComponent />
                         <main className='content'>
                           <Outlet />
                         </main>

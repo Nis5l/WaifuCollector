@@ -1,14 +1,10 @@
 
-import Config from "../../config.json";
+import Config from "../../../config.json";
 
-import "./ProfileImage.scss"
+import "./profile-image.component.scss"
+import { PropsProfileImageProps } from './types';
 
-export type PropsProfileImage = {
-    userID: string,
-    className?: any
-}
-
-function ProfileImage(props: PropsProfileImage){
+export function ProfileImageComponent(props: PropsProfileImageProps){
     return (
         <div className={"profile_image " + (props.className != null ? props.className : "")}>
             <img
@@ -18,5 +14,3 @@ function ProfileImage(props: PropsProfileImage){
         </div>
     )
 }
-
-export default ProfileImage;

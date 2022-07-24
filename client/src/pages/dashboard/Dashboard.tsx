@@ -4,10 +4,9 @@ import { CardComponent } from '../../shared/components';
 import Loading from '../../components/Loading'
 
 import "./Dashboard.scss"
-import { AchievementsComponent } from '../../shared/components';
+import { AchievementsComponent, ProfileImageComponent } from '../../shared/components';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { AuthProps, withAuth } from '../../hooks/useAuth';
-import ProfileImage from '../../components/users/ProfileImage';
 import { ReactRouterProps, withRouter } from '../../hooks/withRouter';
 
 const Friendlist = lazy(() => import('../../components/Friendlist'));
@@ -133,7 +132,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
                     <div className="avatar">
 
                         { /*<Logo className="logo" size="" />*/ }
-                        <ProfileImage userID={this.props.auth.id}></ProfileImage>
+                        <ProfileImageComponent userID={this.props.auth.id}></ProfileImageComponent>
 
                     </div>
 

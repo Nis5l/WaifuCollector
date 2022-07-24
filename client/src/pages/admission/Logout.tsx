@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { removeRememberMe } from "../../utils/utils";
+import { removeRememberMe } from "../../utils";
 
 function LogOut() {
     const axios = useAxiosPrivate();

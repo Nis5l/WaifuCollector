@@ -4,7 +4,7 @@ import { ResizeTextComponent } from '../resize-text'
 
 import { FoldableProps, FoldableState } from './types';
 import "./foldable.component.scss"
-import "../scss/effects.scss"
+import "../../../scss/effects.scss"
 
 export class FoldableComponent extends Component<FoldableProps, FoldableState> {
     constructor(props: FoldableProps) {
