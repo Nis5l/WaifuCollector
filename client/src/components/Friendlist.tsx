@@ -3,11 +3,9 @@ import React, {Component, createRef, RefObject} from 'react'
 import {YesNo} from './Popup'
 
 import './Friendlist.scss'
-import ProfileName from './ProfileName'
-
+import { ProfileNameComponent } from '../shared/components'
 import ThreeDotsMenu from './ThreeDotsMenu'
-
-import { ScrollbarComponent } from '../shared/components/scrollbar'
+import { ScrollbarComponent } from '../shared/components'
 import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
 import { ReactRouterProps, withRouter } from '../hooks/withRouter'
 
@@ -334,7 +332,7 @@ class Friend extends React.Component<PropsFriend, StateFriend> {
                     style={{height: this.friendlist.current !== null ? `min(90%, ${this.friendlist.current.clientWidth / 5}px)` : "18px"}}
                 />
 
-                <ProfileName
+                <ProfileNameComponent
                     userID={this.props.userID}
                     username={this.state.username}
                     badges={undefined}

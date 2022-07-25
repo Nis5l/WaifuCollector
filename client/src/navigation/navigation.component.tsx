@@ -1,7 +1,7 @@
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthProps, withAuth } from "../hooks/useAuth";
+import { withAuth } from "../hooks/useAuth";
 import { ProfileImageComponent } from "../shared/components";
 import { NavigationProps } from './types';
 import "./navigation.component.scss"
@@ -63,6 +63,4 @@ class NavigationComponent extends Component<NavigationProps>{
     }
 }
 
-//TODO: better
-const NavigationComponentWithAuth = withAuth(NavigationComponent);
-export { NavigationComponentWithAuth as NavigationComponent };
+export default withAuth(NavigationComponent);

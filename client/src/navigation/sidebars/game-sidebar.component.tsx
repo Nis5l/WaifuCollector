@@ -1,7 +1,7 @@
 import { NavigationLinkItem, NavigationSubMenuItem, NavigationMenuItem } from "../navigation-items";
-import { SidebarComponent } from "../sidebar.component";
+import SidebarComponent from "../sidebar.component";
 
-export function GameSidebarComponent(){
+export default function GameSidebarComponent(){
     const gameNavbar: NavigationMenuItem[] = [
         new NavigationSubMenuItem("Dashboard", [
           new NavigationLinkItem("Home", "/dashboard"),

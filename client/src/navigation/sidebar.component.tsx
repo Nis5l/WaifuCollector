@@ -9,7 +9,7 @@ import { SidebarProps } from './types';
 import { NavigationMenuItem } from './navigation-items'
 import './sidebar.component.scss'
 
-export class SidebarComponent extends Component<SidebarProps, any> {
+export default class SidebarComponent extends Component<SidebarProps, any> {
     private box: RefObject<any>;
 
     constructor(props: SidebarProps) {

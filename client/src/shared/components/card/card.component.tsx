@@ -1,9 +1,9 @@
-import { ResizeTextComponent } from '../resize-text'
+import ResizeTextComponent from '../resize-text'
 
 import { CardProps } from './types';
 import "./card.component.scss"
 
-export function CardComponent(props: CardProps) {
+export default function CardComponent(props: CardProps) {
     return (
         <div
             className={"card " + props.styleClassName}

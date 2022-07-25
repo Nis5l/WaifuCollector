@@ -11,7 +11,7 @@ import { ReactRouterProps, withRouter } from '../../hooks/withRouter';
 
 const Friendlist = lazy(() => import('../../components/Friendlist'));
 const PackProgressRing = lazy(() => import('../../components/PackProgressRing'));
-const ProfileName = lazy(() => import('../../components/ProfileName'));
+const ProfileNameComponent = lazy(() => import('../../shared/components/profile-name'));
 
 const loading = () => <p>Loading...</p>
 
@@ -139,7 +139,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
                     <div className="profilename_container">
 
                         <Suspense fallback={loading()}>
-                            <ProfileName
+                            <ProfileNameComponent
                                 userID={this.state.userID != null ? this.state.userID : ""}
                                 lCallback={() => { this.incrementLCounter(this); } }
                             />

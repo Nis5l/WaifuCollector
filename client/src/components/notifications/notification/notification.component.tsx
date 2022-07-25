@@ -5,8 +5,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import {timeSince} from '../../../Utils'
 import { NotificationProps } from './types';
 
-export function NotificationComponent(props: NotificationProps) {
-
+export default function NotificationComponent(props: NotificationProps) {
     const fadingTime = 0.2;
     const [fading, setFading] = useState(false);
     const timesince = timeSince(new Date(props.notification.time))//TODO: check if right;
@@ -63,11 +62,7 @@ export function NotificationComponent(props: NotificationProps) {
                         e.stopPropagation();
                     }}
                 />
-
             </div>
-
         </div>
-
     );
-
 }

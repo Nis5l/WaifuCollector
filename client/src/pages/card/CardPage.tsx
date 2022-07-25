@@ -2,7 +2,7 @@ import React, {Component, RefObject} from 'react'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import {YesNo} from '../../components/Popup'
-import { ScrollbarComponent } from '../../shared/components/scrollbar'
+import { ScrollbarComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
 

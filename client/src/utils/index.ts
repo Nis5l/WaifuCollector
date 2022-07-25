@@ -1,4 +1,3 @@
-
 const rememberme: string = "rememberme";
 
 function setRememberMe(value: boolean): void{

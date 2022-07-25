@@ -1,1 +1,1 @@
-export { ScrollbarComponent } from './scrollbar.component';
+export { default } from './scrollbar.component';

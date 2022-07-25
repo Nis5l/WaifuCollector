@@ -5,7 +5,7 @@ import Config from '../../../../config.json';
 
 import './achievement.component.scss';
 
-export class AchievementComponent extends Component<AchievementProps> {
+export default class AchievementComponent extends Component<AchievementProps> {
     render() {
         return (
             <li

@@ -48,7 +48,7 @@ const config: ChartConfiguration = {
 
 const refreshTime = 1000 * 60;
 
-export class PackGraphComponent extends Component<PackGraphProps> {
+export default class PackGraphComponent extends Component<PackGraphProps> {
     private ctx: RefObject<any>;
     private chart: Chart | undefined = undefined;
 

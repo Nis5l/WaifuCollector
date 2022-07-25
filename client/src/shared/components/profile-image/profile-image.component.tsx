@@ -4,7 +4,7 @@ import Config from "../../../config.json";
 import "./profile-image.component.scss"
 import { PropsProfileImageProps } from './types';
 
-export function ProfileImageComponent(props: PropsProfileImageProps){
+export default function ProfileImageComponent(props: PropsProfileImageProps){
     return (
         <div className={"profile_image " + (props.className != null ? props.className : "")}>
             <img

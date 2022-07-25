@@ -1,16 +1,16 @@
 import {Component} from 'react'
 import { CardComponent } from '../../shared/components'
-import { ScrollbarComponent } from '../../shared/components/scrollbar'
+import ScrollbarComponent from '../../shared/components/scrollbar'
 import redirectIfNecessary from '../Redirecter'
 
 import "./notifications.component.scss"
 import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { withRouter } from '../../hooks/withRouter';
-import { NotificationComponent } from './notification';
+import NotificationComponent from './notification';
 
 import { NotificationsProps, NotificationsState } from './types';
 
-export class NotificationsComponent extends Component<NotificationsProps, NotificationsState>{
+class NotificationsComponent extends Component<NotificationsProps, NotificationsState>{
 
     constructor(props: NotificationsProps) {
         super(props);

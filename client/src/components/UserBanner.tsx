@@ -1,7 +1,7 @@
 import {Component} from 'react'
-import {Badge} from './ProfileName'
 import Config from "../config.json"
 
+import { BadgeComponent } from '../shared/components'
 import './UserBanner.scss'
 import { Link } from 'react-router-dom'
 
@@ -75,7 +75,7 @@ class UserBanner extends Component<PropsUserBanner, StateUserBanner> {
                                 let badgeImage = Config.API_HOST + badge.asset;
 
                                 return (
-                                    <Badge
+                                    <BadgeComponent
                                         key={'badge-' + id++}
                                         img={badgeImage}
                                         name={badge.name}

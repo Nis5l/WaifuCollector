@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import InfiniteScroll from 'react-infinite-scroller'
-import { ScrollbarComponent } from '../../shared/components/scrollbar'
+import ScrollbarComponent from '../../shared/components/scrollbar'
 import UserBanner from '../../components/UserBanner'
 import Loading from '../../components/Loading'
 

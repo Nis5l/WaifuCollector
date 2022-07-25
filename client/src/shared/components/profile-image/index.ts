@@ -1,1 +1,1 @@
-export { ProfileImageComponent } from './profile-image.component';
+export { default } from './profile-image.component';

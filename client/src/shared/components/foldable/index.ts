@@ -1,1 +1,1 @@
-export { FoldableComponent } from './foldable.component';
+export { default } from './foldable.component';

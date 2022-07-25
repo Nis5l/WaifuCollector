@@ -2,7 +2,7 @@ import {lazy, Suspense, useState} from 'react'
 
 import { ScrollbarComponent, CardComponent, FoldableComponent } from '../../shared/components'
 import Loading from '../../components/Loading'
-import { PackGraphComponent } from './pack-graph'
+import PackGraphComponent from './pack-graph'
 
 import "./home.component.scss"
 import "../../scss/effects.scss"
@@ -12,7 +12,7 @@ const WaifuCard = lazy(() => import('../../components/WaifuCard'));
 //TODO: loading
 const loading = () => <p>Loading...</p>
 
-export function HomeComponent() {
+export default function HomeComponent() {
 
     const [loadingState, setLoadingState] = useState(true);
 

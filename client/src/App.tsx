@@ -1,6 +1,7 @@
 import { AuthProvider } from './context/AuthProvider'
 
-import { HomeComponent } from './pages/home'
+//TODO: pages index.ts
+import HomeComponent from './pages/home'
 import Dashboard from './pages/dashboard/Dashboard'
 import Profile from './pages/profile/Profile'
 import Pack from './pages/pack/Pack'

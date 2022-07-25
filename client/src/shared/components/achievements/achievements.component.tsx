@@ -1,12 +1,12 @@
 import { Component } from 'react';
 
-import { AchievementComponent } from './achievement';
+import AchievementComponent from './achievement';
 import { AchievementsProps } from './types';
-import { ScrollbarComponent } from '../../../shared/components/scrollbar'
+import ScrollbarComponent from '../../../shared/components/scrollbar'
 
 import './achievements.component.scss';
 
-export class AchievementsComponent extends Component<AchievementsProps>{
+export default class AchievementsComponent extends Component<AchievementsProps>{
 	render()
 	{
 		this.props.achievements.reverse();

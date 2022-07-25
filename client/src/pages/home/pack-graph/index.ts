@@ -1,1 +1,1 @@
-export { PackGraphComponent } from './pack-graph.component';
+export { default } from './pack-graph.component';

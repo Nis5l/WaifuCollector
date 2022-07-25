@@ -1,1 +1,1 @@
-export { AchievementsComponent } from "./achievements.component";
+export { default } from "./achievements.component";

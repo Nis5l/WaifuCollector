@@ -1,1 +1,1 @@
-export { ResizeTextComponent } from './resize-text.component';
+export { default } from './resize-text.component';

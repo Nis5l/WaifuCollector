@@ -1,25 +1,13 @@
 import {useState, useEffect, useCallback} from 'react'
-import {Tooltip} from 'reactstrap'
-
-import Config from '../config.json'
 import axios from 'axios'
 
-import "./ProfileName.scss"
+import Config from '../../../config.json'
+import "./profile-name.component.scss"
+import type { ProfileNameProps } from './types';
+import BadgeComponent, { type Badge } from './badge';
+import { random_string } from '../../../utils';
 
-interface Badge {
-    name: string,
-    asset: string
-}
-
-type Props = {
-    userID: string,
-    username?: string,
-    badges?: Badge[] | undefined,
-    lCallback: () => void
-}
-
-function ProfileName(props: Props) {
-
+export default function ProfileNameComponent(props: ProfileNameProps) {
     const [username, setUsername] = useState(props.username);
     const [badges, setBadges] = useState([] as Badge[]);
 
@@ -29,7 +17,6 @@ function ProfileName(props: Props) {
         setUsername(props.username);
     }
 
-    
     const incrementLCounter = useCallback(() => {
         lcounter++;
         if (lcounter === lcounterMax && props.lCallback) props.lCallback();
@@ -67,7 +54,6 @@ function ProfileName(props: Props) {
         }
 
         async function loadBadges() {
-
             const badges = await getBadges(props.userID);
 
             if(isMounted)setBadges(badges);
@@ -79,11 +65,8 @@ function ProfileName(props: Props) {
     }, [setBadges, props.userID, props.badges, incrementLCounter]);
 
     return (
-
         <div className="profileName">
-
             <a href={`/profile/${props.userID}`} className="name">{username}</a>
-
             <div className="badges">
                 {
                     badges.map((badge) => {
@@ -91,8 +74,8 @@ function ProfileName(props: Props) {
                         let badgeImage = Config.API_HOST + badge.asset;
 
                         return (
-                            <Badge
-                                key={makeID(30)}
+                            <BadgeComponent
+                                key={random_string(30)}
                                 img={badgeImage}
                                 name={badge.name}
                             />
@@ -100,52 +83,7 @@ function ProfileName(props: Props) {
                     })
 
                 }
-
             </div>
-
         </div>
-
     )
 }
-
-function makeID(length: number): string {
-
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-
-}
-
-type PropsBadge = {
-    img: string,
-    name: string
-}
-
-function Badge(props: PropsBadge) {
-
-    const [tooltipOpen, setTooltipOpen] = useState(false);
-    const toggle = () => setTooltipOpen(!tooltipOpen);
-
-    const [badgeID] = useState(makeID(30));
-
-    return (
-
-        <div className="badge">
-
-            <img src={props.img} alt={props.name} id={badgeID} />
-            <Tooltip placement="bottom" isOpen={tooltipOpen} target={badgeID} toggle={toggle}>
-                {props.name}
-            </Tooltip>
-
-        </div>
-
-    );
-
-}
-
-export default ProfileName
-export {Badge};

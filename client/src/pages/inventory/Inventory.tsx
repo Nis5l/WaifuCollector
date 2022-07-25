@@ -2,10 +2,10 @@ import React, {Component, RefObject} from 'react'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
-import { ScrollbarComponent } from '../../shared/components/scrollbar'
+
+import { ScrollbarComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'
-
 import "./Inventory.scss"
 import Config from '../../config.json'
 import { AuthProps, withAuth } from '../../hooks/useAuth'

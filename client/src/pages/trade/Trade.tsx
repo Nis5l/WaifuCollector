@@ -1,7 +1,7 @@
 import React, {Component, RefObject} from 'react'
 import { CardComponent } from '../../shared/components'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
-import { ScrollbarComponent } from '../../shared/components/scrollbar'
+import ScrollbarComponent from '../../shared/components/scrollbar'
 import {YesNo, YesNoCancel} from '../../components/Popup'
 import redirectIfNecessary from '../../components/Redirecter'
 import Loading from '../../components/Loading'

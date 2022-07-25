@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Logo from '../../components/Logo'
-import ProfileName from '../../components/ProfileName'
+import { ProfileNameComponent } from '../../shared/components'
 import Loading from '../../components/Loading'
 import { CardComponent } from '../../shared/components'
 
@@ -115,7 +115,7 @@ class Settings extends Component<PropsSettings, StateSettings> {
           <Loading loading={this.state.loading} />
           <Logo className="" size="200px" />
           <div className="username">Username: &nbsp;
-            <ProfileName
+            <ProfileNameComponent
               userID={userID}
               lCallback={() => { this.incrementLCounter() } }
               username={''}

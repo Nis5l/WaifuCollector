@@ -1,14 +1,12 @@
 import {Component} from 'react'
 import { CardComponent } from '../../shared/components'
 import Friendlist from '../../components/Friendlist'
-import ProfileName from '../../components/ProfileName'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
-import { AchievementsComponent } from '../../shared/components'
 
 import "./Profile.scss"
-import { ScrollbarComponent } from '../../shared/components/scrollbar';
+import { AchievementsComponent, ScrollbarComponent, ProfileNameComponent } from '../../shared/components';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
 import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
@@ -168,7 +166,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
 
                     <div className="profilename_container">
 
-                        <ProfileName
+                        <ProfileNameComponent
                             userID={this.userID}
                             username={''}
                             badges={undefined}

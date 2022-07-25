@@ -4,7 +4,7 @@ import FitText from '@plutonium-js/react-fit-text'
 import { ResizeTextProps } from './types';
 import "./resize-text.component.scss"
 
-export class ResizeTextComponent extends Component<ResizeTextProps> {
+export default class ResizeTextComponent extends Component<ResizeTextProps> {
     render() {
         return (
             <div className="resizetext_wrapper">

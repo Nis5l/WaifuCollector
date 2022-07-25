@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import { FoldableComponent } from '../../shared/components'
-import { ScrollbarComponent } from '../../shared/components/scrollbar'
+import { ScrollbarComponent } from '../../shared/components'
 
 import './Privacy.scss'
 
