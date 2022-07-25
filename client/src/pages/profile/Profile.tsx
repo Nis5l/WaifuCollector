@@ -1,12 +1,11 @@
 import {Component} from 'react'
 import { CardComponent } from '../../shared/components'
-import Friendlist from '../../components/Friendlist'
 import Loading from '../../components/Loading'
 import Logo from '../../components/Logo'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 
 import "./Profile.scss"
-import { AchievementsComponent, ScrollbarComponent, ProfileNameComponent } from '../../shared/components';
+import { AchievementsComponent, ScrollbarComponent, ProfileNameComponent, FriendListComponent } from '../../shared/components';
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
 import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
@@ -239,7 +238,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
                         onClick={function (event: any): void {} }
                     >
 
-                        <Friendlist
+                        <FriendListComponent
                             userID={this.userID}
                             onFriendData={(data: any) => this.onFriendData(data)}
                         />

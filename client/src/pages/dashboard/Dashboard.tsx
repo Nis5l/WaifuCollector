@@ -9,7 +9,7 @@ import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate
 import { AuthProps, withAuth } from '../../hooks/useAuth';
 import { ReactRouterProps, withRouter } from '../../hooks/withRouter';
 
-const Friendlist = lazy(() => import('../../components/Friendlist'));
+const FriendListComponent = lazy(() => import('../../shared/components/friend-list'));
 const PackProgressRing = lazy(() => import('../../components/PackProgressRing'));
 const ProfileNameComponent = lazy(() => import('../../shared/components/profile-name'));
 
@@ -229,7 +229,7 @@ class Dashboard extends Component<PropsDashboard, StateDashboard> {
                         onIconClick={() => { this.setState({ requests: !this.state.requests }); } }
                     >
                         <Suspense fallback={loading()}>
-                            <Friendlist
+                            <FriendListComponent
                                 userID={this.state.userID != null ? this.state.userID : ""}
                                 lCallback={() => { this.incrementLCounter(this); } }
                                 onFriendRequests={(count: number) => { if(this.componentMounted) { this.setState({ friendRequests: count }); } } }

@@ -5,3 +5,4 @@ export { default as AchievementsComponent } from './achievements';
 export { default as FoldableComponent } from './foldable';
 export { default as ProfileImageComponent } from './profile-image';
 export { default as ProfileNameComponent, BadgeComponent } from './profile-name';
+export { default as FriendListComponent } from './friend-list';

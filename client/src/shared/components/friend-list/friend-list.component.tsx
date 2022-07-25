@@ -1,37 +1,17 @@
-import React, {Component, createRef, RefObject} from 'react'
+import {Component} from 'react'
 
-import {YesNo} from './Popup'
+import {YesNo} from '../../../components/Popup'
 
-import './Friendlist.scss'
-import { ProfileNameComponent } from '../shared/components'
-import ThreeDotsMenu from './ThreeDotsMenu'
-import { ScrollbarComponent } from '../shared/components'
-import { AxiosPrivateProps, withAxiosPrivate } from '../hooks/useAxiosPrivate'
-import { ReactRouterProps, withRouter } from '../hooks/withRouter'
+import './friend-list.component.scss'
+import FriendComponent from './friend';
+import ScrollbarComponent from '../scrollbar'
+import { withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
+import { withRouter } from '../../../hooks/withRouter'
 
-interface User {
-    userID: string,
-    username: string
-}
+import { FriendListState, FriendListProps } from './types';
 
-type PropsFriendlist = ReactRouterProps & AxiosPrivateProps & {
-    userID: string,
-    requests?: boolean,
-    onFriendRequests?: (len: number) => void,
-    onFriendData?: (friends: any[]) => void,
-    decrementRequests?: () => void,
-    lCallback?: () => void
-}
-
-type StateFriendlist = {
-    friends: any[],
-    friendRequests: any[],
-    width: number,
-    deleteUser: User | undefined
-}
-
-class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
-    public props: PropsFriendlist;
+class FriendListComponent extends Component<FriendListProps, FriendListState> {
+    public props: FriendListProps;
 
     private lcounter: number;
     private lcounterMax: number;
@@ -40,7 +20,7 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
 
     public componentMounted: boolean = false;
 
-    constructor(props: PropsFriendlist) {
+    constructor(props: FriendListProps) {
         super(props);
         this.props = props;
 
@@ -63,7 +43,7 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
     componentDidMount() {
         this.componentMounted = true;
 
-        async function loadFriends(self: Friendlist) {
+        async function loadFriends(self: FriendListComponent) {
 			try {
 				const response = await self.props.axios.get(`/user/${self.props.userID}/friends`);
 				return response.data;
@@ -73,7 +53,7 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
 			}
         }
 
-        async function fetchData(self: Friendlist) {
+        async function fetchData(self: FriendListComponent) {
 
             let friends = await loadFriends(self);
             const filteredFriends = friends.filter((friend: any) => friend.status === 0);
@@ -227,141 +207,4 @@ class Friendlist extends Component<PropsFriendlist, StateFriendlist> {
     }
 }
 
-type PropsFriend = ReactRouterProps & {
-    userID: string,
-    username: string,
-    status: number,
-    avatar: string
-    onDelete?: (userID: string, username: string) => void,
-    onAccept?: (userID: string) => void,
-    onDecline?: (userID: string) => void
-}
-
-type StateFriend = {
-    username: string
-}
-
-class Friend extends React.Component<PropsFriend, StateFriend> {
-    
-    private status: number;
-    private onDelete: (userID: string, username: string) => void;
-    private onAccept: (userID: string) => void;
-    private onDecline: (userID: string) => void;
-
-    private resizeMethod: () => void;
-
-    private friendlist: RefObject<any>;
-
-    constructor(props: PropsFriend) {
-        super(props);
-
-        this.status = props.status;
-        this.onDelete = props.onDelete != null ? props.onDelete : () => {};
-
-        this.onAccept = props.onAccept != null ? props.onAccept : () => {};
-        this.onDecline = props.onDecline != null ? props.onDecline : () => {};
-
-        this.resizeMethod = () => {this.resize(this)};
-
-        this.friendlist = createRef();
-
-        this.state = {username: this.props.username}
-    }
-
-    onClick = (link: string) => {
-        this.props.router.navigate(link);
-    };
-
-    componentDidMount() {
-        window.addEventListener('resize', this.resizeMethod);
-        window.addEventListener('load', this.resizeMethod);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.resizeMethod);
-        window.removeEventListener('load', this.resizeMethod);
-    }
-
-    resize(self: Friend) {
-        let username = self.props.username;
-        if (this.friendlist.current.clientWidth <= 350) {
-            if (this.friendlist.current.clientWidth <= 250) {
-                if (username.length > 11) username = username.slice(0, 8) + "...";
-            }
-            else if (username.length > 15) username = username.slice(0, 12) + "...";
-        }
-        self.setState({username: username});
-    }
-
-    render() {
-
-        let options = [];
-
-        switch (this.status) {
-            case 0:
-                options.push(
-                    {
-                        name: "Trade",
-                        onClick: () => this.onClick("/trade/" + this.props.userID)
-                    }
-                )
-                options.push(
-                    {
-                        name: "Remove",
-                        color: "#be0303",
-                        onClick: () => {
-                            if (this.onDelete) this.onDelete(this.props.userID, this.props.username);
-                        }
-                    }
-                )
-                break;
-            default:
-        }
-
-        return (
-
-            <li
-                className="friend"
-                ref={this.friendlist}
-                style={{fontSize: this.friendlist.current !== null ? `min(18px, ${this.friendlist.current.clientWidth / 15}px)` : "18px"}}
-            >
-
-                <img
-                    src={this.props.avatar}
-                    alt="Friend Avatar"
-                    style={{height: this.friendlist.current !== null ? `min(90%, ${this.friendlist.current.clientWidth / 5}px)` : "18px"}}
-                />
-
-                <ProfileNameComponent
-                    userID={this.props.userID}
-                    username={this.state.username}
-                    badges={undefined}
-                    lCallback={() => {}}
-                />
-
-                {
-                    options.length > 0 ?
-                        < ThreeDotsMenu
-                            menuID={("friendMenu-" + this.props.userID)}
-                            options={options}
-                        />
-                        : (
-                            <div className="icons">
-                                <i className="fas fa-times" onClick={() => this.onDecline(this.props.userID)} />
-                                <i className="fas fa-check" onClick={() => this.onAccept(this.props.userID)} />
-                            </div>
-                        )
-                }
-
-            </li>
-
-        )
-
-    }
-
-}
-
-const FriendComponent = withRouter(Friend);
-
-export default withAxiosPrivate(withRouter(Friendlist));
-export {FriendComponent};
+export default withAxiosPrivate(withRouter(FriendListComponent));
