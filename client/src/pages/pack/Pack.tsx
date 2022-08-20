@@ -1,8 +1,7 @@
 import {Component} from 'react'
 import WaifuCard, {parseCards, WaifuCardLoad} from "../../components/WaifuCard"
 import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
-
+import { LoadingComponent } from '../../shared/components'
 
 import './Pack.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
@@ -71,7 +70,7 @@ class Pack extends Component<PropsPack, StatePack> {
     render() {
         return (
             <div onClick={(e) => {this.onQuit(e, this)}} className="container_pack" >
-                <Loading loading={this.state.loading} />
+                <LoadingComponent loading={this.state.loading} />
 
                 <div className="packtop-wrapper">
                     <div className="packtop" />

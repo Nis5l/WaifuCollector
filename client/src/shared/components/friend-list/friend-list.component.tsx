@@ -1,14 +1,13 @@
 import {Component} from 'react'
 
-import {YesNo} from '../../../components/Popup'
-
-import './friend-list.component.scss'
+import { YesNoComponent } from '../popup';
 import FriendComponent from './friend';
 import ScrollbarComponent from '../scrollbar'
 import { withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
 import { withRouter } from '../../../hooks/withRouter'
-
 import { FriendListState, FriendListProps } from './types';
+
+import './friend-list.component.scss'
 
 class FriendListComponent extends Component<FriendListProps, FriendListState> {
     public props: FriendListProps;
@@ -185,7 +184,7 @@ class FriendListComponent extends Component<FriendListProps, FriendListState> {
 
                 {
                     this.state.deleteUser !== undefined &&
-                    <YesNo
+                    <YesNoComponent
                         text={`Remove ${this.state.deleteUser.username}?`}
                         yesCallback={() => { if(this.state.deleteUser != null) this.deleteFriend(this.state.deleteUser.userID); this.setState({deleteUser: undefined});}}
                         noCallback={() => this.setState({deleteUser: undefined})}

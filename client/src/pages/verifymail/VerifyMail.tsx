@@ -1,9 +1,7 @@
 import {Component} from 'react'
-import { CardComponent } from '../../shared/components'
+import { CardComponent, LogoComponent, LoadingComponent } from '../../shared/components'
 import {WaifuCardLoad} from '../../components/WaifuCard'
 import {checkMail} from '../../Utils'
-import Loading from '../../components/Loading'
-import Logo from '../../components/Logo'
 
 import './VerifyMail.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
@@ -76,10 +74,10 @@ class VerifyMail extends Component<PropsVerifyMail, StateVerifyMail> {
   render() {
     return (
       <div>
-        <Loading loading={this.state.loading} />
+        <LoadingComponent loading={this.state.loading} />
         <CardComponent styleClassName="verifymail">
 
-          <Logo className="logo" />
+          <LogoComponent className="logo" />
 
           {this.state.loaded === true ?
             <div className="input_wrapper">

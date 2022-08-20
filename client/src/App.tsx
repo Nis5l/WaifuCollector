@@ -2,7 +2,7 @@ import { AuthProvider } from './context/AuthProvider'
 
 //TODO: pages index.ts
 import HomeComponent from './pages/home'
-import Dashboard from './pages/dashboard/Dashboard'
+import DashboardComponent from './pages/dashboard'
 import Profile from './pages/profile/Profile'
 import Pack from './pages/pack/Pack'
 import Inventory from './pages/inventory/Inventory'
@@ -10,7 +10,7 @@ import CardPage from './pages/card/CardPage'
 import Trade from './pages/trade/Trade'
 import TradeInventory from './pages/tradeinventory/TradeInventory'
 import SuggestInventory from './pages/suggestInventory/SuggestInventory'
-import Users from './pages/users/Users'
+import Users from './pages/users'
 import Settings from './pages/settings/Settings'
 import Privacy from './pages/privacy/Privacy'
 
@@ -105,7 +105,7 @@ function App() {
                         </main>
                       </div>
                     }>
-                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/dashboard" element={<DashboardComponent />} />
                       <Route path="/pack" element={<Pack />} />
                       <Route path="/card/:id" element={<CardPage />} />
                       

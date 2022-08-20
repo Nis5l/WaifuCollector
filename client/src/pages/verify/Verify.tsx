@@ -1,8 +1,6 @@
 import {Component} from 'react'
-import { CardComponent } from '../../shared/components'
+import { CardComponent, LogoComponent, LoadingComponent } from '../../shared/components'
 import { WaifuCardLoad } from '../../components/WaifuCard'
-import Loading from '../../components/Loading'
-import Logo from '../../components/Logo'
 
 import Cookies from 'js-cookie'
 
@@ -140,10 +138,10 @@ class Verify extends Component<PropsVerify, StateVerify> {
   render() {
     return (
       <div>
-        <Loading loading={this.state.loading} />
+        <LoadingComponent loading={this.state.loading} />
         <CardComponent styleClassName="verify">
 
-          <Logo className="logo" />
+          <LogoComponent className="logo" />
 
           {
             this.state.mail === undefined ?

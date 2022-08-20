@@ -1,8 +1,5 @@
-import React, {Component} from 'react'
-import Logo from '../../components/Logo'
-import { ProfileNameComponent } from '../../shared/components'
-import Loading from '../../components/Loading'
-import { CardComponent } from '../../shared/components'
+import {Component} from 'react'
+import { ProfileNameComponent, LogoComponent, CardComponent, LoadingComponent } from '../../shared/components'
 
 import './Settings.scss'
 import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
@@ -112,8 +109,8 @@ class Settings extends Component<PropsSettings, StateSettings> {
           onIconClick={function (): void {} }
           onClick={function (event: any): void {} }
         >
-          <Loading loading={this.state.loading} />
-          <Logo className="" size="200px" />
+          <LoadingComponent loading={this.state.loading} />
+          <LogoComponent className="" size="200px" />
           <div className="username">Username: &nbsp;
             <ProfileNameComponent
               userID={userID}

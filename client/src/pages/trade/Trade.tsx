@@ -1,10 +1,8 @@
 import React, {Component, RefObject} from 'react'
 import { CardComponent } from '../../shared/components'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
-import ScrollbarComponent from '../../shared/components/scrollbar'
-import {YesNo, YesNoCancel} from '../../components/Popup'
+import { ScrollbarComponent, LoadingComponent, YesNoComponent, YesNoCancelComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
 import {formatTime} from '../../Utils'
 import moment from 'moment';
 
@@ -327,10 +325,10 @@ class Trade extends Component<PropsTrade, StateTrade> {
 
     return (
       <div className="trade_wrapper_parent">
-        <Loading loading={this.state.loading} />
+        <LoadingComponent loading={this.state.loading} />
         {
           this.state.removeSuggestionId !== undefined &&
-          <YesNoCancel
+          <YesNoCancelComponent
             disableYes={this.state.tradeCount >= this.state.tradeLimit}
             yesCallback={this.cardSuggestionYes}
             noCallback={this.cardSuggestionNo}
@@ -340,7 +338,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
         }
         {
           this.state.removeFriendSuggestionId !== undefined &&
-          <YesNo
+          <YesNoComponent
             yesCallback={this.cardSuggestionFriendRemove}
             noCallback={this.cardSuggestionFriendCancel}
             text="Remove?"
@@ -348,7 +346,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
         }
         {
           this.state.removeId !== undefined &&
-          <YesNo
+          <YesNoComponent
             yesCallback={this.cardOwnRemove}
             noCallback={this.cardOwnRemoveCancel}
             text="Remove?"

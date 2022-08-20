@@ -3,7 +3,7 @@ import React, {createRef, RefObject} from 'react'
 import type { FriendState, FriendProps } from './types';
 import ProfileNameComponent from '../../profile-name';
 import { withRouter } from '../../../../hooks/withRouter'
-import ThreeDotsMenu from '../../../../components/ThreeDotsMenu';
+import ThreeDotsMenuComponent from '../../three-dots-menu';
 
 class FriendComponent extends React.Component<FriendProps, FriendState> {
     private status: number;
@@ -104,7 +104,7 @@ class FriendComponent extends React.Component<FriendProps, FriendState> {
 
                 {
                     options.length > 0 ?
-                        <ThreeDotsMenu
+                        <ThreeDotsMenuComponent
                             menuID={("friendMenu-" + this.props.userID)}
                             options={options}
                         />

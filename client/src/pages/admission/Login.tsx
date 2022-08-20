@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react'
-import { CardComponent } from '../../shared/components'
-import Logo from '../../components/Logo'
+import { CardComponent, LogoComponent } from '../../shared/components'
 
 import "./Login.scss"
 
@@ -84,7 +83,7 @@ function Login(props: PropsLogin) {
             onClick={function (event: any): void {} }
         >
 
-            <Logo className="logo" size="" />
+            <LogoComponent className="logo" size="" />
 
             <form onSubmit={handleSubmit} autoComplete="false">
 

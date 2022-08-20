@@ -1,7 +1,6 @@
 import {lazy, Suspense, useState} from 'react'
 
-import { ScrollbarComponent, CardComponent, FoldableComponent } from '../../shared/components'
-import Loading from '../../components/Loading'
+import { ScrollbarComponent, CardComponent, FoldableComponent, LoadingComponent } from '../../shared/components'
 import PackGraphComponent from './pack-graph'
 
 import "./home.component.scss"
@@ -19,7 +18,7 @@ export default function HomeComponent() {
     return (
 
         <ScrollbarComponent>
-            <Loading loading={loadingState} />
+            <LoadingComponent loading={loadingState} />
             <div className="container_home">
                 <CardComponent
                     title="Packs Opened"

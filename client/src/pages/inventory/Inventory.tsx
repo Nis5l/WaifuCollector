@@ -3,9 +3,8 @@ import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
 
-import { ScrollbarComponent } from '../../shared/components'
+import { ScrollbarComponent, LoadingComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
 import "./Inventory.scss"
 import Config from '../../config.json'
 import { AuthProps, withAuth } from '../../hooks/useAuth'
@@ -151,7 +150,7 @@ class Inventory extends Component<PropsInventory, StateInventory> {
   render() {
     return (
       <div className="inventory_wrapper">
-        <Loading loading={this.state.loading || this.props.loading === true} />
+        <LoadingComponent loading={this.state.loading || this.props.loading === true} />
         <form action="#" onSubmit={(e) => {this.onFilter(e, this);}} className="inventory_input">
           <input ref={this.searchInput} type="text" className="text_input" onChange={(e) => this.onFilter(e, this)} />
           <input type="submit" hidden />

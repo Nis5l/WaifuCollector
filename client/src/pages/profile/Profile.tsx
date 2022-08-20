@@ -1,7 +1,5 @@
 import {Component} from 'react'
-import { CardComponent } from '../../shared/components'
-import Loading from '../../components/Loading'
-import Logo from '../../components/Logo'
+import { CardComponent, LogoComponent, LoadingComponent } from '../../shared/components'
 import WaifuCard, {parseCards} from '../../components/WaifuCard'
 
 import "./Profile.scss"
@@ -148,7 +146,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
         return (
             <div className="container_profile">
 
-                <Loading loading={this.state.loading} />
+                <LoadingComponent loading={this.state.loading} />
 
                 <CardComponent
                     title="Account Info"
@@ -159,7 +157,7 @@ class Profile extends Component<PropsProfile, StateProfile> {
 
                     <div className="avatar">
 
-                        <Logo className="logo" size="" />
+                        <LogoComponent className="logo" size="" />
 
                     </div>
 

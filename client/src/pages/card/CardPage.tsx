@@ -1,10 +1,8 @@
 import React, {Component, RefObject} from 'react'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
-import {YesNo} from '../../components/Popup'
-import { ScrollbarComponent } from '../../shared/components'
+import { ScrollbarComponent, LoadingComponent, YesNoComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
-import Loading from '../../components/Loading'
 
 import Config from '../../config.json'
 
@@ -220,10 +218,10 @@ class CardPage extends Component<PropsCardPage, StateCardPage> {
 
     return (
       <div className="cardpage_wrapper">
-        <Loading loading={this.state.loading} />
+        <LoadingComponent loading={this.state.loading} />
         {
           this.state.upgradeId !== undefined &&
-          <YesNo
+          <YesNoComponent
             yesCallback={this.upgradeCallback}
             noCallback={this.cancelUpgradeCallback}
             text="Upgrade?"
