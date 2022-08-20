@@ -1,49 +1,21 @@
 import React, {Component, RefObject} from 'react'
+import moment from 'moment';
+
 import { CardComponent } from '../../shared/components'
 import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
 import { ScrollbarComponent, LoadingComponent, YesNoComponent, YesNoCancelComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
 import {formatTime} from '../../Utils'
-import moment from 'moment';
+import { withAuth } from '../../hooks/useAuth'
+import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { withRouter } from '../../hooks/withRouter'
+import type { TradeState, TradeProps } from './types';
 
-import './Trade.scss'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import './trade.component.scss'
 
 const suggestCardColor = "rgb(255 255 255 / 50%)";
 
-type PropsTrade = ReactRouterProps & AuthProps & AxiosPrivateProps & {
-
-}
-
-type StateTrade = {
-  name: string,
-  cards: any | undefined,
-  friendcards: any | undefined,
-  found: boolean,
-  info: string,
-  friendinfo: string,
-  tradeCount: number,
-  friendTradeCount: number,
-  tradeLimit: number,
-  tradeTime: number,
-  cardSuggestions: any | undefined,
-  friendCardSuggestions: any | undefined,
-  confirmed: number,
-  friendConfirmed: number,
-
-  removeId: number | undefined,
-  removeFriendSuggestionId: number | undefined,
-  removeSuggestionId: number | undefined,
-
-  disabled: any | undefined,
-  confirmdisabled: string | undefined,
-
-  loading: boolean
-}
-
-class Trade extends Component<PropsTrade, StateTrade> {
+class TradeComponent extends Component<TradeProps, TradeState> {
   private lCounter: number;
   private lCounterMax: number;
 
@@ -56,7 +28,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
 
   private timeinterval: NodeJS.Timeout | undefined;
 
-  constructor(props: PropsTrade) {
+  constructor(props: TradeProps) {
     super(props);
 
     this.lCounter = 0;
@@ -97,7 +69,7 @@ class Trade extends Component<PropsTrade, StateTrade> {
     this.load();
   }
 
-  componentWillReceiveProps(props: PropsTrade) {
+  componentWillReceiveProps(props: TradeProps) {
     if(this.friendid === props.router.params.id) return;
 
     this.friendid = props.router.params.id;
@@ -198,15 +170,15 @@ class Trade extends Component<PropsTrade, StateTrade> {
       this.setState({confirmdisabled: formatTime(this.state.tradeTime)})
   }
 
-  onCardOwnClick(e: any, uuid : any, self: Trade) {
+  onCardOwnClick(e: any, uuid : any, self: TradeComponent) {
     self.setState({removeId: uuid});
   }
 
-  onFriendCardSuggestionClick(e: any, uuid: any, self: Trade) {
+  onFriendCardSuggestionClick(e: any, uuid: any, self: TradeComponent) {
     self.setState({removeFriendSuggestionId: uuid});
   }
 
-  onCardSuggestionClick(e: any, uuid: any, self: Trade) {
+  onCardSuggestionClick(e: any, uuid: any, self: TradeComponent) {
     self.setState({removeSuggestionId: uuid});
   }
 
@@ -494,4 +466,4 @@ class Trade extends Component<PropsTrade, StateTrade> {
   }
 }
 
-export default withAuth(withAxiosPrivate(withRouter(Trade)));
+export default withAuth(withAxiosPrivate(withRouter(TradeComponent)));

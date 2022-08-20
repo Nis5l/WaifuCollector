@@ -1,25 +1,18 @@
 import {Component} from 'react'
-import Inventory from '../inventory/Inventory'
-import redirectIfNecessary from '../../components/Redirecter'
+import Inventory from '../../inventory'
+import redirectIfNecessary from '../../../components/Redirecter'
 
-import './TradeInventory.scss'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import { withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
+import { withAuth } from '../../../hooks/useAuth'
+import { withRouter } from '../../../hooks/withRouter'
+import type { TradeInventoryProps, TradeInventoryState } from './types';
 
-type PropsTradeInventory = ReactRouterProps & AxiosPrivateProps & AuthProps & {
+import './trade-inventory.component.scss'
 
-}
-
-type StateTradeInventory = {
-  loading: boolean,
-  error: any
-}
-
-class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory> {
+class TradeInventoryComponent extends Component<TradeInventoryProps, TradeInventoryState> {
   private friendID: string = "";
   
-  constructor(props: PropsTradeInventory) {
+  constructor(props: TradeInventoryProps) {
     super(props);
 
     const friendID = props.router.params.id;
@@ -31,7 +24,7 @@ class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory>
     }
   }
 
-  onCardClick(self: TradeInventory, e: any, card: any) {
+  onCardClick(self: TradeInventoryComponent, e: any, card: any) {
     self.setState({loading: true});
 
     this.props.axios.post(`/trade/${this.friendID}/card/add/${card}`, {})
@@ -66,4 +59,4 @@ class TradeInventory extends Component<PropsTradeInventory, StateTradeInventory>
   }
 }
 
-export default withAxiosPrivate(withAuth(withRouter(TradeInventory)));
+export default withAxiosPrivate(withAuth(withRouter(TradeInventoryComponent)));

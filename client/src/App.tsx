@@ -5,11 +5,9 @@ import HomeComponent from './pages/home'
 import DashboardComponent from './pages/dashboard'
 import Profile from './pages/profile/Profile'
 import Pack from './pages/pack/Pack'
-import Inventory from './pages/inventory/Inventory'
+import InventoryComponent from './pages/inventory'
 import CardPage from './pages/card/CardPage'
-import Trade from './pages/trade/Trade'
-import TradeInventory from './pages/tradeinventory/TradeInventory'
-import SuggestInventory from './pages/suggestInventory/SuggestInventory'
+import TradeComponent, { TradeInventoryComponent, SuggestInventoryComponent } from './pages/trade'
 import Users from './pages/users'
 import Settings from './pages/settings/Settings'
 import Privacy from './pages/privacy/Privacy'
@@ -109,12 +107,12 @@ function App() {
                       <Route path="/pack" element={<Pack />} />
                       <Route path="/card/:id" element={<CardPage />} />
                       
-                      <Route path="/inventory/:id" element={<Inventory />} />
-                      <Route path="/inventory" element={<Inventory />} />
+                      <Route path="/inventory/:id" element={<InventoryComponent />} />
+                      <Route path="/inventory" element={<InventoryComponent />} />
 
-                      <Route path="/tradeinventory/:id" element={<TradeInventory />} />
-                      <Route path="/suggestcard/:id" element={<SuggestInventory />} />
-                      <Route path="/trade/:id" element={<Trade />} />
+                      <Route path="/tradeinventory/:id" element={<TradeInventoryComponent />} />
+                      <Route path="/suggestcard/:id" element={<SuggestInventoryComponent />} />
+                      <Route path="/trade/:id" element={<TradeComponent />} />
                     </Route>
                   </Route>
 

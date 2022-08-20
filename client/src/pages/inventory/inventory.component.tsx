@@ -5,30 +5,17 @@ import Select from 'react-select'
 
 import { ScrollbarComponent, LoadingComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
-import "./Inventory.scss"
 import Config from '../../config.json'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import { withAuth } from '../../hooks/useAuth'
+import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { withRouter } from '../../hooks/withRouter'
+import type { InventoryState, InventoryProps } from './types';
 
-type PropsInventory = ReactRouterProps & AuthProps & AxiosPrivateProps & {
-  userID: string,
-  friendID?: string,
-  excludeSuggestions?: boolean,
-  redirect?: boolean,
-  loading?: boolean,
-  onCardClick?: (e: any, card: any) => void
-}
-
-type StateInventory = {
-  cards: any[],
-  errorMessage: string | undefined,
-  loading: boolean
-}
+import "./inventory.component.scss"
 
 const collectorID: string = "xxxxxxxxxxxxx";
 
-class Inventory extends Component<PropsInventory, StateInventory> {
+class InventoryComponent extends Component<InventoryProps, InventoryState> {
   private key: number;
   private page: number;
   private scrollpadding: number;
@@ -52,7 +39,7 @@ class Inventory extends Component<PropsInventory, StateInventory> {
   private card_wrapper: RefObject<any>;
   private searchInput: RefObject<any>;
   
-  constructor(props: PropsInventory) {
+  constructor(props: InventoryProps) {
     super(props);
 
     this.card_wrapper = React.createRef();
@@ -220,4 +207,4 @@ class Inventory extends Component<PropsInventory, StateInventory> {
   }
 }
 
-export default withAxiosPrivate(withAuth(withRouter(Inventory)));
+export default withAxiosPrivate(withAuth(withRouter(InventoryComponent)));

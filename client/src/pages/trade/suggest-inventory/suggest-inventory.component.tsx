@@ -1,25 +1,16 @@
 import {Component} from 'react'
-import Inventory from '../inventory/Inventory'
-import redirectIfNecessary from '../../components/Redirecter'
+import Inventory from '../../inventory'
+import redirectIfNecessary from '../../../components/Redirecter'
 
-import './SuggestInventory.scss'
-import { AxiosPrivateProps, withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { AuthProps, withAuth } from '../../hooks/useAuth'
-import { ReactRouterProps, withRouter } from '../../hooks/withRouter'
+import { withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
+import { withAuth } from '../../../hooks/useAuth'
+import { withRouter } from '../../../hooks/withRouter'
+import type { SuggestInventoryProps, SuggestInventoryState } from './types';
 
-type PropsSuggestInventory = ReactRouterProps & AxiosPrivateProps & AuthProps & {
-
-}
-
-type StateSuggestInventory = {
-  error: any | undefined,
-  loading: boolean
-}
-
-class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInventory> {
+class SuggestInventoryComponent extends Component<SuggestInventoryProps, SuggestInventoryState> {
   private friendID: string;
 
-  constructor(props: PropsSuggestInventory) {
+  constructor(props: SuggestInventoryProps) {
     super(props);
 
     this.friendID = props.router.params.id != null ? props.router.params.id : "";
@@ -30,7 +21,7 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
     }
   }
 
-  onCardClick(self: SuggestInventory, e: any, card: any) {
+  onCardClick(self: SuggestInventoryComponent, e: any, card: any) {
     self.setState({loading: true});
 
     this.props.axios.post(`/trade/${this.friendID}/suggestion/add/${card}`, {})
@@ -71,4 +62,4 @@ class SuggestInventory extends Component<PropsSuggestInventory, StateSuggestInve
   }
 }
 
-export default withAxiosPrivate(withAuth(withRouter(SuggestInventory)));
+export default withAxiosPrivate(withAuth(withRouter(SuggestInventoryComponent)));
