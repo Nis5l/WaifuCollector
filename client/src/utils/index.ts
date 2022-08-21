@@ -1,14 +1,17 @@
+import type { GameCard } from '../shared/types';
+import Config from '../config.json';
+
 const rememberme: string = "rememberme";
 
-function setRememberMe(value: boolean): void{
+export function setRememberMe(value: boolean): void{
     localStorage.setItem(rememberme, value ? "true" : "false");
 }
 
-function getRememberMe(): boolean{
+export function getRememberMe(): boolean{
     return localStorage.getItem(rememberme) === "true";
 }
 
-function removeRememberMe(): void{
+export function removeRememberMe(): void{
     localStorage.removeItem(rememberme);
 }
 
@@ -22,4 +25,12 @@ export function random_string(length: number): string {
     return result;
 }
 
-export { setRememberMe, getRememberMe, removeRememberMe };
+export function parseCards(cards: GameCard[]) {
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].cardInfo.image = `${Config.API_HOST}/${cards[i].cardInfo.image}`;
+        cards[i].cardFrame.front = `${Config.API_HOST}/${cards[i].cardFrame.front}`;
+        cards[i].cardFrame.back = `${Config.API_HOST}/${cards[i].cardFrame.back}`;
+        if (cards[i].cardEffect.image != null)
+            cards[i].cardEffect.image = `${Config.API_HOST}/${cards[i].cardEffect.image}`;
+    }
+}

@@ -2,10 +2,10 @@ import React, {Component, RefObject} from 'react'
 import moment from 'moment';
 
 import { CardComponent } from '../../shared/components'
-import WaifuCard, {parseCards, WaifuCardLoad} from '../../components/WaifuCard'
-import { ScrollbarComponent, LoadingComponent, YesNoComponent, YesNoCancelComponent } from '../../shared/components'
+import { ScrollbarComponent, LoadingComponent, YesNoComponent, YesNoCancelComponent, GameCardLoadComponent, GameCardComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
 import {formatTime} from '../../Utils'
+import { parseCards } from '../../utils';
 import { withAuth } from '../../hooks/useAuth'
 import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { withRouter } from '../../hooks/withRouter'
@@ -342,13 +342,13 @@ class TradeComponent extends Component<TradeProps, TradeState> {
                       (
                         this.state.cardSuggestions.map((card: any) => (
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
-                            <WaifuCard
+                            <GameCardComponent
                               card={card}
                               size={size}
                               onClick={(e: any, uuid: any) => {this.onCardSuggestionClick(e, uuid, this)}}
                               cardcolor={suggestCardColor}
                             >
-                            </WaifuCard>
+                            </GameCardComponent>
                           </div>
                         ))
                       )
@@ -357,18 +357,17 @@ class TradeComponent extends Component<TradeProps, TradeState> {
                       this.state.cards === undefined ?
                         (
                           <div className="cards_load">
-                            <WaifuCardLoad size="1">
-                            </WaifuCardLoad>
+                            <GameCardLoadComponent size={1}/>
                           </div>
                         ) :
                         this.state.cards.map((card: any) => (
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
-                            <WaifuCard
+                            <GameCardComponent
                               card={card}
                               size={size}
                               onClick={(e: any, uuid: any) => {this.onCardOwnClick(e, uuid, this)}}
                             >
-                            </WaifuCard>
+                            </GameCardComponent>
                           </div>
                         )
                         )
@@ -398,13 +397,13 @@ class TradeComponent extends Component<TradeProps, TradeState> {
                       (
                         this.state.friendCardSuggestions.map((card: any) => (
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
-                            <WaifuCard
+                            <GameCardComponent
                               card={card}
                               size={size}
                               onClick={(e: any, uuid: any) => {this.onFriendCardSuggestionClick(e, uuid, this)}}
                               cardcolor={suggestCardColor}
                             >
-                            </WaifuCard>
+                            </GameCardComponent>
                           </div>
                         ))
                       )
@@ -413,17 +412,16 @@ class TradeComponent extends Component<TradeProps, TradeState> {
                       this.state.friendcards === undefined ?
                         (
                           <div className="cards_load">
-                            <WaifuCardLoad size="1">
-                            </WaifuCardLoad>
+                            <GameCardLoadComponent size={1}/>
                           </div>
                         ) :
                         this.state.friendcards.map((card: any) => (
                           <div className="waifucard_wrapper" key={"card-" + card.id}>
-                            <WaifuCard
+                            <GameCardComponent
                               card={card}
                               size={size}
                             >
-                            </WaifuCard>
+                            </GameCardComponent>
                           </div>
                         )
                         )

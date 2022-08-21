@@ -9,3 +9,4 @@ export { default as FriendListComponent } from './friend-list';
 export { default as LogoComponent } from './logo';
 export { default as LoadingComponent } from './loading';
 export { YesNoCancelComponent, YesNoComponent } from './popup';
+export { default as GameCardComponent, GameCardLoadComponent } from './game-card';

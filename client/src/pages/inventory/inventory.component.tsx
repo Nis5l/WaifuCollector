@@ -1,14 +1,14 @@
 import React, {Component, RefObject} from 'react'
-import WaifuCard, {parseCards} from '../../components/WaifuCard'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
 
-import { ScrollbarComponent, LoadingComponent } from '../../shared/components'
+import { ScrollbarComponent, LoadingComponent, GameCardComponent } from '../../shared/components'
 import redirectIfNecessary from '../../components/Redirecter'
 import Config from '../../config.json'
 import { withAuth } from '../../hooks/useAuth'
 import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
 import { withRouter } from '../../hooks/withRouter'
+import { parseCards } from '../../utils';
 import type { InventoryState, InventoryProps } from './types';
 
 import "./inventory.component.scss"
@@ -18,7 +18,6 @@ const collectorID: string = "xxxxxxxxxxxxx";
 class InventoryComponent extends Component<InventoryProps, InventoryState> {
   private key: number;
   private page: number;
-  private scrollpadding: number;
   private userID: string;
   private friendID: string | undefined;
   private excludeSuggestions: boolean;
@@ -45,7 +44,6 @@ class InventoryComponent extends Component<InventoryProps, InventoryState> {
     this.card_wrapper = React.createRef();
     this.key = 0;
     this.page = 0;
-    this.scrollpadding = 500;
 
     this.userID = props.userID;
     if (this.userID === undefined)
@@ -184,15 +182,14 @@ class InventoryComponent extends Component<InventoryProps, InventoryState> {
               {
                 this.state.errorMessage === undefined ? this.state.cards.map((card) => (
                   < div className="inventory_card_wrapper" key={"card-" + card.id}>
-                    <WaifuCard
+                    <GameCardComponent
                       onClick={(e: any, card: any) => { if(this.onCardClick){ this.onCardClick(e, card); } }}
                       card={card}
                       size="1"
                       cardcolor="transparent"
                       clickable="true"
                       redirects={this.redirect}
-                    >
-                    </WaifuCard>
+                    />
                   </div>
                 )) :
                   (

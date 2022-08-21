@@ -7,7 +7,7 @@ import "./home.component.scss"
 import "../../scss/effects.scss"
 import { Link } from 'react-router-dom'
 
-const WaifuCard = lazy(() => import('../../components/WaifuCard'));
+const GameCardComponent = lazy(() => import('../../shared/components/game-card'));
 //TODO: loading
 const loading = () => <p>Loading...</p>
 
@@ -42,21 +42,37 @@ export default function HomeComponent() {
                     <p>X: Level, Y: Quality</p>
                     <div>
                         <Suspense fallback={loading()}>
-                            <WaifuCard
-                                img={`/assets/card/Card_Ichigo.webp`}
-                                framefront={`/assets/card/Frame_Silver_Front.png`}
-                                frameback={`/assets/card/Frame_Silver_Back.png`}
-                                effect={`/assets/card/Effect2.gif`}
-                                cardname="Ichigo"
-                                animename="Darling In The FranXX"
-                                size="0.8"
-                                quality="Y"
-                                level="X"
-                                effectopacity="0.5"
+                            <GameCardComponent
+								card={{
+									id: 0,
+									userId: "x",
+									level: 1,
+									quality: 2,
+									cardInfo: {
+										id: "x",
+										name: "Ichigo",
+										image: "/assets/card/Card_Ichigo.webp",
+									},
+									cardFrame: {
+										id: "x",
+										name: "frame",
+										front: "/assets/card/Frame_Silver_Front.png",
+										back: "/assets/card/Frame_Silver_Back.png",
+									},
+									cardType: {
+										id: "x",
+										name: "Darling In The FranXX",
+									},
+									cardEffect: {
+										id: "x",
+										image: "/assets/card/Effect2.gif",
+										opacity: 0.5,
+									},
+								}}
+                                size={0.8}
                                 cardcolor="transparent"
-                                clickable="false"
-                            >
-                            </WaifuCard>
+                                clickable={false}
+                            />
                         </Suspense>
                     </div>
                     <h5>Upgrading</h5>
