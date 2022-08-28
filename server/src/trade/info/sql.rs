@@ -3,8 +3,8 @@ use crate::shared::card::data::{CardDb, Card};
 use crate::config::Config;
 use crate::shared::Id;
 
-//TODO: passing the config to sql doesnt feel right
-pub async fn trade_cards(sql: &Sql, user_id: Id, user_id_friend: Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
+//TODO: dont pass config
+pub async fn trade_cards(sql: &Sql, user_id: &Id, trade_id: &Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let cards_db: Vec<CardDb> = sqlx::query_as(
@@ -32,9 +32,9 @@ pub async fn trade_cards(sql: &Sql, user_id: Id, user_id_friend: Id, config: &Co
          cards.ctid = cardtypes.ctid AND
          cardeffects.ceid = cardunlocks.culevel AND
          cardunlocks.cuid = tradecards.cuid AND
-         tradecards.uidone=? AND tradecards.uidtwo=?;")
+         tradecards.tid=? AND cardunlocks.uid<>?;")
+         .bind(trade_id)
          .bind(user_id)
-         .bind(user_id_friend)
          .fetch_all(&mut con)
          .await?;
 
@@ -43,7 +43,8 @@ pub async fn trade_cards(sql: &Sql, user_id: Id, user_id_friend: Id, config: &Co
     Ok(cards)
 }
 
-pub async fn trade_suggestions(sql: &Sql, user_id: Id, user_id_friend: Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
+//TODO: dont pass config
+pub async fn trade_suggestions(sql: &Sql, user_id: &Id, trade_id: &Id, config: &Config) -> Result<Vec<Card>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let cards_db: Vec<CardDb> = sqlx::query_as(
@@ -71,9 +72,9 @@ pub async fn trade_suggestions(sql: &Sql, user_id: Id, user_id_friend: Id, confi
          cards.ctid = cardtypes.ctid AND
          cardeffects.ceid = cardunlocks.culevel AND
          cardunlocks.cuid = tradesuggestions.cuid AND
-         tradesuggestions.uidone=? AND tradesuggestions.uidtwo=?;")
+         tradesuggestions.tid=? AND cardunlocks.uid<>?;")
+         .bind(trade_id)
          .bind(user_id)
-         .bind(user_id_friend)
          .fetch_all(&mut con)
          .await?;
 

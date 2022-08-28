@@ -1,12 +1,14 @@
 [package]
-name = "WaifuCollector"
+name = "waifu_collector"
 version = "0.1.0"
 authors = ["Nis5l <kirchler123@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-rocket = { version = "0.5.0-rc.2", features = ["json"] }
-rocketjson = "1.2.1"
+#rocket = { version = "0.5.0-rc.2", features = ["json"] }
+rocket = { git = "https://github.com/SergioBenitez/Rocket", branch = "master", features = ["json"] }
+#rocketjson = "1.2.1"
+rocketjson = { git = "https://github.com/Nis5l/rocketjson", branch = "rocket-master" }
 serde = { version = "1.0", features = ["derive", "rc"] }
 serde_repr = "0.1.7"
 figment = { version = "0.10.6", features = ["env", "toml", "json"] }
@@ -23,5 +25,5 @@ sqlx = { version = "0.5", features = [ "runtime-tokio-rustls", "mysql", "chrono"
 chrono = { version = "0.4.19", features = ["serde"] }
 rand = "0.8.4"
 lettre = "0.10.0-rc.4"
-rocket_cors = { git = "https://github.com/lawliet89/rocket_cors", branch = "master" }
+#rocket_cors = { git = "https://github.com/lawliet89/rocket_cors", branch = "master" }
 #when rocket_db_pools is out, switch

@@ -8,8 +8,13 @@ pub mod notification;
 pub mod trade;
 pub mod util;
 pub mod email;
+pub mod crypto;
+pub mod collector;
+pub mod id;
 
-pub type Id = i64;
+pub use id::Id;
+
+pub type IdInt = i32;
 
 #[derive(Debug)]
 pub struct DbParseError;
