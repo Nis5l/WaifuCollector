@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 use sqlx::FromRow;
 
 use crate::config::Config;
-use crate::shared::{Id, IdInt};
+use crate::shared::Id;
 
 #[derive(Debug, Serialize, FromRow)]
 pub struct CardInfo {
@@ -15,7 +15,7 @@ pub struct CardInfo {
 
 #[derive(Debug, Serialize)]
 pub struct CardFrame {
-    pub id: IdInt,
+    pub id: Id,
     pub name: String,
     pub front: String,
     pub back: String
@@ -29,7 +29,7 @@ pub struct CardType {
 
 #[derive(Debug, Serialize)]
 pub struct CardEffect {
-    pub id: IdInt,
+    pub id: Id,
     pub image: String,
     pub opacity: f32
 }
@@ -96,12 +96,12 @@ pub struct CardDb {
     pub type_id: Id,
     pub type_name: String,
 
-    pub frame_id: IdInt,
+    pub frame_id: Id,
     pub frame_name: String,
     pub frame_front: String,
     pub frame_back: String,
 
-    pub effect_id: IdInt,
+    pub effect_id: Id,
     pub effect_image: String,
     pub effect_opacity: f32
 }
@@ -109,7 +109,7 @@ pub struct CardDb {
 #[derive(Debug, Serialize)]
 pub struct CardCreateData {
     pub card_id: Id,
-    pub frame_id: IdInt,
+    pub frame_id: Id,
     pub quality: i32,
     pub level: i32
 }
@@ -142,7 +142,6 @@ impl<'de> Deserialize<'de> for SortType {
 
 pub struct InventoryOptions {
     pub user_id: Id,
-    pub collector_id: Id,
     pub count: u32,
     pub offset: u32,
     pub search: String,

@@ -13,7 +13,7 @@ pub enum FriendStatus {
 }
 
 impl FriendStatus {
-    pub fn from_database(user_id: &Id, friend: &dyn FriendStatusParam) -> Option<Self> {
+    pub fn from_database(user_id: Id, friend: &dyn FriendStatusParam) -> Option<Self> {
         match friend.get_status() {
             0 => return if friend.is_sent(user_id) { Some(FriendStatus::Sent) } else { Some(FriendStatus::Pending) },
             1 => return Some(FriendStatus::Friend),
@@ -23,7 +23,7 @@ impl FriendStatus {
 }
 
 pub trait FriendStatusParam {
-    fn is_sent(&self, user_id: &Id) -> bool;
+    fn is_sent(&self, user_id: Id) -> bool;
     fn get_status(&self) -> i32;
 }
 
@@ -37,8 +37,8 @@ pub struct FriendUsernameDb {
 }
 
 impl FriendStatusParam for FriendUsernameDb {
-    fn is_sent(&self, user_id: &Id) -> bool {
-        &self.userone == user_id
+    fn is_sent(&self, user_id: Id) -> bool {
+        self.userone == user_id
    }
 
     fn get_status(&self) -> i32 {
@@ -55,8 +55,8 @@ pub struct FriendDb {
 }
 
 impl FriendStatusParam for FriendDb {
-    fn is_sent(&self, user_id: &Id) -> bool {
-        &self.userone == user_id
+    fn is_sent(&self, user_id: Id) -> bool {
+        self.userone == user_id
    }
 
     fn get_status(&self) -> i32 {

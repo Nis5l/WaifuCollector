@@ -1,4 +1,5 @@
 use serde::Serialize;
+use sqlx::FromRow;
 
 use crate::shared::user::data::UserVerified;
 

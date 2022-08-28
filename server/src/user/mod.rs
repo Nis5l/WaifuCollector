@@ -1,7 +1,6 @@
 pub mod info;
 pub mod inventory;
 pub mod flex;
-mod index;
-pub mod avatar;
+mod users;
 
-pub use index::user_index_route;
+pub use users::users_route;

@@ -7,15 +7,16 @@ use super::data::{FriendAddResponse, FriendAddRequest};
 use super::sql;
 use crate::shared::{user, friend, notification};
 use crate::sql::Sql;
-use crate::shared::crypto::JwtToken;
+use crate::crypto::JwtToken;
 use crate::config::Config;
 use crate::verify_user;
 
 #[post("/friend/add", data="<data>")]
 pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<FriendAddResponse> {
-    let JwtToken { id: user_id, username } = token;
+    let user_id = token.id;
+    let username = token.username;
 
-    verify_user!(sql, &user_id, true);
+    verify_user!(sql, user_id);
 
     if data.user_id.is_none() && data.username.is_none() {
         return ApiResponseErr::api_err(Status::BadRequest, String::from("One of the fields has to be set: userId, username"));
@@ -23,7 +24,10 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
 
     let (user_id_receiver, username_receiver) = match data.user_id {
         Some(id) => {
-            let username = verify_user!(sql, &id, false);
+            let username = match rjtry!(user::sql::username_from_user_id(sql, id).await) {
+                None => return ApiResponseErr::api_err(Status::NotFound, format!("User with id {} not found", id)),
+                Some(value) => value
+            };
             (id, username)
         },
         None => {
@@ -41,17 +45,17 @@ pub async fn friend_add_route(data: FriendAddRequest, sql: &State<Sql>, token: J
         return ApiResponseErr::api_err(Status::Conflict, String::from("Can not add yourself"));
     }
 
-    if rjtry!(friend::sql::used_friend_slots(sql, &user_id).await) >= config.max_friends as i64 {
+    if rjtry!(friend::sql::used_friend_slots(sql, user_id).await) >= config.max_friends as i64 {
         return ApiResponseErr::api_err(Status::Conflict, format!("Reached friend limit of {}", config.max_friends));
     }
 
-    if rjtry!(friend::sql::user_friend(sql, &user_id, &user_id_receiver).await).is_some() {
+    if rjtry!(friend::sql::user_friend(sql, user_id, user_id_receiver).await).is_some() {
         return ApiResponseErr::api_err(Status::Conflict, format!("Friend response already sent by or to {}", username_receiver));
     }
 
-    rjtry!(sql::send_friend_request(sql, &user_id, &user_id_receiver).await);
+    rjtry!(sql::send_friend_request(sql, user_id, user_id_receiver).await);
 
-    rjtry!(notification::sql::add_notification(sql, &user_id_receiver, None, &notification::data::NotificationCreateData {
+    rjtry!(notification::sql::add_notification(sql, user_id_receiver, &notification::data::NotificationCreateData {
         title: String::from("Friend Request"),
         message: format!("{} sent you a friend request, click to view!", username),
         url: String::from("friends"),

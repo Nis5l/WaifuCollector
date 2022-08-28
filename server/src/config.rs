@@ -8,20 +8,11 @@ pub struct Config {
     pub jwt_secret: String,
     //seconds
     pub jwt_duration: u32,
-    pub refresh_token_secret: String,
-    pub refresh_token_duration: u32,
-
-    pub refresh_token_rotation_strategy: bool,
-
     pub domain: String,
     pub verification_key_length: usize,
-    pub id_length: usize,
 
     pub username_len_min: u32,
     pub username_len_max: u32,
-
-    pub collector_len_min: u32,
-    pub collector_len_max: u32,
 
     pub password_len_min: u32,
     pub password_len_max: u32,
@@ -67,28 +58,17 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            port: 81,
+            port: 80,
             address: String::from("0.0.0.0"),
 
             //NOTE: important to change
             jwt_secret: String::from("CHANGE_THE_SECRET"),
-            //jwt_duration: 60 * 15,
-            jwt_duration: 20,
-
-            refresh_token_secret: String::from("CHANGE_THE_SECRET"),
-            refresh_token_duration: 60 * 60 * 24,
-            
-            refresh_token_rotation_strategy: true,
-
+            jwt_duration: 2678400,
             domain: String::from("https://waifucollector.com"),
             verification_key_length: 20,
-            id_length: 13,
 
             username_len_min: 4,
             username_len_max: 20,
-
-            collector_len_min: 4,
-            collector_len_max: 20,
 
             password_len_min: 8,
             password_len_max: 30,
@@ -127,11 +107,11 @@ impl Default for Config {
 
             db_init_files: vec![
                 String::from("./sqlfiles/tables.sql"),
-                /* String::from("./sqlfiles/cardtypes.sql"),
+                String::from("./sqlfiles/cardtypes.sql"),
                 String::from("./sqlfiles/cards.sql"),
                 String::from("./sqlfiles/cardframes.sql"),
                 String::from("./sqlfiles/cardeffects.sql"),
-                String::from("./sqlfiles/achievements.sql") */
+                String::from("./sqlfiles/achievements.sql")
             ]
         }
     }
