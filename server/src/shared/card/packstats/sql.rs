@@ -1,43 +1,29 @@
-use sqlx::Acquire;
+use sqlx::{MySql, pool::PoolConnection};
 use chrono::{DateTime, Utc};
 
-use crate::sql::Sql;
-use crate::shared::Id;
+use super::data::PackStatsPair;
 
-pub async fn add_pack_stats(sql: &Sql, user_id: &Id, collector_id: &Id, amount: i32, time: &DateTime<Utc>) -> Result<(), sqlx::Error> {
-    let mut con = sql.get_con().await?;
-
-    let mut transaction = con.begin().await?;
-
-    for _ in 0..amount {
-        sqlx::query(
-            "INSERT INTO packstats
-             (uid, coid, pstime)
-             VALUES
-             (?, ?, ?);")
-            .bind(user_id)
-            .bind(collector_id)
-            .bind(time)
-            .execute(&mut transaction)
-            .await?;
-    }
-
-    transaction.commit().await?;
-
-    Ok(())
+pub async fn load_pack_stats(con: &mut PoolConnection<MySql>, start: &DateTime<Utc>, end: &DateTime<Utc>) -> Result<Vec<PackStatsPair>, sqlx::Error> {
+    sqlx::query_as(
+        "SELECT pstime, psamount
+         FROM packstats
+         WHERE pstime BETWEEN ? AND ?;")
+        .bind(start)
+        .bind(end)
+        .fetch_all(con)
+        .await
 }
 
-pub async fn get_pack_stats_db(sql: &Sql, collector_id: &Id, start_time: &DateTime<Utc>, end_time: &DateTime<Utc>) -> Result<Vec<(DateTime<Utc>, )>, sqlx::Error> {
-    let mut con = sql.get_con().await?;
-
+pub async fn add_pack_stats(con: &mut PoolConnection<MySql>, time: &DateTime<Utc>, amount: i32) -> Result<Vec<PackStatsPair>, sqlx::Error> {
     sqlx::query_as(
-        "SELECT pstime
-         FROM packstats
-         WHERE coid=?
-         AND pstime BETWEEN ? AND ?;")
-        .bind(collector_id)
-        .bind(start_time)
-        .bind(end_time)
-        .fetch_all(&mut con)
+        "INSERT INTO packstats
+         (psamount, pstime)
+         VALUES (?, ?)
+         ON DUPLICATE KEY UPDATE
+         psamount = psamount + ?;")
+        .bind(amount)
+        .bind(time)
+        .bind(amount)
+        .fetch_all(con)
         .await
 }

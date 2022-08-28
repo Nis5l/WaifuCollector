@@ -14,16 +14,13 @@ pub struct LoginRequest {
 #[derive(Serialize)]
 #[serde(rename_all="camelCase")]
 pub struct LoginResponse {
-    pub access_token: String,
-    pub user_id: Id,
-    pub username: String,
-    pub role: i8
+    pub token: String,
+    pub user_id: Id
 }
 
 #[derive(Debug, FromRow)]
 pub struct LoginDb {
     pub id: Id,
     pub username: String,
-    pub password: String,
-    pub role: i8
+    pub password: String
 }

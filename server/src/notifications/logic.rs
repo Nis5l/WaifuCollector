@@ -3,23 +3,18 @@ use rocket::http::Status;
 use rocket::State;
 
 use crate::sql::Sql;
-use crate::shared::crypto::JwtToken;
-use crate::shared::Id;
-use crate::{verify_user, verify_collector};
+use crate::crypto::JwtToken;
+use crate::verify_user;
 use super::sql;
 use super::data::NotificationResponse;
 
-#[get("/notifications?<collector_id>")]
-pub async fn notifications_route(collector_id: Option<Id>, sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<NotificationResponse> {
+#[get("/notifications")]
+pub async fn notifications_route(sql: &State<Sql>, token: JwtToken) -> ApiResponseErr<NotificationResponse> {
     let user_id = token.id;
 
-    verify_user!(sql, &user_id, true);
-    if let Some(ref collector_id) = collector_id {
-        println!("{}", collector_id);
-        verify_collector!(sql, &collector_id);
-    }
+    verify_user!(sql, user_id);
 
-    let notifications = rjtry!(sql::get_notifications(&sql, &user_id, &collector_id).await);
+    let notifications = rjtry!(sql::get_notifications(&sql, token.id).await);
 
     ApiResponseErr::ok(Status::Ok, NotificationResponse {
         notifications

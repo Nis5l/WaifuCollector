@@ -1,6 +1,5 @@
-mod collector;
-mod global;
-mod shared;
+mod logic;
+mod sql;
+mod data;
 
-pub use collector::user_stats_collector_route;
-pub use global::user_stats_global_route;
+pub use logic::user_stats_route;

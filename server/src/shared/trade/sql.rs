@@ -4,17 +4,28 @@ use crate::sql::Sql;
 use crate::shared::Id;
 use super::data::{TradeStatus, TradeDb};
 
-pub async fn set_trade_status(sql: &Sql, trade_id: &Id, status: TradeStatus) -> Result<(), sqlx::Error> {
+pub async fn set_trade_status(sql: &Sql, user_id: Id, user_friend_id: Id, status_self: TradeStatus, status_friend: TradeStatus) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
     let mut transaction = con.begin().await?;
 
-    sqlx::query(
+    let query =
         "UPDATE trades
          SET tstatusone=?, tstatustwo=?
-         WHERE tid=?;")
-        .bind(status as i32)
-        .bind(status as i32)
-        .bind(trade_id)
+         WHERE uidone=? AND uidtwo=?;";
+
+    sqlx::query(query)
+        .bind(status_self as i32)
+        .bind(status_friend as i32)
+        .bind(user_id)
+        .bind(user_friend_id)
+        .execute(&mut transaction)
+        .await?;
+
+    sqlx::query(query)
+        .bind(status_friend as i32)
+        .bind(status_self as i32)
+        .bind(user_friend_id)
+        .bind(user_id)
         .execute(&mut transaction)
         .await?;
 
@@ -23,7 +34,7 @@ pub async fn set_trade_status(sql: &Sql, trade_id: &Id, status: TradeStatus) -> 
     Ok(())
 }
 
-pub async fn set_trade_status_one(sql: &Sql, user_id: &Id, user_friend_id: &Id, status_self: TradeStatus) -> Result<(), sqlx::Error> {
+pub async fn set_trade_status_one(sql: &Sql, user_id: Id, user_friend_id: Id, status_self: TradeStatus) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
     let mut transaction = con.begin().await?;
 
@@ -51,7 +62,7 @@ pub async fn set_trade_status_one(sql: &Sql, user_id: &Id, user_friend_id: &Id, 
     Ok(())
 }
 
-pub async fn card_in_trade(sql: &Sql, card_unlocked_id: &Id) -> Result<bool, sqlx::Error> {
+pub async fn card_in_trade(sql: &Sql, card_unlocked_id: Id) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let (count, ): (i64, ) = sqlx::query_as(
@@ -65,15 +76,16 @@ pub async fn card_in_trade(sql: &Sql, card_unlocked_id: &Id) -> Result<bool, sql
     Ok(count != 0)
 }
 
-pub async fn trade_add_card(sql: &Sql, trade_id: &Id, card_unlocked_id: &Id) -> Result<(), sqlx::Error> {
+pub async fn trade_add_card(sql: &Sql, user_id: Id, user_id_friend: Id, card_unlocked_id: Id) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query(
         "INSERT INTO tradecards
-         (tid, cuid)
+         (uidone, uidtwo, cuid)
          VALUES
-         (?, ?);")
-        .bind(trade_id)
+         (?, ?, ?);")
+        .bind(user_id)
+        .bind(user_id_friend)
         .bind(card_unlocked_id)
         .execute(&mut con)
         .await?;
@@ -81,15 +93,15 @@ pub async fn trade_add_card(sql: &Sql, trade_id: &Id, card_unlocked_id: &Id) -> 
     Ok(())
 }
 
-pub async fn suggestion_in_trade(sql: &Sql, trade_id: &Id, card_unlocked_id: &Id) -> Result<bool, sqlx::Error> {
+pub async fn suggestion_in_trade(sql: &Sql, user_id: Id, user_friend_id: Id, card_unlocked_id: Id) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let (count, ): (i64, ) = sqlx::query_as(
         "SELECT COUNT(*)
          FROM tradesuggestions
-         WHERE tid=?
-         AND cuid=?")
-        .bind(trade_id)
+         WHERE uidone=? AND uidtwo=? AND cuid=?;")
+        .bind(user_id)
+        .bind(user_friend_id)
         .bind(card_unlocked_id)
         .fetch_one(&mut con)
         .await?;
@@ -97,57 +109,53 @@ pub async fn suggestion_in_trade(sql: &Sql, trade_id: &Id, card_unlocked_id: &Id
     Ok(count != 0)
 }
 
-//NOTE: this has to be called not just by confirm
-pub async fn create_trade(sql: &Sql, id: &Id, user_id: &Id, user_friend_id: &Id, collector_id: &Id) -> Result<Id, sqlx::Error> {
+//TODO: this has to be called not just by confirm
+pub async fn create_trade(sql: &Sql, user_id: Id, user_friend_id: Id) -> Result<bool, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
-    let res: Result<(Id, ), sqlx::Error> = sqlx::query_as(
-        "SELECT tid
+    let (count, ): (i64, ) = sqlx::query_as(
+        "SELECT COUNT(*)
          FROM trades
-         WHERE (uidone=? AND uidtwo=?) OR (uidtwo=? AND uidone=?)
-         AND coid=?;")
+         WHERE (uidone=? AND uidtwo=?) OR (uidtwo=? AND uidone=?);")
         .bind(user_id)
         .bind(user_friend_id)
         .bind(user_id)
         .bind(user_friend_id)
-        .bind(collector_id)
         .fetch_one(&mut con)
-        .await;
+        .await?;
 
-    if let Ok((id,)) = res {
-        return Ok(id);
+    if count != 0 {
+        return Ok(false);
     }
 
     sqlx::query(
         "INSERT INTO trades
-         (tid, uidone, uidtwo, coid, tstatusone, tstatustwo)
+         (uidone, uidtwo, tstatusone, tstatustwo)
          VALUES
-         (?, ?, ?, ?, 0, 0)")
-        .bind(id)
+         (?, ?, 0, 0)")
         .bind(user_id)
         .bind(user_friend_id)
-        .bind(collector_id)
         .execute(&mut con)
         .await?;
 
-    Ok(id.clone())
+    Ok(true)
 }
 
-pub async fn get_trade(sql: &Sql, user_id: &Id, trade_id: &Id) -> Result<TradeDb, sqlx::Error> {
+pub async fn get_trade(sql: &Sql, user_id: Id, user_id_friend: Id) -> Result<TradeDb, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query_as(
-        "SELECT tstatusone as selfStatus, tstatustwo as friendStatus, tlasttrade as lastTrade
+        "SELECT trades.tstatusone as selfStatus, trades.tstatustwo as friendStatus, trades.tlasttrade as lastTrade
          FROM trades
-         WHERE uidone=? AND tid=?
+         WHERE trades.uidone=? AND trades.uidtwo=?
          UNION
-         SELECT tstatustwo as selfStatus, tstatusone as friendStatus, tlasttrade as lastTrade
+         SELECT trades.tstatustwo as selfStatus, trades.tstatusone as friendStatus, trades.tlasttrade as lastTrade
          FROM trades
-         WHERE uidtwo=? AND tid=?")
+         WHERE trades.uidtwo=? AND trades.uidone=?")
         .bind(user_id)
-        .bind(trade_id)
+        .bind(user_id_friend)
         .bind(user_id)
-        .bind(trade_id)
+        .bind(user_id_friend)
         .fetch_one(&mut con)
         .await
 }

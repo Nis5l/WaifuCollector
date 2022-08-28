@@ -5,28 +5,25 @@ use crate::sql::Sql;
 use crate::shared::Id;
 use super::data::CardCreateDataDb;
 
-pub async fn set_pack_time(sql: &Sql, user_id: &Id, collector_id: &Id, last_opened: DateTime<Utc>) -> Result<(), sqlx::Error> {
+pub async fn set_pack_time(sql: &Sql, user_id: Id, last_opened: DateTime<Utc>) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let result: MySqlQueryResult = sqlx::query(
         "UPDATE packtimes
          SET ptlastopened=?
-         WHERE uid=?
-         AND coid=?;")
+         WHERE uid=?;")
         .bind(last_opened)
         .bind(user_id)
-        .bind(collector_id)
         .execute(&mut con)
         .await?;
 
     if result.rows_affected() == 0 {
         sqlx::query(
             "INSERT INTO packtimes
-             (uid, coid, ptlastopened)
+             (uid, ptlastopened)
              VALUES
-             (?, ?, ?);")
+             (?, ?);")
             .bind(user_id)
-            .bind(collector_id)
             .bind(last_opened)
             .execute(&mut con)
             .await?;
@@ -35,7 +32,7 @@ pub async fn set_pack_time(sql: &Sql, user_id: &Id, collector_id: &Id, last_open
     Ok(())
 }
 
-pub async fn get_random_card_data(sql: &Sql, card_amount: u32, collector_id: &Id) -> Result<Vec<CardCreateDataDb>, sqlx::Error> {
+pub async fn get_random_card_data(sql: &Sql, card_amount: u32) -> Result<Vec<CardCreateDataDb>, sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     let cards: Vec<CardCreateDataDb> = sqlx::query_as(
@@ -44,13 +41,9 @@ pub async fn get_random_card_data(sql: &Sql, card_amount: u32, collector_id: &Id
          cardframes.cfid AS frameId
          FROM
          cards, cardframes
-         WHERE cards.coid=?
-         AND cardframes.coid=?
          ORDER BY
          RAND()
          LIMIT ?;")
-        .bind(collector_id)
-        .bind(collector_id)
         .bind(card_amount)
         .fetch_all(&mut con)
         .await?;
