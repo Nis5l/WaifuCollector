@@ -1,4 +1,4 @@
-import { Achievement } from '../achievement';
+import type { Achievement } from '../achievement';
 
 export interface AchievementsProps {
 	achievements: Achievement[]

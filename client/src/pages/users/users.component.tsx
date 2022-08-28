@@ -5,8 +5,7 @@ import InfiniteScroll from 'react-infinite-scroller'
 import { ScrollbarComponent, LoadingComponent } from '../../shared/components'
 import UserBannerComponent from './user-banner'
 import Config from '../../config.json'
-import { withAuth } from '../../hooks/useAuth'
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
+import { withAuth, withAxiosPrivate } from '../../hooks'
 import { UsersProps, UsersState } from './types';
 
 import './users.component.scss'

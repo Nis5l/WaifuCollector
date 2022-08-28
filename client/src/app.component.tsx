@@ -1,4 +1,4 @@
-import { AuthProvider } from './context/AuthProvider'
+import { AuthProvider } from './context'
 
 //TODO: pages index.ts
 import HomeComponent from './pages/home'
@@ -18,13 +18,11 @@ import './app.component.scss'
 
 import VerifyComponent from './pages/verify'
 import VerifyMailComponent from './pages/verify-mail'
-import RememberMe from './components/RememberMe'
 import { getRememberMe } from './utils'
 import { useState } from 'react'
 import { NavigationComponent, GameSidebarComponent, CollectorSidebarComponent } from './navigation'
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
-import RequireAuth from './components/routes/RequireAuth'
-import RequireNoAuth from './components/routes/RequireNoAuth'
+import { RequireAuth, RequireNoAuth, RememberMe } from './routes'
 import CollectorListComponent from './pages/collector/list'
 
 function AppComponent() {

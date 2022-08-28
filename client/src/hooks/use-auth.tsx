@@ -1,8 +1,8 @@
 import { useContext } from "react"
-import AuthContext from "../context/AuthProvider"
+import { AuthContext } from "../context"
 import { User } from "../shared/types";
 
-const useAuth = () => {
+export const useAuth = () => {
     return useContext(AuthContext);
 }
 
@@ -18,5 +18,3 @@ export const withAuth = (Component: any) => {
         return <Component auth={auth} setAuth={setAuth} {...props} />
     }
 }
-
-export default useAuth;

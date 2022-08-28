@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function useAsync(asyncFn: () => any, onSuccess: (data: any) => void): void {
+export function useAsync(asyncFn: () => any, onSuccess: (data: any) => void): void {
     useEffect(() => {
       let isActive = true;
       asyncFn().then((data: any) => {
@@ -15,5 +15,3 @@ export const withAsync = (asyncFn: () => any, onSuccess: (data: any) => void) =>
         useAsync(asyncFn, onSuccess);
     }
 }
-
-export default useAsync;

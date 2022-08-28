@@ -2,9 +2,7 @@ import {Component} from 'react'
 
 import { CardComponent, LogoComponent, LoadingComponent, GameCardComponent, GameCardLoadComponent } from '../../shared/components'
 import { AchievementsComponent, ScrollbarComponent, ProfileNameComponent, FriendListComponent } from '../../shared/components';
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { withAuth } from '../../hooks/useAuth'
-import { withRouter } from '../../hooks/withRouter'
+import { withAxiosPrivate, withAuth, withRouter } from '../../hooks'
 import type { ProfileProps, ProfileState } from './types';
 import { parseCards } from '../../utils';
 

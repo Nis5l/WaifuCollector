@@ -2,8 +2,7 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 
 import { CardComponent, LogoComponent, LoadingComponent, GameCardLoadComponent } from '../../shared/components'
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { withRouter } from '../../hooks/withRouter'
+import { withAxiosPrivate, withRouter } from '../../hooks'
 import type { VerifyState, VerifyProps } from './types';
 
 import './verify.component.scss'

@@ -1,4 +1,4 @@
-import { ReactRouterProps } from '../../../../../hooks/withRouter'
+import type { ReactRouterProps } from '../../../../../hooks'
 
 export interface FriendProps extends ReactRouterProps {
     userID: string;

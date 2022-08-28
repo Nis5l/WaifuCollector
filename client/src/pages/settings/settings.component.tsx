@@ -1,9 +1,7 @@
 import {Component} from 'react'
 import { ProfileNameComponent, LogoComponent, CardComponent, LoadingComponent } from '../../shared/components'
 
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { withAuth } from '../../hooks/useAuth'
-import { withRouter } from '../../hooks/withRouter'
+import { withAxiosPrivate, withAuth, withRouter } from '../../hooks'
 import type { SettingsProps, SettingsState } from './types';
 
 import './settings.component.scss'

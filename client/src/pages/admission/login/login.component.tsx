@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { CardComponent, LogoComponent } from '../../../shared/components'
 import { User } from '../../../shared/types'
-import useAuth from '../../../hooks/useAuth'
-import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
+import { useAuth, useAxiosPrivate } from '../../../hooks'
 import { setRememberMe } from '../../../utils'
 
 import "./login.component.scss"

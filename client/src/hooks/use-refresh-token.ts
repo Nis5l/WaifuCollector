@@ -1,8 +1,8 @@
 import jwtDecode from "jwt-decode";
 import axios from "../api/axios";
-import useAuth from "./useAuth";
+import { useAuth } from "./use-auth";
 
-const useRefreshToken = () => {
+export const useRefreshToken = () => {
     const { setAuth } = useAuth();
 
     let refreshing: boolean = false;
@@ -11,7 +11,6 @@ const useRefreshToken = () => {
     const refresh = async () => {
         if(!refreshing){
             refreshing = true;
-            console.log("refreshing");
             promise = new Promise(async (resolve, reject) => {
                 let ret = undefined;
                 try{
@@ -30,7 +29,6 @@ const useRefreshToken = () => {
                     setAuth(undefined);
                 }
                 refreshing = false;
-                console.log("refreshed");
                 resolve(ret);
             });
         }
@@ -38,5 +36,3 @@ const useRefreshToken = () => {
     }
     return refresh;
 };
-
-export default useRefreshToken;

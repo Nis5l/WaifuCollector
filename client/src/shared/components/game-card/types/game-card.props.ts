@@ -1,4 +1,4 @@
-import { ReactRouterProps } from '../../../../hooks/withRouter'
+import type { ReactRouterProps } from '../../../../hooks'
 import type { GameCard } from '../../../types';
 
 export interface GameCardProps extends ReactRouterProps {

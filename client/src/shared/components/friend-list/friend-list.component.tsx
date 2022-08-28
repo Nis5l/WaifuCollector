@@ -3,8 +3,7 @@ import {Component} from 'react'
 import { YesNoComponent } from '../popup';
 import FriendComponent from './friend';
 import ScrollbarComponent from '../scrollbar'
-import { withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
-import { withRouter } from '../../../hooks/withRouter'
+import { withAxiosPrivate, withRouter } from '../../../hooks'
 import { FriendListState, FriendListProps } from './types';
 
 import './friend-list.component.scss'

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useRefreshToken from "../hooks/useRefreshToken";
+import { useRefreshToken } from "../hooks";
 
 type PropsRememberMe = {
     remembered: () => void

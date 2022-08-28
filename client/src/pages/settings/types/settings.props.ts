@@ -1,5 +1,3 @@
-import { AxiosPrivateProps } from '../../../hooks/useAxiosPrivate'
-import { AuthProps } from '../../../hooks/useAuth'
-import { ReactRouterProps } from '../../../hooks/withRouter'
+import type { ReactRouterProps, AuthProps, AxiosPrivateProps } from '../../../hooks'
 
 export interface SettingsProps extends ReactRouterProps, AxiosPrivateProps, AuthProps {}

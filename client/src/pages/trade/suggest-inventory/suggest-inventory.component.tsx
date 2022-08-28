@@ -1,10 +1,8 @@
 import {Component} from 'react'
 import Inventory from '../../inventory'
-import redirectIfNecessary from '../../../components/Redirecter'
+import { redirectIfNecessary } from '../../../api'
 
-import { withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
-import { withAuth } from '../../../hooks/useAuth'
-import { withRouter } from '../../../hooks/withRouter'
+import { withAxiosPrivate, withAuth, withRouter } from '../../../hooks'
 import type { SuggestInventoryProps, SuggestInventoryState } from './types';
 
 class SuggestInventoryComponent extends Component<SuggestInventoryProps, SuggestInventoryState> {

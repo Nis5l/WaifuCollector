@@ -2,9 +2,9 @@ import React, {Component, RefObject} from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 
 import { ScrollbarComponent, LoadingComponent, YesNoComponent, GameCardLoadComponent, GameCardComponent } from '../../shared/components'
-import redirectIfNecessary from '../../components/Redirecter'
+import { redirectIfNecessary } from '../../api'
 import Config from '../../config.json'
-import { withRouter } from '../../hooks/withRouter'
+import { withRouter } from '../../hooks'
 import { parseCards } from '../../utils';
 import type { CardProps, CardState } from './types';
 

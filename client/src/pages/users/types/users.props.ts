@@ -1,4 +1,3 @@
-import { AuthProps } from '../../../hooks/useAuth'
-import { AxiosPrivateProps } from '../../../hooks/useAxiosPrivate'
+import type { AuthProps, AxiosPrivateProps } from '../../../hooks'
 
 export interface UsersProps extends AuthProps, AxiosPrivateProps {}

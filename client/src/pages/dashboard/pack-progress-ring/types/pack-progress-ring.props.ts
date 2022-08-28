@@ -1,5 +1,4 @@
-import { AxiosPrivateProps } from '../../../../hooks/useAxiosPrivate'
-import { ReactRouterProps } from '../../../../hooks/withRouter';
+import type { ReactRouterProps, AxiosPrivateProps } from '../../../../hooks'
 
 export interface PackProgressRingProps extends ReactRouterProps, AxiosPrivateProps {
     collectorID: string;

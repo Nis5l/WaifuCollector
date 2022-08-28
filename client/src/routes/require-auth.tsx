@@ -1,6 +1,6 @@
 import { RouteProps } from "react-router";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import useAuth from "../../hooks/useAuth"
+import { useAuth } from "../hooks"
 
 type Props = RouteProps & {
     allowedRoles?: number[]

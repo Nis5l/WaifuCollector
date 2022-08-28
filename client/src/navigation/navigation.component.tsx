@@ -1,7 +1,7 @@
 import { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-import { withAuth } from "../hooks/useAuth";
+import { withAuth } from "../hooks";
 import { ProfileImageComponent } from "../shared/components";
 import { NavigationProps } from './types';
 import "./navigation.component.scss"

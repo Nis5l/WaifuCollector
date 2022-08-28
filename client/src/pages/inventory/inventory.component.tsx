@@ -3,11 +3,9 @@ import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
 
 import { ScrollbarComponent, LoadingComponent, GameCardComponent } from '../../shared/components'
-import redirectIfNecessary from '../../components/Redirecter'
+import { redirectIfNecessary } from '../../api'
 import Config from '../../config.json'
-import { withAuth } from '../../hooks/useAuth'
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { withRouter } from '../../hooks/withRouter'
+import { withAuth, withAxiosPrivate, withRouter } from '../../hooks'
 import { parseCards } from '../../utils';
 import type { InventoryState, InventoryProps } from './types';
 

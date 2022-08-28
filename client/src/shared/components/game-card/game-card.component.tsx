@@ -1,7 +1,7 @@
 import {Component} from 'react'
 import ResizeTextComponent from "../resize-text"
 
-import { withRouter } from '../../../hooks/withRouter'
+import { withRouter } from '../../../hooks'
 import type { GameCardProps, GameCardState } from './types';
 import { DEFFONT, DEFHEIGTH, DEFWIDTH } from './constants';
 

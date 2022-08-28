@@ -1,9 +1,8 @@
 import {Component} from 'react'
 import { CardComponent, LogoComponent, LoadingComponent, GameCardLoadComponent } from '../../shared/components'
-import {checkMail} from '../../Utils'
+import { checkMail } from '../../utils'
 
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { withRouter } from '../../hooks/withRouter'
+import { withAxiosPrivate, withRouter } from '../../hooks'
 import type { VerifyMailProps, VerifyMailState } from './types';
 
 import './verify-mail.component.scss'

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { CardComponent, LogoComponent } from '../../../shared/components';
-import {checkMail} from '../../../Utils'
+import { checkMail } from '../../../utils'
 import Config from '../../../config.json';
 
 import "./register.component.scss"

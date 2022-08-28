@@ -3,9 +3,7 @@ import {Component, lazy, Suspense} from 'react'
 import { CardComponent, LoadingComponent } from '../../shared/components';
 
 import { AchievementsComponent, ProfileImageComponent } from '../../shared/components';
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { withAuth } from '../../hooks/useAuth';
-import { withRouter } from '../../hooks/withRouter';
+import { withAxiosPrivate, withAuth, withRouter } from '../../hooks';
 import type { DashboardState, DashboardProps } from './types';
 
 const FriendListComponent = lazy(() => import('../../shared/components/friend-list'));

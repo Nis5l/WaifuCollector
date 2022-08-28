@@ -1,9 +1,8 @@
 import {Component} from 'react'
 
-import redirectIfNecessary from '../../components/Redirecter'
+import { redirectIfNecessary } from '../../api'
 import { LoadingComponent, GameCardLoadComponent, GameCardComponent } from '../../shared/components'
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { withRouter } from '../../hooks/withRouter'
+import { withAxiosPrivate, withRouter } from '../../hooks'
 import { parseCards } from '../../utils';
 import type { PackProps, PackState } from './types';
 

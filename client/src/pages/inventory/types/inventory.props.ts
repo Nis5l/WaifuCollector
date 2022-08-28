@@ -1,6 +1,4 @@
-import { AuthProps } from '../../../hooks/useAuth'
-import { AxiosPrivateProps } from '../../../hooks/useAxiosPrivate'
-import { ReactRouterProps } from '../../../hooks/withRouter'
+import type { ReactRouterProps, AxiosPrivateProps, AuthProps } from '../../../hooks'
 
 export interface InventoryProps extends ReactRouterProps, AuthProps, AxiosPrivateProps {
   userID: string;

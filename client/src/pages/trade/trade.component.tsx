@@ -3,12 +3,9 @@ import moment from 'moment';
 
 import { CardComponent } from '../../shared/components'
 import { ScrollbarComponent, LoadingComponent, YesNoComponent, YesNoCancelComponent, GameCardLoadComponent, GameCardComponent } from '../../shared/components'
-import redirectIfNecessary from '../../components/Redirecter'
-import {formatTime} from '../../Utils'
-import { parseCards } from '../../utils';
-import { withAuth } from '../../hooks/useAuth'
-import { withAxiosPrivate } from '../../hooks/useAxiosPrivate'
-import { withRouter } from '../../hooks/withRouter'
+import { redirectIfNecessary } from '../../api'
+import { parseCards, formatTime } from '../../utils';
+import { withRouter, withAuth, withAxiosPrivate } from '../../hooks'
 import type { TradeState, TradeProps } from './types';
 
 import './trade.component.scss'

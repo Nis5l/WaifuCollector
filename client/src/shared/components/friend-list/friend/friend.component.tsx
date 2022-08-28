@@ -2,7 +2,7 @@ import React, {createRef, RefObject} from 'react'
 
 import type { FriendState, FriendProps } from './types';
 import ProfileNameComponent from '../../profile-name';
-import { withRouter } from '../../../../hooks/withRouter'
+import { withRouter } from '../../../../hooks'
 import ThreeDotsMenuComponent from '../../three-dots-menu';
 
 class FriendComponent extends React.Component<FriendProps, FriendState> {

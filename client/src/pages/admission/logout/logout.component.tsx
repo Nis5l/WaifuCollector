@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
-import useAuth from "../../../hooks/useAuth";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { useAuth, useAxiosPrivate } from "../../../hooks";
 import { removeRememberMe } from "../../../utils";
 
 function LogOutComponent() {

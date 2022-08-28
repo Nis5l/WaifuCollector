@@ -1,10 +1,9 @@
 import {Component} from 'react'
-import {formatTime} from '../../../Utils'
 import moment, { Duration, Moment } from 'moment';
 
-import redirectIfNecessary from '../../../components/Redirecter'
-import { withAxiosPrivate } from '../../../hooks/useAxiosPrivate'
-import { withRouter } from '../../../hooks/withRouter';
+import {formatTime} from '../../../utils'
+import { redirectIfNecessary } from '../../../api'
+import { withAxiosPrivate, withRouter } from '../../../hooks'
 import type { PackProgressRingProps, PackProgressRingState } from './types';
 
 import './pack-progress-ring.component.scss'
@@ -79,7 +78,7 @@ class PackProgressRingComponent extends Component<PackProgressRingProps, PackPro
 
             let text = 'Open';
 			if(diff > 0)
-				text = formatTime(diff.toString());
+				text = formatTime(diff);
 
             this.setState({progress, text});
         }, this.update);

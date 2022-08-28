@@ -1,4 +1,3 @@
-import { AxiosPrivateProps } from '../../../hooks/useAxiosPrivate'
-import { ReactRouterProps } from '../../../hooks/withRouter'
+import type { AxiosPrivateProps, ReactRouterProps } from '../../../hooks'
 
 export interface VerifyProps extends ReactRouterProps, AxiosPrivateProps {}
