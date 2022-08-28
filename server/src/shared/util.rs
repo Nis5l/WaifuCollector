@@ -19,14 +19,17 @@ pub fn escape_for_like(s: String) -> String {
      .replace("[", "![")
 }
 
-pub fn build_refresh_token_cookie(value: String, expires_in: i64) -> Cookie<'static>{
+pub fn build_refresh_token_cookie(value: String, expires_in: i64, debug: Option<bool>) -> Cookie<'static>{
     let expires = OffsetDateTime::now_utc() + rocket::time::Duration::seconds(expires_in);
 
-    Cookie::build("refresh_token", value)
+    let is_debug = !debug.unwrap_or(false);
+
+    let mut cookie = Cookie::build("refresh_token", value)
         .path("/")
+        .expires(expires)
         .same_site(SameSite::None)
         .secure(true)
-        .http_only(true)
-        .expires(expires)
-        .finish()
+        .http_only(true);
+    
+    cookie.finish()
 }

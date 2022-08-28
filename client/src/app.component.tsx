@@ -1,13 +1,15 @@
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context'
 
 //TODO: pages index.ts
 import HomeComponent from './pages/home'
-import DashboardComponent from './pages/dashboard'
+import DashboardComponent from './pages/game/dashboard'
 import ProfileComponent from './pages/profile'
-import PackComponent from './pages/pack'
-import InventoryComponent from './pages/inventory'
-import CardComponent from './pages/card'
-import TradeComponent, { TradeInventoryComponent, SuggestInventoryComponent } from './pages/trade'
+import PackComponent from './pages/game/pack'
+import InventoryComponent from './pages/game/inventory'
+import CardComponent from './pages/game/card'
+import TradeComponent, { TradeInventoryComponent, SuggestInventoryComponent } from './pages/game/trade'
+import NoMatchComponent from './pages/no-match';
 import Users from './pages/users'
 import SettingsComponent from './pages/settings'
 import PrivacyComponent from './pages/privacy'
@@ -21,9 +23,9 @@ import VerifyMailComponent from './pages/verify-mail'
 import { getRememberMe } from './utils'
 import { useState } from 'react'
 import { NavigationComponent, GameSidebarComponent, CollectorSidebarComponent } from './navigation'
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { RequireAuth, RequireNoAuth, RememberMe } from './routes'
 import CollectorListComponent from './pages/collector/list'
+import CollectorNewComponent from './pages/collector/new'
 
 function AppComponent() {
   let [ remembered, setRemembered ] = useState(false);
@@ -70,6 +72,8 @@ function AppComponent() {
                         </main>
                       </div>
                     }>
+                      <Route path="/dashboard" element={<DashboardComponent />} />
+
                       <Route path="/logout" element={<LogoutComponent />} />
 
                       <Route path="/verify/mail" element={<VerifyMailComponent />} />
@@ -87,11 +91,13 @@ function AppComponent() {
                           </main>
                         </div>
                       }>
-                        <Route index element={<CollectorListComponent />} /> 
+                        <Route index element={<Navigate to="list" />} />
+                        <Route path="list" element={<CollectorListComponent />} /> 
+                        <Route path="new" element={<CollectorNewComponent />} />
                     </Route>
 
                     {/* Game Player */}
-                    <Route element={
+                    <Route path="/collector/:collector_id" element={
                       <div style={{height: "100%", width: "100%", display: "flex"}}>
                         <GameSidebarComponent />
                         <main className='content'>
@@ -99,19 +105,27 @@ function AppComponent() {
                         </main>
                       </div>
                     }>
-                      <Route path="/dashboard" element={<DashboardComponent />} />
-                      <Route path="/pack" element={<PackComponent />} />
-                      <Route path="/card/:id" element={<CardComponent />} />
+                      <Route index element={<Navigate to="dashboard" />} />
+                      <Route path="dashboard" element={<DashboardComponent />} />
+                      <Route path="pack" element={<PackComponent />} />
+                      <Route path="card/:id" element={<CardComponent />} />
                       
-                      <Route path="/inventory/:id" element={<InventoryComponent />} />
-                      <Route path="/inventory" element={<InventoryComponent />} />
+                      <Route path="inventory/:id" element={<InventoryComponent />} />
+                      <Route path="inventory" element={<InventoryComponent />} />
 
-                      <Route path="/tradeinventory/:id" element={<TradeInventoryComponent />} />
-                      <Route path="/suggestcard/:id" element={<SuggestInventoryComponent />} />
-                      <Route path="/trade/:id" element={<TradeComponent />} />
+                      <Route path="tradeinventory/:id" element={<TradeInventoryComponent />} />
+                      <Route path="suggestcard/:id" element={<SuggestInventoryComponent />} />
+                      <Route path="trade/:id" element={<TradeComponent />} />
                     </Route>
                   </Route>
 
+                    <Route path="*" element={
+                      <div style={{height: "100%", width: "100%", display: "flex"}}>
+                        <main className='content'>
+                          <NoMatchComponent />
+                        </main>
+                      </div>
+                    } />
                 </Routes>
             </> )
           }

@@ -34,7 +34,7 @@ pub async fn login_route(cookies: &CookieJar<'_>, data: LoginRequest, sql: &Stat
         Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
     };
 
-    let refresh_token_cookie: Cookie = build_refresh_token_cookie(refresh_token.clone(), config.refresh_token_duration.into());
+    let refresh_token_cookie: Cookie = build_refresh_token_cookie(refresh_token.clone(), config.refresh_token_duration.into(), Option::Some(config.debug));
 
     rjtry!(sql::insert_refresh_token(&sql, &user_id, &refresh_token).await);
 
