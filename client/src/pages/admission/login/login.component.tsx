@@ -24,7 +24,7 @@ function LoginComponent(props: {}) {
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state as any;
-    const from = state != null && state.from != null && state.from.pathname != null ? state.from.pathname : "/dashboard";
+    const from = state?.from?.pathname != null ? state.from.pathname : "/dashboard";
 
     const axios = useAxiosPrivate();
 

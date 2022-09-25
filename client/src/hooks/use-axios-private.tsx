@@ -1,5 +1,5 @@
 import axios from "../api/axios";
-import AXIOS from 'axios';
+import AXIOS, { AxiosInstance } from 'axios';
 import { useEffect } from "react";
 import { useRefreshToken } from "./use-refresh-token";
 import { useAuth } from "./use-auth";
@@ -61,7 +61,7 @@ export const useAxiosPrivate = () => {
 }
 
 export type AxiosPrivateProps = {
-    axios: any
+    axios: AxiosInstance
 }
 
 export const withAxiosPrivate = (Component: any) => {

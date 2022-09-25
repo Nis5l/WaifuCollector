@@ -11,14 +11,14 @@ import "./profile.component.scss"
 const collector: string = "xxxxxxxxxxxxx";
 
 class ProfileComponent extends Component<ProfileProps, ProfileState> {
-    private userID: string;
+    private userId: string;
     private lcounter: number;
     private lcounterMax: number;
 
     constructor(props: ProfileProps) {
         super(props);
 
-        this.userID = props.router.params.id != null ? props.router.params.id : "";
+        this.userId = props.router.params.id != null ? props.router.params.id : "";
 
         this.lcounter = 0;
         this.lcounterMax = 2;
@@ -34,9 +34,9 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
 
     componentDidMount() {
 
-        async function loadStats(self: ProfileComponent, userID: string) {
+        async function loadStats(self: ProfileComponent, userId: string) {
 			try {
-				const reponse = await self.props.axios.get(`/user/${userID}/stats`);
+				const reponse = await self.props.axios.get(`/user/${userId}/stats`);
                 return reponse.data;
 			} catch (err) {
 				console.log("Unexpected /user/:id/stats error");
@@ -44,9 +44,9 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
 			}
         }
 
-        async function loadFlexCards(self: ProfileComponent, userID: string) {
+        async function loadFlexCards(self: ProfileComponent, userId: string) {
 			try {
-				const res = await self.props.axios.get(`/user/${userID}/${collector}/flex`)
+				const res = await self.props.axios.get(`/user/${userId}/${collector}/flex`)
                 parseCards(res.data);
                 return res.data;
 			} catch (err) {
@@ -56,9 +56,9 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
 
         async function updateStats(self: ProfileComponent) {
 
-            const stats = await loadStats(self, self.userID);
+            const stats = await loadStats(self, self.userId);
 
-            const cards = await loadFlexCards(self, self.userID);
+            const cards = await loadFlexCards(self, self.userId);
 
             self.setState({stats: stats, flexCards: cards});
             self.incrementLCounter();
@@ -76,7 +76,7 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
 
         let status = -1;
 
-        if (ownID == null || ownID === this.userID) {
+        if (ownID == null || ownID === this.userId) {
             this.setState({friendStatus: 3});
             return;
         }
@@ -93,7 +93,7 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
 
     onFriendAdd() {
         const data = {
-            userId: this.userID
+            userId: this.userId
         };
         this.props.axios.post(`/friend/add`, data);
         this.setState({friendStatus: 2});
@@ -115,7 +115,7 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
             }
             else if (this.state.friendStatus === 0) {
                 icon = "fa-handshake";
-                onIconClick = () => {this.props.router.navigate(`/trade/${this.userID}`)}
+                onIconClick = () => {this.props.router.navigate(`/trade/${this.userId}`)}
             }
         }
 
@@ -145,10 +145,10 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
                     <div className="profilename_container">
 
                         <ProfileNameComponent
-                            userID={this.userID}
+                            userId={this.userId}
                             username={''}
                             badges={undefined}
-                            lCallback={function (): void {} }
+                            loadingCallback={function (): void {} }
                         />
 
                     </div>
@@ -218,7 +218,7 @@ class ProfileComponent extends Component<ProfileProps, ProfileState> {
                     >
 
                         <FriendListComponent
-                            userID={this.userID}
+                            userId={this.userId}
                             onFriendData={(data: any) => this.onFriendData(data)}
                         />
 

@@ -1,5 +1,5 @@
 export interface PropsProfileImageProps {
-    userID: string;
+    userId: string;
     className?: string;
 }
 

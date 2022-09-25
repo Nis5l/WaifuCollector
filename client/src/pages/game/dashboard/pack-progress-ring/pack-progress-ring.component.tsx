@@ -39,7 +39,7 @@ class PackProgressRingComponent extends Component<PackProgressRingProps, PackPro
     }
 
     loadMaxPackTime(self: PackProgressRingComponent) {
-        this.props.axios.get(`${this.props.collectorID}/pack/time/max`)
+        this.props.axios.get(`${this.props.collectorId}/pack/time/max`)
             .then((res: any) => {
 				self.packTimeMax = moment.duration(res.data.packTimeMax);
 				this.incrementLCounter();
@@ -49,7 +49,7 @@ class PackProgressRingComponent extends Component<PackProgressRingProps, PackPro
     }
 
     loadPackTime(self: PackProgressRingComponent) {
-        this.props.axios.get(`/pack/${this.props.collectorID}/time`)
+        this.props.axios.get(`/pack/${this.props.collectorId}/time`)
 			.then((res: any) => {
 				self.packTime = moment(res.data.packTime);
 				this.incrementLCounter();

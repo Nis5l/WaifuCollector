@@ -83,7 +83,7 @@ class SettingsComponent extends Component<SettingsProps, SettingsState> {
 
   render() {
     const disabled = this.state.passwordWrong || this.state.passwordRepeatWrong;
-    const userID: string = this.props.auth.id;
+    const userId: string = this.props.auth.id;
     return (
       <div className="settings_wrapper">
         <CardComponent
@@ -98,8 +98,8 @@ class SettingsComponent extends Component<SettingsProps, SettingsState> {
           <LogoComponent className="" size="200px" />
           <div className="username">Username: &nbsp;
             <ProfileNameComponent
-              userID={userID}
-              lCallback={() => { this.incrementLCounter() } }
+              userId={userId}
+              loadingCallback={() => { this.incrementLCounter() } }
               username={''}
               badges={undefined}
             />

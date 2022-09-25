@@ -109,7 +109,7 @@ class FriendListComponent extends Component<FriendListProps, FriendListState> {
 
     onDecline(userID: string) {
         this.deleteFriend(userID);
-        if (this.props.decrementRequests) this.props.decrementRequests();
+		if(this.props.onFriendRequests) this.props.onFriendRequests(this.state.friendRequests.length);
     }
 
     onAccept(userID: string) {
@@ -129,7 +129,7 @@ class FriendListComponent extends Component<FriendListProps, FriendListState> {
             }
         }
 
-        if (this.props.decrementRequests) this.props.decrementRequests();
+		if(this.props.onFriendRequests) this.props.onFriendRequests(this.state.friendRequests.length);
     }
 
     render() {

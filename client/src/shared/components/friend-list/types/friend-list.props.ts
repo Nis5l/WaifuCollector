@@ -5,6 +5,5 @@ export interface FriendListProps extends ReactRouterProps, AxiosPrivateProps {
     requests?: boolean,
     onFriendRequests?: (len: number) => void,
     onFriendData?: (friends: any[]) => void,
-    decrementRequests?: () => void,
     lCallback?: () => void
 }

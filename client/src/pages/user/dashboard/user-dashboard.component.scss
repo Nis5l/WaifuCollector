@@ -8,106 +8,18 @@
     width: 100%;
     height: 100%;
 
-    grid-template-columns: 1fr 1.2fr 1.1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
 
     grid-gap: 20px;
 
     grid-template-areas: 
-        "account packs friends"
-        "achievements packs friends";
+        "user friends achievements"
+        "user friends achievements";
 
-    .accountInfo{
-
-        grid-area: account;
-
-        .avatar{
-
-            display: flex;
-
-            justify-content: center;
-
-            height: 50%;
-            width: 100%;
-
-            @media screen and (max-width: $breakpoint-md){
-
-                max-height: 400px;
-
-            }
-
-            .profile_image{
-                height: 17vh;
-                width: 17vh;
-
-                border-radius: 100%;
-                border: 1px solid white;
-
-                backface-visibility: hidden;
-                -ms-transform: translateZ(0); /* IE 9 */
-                -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
-                transform: translateZ(0);
-
-                @media screen and (max-width: $breakpoint-md){
-
-                    width: 100%;
-
-                    height: auto;
-
-                    max-width: 200px;
-        
-                }
-
-            }
-
-
-        }
-
-        .profilename_container{
-
-            display: flex;
-            justify-content: center;
-
-            margin-top: 10px;
-
-            text-align: center;
-
-            .profileName{
-
-                font-size: 18px;
-                letter-spacing: 0.1em;
-
-            }
-
-        }
-
-        .stats{
-
-            margin-top: 10px;
-
-            width: 100%;
-
-            letter-spacing: 0.05em;
-
-            td:nth-child(2){
-
-                text-align: right;
-
-            }
-
-        }
-
-        @media screen and (max-width: $breakpoint-md){
-
-            &{
-
-                height: fit-content;
-
-            }
-
-        }
-
-    }
+	.user-info {
+		grid-area: user;
+	}
 
     .achievements{
 
@@ -218,48 +130,37 @@
         }
 
         @media screen and (max-width: $breakpoint-md){
-
             &{
-
                 height: fit-content;
-
             }
-
         }
-
     }
 
-    @media screen and (max-width: $breakpoint-xl) {
-        
-        grid-template-columns: 1fr 1fr 1fr;
+    // @media screen and (max-width: $breakpoint-xl) {
+    //     grid-template-columns: 1fr 1fr 1fr;
 
-        grid-template-areas: 
-        "packs packs packs"
-        "account achievements friends";
-
-    }
+    //     grid-template-areas: 
+    //     "packs packs packs"
+    //     "account achievements friends";
+    // }
 
     @media screen and (max-width: $breakpoint-md){
- 
         grid-template-columns: 1fr;
         grid-template-rows: 100% min-content min-content min-content;
 
         box-sizing: unset;
 
         grid-template-areas: 
-        "packs"
-        "account"
+        "user"
         "achievements"
         "friends";
-
     }
 
-    .friends_wrapper
-    {
-        grid-area: friends;
-        @media screen and (max-width: $breakpoint-md){
-            padding-bottom: 30px;
-        }
-    }
-
+    // .friends_wrapper
+    // {
+    //     grid-area: friends;
+    //     @media screen and (max-width: $breakpoint-md){
+    //         padding-bottom: 30px;
+    //     }
+    // }
 }

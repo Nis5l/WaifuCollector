@@ -26,6 +26,7 @@ import { NavigationComponent, GameSidebarComponent, CollectorSidebarComponent } 
 import { RequireAuth, RequireNoAuth, RememberMe } from './routes'
 import CollectorListComponent from './pages/collector/list'
 import CollectorNewComponent from './pages/collector/new'
+import UserDashboardComponent from './pages/user/dashboard'
 
 function AppComponent() {
   let [ remembered, setRemembered ] = useState(false);
@@ -72,7 +73,7 @@ function AppComponent() {
                         </main>
                       </div>
                     }>
-                      <Route path="/dashboard" element={<DashboardComponent />} />
+                      <Route path="/dashboard" element={<UserDashboardComponent />} />
 
                       <Route path="/logout" element={<LogoutComponent />} />
 

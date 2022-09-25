@@ -37,7 +37,7 @@ class NavigationComponent extends Component<NavigationProps>{
                             >Collectors</Link>
                             <ProfileImageComponent
                                 className={"profile"}
-                                userID={this.props.auth.id}
+                                userId={this.props.auth.id}
                             />
                             <Link
                                 to="/logout"

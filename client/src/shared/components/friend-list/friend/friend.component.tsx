@@ -7,9 +7,9 @@ import ThreeDotsMenuComponent from '../../three-dots-menu';
 
 class FriendComponent extends React.Component<FriendProps, FriendState> {
     private status: number;
-    private onDelete: (userID: string, username: string) => void;
-    private onAccept: (userID: string) => void;
-    private onDecline: (userID: string) => void;
+    private onDelete: (userId: string, username: string) => void;
+    private onAccept: (userId: string) => void;
+    private onDecline: (userId: string) => void;
 
     private resizeMethod: () => void;
 
@@ -65,7 +65,7 @@ class FriendComponent extends React.Component<FriendProps, FriendState> {
                 options.push(
                     {
                         name: "Trade",
-                        onClick: () => this.onClick("/trade/" + this.props.userID)
+                        onClick: () => this.onClick("/trade/" + this.props.userId)
                     }
                 )
                 options.push(
@@ -73,7 +73,7 @@ class FriendComponent extends React.Component<FriendProps, FriendState> {
                         name: "Remove",
                         color: "#be0303",
                         onClick: () => {
-                            if (this.onDelete) this.onDelete(this.props.userID, this.props.username);
+                            if (this.onDelete) this.onDelete(this.props.userId, this.props.username);
                         }
                     }
                 )
@@ -96,22 +96,22 @@ class FriendComponent extends React.Component<FriendProps, FriendState> {
                 />
 
                 <ProfileNameComponent
-                    userID={this.props.userID}
+                    userId={this.props.userId}
                     username={this.state.username}
                     badges={undefined}
-                    lCallback={() => {}}
+                    loadingCallback={() => {}}
                 />
 
                 {
                     options.length > 0 ?
                         <ThreeDotsMenuComponent
-                            menuID={("friendMenu-" + this.props.userID)}
+                            menuID={("friendMenu-" + this.props.userId)}
                             options={options}
                         />
                         : (
                             <div className="icons">
-                                <i className="fas fa-times" onClick={() => this.onDecline(this.props.userID)} />
-                                <i className="fas fa-check" onClick={() => this.onAccept(this.props.userID)} />
+                                <i className="fas fa-times" onClick={() => this.onDecline(this.props.userId)} />
+                                <i className="fas fa-check" onClick={() => this.onAccept(this.props.userId)} />
                             </div>
                         )
                 }

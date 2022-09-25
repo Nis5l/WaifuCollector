@@ -1,20 +1,21 @@
-import {Component, lazy, Suspense} from 'react'
+import {lazy, Suspense} from 'react'
 
 import { AchievementsComponent, ProfileImageComponent, CardComponent, LoadingComponent } from '../../../shared/components';
+import { AbstractLoadingComponent } from '../../../shared/abstract';
 import { withAxiosPrivate, withAuth, withRouter } from '../../../hooks';
 import type { DashboardState, DashboardProps } from './types';
 
-const FriendListComponent = lazy(() => import('../../../shared/components/friend-list'));
-const PackProgressRing = lazy(() => import('./pack-progress-ring'));
-const ProfileNameComponent = lazy(() => import('../../../shared/components/profile-name'));
-
 import "./dashboard.component.scss"
+
+const FriendListComponent = lazy(() => import('../../../shared/components/friend-list'));
+const PackProgressRingComponent = lazy(() => import('./pack-progress-ring'));
+const ProfileNameComponent = lazy(() => import('../../../shared/components/profile-name'));
 
 const loading = () => <p>Loading...</p>
 
-class DashboardComponent extends Component<DashboardProps, DashboardState> {
-    private lcounter: number;
-    private lcounterMax: number;
+class DashboardComponent extends AbstractLoadingComponent<DashboardProps, DashboardState> {
+	protected readonly renderLoad = true;
+	protected readonly loadLimit = 4;
     private collectorId: string;
 
     public componentMounted: boolean = false;
@@ -22,14 +23,11 @@ class DashboardComponent extends Component<DashboardProps, DashboardState> {
     constructor(props: DashboardProps) {
         super(props);
 
-        this.lcounter = 0;
-        this.lcounterMax = 4;
-
         this.collectorId = this.props.router.params.collector_id != null ? this.props.router.params.collector_id : "";
 
         this.state =
         {
-            userID: this.props.auth != null ? this.props.auth.id : "",
+            userId: this.props.auth != null ? this.props.auth.id : "",
             friends: 0,
             maxFriends: 0,
             cards: 0,
@@ -45,23 +43,23 @@ class DashboardComponent extends Component<DashboardProps, DashboardState> {
 
     componentDidMount() {
         this.componentMounted = true;
-        async function loadStats(self: DashboardComponent, userID: string) {
+        const loadStats = async (userId: string) => {
 			try {
-				const response = await self.props.axios.get(`/user/${userID}/stats`);
+				const response = await this.props.axios.get(`/user/${userId}/stats`);
 				return response.data;
 			} catch (err) {
 				return [];
 			}
         }
 
-        async function updateStats(self: DashboardComponent) {
-            if(self.state.userID == null) return;
+        const updateStats = async () => {
+            if(this.state.userId == null) return;
 
-            const stats = await loadStats(self, self.state.userID);
-            if(!self.componentMounted) return;
+            const stats = await loadStats(this.state.userId);
+            if(!this.componentMounted) return;
 
-            self.incrementLCounter(self);
-            self.setState(stats);
+            this.incrementLoadCount();
+            this.setState(stats);
         }
 
         this.props.axios.get(`/verify/check`)
@@ -80,8 +78,7 @@ class DashboardComponent extends Component<DashboardProps, DashboardState> {
 				console.log("Unexpected /verify/check error");
 			});;
 
-        updateStats(this);
-
+        updateStats();
     }
 
     componentWillUnmount(){
@@ -92,72 +89,43 @@ class DashboardComponent extends Component<DashboardProps, DashboardState> {
         self.props.router.navigate("/users")
     }
 
-    incrementLCounter(self: DashboardComponent) {
-        self.lcounter++;
-        if (self.lcounter === self.lcounterMax) self.setState({loading: false});
-    }
-
     render() {
-
         return (
-
             <div className="container">
                 <LoadingComponent loading={this.state.loading} />
-
                 <CardComponent
                     title="Account Info"
                     styleClassName="accountInfo"
                     >
-
                     <div className="avatar">
-
                         { /*<Logo className="logo" size="" />*/ }
-                        <ProfileImageComponent userID={this.props.auth.id}></ProfileImageComponent>
-
+                        <ProfileImageComponent userId={this.props.auth.id}></ProfileImageComponent>
                     </div>
-
                     <div className="profilename_container">
-
                         <Suspense fallback={loading()}>
                             <ProfileNameComponent
-                                userID={this.state.userID != null ? this.state.userID : ""}
-                                lCallback={() => { this.incrementLCounter(this); } }
+                                userId={this.state.userId != null ? this.state.userId : ""}
+                                loadingCallback={() => { this.incrementLoadCount(); } }
                             />
                         </Suspense>
-
                     </div>
-
                     <table className="stats">
-
                         <tbody>
-
                             <tr>
-
                                 <td>Friends:</td>
                                 <td>{`${this.state.friends}/${this.state.maxFriends}`}</td>
-
                             </tr>
-
                             <tr>
-
                                 <td>Waifus:</td>
                                 <td>{`${this.state.cards}/${this.state.maxCards}`}</td>
-
                             </tr>
-
                             <tr>
-
                                 <td>Trades:</td>
                                 <td>{`${this.state.trades}/${this.state.maxTrades}`}</td>
-
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </CardComponent>
-
                 <CardComponent
                     title="Achievements"
                     styleClassName="achievements"
@@ -170,7 +138,6 @@ class DashboardComponent extends Component<DashboardProps, DashboardState> {
 						achievements={this.state.achievements}
 					/>
                 </CardComponent>
-
                 <CardComponent
                     title="Packs"
                     styleClassName="packs"
@@ -182,24 +149,23 @@ class DashboardComponent extends Component<DashboardProps, DashboardState> {
                     <div className="packs-grid">
 
                         <Suspense fallback={loading()}>
-                            <PackProgressRing
+                            <PackProgressRingComponent
                                 collectorId={this.collectorId}
                                 className="pack1"
-                                lCallback={() => {this.incrementLCounter(this)}}
+                                lCallback={() => {this.incrementLoadCount()}}
                             />
                         </Suspense>
                         {false && <Suspense fallback={loading()}>
-                            <PackProgressRing
+                            <PackProgressRingComponent
                                 collectorId={this.collectorId}
                                 className="pack2"
-                                lCallback={() => {this.incrementLCounter(this)}}
+                                lCallback={() => {this.incrementLoadCount()}}
                             />
                         </Suspense>}
 
                     </div>
 
                 </CardComponent>
-
                 <div className="friends_wrapper">
                     <CardComponent
                         title="Friends"
@@ -210,19 +176,16 @@ class DashboardComponent extends Component<DashboardProps, DashboardState> {
                     >
                         <Suspense fallback={loading()}>
                             <FriendListComponent
-                                userID={this.state.userID != null ? this.state.userID : ""}
-                                lCallback={() => { this.incrementLCounter(this); } }
+                                userId={this.state.userId != null ? this.state.userId : ""}
+                                lCallback={() => { this.incrementLoadCount(); } }
                                 onFriendRequests={(count: number) => { if(this.componentMounted) { this.setState({ friendRequests: count }); } } }
                                 requests={this.state.requests}
                                 decrementRequests={() => { if(this.componentMounted) { this.setState({ friendRequests: this.state.friendRequests - 1 }); } } }
                             />
                         </Suspense>
-
                     </CardComponent>
                 </div>
-
             </div>
-
         )
     }
 }
