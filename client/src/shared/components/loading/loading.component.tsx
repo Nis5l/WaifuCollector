@@ -1,9 +1,8 @@
-import {Component} from 'react';
-
+import { AbstractComponent } from '../../../shared/abstract';
 import { LoadingProps } from './types';
 import './loading.component.scss';
 
-class LoadingComponent extends Component<LoadingProps> {
+class LoadingComponent extends AbstractComponent<LoadingProps> {
     render() {
         return (
             <div

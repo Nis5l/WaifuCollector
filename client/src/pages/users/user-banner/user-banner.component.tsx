@@ -1,13 +1,13 @@
-import {Component} from 'react'
 import { Link } from 'react-router-dom'
 
+import { AbstractComponent } from '../../../shared/abstract'
 import { BadgeComponent } from '../../../shared/components'
 import type { UserBannerProps, UserBannerState } from './types';
 import Config from "../../../config.json"
 
 import './user-banner.component.scss'
 
-class UserBannerComponent extends Component<UserBannerProps, UserBannerState> {
+class UserBannerComponent extends AbstractComponent<UserBannerProps, UserBannerState> {
     private username: string;
     private resizeMethod: () => void;
 

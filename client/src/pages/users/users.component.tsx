@@ -1,7 +1,7 @@
-import {Component} from 'react'
 import axios from 'axios'
 import InfiniteScroll from 'react-infinite-scroller'
 
+import { AbstractComponent } from '../../shared/abstract'
 import { ScrollbarComponent, LoadingComponent } from '../../shared/components'
 import UserBannerComponent from './user-banner'
 import Config from '../../config.json'
@@ -10,7 +10,7 @@ import { UsersProps, UsersState } from './types';
 
 import './users.component.scss'
 
-class UsersComponent extends Component<UsersProps, UsersState> {
+class UsersComponent extends AbstractComponent<UsersProps, UsersState> {
   private page: number;
   private loading: boolean;
   private hasMore: boolean;

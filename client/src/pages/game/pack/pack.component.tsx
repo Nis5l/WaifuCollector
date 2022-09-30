@@ -1,5 +1,4 @@
-import {Component} from 'react'
-
+import { AbstractComponent } from '../../../shared/abstract'
 import { redirectIfNecessary } from '../../../api'
 import { LoadingComponent, GameCardLoadComponent, GameCardComponent } from '../../../shared/components'
 import { withAxiosPrivate, withRouter } from '../../../hooks'
@@ -8,7 +7,7 @@ import type { PackProps, PackState } from './types';
 
 import './pack.component.scss'
 
-class PackComponent extends Component<PackProps, PackState> {
+class PackComponent extends AbstractComponent<PackProps, PackState> {
     private key: number;
     private quitCooldown: number;
     private quittable: boolean;

@@ -1,12 +1,12 @@
-import {Component} from 'react'
 import CollapsibleContent from 'react-collapsible-content'
-import ResizeTextComponent from '../resize-text'
 
+import ResizeTextComponent from '../resize-text'
+import { AbstractComponent } from '../../abstract';
 import { FoldableProps, FoldableState } from './types';
 import "./foldable.component.scss"
 import "../../../scss/effects.scss"
 
-export default class FoldableComponent extends Component<FoldableProps, FoldableState> {
+export default class FoldableComponent extends AbstractComponent<FoldableProps, FoldableState> {
     constructor(props: FoldableProps) {
         super(props);
         this.state = {

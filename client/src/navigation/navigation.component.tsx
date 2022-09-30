@@ -1,6 +1,7 @@
-import { Component, ReactNode } from "react";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
+import { AbstractComponent } from "../shared/abstract";
 import { withAuth } from "../hooks";
 import { ProfileImageComponent } from "../shared/components";
 import { NavigationProps } from './types';
@@ -8,7 +9,7 @@ import "./navigation.component.scss"
 
 const navprefix: string = "nav-";
 
-class NavigationComponent extends Component<NavigationProps>{
+class NavigationComponent extends AbstractComponent<NavigationProps>{
 
     render(): ReactNode {
         return (

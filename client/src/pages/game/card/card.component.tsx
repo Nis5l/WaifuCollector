@@ -1,6 +1,7 @@
-import React, {Component, RefObject} from 'react'
+import React, { RefObject} from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 
+import { AbstractComponent } from '../../../shared/abstract'
 import { ScrollbarComponent, LoadingComponent, YesNoComponent, GameCardLoadComponent, GameCardComponent } from '../../../shared/components'
 import { redirectIfNecessary } from '../../../api'
 import Config from '../../../config.json'
@@ -10,7 +11,7 @@ import type { CardProps, CardState } from './types';
 
 import './card.component.scss'
 
-class CardComponent extends Component<CardProps, CardState> {
+class CardComponent extends AbstractComponent<CardProps, CardState> {
   private mainuuid: number = 0;
   
   private key: number;

@@ -1,6 +1,7 @@
-import React, {Component, RefObject} from 'react'
+import React, { RefObject } from 'react'
 import moment from 'moment';
 
+import { AbstractComponent } from '../../../shared/abstract'
 import { CardComponent } from '../../../shared/components'
 import { ScrollbarComponent, LoadingComponent, YesNoComponent, YesNoCancelComponent, GameCardLoadComponent, GameCardComponent } from '../../../shared/components'
 import { redirectIfNecessary } from '../../../api'
@@ -12,7 +13,7 @@ import './trade.component.scss'
 
 const suggestCardColor = "rgb(255 255 255 / 50%)";
 
-class TradeComponent extends Component<TradeProps, TradeState> {
+class TradeComponent extends AbstractComponent<TradeProps, TradeState> {
   private lCounter: number;
   private lCounterMax: number;
 

@@ -1,9 +1,9 @@
-import {Component} from 'react'
+import { AbstractComponent } from '../../../shared/abstract';
 import {Scrollbars} from 'react-custom-scrollbars'
 
 import './scrollbar.component.scss'
 
-export default class ScrollbarComponent extends Component {
+export default class ScrollbarComponent extends AbstractComponent {
     constructor(props: any) {
         super(props);
         this.renderThumb = this.renderThumb.bind(this);

@@ -1,11 +1,10 @@
-import {Component} from 'react'
+import { AbstractComponent } from '../../../../shared/abstract';
 import Inventory from '../../inventory'
 import { redirectIfNecessary } from '../../../../api'
-
 import { withAxiosPrivate, withAuth, withRouter } from '../../../../hooks'
 import type { SuggestInventoryProps, SuggestInventoryState } from './types';
 
-class SuggestInventoryComponent extends Component<SuggestInventoryProps, SuggestInventoryState> {
+class SuggestInventoryComponent extends AbstractComponent<SuggestInventoryProps, SuggestInventoryState> {
   private friendID: string;
 
   constructor(props: SuggestInventoryProps) {

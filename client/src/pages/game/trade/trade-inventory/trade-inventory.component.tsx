@@ -1,13 +1,13 @@
-import {Component} from 'react'
 import Inventory from '../../inventory'
 import { redirectIfNecessary } from '../../../../api'
 
+import { AbstractComponent } from '../../../../shared/abstract';
 import { withAxiosPrivate, withAuth, withRouter } from '../../../../hooks'
 import type { TradeInventoryProps, TradeInventoryState } from './types';
 
 import './trade-inventory.component.scss'
 
-class TradeInventoryComponent extends Component<TradeInventoryProps, TradeInventoryState> {
+class TradeInventoryComponent extends AbstractComponent<TradeInventoryProps, TradeInventoryState> {
   private friendID: string = "";
   
   constructor(props: TradeInventoryProps) {

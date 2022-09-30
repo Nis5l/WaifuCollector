@@ -1,5 +1,4 @@
-import {Component} from 'react'
-
+import { AbstractComponent } from '../../shared/abstract'
 import { CardComponent, LogoComponent, LoadingComponent, GameCardComponent, GameCardLoadComponent } from '../../shared/components'
 import { AchievementsComponent, ScrollbarComponent, ProfileNameComponent, FriendListComponent } from '../../shared/components';
 import { withAxiosPrivate, withAuth, withRouter } from '../../hooks'
@@ -10,7 +9,7 @@ import "./profile.component.scss"
 
 const collector: string = "xxxxxxxxxxxxx";
 
-class ProfileComponent extends Component<ProfileProps, ProfileState> {
+class ProfileComponent extends AbstractComponent<ProfileProps, ProfileState> {
     private userId: string;
     private lcounter: number;
     private lcounterMax: number;

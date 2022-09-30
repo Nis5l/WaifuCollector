@@ -1,9 +1,11 @@
-import React, {Component, RefObject} from 'react';
+import React, { RefObject} from 'react';
 import Chart, { ChartConfiguration } from 'chart.js';
 
-import "./pack-graph.component.scss"
+import { AbstractComponent } from '../../../shared/abstract';
 import axios from '../../../api/axios'
 import { PackGraphProps } from './types';
+
+import "./pack-graph.component.scss"
 
 const config: ChartConfiguration = {
     type: 'line',
@@ -48,7 +50,7 @@ const config: ChartConfiguration = {
 
 const refreshTime = 1000 * 60;
 
-export default class PackGraphComponent extends Component<PackGraphProps> {
+export default class PackGraphComponent extends AbstractComponent<PackGraphProps> {
     private ctx: RefObject<any>;
     private chart: Chart | undefined = undefined;
 

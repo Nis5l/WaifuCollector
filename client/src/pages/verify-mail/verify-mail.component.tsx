@@ -1,13 +1,12 @@
-import {Component} from 'react'
+import { AbstractComponent } from '../../shared/abstract'
 import { CardComponent, LogoComponent, LoadingComponent, GameCardLoadComponent } from '../../shared/components'
 import { checkMail } from '../../utils'
-
 import { withAxiosPrivate, withRouter } from '../../hooks'
 import type { VerifyMailProps, VerifyMailState } from './types';
 
 import './verify-mail.component.scss'
 
-class VerifyMailComponent extends Component<VerifyMailProps, VerifyMailState> {
+class VerifyMailComponent extends AbstractComponent<VerifyMailProps, VerifyMailState> {
   constructor(props: VerifyMailProps) {
     super(props);
     this.state =

@@ -1,11 +1,10 @@
-import {Component} from 'react'
-
+import { AbstractComponent } from '../../../abstract';
 import CardComponent from '../../card'
 import type { YesNoProps } from './types';
 
 import '../popup.component.scss';
 
-export default class YesNoComponent extends Component<YesNoProps> {
+export default class YesNoComponent extends AbstractComponent<YesNoProps> {
     private text: string;
 
     private yesCallback: () => void;

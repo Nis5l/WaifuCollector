@@ -1,13 +1,13 @@
-import {Component} from 'react'
 import ResizeTextComponent from "../resize-text"
 
+import { AbstractComponent } from '../../abstract';
 import { withRouter } from '../../../hooks'
 import type { GameCardProps, GameCardState } from './types';
 import { DEFFONT, DEFHEIGTH, DEFWIDTH } from './constants';
 
 import './game-card.component.scss'
 
-class GameCardComponent extends Component<GameCardProps, GameCardState> {
+class GameCardComponent extends AbstractComponent<GameCardProps, GameCardState> {
 	private upgradeEffectDelay = 100;
     private upgradeEffectTimer: NodeJS.Timer | undefined = undefined;
     private upgradeEffectSize = 1.2;

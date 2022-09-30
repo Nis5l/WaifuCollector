@@ -1,9 +1,8 @@
-import { Component } from 'react'
-
+import { AbstractComponent } from '../../../abstract';
 import CardComponent from '../../card';
 import { YesNoCancelProps } from './types';
 
-export default class YesNoCancelComponent extends Component<YesNoCancelProps> {
+export default class YesNoCancelComponent extends AbstractComponent<YesNoCancelProps> {
     private text: string;
     private disableYes: boolean | undefined;
 

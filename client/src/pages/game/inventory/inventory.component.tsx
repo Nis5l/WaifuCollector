@@ -1,7 +1,8 @@
-import React, {Component, RefObject} from 'react'
+import React, { RefObject} from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
 import Select from 'react-select'
 
+import { AbstractComponent } from '../../../shared/abstract'
 import { ScrollbarComponent, LoadingComponent, GameCardComponent } from '../../../shared/components'
 import { redirectIfNecessary } from '../../../api'
 import Config from '../../../config.json'
@@ -11,7 +12,7 @@ import type { InventoryState, InventoryProps } from './types';
 
 import "./inventory.component.scss"
 
-class InventoryComponent extends Component<InventoryProps, InventoryState> {
+class InventoryComponent extends AbstractComponent<InventoryProps, InventoryState> {
   private key: number;
   private page: number;
   private userID: string;

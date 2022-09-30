@@ -1,10 +1,10 @@
-import {Component} from 'react'
 import {LoopCircleLoading} from 'react-loadingg'
 
+import { AbstractComponent } from '../../../abstract';
 import { DEFWIDTH, DEFHEIGTH } from '../constants';
 import type { GameCardLoadProps } from './types';
 
-export default class GameCardLoadComponent extends Component<GameCardLoadProps> {
+export default class GameCardLoadComponent extends AbstractComponent<GameCardLoadProps> {
     constructor(props: GameCardLoadProps) {
         super(props);
     }

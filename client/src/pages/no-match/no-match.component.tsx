@@ -1,9 +1,9 @@
-import {Component} from 'react'
+import { AbstractComponent } from '../../shared/abstract'
 import { CardComponent } from '../../shared/components'
 
 import './no-match.component.scss'
 
-class NoMatchComponent extends Component {
+class NoMatchComponent extends AbstractComponent {
   render() {
     return (
       <div className="nopage_wrapper">
@@ -12,8 +12,6 @@ class NoMatchComponent extends Component {
           styleClassName={''}
           icon={''}
           iconNum={0}
-          onIconClick={function (): void {} }
-          onClick={function (event: any): void {} }
         >
         (⌯˃̶᷄ ﹏ ˂̶᷄⌯)ﾟ <br/> <br/> This page doesn't exist
         </CardComponent>

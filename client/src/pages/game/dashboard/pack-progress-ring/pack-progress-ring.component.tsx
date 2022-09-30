@@ -1,6 +1,6 @@
-import {Component} from 'react'
 import moment, { Duration, Moment } from 'moment';
 
+import { AbstractComponent } from '../../../../shared/abstract';
 import {formatTime} from '../../../../utils'
 import { redirectIfNecessary } from '../../../../api'
 import { withAxiosPrivate, withRouter } from '../../../../hooks'
@@ -8,7 +8,7 @@ import type { PackProgressRingProps, PackProgressRingState } from './types';
 
 import './pack-progress-ring.component.scss'
 
-class PackProgressRingComponent extends Component<PackProgressRingProps, PackProgressRingState> {
+class PackProgressRingComponent extends AbstractComponent<PackProgressRingProps, PackProgressRingState> {
     public radius: number;
     public strokeDashes: number;
     public update: number;

@@ -1,8 +1,8 @@
-import { Component } from "react";
+import AbstractComponent from '../component';
 import { LoadingComponent } from "../../components";
 import type { LoadingComponentState, LoadingComponentProps } from './types';
 
-export default abstract class AbstractLoadingComponent<TProps extends LoadingComponentProps = LoadingComponentProps, TState extends LoadingComponentState = LoadingComponentState> extends Component<TProps, TState> {
+export default abstract class AbstractLoadingComponent<TProps extends LoadingComponentProps = LoadingComponentProps, TState extends LoadingComponentState = LoadingComponentState> extends AbstractComponent<TProps, TState> {
 	protected abstract readonly loadLimit: number;
 	protected abstract readonly renderLoad: boolean;
 	protected loadCount = 0;

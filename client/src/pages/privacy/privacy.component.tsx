@@ -1,11 +1,9 @@
-import {Component} from 'react'
-
-import { FoldableComponent } from '../../shared/components'
-import { ScrollbarComponent } from '../../shared/components'
+import { AbstractComponent } from '../../shared/abstract'
+import { FoldableComponent, ScrollbarComponent } from '../../shared/components'
 
 import './privacy.component.scss'
 
-class PrivacyComponent extends Component {
+class PrivacyComponent extends AbstractComponent {
 
   render() {
     return (

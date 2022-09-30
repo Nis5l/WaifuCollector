@@ -1,6 +1,6 @@
-import {Component} from 'react'
 import Cookies from 'js-cookie'
 
+import { AbstractComponent  } from '../../shared/abstract'
 import { CardComponent, LogoComponent, LoadingComponent, GameCardLoadComponent } from '../../shared/components'
 import { withAxiosPrivate, withRouter } from '../../hooks'
 import type { VerifyState, VerifyProps } from './types';
@@ -17,7 +17,7 @@ function queryString(queryString: string) {
   return query;
 }
 
-class VerifyComponent extends Component<VerifyProps, VerifyState> {
+class VerifyComponent extends AbstractComponent<VerifyProps, VerifyState> {
   private key: string = "";
   private lCount: number;
   private lCountMax: number;

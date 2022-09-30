@@ -1,5 +1,4 @@
-import {Component} from 'react'
-
+import { AbstractComponent } from '../../abstract';
 import { YesNoComponent } from '../popup';
 import FriendComponent from './friend';
 import ScrollbarComponent from '../scrollbar'
@@ -8,7 +7,7 @@ import { FriendListState, FriendListProps } from './types';
 
 import './friend-list.component.scss'
 
-class FriendListComponent extends Component<FriendListProps, FriendListState> {
+class FriendListComponent extends AbstractComponent<FriendListProps, FriendListState> {
     public props: FriendListProps;
 
     private lcounter: number;

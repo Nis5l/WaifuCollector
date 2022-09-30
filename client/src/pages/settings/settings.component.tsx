@@ -1,12 +1,12 @@
-import {Component} from 'react'
 import { ProfileNameComponent, LogoComponent, CardComponent, LoadingComponent } from '../../shared/components'
+import { AbstractComponent } from '../../shared/abstract'
 
 import { withAxiosPrivate, withAuth, withRouter } from '../../hooks'
 import type { SettingsProps, SettingsState } from './types';
 
 import './settings.component.scss'
 
-class SettingsComponent extends Component<SettingsProps, SettingsState> {
+class SettingsComponent extends AbstractComponent<SettingsProps, SettingsState> {
   private lCounter: number;
   private lCounterMax: number;
   private passInterval: NodeJS.Timeout | undefined;
