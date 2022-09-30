@@ -59,7 +59,7 @@ class UserDashboardComponent extends AbstractLoadingComponent<UserDashboardProps
 						<FriendListComponent
 							userId={this.userId}
 							loadingCallback={() => { this.incrementLoadCount(); } }
-							onFriendRequests={(friendRequestCount: number) => { if(/*this.componentMounted*/true) { this.setState({ friendRequestCount }); } } }
+							onFriendRequests={(friendRequestCount: number) => { if(this.isMounted) { this.setState({ friendRequestCount }); } } }
 							requests={this.state.friendListState === "friendRequests"}
 						/>
 					</CardComponent>

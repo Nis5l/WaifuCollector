@@ -1,5 +1,5 @@
 interface User {
-    userID: string,
+    userId: string,
     username: string
 }
 

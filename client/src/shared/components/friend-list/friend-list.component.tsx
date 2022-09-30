@@ -42,7 +42,7 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
 
         async function loadFriends(self: FriendListComponent) {
 			try {
-				const response = await self.props.axios.get(`/user/${self.props.userID}/friends`);
+				const response = await self.props.axios.get(`/user/${self.props.userId}/friends`);
 				return response.data;
 			} catch (err) {
 				console.log("Unexpected /user/:id/friends error");
@@ -83,14 +83,14 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
         if (this.lcounter === this.lcounterMax && this.props.lCallback) this.props.lCallback();
     }
 
-    deleteFriend(userID: string) {
+    deleteFriend(userId: string) {
         const data = {
-            userId: userID
+            userId: userId
         }
         this.props.axios.post(`/friend/remove`, data);
 
         for (let i = 0; i < this.state.friends.length; i++) {
-            if (this.state.friends[i].userId === userID) {
+            if (this.state.friends[i].userId === userId) {
                 this.state.friends.splice(i, 1);
                 this.setState({friends: [...this.state.friends]});
                 break;
@@ -98,7 +98,7 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
         }
 
         for (let i = 0; i < this.state.friendRequests.length; i++) {
-            if (this.state.friendRequests[i].userId === userID) {
+            if (this.state.friendRequests[i].userId === userId) {
                 this.state.friendRequests.splice(i, 1);
                 this.setState({friendRequests: [...this.state.friendRequests]});
                 break;
@@ -106,19 +106,19 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
         }
     }
 
-    onDecline(userID: string) {
-        this.deleteFriend(userID);
+    onDecline(userId: string) {
+        this.deleteFriend(userId);
 		if(this.props.onFriendRequests) this.props.onFriendRequests(this.state.friendRequests.length);
     }
 
-    onAccept(userID: string) {
+    onAccept(userId: string) {
         const data = {
-            userId: userID
+            userId: userId
         }
         this.props.axios.post(`/friend/accept`, data);
 
         for (let i = 0; i < this.state.friendRequests.length; i++) {
-            if (this.state.friendRequests[i].userId === userID) {
+            if (this.state.friendRequests[i].userId === userId) {
                 this.state.friends.push(this.state.friendRequests[i])
                 let newreq = this.state.friendRequests[i];
                 newreq.status = 0;
@@ -132,7 +132,7 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
     }
 
     render() {
-        if (this.props.userID === undefined) return (<div className="friendslist"></div>);
+        if (this.props.userId === undefined) return (<div className="friendslist"></div>);
 
         let inner = (
             <div className="friendRequests">
@@ -143,10 +143,10 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
                                 key={friend.userId}
 
                                 avatar="/assets/Icon.png"
-                                userID={friend.userId}
+                                userId={friend.userId}
                                 status={friend.status}
                                 username={friend.username}
-                                onDelete={(userID: string, username: string) => { this.setState({ deleteUser: { userID: userID, username: username } }) } }
+                                onDelete={(userId: string, username: string) => { this.setState({ deleteUser: { userId, username: username } }) } }
                                 />
                         )
 
@@ -160,11 +160,11 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
                                 key={friend.userId}
 
                                 avatar="/assets/Icon.png"
-                                userID={friend.userId}
+                                userId={friend.userId}
                                 status={friend.status}
                                 username={friend.username}
-                                onAccept={(userID: string) => this.onAccept(userID)}
-                                onDecline={(userID: string) => this.onDecline(userID)}
+                                onAccept={(userId: string) => this.onAccept(userId)}
+                                onDecline={(userId: string) => this.onDecline(userId)}
                                 />
                         )
 
@@ -184,7 +184,7 @@ class FriendListComponent extends AbstractComponent<FriendListProps, FriendListS
                     this.state.deleteUser !== undefined &&
                     <YesNoComponent
                         text={`Remove ${this.state.deleteUser.username}?`}
-                        yesCallback={() => { if(this.state.deleteUser != null) this.deleteFriend(this.state.deleteUser.userID); this.setState({deleteUser: undefined});}}
+                        yesCallback={() => { if(this.state.deleteUser != null) this.deleteFriend(this.state.deleteUser.userId); this.setState({deleteUser: undefined});}}
                         noCallback={() => this.setState({deleteUser: undefined})}
                     />
                 }
