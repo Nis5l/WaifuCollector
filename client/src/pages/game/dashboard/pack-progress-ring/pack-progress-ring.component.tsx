@@ -1,3 +1,4 @@
+import React from 'react';
 import moment, { Duration, Moment } from 'moment';
 
 import { AbstractComponent } from '../../../../shared/abstract';
@@ -7,6 +8,7 @@ import { withAxiosPrivate, withRouter } from '../../../../hooks'
 import type { PackProgressRingProps, PackProgressRingState } from './types';
 
 import './pack-progress-ring.component.scss'
+import { AxiosError } from 'axios';
 
 class PackProgressRingComponent extends AbstractComponent<PackProgressRingProps, PackProgressRingState> {
     public radius: number;
@@ -43,7 +45,7 @@ class PackProgressRingComponent extends AbstractComponent<PackProgressRingProps,
             .then((res: any) => {
 				self.packTimeMax = moment.duration(res.data.packTimeMax);
 				this.incrementLCounter();
-            }).catch((err: any) => {
+            }).catch((err: AxiosError) => {
 				console.log("Unexpected /pack/time/max error");
 			});
     }
@@ -53,17 +55,17 @@ class PackProgressRingComponent extends AbstractComponent<PackProgressRingProps,
 			.then((res: any) => {
 				self.packTime = moment(res.data.packTime);
 				this.incrementLCounter();
-            }).catch((err: any) => {
+            }).catch((err: AxiosError) => {
                 redirectIfNecessary(this.props.router.navigate, err);
 			});
     }
 
-    incrementLCounter() {
+    incrementLCounter(): void {
         this.lcounter++;
         if (this.lcounter === this.lcounterMax && this.props.lCallback) this.props.lCallback();
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         this.loadMaxPackTime(this);
         this.loadPackTime(this);
 
@@ -86,12 +88,12 @@ class PackProgressRingComponent extends AbstractComponent<PackProgressRingProps,
         window.addEventListener("focus", () => {this.loadPackTime(this)});
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         clearInterval(this.interval);
     }
 
-    onClick(obj: any) {
-        if (new Date() >= obj.packTime)
+    onClick(): void {
+        if (this.packTime != null && moment() >= this.packTime)
             this.props.router.navigate('../pack');
     }
 
@@ -100,7 +102,7 @@ class PackProgressRingComponent extends AbstractComponent<PackProgressRingProps,
             <svg className={`packProgressRing ${this.props.className}`} viewBox="0 0 100 100">
                 <text fontSize={this.radius / 3} x="50%" y="50%" textAnchor="middle" fill="#fff" dy=".38em">{this.state.text}</text>
                 <circle
-                    onClick={() => {this.onClick(this)}}
+                    onClick={() => {this.onClick()}}
                     stroke="white"
                     strokeDasharray={this.strokeDashes}
                     strokeDashoffset={this.state.progress}

@@ -25,8 +25,6 @@ export default function HomeComponent() {
                     styleClassName="packGraphWrapper"
                     icon={''}
                     iconNum={0}
-                    onIconClick={function (): void {} }
-                    onClick={function (_event: any): void {} }
                 >
                     <PackGraphComponent styleClassName="packGraph" onLoad={() => {setLoadingState(false)}} />
                 </CardComponent>
@@ -107,8 +105,6 @@ export default function HomeComponent() {
                         title={''}
                         icon={''}
                         iconNum={0}
-                        onIconClick={function (): void {} }
-                        onClick={function (_event: any): void {} }
                     >
                         <div>
                             <div>

@@ -1,5 +1,6 @@
 import React, { RefObject } from 'react'
 import moment from 'moment';
+import type { AxiosError } from 'axios';
 
 import { AbstractComponent } from '../../../shared/abstract'
 import { CardComponent } from '../../../shared/components'
@@ -35,8 +36,8 @@ class TradeComponent extends AbstractComponent<TradeProps, TradeState> {
     this.state =
     {
       name: "Loading...",
-      cards: undefined,
-      friendcards: undefined,
+      cards: [],
+      friendcards: [],
       found: true,
       info: "",
       friendinfo: "",
@@ -44,8 +45,8 @@ class TradeComponent extends AbstractComponent<TradeProps, TradeState> {
       friendTradeCount: 0,
       tradeLimit: 0,
       tradeTime: 0,
-      cardSuggestions: undefined,
-      friendCardSuggestions: undefined,
+      cardSuggestions: [],
+      friendCardSuggestions: [],
       confirmed: 0,
       friendConfirmed: 0,
 
@@ -74,16 +75,16 @@ class TradeComponent extends AbstractComponent<TradeProps, TradeState> {
 
     this.setState({
       name: "Loading...",
-      cards: undefined,
-      friendcards: undefined,
+      cards: [],
+      friendcards: [],
       found: true,
       info: "",
       friendinfo: "",
       tradeCount: 0,
       friendTradeCount: 0,
       tradeLimit: 0,
-      cardSuggestions: undefined,
-      friendCardSuggestions: undefined,
+      cardSuggestions: [],
+      friendCardSuggestions: [],
       confirmed: 0,
       friendConfirmed: 0,
 
@@ -133,7 +134,7 @@ class TradeComponent extends AbstractComponent<TradeProps, TradeState> {
               if (diff === 0) clearInterval(interval);
             }, 1000)
           }
-      }).catch((err: any) => {
+      }).catch((err: AxiosError) => {
           if (redirectIfNecessary(this.props.router.navigate, err)) return;
           this.setState({found: false});
 	  });
@@ -218,7 +219,7 @@ class TradeComponent extends AbstractComponent<TradeProps, TradeState> {
     this.props.axios.post(`/trade/${this.friendid}/suggestion/remove/${this.state.removeFriendSuggestionId}`, {})
       .then((res: any) => {
         this.load()
-      }).catch((err: any) => {
+      }).catch((err: AxiosError) => {
         if (redirectIfNecessary(this.props.router.navigate, err)) return;
 	  });
 

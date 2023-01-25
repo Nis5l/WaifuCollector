@@ -1,3 +1,4 @@
+import React from 'react';
 import { AbstractComponent } from '../../../abstract';
 import CardComponent from '../../card'
 import type { YesNoProps } from './types';
@@ -35,7 +36,7 @@ export default class YesNoComponent extends AbstractComponent<YesNoProps> {
                     title="" icon=""
                     iconNum={0}
                     onIconClick={function (): void {} } 
-                    onClick={function (event: any): void {}}>
+                    onClick={function (event: React.MouseEvent): void {}}>
                     <div className="popup_content">
                         <div className="text_area">
                             <p>{this.text}</p>

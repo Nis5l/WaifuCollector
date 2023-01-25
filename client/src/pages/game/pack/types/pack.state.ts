@@ -1,4 +1,6 @@
+import type { GameCard } from "../../../../shared/types";
+
 export interface PackState {
     loading: boolean;
-    cards: any[];
+    cards: GameCard[];
 }

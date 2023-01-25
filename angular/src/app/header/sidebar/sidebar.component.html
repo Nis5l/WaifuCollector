@@ -1,0 +1,10 @@
+<mat-drawer-container autosize>
+	<mat-drawer #drawer class="sidenav" mode="side" [opened]="open">
+		<button mat-button routerLink="collectors">
+			<mat-icon>featured_play_list</mat-icon> Collectors
+		</button>
+	</mat-drawer>
+	<div class="container">
+		<ng-content></ng-content>
+	</div>
+</mat-drawer-container>

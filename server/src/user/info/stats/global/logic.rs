@@ -12,7 +12,7 @@ use super::super::shared::sql::get_achievements;
 
 #[get("/user/<user_id>/stats")]
 pub async fn user_stats_global_route(user_id: Id, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<UserStatsGlobalResponse> {
-    verify_user!(sql, &user_id, false);
+    let username = verify_user!(sql, &user_id, false);
 
     let friend_count = rjtry!(friend::sql::used_friend_slots(sql, &user_id).await);
 
@@ -24,6 +24,7 @@ pub async fn user_stats_global_route(user_id: Id, sql: &State<Sql>, config: &Sta
     let achievements = rjtry!(get_achievements(sql, &user_id, None).await);
 
     ApiResponseErr::ok(Status::Ok, UserStatsGlobalResponse {
+        username,
         max_friends: config.max_friends,
         friends: friend_count,
 

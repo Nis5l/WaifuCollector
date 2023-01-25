@@ -3,10 +3,12 @@ use sqlx::FromRow;
 use crate::shared::Id;
 
 #[derive(Debug, Serialize, FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct Collector {
     pub id: Id,
     pub name: String,
-    pub userId: Id
+    #[sqlx(rename="userId")]
+    pub user_id: Id
 }
 
 #[macro_export]

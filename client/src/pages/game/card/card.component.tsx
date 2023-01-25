@@ -1,5 +1,6 @@
 import React, { RefObject} from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
+import { AxiosError } from 'axios';
 
 import { AbstractComponent } from '../../../shared/abstract'
 import { ScrollbarComponent, LoadingComponent, YesNoComponent, GameCardLoadComponent, GameCardComponent } from '../../../shared/components'
@@ -61,7 +62,7 @@ class CardComponent extends AbstractComponent<CardProps, CardState> {
         this.incrementLCounter();
         parseCards([res.data]);
         this.setState({maincard: res.data});
-      }).catch((err: any) => {
+      }).catch((err: AxiosError) => {
         this.setState({maincard: -1});
 	  });
 
@@ -107,7 +108,7 @@ class CardComponent extends AbstractComponent<CardProps, CardState> {
             if (res.data.length === 0) this.setState({hasMore: false});
             this.loadingCards = false;
         	this.setState({cards: cards});
-      }).catch((err: any) => {
+      }).catch((err: AxiosError) => {
           redirectIfNecessary(this.props.history, err);
 	  });
   }
@@ -146,10 +147,10 @@ class CardComponent extends AbstractComponent<CardProps, CardState> {
           .then((res: any) => {
             parseCards([res.data]);
             newcard = res.data;
-          }).catch((err: any) => {
+          }).catch((err: AxiosError) => {
             this.setState({maincard: -1});
           });
-        }).catch((err: any) => {
+        }).catch((err: AxiosError) => {
           redirectIfNecessary(this.props.history, err);
         });
 

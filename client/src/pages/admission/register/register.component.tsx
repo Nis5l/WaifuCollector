@@ -65,8 +65,6 @@ function RegisterComponent(props: {}) {
             title={''}
             icon={''}
             iconNum={0}
-            onIconClick={function (): void {} }
-            onClick={function (event: any): void {} }
         >
 
             <LogoComponent className="logo" size="" />

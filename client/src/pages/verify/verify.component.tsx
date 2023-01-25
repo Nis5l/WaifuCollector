@@ -6,6 +6,7 @@ import { withAxiosPrivate, withRouter } from '../../hooks'
 import type { VerifyState, VerifyProps } from './types';
 
 import './verify.component.scss'
+import { AxiosError } from 'axios';
 
 function queryString(queryString: string) {
   var query: Map<string, string> = new Map<string, string>();
@@ -45,7 +46,7 @@ class VerifyComponent extends AbstractComponent<VerifyProps, VerifyState> {
     this.props.axios.post(`/verify/confirm/${this.key}`, {})
       .then((res: any) => {
 	    this.props.router.navigate('/dashboard');
-      }).catch((err: any) => {
+      }).catch((err: AxiosError) => {
 		    console.log("Unexpected /verify/confirm/:key error");
       }).finally(() => {
           this.incrementLCounter();
@@ -66,7 +67,7 @@ class VerifyComponent extends AbstractComponent<VerifyProps, VerifyState> {
               default:
                 this.props.router.navigate('/dashboard');
             }
-      }).catch((err: any) => { console.log("Unexpected /verify/check error");
+      }).catch((err: AxiosError) => { console.log("Unexpected /verify/check error");
       });
     this.startTimer();
   }

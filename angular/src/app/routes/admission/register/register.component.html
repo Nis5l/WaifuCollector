@@ -1,0 +1,26 @@
+<div class="register-wrapper">
+	<mat-card>
+		<form class="register" [formGroup]="formGroup" (submit)="register()">
+			<mat-form-field >
+				<input matInput type="text" formControlName="username" placeholder="Username" />
+				<mat-error>Username has to be {{config.username.minLength}}-{{config.username.maxLength}} characters</mat-error>
+			</mat-form-field>
+			<mat-form-field >
+				<input matInput type="text" formControlName="email" placeholder="Email" />
+				<mat-error>Email has to be a valid Email</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input matInput type="password" formControlName="password" placeholder="Password" />
+				<mat-error>Password has to be {{config.password.minLength}}-{{config.password.maxLength}} characters</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input matInput type="password" formControlName="passwordRepeat" placeholder="Repeat Password" />
+				<mat-error>Password has to be {{config.password.minLength}}-{{config.password.maxLength}} characters</mat-error>
+			</mat-form-field>
+			<div *ngVar="(error$ | async) as error" class="error">
+				<mat-error *ngIf="error != null">{{error}}</mat-error>
+			</div>
+			<button mat-raised-button type="submit" [disabled]="!formGroup.valid">Register</button>
+		</form>
+	</mat-card>
+</div>

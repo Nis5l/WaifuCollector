@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { AxiosResponse } from 'axios';
 
 import CollectorComponent from "./collector";
 import { useAxiosPrivate } from "../../../hooks";
-import { Collector } from "../../../shared/types";
+import type { Collector } from "../../../shared/types";
 
 import "./collector-list.component.scss";
 
@@ -13,7 +14,7 @@ function CollectorListComponent(props: {}){
     const navigate = useNavigate();
 
     useEffect(() => {
-        axiosPrivate.get("/collector/list").then((response: any) => {
+        axiosPrivate.get<Collector[]>("/collector/list").then((response: AxiosResponse<Collector[]>) => {
             const list: Collector[] = response.data;
             setCollectors(list);
         });

@@ -14,15 +14,11 @@ export default function ThreeDotsMenuComponent(props: ThreeDotsMenuProps) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event: any) => {
-
         setAnchorEl(event.currentTarget);
-
     }
 
     const handleClose = () => {
-
         setAnchorEl(null);
-
     }
 
     return (

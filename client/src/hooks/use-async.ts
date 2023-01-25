@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 
-export function useAsync(asyncFn: () => any, onSuccess: (data: any) => void): void {
+export function useAsync(asyncFn: () => Promise<unknown>, onSuccess: (data: unknown) => void): void {
     useEffect(() => {
       let isActive = true;
-      asyncFn().then((data: any) => {
+      asyncFn().then((data: unknown) => {
         if (isActive) onSuccess(data);
       });
       return () => { isActive = false };
     }, [asyncFn, onSuccess]);
 }
 
-export const withAsync = (asyncFn: () => any, onSuccess: (data: any) => void) => {
+export const withAsync = (asyncFn: () => Promise<unknown>, onSuccess: (data: unknown) => void) => {
     return () => {
         useAsync(asyncFn, onSuccess);
     }

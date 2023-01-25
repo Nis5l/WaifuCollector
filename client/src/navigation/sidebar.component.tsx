@@ -51,7 +51,7 @@ export default class SidebarComponent extends AbstractComponent<SidebarProps, an
     /**
      * Close sidebar if clicked outside
      */
-    public handleClickOutside: (any) = (event:any) => {
+    public handleClickOutside: ((event: Event) => void) = (event: Event) => {
         if ((this.state.mobile && this.state.toggled) && this.box && !this.box.current.contains(event.target)) {
             this.setState({toggled: false});
         }

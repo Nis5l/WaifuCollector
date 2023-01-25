@@ -91,7 +91,7 @@ export default class PackGraphComponent extends AbstractComponent<PackGraphProps
     }
 
     async updateChart() {
-        const options: any = {hourCycle: "h23", weekday: 'short', hour: 'numeric', minute: '2-digit'};
+        const options: Intl.DateTimeFormatOptions = {hourCycle: "h23", weekday: 'short', hour: 'numeric', minute: '2-digit'};
 
         const packData = await this.loadData();
 

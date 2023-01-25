@@ -1,6 +1,7 @@
 import { NavigateFunction } from "react-router-dom";
+import { AxiosError } from 'axios';
 
-function redirectIfNecessary(navigate: NavigateFunction, err: any): number {
+function redirectIfNecessary(navigate: NavigateFunction, err: AxiosError): number {
     if (err.response === undefined) return 0;
 
 	//Unathorized

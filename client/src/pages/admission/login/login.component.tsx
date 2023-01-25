@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { CardComponent, LogoComponent } from '../../../shared/components'
@@ -32,7 +32,7 @@ function LoginComponent(props: {}) {
         return (username.length > 0) && (password.length > 0);
     }
 
-    function handleSubmit(event: any) {
+    function handleSubmit(event: React.SyntheticEvent) {
         setError(undefined);
 
         event.preventDefault();
@@ -75,8 +75,6 @@ function LoginComponent(props: {}) {
             title={''}
             icon={''}
             iconNum={0}
-            onIconClick={function (): void {} }
-            onClick={function (event: any): void {} }
         >
 
             <LogoComponent className="logo" size="" />

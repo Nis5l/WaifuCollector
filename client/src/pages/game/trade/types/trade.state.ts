@@ -1,7 +1,9 @@
+import type { GameCard } from "../../../../shared/types";
+
 export interface TradeState {
   name: string;
-  cards: any | undefined;
-  friendcards: any | undefined;
+  cards: GameCard[];
+  friendcards: GameCard[];
   found: boolean;
   info: string;
   friendinfo: string;
@@ -9,16 +11,16 @@ export interface TradeState {
   friendTradeCount: number;
   tradeLimit: number;
   tradeTime: number;
-  cardSuggestions: any | undefined;
-  friendCardSuggestions: any | undefined;
+  cardSuggestions: GameCard[];
+  friendCardSuggestions: GameCard[];
   confirmed: number;
   friendConfirmed: number;
 
-  removeId: number | undefined;
-  removeFriendSuggestionId: number | undefined;
-  removeSuggestionId: number | undefined;
+  removeId: string | undefined;
+  removeFriendSuggestionId: string | undefined;
+  removeSuggestionId: string | undefined;
 
-  disabled: any | undefined;
+  disabled: string | undefined;
   confirmdisabled: string | undefined;
 
   loading: boolean;

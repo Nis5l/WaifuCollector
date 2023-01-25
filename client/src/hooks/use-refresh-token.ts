@@ -11,13 +11,13 @@ export const useRefreshToken = () => {
     const refresh = async () => {
         if(!refreshing){
             refreshing = true;
-            promise = new Promise(async (resolve, reject) => {
+            promise = new Promise(async (resolve) => {
                 let ret = undefined;
                 try{
                     const response = await axios.get("/refresh");
                     const token = response.data.accessToken;
 
-                    let decoded: any = jwtDecode(token);
+                    let decoded: { id: string, username: string } = jwtDecode(token);
 
                     const id = decoded.id;
                     const username = decoded.username;

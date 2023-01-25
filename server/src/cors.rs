@@ -26,7 +26,7 @@ pub struct CORS;
         }
 
         let allowed_origins: Vec<String> = vec![
-            String::from("localhost:81")
+            //String::from("localhost:4200")
         ];
 
         let origin = match request.headers().get_one("origin") {

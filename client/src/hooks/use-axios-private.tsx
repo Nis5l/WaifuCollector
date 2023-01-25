@@ -5,7 +5,7 @@ import { useRefreshToken } from "./use-refresh-token";
 import { useAuth } from "./use-auth";
 import { AxiosError } from "axios";
 
-export const useAxiosPrivate = () => {
+export const useAxiosPrivate: (() => AxiosInstance) = () => {
     const refresh = useRefreshToken();
     const { auth } = useAuth();
 
@@ -48,16 +48,7 @@ export const useAxiosPrivate = () => {
         }
     }, [requestInterceptor, responseIntercept]);
 
-    let ret = {
-        post: async (url: string, data: any) => {
-            return axios.post(url, data);
-        },
-        get: async (url: string) => {
-            return axios.get(url);
-        }
-    }
-
-    return ret;
+    return axios;
 }
 
 export type AxiosPrivateProps = {
