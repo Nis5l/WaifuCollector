@@ -1,7 +1,7 @@
 /**
 * Generated theme by Material Theme Generator
 * https://materialtheme.arcsine.dev
-* Fork at: https://materialtheme.arcsine.dev/?c=YHBhbGV0dGU$YHByaW1hcnk$YF48IzhjOTZjNiIsIj9lcjwjYmNjYWZmIiwiO2VyPCM2NDZkOTl$LCIlPmBePCM5ZDgxZDAiLCI~ZXI8I2QxYmFmYiIsIjtlcjwjOTU3MWUyfiwid2Fybj5gXjwjZjc3NjhlIiwiP2VyPCNmZGQ2ZGQiLCI7ZXI8I2YzNTk3MX4sIj9UZXh0PCMwMDAwMDAiLCI~PTwjZmFmYWZhIiwiO1RleHQ8I2YxZjNmZiIsIjs9PCMxYTFkMjd$LCJmb250cz5bYEA8KC00fixgQDwoLTN$LGBAPCgtMn4sYEA8KC0xfixgQDxoZWFkbGluZX4sYEA8dGl0bGV$LGBAPHN1YiktMn4sYEA8c3ViKS0xfixgQDxib2R5LTJ$LGBAPGJvZHktMX4sYEA8YnV0dG9ufixgQDxjYXB0aW9ufixgQDxpbnB1dCIsInNpemU$bnVsbH1dLCJpY29uczxGaWxsZWQiLCI~bmVzcz5mYWxzZSwidmVyc2lvbj4xM30=
+* Fork at: https://materialtheme.arcsine.dev/?c=YHBhbGV0dGU$YHByaW1hcnk$YF48IzhjOTZjNiIsIj9lcjwjYmNjYWZmIiwiO2VyPCM2NDZkOTl$LCIlPmBePCM5ZDgxZDAiLCI~ZXI8I2QxYmFmYiIsIjtlcjwjNjc0OGE3fiwid2Fybj5gXjwjZjc3NjhlIiwiP2VyPCNmZGQ2ZGQiLCI7ZXI8I2YzNTk3MX4sIj9UZXh0PCMwMDAwMDAiLCI~PTwjZmFmYWZhIiwiO1RleHQ8I2YxZjNmZiIsIjs9PCMxYTFkMjd$LCJmb250cz5bYEA8KC00fixgQDwoLTN$LGBAPCgtMn4sYEA8KC0xfixgQDxoZWFkbGluZX4sYEA8dGl0bGV$LGBAPHN1YiktMn4sYEA8c3ViKS0xfixgQDxib2R5LTJ$LGBAPGJvZHktMX4sYEA8YnV0dG9ufixgQDxjYXB0aW9ufixgQDxpbnB1dCIsInNpemU$bnVsbH1dLCJpY29uczxGaWxsZWQiLCI~bmVzcz5mYWxzZSwidmVyc2lvbj4xM30=
 */
 
 @use '@angular/material' as mat;
@@ -100,7 +100,8 @@ $dark-bg-alpha-12:    rgba(#1a1d27, 0.12);
 $mat-light-theme-background: (
   background:               $light-background,
   status-bar:               $light-bg-darker-20,
-  app-bar:                  $light-bg-darker-5,
+  //app-bar:                  $light-bg-darker-5,
+  app-bar:                  $light-bg-darker-10,
   hover:                    $dark-bg-alpha-4,
   card:                     $light-bg-lighter-5,
   dialog:                   $light-bg-lighter-5,
@@ -174,20 +175,20 @@ $theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
 body {
   --accent-color: #9d81d0;
   --accent-lighter-color: #d1bafb;
-  --accent-darker-color: #9571e2;
+  --accent-darker-color: #6748a7;
   --text-accent-color: #{$dark-primary-text};
   --text-accent-lighter-color: #{$dark-primary-text};
-  --text-accent-darker-color: #{$dark-primary-text};
+  --text-accent-darker-color: #{$light-primary-text};
 }   
 $mat-accent: (
   main: #9d81d0,
   lighter: #d1bafb,
-  darker: #9571e2,
+  darker: #6748a7,
   200: #9d81d0, // For slide toggle,
   contrast : (
     main: $dark-primary-text,
     lighter: $dark-primary-text,
-    darker: $dark-primary-text,
+    darker: $light-primary-text,
   )
 );
 $theme-accent: mat.define-palette($mat-accent, main, lighter, darker);

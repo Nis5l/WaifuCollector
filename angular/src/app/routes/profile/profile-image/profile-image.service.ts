@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, of as observableOf } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import type { Id } from '../../../types';
+import { HttpService } from '../../../http-service';
 
 @Injectable()
 export class ProfileImageService {
-	public getImageUrl(id: Id): Observable<string> {
-		return observableOf("/assets/clown.jpg");
+	constructor(private readonly httpService: HttpService) {}
+
+	public getImageUrl(id: Id): string {
+		return this.httpService.apiUrl(`/user/${id}/profile-image`);
+	}
+
+	public uploadImage(image: File): Observable<void> {
+		return this.httpService.putFile("/user/profile-image", image);
 	}
 }

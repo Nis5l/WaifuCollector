@@ -2,8 +2,6 @@ use figment::{Figment, providers::{Format, Json, Serialized}};
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct Config {
-    pub debug: bool,
-
     port: i32,
     address: String,
 
@@ -57,6 +55,8 @@ pub struct Config {
     pub achievements_image_base: String,
     pub badges_image_base: String,
 
+    pub user_fs_base: String,
+
     pub log_file: String,
 
     pub email: String,
@@ -69,8 +69,6 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            debug: false,
-
             port: 80,
             address: String::from("0.0.0.0"),
 
@@ -122,6 +120,8 @@ impl Default for Config {
             effect_image_base: String::from("effect"),
             achievements_image_base: String::from("achievements"),
             badges_image_base: String::from("badges"),
+
+            user_fs_base: String::from("static/user"),
 
             log_file: String::from("./log-file.log"),
 

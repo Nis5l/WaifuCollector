@@ -22,9 +22,6 @@ mod trade;
 mod admin;
 mod collector;
 
-//DONE:
-// user
-
 #[get("/")]
 fn index() -> &'static str {
     println!("index");
@@ -97,7 +94,8 @@ async fn rocket() -> _ {
            user::info::stats::user_stats_collector_route,
            user::inventory::inventory_route,
            user::flex::flex_route,
-           user::avatar::user_avatar,
+           user::profile_image::profile_image_set_route,
+           user::profile_image::profile_image_get_route,
 
            notifications::notifications_route,
            notifications::notifications_delete_route,

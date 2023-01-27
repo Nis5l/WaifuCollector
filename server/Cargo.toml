@@ -25,5 +25,6 @@ sqlx = { version = "0.5", features = [ "runtime-tokio-rustls", "mysql", "chrono"
 chrono = { version = "0.4.19", features = ["serde"] }
 rand = "0.8.4"
 lettre = "0.10.0-rc.4"
+#rocket-multipart-form-data = "0.10.5"
 #rocket_cors = { git = "https://github.com/lawliet89/rocket_cors", branch = "master" }
 #when rocket_db_pools is out, switch

@@ -1,15 +1,14 @@
-use rocket::http::{ContentType};
+use rocket::http::ContentType;
 use rocket::fs::NamedFile;
 use rocketjson::error::{ApiErrors, self};
 
-
 #[derive(Debug)]
-pub struct AvatarResponse {
+pub struct ProfileImageGetResponse {
     pub response: Result<NamedFile, ApiErrors>,
     pub status: Option<rocket::http::Status>
 }
 
-impl AvatarResponse {
+impl ProfileImageGetResponse {
     pub fn ok(status: rocket::http::Status, image: NamedFile) -> Self {
         Self {
             response: Ok(image),
@@ -31,7 +30,7 @@ impl AvatarResponse {
     }
 }
 
-impl<'r> rocket::response::Responder<'r, 'static> for AvatarResponse {
+impl<'r> rocket::response::Responder<'r, 'static> for ProfileImageGetResponse {
     fn respond_to(self, req: &'r rocket::request::Request<'_>) -> rocket::response::Result<'static> {
         let status = self.get_status();
 

@@ -28,6 +28,14 @@ export class AuthService {
 		this.loggedInSubject.next(authData);
 	}
 
+	public setAccessToken(accessToken: string): void {
+		const data = this.loggedInSubject.getValue();
+		if(data == null) throw new Error("AuthData not set");
+
+		localStorage.setItem("access-token", accessToken);
+		this.loggedInSubject.next({ ...data, accessToken });
+	}
+
 	public loggedIn(): Observable<boolean> {
 		return this.loggedInSubject.asObservable().pipe(map(id => id != null));
 	}

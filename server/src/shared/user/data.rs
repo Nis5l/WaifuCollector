@@ -66,7 +66,7 @@ macro_rules! verify_user {
             let vd = rocketjson::rjtry!(crate::shared::user::sql::get_verify_data($sql, $user_id).await);
 
             match vd {
-                None => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::NotFound, format!("User {} not found", $user_id)),
+                None => return rocketjson::ApiResponseErr::api_err(rocket::http::Status::NotFound, format!("User with id {} not found", $user_id)),
                 Some(vd) => {
                     if ($is_verified) {
                         match rocketjson::rjtry!(crate::shared::user::data::UserVerified::from_db(&vd.email, vd.verified)) {

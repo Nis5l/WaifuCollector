@@ -65,7 +65,7 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
         rjtry!(sql::delete_refresh_token(&sql, refresh_token).await);
         rjtry!(sql::insert_refresh_token(&sql, &token.id, &new_refresh_token).await);
 
-        let refresh_token_cookie: Cookie = build_refresh_token_cookie(new_refresh_token.clone(), config.refresh_token_duration.into(), Option::Some(config.debug));
+        let refresh_token_cookie: Cookie = build_refresh_token_cookie(new_refresh_token.clone(), config.refresh_token_duration.into());
         cookies.add(refresh_token_cookie);
     }
 

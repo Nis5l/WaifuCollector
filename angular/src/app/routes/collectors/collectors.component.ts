@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 
 import type { Collector } from './collector';
 import { CollectorsService } from './collectors.service';
@@ -11,7 +11,7 @@ import { LoadingService } from '../../loading';
 	styleUrls: [ './collectors.component.scss' ]
 })
 export class CollectorsComponent implements OnInit {
-	private readonly collectorsSubject: BehaviorSubject<Collector[] | null> = new BehaviorSubject<Collector[] | null>(null);
+	private readonly collectorsSubject: ReplaySubject<Collector[]> = new ReplaySubject<Collector[]>(1);
 	public readonly collectors$: Observable<Collector[] | null>;
 
 	constructor(private readonly collectorsService: CollectorsService, private readonly loadingService: LoadingService) {
