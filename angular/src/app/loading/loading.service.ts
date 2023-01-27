@@ -14,16 +14,18 @@ export class LoadingService {
 
 	public setLoading(b: boolean): void {
 		if(b === false && this.observables.size !== 0) return;
-		this.loadingSubject.next(b);
+		setTimeout(() => {
+			this.loadingSubject.next(b);
+		});
 	}
 
 	public waitFor<T>(o: Observable<T>): Observable<T> {
-		this.loadingSubject.next(true);
+		this.setLoading(true);
 		this.observables.add(o);
 		return o.pipe(
 			tap(() => {
 				this.observables.delete(o);
-				if(this.observables.size === 0) this.loadingSubject.next(false);
+				this.setLoading(false);
 			})
 		);
 	}
