@@ -21,6 +21,7 @@ mod friend;
 mod trade;
 mod admin;
 mod collector;
+mod scripts;
 
 #[get("/")]
 fn index() -> &'static str {
