@@ -27,6 +27,7 @@ pub struct Config {
     pub password_len_max: u32,
 
     pub users_page_amount: u32,
+    pub collectors_page_amount: u32,
     pub inventory_page_amount: u32,
     pub flex_cards_amount: u32,
 
@@ -96,6 +97,7 @@ impl Default for Config {
             password_len_max: 30,
 
             users_page_amount: 5,
+            collectors_page_amount: 5,
             inventory_page_amount: 20,
             flex_cards_amount: 9,
 

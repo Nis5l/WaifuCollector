@@ -1,19 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
- import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
-
 import { LoadingService } from './loading.service';
 import { LoadingComponent } from './loading.component';
-
-const MATERIAL_MODULES = [
-	MatProgressSpinnerModule,
-];
+import { LoadingSpinnerModule } from './loading-spinner';
 
 @NgModule({
 	imports: [
 		CommonModule,
-		...MATERIAL_MODULES
+
+		LoadingSpinnerModule,
 	],
 	providers: [ LoadingService ],
 	declarations: [ LoadingComponent ],

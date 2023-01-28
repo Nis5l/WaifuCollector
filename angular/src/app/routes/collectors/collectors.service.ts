@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { HttpService } from '../../http-service';
@@ -8,7 +9,9 @@ import type { Collector } from './collector';
 export class CollectorsService {
 	constructor(private readonly httpService: HttpService) {}
 
-	public getCollectors(): Observable<Collector[]> {
-		return this.httpService.get("/collector/list");
+	public getCollectors(search: string, page: number): Observable<Collector[]> {
+		const params = new HttpParams().set('search', search).set('page', page);
+
+		return this.httpService.get("/collector", params);
 	}
 }

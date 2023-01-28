@@ -127,7 +127,7 @@ async fn rocket() -> _ {
            collector::create::create_collector_route,
            collector::favorite::add::collector_favorite_add_route,
            collector::favorite::remove::collector_favorite_remove_route,
-           collector::list::get_all_collectors,
+           collector::index::collector_index_route,
         ])
         .mount(format!("/{}", &config.card_image_base), FileServer::from(relative!("static/card")))
         .mount(format!("/{}", &config.frame_image_base), FileServer::from(relative!("static/frame")))

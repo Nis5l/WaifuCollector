@@ -1,1 +1,11 @@
-<cc-collector *ngFor="let collector of (collectors$ | async)" [collector]="collector"></cc-collector>
+<div>
+	<form class="collector-form" [formGroup]="formGroup">
+		<mat-form-field>
+			<input matInput type="text" formControlName="search" placeholder="Search" />
+		</mat-form-field>
+	</form>
+	<cc-collector *ngFor="let collector of (collectors$ | async)" [collector]="collector"></cc-collector>
+	<div class="loading" *ngIf="loading$ | async">
+		<cc-loading-spinner></cc-loading-spinner>
+	</div>
+</div>

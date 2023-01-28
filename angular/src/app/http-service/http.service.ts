@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError as observableThrowError, tap, switchMap } from 'rxjs';
 
 import { AuthService } from '../auth-service';
@@ -8,6 +8,10 @@ import type { RefreshResponse } from './types';
 
 interface Headers {
 	[key: string]: string
+}
+
+interface HttpOptions {
+	withCredentials?: boolean,
 }
 
 @Injectable()
@@ -36,13 +40,13 @@ export class HttpService {
 		return this.request(req);
 	}
 
-	public get<TRes>(url: string): Observable<TRes> {
-		const req = () => this.httpClient.get<TRes>(this.apiUrl(url), { headers: this.getHeaders() } );
+	public get<TRes>(url: string, params?: HttpParams): Observable<TRes> {
+		const req = () => this.httpClient.get<TRes>(this.apiUrl(url), { params, headers: this.getHeaders() } );
 		return this.request(req);
 	}
 
-	public post<TBody, TRes>(url: string, body: TBody): Observable<TRes> {
-		const req = () => this.httpClient.post<TRes>(this.apiUrl(url), body, { headers: this.getHeaders() })
+	public post<TBody, TRes>(url: string, body: TBody, options?: HttpOptions): Observable<TRes> {
+		const req = () => this.httpClient.post<TRes>(this.apiUrl(url), body, { ...options, headers: this.getHeaders() })
 		return this.request(req);
 	}
 
