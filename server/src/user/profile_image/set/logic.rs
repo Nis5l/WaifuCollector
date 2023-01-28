@@ -21,7 +21,7 @@ pub async fn profile_image_set_route(mut data: Form<ProfileImageSetRequest<'_>>,
          return ApiResponseErr::api_err(Status::InternalServerError, String::from("fs error"))
     }
 
-    if let Err(_) = data.file.persist_to(path.join("profile-image")).await {
+    if let Err(_) = data.file.copy_to(path.join("profile-image")).await {
          return ApiResponseErr::api_err(Status::InternalServerError, String::from("error saving file"))
     }
 
