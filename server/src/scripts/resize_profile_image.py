@@ -1,7 +1,7 @@
 import cv2
 
 target_size = 250
-target_type = ".png"
+target_type = ".jpg"
 
 
 def resize(file):

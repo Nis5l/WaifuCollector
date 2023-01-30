@@ -35,7 +35,7 @@ impl<'r> rocket::response::Responder<'r, 'static> for ProfileImageGetResponse {
         let status = self.get_status();
 
         let content_type = match self.response {
-            Ok(_) => ContentType::new("image", "png"),
+            Ok(_) => ContentType::new("image", "jpeg"),
             Err(_) => ContentType::JSON
         };
 
