@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -14,7 +14,7 @@ import type { AdmissionConfig } from '../admission-service';
 	styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent {
-	public readonly formGroup: FormGroup;
+	public readonly formGroup: UntypedFormGroup;
 	public readonly config: AdmissionConfig;
 
 	private readonly errorSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
@@ -22,13 +22,13 @@ export class LoginComponent {
 
 	constructor(private readonly loginService: LoginService, private readonly router: Router, private readonly admissionService: AdmissionService) {
 		this.config = this.admissionService.getConfig();
-		this.formGroup = new FormGroup({
-			username: new FormControl("", [
+		this.formGroup = new UntypedFormGroup({
+			username: new UntypedFormControl("", [
 				Validators.required,
 				Validators.minLength(this.config.username.minLength),
 				Validators.maxLength(this.config.username.maxLength)
 			]),
-			password: new FormControl("", [
+			password: new UntypedFormControl("", [
 				Validators.required,
 				Validators.minLength(this.config.password.minLength),
 				Validators.maxLength(this.config.password.maxLength)

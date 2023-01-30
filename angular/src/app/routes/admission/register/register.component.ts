@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -15,7 +15,7 @@ import type { AdmissionConfig } from '../admission-service';
 	styleUrls: [ './register.component.scss' ],
 })
 export class RegisterComponent {
-	public readonly formGroup: FormGroup;
+	public readonly formGroup: UntypedFormGroup;
 	public readonly config: AdmissionConfig;
 
 	private readonly errorSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
@@ -29,22 +29,22 @@ export class RegisterComponent {
 
 	constructor(private readonly registerService: RegisterService, private readonly router: Router, private readonly admissionService: AdmissionService) {
 		this.config = this.admissionService.getConfig();
-		this.formGroup = new FormGroup({
-			username: new FormControl("", [
+		this.formGroup = new UntypedFormGroup({
+			username: new UntypedFormControl("", [
 				Validators.required,
 				Validators.minLength(this.config.username.minLength),
 				Validators.maxLength(this.config.username.maxLength)
 			]),
-			email: new FormControl("", [
+			email: new UntypedFormControl("", [
 				Validators.required,
 				Validators.email
 			]),
-			password: new FormControl("", [
+			password: new UntypedFormControl("", [
 				Validators.required,
 				Validators.minLength(this.config.password.minLength),
 				Validators.maxLength(this.config.password.maxLength)
 			]),
-			passwordRepeat: new FormControl("", [
+			passwordRepeat: new UntypedFormControl("", [
 				Validators.required,
 			]),
 		}, { validators: this.passwordValidator });

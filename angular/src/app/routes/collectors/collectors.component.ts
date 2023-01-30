@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { ReplaySubject, Observable, debounceTime, distinctUntilChanged, BehaviorSubject, startWith } from 'rxjs';
 
 import type { Collector } from './collector';
@@ -14,8 +14,8 @@ export class CollectorsComponent {
 	private readonly collectorsSubject: ReplaySubject<Collector[]> = new ReplaySubject<Collector[]>(1);
 	public readonly collectors$: Observable<Collector[] | null>;
 
-	public readonly formGroup: FormGroup;
-	private readonly searchForm: FormControl;
+	public readonly formGroup: UntypedFormGroup;
+	private readonly searchForm: UntypedFormControl;
 
 	public readonly loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	public readonly loading$: Observable<boolean>;
@@ -24,7 +24,7 @@ export class CollectorsComponent {
 		this.collectors$ = this.collectorsSubject.asObservable();
 		this.loading$ = this.loadingSubject.asObservable();
 
-		this.searchForm = new FormControl();
+		this.searchForm = new UntypedFormControl();
 		this.searchForm.valueChanges.pipe(
 			startWith(""),
 			debounceTime(500),
@@ -34,7 +34,7 @@ export class CollectorsComponent {
 			this.loadCollectors(search, 0);
 		});
 
-		this.formGroup = new FormGroup({
+		this.formGroup = new UntypedFormGroup({
 			search: this.searchForm
 		});
 	}
