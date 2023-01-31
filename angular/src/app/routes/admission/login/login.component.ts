@@ -14,7 +14,7 @@ import type { AdmissionConfig } from '../admission-service';
 	styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent {
-	public readonly formGroup: FormGroup;
+	public readonly formGroup;
 	public readonly config: AdmissionConfig;
 
 	private readonly errorSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
@@ -23,23 +23,29 @@ export class LoginComponent {
 	constructor(private readonly loginService: LoginService, private readonly router: Router, private readonly admissionService: AdmissionService) {
 		this.config = this.admissionService.getConfig();
 		this.formGroup = new FormGroup({
-			username: new FormControl("", [
-				Validators.required,
-				Validators.minLength(this.config.username.minLength),
-				Validators.maxLength(this.config.username.maxLength)
-			]),
-			password: new FormControl("", [
-				Validators.required,
-				Validators.minLength(this.config.password.minLength),
-				Validators.maxLength(this.config.password.maxLength)
-			]),
+			username: new FormControl("", {
+				nonNullable: true,
+				validators: [
+					Validators.required,
+					Validators.minLength(this.config.username.minLength),
+					Validators.maxLength(this.config.username.maxLength)
+				]
+			}),
+			password: new FormControl("", {
+				nonNullable: true,
+				validators: [
+					Validators.required,
+					Validators.minLength(this.config.password.minLength),
+					Validators.maxLength(this.config.password.maxLength)
+				]
+			}),
 		});
 
 		this.error$ = this.errorSubject.asObservable();
 	}
 
 	public login(): void {
-		this.loginService.login(this.formGroup.value).subscribe({
+		this.loginService.login(this.formGroup.getRawValue()).subscribe({
 			next: () => {
 				this.errorSubject.next(null);
 				this.router.navigate(["collectors"]);

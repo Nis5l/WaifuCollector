@@ -18,5 +18,13 @@
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+
+		.error {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			width: 100%;
+		}
 	}
 }
