@@ -5,7 +5,9 @@
 		</mat-form-field>
 		<button class="new-collector" mat-raised-button (click)="newCollector()">New</button>
 	</form>
-	<cc-collector *ngFor="let collector of (collectors$ | async)" [collector]="collector"></cc-collector>
+	<div class="collectors">
+		<cc-collector *ngFor="let collector of (collectors$ | async)" [collector]="collector"></cc-collector>
+	</div>
 	<div class="loading" *ngIf="loading$ | async">
 		<cc-loading-spinner></cc-loading-spinner>
 	</div>

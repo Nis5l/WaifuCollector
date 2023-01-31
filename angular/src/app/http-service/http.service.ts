@@ -65,9 +65,13 @@ export class HttpService {
 			catchError((error: unknown) => {
 				if(!(error instanceof HttpErrorResponse)) return observableThrowError(() => error);
 				if(error.status === 401) {
+					//TODO: if multiple requests are made at the same time and the auth token is expired, they all try to refresh, the first one refreshes and gets the new refresh token.
+					//For the other requests then refresh using a invalid refresh token
+					//
+					//solution? ensure that only one refresh request is made, if one is already sent, "subscribe" to that one instead of sending a new one
 					return this.httpClient.get<RefreshResponse>(this.apiUrl("/refresh"), { withCredentials: true }).pipe(
 						catchError((err: unknown) => {
-							this.router.navigate(["login"]);
+							this.router.navigate(["logout"]);
 							throw err;
 						}),
 						tap(res => this.authService.setAccessToken(res.accessToken)),

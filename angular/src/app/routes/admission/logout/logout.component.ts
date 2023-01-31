@@ -13,9 +13,13 @@ export class LogoutComponent implements OnInit {
 	constructor(private readonly authService: AuthService, private readonly httpService: HttpService, private readonly router: Router) {}
 
 	public ngOnInit(): void {
-		this.httpService.post("/logout", {}, { withCredentials: true }).subscribe(() => {
+		const logout = () => {
 			this.authService.logout();
 			this.router.navigate(["login"]);
+		};
+		this.httpService.post("/logout", {}, { withCredentials: true }).subscribe({
+			error: logout,
+			next: logout
 		});
 	}
 }
