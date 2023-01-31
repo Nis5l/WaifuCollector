@@ -1,6 +1,7 @@
 <mat-card class="collector">
 	<cc-collector-image [editable]="false" [collectorId]="collector.id"></cc-collector-image>
 	<div>
+		<cc-collector-favorite [collectorId]="collector.id"></cc-collector-favorite>
 		<mat-card-title>{{collector.name}}</mat-card-title>
 		<mat-card-subtitle>...description...</mat-card-subtitle>
 		<mat-card-subtitle>...stats...</mat-card-subtitle>

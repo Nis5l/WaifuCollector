@@ -1,0 +1,7 @@
+<button mat-icon-button color="accent" aria-label="Favorite"
+	*ngIf="{favorite: collectorFavorite$ | async} as data"
+	(click)="setFavorite(!data.favorite)"
+	matTooltip="Favor"
+	matTooltipShowDelay="500">
+	<mat-icon>{{data.favorite ? "star" : "star_outline"}}</mat-icon>
+</button>
