@@ -6,15 +6,15 @@ use crate::config::Config;
 use crate::sql::Sql;
 use crate::shared::Id;
 use crate::shared::user;
-use super::data::ProfileImageGetResponse;
+use crate::shared::image::ImageResponse;
 
 #[get("/user/<user_id>/profile-image")]
-pub async fn profile_image_get_route(user_id: Id, sql: &State<Sql>, config: &State<Config>) -> ProfileImageGetResponse {
+pub async fn profile_image_get_route(user_id: Id, sql: &State<Sql>, config: &State<Config>) -> ImageResponse {
     //NOTE: check user_id to avoid path traversal attacks or similar
     match user::sql::username_from_user_id(sql, &user_id).await {
         Ok(Some(_)) => (),
-        Ok(None) => return ProfileImageGetResponse::api_err(Status::NotFound, format!("User with id {} not found", user_id)),
-        Err(_) => return ProfileImageGetResponse::api_err(Status::InternalServerError, String::from("database error"))
+        Ok(None) => return ImageResponse::api_err(Status::NotFound, format!("user with id {} not found", user_id)),
+        Err(_) => return ImageResponse::api_err(Status::InternalServerError, String::from("database error"))
     }
 
     let path = Path::new(&config.user_fs_base);
@@ -23,9 +23,9 @@ pub async fn profile_image_get_route(user_id: Id, sql: &State<Sql>, config: &Sta
         Ok(file) => file,
         Err(_) => match NamedFile::open(path.join("profile-image-default")).await {
             Ok(file) => file,
-            Err(_) => return ProfileImageGetResponse::api_err(Status::InternalServerError, String::from("default image not found"))
+            Err(_) => return ImageResponse::api_err(Status::InternalServerError, String::from("default image not found"))
         }
     };
 
-    ProfileImageGetResponse::ok(Status::Ok, file)
+    ImageResponse::ok(Status::Ok, file)
 }

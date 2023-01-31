@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { CollectorComponent } from './collector.component';
 import { LoadingSpinnerModule } from '../../../loading';
+import { CollectorImageModule } from './collector-image';
 
 const MATERIAL_MODULES = [
 	MatCardModule
@@ -17,6 +18,7 @@ const MATERIAL_MODULES = [
 		...MATERIAL_MODULES,
 
 		LoadingSpinnerModule,
+		CollectorImageModule,
 	],
 	declarations: [ CollectorComponent ],
 	exports: [ CollectorComponent ],

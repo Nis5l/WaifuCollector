@@ -1,6 +1,6 @@
 <div class="profile-image-wrapper">
 <img [src]="profileImage$ | async" alt="Profile image" class="profile-image"/>
-<input #imageInput hidden="true" type="file" (change)="uploadImage($event.target)" accept="image/*"/>
+<input #imageInput hidden="true" type="file" (change)="uploadImage($event.target)" accept="image/jpeg"/>
 <button *ngIf="isEditable()" mat-fab class="edit-button" (click)="imageInput.click()">
 	<mat-icon>edit</mat-icon>
 </button>

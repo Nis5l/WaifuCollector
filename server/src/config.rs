@@ -57,6 +57,7 @@ pub struct Config {
     pub badges_image_base: String,
 
     pub user_fs_base: String,
+    pub collector_fs_base: String,
 
     pub log_file: String,
 
@@ -124,6 +125,7 @@ impl Default for Config {
             badges_image_base: String::from("badges"),
 
             user_fs_base: String::from("static/user"),
+            collector_fs_base: String::from("static/collector"),
 
             log_file: String::from("./log-file.log"),
 

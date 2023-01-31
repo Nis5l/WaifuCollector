@@ -1,0 +1,7 @@
+<div class="collector-image-wrapper">
+<img [src]="collectorImage$ | async" alt="Collector image" class="collector-image"/>
+<input #imageInput hidden="true" type="file" (change)="uploadImage($event.target)" accept="image/jpeg"/>
+<button *ngIf="editable" mat-fab class="edit-button" (click)="imageInput.click()">
+	<mat-icon>edit</mat-icon>
+</button>
+</div>

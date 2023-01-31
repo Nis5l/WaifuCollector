@@ -1,5 +1,8 @@
-<mat-card>
-	<mat-card-header>
+<mat-card class="collector">
+	<cc-collector-image [editable]="false" [collectorId]="collector.id"></cc-collector-image>
+	<div>
 		<mat-card-title>{{collector.name}}</mat-card-title>
-	</mat-card-header>
+		<mat-card-subtitle>...description...</mat-card-subtitle>
+		<mat-card-subtitle>...stats...</mat-card-subtitle>
+	</div>
 </mat-card>

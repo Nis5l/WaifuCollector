@@ -11,6 +11,7 @@ pub mod email;
 pub mod crypto;
 pub mod collector;
 pub mod id;
+pub mod image;
 
 pub use id::Id;
 

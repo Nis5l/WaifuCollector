@@ -3,12 +3,12 @@ use rocket::fs::NamedFile;
 use rocketjson::error::{ApiErrors, self};
 
 #[derive(Debug)]
-pub struct ProfileImageGetResponse {
+pub struct ImageResponse {
     pub response: Result<NamedFile, ApiErrors>,
     pub status: Option<rocket::http::Status>
 }
 
-impl ProfileImageGetResponse {
+impl ImageResponse {
     pub fn ok(status: rocket::http::Status, image: NamedFile) -> Self {
         Self {
             response: Ok(image),
@@ -30,7 +30,7 @@ impl ProfileImageGetResponse {
     }
 }
 
-impl<'r> rocket::response::Responder<'r, 'static> for ProfileImageGetResponse {
+impl<'r> rocket::response::Responder<'r, 'static> for ImageResponse {
     fn respond_to(self, req: &'r rocket::request::Request<'_>) -> rocket::response::Result<'static> {
         let status = self.get_status();
 

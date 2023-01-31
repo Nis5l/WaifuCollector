@@ -47,6 +47,8 @@ export class ProfileImageComponent {
 		const file = target.files?.item(0);
 		if(file == null) throw new Error("no file");
 
-		this.loadingService.waitFor(this.profileImageService.uploadImage(file)).subscribe(() => this.profileImageSubject.next(`${this.profileImageService.getImageUrl(this.userId)}?${new Date().getTime()}`));
+		this.loadingService.waitFor(this.profileImageService.uploadImage(file)).subscribe(
+			() => this.profileImageSubject.next(`${this.profileImageService.getImageUrl(this.userId)}?${new Date().getTime()}`)
+		);
 	}
 }
