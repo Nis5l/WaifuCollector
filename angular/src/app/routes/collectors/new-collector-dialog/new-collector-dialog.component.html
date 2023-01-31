@@ -1,0 +1,12 @@
+<div class="new-collector-wrapper">
+	<div class="new-collector-image">
+		<cc-image-circle [image]="newCollectorDialogService.getImageUrl()" [editable]="true" (onImageChange)="imageChange($event)"></cc-image-circle>
+	</div>
+	<form [formGroup]="formGroup" (submit)="onCreate()">
+		<mat-form-field>
+			<input matInput type="text" formControlName="name" placeholder="Name" />
+			<mat-error>Name has to be {{config.name.minLength}}-{{config.name.maxLength}} characters</mat-error>
+		</mat-form-field>
+		<button mat-raised-button type="submit" [disabled]="!formGroup.valid">Create</button>
+	</form>
+</div>

@@ -12,8 +12,8 @@ use crate::shared::image::ImageResponse;
 pub async fn collector_image_get_route(collector_id: Id, sql: &State<Sql>, config: &State<Config>) -> ImageResponse {
     //NOTE: check collector_id to avoid path traversal attacks or similar
     match collector::sql::collector_exists(sql, &collector_id).await {
-        Ok(True) => (),
-        Ok(False) => return ImageResponse::api_err(Status::NotFound, format!("collector with id {} not found", collector_id)),
+        Ok(true) => (),
+        Ok(false) => return ImageResponse::api_err(Status::NotFound, format!("collector with id {} not found", collector_id)),
         Err(_) => return ImageResponse::api_err(Status::InternalServerError, String::from("database error"))
     }
 

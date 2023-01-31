@@ -1,0 +1,22 @@
+.new-collector-wrapper {
+	width: 50vw;
+	min-width: 300px;
+	max-width: 1000px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 30px;
+
+	.new-collector-image {
+		width: 200px;
+		height: 200px;
+	}
+
+	form {
+		width: 250px;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+}

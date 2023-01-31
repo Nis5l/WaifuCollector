@@ -8,6 +8,7 @@ import { ProfileImageService } from './profile-image.service';
 import { LoadingModule } from '../../../loading';
 import { HttpModule } from '../../../http-service';
 import { AuthModule } from '../../../auth-service';
+import { ImageCircleModule } from '../../../components/image-circle';
 
 const MATERIAL_MODULES = [
 	MatButtonModule,
@@ -22,6 +23,7 @@ const MATERIAL_MODULES = [
 
 		AuthModule,
 		LoadingModule,
+		ImageCircleModule,
 		HttpModule,
 	],
 	providers: [ ProfileImageService ],

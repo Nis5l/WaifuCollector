@@ -41,12 +41,7 @@ export class ProfileImageComponent {
 		return this.authService.getUserId() == this.userId && this.editable;
 	}
 
-	public uploadImage(target: EventTarget | null) {
-		if(target == null || !(target instanceof HTMLInputElement)) throw new Error("target has to be input");
-
-		const file = target.files?.item(0);
-		if(file == null) throw new Error("no file");
-
+	public uploadImage(file: File) {
 		this.loadingService.waitFor(this.profileImageService.uploadImage(file)).subscribe(
 			() => this.profileImageSubject.next(`${this.profileImageService.getImageUrl(this.userId)}?${new Date().getTime()}`)
 		);

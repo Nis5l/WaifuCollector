@@ -13,6 +13,6 @@ export class ProfileImageService {
 	}
 
 	public uploadImage(image: File): Observable<void> {
-		return this.httpService.putFile("/user/profile-image", image);
+		return this.httpService.putFile<void>("/user/profile-image", image);
 	}
 }

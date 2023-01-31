@@ -30,13 +30,4 @@ export class CollectorImageComponent {
 	constructor(private readonly collectorImageService: CollectorImageService) {
 		this.collectorImage$ = this.collectorImageSubject.asObservable();
 	}
-
-	public uploadImage(target: EventTarget | null) {
-		if(target == null || !(target instanceof HTMLInputElement)) throw new Error("target has to be input");
-
-		const file = target.files?.item(0);
-		if(file == null) throw new Error("no file");
-
-		//TODO: first create collector, then set this image, probably pass this via eventemitter to editor and post from there
-	}
 }
