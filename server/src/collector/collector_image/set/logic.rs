@@ -12,7 +12,7 @@ use crate::shared::crypto::JwtToken;
 use crate::shared::collector;
 use crate::{verify_user, verify_collector};
 use super::data::{CollectorImageSetRequest, CollectorImageSetResponse};
-use crate::scripts::resize_profile_image;
+use crate::scripts::resize_image_square;
 
 #[put("/collector/<collector_id>/collector-image", data="<data>")]
 pub async fn collector_image_set_route(collector_id: Id,
@@ -40,7 +40,7 @@ pub async fn collector_image_set_route(collector_id: Id,
          return ApiResponseErr::api_err(Status::InternalServerError, String::from("error saving file"))
     }
 
-    resize_profile_image(path.join("collector-image"));
+    resize_image_square(path.join("collector-image"));
 
     ApiResponseErr::ok(Status::Ok, CollectorImageSetResponse {
         message: String::from("collector image set")

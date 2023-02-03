@@ -10,7 +10,7 @@ use crate::config::Config;
 use crate::shared::crypto::JwtToken;
 use crate::verify_user;
 use super::data::{ProfileImageSetResponse, ProfileImageSetRequest};
-use crate::scripts::resize_profile_image;
+use crate::scripts::resize_image_square;
 
 #[put("/user/profile-image", data="<data>")]
 pub async fn profile_image_set_route(mut data: Form<ProfileImageSetRequest<'_>>, sql: &State<Sql>, config: &State<Config>, token: JwtToken) -> ApiResponseErr<ProfileImageSetResponse> {
@@ -26,7 +26,7 @@ pub async fn profile_image_set_route(mut data: Form<ProfileImageSetRequest<'_>>,
          return ApiResponseErr::api_err(Status::InternalServerError, String::from("error saving file"))
     }
 
-    resize_profile_image(path.join("profile-image"));
+    resize_image_square(path.join("profile-image"));
 
     ApiResponseErr::ok(Status::Ok, ProfileImageSetResponse {
         message: String::from("profile image set")
