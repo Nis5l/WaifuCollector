@@ -1,21 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import { HttpService } from '../../../http-service';
 import { Id } from '../../../types';
-import type { NewCollectorConfig, CollectorCreateResponse, CollectorCreateRequest } from './types';
+import type { CreateConfigCollectorResponse, NewCollectorConfig, CollectorCreateResponse, CollectorCreateRequest } from './types';
 
 @Injectable()
 export class NewCollectorDialogService {
-	//TODO: get from server
-	private readonly config: NewCollectorConfig = {
+	private config: NewCollectorConfig = {
 		name: {
-			minLength: 4,
-			maxLength: 20
+			minLength: 0,
+			maxLength: 0
 		}
 	};
 
-	constructor(private readonly httpService: HttpService) {}
+	private loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+	constructor(private readonly httpService: HttpService) {
+		// Load config from server
+		this.loadingSubject.next(true);
+		this.httpService.get<CreateConfigCollectorResponse>("/collector/create-config").subscribe((res: CreateConfigCollectorResponse) => {
+			this.config.name.minLength = res.min_length;
+			this.config.name.maxLength = res.max_length;
+			this.loadingSubject.next(false);
+		});
+	}
+
+	public loading(): Observable<boolean>{
+		return this.loadingSubject.asObservable();
+	}
 
 	public getImageUrl(): string {
 		return this.httpService.apiUrl(`/collector/collector-image`);
