@@ -1,4 +1,5 @@
-<div class="new-collector-wrapper">
+<cc-loading-spinner *ngIf="loading$ | async"></cc-loading-spinner>
+<div *ngIf="!(loading$ | async)" class="new-collector-wrapper">
 	<div class="new-collector-image">
 		<cc-image-circle [image]="newCollectorDialogService.getImageUrl()" [editable]="true" (onImageChange)="imageChange($event)"></cc-image-circle>
 	</div>

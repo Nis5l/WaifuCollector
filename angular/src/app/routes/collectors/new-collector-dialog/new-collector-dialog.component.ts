@@ -17,11 +17,13 @@ import type { Id } from '../../../types';
 })
 export class NewCollectorDialogComponent {
 	private image: File | null = null;
-	public readonly formGroup;
-	public readonly config: NewCollectorConfig;
+	public formGroup;
+	public config: NewCollectorConfig;
 
 	private readonly errorSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 	public readonly error$: Observable<string | null>;
+
+	public loading$: Observable<boolean>;
 
 	constructor(
 		public readonly newCollectorDialogService: NewCollectorDialogService,
@@ -37,6 +39,17 @@ export class NewCollectorDialogComponent {
 				nonNullable: true,
 				validators: [ Validators.required, Validators.minLength(this.config.name.minLength), Validators.maxLength(this.config.name.maxLength) ]
 			})
+		});
+
+		this.loading$ = this.newCollectorDialogService.loading();
+		this.loading$.subscribe(() => {
+			this.config = this.newCollectorDialogService.getConfig();
+			this.formGroup = new FormGroup({
+				name: new FormControl("", {
+					nonNullable: true,
+					validators: [ Validators.required, Validators.minLength(this.config.name.minLength), Validators.maxLength(this.config.name.maxLength) ]
+				})
+			});
 		});
 	}
 

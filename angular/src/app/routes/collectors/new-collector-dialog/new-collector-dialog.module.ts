@@ -11,7 +11,7 @@ import { NewCollectorDialogService } from './new-collector-dialog.service';
 import { NewCollectorDialogComponent } from './new-collector-dialog.component';
 import { CollectorImageModule } from '../../collector';
 import { ImageCircleModule } from '../../../components/image-circle';
-import { LoadingModule } from '../../../loading';
+import { LoadingModule, LoadingSpinnerModule } from '../../../loading';
 import { NgVarModule } from '../../../directives';
 
 const MATERIAL_MODULES = [
@@ -30,6 +30,7 @@ const MATERIAL_MODULES = [
 
 		CollectorImageModule,
 		LoadingModule,
+		LoadingSpinnerModule,
 		ImageCircleModule,
 		NgVarModule,
 	],
