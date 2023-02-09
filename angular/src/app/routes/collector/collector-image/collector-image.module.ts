@@ -5,8 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { CollectorImageComponent } from './collector-image.component';
 import { CollectorImageService } from './collector-image.service';
-import { HttpModule } from '../../../../http-service';
-import { ImageCircleModule } from '../../../../components/image-circle';
+import { HttpModule } from '../../../http-service';
+import { ImageCircleModule } from '../../../components/image-circle';
 
 const MATERIAL_MODULES = [
 	MatButtonModule,

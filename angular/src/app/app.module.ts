@@ -14,6 +14,7 @@ import {
 	RegisterModule,
 	ProfileModule,
 	HomeModule,
+	CollectorModule,
 } from './routes';
 
 const MODULES = [
@@ -25,6 +26,7 @@ const MODULES = [
 	RegisterModule,
 
 	CollectorsModule,
+	CollectorModule,
 	ProfileModule,
 	HomeModule,
 ];

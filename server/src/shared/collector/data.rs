@@ -2,6 +2,7 @@ use serde::Serialize;
 use sqlx::FromRow;
 use crate::shared::Id;
 
+//TODO: creation date
 #[derive(Debug, Serialize, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Collector {

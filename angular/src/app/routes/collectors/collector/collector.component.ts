@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 import type { Collector } from './types';
 
@@ -17,5 +18,11 @@ export class CollectorComponent {
 	public get collector(): Collector {
 		if(this._collector == null) throw new Error("Collector not set");
 		return this._collector;
+	}
+
+	constructor(private readonly router: Router) {}
+
+	public collectorClick(): void {
+		this.router.navigate(["collector", this.collector.id]);
 	}
 }

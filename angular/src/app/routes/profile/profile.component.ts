@@ -20,8 +20,8 @@ export class ProfileComponent {
 		loadingService: LoadingService,
 		activatedRoute: ActivatedRoute
 	) {
-
 		loadingService.setLoading(true);
+		//TODO: pipe instead of subscribe
 		activatedRoute.params.subscribe(params => {
 			const userId = params["userId"] as unknown;
 			if(typeof userId !== "string") {

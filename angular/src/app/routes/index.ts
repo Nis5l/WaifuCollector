@@ -9,3 +9,4 @@ export {
 export { CollectorsComponent, CollectorsModule } from './collectors';
 export { ProfileModule, ProfileComponent } from './profile';
 export { HomeModule, HomeComponent } from './home';
+export { CollectorModule, CollectorComponent } from './collector';

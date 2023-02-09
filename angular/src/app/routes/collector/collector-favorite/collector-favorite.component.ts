@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 import { CollectorFavoriteService } from './collector-favorite.service';
-import type { Id } from '../../../../types';
+import type { Id } from '../../../types';
 import type { CollectorFavoriteResponse } from './types';
 
 @Component({

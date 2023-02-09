@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 import { CollectorImageService } from './collector-image.service';
-import type { Id } from '../../../../types';
+import type { Id } from '../../../types';
 
 @Component({
 	selector: "cc-collector-image",

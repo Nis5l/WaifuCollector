@@ -1,0 +1,33 @@
+.banner {
+	width: 100%;
+	height: 200px;
+	background: red;
+}
+
+.head {
+	height: 300px;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: 20px;
+	margin-top: 20px;
+	margin-left: 50px;
+
+	cc-collector-favorite {
+		//NOTE: not center otherwise
+		margin-top: 3px;
+
+		transform: scale(1.6);
+	}
+
+	.collector-image {
+		margin-top: -70px;
+		width: 150px;
+		height: 150px;
+	}
+
+	.name {
+		font-size: 30pt;
+		margin: 0;
+	}
+}

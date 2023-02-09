@@ -8,6 +8,7 @@ import {
 	RegisterComponent,
 	ProfileComponent,
 	HomeComponent,
+	CollectorComponent,
 } from './routes';
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
 	{ path: "register", component: RegisterComponent },
 
 	{ path: "collectors", component: CollectorsComponent },
+	{ path: "collector/:collectorId", component: CollectorComponent },
 	{ path: "home", component: HomeComponent },
 
 	{ path: "user/:userId", component: ProfileComponent },

@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { NewCollectorDialogService } from './new-collector-dialog.service';
 import { NewCollectorDialogComponent } from './new-collector-dialog.component';
-import { CollectorImageModule } from '../collector';
+import { CollectorImageModule } from '../../collector';
 import { ImageCircleModule } from '../../../components/image-circle';
 import { LoadingModule } from '../../../loading';
 import { NgVarModule } from '../../../directives';

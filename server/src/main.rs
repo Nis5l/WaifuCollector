@@ -130,6 +130,7 @@ async fn rocket() -> _ {
            collector::favorite::remove::collector_favorite_remove_route,
            collector::favorite::get::collector_favorite_get_route,
            collector::index::collector_index_route,
+           collector::get::collector_get_route,
            collector::collector_image::collector_image_default_route,
            collector::collector_image::collector_image_get_route,
            collector::collector_image::collector_image_set_route,
