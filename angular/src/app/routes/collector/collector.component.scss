@@ -1,13 +1,17 @@
+@import "../../../theme.scss";
+@import "../../../screen.scss";
+
 .banner {
 	width: 100%;
 	height: 200px;
 	background: red;
+	object-fit: cover;
 }
 
 .head {
-	height: 300px;
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	align-items: flex-start;
 	gap: 20px;
 	margin-top: 20px;
@@ -16,8 +20,11 @@
 	cc-collector-favorite {
 		//NOTE: not center otherwise
 		margin-top: 3px;
-
 		transform: scale(1.6);
+		@media (max-width: $breakpoint-md) {
+			margin-top: 0px;
+			transform: scale(1.2);
+		}
 	}
 
 	.collector-image {
@@ -26,8 +33,25 @@
 		height: 150px;
 	}
 
-	.name {
-		font-size: 30pt;
-		margin: 0;
+	.info {
+		margin-left: 5px;
+		margin-right: 80px;
+		.name-wrapper {
+			display: flex;
+			flex-direction: row;
+			gap: 20px;
+
+			.name {
+				font-size: 30pt;
+				@media (max-width: $breakpoint-md) {
+					font-size: 24pt;
+				}
+				margin: 0;
+			}
+		}
+	}
+
+	.description {
+		color: map-get(map-get($theme, foreground), hint-text);
 	}
 }

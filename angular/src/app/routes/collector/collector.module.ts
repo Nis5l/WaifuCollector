@@ -8,6 +8,7 @@ import { HttpModule } from '../../http-service';
 import { NgVarModule } from '../../directives';
 import { CollectorImageModule } from './collector-image';
 import { CollectorFavoriteModule } from './collector-favorite';
+import { CollectorBannerModule } from './collector-banner';
 
 @NgModule({
 	imports: [
@@ -17,6 +18,7 @@ import { CollectorFavoriteModule } from './collector-favorite';
 			
 		CollectorImageModule,
 		CollectorFavoriteModule,
+		CollectorBannerModule,
 		NgVarModule
 	],
 	providers: [ CollectorService ],

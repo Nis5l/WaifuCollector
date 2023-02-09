@@ -14,7 +14,7 @@ import type { Collector } from '../../types';
 export class CollectorComponent {
 	public readonly collector$: Observable<Collector | null>;
 	
-	constructor(collectorService: CollectorService, activatedRoute: ActivatedRoute, loadingService: LoadingService) {
+	constructor(public readonly collectorService: CollectorService, activatedRoute: ActivatedRoute, loadingService: LoadingService) {
 		loadingService.setLoading(true);
 		this.collector$ = activatedRoute.params.pipe(
 			switchMap(params => {

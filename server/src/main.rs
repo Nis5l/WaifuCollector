@@ -135,6 +135,8 @@ async fn rocket() -> _ {
            collector::collector_image::collector_image_default_route,
            collector::collector_image::collector_image_get_route,
            collector::collector_image::collector_image_set_route,
+           collector::banner::collector_banner_get_route,
+           collector::banner::collector_banner_set_route,
         ])
         .mount(format!("/{}", &config.card_image_base), FileServer::from(relative!("static/card")))
         .mount(format!("/{}", &config.frame_image_base), FileServer::from(relative!("static/frame")))

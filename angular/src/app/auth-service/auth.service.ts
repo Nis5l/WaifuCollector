@@ -23,6 +23,7 @@ export class AuthService {
 	}
 
 	public login(authData: AuthData): void {
+		authData.userId = authData.userId.toLowerCase();
 		localStorage.setItem("access-token", authData.accessToken);
 		localStorage.setItem("user-id", authData.userId);
 		this.loggedInSubject.next(authData);

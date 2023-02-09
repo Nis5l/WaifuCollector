@@ -12,7 +12,6 @@ export class UserService {
 	public getUsername(): Observable<string | null> {
 		const userId = this.authService.getUserId();
 		if(userId == null) return observableOf(null);
-		console.log(userId);
 		return this.httpService.get<UsernameResponse>(`/user/${userId}/username`).pipe(
 			map((res: UsernameResponse): string => res.username)
 		);
