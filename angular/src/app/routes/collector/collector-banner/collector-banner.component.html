@@ -1,5 +1,5 @@
 <div class="banner-wrapper">
-	<img [src]="collectorImage$ | async" class="banner"/>
+	<img [src]="collectorBanner$ | async" class="banner"/>
 	<input #imageInput hidden="true" type="file" (change)="uploadImage($event.target)" accept="image/jpeg"/>
 	<button *ngIf="editable$ | async" mat-fab class="edit-button" (click)="imageInput.click()">
 		<mat-icon>edit</mat-icon>

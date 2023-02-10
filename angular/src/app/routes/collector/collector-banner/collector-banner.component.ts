@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, filter, map } from 'rxjs';
 import { CollectorBannerService } from './collector-banner.service';
 import type { CollectorBanner } from './types';
 import { AuthService } from '../../../auth-service';
+import { LoadingService } from '../../../loading';
 
 @Component({
 	selector: 'cc-collector-banner',
@@ -12,7 +13,7 @@ import { AuthService } from '../../../auth-service';
 })
 export class CollectorBannerComponent {
 	private collectorBannerSubject: BehaviorSubject<CollectorBanner | null> = new BehaviorSubject<CollectorBanner | null>(null);
-	public readonly collectorImage$: Observable<string>;
+	public readonly collectorBanner$: Observable<string>;
 	public readonly editable$: Observable<boolean>;
 
 	@Input()
@@ -25,10 +26,14 @@ export class CollectorBannerComponent {
 		return collectorBanner;
 	}
 
-	constructor(private readonly collectorBannerService: CollectorBannerService, private readonly authService: AuthService) {
-		this.collectorImage$ = this.collectorBannerSubject.asObservable().pipe(
+	constructor(
+		private readonly collectorBannerService: CollectorBannerService,
+		private readonly authService: AuthService,
+		private readonly loadingService: LoadingService
+	) {
+		this.collectorBanner$ = this.collectorBannerSubject.asObservable().pipe(
 			filter((collectorBanner): collectorBanner is CollectorBanner => collectorBanner != null),
-			map(collectorBanner => this.collectorBannerService.getBannerUrl(collectorBanner.id))
+			map(collectorBanner => `${this.collectorBannerService.getBannerUrl(collectorBanner.id)}?${new Date().getTime()}`)
 		);
 
 		this.editable$ = this.collectorBannerSubject.asObservable().pipe(
@@ -43,5 +48,8 @@ export class CollectorBannerComponent {
 		const file = target.files?.item(0);
 		if(file == null) throw new Error("no file");
 
+		this.loadingService.waitFor(this.collectorBannerService.uploadBanner(this.collector.id, file)).subscribe(
+			() => this.collectorBannerSubject.next(this.collectorBannerSubject.getValue())
+		);
 	}
 }
