@@ -1,0 +1,3 @@
+<button mat-icon-button aria-label="Show notifications" *ngVar="(notifications$ | async) as notifications">
+	<mat-icon [matBadge]="notifications.length" [matBadgeHidden]="notifications.length == 0" matBadgeColor="accent">notifications</mat-icon>
+</button>

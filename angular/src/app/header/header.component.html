@@ -11,6 +11,8 @@
 		<button *ngIf="!loggedIn" routerLink="register" mat-icon-button matTooltip="Register">
 			<mat-icon>person_add</mat-icon>
 		</button>
+
+		<cc-notifications *ngIf="loggedIn"></cc-notifications>
 		<button mat-button [matMenuTriggerFor]="menu">{{username$ | async}}</button>
 		<mat-menu #menu="matMenu">
 			<button mat-menu-item (click)="navigateProfile()">
