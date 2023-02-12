@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { PopupModule } from './popup';
 import { HeaderModule } from './header';
 import { LoadingModule } from './loading';
 import {
@@ -29,6 +30,7 @@ const MODULES = [
 	CollectorModule,
 	ProfileModule,
 	HomeModule,
+	PopupModule
 ];
 
 @NgModule({

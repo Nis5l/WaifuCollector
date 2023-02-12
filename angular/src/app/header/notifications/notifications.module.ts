@@ -7,8 +7,11 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule } from '@angular/material/icon'; 
 
+import { PopupModule } from '../../popup';
 import { HttpModule } from '../../http-service';
 
+import { NotificationItemComponent } from './notification-item';
+import { NotificationsListComponent } from './notifications-list';
 import { NotificationsComponent } from './notifications.component';
 import { NotificationsService } from './notifications.service';
 
@@ -26,10 +29,11 @@ const MATERIAL_MODULES = [
 		...MATERIAL_MODULES,
 	
 		HttpModule,
-		NgVarModule
+		NgVarModule,
+		PopupModule
 	],
 	providers: [ NotificationsService ],
-	declarations: [ NotificationsComponent ],
+	declarations: [ NotificationsComponent, NotificationsListComponent, NotificationItemComponent ],
 	exports: [ NotificationsComponent ],
 })
 export class NotificationsModule {}
