@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { HomeComponent } from './home.component';
-import { CardModule } from '../../card';
+import { CardModule } from '../../components/card';
 
 @NgModule({
 	imports: [ CardModule ],
