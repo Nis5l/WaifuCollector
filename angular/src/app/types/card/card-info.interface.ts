@@ -1,4 +1,4 @@
-import type { Id } from '../../types';
+import type { Id } from '../';
 
 export interface CardInfo {
     id: Id,

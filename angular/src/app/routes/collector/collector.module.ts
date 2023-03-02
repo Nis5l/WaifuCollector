@@ -9,6 +9,7 @@ import { NgVarModule } from '../../directives';
 import { CollectorImageModule } from './collector-image';
 import { CollectorFavoriteModule } from './collector-favorite';
 import { CollectorBannerModule } from './collector-banner';
+import { CollectorOpenModule } from './collector-open';
 
 @NgModule({
 	imports: [
@@ -19,6 +20,7 @@ import { CollectorBannerModule } from './collector-banner';
 		CollectorImageModule,
 		CollectorFavoriteModule,
 		CollectorBannerModule,
+		CollectorOpenModule,
 		NgVarModule
 	],
 	providers: [ CollectorService ],
