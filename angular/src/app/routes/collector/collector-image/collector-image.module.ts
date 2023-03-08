@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CollectorImageComponent } from './collector-image.component';
 import { CollectorImageService } from './collector-image.service';
 import { HttpModule } from '../../../http-service';
+import { AuthModule } from '../../../auth-service';
 import { ImageCircleModule } from '../../../components/image-circle';
 
 const MATERIAL_MODULES = [
@@ -20,6 +21,7 @@ const MATERIAL_MODULES = [
 		...MATERIAL_MODULES,
 
 		HttpModule,
+		AuthModule,
 		ImageCircleModule
 	],
 	providers: [ CollectorImageService ],

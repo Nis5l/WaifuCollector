@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, BehaviorSubject, filter, map } from 'rxjs';
 
 import { CollectorImageService } from './collector-image.service';
-import type { Id } from '../../../types';
+import type { CollectorImage } from './types';
+import { AuthService } from '../../../auth-service';
 
 @Component({
 	selector: "cc-collector-image",
@@ -10,24 +11,29 @@ import type { Id } from '../../../types';
 	styleUrls: [ "./collector-image.component.scss" ]
 })
 export class CollectorImageComponent {
-	private _collectorId: Id | null = null;
-	private readonly collectorImageSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
+	private readonly collectorImageSubject: BehaviorSubject<CollectorImage | null> = new BehaviorSubject<CollectorImage | null>(null);
 	public readonly collectorImage$: Observable<string>;
+	public readonly editable$: Observable<boolean>;
 
 	@Input()
-	public set collectorId(id: Id) {
-		this._collectorId = id;
-		this.collectorImageSubject.next(this.collectorImageService.getImageUrl(id));
+	public set collectorId(collectorImage: CollectorImage) {
+		this.collectorImageSubject.next(collectorImage);
 	}
-	public get collectorId(): Id {
-		if(this._collectorId == null) throw new Error("collectorId not set");
-		return this._collectorId;
+	public get collectorId(): CollectorImage {
+		const collectorImage = this.collectorImageSubject.getValue();
+		if(collectorImage == null) throw new Error("collectorImage not set");
+		return collectorImage;
 	}
 
 	@Input()
 	public editable: boolean = false;
 
-	constructor(private readonly collectorImageService: CollectorImageService) {
-		this.collectorImage$ = this.collectorImageSubject.asObservable();
+	constructor(private readonly collectorImageService: CollectorImageService, private readonly authService: AuthService) {
+		this.collectorImage$ = this.collectorImageSubject.asObservable().pipe(
+			filter((collectorImage): collectorImage is CollectorImage => collectorImage != null),
+			map(collectorImage => this.collectorImageService.getImageUrl(collectorImage.id))
+		);
+
+		this.editable$ = this.collectorImageSubject.
 	}
 }
