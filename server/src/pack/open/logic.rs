@@ -17,7 +17,7 @@ use crate::{verify_user, verify_collector};
 use crate::shared::card::packstats::sql::add_pack_stats;
 use crate::shared::collector::{get_collector_setting, CollectorSetting};
 
-#[post("/<collector_id>/pack/open")]
+#[post("/pack/<collector_id>/open")]
 pub async fn pack_open_route(collector_id: Id, sql: &State<Sql>, token: JwtToken, config: &State<Config>) -> ApiResponseErr<PackOpenResponse> {
     let user_id = token.id;
 

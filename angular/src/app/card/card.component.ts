@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import type { Card } from './types';
+import type { Card } from '../types';
 import { CardService } from './card.service';
 
 @Component({

@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 
 import { HeaderComponent } from './header.component';
 import { SideBarModule } from './sidebar';
+import { NotificationsModule } from './notifications';
 import { AuthModule } from '../auth-service';
 import { UserModule } from '../user-service';
 import { NgVarModule } from '../directives';
@@ -30,6 +31,7 @@ const MATERIAL_MODULES = [
 
 		NgVarModule,
 		SideBarModule,
+		NotificationsModule,
 		AuthModule,
 		UserModule,
 	],

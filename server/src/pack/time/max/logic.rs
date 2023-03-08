@@ -10,7 +10,7 @@ use crate::shared::collector::{get_collector_setting, CollectorSetting};
 use crate::verify_collector;
 use super::data::PackTimeMaxResponse;
 
-#[get("/<collector_id>/pack/time/max")]
+#[get("/pack/<collector_id>/time/max")]
 pub async fn pack_time_max_route(collector_id: Id, config: &State<Config>, sql: &State<Sql>) -> ApiResponseErr<PackTimeMaxResponse> {
     verify_collector!(sql, &collector_id);
 
