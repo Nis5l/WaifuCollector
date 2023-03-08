@@ -15,7 +15,8 @@ import {
 	RegisterModule,
 	ProfileModule,
 	HomeModule,
-	CollectorModule,
+	CollectorReadonlyModule,
+	CollectorEditModule,
 } from './routes';
 
 const MODULES = [
@@ -27,7 +28,8 @@ const MODULES = [
 	RegisterModule,
 
 	CollectorsModule,
-	CollectorModule,
+	CollectorReadonlyModule,
+	CollectorEditModule,
 	ProfileModule,
 	HomeModule,
 	PopupModule

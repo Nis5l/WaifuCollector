@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { HttpService } from '../../../http-service';
+import { HttpService } from '../../../../http-service';
 
-import type { Id } from '../../../types';
+import type { Id } from '../../../../types';
 import type { PackOpenResponse, PackMaxTimeResponse, PackTimeResponse } from './types';
 
 @Injectable()

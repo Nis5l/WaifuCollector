@@ -1,12 +1,12 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription, ReplaySubject, timer, forkJoin, tap, of as observableof} from 'rxjs';
+import { Observable, Subscription, timer, forkJoin, tap, of as observableof} from 'rxjs';
 
 import * as moment from 'moment';
 
-import { PackMaxTimeResponse, PackTimeResponse } from './types';
+import { PackTimeResponse } from './types';
 import { CollectorOpenService } from './collector-open.service';
 
-import type { Id } from '../../../types';
+import type { Id } from '../../../../types';
 
 const UPDATE_FREQUENCY_MS = 100;
 

@@ -1,0 +1,23 @@
+<ng-container *ngVar="(collector$ | async) as collector">
+	<div *ngIf="collector != null">
+		<cc-collector-banner [editable]="false" [collector]="collector"></cc-collector-banner>
+		<div class="head">
+			<div class="collector-image">
+				<cc-collector-image [editable]="false" [collector]="collector"></cc-collector-image>
+			</div>
+			<div class="info">
+				<div class="name-wrapper">
+					<h2 class="name">{{collector.name}}</h2>
+					<cc-collector-favorite [collectorId]="collector.id"></cc-collector-favorite>
+				</div>
+				<p class="description">...desc...</p>
+			</div>
+		</div>
+		<div>
+			<cc-collector-open [collectorId]="collector.id"></cc-collector-open>
+		</div>
+        <button class="edit" mat-fab aria-label="Edit" (click)="edit()">
+          <mat-icon>edit</mat-icon>
+        </button>
+	</div>
+</ng-container>

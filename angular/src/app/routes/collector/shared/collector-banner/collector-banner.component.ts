@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { Observable, BehaviorSubject, filter, map } from 'rxjs';
+import { Observable, BehaviorSubject, filter, map, combineLatest as observableCombineLatest } from 'rxjs';
 
 import { CollectorBannerService } from './collector-banner.service';
 import type { CollectorBanner } from './types';
-import { AuthService } from '../../../auth-service';
-import { LoadingService } from '../../../loading';
+import { AuthService } from '../../../../auth-service';
+import { LoadingService } from '../../../../loading';
 
 @Component({
 	selector: 'cc-collector-banner',
@@ -14,6 +14,7 @@ import { LoadingService } from '../../../loading';
 export class CollectorBannerComponent {
 	private collectorBannerSubject: BehaviorSubject<CollectorBanner | null> = new BehaviorSubject<CollectorBanner | null>(null);
 	public readonly collectorBanner$: Observable<string>;
+	public readonly editableSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	public readonly editable$: Observable<boolean>;
 
 	@Input()
@@ -26,19 +27,28 @@ export class CollectorBannerComponent {
 		return collectorBanner;
 	}
 
+	@Input()
+	public set editable(b: boolean) {
+		this.editableSubject.next(b);
+	}
+	public get editable(): boolean {
+		return this.editableSubject.getValue();
+	}
+
 	constructor(
 		private readonly collectorBannerService: CollectorBannerService,
 		private readonly authService: AuthService,
 		private readonly loadingService: LoadingService
 	) {
-		this.collectorBanner$ = this.collectorBannerSubject.asObservable().pipe(
-			filter((collectorBanner): collectorBanner is CollectorBanner => collectorBanner != null),
+		const collectorBannerNonNull$ = this.collectorBannerSubject.asObservable().pipe(
+			filter((collectorBanner): collectorBanner is CollectorBanner => collectorBanner != null)
+		);
+		this.collectorBanner$ = collectorBannerNonNull$.pipe(
 			map(collectorBanner => `${this.collectorBannerService.getBannerUrl(collectorBanner.id)}?${new Date().getTime()}`)
 		);
 
-		this.editable$ = this.collectorBannerSubject.asObservable().pipe(
-			filter((collectorBanner): collectorBanner is CollectorBanner => collectorBanner != null),
-			map(collectorBanner => this.authService.getUserId() == collectorBanner.userId.toLowerCase())
+		this.editable$ = observableCombineLatest([this.editableSubject.asObservable(), collectorBannerNonNull$]).pipe(
+			map(([editable, collectorBanner]) => editable === true && this.authService.getUserId() == collectorBanner.userId.toLowerCase())
 		);
 	}
 
