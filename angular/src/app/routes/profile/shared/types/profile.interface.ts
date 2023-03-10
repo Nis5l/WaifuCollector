@@ -1,5 +1,5 @@
 import type { Achievement } from './achievement.interface';
-import type { Collector } from '../../../types';
+import type { Collector } from '../../../../types';
 
 export interface Profile {
 	username: string,

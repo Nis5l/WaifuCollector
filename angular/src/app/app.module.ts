@@ -16,7 +16,8 @@ import {
 	LogoutModule,
 	CollectorsModule,
 	RegisterModule,
-	ProfileModule,
+	ProfileReadonlyModule,
+	ProfileEditModule,
 	HomeModule,
 	CollectorReadonlyModule,
 	CollectorEditModule,
@@ -33,7 +34,8 @@ const MODULES = [
 	CollectorsModule,
 	CollectorReadonlyModule,
 	CollectorEditModule,
-	ProfileModule,
+	ProfileReadonlyModule,
+	ProfileEditModule,
 	HomeModule,
 	PopupModule
 ];

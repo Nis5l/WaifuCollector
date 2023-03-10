@@ -2,17 +2,17 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of as observableOf, catchError, map } from 'rxjs';
 
-import { ProfileService } from './profile.service';
-import { LoadingService } from '../../loading';
-import type { Profile } from './types';
-import type { Id } from '../../types';
+import { ProfileService } from '../profile.service';
+import { LoadingService } from '../../../loading';
+import type { Profile } from '../shared';
+import type { Id } from '../../../types';
 
 @Component({
-	selector: "cc-profile",
-	templateUrl: "./profile.component.html",
-	styleUrls: [ "/profile.component.scss" ]
+	selector: "cc-profile-edit",
+	templateUrl: "./profile-edit.component.html",
+	styleUrls: [ "/profile-edit.component.scss" ]
 })
-export class ProfileComponent {
+export class ProfileEditComponent {
 	public profile$: Observable<(Profile & { userId: Id }) | null> = observableOf(null);
 
 	constructor(

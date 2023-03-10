@@ -1,0 +1,7 @@
+<div *ngVar="(profile$ | async) as profile" class="profile-wrapper">
+	<div *ngIf="profile != null" class="profile">
+		<cc-profile-image [userId]="profile.userId" [editable]="false"></cc-profile-image>
+		<h1 class="username">{{profile.username}}</h1>
+		<p class="stats">Friends: {{profile.friends}}/{{profile.maxFriends}}</p>
+	</div>
+</div>

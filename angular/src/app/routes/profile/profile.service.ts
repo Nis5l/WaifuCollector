@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { HttpService } from '../../http-service';
-import type { Profile } from './types';
+import type { Profile } from './shared';
 import type { Id } from '../../types';
 
 @Injectable()

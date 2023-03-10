@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 
 import { ProfileImageService } from './profile-image.service';
-import { AuthService } from '../../../auth-service';
-import { LoadingService } from '../../../loading';
-import type { Id } from '../../../types';
+import { AuthService } from '../../../../auth-service';
+import { LoadingService } from '../../../../loading';
+import type { Id } from '../../../../types';
 
 @Component({
 	selector: 'cc-profile-image',

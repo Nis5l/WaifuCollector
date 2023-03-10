@@ -6,7 +6,8 @@ import {
 	LogoutComponent,
 	CollectorsComponent,
 	RegisterComponent,
-	ProfileComponent,
+	ProfileReadonlyComponent,
+	ProfileEditComponent,
 	HomeComponent,
 	CollectorReadonlyComponent,
 	CollectorEditComponent,
@@ -18,17 +19,13 @@ const routes: Routes = [
 	{ path: "register", component: RegisterComponent },
 
 	{ path: "collectors", component: CollectorsComponent },
-	{
-		path: "collector/:collectorId/edit",
-		component: CollectorEditComponent,
-	},
-	{
-		path: "collector/:collectorId",
-		component: CollectorReadonlyComponent,
-	},
-	{ path: "home", component: HomeComponent },
+	{ path: "collector/:collectorId/edit", component: CollectorEditComponent },
+	{ path: "collector/:collectorId", component: CollectorReadonlyComponent },
 
-	{ path: "user/:userId", component: ProfileComponent },
+	{ path: "user/:userId/edit", component: ProfileEditComponent },
+	{ path: "user/:userId", component: ProfileReadonlyComponent },
+
+	{ path: "home", component: HomeComponent },
 ];
 
 @NgModule({

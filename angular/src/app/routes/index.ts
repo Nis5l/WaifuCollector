@@ -7,6 +7,6 @@ export {
 	RegisterComponent,
 } from './admission';
 export { CollectorsComponent, CollectorsModule } from './collectors';
-export { ProfileModule, ProfileComponent } from './profile';
+export { ProfileReadonlyModule, ProfileReadonlyComponent, ProfileEditModule, ProfileEditComponent } from './profile';
 export { HomeModule, HomeComponent } from './home';
 export { CollectorReadonlyModule, CollectorReadonlyComponent, CollectorEditModule, CollectorEditComponent } from './collector';
