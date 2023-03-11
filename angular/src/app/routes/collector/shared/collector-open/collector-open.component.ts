@@ -28,6 +28,8 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 
 	private timerSubscription: Subscription | undefined = undefined;
 
+	public displayText: string = "";
+
 	constructor(
 		private readonly collectorOpenService: CollectorOpenService
 	){ }
@@ -91,6 +93,9 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 		}
 		let diff: number = (this.packTime.getTime() - Date.now());
 		this.progress =  Math.min(1.0, 1.0 - diff / this.maxTime);
+		setTimeout(() => {
+			this.displayText = this.createDisplayText();
+		});
 	}
 
 	private startCounter(){
@@ -106,7 +111,7 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 		this.timerSubscription = undefined;
 	}
 
-	public get displayText(): string{
+	private createDisplayText(): string{
 		if(this.progress >= 1.0) return "Open";
 		if(this.packTime == null) return "Error";
 
