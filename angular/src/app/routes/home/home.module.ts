@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 
 import { HomeComponent } from './home.component';
-import { CardModule } from '../../components/card';
+import { BasicCardModule } from '../../components/basic-card';
 
 @NgModule({
-	imports: [ CardModule ],
+	imports: [ BasicCardModule ],
 	declarations: [ HomeComponent ],
 	exports: [ HomeComponent ],
 })
