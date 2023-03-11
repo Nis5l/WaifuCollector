@@ -8,12 +8,14 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { NewCollectorDialogService } from './new-collector-dialog.service';
 import type { NewCollectorConfig } from './types';
 
+import { BaseComponent } from '../../../base-component';
+
 @Component({
 	selector: "cc-new-collector-dialog",
 	templateUrl: "./new-collector-dialog.component.html",
 	styleUrls: [ "./new-collector-dialog.component.scss" ]
 })
-export class NewCollectorDialogComponent {
+export class NewCollectorDialogComponent extends BaseComponent{
 	public formGroup;
 	public config: NewCollectorConfig;
 
@@ -27,6 +29,7 @@ export class NewCollectorDialogComponent {
 		private readonly dialogRef: MatDialogRef<NewCollectorDialogComponent>,
 		private readonly router: Router,
 	) {
+		super();
 		this.error$ = this.errorSubject.asObservable();
 
 		this.config = this.newCollectorDialogService.getConfig();
@@ -38,27 +41,31 @@ export class NewCollectorDialogComponent {
 		});
 
 		this.loading$ = this.newCollectorDialogService.loading();
-		this.loading$.subscribe(() => {
-			this.config = this.newCollectorDialogService.getConfig();
-			this.formGroup = new FormGroup({
-				name: new FormControl("", {
-					nonNullable: true,
-					validators: [ Validators.required, Validators.minLength(this.config.name.minLength), Validators.maxLength(this.config.name.maxLength) ]
-				})
-			});
-		});
+		this.registerSubscription(
+			this.loading$.subscribe(() => {
+				this.config = this.newCollectorDialogService.getConfig();
+				this.formGroup = new FormGroup({
+					name: new FormControl("", {
+						nonNullable: true,
+						validators: [ Validators.required, Validators.minLength(this.config.name.minLength), Validators.maxLength(this.config.name.maxLength) ]
+					})
+				});
+			})
+		);
 	}
 
 	public onCreate(): void {
-		this.newCollectorDialogService.createCollector(this.formGroup.getRawValue()).subscribe({
-			next: res => {
-				this.errorSubject.next(null);
-				this.dialogRef.close();
-				this.router.navigate(["collector", res.id]);
-			},
-			error: (err: HttpErrorResponse) => {
-				this.errorSubject.next(err.error?.error ?? "Creating collector failed");
-			}
-		});
+		this.registerSubscription(
+			this.newCollectorDialogService.createCollector(this.formGroup.getRawValue()).subscribe({
+				next: res => {
+					this.errorSubject.next(null);
+					this.dialogRef.close();
+					this.router.navigate(["collector", res.id]);
+				},
+				error: (err: HttpErrorResponse) => {
+					this.errorSubject.next(err.error?.error ?? "Creating collector failed");
+				}
+			})
+		);
 	}
 }

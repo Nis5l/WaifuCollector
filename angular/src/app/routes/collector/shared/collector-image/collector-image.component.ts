@@ -10,7 +10,7 @@ import { AuthService } from '../../../../auth-service';
 	templateUrl: "./collector-image.component.html",
 	styleUrls: [ "./collector-image.component.scss" ]
 })
-export class CollectorImageComponent {
+export class CollectorImageComponent{
 	private readonly collectorImageSubject: BehaviorSubject<CollectorImage | null> = new BehaviorSubject<CollectorImage | null>(null);
 	public readonly collectorImage$: Observable<string>;
 	public readonly editableSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

@@ -6,12 +6,14 @@ import type { CollectorBanner } from './types';
 import { AuthService } from '../../../../auth-service';
 import { LoadingService } from '../../../../loading';
 
+import { BaseComponent } from '../../../../base-component';
+
 @Component({
 	selector: 'cc-collector-banner',
 	templateUrl: './collector-banner.component.html',
 	styleUrls: [ './collector-banner.component.scss' ]
 })
-export class CollectorBannerComponent {
+export class CollectorBannerComponent extends BaseComponent{
 	private collectorBannerSubject: BehaviorSubject<CollectorBanner | null> = new BehaviorSubject<CollectorBanner | null>(null);
 	public readonly collectorBanner$: Observable<string>;
 	public readonly editableSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -40,6 +42,7 @@ export class CollectorBannerComponent {
 		private readonly authService: AuthService,
 		private readonly loadingService: LoadingService
 	) {
+		super();
 		const collectorBannerNonNull$ = this.collectorBannerSubject.asObservable().pipe(
 			filter((collectorBanner): collectorBanner is CollectorBanner => collectorBanner != null)
 		);
@@ -58,8 +61,10 @@ export class CollectorBannerComponent {
 		const file = target.files?.item(0);
 		if(file == null) throw new Error("no file");
 
-		this.loadingService.waitFor(this.collectorBannerService.uploadBanner(this.collector.id, file)).subscribe(
-			() => this.collectorBannerSubject.next(this.collectorBannerSubject.getValue())
+		this.registerSubscription(
+			this.loadingService.waitFor(this.collectorBannerService.uploadBanner(this.collector.id, file)).subscribe(
+				() => this.collectorBannerSubject.next(this.collectorBannerSubject.getValue())
+			)
 		);
 	}
 }
