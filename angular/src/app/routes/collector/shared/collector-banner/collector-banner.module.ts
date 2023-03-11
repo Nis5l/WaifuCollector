@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { CollectorBannerComponent } from './collector-banner.component';
 import { CollectorBannerService } from './collector-banner.service';
-import { HttpModule } from '../../../http-service';
+import { HttpModule } from '../../../../http-service';
 
 const MATERIAL_MODULES = [
 	MatButtonModule,

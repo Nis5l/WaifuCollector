@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 import { HttpService } from '../../../http-service';
-import { Id } from '../../../types';
 import type { CreateConfigCollectorResponse, NewCollectorConfig, CollectorCreateResponse, CollectorCreateRequest } from './types';
 
 @Injectable()
@@ -17,6 +16,9 @@ export class NewCollectorDialogService {
 	private loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 	constructor(private readonly httpService: HttpService) {
+		//TODO: this doesnt seem to make sense, why is the config created, collector name len should be global, min_length should be minLength etc.
+		//And use Observables
+		
 		// Load config from server
 		this.loadingSubject.next(true);
 		this.httpService.get<CreateConfigCollectorResponse>("/collector/create-config").subscribe((res: CreateConfigCollectorResponse) => {
@@ -30,19 +32,11 @@ export class NewCollectorDialogService {
 		return this.loadingSubject.asObservable();
 	}
 
-	public getImageUrl(): string {
-		return this.httpService.apiUrl(`/collector/collector-image`);
-	}
-
 	public getConfig(): NewCollectorConfig {
 		return this.config;
 	}
 
 	public createCollector(data: CollectorCreateRequest): Observable<CollectorCreateResponse> {
 		return this.httpService.post<CollectorCreateRequest, CollectorCreateResponse>("/collector/create", data);
-	}
-
-	public setCollectorImage(collectorId: Id, image: File): Observable<void> {
-		return this.httpService.putFile<void>(`/collector/${collectorId}/collector-image`, image);
 	}
 }

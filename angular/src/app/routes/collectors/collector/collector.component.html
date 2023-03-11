@@ -1,6 +1,6 @@
 <mat-card class="collector" (click)="collectorClick()">
 	<div class="collector-image">
-		<cc-collector-image [editable]="false" [collectorId]="collector.id"></cc-collector-image>
+		<cc-collector-image [editable]="false" [collector]="collector"></cc-collector-image>
 	</div>
 	<div>
 		<mat-card-title>{{collector.name}}</mat-card-title>

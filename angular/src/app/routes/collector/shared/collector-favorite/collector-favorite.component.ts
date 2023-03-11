@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 import { CollectorFavoriteService } from './collector-favorite.service';
-import type { Id } from '../../../types';
+import type { Id } from '../../../../types';
 import type { CollectorFavoriteResponse } from './types';
 
 @Component({
@@ -33,13 +33,8 @@ export class CollectorFavoriteComponent {
 
 	public setFavorite(value: boolean){
 		if(this._collectorId == null) return;
-		let observable: Observable<any> | null = null;
-		if(value){
-			observable = this.collectorFavoriteService.addFavorite(this._collectorId);
-		}else{
-			observable = this.collectorFavoriteService.removeFavorite(this._collectorId);
-		}
-		observable.subscribe((res) => {
+		let observable: Observable<unknown> = value ? this.collectorFavoriteService.addFavorite(this._collectorId) : this.collectorFavoriteService.removeFavorite(this._collectorId);
+		observable.subscribe(_res => {
 			this.collectorFavoriteSubject.next(value);
 		});
 	}

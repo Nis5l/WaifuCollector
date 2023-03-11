@@ -1,3 +1,3 @@
-export { CollectorComponent } from './collector.component';
-export { CollectorModule } from './collector.module';
-export { CollectorImageModule } from './collector-image';
+export { CollectorImageModule } from './shared';
+export { CollectorReadonlyModule, CollectorReadonlyComponent } from './collector-readonly';
+export { CollectorEditModule, CollectorEditComponent } from './collector-edit';

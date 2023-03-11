@@ -1,9 +1,9 @@
 <div *ngVar="(collector$ | async) as collector">
 	<div *ngIf="collector != null">
-		<cc-collector-banner [collector]="collector"></cc-collector-banner>
+		<cc-collector-banner [editable]="true" [collector]="collector"></cc-collector-banner>
 		<div class="head">
 			<div class="collector-image">
-				<cc-collector-image [editable]="false" [collectorId]="collector.id"></cc-collector-image>
+				<cc-collector-image [editable]="true" [collector]="collector"></cc-collector-image>
 			</div>
 			<div class="info">
 				<div class="name-wrapper">
@@ -12,9 +12,6 @@
 				</div>
 				<p class="description">...desc...</p>
 			</div>
-		</div>
-		<div class="test">
-			<cc-collector-open [collectorId]="collector.id"></cc-collector-open>
 		</div>
 	</div>
 </div>

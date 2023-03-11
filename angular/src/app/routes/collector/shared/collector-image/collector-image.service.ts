@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { HttpService } from '../../../http-service';
-import type { Id } from '../../../types';
+import { HttpService } from '../../../../http-service';
+import type { Id } from '../../../../types';
 
 @Injectable()
 export class CollectorImageService {

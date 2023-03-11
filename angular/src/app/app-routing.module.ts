@@ -8,7 +8,8 @@ import {
 	RegisterComponent,
 	ProfileComponent,
 	HomeComponent,
-	CollectorComponent,
+	CollectorReadonlyComponent,
+	CollectorEditComponent,
 } from './routes';
 
 const routes: Routes = [
@@ -17,7 +18,14 @@ const routes: Routes = [
 	{ path: "register", component: RegisterComponent },
 
 	{ path: "collectors", component: CollectorsComponent },
-	{ path: "collector/:collectorId", component: CollectorComponent },
+	{
+		path: "collector/:collectorId/edit",
+		component: CollectorEditComponent,
+	},
+	{
+		path: "collector/:collectorId",
+		component: CollectorReadonlyComponent,
+	},
 	{ path: "home", component: HomeComponent },
 
 	{ path: "user/:userId", component: ProfileComponent },

@@ -7,8 +7,6 @@ import { Observable, BehaviorSubject } from 'rxjs';
 
 import { NewCollectorDialogService } from './new-collector-dialog.service';
 import type { NewCollectorConfig } from './types';
-import { LoadingService } from '../../../loading';
-import type { Id } from '../../../types';
 
 @Component({
 	selector: "cc-new-collector-dialog",
@@ -16,7 +14,6 @@ import type { Id } from '../../../types';
 	styleUrls: [ "./new-collector-dialog.component.scss" ]
 })
 export class NewCollectorDialogComponent {
-	private image: File | null = null;
 	public formGroup;
 	public config: NewCollectorConfig;
 
@@ -28,7 +25,6 @@ export class NewCollectorDialogComponent {
 	constructor(
 		public readonly newCollectorDialogService: NewCollectorDialogService,
 		private readonly dialogRef: MatDialogRef<NewCollectorDialogComponent>,
-		private readonly loadingService: LoadingService,
 		private readonly router: Router,
 	) {
 		this.error$ = this.errorSubject.asObservable();
@@ -54,27 +50,15 @@ export class NewCollectorDialogComponent {
 	}
 
 	public onCreate(): void {
-		const redirect = (id: Id) => this.router.navigate(["collector", id]);
 		this.newCollectorDialogService.createCollector(this.formGroup.getRawValue()).subscribe({
 			next: res => {
 				this.errorSubject.next(null);
-				const id = res.id;
-				if(this.image == null) {
-					redirect(id);
-					return;
-				}
-				this.loadingService.waitFor(this.newCollectorDialogService.setCollectorImage(id, this.image)).subscribe({
-					error: () => redirect(id),
-					next: () => redirect(id)
-				})
+				this.dialogRef.close();
+				this.router.navigate(["collector", res.id]);
 			},
 			error: (err: HttpErrorResponse) => {
 				this.errorSubject.next(err.error?.error ?? "Creating collector failed");
 			}
 		});
-	}
-
-	public imageChange(image: File): void {
-		this.image = image;
 	}
 }
