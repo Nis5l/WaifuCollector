@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, of as observableOf, catchError, map, switchMap } from 'rxjs';
 
 import { LoadingService } from '../../../shared/services';
@@ -19,6 +19,7 @@ export class ProfileEditComponent extends SubscriptionManagerComponent {
 
 	constructor(
 		private readonly profileService: ProfileService,
+		private readonly router: Router,
 		loadingService: LoadingService,
 		activatedRoute: ActivatedRoute
 	) {
@@ -38,5 +39,9 @@ export class ProfileEditComponent extends SubscriptionManagerComponent {
 				catchError(() => observableOf(null)))
 			)
 		));
+	}
+
+	public navigateProfile(userId: Id): void {
+		this.router.navigate(["user", userId]);
 	}
 }

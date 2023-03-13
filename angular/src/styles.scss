@@ -11,3 +11,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 	gap: 8px;
 	font-size: 1.25em;
 }
+
+.floating-button-br {
+	position: fixed !important;
+	right: 60px !important;
+	bottom: 60px !important;
+	transform: translate(50%, 50%) scale(1.1) !important;
+}

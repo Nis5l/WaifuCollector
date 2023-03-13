@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, ReplaySubject } from 'rxjs';
 
@@ -10,6 +10,17 @@ import { Observable, ReplaySubject } from 'rxjs';
 export class ImageCircleComponent {
 	private readonly imageSubject: ReplaySubject<string | SafeResourceUrl> = new ReplaySubject<string | SafeResourceUrl>(1);
 	public readonly image$: Observable<string | SafeResourceUrl>;
+
+	private _imageInput: ElementRef | null = null;
+	@ViewChild('imageInput', { read: ElementRef })
+	public set imageInput(e: ElementRef) {
+		this._imageInput = e;
+	}
+
+	public get imageInput(): ElementRef {
+		if(!this._imageInput) throw new Error("no imageInput set");
+		return this._imageInput;
+	}
 
 	@Output()
 	public readonly onImageChange: EventEmitter<File> = new EventEmitter<File>();
@@ -27,7 +38,7 @@ export class ImageCircleComponent {
 		this.image$ = this.imageSubject.asObservable();
 	}
 
-	public imageChange(target: EventTarget | null) {
+	public imageChange(target: EventTarget | null): void {
 		if(target == null || !(target instanceof HTMLInputElement)) throw new Error("target has to be input");
 
 		const file = target.files?.item(0);
@@ -36,5 +47,10 @@ export class ImageCircleComponent {
 		this.onImageChange.next(file);
 		const blobUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
 		this.imageSubject.next(blobUrl);
+	}
+
+	public selectImage(): void {
+		if(!this.editable) return;
+		this.imageInput.nativeElement.click();
 	}
 }
