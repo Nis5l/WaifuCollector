@@ -31,8 +31,15 @@ export class ImageCircleComponent {
 		this.imageSubject.next(path);
 	}
 
+	public _editable: boolean = false;
 	@Input()
-	public editable: boolean = false;
+	public set editable(v: boolean | null) {
+		this._editable = v === true;
+	}
+
+	public get editable(): boolean {
+		return this._editable;
+	}
 
 	constructor(private readonly domSanitizer: DomSanitizer) {
 		this.image$ = this.imageSubject.asObservable();
