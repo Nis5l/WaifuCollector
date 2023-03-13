@@ -26,4 +26,11 @@
 			color: map-get(map-get($theme, foreground), hint-text);
 		}
 	}
+
+	.edit {
+		position: fixed;
+		right: 60px;
+		bottom: 60px;
+		transform: translate(50%, 50%) scale(1.2);
+	}
 }

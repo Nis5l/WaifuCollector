@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, of as observableOf, catchError, map } from 'rxjs';
 
 import { LoadingService } from '../../../shared/services';
@@ -17,8 +17,9 @@ export class ProfileReadonlyComponent {
 
 	constructor(
 		private readonly profileService: ProfileService,
+		private readonly activatedRoute: ActivatedRoute,
+		private readonly router: Router,
 		loadingService: LoadingService,
-		activatedRoute: ActivatedRoute
 	) {
 		loadingService.setLoading(true);
 		//TODO: pipe instead of subscribe
@@ -33,5 +34,9 @@ export class ProfileReadonlyComponent {
 				catchError(() => observableOf(null)))
 			);
 		});
+	}
+
+	public edit(): void {
+		this.router.navigate(["edit"], { relativeTo: this.activatedRoute });
 	}
 }
