@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
-import type { Id } from '../types';
+import type { Id } from '../../types';
 import type { AuthData } from './types';
 
 @Injectable()

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import type { Collector, Id } from '../../types';
-import { HttpService } from '../../http-service';
+import type { Collector, Id } from '../../shared/types';
+import { HttpService } from '../../shared/services';
 
 @Injectable()
 export class CollectorService {

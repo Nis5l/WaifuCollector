@@ -7,8 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
-import { HttpModule } from '../../http-service';
-import { LoadingSpinnerModule } from '../../loading';
+import { HttpModule } from '../../shared/services';
+import { LoadingSpinnerModule } from '../../shared/services/loading';
 import { CollectorModule } from './collector';
 import { NewCollectorDialogModule } from './new-collector-dialog';
 

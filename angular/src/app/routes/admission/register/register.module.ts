@@ -8,8 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
-import { HttpModule } from '../../../http-service';
-import { NgVarModule } from '../../../directives';
+import { HttpModule } from '../../../shared/services';
+import { NgVarModule } from '../../../shared/directives';
 import { AdmissionModule } from '../admission-service';
 import { RegisterComponent } from './register.component';
 import { RegisterService } from './register.service';

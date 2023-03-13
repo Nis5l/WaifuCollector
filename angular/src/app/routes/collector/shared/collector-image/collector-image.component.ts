@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject, filter, map, combineLatest as observableCo
 
 import { CollectorImageService } from './collector-image.service';
 import type { CollectorImage } from './types';
-import { AuthService } from '../../../../auth-service';
+import { AuthService } from '../../../../shared/services';
 
 @Component({
 	selector: "cc-collector-image",

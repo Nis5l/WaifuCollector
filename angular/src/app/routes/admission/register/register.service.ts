@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import type { RegisterRequest, RegisterResponse } from './types';
-import { HttpService } from '../../../http-service';
+import { HttpService } from '../../../shared/services';
 
 @Injectable()
 export class RegisterService {

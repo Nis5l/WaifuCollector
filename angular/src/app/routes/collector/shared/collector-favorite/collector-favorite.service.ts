@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { HttpService } from '../../../../http-service';
-import type { Id } from '../../../../types';
+import { HttpService } from '../../../../shared/services';
+import type { Id } from '../../../../shared/types';
 import type { CollectorFavoriteResponse, CollectorFavoriteAddResponse, CollectorFavoriteRemoveResponse } from './types';
 
 @Injectable()

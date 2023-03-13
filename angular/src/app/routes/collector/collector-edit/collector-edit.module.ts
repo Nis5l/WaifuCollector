@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 
 import { CollectorEditComponent } from './collector-edit.component';
 import { CollectorService } from '../collector.service';
-import { HttpModule } from '../../../http-service';
-import { NgVarModule } from '../../../directives';
+import { HttpModule } from '../../../shared/services';
+import { NgVarModule } from '../../../shared/directives';
 import {
 	CollectorImageModule,
 	CollectorFavoriteModule,

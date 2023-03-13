@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { HttpService } from '../../../http-service';
+import { HttpService } from '../../../shared/services';
 import type { CreateConfigCollectorResponse, NewCollectorConfig, CollectorCreateResponse, CollectorCreateRequest } from './types';
 
 @Injectable()

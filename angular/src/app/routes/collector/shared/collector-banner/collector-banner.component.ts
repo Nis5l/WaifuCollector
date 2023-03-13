@@ -3,8 +3,7 @@ import { Observable, BehaviorSubject, filter, map, combineLatest as observableCo
 
 import { CollectorBannerService } from './collector-banner.service';
 import type { CollectorBanner } from './types';
-import { AuthService } from '../../../../auth-service';
-import { LoadingService } from '../../../../loading';
+import { AuthService, LoadingService } from '../../../../shared/services';
 
 @Component({
 	selector: 'cc-collector-banner',

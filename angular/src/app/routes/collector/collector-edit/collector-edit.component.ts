@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap, of as observableOf, Observable } from 'rxjs';
 
 import { CollectorService } from '../collector.service';
-import { LoadingService } from '../../../loading';
-import type { Collector } from '../../../types';
+import { LoadingService } from '../../../shared/services';
+import type { Collector } from '../../../shared/types';
 
 @Component({
 	selector: "cc-collector-edit",

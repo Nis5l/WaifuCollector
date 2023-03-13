@@ -10,10 +10,9 @@ import { MatCardModule } from '@angular/material/card';
 
 import { LoginComponent } from './login.component';
 import { LoginService } from './login.service';
-import { HttpModule } from '../../../http-service';
+import { HttpModule, AuthModule } from '../../../shared/services';
+import { NgVarModule } from '../../../shared/directives';
 import { AdmissionModule } from '../admission-service';
-import { AuthModule } from '../../../auth-service';
-import { NgVarModule } from '../../../directives';
 
 const MATERIAL_MODULES = [
 	MatFormFieldModule,

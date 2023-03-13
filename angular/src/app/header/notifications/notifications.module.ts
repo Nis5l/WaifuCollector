@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
-import { NgVarModule } from '../../directives';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button'; 
-import { MatIconModule } from '@angular/material/icon'; 
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
-import { PopupModule } from '../../popup';
-import { HttpModule } from '../../http-service';
-
+import { NgVarModule } from '../../shared/directives';
+import { PopupModule, HttpModule } from '../../shared/services';
 import { NotificationItemComponent } from './notification-item';
 import { NotificationsListComponent } from './notifications-list';
 import { NotificationsComponent } from './notifications.component';

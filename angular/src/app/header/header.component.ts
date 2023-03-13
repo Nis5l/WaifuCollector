@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, map, switchMap } from 'rxjs';
 
-import { AuthService } from '../auth-service';
-import { UserService } from '../user-service';
-import { LoadingService } from '../loading';
+import { AuthService, UserService, LoadingService } from '../shared/services';
 
 @Component({
   selector: 'cc-header',

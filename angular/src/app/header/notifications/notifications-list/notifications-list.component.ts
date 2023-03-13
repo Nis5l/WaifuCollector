@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 
-import { Popup } from '../../../popup';
+import { Popup } from '../../../shared/services/popup';
 
 import { Notification } from '../types';
 import { NotificationsService } from '../notifications.service';

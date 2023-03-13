@@ -7,12 +7,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
+import { CollectorImageModule } from '../../collector';
+import { ImageCircleModule } from '../../../shared/components';
+import { LoadingModule, LoadingSpinnerModule } from '../../../shared/services/loading';
+import { NgVarModule } from '../../../shared/directives';
 import { NewCollectorDialogService } from './new-collector-dialog.service';
 import { NewCollectorDialogComponent } from './new-collector-dialog.component';
-import { CollectorImageModule } from '../../collector';
-import { ImageCircleModule } from '../../../components/image-circle';
-import { LoadingModule, LoadingSpinnerModule } from '../../../loading';
-import { NgVarModule } from '../../../directives';
 
 const MATERIAL_MODULES = [
 	MatFormFieldModule,

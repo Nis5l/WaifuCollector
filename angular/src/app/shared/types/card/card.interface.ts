@@ -1,4 +1,4 @@
-import type { Id } from '../';
+import type { Id } from '../id.interface';
 import type { CardInfo } from './card-info.interface';
 import type { CardFrame } from './card-frame.interface';
 import type { CardType } from './card-type.interface';

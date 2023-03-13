@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import { PackTimeResponse } from './types';
 import { CollectorOpenService } from './collector-open.service';
 
-import type { Id } from '../../../../types';
+import type { Id } from '../../../../shared/types';
 
 const UPDATE_FREQUENCY_MS = 100;
 

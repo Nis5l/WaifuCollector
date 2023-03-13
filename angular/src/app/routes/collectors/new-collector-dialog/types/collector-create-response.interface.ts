@@ -1,4 +1,4 @@
-import type { Id } from '../../../../types';
+import type { Id } from '../../../../shared/types';
 
 export interface CollectorCreateResponse {
 	id: Id

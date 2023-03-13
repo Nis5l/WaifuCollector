@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { CardComponent } from './card.component';
 import { CardService } from './card.service';
-import { HttpModule } from '../http-service';
+import { HttpModule } from '../../services';
 
 @NgModule({
 	imports: [ HttpModule ],

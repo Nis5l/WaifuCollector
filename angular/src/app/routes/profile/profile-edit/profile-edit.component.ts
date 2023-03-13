@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of as observableOf, catchError, map } from 'rxjs';
 
+import { LoadingService } from '../../../shared/services';
+import type { Id } from '../../../shared/types';
 import { ProfileService } from '../profile.service';
-import { LoadingService } from '../../../loading';
 import type { Profile } from '../shared';
-import type { Id } from '../../../types';
 
 @Component({
 	selector: "cc-profile-edit",

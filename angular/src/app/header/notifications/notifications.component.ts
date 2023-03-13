@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { NotificationsListComponent } from './notifications-list';
 import type { Notification } from './types';
 
-import { PopupService, PopupLocation } from '../../popup';
+import { PopupService } from '../../shared/services';
 
 @Component({
   selector: 'cc-notifications',

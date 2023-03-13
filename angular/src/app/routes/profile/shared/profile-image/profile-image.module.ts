@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
+import { HttpModule, AuthModule, LoadingModule } from '../../../../shared/services';
+import { ImageCircleModule } from '../../../../shared/components';
 import { ProfileImageComponent } from './profile-image.component';
 import { ProfileImageService } from './profile-image.service';
-import { LoadingModule } from '../../../../loading';
-import { HttpModule } from '../../../../http-service';
-import { AuthModule } from '../../../../auth-service';
-import { ImageCircleModule } from '../../../../components/image-circle';
 
 const MATERIAL_MODULES = [
 	MatButtonModule,

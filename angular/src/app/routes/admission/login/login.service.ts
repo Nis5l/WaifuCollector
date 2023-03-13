@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { HttpService } from '../../../http-service';
-import { AuthService } from '../../../auth-service';
+import { HttpService, AuthService } from '../../../shared/services';
 
 import type { LoginRequest, LoginResponse } from './types';
 

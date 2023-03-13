@@ -11,9 +11,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { HeaderComponent } from './header.component';
 import { SideBarModule } from './sidebar';
 import { NotificationsModule } from './notifications';
-import { AuthModule } from '../auth-service';
-import { UserModule } from '../user-service';
-import { NgVarModule } from '../directives';
+import { AuthModule, UserModule } from '../shared/services';
+import { NgVarModule } from '../shared/directives';
 
 const MATERIAL_MODULES = [
 	MatToolbarModule,

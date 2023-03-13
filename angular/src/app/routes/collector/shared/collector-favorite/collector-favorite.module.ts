@@ -6,7 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { CollectorFavoriteService } from './collector-favorite.service';
 import { CollectorFavoriteComponent } from './collector-favorite.component';
-import { HttpModule } from '../../../../http-service';
+import { HttpModule } from '../../../../shared/services';
 
 const MATERIAL_MODULES = [
 	MatButtonModule,
