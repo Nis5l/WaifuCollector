@@ -1,0 +1,14 @@
+<div class="card" *ngIf="card != null">
+	<div class="card-container">
+			<div class="card-inner">
+				<img class="card-effect" [src]="effect" alt="Card Effect"/>
+				<img [src]="image" alt="Card Image"/>
+			</div>
+			<div class="card-frame">
+				<span class="card-name card-text">{{name}}</span>
+				<span class="card-type-name card-text">{{type}}</span>
+				
+				<img [src]="frameFront" alt="Card Frame" />
+			</div>
+	</div>
+</div>

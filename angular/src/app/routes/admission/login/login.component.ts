@@ -8,12 +8,14 @@ import { LoginService } from './login.service';
 import { AdmissionService } from '../admission-service';
 import type { AdmissionConfig } from '../admission-service';
 
+import { SubscriptionManagerComponent } from '../../../shared/abstract';
+
 @Component({
 	selector: "cc-login",
 	templateUrl: "./login.component.html",
 	styleUrls: ["./login.component.scss"],
 })
-export class LoginComponent {
+export class LoginComponent extends SubscriptionManagerComponent {
 	public readonly formGroup;
 	public readonly config: AdmissionConfig;
 
@@ -21,6 +23,7 @@ export class LoginComponent {
 	public readonly error$: Observable<string | null>;
 
 	constructor(private readonly loginService: LoginService, private readonly router: Router, private readonly admissionService: AdmissionService) {
+		super();
 		this.config = this.admissionService.getConfig();
 		this.formGroup = new FormGroup({
 			username: new FormControl("", {
@@ -45,14 +48,16 @@ export class LoginComponent {
 	}
 
 	public login(): void {
-		this.loginService.login(this.formGroup.getRawValue()).subscribe({
-			next: () => {
-				this.errorSubject.next(null);
-				this.router.navigate(["collectors"]);
-			},
-			error: (err: HttpErrorResponse) => {
-				this.errorSubject.next(err.error?.error ?? "Login failed");
-			}
-		});
+		this.registerSubscription(
+			this.loginService.login(this.formGroup.getRawValue()).subscribe({
+				next: () => {
+					this.errorSubject.next(null);
+					this.router.navigate(["collectors"]);
+				},
+				error: (err: HttpErrorResponse) => {
+					this.errorSubject.next(err.error?.error ?? "Login failed");
+				}
+			})
+		);
 	}
 }

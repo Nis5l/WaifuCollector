@@ -1,17 +1,18 @@
 import { Component, ViewChild, HostListener } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Popup, PopupStyle } from '../types';
 import { PopupDirective } from '../popup.directive';
 import { PopupItem } from '../popup-item.component';
 import { PopupService } from '../popup.service';
 
+import { SubscriptionManagerComponent } from '../../../abstract';
+
 @Component({
 	selector: "cc-popup-container",
 	templateUrl: "./popup-container.component.html",
 	styleUrls: [ "/popup-container.component.scss" ]
 })
-export class PopupContainerComponent {
+export class PopupContainerComponent extends SubscriptionManagerComponent {
 	private popupItem: PopupItem | null = null;
 	
 	@ViewChild(PopupDirective) popupHost!: PopupDirective;
@@ -21,11 +22,14 @@ export class PopupContainerComponent {
 	constructor(
 		private popupService: PopupService
 	) {
-		this.popupService.getObservable().subscribe((item: PopupItem | null) => {
-			this.closePopup();
-			this.popupItem = item;
-			this.openPopup();
-		});
+		super();
+		this.registerSubscription(
+			this.popupService.getObservable().subscribe((item: PopupItem | null) => {
+				this.closePopup();
+				this.popupItem = item;
+				this.openPopup();
+			})
+		);
 	}
 
 	private closePopup(){

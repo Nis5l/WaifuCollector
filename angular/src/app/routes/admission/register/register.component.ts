@@ -8,12 +8,14 @@ import { RegisterService } from './register.service';
 import { AdmissionService } from '../admission-service';
 import type { AdmissionConfig } from '../admission-service';
 
+import { SubscriptionManagerComponent } from '../../../shared/abstract';
+
 @Component({
 	selector: 'cc-register',
 	templateUrl: './register.component.html',
 	styleUrls: [ './register.component.scss' ],
 })
-export class RegisterComponent {
+export class RegisterComponent extends SubscriptionManagerComponent {
 	public readonly formGroup;
 	public readonly config: AdmissionConfig;
 
@@ -27,6 +29,7 @@ export class RegisterComponent {
 	};
 
 	constructor(private readonly registerService: RegisterService, private readonly router: Router, private readonly admissionService: AdmissionService) {
+		super();
 		this.config = this.admissionService.getConfig();
 		this.formGroup = new FormGroup({
 			username: new FormControl("", {
@@ -63,13 +66,15 @@ export class RegisterComponent {
 	public register(): void {
 		const { passwordRepeat , ...config} = this.formGroup.getRawValue();
 
-		this.registerService.register(config).subscribe({
-			next: () => {
-				this.router.navigate(["login"]);
-			},
-			error: (err: HttpErrorResponse) => {
-				this.errorSubject.next(err.error?.error ?? "Register failed");
-			}
-		});
+		this.registerSubscription(
+			this.registerService.register(config).subscribe({
+				next: () => {
+					this.router.navigate(["login"]);
+				},
+				error: (err: HttpErrorResponse) => {
+					this.errorSubject.next(err.error?.error ?? "Register failed");
+				}
+			})
+		);
 	}
 }

@@ -7,13 +7,14 @@ import { NotificationsListComponent } from './notifications-list';
 import type { Notification } from './types';
 
 import { PopupService } from '../../shared/services';
+import { SubscriptionManagerComponent } from '../../shared/abstract';
 
 @Component({
   selector: 'cc-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ["./notifications.component.scss"]
 })
-export class NotificationsComponent {
+export class NotificationsComponent extends SubscriptionManagerComponent {
 	public readonly notificationsSubject: BehaviorSubject<Notification[]> = new BehaviorSubject<Notification[]>([]);
 	public readonly notifications$: Observable<Notification[]>;
 
@@ -21,13 +22,16 @@ export class NotificationsComponent {
 		private readonly notificationsService: NotificationsService,
 		private readonly popupService: PopupService
 	){
+		super();
 		this.notifications$ = this.notificationsSubject.asObservable();
 	}
 
 	ngOnInit(){
-		this.notificationsService.getNotifications().subscribe((notifications) => {
-			this.notificationsSubject.next(notifications);
-		});
+		this.registerSubscription(
+			this.notificationsService.getNotifications().subscribe((notifications) => {
+				this.notificationsSubject.next(notifications);
+			})
+		);
 	}
 
 	onClick(e: any){

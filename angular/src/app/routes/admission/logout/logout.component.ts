@@ -3,22 +3,26 @@ import { Router } from '@angular/router';
 
 import { AuthService, HttpService } from '../../../shared/services';
 
+import { SubscriptionManagerComponent } from '../../../shared/abstract';
+
 @Component({
 	selector: 'cc-logout',
 	template: '',
 	styleUrls: [],
 })
-export class LogoutComponent implements OnInit {
-	constructor(private readonly authService: AuthService, private readonly httpService: HttpService, private readonly router: Router) {}
+export class LogoutComponent extends SubscriptionManagerComponent implements OnInit {
+	constructor(private readonly authService: AuthService, private readonly httpService: HttpService, private readonly router: Router) { super(); }
 
 	public ngOnInit(): void {
 		const logout = () => {
 			this.authService.logout();
 			this.router.navigate(["login"]);
 		};
-		this.httpService.post("/logout", {}, { withCredentials: true }).subscribe({
-			error: logout,
-			next: logout
-		});
+		this.registerSubscription(
+			this.httpService.post("/logout", {}, { withCredentials: true }).subscribe({
+				error: logout,
+				next: logout
+			})
+		);
 	}
 }

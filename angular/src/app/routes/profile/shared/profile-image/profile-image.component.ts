@@ -5,12 +5,14 @@ import { AuthService, LoadingService } from '../../../../shared/services';
 import type { Id } from '../../../../shared/types';
 import { ProfileImageService } from './profile-image.service';
 
+import { SubscriptionManagerComponent } from '../../../../shared/abstract';
+
 @Component({
 	selector: 'cc-profile-image',
 	templateUrl: './profile-image.component.html',
 	styleUrls: [ './profile-image.component.scss' ],
 })
-export class ProfileImageComponent {
+export class ProfileImageComponent extends SubscriptionManagerComponent {
 	private _userId: Id | null = null;
 	private readonly profileImageSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
 	public readonly profileImage$: Observable<string>;
@@ -33,6 +35,7 @@ export class ProfileImageComponent {
 		private readonly authService: AuthService,
 		private readonly loadingService: LoadingService,
 	) {
+		super();
 		this.profileImage$ = this.profileImageSubject.asObservable();
 	}
 
@@ -41,8 +44,10 @@ export class ProfileImageComponent {
 	}
 
 	public uploadImage(file: File) {
-		this.loadingService.waitFor(this.profileImageService.uploadImage(file)).subscribe(
-			() => this.profileImageSubject.next(`${this.profileImageService.getImageUrl(this.userId)}?${new Date().getTime()}`)
+		this.registerSubscription(
+			this.loadingService.waitFor(this.profileImageService.uploadImage(file)).subscribe(
+				() => this.profileImageSubject.next(`${this.profileImageService.getImageUrl(this.userId)}?${new Date().getTime()}`)
+			)
 		);
 	}
 }

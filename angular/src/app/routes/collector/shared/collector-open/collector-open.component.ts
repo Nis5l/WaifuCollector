@@ -1,8 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription, timer, forkJoin, tap, of as observableof} from 'rxjs';
 
-import * as moment from 'moment';
-
 import { PackTimeResponse } from './types';
 import { CollectorOpenService } from './collector-open.service';
 
@@ -25,10 +23,12 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 
 	public progress: number = 1;
 
-	private maxTime: moment.Duration | undefined = undefined;
+	private maxTime: number = 0;
 	private packTime: Date | undefined = undefined;
 
 	private timerSubscription: Subscription | undefined = undefined;
+
+	public displayText: string = "";
 
 	constructor(
 		private readonly collectorOpenService: CollectorOpenService
@@ -69,13 +69,13 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 		let streams = [];
 		streams.push(this.collectorOpenService.getMaxTime(this.collectorId).pipe(
 			tap(res => {
-				this.maxTime = moment.duration(res.packTimeMax);
+				this.maxTime = this.parseDuration(res.packTimeMax);
 			})
 		));
 
 		streams.push(this.collectorOpenService.getTime(this.collectorId).pipe(
 			tap((res: PackTimeResponse) => {
-				this.packTime = moment(res.packTime).toDate();
+				this.packTime = new Date(res.packTime);
 			})
 		));
 
@@ -87,12 +87,15 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 	}
 
 	private updateProgress(){
-		if(this.packTime == null || this.maxTime == null){
+		if(this.packTime == null){
 			this.progress = 0;
 			return;
 		}
 		let diff: number = (this.packTime.getTime() - Date.now());
-		this.progress =  Math.min(1.0, 1.0 - diff / this.maxTime.as("milliseconds"));
+		this.progress =  Math.min(1.0, 1.0 - diff / this.maxTime);
+		setTimeout(() => {
+			this.displayText = this.createDisplayText();
+		});
 	}
 
 	private startCounter(){
@@ -108,12 +111,13 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 		this.timerSubscription = undefined;
 	}
 
-	public get displayText(): string{
+	private createDisplayText(): string{
 		if(this.progress >= 1.0) return "Open";
+		if(this.packTime == null) return "Error";
 
-		let now = moment(Date.now());
-		let end = moment(this.packTime);
-		let ms = end.diff(now);
+		let now = Date.now();
+		let end = this.packTime.getTime();
+		let ms = end - now;
 
 		let seconds = Math.floor(ms / 1000);
 		let minutes = Math.floor(seconds / 60);
@@ -132,5 +136,24 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 		}
 		text += seconds;
 		return text;
+	}
+
+	private parseDuration(durationString: string): number{
+		const isoDuration: RegExp = /^-?P(?:(?:(-?\d{1,20}(?:\.\d{1,20})?)Y)?(?:(-?\d{1,20}(?:\.\d{1,20})?)M)?(?:(-?\d{1,20}(?:\.\d{1,20})?)W)?(?:(-?\d{1,20}(?:\.\d{1,20})?)D)?(?:T(?:(-?\d{1,20}(?:\.\d{1,20})?)H)?(?:(-?\d{1,20}(?:\.\d{1,20})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,20}))?S)?)?)$/;
+		let parsed = isoDuration.exec(durationString);
+		if(parsed == null) return 0;
+		parsed.shift();
+		const values = parsed.map((s: string) => s == null ? 0 : parseInt(s));
+		const [yearStr, monthStr, weekStr, dayStr, hourStr, minuteStr, secondStr, millisecondsStr] = values;
+
+		let millis = 0;
+		if(yearStr != null) millis += yearStr * 365 * 24 * 60 * 60 * 1000;
+		if(monthStr != null) millis += monthStr * 30 * 24 * 60 * 60 * 1000;
+		if(dayStr != null) millis += dayStr * 24 * 60 * 60 * 1000;
+		if(hourStr != null) millis += hourStr * 60 * 60 * 1000;
+		if(minuteStr != null) millis += minuteStr * 60 * 1000;
+		if(secondStr != null) millis += secondStr * 1000;
+		if(millisecondsStr != null) millis += millisecondsStr;
+		return millis;
 	}
 }
