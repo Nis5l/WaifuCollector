@@ -1,3 +1,16 @@
-<div class="card">
-
-</div>
+<ng-container *ngVar="(card$ | async) as c">
+	<div class="card" *ngIf="c != null">
+		<div class="card-container">
+			<div class="card-inner">
+				<img class="card-effect" [src]="c.cardEffect.image" alt="Card Effect"/>
+				<img [src]="c.cardInfo.image" alt="Card Image"/>
+			</div>
+			<div class="card-frame">
+				<span class="card-name card-text">{{c.cardInfo.name}}</span>
+				<span class="card-type-name card-text">{{c.cardType.name}}</span>
+				
+				<img [src]="c.cardFrame.front" alt="Card Frame" />
+			</div>
+		</div>
+	</div>
+</ng-container>

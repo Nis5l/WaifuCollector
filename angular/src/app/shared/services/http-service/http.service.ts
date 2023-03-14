@@ -69,7 +69,6 @@ export class HttpService {
 		return `${this.api}${url}`;
 	}
 
-	//TODO: maybe replace req with only observable, means do header work in observable
 	private request<TRes>(req: () => Observable<TRes>): Observable<TRes> {
 		return req().pipe(
 			catchError((error: unknown) => {

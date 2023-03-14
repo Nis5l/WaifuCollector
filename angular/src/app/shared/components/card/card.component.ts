@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable,  ReplaySubject } from 'rxjs';
 
-import type { Card } from '../../types';
+import type { Card, CardData } from '../../types';
 import { CardService } from './card.service';
 
 @Component({
@@ -10,20 +10,25 @@ import { CardService } from './card.service';
 	styleUrls: [ './card.component.scss' ],
 })
 export class CardComponent {
-	private _cardId: string | null = null;
+	private _card: string | CardData | null = null;
+	private readonly cardSubject: ReplaySubject<Card | CardData> = new ReplaySubject(1);
+	public readonly card$: Observable<Card | CardData>;
 
 	@Input()
-	public set cardId(id: string) {
-		this._cardId = id;
+	public set card(card: string | CardData) {
+		this._card = card;
+		if(typeof card === "string") {
+			this.cardService.getCard(card).subscribe(data => this.cardSubject.next(data));
+		} else {
+			this.cardSubject.next(card);
+		}
 	}
-	public get cardId(): string {
-		if(this._cardId == null) throw new Error("cardId not set");
-		return this._cardId;
+	public get card(): string | CardData {
+		if(this._card == null) throw new Error("cardId not set");
+		return this._card;
 	}
-
-	private readonly card$: Observable<Card>;
 
 	constructor(private readonly cardService: CardService) {
-		this.card$ = this.cardService.getCard(this.cardId);
+		this.card$ = this.cardSubject.asObservable();
 	}
 }

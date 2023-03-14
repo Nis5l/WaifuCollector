@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 
 import { HomeComponent } from './home.component';
-import { BasicCardModule } from '../../shared/components';
+import { CardModule } from '../../shared/components';
 
 @NgModule({
-	imports: [ BasicCardModule ],
+	imports: [ CardModule ],
 	declarations: [ HomeComponent ],
 	exports: [ HomeComponent ],
 })

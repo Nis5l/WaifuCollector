@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, of as observableOf, catchError, map } from 'rxjs';
+import { Observable, of as observableOf, catchError, map, switchMap } from 'rxjs';
 
 import { LoadingService } from '../../../shared/services';
 import type { Id } from '../../../shared/types';
@@ -22,18 +22,20 @@ export class ProfileReadonlyComponent {
 		loadingService: LoadingService,
 	) {
 		loadingService.setLoading(true);
-		//TODO: pipe instead of subscribe
-		activatedRoute.params.subscribe(params => {
-			const userId = params["userId"] as unknown;
-			if(typeof userId !== "string") {
-				loadingService.setLoading(false);
-				return;
-			}
-			this.profile$ = loadingService.waitFor(this.profileService.getProfile(userId).pipe(
+		this.profile$ = loadingService.waitFor(activatedRoute.params.pipe(
+			map(params => {
+				const userId = params["userId"] as unknown;
+				if(typeof userId !== "string") {
+					loadingService.setLoading(false);
+					throw new Error("userId is not a string");
+				}
+				return userId;
+			}),
+			switchMap(userId => this.profileService.getProfile(userId).pipe(
 				map(profile => ({ ...profile, userId })),
 				catchError(() => observableOf(null)))
-			);
-		});
+			)
+		));
 	}
 
 	public edit(): void {
