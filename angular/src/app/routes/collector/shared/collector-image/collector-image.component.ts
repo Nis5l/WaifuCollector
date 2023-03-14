@@ -43,8 +43,8 @@ export class CollectorImageComponent{
 			map(collectorImage => this.collectorImageService.getImageUrl(collectorImage.id))
 		);
 
-		this.editable$ = observableCombineLatest([this.editableSubject.asObservable(), collectorImageNonNull$]).pipe(
-			map(([editable, collectorImage]) => editable === true && this.authService.getUserId() === collectorImage.userId.toLowerCase())
+		this.editable$ = observableCombineLatest([this.editableSubject.asObservable(), collectorImageNonNull$, this.authService.authData()]).pipe(
+			map(([editable, collectorImage, authData]) => editable === true && AuthService.userIdEqual(authData?.userId, collectorImage.userId))
 		);
 	}
 }

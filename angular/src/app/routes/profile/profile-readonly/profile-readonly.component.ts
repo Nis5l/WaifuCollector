@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, of as observableOf, catchError, map, switchMap } from 'rxjs';
+import { Observable, of as observableOf, catchError, map, switchMap, combineLatest as observableCombineLatest } from 'rxjs';
 
-import { LoadingService } from '../../../shared/services';
+import { LoadingService, AuthService } from '../../../shared/services';
 import type { Id } from '../../../shared/types';
 import { ProfileService } from '../profile.service';
 import type { Profile } from '../shared';
@@ -13,20 +13,20 @@ import type { Profile } from '../shared';
 	styleUrls: [ "/profile-readonly.component.scss" ]
 })
 export class ProfileReadonlyComponent {
-	public profile$: Observable<(Profile & { userId: Id }) | null> = observableOf(null);
+	public readonly profile$: Observable<(Profile & { userId: Id }) | null>;
+	public readonly canEdit$: Observable<boolean>;
 
 	constructor(
 		private readonly profileService: ProfileService,
 		private readonly activatedRoute: ActivatedRoute,
 		private readonly router: Router,
+		private readonly authService: AuthService,
 		loadingService: LoadingService,
 	) {
-		loadingService.setLoading(true);
 		this.profile$ = loadingService.waitFor(activatedRoute.params.pipe(
 			map(params => {
 				const userId = params["userId"] as unknown;
 				if(typeof userId !== "string") {
-					loadingService.setLoading(false);
 					throw new Error("userId is not a string");
 				}
 				return userId;
@@ -36,6 +36,10 @@ export class ProfileReadonlyComponent {
 				catchError(() => observableOf(null)))
 			)
 		));
+
+		this.canEdit$ = observableCombineLatest([this.profile$, this.authService.authData()]).pipe(
+			map(([profile, authData]) => AuthService.userIdEqual(profile?.userId, authData?.userId))
+		);
 	}
 
 	public edit(): void {

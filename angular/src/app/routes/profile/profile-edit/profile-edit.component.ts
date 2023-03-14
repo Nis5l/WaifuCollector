@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, of as observableOf, catchError, map, switchMap } from 'rxjs';
+import { Observable, of as observableOf, catchError, map, switchMap, combineLatest as observableCombineLatest, filter } from 'rxjs';
 
-import { LoadingService } from '../../../shared/services';
+import { LoadingService, AuthService } from '../../../shared/services';
 import type { Id } from '../../../shared/types';
 import { ProfileService } from '../profile.service';
 import type { Profile } from '../shared';
@@ -20,16 +20,15 @@ export class ProfileEditComponent extends SubscriptionManagerComponent {
 	constructor(
 		private readonly profileService: ProfileService,
 		private readonly router: Router,
+		private readonly authService: AuthService,
 		loadingService: LoadingService,
 		activatedRoute: ActivatedRoute
 	) {
 		super();
-		loadingService.setLoading(true);
 		this.profile$ = loadingService.waitFor(activatedRoute.params.pipe(
 			map(params => {
 				const userId = params["userId"] as unknown;
 				if(typeof userId !== "string") {
-					loadingService.setLoading(false);
 					throw new Error("userId is not a string");
 				}
 				return userId;
@@ -39,9 +38,14 @@ export class ProfileEditComponent extends SubscriptionManagerComponent {
 				catchError(() => observableOf(null)))
 			)
 		));
+
+		this.registerSubscription(observableCombineLatest([this.profile$, this.authService.authData()]).pipe(
+			filter(([profile, authData]) => !AuthService.userIdEqual(profile?.userId, authData?.userId))
+		).subscribe(([profile]) => this.navigateProfile(profile?.userId)));
 	}
 
-	public navigateProfile(userId: Id): void {
+	public navigateProfile(userId: Id | undefined): void {
+		if(userId == null) this.router.navigate(["home"]);
 		this.router.navigate(["user", userId]);
 	}
 }

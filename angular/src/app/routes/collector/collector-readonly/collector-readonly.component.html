@@ -16,7 +16,7 @@
 		<div>
 			<cc-collector-open [collectorId]="collector.id"></cc-collector-open>
 		</div>
-        <button class="floating-button-br" mat-fab aria-label="Edit" (click)="edit()">
+        <button *ngIf="canEdit$ | async" class="floating-button-br" mat-fab aria-label="Edit" (click)="edit()">
           <mat-icon>edit</mat-icon>
         </button>
 	</div>

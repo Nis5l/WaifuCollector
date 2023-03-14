@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { CollectorReadonlyComponent } from './collector-readonly.component';
 import { CollectorService } from '../collector.service';
-import { HttpModule } from '../../../shared/services';
+import { HttpModule, AuthModule } from '../../../shared/services';
 import { NgVarModule } from '../../../shared/directives';
 import {
 	CollectorImageModule,
@@ -22,17 +22,19 @@ const MATERIAL_MODULES = [
 
 @NgModule({
 	imports: [
-		HttpModule,
 		CommonModule,
 		RouterModule,
 
 		...MATERIAL_MODULES,
+
+		HttpModule,
+		AuthModule,
+		NgVarModule,
 			
 		CollectorImageModule,
 		CollectorFavoriteModule,
 		CollectorBannerModule,
 		CollectorOpenModule,
-		NgVarModule
 	],
 	providers: [ CollectorService ],
 	declarations: [ CollectorReadonlyComponent ],

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, of as observableOf, Observable } from 'rxjs';
+import { switchMap, map, Observable, combineLatest as observableCombineLatest } from 'rxjs';
 
 import { CollectorService } from '../collector.service';
-import { LoadingService } from '../../../shared/services';
+import { LoadingService, AuthService } from '../../../shared/services';
 import type { Collector } from '../../../shared/types';
 
 @Component({
@@ -13,24 +13,28 @@ import type { Collector } from '../../../shared/types';
 })
 export class CollectorReadonlyComponent {
 	public readonly collector$: Observable<Collector | null>;
+	public readonly canEdit$: Observable<boolean>;
 	
 	constructor(
 		private readonly router: Router,
 		private readonly collectorService: CollectorService,
 		private readonly activatedRoute: ActivatedRoute,
+		private readonly authService: AuthService,
 		loadingService: LoadingService
 	) {
-		loadingService.setLoading(true);
-		this.collector$ = activatedRoute.params.pipe(
+		this.collector$ = loadingService.waitFor(activatedRoute.params.pipe(
 			switchMap(params => {
 				const collectorId = params["collectorId"] as unknown;
 				if(typeof collectorId !== "string") {
-					loadingService.setLoading(false);
-					return observableOf(null);
+					throw new Error("collectorId is not a string");
 				}
 
-				return loadingService.waitFor(this.collectorService.getCollector(collectorId))
+				return this.collectorService.getCollector(collectorId);
 			})
+		));
+		
+		this.canEdit$ = observableCombineLatest([this.collector$, this.authService.authData()]).pipe(
+			map(([collector, authData]) => AuthService.userIdEqual(collector?.userId, authData?.userId))
 		);
 	}
 

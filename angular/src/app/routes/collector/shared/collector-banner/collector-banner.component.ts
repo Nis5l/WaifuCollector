@@ -49,8 +49,8 @@ export class CollectorBannerComponent extends SubscriptionManagerComponent {
 			map(collectorBanner => `${this.collectorBannerService.getBannerUrl(collectorBanner.id)}?${new Date().getTime()}`)
 		);
 
-		this.editable$ = observableCombineLatest([this.editableSubject.asObservable(), collectorBannerNonNull$]).pipe(
-			map(([editable, collectorBanner]) => editable === true && this.authService.getUserId() == collectorBanner.userId.toLowerCase())
+		this.editable$ = observableCombineLatest([this.editableSubject.asObservable(), collectorBannerNonNull$, this.authService.authData()]).pipe(
+			map(([editable, collectorBanner, authData]) => editable === true && AuthService.userIdEqual(authData?.userId, collectorBanner.userId))
 		);
 	}
 

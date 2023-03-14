@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { HttpModule } from '../../../shared/services';
+import { HttpModule, AuthModule } from '../../../shared/services';
 import { NgVarModule } from '../../../shared/directives';
 import { ProfileEditComponent } from './profile-edit.component';
 import { ProfileService } from '../profile.service';
@@ -18,11 +18,12 @@ const MATERIAL_MODULES = [
 @NgModule({
 	imports: [
 		CommonModule,
+	 	RouterModule,
 
 		...MATERIAL_MODULES,
 
 		HttpModule,
-	 	RouterModule,
+		AuthModule,
 
 		NgVarModule,
 
