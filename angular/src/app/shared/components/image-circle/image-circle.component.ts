@@ -2,6 +2,8 @@ import { Component, Output, Input, EventEmitter, ViewChild, ElementRef } from '@
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, ReplaySubject } from 'rxjs';
 
+import { eventGetImage } from '../../../shared/utils';
+
 @Component({
 	selector: "cc-image-circle",
 	templateUrl: "./image-circle.component.html",
@@ -46,10 +48,7 @@ export class ImageCircleComponent {
 	}
 
 	public imageChange(target: EventTarget | null): void {
-		if(target == null || !(target instanceof HTMLInputElement)) throw new Error("target has to be input");
-
-		const file = target.files?.item(0);
-		if(file == null) throw new Error("no file");
+		const file = eventGetImage(target);
 
 		this.onImageChange.next(file);
 		const blobUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));

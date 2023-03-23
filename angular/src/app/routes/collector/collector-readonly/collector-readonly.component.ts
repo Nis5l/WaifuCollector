@@ -4,7 +4,9 @@ import { switchMap, map, Observable, combineLatest as observableCombineLatest } 
 
 import { CollectorService } from '../collector.service';
 import { LoadingService, AuthService } from '../../../shared/services';
-import type { Collector } from '../../../shared/types';
+import type { Collector, Id } from '../../../shared/types';
+import { CollectorAddDialogComponent } from './collector-add-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: "cc-collector-readonly",
@@ -20,6 +22,7 @@ export class CollectorReadonlyComponent {
 		private readonly collectorService: CollectorService,
 		private readonly activatedRoute: ActivatedRoute,
 		private readonly authService: AuthService,
+		private readonly matDialog: MatDialog,
 		loadingService: LoadingService
 	) {
 		this.collector$ = loadingService.waitFor(activatedRoute.params.pipe(
@@ -40,5 +43,9 @@ export class CollectorReadonlyComponent {
 
 	public edit(): void {
 		this.router.navigate(["edit"], { relativeTo: this.activatedRoute });
+	}
+
+	public openAddDialog(collectorId: Id): void {
+		CollectorAddDialogComponent.open(this.matDialog, collectorId);
 	}
 }

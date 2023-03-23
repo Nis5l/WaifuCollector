@@ -1,0 +1,33 @@
+@import '../../../../../../screen.scss';
+
+.card-add-container {
+	margin: 10px;
+	height: 520px;
+	width: auto;
+	display: flex;
+	gap: 50px;
+	justify-content: space-between;
+
+	flex-direction: row;
+	@media (max-width: $breakpoint-md) {
+		flex-direction: column;
+	}
+
+	form {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+
+		button {
+			margin-top: auto;
+		}
+	}
+
+	.card {
+		display: flex;
+		flex: 1;
+		margin: 20px;
+		justify-content: center;
+		align-items: center;
+	}
+}

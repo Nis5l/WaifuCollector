@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -52,6 +52,10 @@ export class NewCollectorDialogComponent extends SubscriptionManagerComponent {
 				});
 			})
 		);
+	}
+
+	public static open(matDialog: MatDialog): Observable<undefined> {
+		return matDialog.open<NewCollectorDialogComponent, undefined, undefined>(NewCollectorDialogComponent, {}).afterClosed();
 	}
 
 	public onCreate(): void {

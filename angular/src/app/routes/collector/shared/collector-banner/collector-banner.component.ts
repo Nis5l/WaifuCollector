@@ -4,8 +4,8 @@ import { Observable, BehaviorSubject, filter, map, combineLatest as observableCo
 import { CollectorBannerService } from './collector-banner.service';
 import type { CollectorBanner } from './types';
 import { AuthService, LoadingService } from '../../../../shared/services';
-
 import { SubscriptionManagerComponent } from '../../../../shared/abstract';
+import { eventGetImage } from '../../../../shared/utils';
 
 @Component({
 	selector: 'cc-collector-banner',
@@ -55,10 +55,7 @@ export class CollectorBannerComponent extends SubscriptionManagerComponent {
 	}
 
 	public uploadImage(target: EventTarget | null): void {
-		if(target == null || !(target instanceof HTMLInputElement)) throw new Error("target has to be input");
-
-		const file = target.files?.item(0);
-		if(file == null) throw new Error("no file");
+		const file = eventGetImage(target);
 
 		this.registerSubscription(
 			this.loadingService.waitFor(this.collectorBannerService.uploadBanner(this.collector.id, file)).subscribe(

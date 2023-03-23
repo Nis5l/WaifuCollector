@@ -49,7 +49,7 @@ export class CollectorsComponent extends SubscriptionManagerComponent {
 	}
 
 	public newCollector(): void {
-		this.matDialog.open<NewCollectorDialogComponent>(NewCollectorDialogComponent, {})
+		NewCollectorDialogComponent.open(this.matDialog);
 	}
 
 	private loadCollectors(search: string, page: number): void {

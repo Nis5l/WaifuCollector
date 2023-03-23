@@ -1,0 +1,13 @@
+<div class="card-add-container" *ngVar="(card$ | async) as card">
+	<form [formGroup]="formGroup">
+		<mat-form-field>
+			<input matInput type="text" formControlName="name" placeholder="Name" />
+			<mat-error>Name has to be TODO-TODO characters</mat-error>
+		</mat-form-field>
+		<input #imageInput hidden="true" type="file" (change)="imageChange($event.target)" accept="image/jpeg"/>
+		<button mat-button (click)="imageInput.click()">Image</button>
+	</form>
+	<div class="card" *ngIf="card != null">
+		<cc-card [card]="card"></cc-card>
+	</div>
+</div>

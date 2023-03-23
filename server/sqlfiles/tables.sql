@@ -89,15 +89,13 @@ CREATE TABLE cardtypes (
 
 CREATE TABLE cards (
 	cid VARCHAR(13) NOT NULL,
-	coid VARCHAR(13) NOT NULL,
 	cname TINYTEXT NOT NULL,
 	ctid VARCHAR(13) NOT NULL,
 	cimage TINYTEXT NOT NULL,
 	PRIMARY KEY (cid),
 	FOREIGN KEY (ctid) REFERENCES cardtypes(ctid)
-	ON DELETE RESTRICT,
-	FOREIGN KEY (coid) REFERENCES collectors(coid)
-	ON DELETE CASCADE
+	ON DELETE CASCADE,
+	UNIQUE(ctid, cname)
 ) ENGINE = InnoDB;
 
 CREATE TABLE cardframes (

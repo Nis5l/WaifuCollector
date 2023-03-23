@@ -58,6 +58,7 @@ pub struct Config {
 
     pub user_fs_base: String,
     pub collector_fs_base: String,
+    pub card_fs_base: String,
 
     pub log_file: String,
 
@@ -126,6 +127,7 @@ impl Default for Config {
 
             user_fs_base: String::from("static/user"),
             collector_fs_base: String::from("static/collector"),
+            card_fs_base: String::from("static/card"),
 
             log_file: String::from("./log-file.log"),
 

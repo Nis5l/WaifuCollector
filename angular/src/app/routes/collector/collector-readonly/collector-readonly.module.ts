@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { CollectorReadonlyComponent } from './collector-readonly.component';
 import { CollectorService } from '../collector.service';
@@ -14,10 +15,14 @@ import {
 	CollectorBannerModule,
 	CollectorOpenModule
 } from '../shared';
+import { CollectorAddDialogModule } from './collector-add-dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const MATERIAL_MODULES = [
 	MatButtonModule,
 	MatIconModule,
+	MatTabsModule,
+	MatDialogModule,
 ];
 
 @NgModule({
@@ -35,6 +40,7 @@ const MATERIAL_MODULES = [
 		CollectorFavoriteModule,
 		CollectorBannerModule,
 		CollectorOpenModule,
+		CollectorAddDialogModule,
 	],
 	providers: [ CollectorService ],
 	declarations: [ CollectorReadonlyComponent ],

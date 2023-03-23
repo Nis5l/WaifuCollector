@@ -18,6 +18,7 @@
 	margin-left: 50px;
 	@media (max-width: $breakpoint-md) {
 		margin-left: 20px;
+		gap: 5px;
 	}
 
 	cc-collector-favorite {

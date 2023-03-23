@@ -113,6 +113,7 @@ async fn rocket() -> _ {
 
            card::uuid::card_uuid_route,
            card::upgrade::upgrade_route,
+           card::card_image::card_image_default_route,
 
            trade::info::trade_route,
            trade::confirm::trade_confirm_route,

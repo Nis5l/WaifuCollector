@@ -1,0 +1,7 @@
+<form [formGroup]="formGroup" (sumbit)="createType()">
+	<mat-form-field>
+		<input matInput type="text" formControlName="name" placeholder="Name" />
+		<mat-error>Name has to be TODO-TODO characters</mat-error>
+	</mat-form-field>
+	<button mat-button type="sumbit()">Create</button>
+</form>
