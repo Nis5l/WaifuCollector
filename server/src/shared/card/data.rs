@@ -21,10 +21,11 @@ pub struct CardFrame {
     pub back: String
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, FromRow)]
 pub struct CardType {
     pub id: Id,
-    pub name: String
+    pub name: String,
+    pub user_id: Id,
 }
 
 #[derive(Debug, Serialize)]
@@ -70,6 +71,7 @@ impl Card {
             card_type: CardType {
                 id: card.type_id,
                 name: card.type_name,
+                user_id: card.card_type_user_id,
             },
             card_effect: CardEffect {
                 id: card.effect_id,
@@ -89,6 +91,7 @@ pub struct CardDb {
     pub level: i32,
     pub quality: i32,
 
+    pub card_type_user_id: Id,
     pub card_id: Id,
     pub card_name: String,
     pub card_image: String,
@@ -112,6 +115,24 @@ pub struct CardCreateData {
     pub frame_id: IdInt,
     pub quality: i32,
     pub level: i32
+}
+
+#[derive(Debug)]
+pub enum CardState {
+    Requested = 0,
+    Created = 1,
+}
+
+impl<'de> Deserialize<'de> for CardState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+       where D: serde::Deserializer<'de> {
+            let i = i32::deserialize(deserializer)?;
+
+            Ok(match i {
+                0 => Self::Requested,
+                _ => Self::Created
+            })
+       }
 }
 
 #[derive(Debug)]

@@ -3,6 +3,7 @@ use chrono::{DateTime, Utc};
 
 use crate::sql::Sql;
 use crate::shared::Id;
+use crate::shared::card::data::CardState;
 use super::data::CardCreateDataDb;
 
 pub async fn set_pack_time(sql: &Sql, user_id: &Id, collector_id: &Id, last_opened: DateTime<Utc>) -> Result<(), sqlx::Error> {
@@ -46,11 +47,13 @@ pub async fn get_random_card_data(sql: &Sql, card_amount: u32, collector_id: &Id
          cards, cardframes
          WHERE cards.coid=?
          AND cardframes.coid=?
+         AND cards.cstate=?
          ORDER BY
          RAND()
          LIMIT ?;")
         .bind(collector_id)
         .bind(collector_id)
+        .bind(CardState::Created as u32)
         .bind(card_amount)
         .fetch_all(&mut con)
         .await?;

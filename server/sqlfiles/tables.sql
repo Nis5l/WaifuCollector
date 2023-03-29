@@ -81,21 +81,28 @@ CREATE TABLE collectorsettings (
 CREATE TABLE cardtypes (
 	ctid VARCHAR(13) NOT NULL,
 	coid VARCHAR(13) NOT NULL,
+	uid VARCHAR(13),
 	ctname TINYTEXT NOT NULL,
+	ctstate INT NOT NULL,
 	PRIMARY KEY (ctid),
 	FOREIGN KEY (coid) REFERENCES collectors(coid)
-	ON DELETE CASCADE
+	ON DELETE CASCADE,
+	FOREIGN KEY (uid) REFERENCES users(uid)
+	ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
 CREATE TABLE cards (
 	cid VARCHAR(13) NOT NULL,
 	cname TINYTEXT NOT NULL,
 	ctid VARCHAR(13) NOT NULL,
+	uid VARCHAR(13),
 	cimage TINYTEXT NOT NULL,
+	cstate INT NOT NULL,
 	PRIMARY KEY (cid),
 	FOREIGN KEY (ctid) REFERENCES cardtypes(ctid)
 	ON DELETE CASCADE,
-	UNIQUE(ctid, cname)
+	FOREIGN KEY (uid) REFERENCES users(uid)
+	ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
 CREATE TABLE cardframes (

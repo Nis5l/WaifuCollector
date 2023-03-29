@@ -55,9 +55,9 @@ export class HttpService {
 		return this.request(req);
 	}
 
-	public post<TBody, TRes>(url: string, body: TBody, options?: HttpOptions): Observable<TRes> {
+	public post<TBody, TRes>(url: string, body: TBody, options?: HttpOptions, refresh: boolean = true): Observable<TRes> {
 		const req = () => this.httpClient.post<TRes>(this.apiUrl(url), body, { ...options, headers: this.getHeaders() })
-		return this.request(req);
+		return this.request(req, refresh);
 	}
 
 	public delete<TRes>(url: string): Observable<TRes> {
@@ -69,11 +69,11 @@ export class HttpService {
 		return `${this.api}${url}`;
 	}
 
-	private request<TRes>(req: () => Observable<TRes>): Observable<TRes> {
+	private request<TRes>(req: () => Observable<TRes>, refresh: boolean = true): Observable<TRes> {
 		return req().pipe(
 			catchError((error: unknown) => {
 				if(!(error instanceof HttpErrorResponse)) return observableThrowError(() => error);
-				if(error.status === 401) {
+				if(refresh === true && error.status === 401) {
 					return this.refreshRequest.pipe(
 						switchMap(() => req())
 					);

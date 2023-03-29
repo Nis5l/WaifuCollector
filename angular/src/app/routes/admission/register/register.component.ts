@@ -23,9 +23,9 @@ export class RegisterComponent extends SubscriptionManagerComponent {
 	public readonly error$: Observable<string | null>;
 
 	private readonly passwordValidator: ValidatorFn = (fg: AbstractControl): ValidationErrors | null => {
-		let password = fg.get("password")?.value;
-		let passwordRepeat = fg.get("passwordRepeat")?.value;
-		return password === passwordRepeat ? null : { notSame: true };
+		let password = fg.parent?.get("password")?.value;
+		let passwordRepeat = fg.value;
+		return password === passwordRepeat ? null : { passwordNotSame: true };
 	};
 
 	constructor(private readonly registerService: RegisterService, private readonly router: Router, private readonly admissionService: AdmissionService) {
@@ -36,8 +36,8 @@ export class RegisterComponent extends SubscriptionManagerComponent {
 				nonNullable: true,
 				validators: [
 					Validators.required,
-					Validators.minLength(this.config.username.minLength),
-					Validators.maxLength(this.config.username.maxLength)
+					//TODO: error in html
+					Validators.pattern("^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$"),
 				]
 			}),
 			email: new FormControl("", {
@@ -50,15 +50,14 @@ export class RegisterComponent extends SubscriptionManagerComponent {
 			password: new FormControl("", {
 				nonNullable: true,
 				validators: [
-					Validators.required,
-					Validators.minLength(this.config.password.minLength),
-					Validators.maxLength(this.config.password.maxLength)
+					Validators.required
 				]
 			}),
 			passwordRepeat: new FormControl("", [
 				Validators.required,
+				this.passwordValidator
 			]),
-		}, { validators: this.passwordValidator });
+		});
 
 		this.error$ = this.errorSubject.asObservable();
 	}

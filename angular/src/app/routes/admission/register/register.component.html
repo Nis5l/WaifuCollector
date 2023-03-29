@@ -1,21 +1,29 @@
 <div class="register-wrapper">
 	<mat-card>
 		<form class="register" [formGroup]="formGroup" (submit)="register()">
-			<mat-form-field >
-				<input matInput type="text" formControlName="username" placeholder="Username" />
-				<mat-error>Username has to be {{config.username.minLength}}-{{config.username.maxLength}} characters</mat-error>
+			<mat-form-field *ngVar="formGroup.controls.username as usernameFormControl">
+				<input matInput type="text" formControlName="username" placeholder="Username" [minlength]="config.username.minLength" [maxlength]="config.username.maxLength" />
+				<mat-error *ngIf="usernameFormControl.hasError('required') || usernameFormControl.hasError('minlength')">
+					Username has to be {{config.username.minLength}}-{{config.username.maxLength}} characters
+				</mat-error>
+				<mat-error *ngIf="usernameFormControl.hasError('pattern')">
+					Username can only contain letters, numbers, _ and whitespaces in between words
+				</mat-error>
 			</mat-form-field>
 			<mat-form-field >
 				<input matInput type="text" formControlName="email" placeholder="Email" />
 				<mat-error>Email has to be a valid Email</mat-error>
 			</mat-form-field>
 			<mat-form-field>
-				<input matInput type="password" formControlName="password" placeholder="Password" />
+				<input matInput type="password" formControlName="password" placeholder="Password" [minlength]="this.config.password.minLength" [maxlength]="this.config.password.maxLength"/>
 				<mat-error>Password has to be {{config.password.minLength}}-{{config.password.maxLength}} characters</mat-error>
 			</mat-form-field>
-			<mat-form-field>
+			<mat-form-field *ngVar="formGroup.controls.passwordRepeat as passwordRepeatFormControl">
 				<input matInput type="password" formControlName="passwordRepeat" placeholder="Repeat Password" />
-				<mat-error>Password has to be {{config.password.minLength}}-{{config.password.maxLength}} characters</mat-error>
+				<mat-error *ngIf="passwordRepeatFormControl.hasError('required') || passwordRepeatFormControl.hasError('minlength')">
+					Password has to be {{config.password.minLength}}-{{config.password.maxLength}} characters
+				</mat-error>
+				<mat-error *ngIf="passwordRepeatFormControl.hasError('passwordNotSame')">Passwords do not match</mat-error>
 			</mat-form-field>
 			<div *ngVar="(error$ | async) as error" class="error">
 				<mat-error *ngIf="error != null">{{error}}</mat-error>

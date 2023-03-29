@@ -29,7 +29,7 @@ fn validate_collector_name(name: &str, config: &config::Config) -> Result<(), Va
     let re = Regex::new("^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$").unwrap();
 
     if !re.is_match(name) {
-        return Err(ValidationError::new("user can only contain letters, numbers, _ and whitespaces in between words"));
+        return Err(ValidationError::new("collector can only contain letters, numbers, _ and whitespaces in between words"));
     }
 
     Ok(())

@@ -23,6 +23,9 @@ pub struct Config {
     pub collector_len_min: u32,
     pub collector_len_max: u32,
 
+    pub card_type_len_min: u32,
+    pub card_type_len_max: u32,
+
     pub password_len_min: u32,
     pub password_len_max: u32,
 
@@ -30,6 +33,7 @@ pub struct Config {
     pub collectors_page_amount: u32,
     pub inventory_page_amount: u32,
     pub flex_cards_amount: u32,
+    pub card_type_page_amount: u32,
 
     pub max_friends: u32,
     pub max_trades: u32,
@@ -95,6 +99,9 @@ impl Default for Config {
             collector_len_min: 4,
             collector_len_max: 20,
 
+            card_type_len_min: 4,
+            card_type_len_max: 20,
+
             password_len_min: 8,
             password_len_max: 30,
 
@@ -102,6 +109,7 @@ impl Default for Config {
             collectors_page_amount: 5,
             inventory_page_amount: 20,
             flex_cards_amount: 9,
+            card_type_page_amount: 10,
 
             max_friends: 50,
             max_trades: 5,

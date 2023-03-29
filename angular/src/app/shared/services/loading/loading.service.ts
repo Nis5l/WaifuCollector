@@ -22,10 +22,14 @@ export class LoadingService {
 	public waitFor<T>(o: Observable<T>): Observable<T> {
 		this.setLoading(true);
 		this.observables.add(o);
+		const f = () => {
+			this.observables.delete(o);
+			this.setLoading(false);
+		};
 		return o.pipe(
-			tap(() => {
-				this.observables.delete(o);
-				this.setLoading(false);
+			tap({
+				next: () => f(),
+				error: () => f()
 			})
 		);
 	}
