@@ -13,8 +13,8 @@ pub async fn profile_image_get_route(user_id: Id, sql: &State<Sql>, config: &Sta
     //NOTE: check user_id to avoid path traversal attacks or similar
     match user::sql::username_from_user_id(sql, &user_id).await {
         Ok(Some(_)) => (),
-        Ok(None) => return ImageResponse::api_err(Status::NotFound, format!("user with id {} not found", user_id)),
-        Err(_) => return ImageResponse::api_err(Status::InternalServerError, String::from("database error"))
+        Ok(None) => return ImageResponse::api_err(Status::NotFound, String::from("User not found")),
+        Err(_) => return ImageResponse::api_err(Status::InternalServerError, String::from("Database error"))
     }
 
     let path = Path::new(&config.user_fs_base);
@@ -23,7 +23,7 @@ pub async fn profile_image_get_route(user_id: Id, sql: &State<Sql>, config: &Sta
         Ok(file) => file,
         Err(_) => match NamedFile::open(path.join("profile-image-default")).await {
             Ok(file) => file,
-            Err(_) => return ImageResponse::api_err(Status::InternalServerError, String::from("default image not found"))
+            Err(_) => return ImageResponse::api_err(Status::InternalServerError, String::from("Default image not found"))
         }
     };
 

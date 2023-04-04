@@ -96,7 +96,6 @@ CREATE TABLE cards (
 	cname TINYTEXT NOT NULL,
 	ctid VARCHAR(13) NOT NULL,
 	uid VARCHAR(13),
-	cimage TINYTEXT NOT NULL,
 	cstate INT NOT NULL,
 	PRIMARY KEY (cid),
 	FOREIGN KEY (ctid) REFERENCES cardtypes(ctid)

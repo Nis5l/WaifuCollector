@@ -15,7 +15,7 @@ pub async fn admin_log_route(sql: &State<Sql>, config: &State<Config>, token: Jw
     let user_id = token.id;
 
     if !matches!(rjtry!(user::sql::get_user_rank(sql, &user_id).await), Ok(user::data::UserRanking::Admin)) {
-        return ApiResponseErr::api_err(Status::Forbidden, String::from("You need to be admin to view this"))
+        return ApiResponseErr::api_err(Status::Forbidden, String::from("Missing admin permissions"))
     }
 
     let log = rjtry!(read_logfile(&config.log_file));

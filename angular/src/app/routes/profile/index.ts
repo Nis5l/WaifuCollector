@@ -1,2 +1,2 @@
-export { ProfileEditModule, ProfileEditComponent } from './profile-edit';
-export { ProfileReadonlyModule, ProfileReadonlyComponent } from './profile-readonly';
+export { ProfileEditModule, ProfileEditComponent } from './edit';
+export { ProfileReadonlyModule, ProfileReadonlyComponent } from './readonly';

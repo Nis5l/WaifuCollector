@@ -24,10 +24,12 @@ pub async fn login_route(cookies: &CookieJar<'_>, data: LoginRequest, sql: &Stat
         Ok(_) => ()
     }
 
-    let access_token: String = match jwt_sign_token(&username, &user_id, &config.jwt_secret) {
+    /* let access_token: String = match jwt_sign_token(&username, &user_id, &config.jwt_secret) {
         Ok(token) => token,
         Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("Internal server error"))
-    };
+    }; */
+
+    let access_token: String = rjtry!(jwt_sign_token(&username, &user_id, &config.jwt_secret));
 
     let refresh_token: String = match jwt_sign_token(&username, &user_id, &config.refresh_token_secret) {
         Ok(token) => token,

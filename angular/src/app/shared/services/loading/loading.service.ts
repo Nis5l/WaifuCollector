@@ -20,8 +20,6 @@ export class LoadingService {
 	}
 
 	public waitFor<T>(o: Observable<T>): Observable<T> {
-		this.setLoading(true);
-		this.observables.add(o);
 		const f = () => {
 			this.observables.delete(o);
 			this.setLoading(false);
@@ -29,7 +27,13 @@ export class LoadingService {
 		return o.pipe(
 			tap({
 				next: () => f(),
-				error: () => f()
+				error: () => f(),
+				subscribe:() => {
+					this.setLoading(true);
+					this.observables.add(o);
+				},
+				finalize: () => console.log("finalize"),
+				complete: () => console.log("complete")
 			})
 		);
 	}

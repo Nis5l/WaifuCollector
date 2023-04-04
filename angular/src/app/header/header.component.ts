@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, combineLatest, map, switchMap } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, map, switchMap, filter } from 'rxjs';
 
 import { AuthService, UserService, LoadingService } from '../shared/services';
 
@@ -26,7 +26,10 @@ export class HeaderComponent {
 		this.toggleSidebar$ = combineLatest([this.toggleSidebarSubject.asObservable(), this.loggedIn$]).pipe(
 			map(([toggled, loggedIn]: [boolean, boolean]): boolean => toggled && loggedIn)
 		);
-		this.username$ = this.loadingService.waitFor(this.loggedIn$.pipe(switchMap(() => this.userService.getUsername())));
+
+		this.username$ = this.loadingService.waitFor(this.loggedIn$.pipe(
+			switchMap(() => this.userService.getUsername())
+		));
 	}
 
 	public toggleSidebar(): void {

@@ -19,7 +19,7 @@ pub async fn email_change_route(sql: &State<Sql>, config: &State<Config>, data: 
     }
 
     if rjtry!(user::sql::email_exists(sql, &data.email).await) {
-        return ApiResponseErr::api_err(Status::Conflict, format!("Email {} already exists", &data.email))
+        return ApiResponseErr::api_err(Status::Conflict, String::from("Email already exists"))
     }
 
     rjtry!(user::sql::set_email(sql, &user_id, Some(&data.email)).await);

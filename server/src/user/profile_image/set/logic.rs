@@ -19,16 +19,16 @@ pub async fn profile_image_set_route(mut data: Form<ProfileImageSetRequest<'_>>,
 
     let path = Path::new(&config.user_fs_base).join(user_id.to_string());
     if let Err(_) = fs::create_dir_all(&path) {
-         return ApiResponseErr::api_err(Status::InternalServerError, String::from("fs error"))
+         return ApiResponseErr::api_err(Status::InternalServerError, String::from("File-System error"))
     }
 
     if let Err(_) = data.file.copy_to(path.join("profile-image")).await {
-         return ApiResponseErr::api_err(Status::InternalServerError, String::from("error saving file"))
+         return ApiResponseErr::api_err(Status::InternalServerError, String::from("Error saving file"))
     }
 
     resize_image_square(path.join("profile-image"));
 
     ApiResponseErr::ok(Status::Ok, ProfileImageSetResponse {
-        message: String::from("profile image set")
+        message: String::from("Profile image set")
     })
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { HttpService } from '../../../../shared/services';
 import type { Id } from '../../../../shared/types';
@@ -9,5 +10,9 @@ export class CollectorImageService {
 
 	public getImageUrl(id: Id): string {
 		return this.httpService.apiUrl(`/collector/${id}/collector-image`);
+	}
+
+	public uploadImage(collectorId: Id, image: File): Observable<undefined> {
+		return this.httpService.putFile(`/collector/${collectorId}/collector-image`, image);
 	}
 }

@@ -17,7 +17,7 @@ pub async fn card_type_request_route(collector_id: Id, config: &State<Config>, s
     verify_user!(sql, user_id, true);
 
     if rjtry!(sql::collector_type_exists(sql, &collector_id, user_id, &data.name).await) {
-        return ApiResponseErr::api_err(Status::Conflict, String::from("card-type already exists"))
+        return ApiResponseErr::api_err(Status::Conflict, String::from("Card-Type already exists"))
     }
 
     let card_type_id = Id::new(config.id_length);

@@ -9,8 +9,6 @@ pub struct CardInfo {
     pub id: Id,
     #[sqlx(rename="cardName")]
     pub name: String,
-    #[sqlx(rename="cardImage")]
-    pub image: String
 }
 
 #[derive(Debug, Serialize)]
@@ -22,9 +20,11 @@ pub struct CardFrame {
 }
 
 #[derive(Debug, Serialize, FromRow)]
+#[serde(rename_all="camelCase")]
 pub struct CardType {
     pub id: Id,
     pub name: String,
+    #[sqlx(rename="userId")]
     pub user_id: Id,
 }
 
@@ -60,7 +60,6 @@ impl Card {
             card_info: CardInfo {
                 id: card.card_id,
                 name: card.card_name,
-                image: format!("{}/{}", &config.card_image_base, card.card_image)
             },
             card_frame: CardFrame {
                 id: card.frame_id,
@@ -94,7 +93,6 @@ pub struct CardDb {
     pub card_type_user_id: Id,
     pub card_id: Id,
     pub card_name: String,
-    pub card_image: String,
 
     pub type_id: Id,
     pub type_name: String,

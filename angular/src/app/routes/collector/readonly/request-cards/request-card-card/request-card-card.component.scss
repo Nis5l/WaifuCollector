@@ -1,0 +1,22 @@
+.collector-card-type {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	height: 300px;
+
+	mat-card-title {
+		display: flex;
+		gap: 10px;
+
+		.seperator {
+			padding: 0;
+			margin: 0;
+		}
+
+		cc-user {
+			display: block;
+			height: 25px;
+			font-size: 16px;
+		}
+	}
+}

@@ -13,12 +13,12 @@
 		</button>
 
 		<cc-notifications *ngIf="loggedIn"></cc-notifications>
-		<button mat-button [matMenuTriggerFor]="menu">{{username$ | async}}</button>
+		<button mat-button *ngIf="loggedIn" [matMenuTriggerFor]="menu">{{username$ | async}}</button>
 		<mat-menu #menu="matMenu">
 			<button mat-menu-item (click)="navigateProfile()">
 				<mat-icon>person</mat-icon> Profile
 			</button>
-			<button mat-menu-item *ngIf="loggedIn" routerLink="logout" matTooltip="Logout">
+			<button mat-menu-item routerLink="logout" matTooltip="Logout">
 				<mat-icon>logout</mat-icon> Logout
 			</button>
 		</mat-menu>

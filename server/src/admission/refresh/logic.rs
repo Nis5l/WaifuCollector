@@ -29,7 +29,7 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
             };
         },
         Err(JwtTokenError::ParseError(_)) => {
-            return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't parse refresh token"));
+            return ApiResponseErr::api_err(Status::Unauthorized, String::from("Could not parse refresh token"));
         }
     };
 
@@ -53,7 +53,7 @@ pub async fn refresh_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &r
     let UserRoleDb { username: _, role } = if let Some(user_role_db) = rjtry!(sql::get_user_role(&sql, String::from(token.username)).await) {
         user_role_db
     } else {
-        return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't find user"));
+        return ApiResponseErr::api_err(Status::Unauthorized, String::from("Could not find user"));
     };
 
     if config.refresh_token_rotation_strategy {

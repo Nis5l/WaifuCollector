@@ -11,6 +11,7 @@ use crate::config::Config;
 use crate::shared::Id;
 use crate::{verify_user, verify_collector};
 
+//TODO: pretty sure collector_id can be removed
 #[post("/<collector_id>/card/upgrade", data="<data>")]
 pub async fn upgrade_route(collector_id: Id, sql: &State<Sql>, token: JwtToken, data: UpgradeRequest, config: &State<Config>) -> ApiResponseErr<UpgradeResponse> {
     let user_id = token.id;

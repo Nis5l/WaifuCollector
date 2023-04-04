@@ -1,5 +1,5 @@
 <div class="image-circle-wrapper">
-	<img [src]="image$ | async" alt="Image" class="image-circle" (click)="selectImage()" [style.cursor]="editable ? 'pointer' : 'auto'"/>
+	<img [src]="image$ | async" alt="Image" class="image-circle" (click)="selectImage()" [style.cursor]="editable ? 'pointer' : 'unset'"/>
 	<input #imageInput hidden="true" type="file" (change)="imageChange($event.target)" accept="image/jpeg"/>
 	<button *ngIf="editable" mat-fab class="edit-button" (click)="selectImage()">
 		<mat-icon>edit</mat-icon>

@@ -1,17 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { Observable, BehaviorSubject, filter, map, combineLatest as observableCombineLatest } from 'rxjs';
+import { Observable, BehaviorSubject, ReplaySubject, filter, map, combineLatest as observableCombineLatest, merge as observableMerge } from 'rxjs';
 
 import { CollectorImageService } from './collector-image.service';
 import type { CollectorImage } from './types';
-import { AuthService } from '../../../../shared/services';
+import { AuthService, LoadingService } from '../../../../shared/services';
+import { SubscriptionManagerComponent } from '../../../../shared/abstract';
 
 @Component({
 	selector: "cc-collector-image",
 	templateUrl: "./collector-image.component.html",
 	styleUrls: [ "./collector-image.component.scss" ]
 })
-export class CollectorImageComponent{
+export class CollectorImageComponent extends SubscriptionManagerComponent {
 	private readonly collectorImageSubject: BehaviorSubject<CollectorImage | null> = new BehaviorSubject<CollectorImage | null>(null);
+	private readonly collectorImageUrlSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
 	public readonly collectorImage$: Observable<string>;
 	public readonly editableSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	public readonly editable$: Observable<boolean>;
@@ -35,16 +37,32 @@ export class CollectorImageComponent{
 		return this.editableSubject.getValue();
 	}
 
-	constructor(private readonly collectorImageService: CollectorImageService, private readonly authService: AuthService) {
+	constructor(
+		private readonly collectorImageService: CollectorImageService,
+		private readonly authService: AuthService,
+		private readonly loadingService: LoadingService
+	) {
+		super();
 		const collectorImageNonNull$ = this.collectorImageSubject.asObservable().pipe(
 			filter((collectorImage): collectorImage is CollectorImage => collectorImage != null),
 		);
-		this.collectorImage$ = collectorImageNonNull$.pipe(
-			map(collectorImage => this.collectorImageService.getImageUrl(collectorImage.id))
+		this.collectorImage$ = observableMerge(collectorImageNonNull$, this.collectorImageUrlSubject.asObservable()).pipe(
+			map(collectorImage => typeof collectorImage === "string" ? collectorImage : this.collectorImageService.getImageUrl(collectorImage.id)),
 		);
 
 		this.editable$ = observableCombineLatest([this.editableSubject.asObservable(), collectorImageNonNull$, this.authService.authData()]).pipe(
 			map(([editable, collectorImage, authData]) => editable === true && AuthService.userIdEqual(authData?.userId, collectorImage.userId))
+		);
+	}
+
+	public uploadImage(file: File) {
+		this.registerSubscription(
+			this.loadingService.waitFor(this.collectorImageService.uploadImage(this.collector.id, file)).subscribe(
+				() => {
+					console.log(this.collectorImageService.getImageUrl(this.collector.id));
+					return this.collectorImageUrlSubject.next(`${this.collectorImageService.getImageUrl(this.collector.id)}?${new Date().getTime()}`)
+				}
+			)
 		);
 	}
 }

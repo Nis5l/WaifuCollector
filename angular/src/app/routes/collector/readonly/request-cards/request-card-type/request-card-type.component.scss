@@ -1,0 +1,17 @@
+@import "../../../../../../theme.scss";
+
+.card-type-content {
+	margin: 24px 16px;
+
+	.name {
+		display: flex;
+		font-size: 21px;
+		gap: 20px;
+		align-items: center;
+
+		.label {
+			font-size: 13px;
+			color: map-get(map-get($theme, foreground), secondary-text);
+		}
+	}
+}

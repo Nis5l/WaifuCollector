@@ -13,13 +13,13 @@ pub async fn verify_confirm_route(key: String, sql: &State<Sql>, token: JwtToken
     let JwtToken { id: user_id, username } = token;
 
     if let user::data::UserVerifiedDb::Yes = rjtry!(user::data::UserVerifiedDb::from_db(rjtry!(sql::user_verified(sql, &user_id).await))) {
-            return ApiResponseErr::api_err(Status::Conflict, String::from("You are already verified"));
+        return ApiResponseErr::api_err(Status::Conflict, String::from("Already verified"));
     };
 
     let verified_key = if let Some(verified_key) = rjtry!(sql::get_verification_key(sql, &user_id).await) {
         verified_key
     } else {
-        return ApiResponseErr::api_err(Status::NotFound, format!("No verification key for user {} found", username))
+        return ApiResponseErr::api_err(Status::NotFound, String::from("No verification key found"))
     };
 
     if verified_key != key {
@@ -30,6 +30,6 @@ pub async fn verify_confirm_route(key: String, sql: &State<Sql>, token: JwtToken
     rjtry!(sql::delete_verification_key(sql, &user_id).await);
 
     ApiResponseErr::ok(Status::Ok, VerifyConfirmResponse {
-        message: format!("Successfully verified user {}", username)
+        message: String::from("Successfully verified")
     })
 }

@@ -11,6 +11,6 @@ use super::sql;
 pub async fn collector_get_route(collector_id: Id, sql: &State<Sql>) -> ApiResponseErr<Collector> {
     match rjtry!(sql::get_collector(&sql, &collector_id).await) {
         Some(collector) => ApiResponseErr::ok(Status::Ok, collector),
-        None => ApiResponseErr::api_err(Status::NotFound, format!("collector with id {} not found", collector_id))
+        None => ApiResponseErr::api_err(Status::NotFound, String::from("Collector not found"))
     }
 }

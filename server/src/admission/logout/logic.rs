@@ -21,11 +21,11 @@ pub async fn logout_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &ro
 
     match jwt_verify_token(&refresh_token, &config.refresh_token_secret, &Duration::seconds(config.refresh_token_duration as _)) {
         Err(JwtTokenError::ParseError(_)) => {
-            return  ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't parse refresh token"));
+            return  ApiResponseErr::api_err(Status::Unauthorized, String::from("Could not parse refresh token"));
         },
         _ => {
             match sql::delete_refresh_token(&sql, refresh_token).await {
-                Err(_) => return ApiResponseErr::api_err(Status::Unauthorized, String::from("Couldn't delete refresh token")),
+                Err(_) => return ApiResponseErr::api_err(Status::Unauthorized, String::from("Could not delete refresh token")),
                 Ok(_) => {}
             }
         }
@@ -33,5 +33,5 @@ pub async fn logout_route(cookies: &CookieJar<'_>, sql: &State<Sql>, config: &ro
 
     cookies.remove(Cookie::named("refresh_token"));
 
-    ApiResponseErr::ok(Status::Ok, LogoutResponse { message: String::from("Logged out!") })
+    ApiResponseErr::ok(Status::Ok, LogoutResponse { message: String::from("Logged out") })
 }
