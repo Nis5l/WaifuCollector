@@ -9,8 +9,7 @@ use crate::sql::Sql;
 use crate::config::Config;
 use crate::shared::Id;
 use crate::shared::crypto::JwtToken;
-use crate::shared::collector;
-use crate::{verify_user, verify_collector};
+use crate::{verify_user, verify_collector, verify_collector_admin};
 use super::data::{CollectorImageSetRequest, CollectorImageSetResponse};
 use crate::scripts::resize_image_square;
 
@@ -23,13 +22,7 @@ pub async fn collector_image_set_route(collector_id: Id,
     let user_id = token.id;
     verify_user!(sql, &user_id, true);
     verify_collector!(sql, &collector_id);
-
-    match collector::sql::collecor_is_admin(sql, &collector_id, &user_id).await {
-        Ok(true) => (),
-        Ok(false) => return ApiResponseErr::api_err(Status::Unauthorized, format!("user with id {} is not admin of collector with id {}", user_id, collector_id)),
-        Err(_) => return ApiResponseErr::api_err(Status::InternalServerError, String::from("database error"))
-
-    }
+    verify_collector_admin!(sql, &collector_id, &user_id);
 
     let path = Path::new(&config.collector_fs_base).join(collector_id.to_string());
     if let Err(_) = fs::create_dir_all(&path) {

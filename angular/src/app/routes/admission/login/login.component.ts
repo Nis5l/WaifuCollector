@@ -9,6 +9,7 @@ import { AdmissionService } from '../admission-service';
 import type { AdmissionConfig } from '../admission-service';
 
 import { SubscriptionManagerComponent } from '../../../shared/abstract';
+import { LoadingService } from '../../../shared/services';
 
 @Component({
 	selector: "cc-login",
@@ -22,7 +23,12 @@ export class LoginComponent extends SubscriptionManagerComponent {
 	private readonly errorSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 	public readonly error$: Observable<string | null>;
 
-	constructor(private readonly loginService: LoginService, private readonly router: Router, private readonly admissionService: AdmissionService) {
+	constructor(
+		private readonly loginService: LoginService,
+		private readonly router: Router,
+		private readonly admissionService: AdmissionService,
+		private readonly loadingService: LoadingService
+	) {
 		super();
 		this.config = this.admissionService.getConfig();
 		this.formGroup = new FormGroup({
@@ -49,7 +55,7 @@ export class LoginComponent extends SubscriptionManagerComponent {
 
 	public login(): void {
 		this.registerSubscription(
-			this.loginService.login(this.formGroup.getRawValue()).subscribe({
+			this.loadingService.waitFor(this.loginService.login(this.formGroup.getRawValue())).subscribe({
 				next: () => {
 					this.errorSubject.next(null);
 					this.router.navigate(["collectors"]);

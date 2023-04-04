@@ -3,14 +3,17 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { RequestCardComponent } from './request-card.component';
 import { UserModule } from '../../../../../../shared/components';
+import { UserModule as UserServiceModule } from '../../../../../../shared/services';
 
 const MATERIAL_MODULES = [
 	MatCardModule,
 	MatButtonModule,
-	MatIconModule
+	MatIconModule,
+	MatDividerModule
 ];
 
 @NgModule({
@@ -19,7 +22,8 @@ const MATERIAL_MODULES = [
 
 		...MATERIAL_MODULES,
 
-		UserModule
+		UserModule,
+		UserServiceModule
 	],
 	declarations: [ RequestCardComponent ],
 	exports: [ RequestCardComponent ]

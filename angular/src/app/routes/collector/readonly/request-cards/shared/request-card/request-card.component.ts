@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { Observable, BehaviorSubject, filter, switchMap } from 'rxjs';
 
 import type { Id } from '../../../../../../shared/types';
+import { UserService } from '../../../../../../shared/services';
 
 @Component({
 	selector: 'cc-request-card',
@@ -8,30 +10,43 @@ import type { Id } from '../../../../../../shared/types';
 	styleUrls: [ './request-card.component.scss' ]
 })
 export class RequestCardComponent {
-	private _collectorId: Id | null = null;
+	public readonly isAdmin$: Observable<boolean>;
+
+	public readonly userId$: Observable<Id>;
+	public readonly collectorId$: Observable<Id>;
+	private readonly userIdSubject: BehaviorSubject<Id | null> = new BehaviorSubject<Id | null>(null);
+	private readonly collectorIdSubject: BehaviorSubject<Id | null> = new BehaviorSubject<Id | null>(null);
+
 	@Input()
 	public set collectorId(id: Id) {
-		this._collectorId = id;
+		this.collectorIdSubject.next(id);
 	}
 	public get collectorId(): Id {
-		if(this._collectorId == null) throw new Error("collectorId not set");
-		return this._collectorId;
+		const collectorId = this.collectorIdSubject.getValue();
+		if(collectorId == null) throw new Error("collectorId not set");
+		return collectorId;
 	}
 
-	private _userId: Id | null = null;
 	@Input()
 	public set userId(id: Id | null | undefined) {
 		if(id == null) return;
-		this._userId = id;
+		this.userIdSubject.next(id);
 	}
 	public get userId(): Id {
-		if(this._userId == null) throw new Error("userId not set");
-		return this._userId;
+		const userId = this.userIdSubject.getValue();
+		if(userId == null) throw new Error("userId not set");
+		return userId;
 	}
 
 	@Input()
 	public title: string = "UNSET";
 
-	//TODO: show actions if admin
-	constructor() {}
+	constructor(private readonly userService: UserService) {
+		this.userId$ = this.userIdSubject.asObservable().pipe(filter((userId): userId is Id => userId != null));
+		this.collectorId$ = this.collectorIdSubject.asObservable().pipe(filter((collectorId): collectorId is Id => collectorId != null));
+
+		this.isAdmin$ = this.collectorId$.pipe(
+			switchMap(collectorId => this.userService.isCollectorAdmin(collectorId))
+		);
+	}
 }

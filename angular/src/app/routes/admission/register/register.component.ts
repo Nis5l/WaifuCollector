@@ -9,6 +9,7 @@ import { AdmissionService } from '../admission-service';
 import type { AdmissionConfig } from '../admission-service';
 
 import { SubscriptionManagerComponent } from '../../../shared/abstract';
+import { LoadingService } from '../../../shared/services';
 
 @Component({
 	selector: 'cc-register',
@@ -28,7 +29,12 @@ export class RegisterComponent extends SubscriptionManagerComponent {
 		return password === passwordRepeat ? null : { passwordNotSame: true };
 	};
 
-	constructor(private readonly registerService: RegisterService, private readonly router: Router, private readonly admissionService: AdmissionService) {
+	constructor(
+		private readonly registerService: RegisterService,
+		private readonly router: Router,
+		private readonly admissionService: AdmissionService,
+		private readonly loadingService: LoadingService
+	) {
 		super();
 		this.config = this.admissionService.getConfig();
 		this.formGroup = new FormGroup({
@@ -66,7 +72,7 @@ export class RegisterComponent extends SubscriptionManagerComponent {
 		const { passwordRepeat , ...config} = this.formGroup.getRawValue();
 
 		this.registerSubscription(
-			this.registerService.register(config).subscribe({
+			this.loadingService.waitFor(this.registerService.register(config)).subscribe({
 				next: () => {
 					this.router.navigate(["login"]);
 				},

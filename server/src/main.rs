@@ -97,6 +97,7 @@ async fn rocket() -> _ {
            user::flex::flex_route,
            user::profile_image::profile_image_set_route,
            user::profile_image::profile_image_get_route,
+           user::collector_is_admin::user_collector_is_admin_route,
 
            notifications::notifications_route,
            notifications::notifications_delete_route,
