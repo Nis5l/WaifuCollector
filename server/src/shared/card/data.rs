@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 use sqlx::FromRow;
+use rocket::form::FromFormField;
 
 use crate::config::Config;
 use crate::shared::{Id, IdInt};
@@ -115,9 +116,11 @@ pub struct CardCreateData {
     pub level: i32
 }
 
-#[derive(Debug)]
+#[derive(Debug, FromFormField)]
 pub enum CardState {
+    #[field(value = "0")]
     Requested = 0,
+    #[field(value = "1")]
     Created = 1,
 }
 

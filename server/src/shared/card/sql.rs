@@ -5,6 +5,20 @@ use crate::config::Config;
 use super::data::{CardCreateData, Card, CardDb, SortType, InventoryOptions};
 use crate::shared::{Id, util};
 
+pub async fn get_card_type_collector_id(sql: &Sql, card_type_id: &Id) -> Result<Id, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    let (id, ): (Id, ) = sqlx::query_as(
+        "SELECT coid
+         FROM cardtypes
+         WHERE ctid=?;")
+        .bind(card_type_id)
+        .fetch_one(&mut con)
+        .await?;
+
+    Ok(id)
+}
+
 //TODO: Think if should also safe collector_id
 pub async fn add_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id, _collector_id: &Id, card: &CardCreateData) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;

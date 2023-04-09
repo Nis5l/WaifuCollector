@@ -8,13 +8,13 @@ use crate::config;
 use crate::shared::Id;
 
 #[derive(Debug, Deserialize, Validate, JsonBody)]
-pub struct CardTypeRequestRequest {
+pub struct CardTypeRequestCreateRequest {
     #[validate(custom(function="validate_collector_type_name", arg="&'v_a config::Config"))]
     pub name: String
 }
 
 #[derive(Debug, Serialize)]
-pub struct CardTypeRequestResponse {
+pub struct CardTypeRequestCreateResponse {
     pub id: Id
 }
 

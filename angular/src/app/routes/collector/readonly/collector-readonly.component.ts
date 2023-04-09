@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, map, Observable, combineLatest as observableCombineLatest } from 'rxjs';
+import { switchMap, map, Observable, combineLatest as observableCombineLatest, BehaviorSubject } from 'rxjs';
 
 import { CollectorService } from '../collector.service';
 import { CollectorReadonlyService } from './collector-readonly.service';
 import { LoadingService, AuthService } from '../../../shared/services';
+import { SubscriptionManagerComponent } from '../../../shared/abstract';
 import type { Collector, Id, CardType } from '../../../shared/types';
 import { CollectorAddDialogComponent } from './collector-add-dialog';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,10 +15,11 @@ import { MatDialog } from '@angular/material/dialog';
 	templateUrl: "./collector-readonly.component.html",
 	styleUrls: [ "./collector-readonly.component.scss" ]
 })
-export class CollectorReadonlyComponent {
+export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 	public readonly collector$: Observable<Collector>;
 	public readonly canEdit$: Observable<boolean>;
 
+	public readonly cardTypesSubject: BehaviorSubject<CardType[]> = new BehaviorSubject<CardType[]>([]);
 	public readonly cardTypes$: Observable<CardType[]>;
 	
 	constructor(
@@ -29,6 +31,7 @@ export class CollectorReadonlyComponent {
 		private readonly collectorReadonlyService: CollectorReadonlyService,
 		loadingService: LoadingService
 	) {
+		super();
 		this.collector$ = loadingService.waitFor(activatedRoute.params.pipe(
 			switchMap(params => {
 				const collectorId = params["collectorId"] as unknown;
@@ -44,13 +47,19 @@ export class CollectorReadonlyComponent {
 			map(([collector, authData]) => AuthService.userIdEqual(collector.userId, authData?.userId))
 		);
 
-		this.cardTypes$ = loadingService.waitFor(this.collector$.pipe(
-			switchMap(({ id }) => this.collectorReadonlyService.indexCardTypes(id, "", 0))
-		));
+		this.registerSubscription(loadingService.waitFor(this.collector$.pipe(
+			switchMap(({ id }) => this.collectorReadonlyService.indexRequestedCardTypes(id, "", 0))
+		)).subscribe(cardTypes => this.cardTypesSubject.next(cardTypes)));
+
+		this.cardTypes$ = this.cardTypesSubject.asObservable();
 	}
 
 	public edit(): void {
 		this.router.navigate(["edit"], { relativeTo: this.activatedRoute });
+	}
+
+	public removeCardType(cardTypeId: Id): void {
+		this.cardTypesSubject.next(this.cardTypesSubject.getValue().filter(cardType => cardType.id != cardTypeId));
 	}
 
 	public openAddDialog(collectorId: Id): void {

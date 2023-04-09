@@ -2,7 +2,7 @@ use crate::sql::Sql;
 use crate::shared::Id;
 use crate::shared::card::data::CardState;
 
-pub async fn collector_type_request(sql: &Sql, card_type_id: &Id, collector_id: &Id, user_id: &Id, name: &str) -> Result<(), sqlx::Error> {
+pub async fn collector_type_request_create(sql: &Sql, card_type_id: &Id, collector_id: &Id, user_id: &Id, name: &str) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query("INSERT INTO cardtypes

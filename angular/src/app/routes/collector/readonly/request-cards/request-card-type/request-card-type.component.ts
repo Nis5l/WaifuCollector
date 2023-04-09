@@ -1,6 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import type { CardType, Id } from '../../../../../shared/types';
+import { RequestCardTypeService } from './request-card-type.service';
+import { LoadingService } from '../../../../../shared/services';
+import { SubscriptionManagerComponent } from '../../../../../shared/abstract';
 
 //TODO: ADD TIMES FOR ALL CARDS
 //TODO: CHAT
@@ -10,7 +13,10 @@ import type { CardType, Id } from '../../../../../shared/types';
 	templateUrl: './request-card-type.component.html',
 	styleUrls: [ './request-card-type.component.scss' ]
 })
-export class RequestCardTypeComponent {
+export class RequestCardTypeComponent extends SubscriptionManagerComponent {
+	@Output()
+	public readonly onRemove: EventEmitter<void> = new EventEmitter<void>();
+
 	private _cardType: CardType | null = null;
 	@Input()
 	public set cardType(cardType: CardType) {
@@ -31,5 +37,24 @@ export class RequestCardTypeComponent {
 		return this._collectorId;
 	}
 
-	constructor() {}
+	constructor(
+		private readonly requestCardTypeService: RequestCardTypeService,
+		private readonly loadingService: LoadingService
+	) {
+		super();
+	}
+
+	public accept(): void {
+		this.registerSubscription(this.loadingService.waitFor(this.requestCardTypeService.accept(this.cardType.id)).subscribe({
+			next: () => this.onRemove.next(),
+			error: () => console.error("Error accepting Card-Type Request")
+		}));
+	}
+
+	public decline(): void {
+		this.registerSubscription(this.loadingService.waitFor(this.requestCardTypeService.decline(this.cardType.id)).subscribe({
+			next: () => this.onRemove.next(),
+			error: () => console.error("Error declining Card-Type Request")
+		}));
+	}
 }

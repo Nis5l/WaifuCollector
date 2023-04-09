@@ -22,7 +22,7 @@
 			</mat-tab>
 			<mat-tab label="Cards">
 				<div class="request-container">
-					<cc-request-card-type *ngFor="let cardType of cardTypes$ | async" [cardType]="cardType" [collectorId]="collector.id"></cc-request-card-type>
+					<cc-request-card-type *ngFor="let cardType of cardTypes$ | async" (onRemove)="removeCardType(cardType.id)" [cardType]="cardType" [collectorId]="collector.id"></cc-request-card-type>
 				</div>
 				<button class="floating-button-br" mat-fab aria-label="Add" (click)="openAddDialog(collector.id)">
 				  <mat-icon>add</mat-icon>
