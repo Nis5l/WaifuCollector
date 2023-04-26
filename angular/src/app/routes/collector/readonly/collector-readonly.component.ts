@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, map, Observable, combineLatest as observableCombineLatest, BehaviorSubject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import type { PageEvent } from '@angular/material/paginator';
+import { switchMap, map, Observable, combineLatest as observableCombineLatest, BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 
 import { CollectorService } from '../collector.service';
 import { CollectorReadonlyService } from './collector-readonly.service';
 import { LoadingService, AuthService } from '../../../shared/services';
 import { SubscriptionManagerComponent } from '../../../shared/abstract';
-import type { Collector, Id, CardType } from '../../../shared/types';
+import type { Collector, Id } from '../../../shared/types';
+import type { CardTypeIndexResponse } from './types';
 import { CollectorAddDialogComponent } from './collector-add-dialog';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: "cc-collector-readonly",
@@ -16,11 +18,14 @@ import { MatDialog } from '@angular/material/dialog';
 	styleUrls: [ "./collector-readonly.component.scss" ]
 })
 export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
+	private readonly pageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
 	public readonly collector$: Observable<Collector>;
 	public readonly canEdit$: Observable<boolean>;
 
-	public readonly cardTypesSubject: BehaviorSubject<CardType[]> = new BehaviorSubject<CardType[]>([]);
-	public readonly cardTypes$: Observable<CardType[]>;
+	private readonly reloadCardTypesSubject: Subject<void> = new Subject();
+	public readonly cardTypeIndexSubject: ReplaySubject<CardTypeIndexResponse> = new ReplaySubject<CardTypeIndexResponse>(1);
+	public readonly cardTypeIndex$: Observable<CardTypeIndexResponse>;
 	
 	constructor(
 		private readonly router: Router,
@@ -29,7 +34,7 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 		private readonly authService: AuthService,
 		private readonly matDialog: MatDialog,
 		private readonly collectorReadonlyService: CollectorReadonlyService,
-		loadingService: LoadingService
+		private readonly loadingService: LoadingService
 	) {
 		super();
 		this.collector$ = loadingService.waitFor(activatedRoute.params.pipe(
@@ -47,22 +52,30 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 			map(([collector, authData]) => AuthService.userIdEqual(collector.userId, authData?.userId))
 		);
 
-		this.registerSubscription(loadingService.waitFor(this.collector$.pipe(
-			switchMap(({ id }) => this.collectorReadonlyService.indexRequestedCardTypes(id, "", 0))
-		)).subscribe(cardTypes => this.cardTypesSubject.next(cardTypes)));
+		this.registerSubscription(this.loadingService.waitFor(
+			observableCombineLatest([this.collector$, this.pageSubject.asObservable(), this.reloadCardTypesSubject.asObservable()]).pipe(
+				switchMap(([{ id }, page]) => this.collectorReadonlyService.indexRequestedCardTypes(id, "", page))
+			)
+		)
+		.subscribe(cardTypeIndex => this.cardTypeIndexSubject.next(cardTypeIndex)));
 
-		this.cardTypes$ = this.cardTypesSubject.asObservable();
+		this.cardTypeIndex$ = this.cardTypeIndexSubject.asObservable();
+		this.reloadCardTypes();
 	}
 
 	public edit(): void {
 		this.router.navigate(["edit"], { relativeTo: this.activatedRoute });
 	}
 
-	public removeCardType(cardTypeId: Id): void {
-		this.cardTypesSubject.next(this.cardTypesSubject.getValue().filter(cardType => cardType.id != cardTypeId));
-	}
-
 	public openAddDialog(collectorId: Id): void {
 		CollectorAddDialogComponent.open(this.matDialog, collectorId);
+	}
+
+	public reloadCardTypes(): void {
+		this.reloadCardTypesSubject.next();
+	}
+
+	public changePage(page: PageEvent): void {
+		this.pageSubject.next(page.pageIndex);
 	}
 }

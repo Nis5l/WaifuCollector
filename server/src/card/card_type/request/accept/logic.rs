@@ -18,6 +18,7 @@ pub async fn card_type_request_accept_route(card_type_id: Id, sql: &State<Sql>, 
     let collector_id = rjtry!(card::sql::get_card_type_collector_id(sql, &card_type_id).await);
     verify_collector_admin!(sql, &collector_id, user_id);
 
+    rjtry!(sql::collector_type_remove_duplicates(sql, &collector_id, &card_type_id).await);
     rjtry!(sql::collector_type_request_accept(sql, &card_type_id).await);
 
     ApiResponseErr::ok(Status::Ok, CardTypeRequestAcceptResponse { message: String::from("Card-Type request accepted") })

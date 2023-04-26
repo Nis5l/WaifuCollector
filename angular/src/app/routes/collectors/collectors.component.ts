@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ReplaySubject, Observable, debounceTime, distinctUntilChanged, BehaviorSubject, startWith } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog'; 
+import { ReplaySubject, Observable, debounceTime, distinctUntilChanged, BehaviorSubject, startWith, combineLatest as observableCombibeLatest } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import type { PageEvent } from '@angular/material/paginator';
 
-import type { Collector } from './collector';
 import { CollectorsService } from './collectors.service';
 import { NewCollectorDialogComponent } from './new-collector-dialog';
+import type { CollectorsIndexResponse } from './types';
 
 import { SubscriptionManagerComponent } from '../../shared/abstract';
 
@@ -15,8 +16,10 @@ import { SubscriptionManagerComponent } from '../../shared/abstract';
 	styleUrls: [ './collectors.component.scss' ]
 })
 export class CollectorsComponent extends SubscriptionManagerComponent {
-	private readonly collectorsSubject: ReplaySubject<Collector[]> = new ReplaySubject<Collector[]>(1);
-	public readonly collectors$: Observable<Collector[] | null>;
+	private readonly pageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+	private readonly collectorIndexResponseSubject: ReplaySubject<CollectorsIndexResponse> = new ReplaySubject<CollectorsIndexResponse>(1);
+	public readonly collectorIndexResponse$: Observable<CollectorsIndexResponse>;
 
 	public readonly formGroup;
 	private readonly searchForm;
@@ -29,17 +32,19 @@ export class CollectorsComponent extends SubscriptionManagerComponent {
 		private readonly matDialog: MatDialog,
 	) {
 		super();
-		this.collectors$ = this.collectorsSubject.asObservable();
+		this.collectorIndexResponse$ = this.collectorIndexResponseSubject.asObservable();
 		this.loading$ = this.loadingSubject.asObservable();
 
 		this.searchForm = new FormControl("", { nonNullable: true });
-		this.registerSubscription(
+		this.registerSubscription(observableCombibeLatest([
 			this.searchForm.valueChanges.pipe(
 				startWith(""),
 				debounceTime(500),
 				distinctUntilChanged(),
-			).subscribe((search) => {
-				this.loadCollectors(search, 0);
+			),
+			this.pageSubject.asObservable()
+		]).subscribe(([search, page]) => {
+				this.loadCollectors(search, page);
 			})
 		);
 
@@ -52,12 +57,16 @@ export class CollectorsComponent extends SubscriptionManagerComponent {
 		NewCollectorDialogComponent.open(this.matDialog);
 	}
 
+	public changePage(page: PageEvent): void {
+		this.pageSubject.next(page.pageIndex);
+	}
+
 	private loadCollectors(search: string, page: number): void {
+		//TODO: rewrite if this can be solved using waitFor
 		this.loadingSubject.next(true);
-		this.collectorsSubject.next([]);
 		this.registerSubscription(
-			this.collectorsService.getCollectors(search, page).subscribe(collectors => {
-				this.collectorsSubject.next(collectors);
+			this.collectorsService.getCollectors(search, page).subscribe(collectorIndexResponse => {
+				this.collectorIndexResponseSubject.next(collectorIndexResponse);
 				this.loadingSubject.next(false);
 			})
 		);

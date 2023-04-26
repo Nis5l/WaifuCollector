@@ -15,4 +15,9 @@
 		flex-direction: column;
 		gap: 10px;
 	}
+
+	mat-paginator {
+		justify-self: flex-end;
+		align-self: flex-end;
+	}
 }

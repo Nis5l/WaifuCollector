@@ -4,6 +4,7 @@
 			<input matInput type="text" formControlName="name" placeholder="Name" />
 			<mat-error>Name has to be TODO-TODO characters</mat-error>
 		</mat-form-field>
+		<cc-card-type-selector (cardType)="cardTypeChange($event)" [collectorId]="collectorId"></cc-card-type-selector>
 		<input #imageInput hidden="true" type="file" (change)="imageChange($event.target)" accept="image/jpeg"/>
 		<button mat-button (click)="imageInput.click()">Image</button>
 	</form>

@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { CollectorReadonlyComponent } from './collector-readonly.component';
 import { CollectorReadonlyService } from './collector-readonly.service';
@@ -25,6 +26,7 @@ const MATERIAL_MODULES = [
 	MatIconModule,
 	MatTabsModule,
 	MatDialogModule,
+	MatPaginatorModule,
 ];
 
 @NgModule({

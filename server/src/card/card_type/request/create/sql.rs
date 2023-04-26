@@ -31,10 +31,11 @@ pub async fn collector_type_exists(sql: &Sql, collector_id: &Id, user_id: &Id, n
          (ctstate=? OR uid=?);")
         .bind(collector_id)
         .bind(name)
-        .bind(CardState::Requested as i32)
+        .bind(CardState::Created as i32)
         .bind(user_id)
         .fetch_one(&mut con)
         .await?;
+
 
     Ok(count != 0)
 }

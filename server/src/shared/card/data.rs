@@ -116,7 +116,7 @@ pub struct CardCreateData {
     pub level: i32
 }
 
-#[derive(Debug, FromFormField)]
+#[derive(Debug, Clone, FromFormField)]
 pub enum CardState {
     #[field(value = "0")]
     Requested = 0,

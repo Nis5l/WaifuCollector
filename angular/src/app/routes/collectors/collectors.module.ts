@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog'; 
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
 import { HttpModule } from '../../shared/services';
+import { NgVarModule } from '../../shared/directives';
 import { LoadingSpinnerModule } from '../../shared/services/loading';
 import { CollectorModule } from './collector';
 import { NewCollectorDialogModule } from './new-collector-dialog';
@@ -20,6 +22,7 @@ const MATERIAL_MODULES = [
 	MatInputModule,
 	MatButtonModule,
 	MatDialogModule,
+	MatPaginatorModule,
 ];
 
 @NgModule({
@@ -29,6 +32,7 @@ const MATERIAL_MODULES = [
 
 		...MATERIAL_MODULES,
 
+		NgVarModule,
 		HttpModule,
 		CollectorModule,
 		LoadingSpinnerModule,

@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import type { SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-import type { CardData, Id } from '../../../../../shared/types';
+import type { CardData, CardType, Id } from '../../../../../shared/types';
 import { HttpService } from '../../../../../shared/services';
 import { eventGetImage } from '../../../../../shared/utils';
 
@@ -25,6 +26,12 @@ export class CollectorAddCardComponent {
 	}
 
 	private readonly imageSubject: Subject<SafeResourceUrl> = new Subject<SafeResourceUrl>();
+	private readonly cardTypeDefault: CardType = {
+		id: "id",
+		name: "",
+		userId: null
+	};
+
 	private readonly cardSubject: BehaviorSubject<CardData> = new BehaviorSubject<CardData>({
 		cardEffect: {
 			id: 0,
@@ -42,11 +49,7 @@ export class CollectorAddCardComponent {
 			name: "",
 			image: this.httpService.apiUrl("/card/card-image"),
 		},
-		cardType: {
-			id: "id",
-			name: "type",
-			userId: null
-		}
+		cardType: this.cardTypeDefault
 	});
 
 	public readonly card$: Observable<CardData>;
@@ -83,5 +86,20 @@ export class CollectorAddCardComponent {
 
 		const blobUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(image));
 		this.imageSubject.next(blobUrl);
+	}
+
+	public cardTypeChange(cardType: CardType | null): void {
+		const current = this.cardSubject.getValue();
+		if(cardType != null) {
+			this.cardSubject.next({
+				...current,
+				cardType
+			});
+		} else {
+			this.cardSubject.next({
+				...current,
+				cardType: this.cardTypeDefault
+			});
+		}
 	}
 }
