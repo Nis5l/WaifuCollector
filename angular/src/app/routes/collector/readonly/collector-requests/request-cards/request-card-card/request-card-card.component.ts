@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import type { CardType, Id } from '../../../../../shared/types';
+import type { CardType, Id } from '../../../../../../shared/types';
 
 @Component({
 	selector: 'cc-request-card-type',

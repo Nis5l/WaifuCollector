@@ -9,7 +9,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { CollectorReadonlyComponent } from './collector-readonly.component';
 import { CollectorReadonlyService } from './collector-readonly.service';
 import { CollectorService } from '../collector.service';
-import { RequestCardTypeModule } from './request-cards';
 import { HttpModule, AuthModule } from '../../../shared/services';
 import { NgVarModule } from '../../../shared/directives';
 import {
@@ -19,6 +18,8 @@ import {
 	CollectorOpenModule
 } from '../shared';
 import { CollectorAddDialogModule } from './collector-add-dialog';
+import { CollectorDashboardModule } from './collector-dashboard';
+import { CollectorRequestsModule } from './collector-requests';
 import { MatDialogModule } from '@angular/material/dialog';
 
 const MATERIAL_MODULES = [
@@ -39,13 +40,14 @@ const MATERIAL_MODULES = [
 		HttpModule,
 		AuthModule,
 		NgVarModule,
-			
+
 		CollectorImageModule,
 		CollectorFavoriteModule,
 		CollectorBannerModule,
 		CollectorOpenModule,
 		CollectorAddDialogModule,
-		RequestCardTypeModule,
+    CollectorDashboardModule,
+    CollectorRequestsModule,
 	],
 	providers: [ CollectorService, CollectorReadonlyService ],
 	declarations: [ CollectorReadonlyComponent ],

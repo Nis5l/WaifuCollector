@@ -1,0 +1,11 @@
+<ng-container *ngIf="collector != null">
+  <div class="request-container" *ngVar="(cardTypeIndex$ | async) as res">
+    <ng-container *ngIf="res != null">
+      <cc-request-card-type *ngFor="let cardType of res.cardTypes" (onRemove)="reloadCardTypes()" [cardType]="cardType" [collectorId]="collector.id"></cc-request-card-type>
+      <mat-paginator [length]="res.cardTypeCount" [pageSize]="res.pageSize" (page)="changePage($event)"></mat-paginator>
+    </ng-container>
+  </div>
+  <button class="floating-button-br" mat-fab aria-label="Add" (click)="openAddDialog(collector.id)">
+    <mat-icon>add</mat-icon>
+  </button>
+</ng-container>

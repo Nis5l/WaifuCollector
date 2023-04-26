@@ -2,10 +2,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, BehaviorSubject, filter, switchMap } from 'rxjs';
 
-import type { Id } from '../../../../../../shared/types';
-import { UserService } from '../../../../../../shared/services';
-import { ConfirmationDialogComponent } from '../../../../../../shared/dialogs';
-import { SubscriptionManagerComponent } from '../../../../../../shared/abstract';
+import type { Id } from '../../../../../../../shared/types';
+import { UserService } from '../../../../../../../shared/services';
+import { ConfirmationDialogComponent } from '../../../../../../../shared/dialogs';
+import { SubscriptionManagerComponent } from '../../../../../../../shared/abstract';
 
 @Component({
 	selector: 'cc-request-card',

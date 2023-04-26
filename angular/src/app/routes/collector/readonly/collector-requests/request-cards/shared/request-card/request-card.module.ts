@@ -7,9 +7,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { RequestCardComponent } from './request-card.component';
-import { UserModule } from '../../../../../../shared/components';
-import { UserModule as UserServiceModule } from '../../../../../../shared/services';
-import { ConfirmationDialogModule } from '../../../../../../shared/dialogs';
+import { UserModule } from '../../../../../../../shared/components';
+import { UserModule as UserServiceModule } from '../../../../../../../shared/services';
+import { ConfirmationDialogModule } from '../../../../../../../shared/dialogs';
 
 const MATERIAL_MODULES = [
 	MatCardModule,

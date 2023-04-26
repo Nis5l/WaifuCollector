@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import type { CardType, Id } from '../../../../../shared/types';
+import type { CardType, Id } from '../../../../../../shared/types';
 import { RequestCardTypeService } from './request-card-type.service';
-import { LoadingService } from '../../../../../shared/services';
-import { SubscriptionManagerComponent } from '../../../../../shared/abstract';
+import { LoadingService } from '../../../../../../shared/services';
+import { SubscriptionManagerComponent } from '../../../../../../shared/abstract';
 
 //TODO: ADD TIMES FOR ALL CARDS
 //TODO: CHAT

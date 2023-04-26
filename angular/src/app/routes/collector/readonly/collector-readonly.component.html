@@ -15,21 +15,10 @@
 		</div>
 		<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
 			<mat-tab label="Dashboard">
-				<cc-collector-open [collectorId]="collector.id"></cc-collector-open>
-				<button *ngIf="canEdit$ | async" class="floating-button-br" mat-fab aria-label="Edit" (click)="edit()">
-				  <mat-icon>edit</mat-icon>
-				</button>
-			</mat-tab>
+        <cc-collector-dashboard [collector]="collector"></cc-collector-dashboard>
+      </mat-tab>
 			<mat-tab label="Cards">
-				<div class="request-container" *ngVar="(cardTypeIndex$ | async) as res">
-					<ng-container *ngIf="res != null">
-						<cc-request-card-type *ngFor="let cardType of res.cardTypes" (onRemove)="reloadCardTypes()" [cardType]="cardType" [collectorId]="collector.id"></cc-request-card-type>
-						<mat-paginator [length]="res.cardTypeCount" [pageSize]="res.pageSize" (page)="changePage($event)"></mat-paginator>
-					</ng-container>
-				</div>
-				<button class="floating-button-br" mat-fab aria-label="Add" (click)="openAddDialog(collector.id)">
-				  <mat-icon>add</mat-icon>
-				</button>
+        <cc-collector-requests [collector]="collector"></cc-collector-requests>
 			</mat-tab>
 			<mat-tab label="...">Content 3</mat-tab>
 		</mat-tab-group>
