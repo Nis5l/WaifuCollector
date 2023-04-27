@@ -20,7 +20,7 @@ const routes: Routes = [
 
 	{ path: "collectors", component: CollectorsComponent },
 	{ path: "collector/:collectorId/edit", component: CollectorEditComponent },
-	{ path: "collector/:collectorId", component: CollectorReadonlyComponent },
+	{ path: "collector/:collectorId", component: CollectorReadonlyComponent, children: CollectorReadonlyComponent.getRoutes() },
 
 	{ path: "user/:userId/edit", component: ProfileEditComponent },
 	{ path: "user/:userId", component: ProfileReadonlyComponent },

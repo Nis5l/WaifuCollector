@@ -1,4 +1,4 @@
-<ng-container *ngIf="collector != null">
+<ng-container *ngVar="(collector$ | async) as collector">
   <div class="request-container" *ngVar="(cardTypeIndex$ | async) as res">
     <ng-container *ngIf="res != null">
       <cc-request-card-type *ngFor="let cardType of res.cardTypes" (onRemove)="reloadCardTypes()" [cardType]="cardType" [collectorId]="collector.id"></cc-request-card-type>

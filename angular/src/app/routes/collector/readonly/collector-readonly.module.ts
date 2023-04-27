@@ -20,6 +20,7 @@ import {
 import { CollectorAddDialogModule } from './collector-add-dialog';
 import { CollectorDashboardModule } from './collector-dashboard';
 import { CollectorRequestsModule } from './collector-requests';
+import { CollectorNavigationModule } from './collector-navigation';
 import { MatDialogModule } from '@angular/material/dialog';
 
 const MATERIAL_MODULES = [
@@ -48,6 +49,7 @@ const MATERIAL_MODULES = [
 		CollectorAddDialogModule,
     CollectorDashboardModule,
     CollectorRequestsModule,
+    CollectorNavigationModule,
 	],
 	providers: [ CollectorService, CollectorReadonlyService ],
 	declarations: [ CollectorReadonlyComponent ],

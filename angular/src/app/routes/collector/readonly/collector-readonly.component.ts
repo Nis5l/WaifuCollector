@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Route } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import type { PageEvent } from '@angular/material/paginator';
 import { switchMap, map, Observable, combineLatest as observableCombineLatest, BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
@@ -10,7 +10,18 @@ import { LoadingService, AuthService } from '../../../shared/services';
 import { SubscriptionManagerComponent } from '../../../shared/abstract';
 import type { Collector, Id } from '../../../shared/types';
 import type { CardTypeIndexResponse } from './types';
+import type { NavigationItem } from './collector-navigation';
+
 import { CollectorAddDialogComponent } from './collector-add-dialog';
+
+import { CollectorDashboardComponent } from './collector-dashboard';
+import { CollectorRequestsComponent } from './collector-requests';
+
+const ROUTES: Route[] = [
+  { path: "", pathMatch: "full", redirectTo: "dashboard" },
+  { path: "dashboard", component: CollectorDashboardComponent },
+  { path: "requests", component: CollectorRequestsComponent }
+];
 
 @Component({
 	selector: "cc-collector-readonly",
@@ -26,7 +37,12 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 	private readonly reloadCardTypesSubject: Subject<void> = new Subject();
 	public readonly cardTypeIndexSubject: ReplaySubject<CardTypeIndexResponse> = new ReplaySubject<CardTypeIndexResponse>(1);
 	public readonly cardTypeIndex$: Observable<CardTypeIndexResponse>;
-	
+
+  public readonly navigationItems: NavigationItem[] = [
+    { name: "Dashboard", link: "./dashboard", icon: "home" },
+    { name: "Requests", link: "./requests", icon: "list_alt" }
+  ];
+
 	constructor(
 		private readonly router: Router,
 		private readonly collectorService: CollectorService,
@@ -47,7 +63,7 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 				return this.collectorService.getCollector(collectorId);
 			})
 		));
-		
+
 		this.canEdit$ = observableCombineLatest([this.collector$, this.authService.authData()]).pipe(
 			map(([collector, authData]) => AuthService.userIdEqual(collector.userId, authData?.userId))
 		);
@@ -78,4 +94,7 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 	public changePage(page: PageEvent): void {
 		this.pageSubject.next(page.pageIndex);
 	}
+  public static getRoutes(){
+    return ROUTES;
+  }
 }

@@ -1,0 +1,72 @@
+@import "../../../../../theme.scss";
+@import "../../../../../screen.scss";
+
+
+.navigation{
+  display: flex;
+  justify-content: space-between;
+
+  min-height: 48px;
+
+  box-shadow: inset 0 -1px 0 #373e47;
+
+	color: map-get(map-get($theme, foreground), text);
+  ul{
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+    list-style-type: none;
+
+    margin: 0;
+    padding: 0 10px;
+
+    box-sizing: border-box;
+    li{
+      display: inline-flex;
+      word-wrap: break-word;
+      box-sizing: border-box;
+
+      transition: background 0.25s ease-out;
+      &:hover{
+        background-color: rgba(map-get($mat-accent, darker), 0.25);
+        border-radius: 3px;
+      }
+      a{
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        line-height: 30px;
+        padding: 0 10px;
+        text-align: center;
+        position: relative;
+
+        color: inherit;
+        text-decoration: none;
+        &.active:after{
+          content: "";
+
+          position: absolute;
+
+          height: 3px;
+          width: 100%;
+
+          bottom: calc(50% - 25px);
+          right: 50%;
+          transform: translate(50%, -50%);
+
+		      background: map-get($mat-accent, darker);
+          border-radius: 6px;
+
+        }
+
+        .icon{
+          color: inherit;
+          display: inline;
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
