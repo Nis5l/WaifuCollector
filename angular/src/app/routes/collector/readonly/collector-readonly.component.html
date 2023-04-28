@@ -1,7 +1,7 @@
 <ng-container *ngVar="(collector$ | async) as collector">
 	<div *ngIf="collector != null">
 		<cc-collector-banner [editable]="false" [collector]="collector"></cc-collector-banner>
-		<div class="head">
+		<div class="wrap head">
 			<div class="collector-image">
 				<cc-collector-image [editable]="false" [collector]="collector"></cc-collector-image>
 			</div>
@@ -13,7 +13,7 @@
 				<p class="description">...desc...</p>
 			</div>
 		</div>
-    <div class="container">
+    <div class="wrap">
       <cc-collector-navigation [items]="navigationItems"></cc-collector-navigation>
       <router-outlet></router-outlet>
     </div>
