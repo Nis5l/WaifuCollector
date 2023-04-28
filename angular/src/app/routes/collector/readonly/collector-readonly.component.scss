@@ -64,8 +64,22 @@
 
 	.description {
 		margin: 5px 0 0 0;
-		color: map-get(map-get($theme, foreground), hint-text);
 	}
+
+  .description, .owner{
+    color: map-get(map-get($theme, foreground), hint-text);
+  }
+
+  .creator{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    .owner{ margin: 0 5px 0 0; }
+    &, cc-user{
+      height: 1em;
+    }
+  }
 }
 
 .request-container {
