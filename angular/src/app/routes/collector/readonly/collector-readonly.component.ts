@@ -40,7 +40,7 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 
   public readonly navigationItems: NavigationItem[] = [
     { name: "Dashboard", link: "./dashboard", icon: "home" },
-    { name: "Requests", link: "./requests", icon: "list_alt" }
+    { name: "Requests", link: "./requests", icon: "list_alt" },
   ];
 
 	constructor(

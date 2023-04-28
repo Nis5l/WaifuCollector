@@ -10,4 +10,25 @@ import type { NavigationItem } from './types';
 export class CollectorNavigationComponent{
   @Input()
   public items: NavigationItem[] = [];
+
+  public open: boolean = false;
+
+  public hiddenId: number = 0;
+
+  public toggleOpen(): void{
+    this.open = !this.open;
+  }
+
+  public onResized(element: any){
+    const availableWidth = element.offsetWidth;
+    const children = element.children;
+    this.hiddenId = this.items.length;
+    for(let i = 0; i < children.length; i++){
+      const child = children[i];
+      if(availableWidth < (child.offsetLeft + child.offsetWidth)){
+        this.hiddenId = i;
+        break;
+      }
+    }
+  }
 }
