@@ -18,3 +18,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 	bottom: 60px !important;
 	transform: translate(50%, 50%) scale(1.1) !important;
 }
+
+.wrap{
+  position: relative;
+  width: 92%;
+  max-width: 1024px;
+  margin: 0 auto;
+  margin-top: 10px;
+  box-sizing: border-box;
+}

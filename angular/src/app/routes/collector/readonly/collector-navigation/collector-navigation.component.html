@@ -1,6 +1,7 @@
 <nav class="navigation">
-  <ul>
-    <li *ngFor="let item of items">
+  <ul #navItems (resized)="onResized(navItems)">
+    <ng-container *ngFor="let item of items; let i = index">
+      <li [ngClass]="hiddenId <= i ? 'hidden' : ''">
       <a
         [routerLink]="item.link"
         routerLinkActive="active"
@@ -9,5 +10,18 @@
         <span>{{item.name}}</span>
       </a>
     </li>
+    </ng-container>
   </ul>
+  <div *ngIf="items.length != hiddenId" class="details">
+    <div class="more_btn" (click)="toggleOpen()">
+      <mat-icon>more_vert</mat-icon>
+      <div [ngClass]="open ? 'open' : ''" class="more_box">
+        <ul>
+          <ng-container *ngFor="let item of items; let i = index">
+            <li *ngIf="hiddenId <= i"><a [routerLink]="item.link">{{item.name}}</a></li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </div>
 </nav>

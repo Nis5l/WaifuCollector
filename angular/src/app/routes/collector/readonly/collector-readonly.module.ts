@@ -23,6 +23,8 @@ import { CollectorRequestsModule } from './collector-requests';
 import { CollectorNavigationModule } from './collector-navigation';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { UserModule } from '../../../shared/components';
+
 const MATERIAL_MODULES = [
 	MatButtonModule,
 	MatIconModule,
@@ -50,6 +52,8 @@ const MATERIAL_MODULES = [
     CollectorDashboardModule,
     CollectorRequestsModule,
     CollectorNavigationModule,
+
+    UserModule,
 	],
 	providers: [ CollectorService, CollectorReadonlyService ],
 	declarations: [ CollectorReadonlyComponent ],
