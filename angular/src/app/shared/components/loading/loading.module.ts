@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { LoadingService } from './loading.service';
 import { LoadingComponent } from './loading.component';
-import { LoadingSpinnerModule } from '../../components/loading-spinner';
+import { LoadingSpinnerModule } from '../loading-spinner';
 
 @NgModule({
 	imports: [
 		CommonModule,
 
-		LoadingSpinnerModule,
+		LoadingSpinnerModule
 	],
-	providers: [ LoadingService ],
 	declarations: [ LoadingComponent ],
-	exports: [ LoadingComponent ],
+	exports: [ LoadingComponent ]
 })
 export class LoadingModule {}

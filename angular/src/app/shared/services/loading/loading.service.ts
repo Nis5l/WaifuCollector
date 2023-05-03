@@ -14,6 +14,7 @@ export class LoadingService {
 
 	public setLoading(b: boolean): void {
 		if(b === false && this.observables.size !== 0) return;
+		//NOTE: lifecycle hook checks twice if values changed
 		setTimeout(() => {
 			this.loadingSubject.next(b);
 		});

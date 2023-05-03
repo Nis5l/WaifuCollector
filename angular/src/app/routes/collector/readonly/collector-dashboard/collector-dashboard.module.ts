@@ -8,11 +8,11 @@ import { CollectorDashboardComponent } from './collector-dashboard.component';
 
 @NgModule({
 	imports: [
-    NgVarModule,
+		CommonModule,
 
-    CommonModule,
-    CollectorOpenModule
-  ],
+		NgVarModule,
+		CollectorOpenModule,
+	],
 	declarations: [ CollectorDashboardComponent ],
   exports: [ CollectorDashboardComponent ]
 })

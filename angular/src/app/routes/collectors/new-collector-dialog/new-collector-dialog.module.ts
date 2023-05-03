@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { CollectorImageModule } from '../../collector';
 import { ImageCircleModule } from '../../../shared/components';
-import { LoadingModule, LoadingSpinnerModule } from '../../../shared/services/loading';
+import { LoadingModule } from '../../../shared/services/loading';
 import { NgVarModule } from '../../../shared/directives';
 import { NewCollectorDialogService } from './new-collector-dialog.service';
 import { NewCollectorDialogComponent } from './new-collector-dialog.component';
@@ -30,7 +30,6 @@ const MATERIAL_MODULES = [
 
 		CollectorImageModule,
 		LoadingModule,
-		LoadingSpinnerModule,
 		ImageCircleModule,
 		NgVarModule,
 	],

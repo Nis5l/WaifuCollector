@@ -9,6 +9,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { RequestCardTypeModule } from './request-cards';
 import { CollectorRequestsComponent } from './collector-requests.component';
 import { CollectorRequestsService } from './collector-requests.service';
+import { LoadingModule } from '../../../../shared/components';
 
 const MATERIAL_MODULES = [
   MatIconModule,
@@ -18,8 +19,11 @@ const MATERIAL_MODULES = [
 
 @NgModule({
 	imports: [
-    ...MATERIAL_MODULES,
     CommonModule,
+
+    ...MATERIAL_MODULES,
+
+	LoadingModule,
     NgVarModule,
     RequestCardTypeModule
   ],
