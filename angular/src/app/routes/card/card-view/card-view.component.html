@@ -1,0 +1,5 @@
+<div>
+	<ng-container *ngVar="(cardId$ | async) as cardId">
+		<cc-card *ngIf="cardId != null" [card]="cardId"></cc-card>
+	</ng-container>
+</div>

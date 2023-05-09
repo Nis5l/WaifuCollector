@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription, timer, forkJoin, tap, of as observableof} from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, Subscription, timer, forkJoin, tap } from 'rxjs';
 
 import { PackTimeResponse } from './types';
 import { CollectorOpenService } from './collector-open.service';
@@ -15,8 +16,15 @@ const UPDATE_FREQUENCY_MS = 100;
 })
 export class CollectorOpenComponent implements OnInit, OnDestroy {
 
+	public _collectorId: Id | null = null;
 	@Input()
-	public collectorId: Id | undefined = undefined;
+	public set collectorId(id: Id) {
+		this._collectorId = id;
+	}
+	public get collectorId(): Id {
+		if(this._collectorId == null) throw new Error("collectorId not set");
+		return this._collectorId;
+	}
 
 	@Input()
 	public radius: number = 46;
@@ -31,7 +39,8 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 	public displayText: string = "";
 
 	constructor(
-		private readonly collectorOpenService: CollectorOpenService
+		private readonly collectorOpenService: CollectorOpenService,
+		private readonly router: Router
 	){ }
 
 	public ngOnInit(){
@@ -53,19 +62,18 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 	}
 
 	public onClick(){
-		if(this.collectorId == null) return;
 		if(this.progress < 1.0) return;
 		this.collectorOpenService.openPack(this.collectorId).subscribe((res) => {
 			this.progress = 0;
 			this.refreshTime().subscribe(() => {
 				this.startCounter();
 			});
+			//TODO: change this if more than one card can be pulled
+			this.router.navigate(["card", res.cards[0].id]);
 		});
 	}
 
 	private refreshTime(): Observable<unknown>{
-		if(this.collectorId == null) return observableof(null);
-	
 		let streams = [];
 		streams.push(this.collectorOpenService.getMaxTime(this.collectorId).pipe(
 			tap(res => {

@@ -11,6 +11,7 @@ import {
 	HomeComponent,
 	CollectorReadonlyComponent,
 	CollectorEditComponent,
+	CardViewComponent,
 } from './routes';
 
 const routes: Routes = [
@@ -24,6 +25,8 @@ const routes: Routes = [
 
 	{ path: "user/:userId/edit", component: ProfileEditComponent },
 	{ path: "user/:userId", component: ProfileReadonlyComponent },
+
+	{ path: "card/:cardId", component: CardViewComponent },
 
 	{ path: "home", component: HomeComponent },
 ];

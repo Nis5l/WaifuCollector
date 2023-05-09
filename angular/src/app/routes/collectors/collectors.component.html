@@ -1,4 +1,5 @@
 <div class="collectors-wrapper wrap">
+	<cc-loading [observable]="loading$"></cc-loading>
 	<form class="collector-form" [formGroup]="formGroup">
 		<mat-form-field>
 			<input matInput type="text" formControlName="search" placeholder="Search" />

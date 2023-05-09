@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { HttpModule } from '../../../../shared/services';
 
@@ -8,8 +9,10 @@ import { CollectorOpenComponent } from './collector-open.component';
 
 @NgModule({
 imports: [
-	HttpModule,
 	CommonModule,
+	RouterModule,
+
+	HttpModule,
 ],
 providers: [ CollectorOpenService ],
 declarations: [ CollectorOpenComponent ],

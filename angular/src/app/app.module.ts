@@ -17,6 +17,7 @@ import {
 	HomeModule,
 	CollectorReadonlyModule,
 	CollectorEditModule,
+	CardViewModule,
 } from './routes';
 
 const MODULES = [
@@ -33,7 +34,8 @@ const MODULES = [
 	ProfileReadonlyModule,
 	ProfileEditModule,
 	HomeModule,
-	PopupModule
+	PopupModule,
+	CardViewModule,
 ];
 
 @NgModule({
