@@ -1,6 +1,6 @@
 <ng-container *ngVar="(config$ | async) as config">
-	<div class="collector-add-type" *ngIf="config != null">
-		<form [formGroup]="formGroup" (submit)="createTypeRequest()">
+	<div class="collector-add-card-type" *ngIf="config != null">
+		<form [formGroup]="formGroup" (submit)="createCardTypeRequest()">
 			<mat-form-field *ngVar="formGroup.controls.name as nameFormControl">
 				<input matInput type="text" formControlName="name" placeholder="Name" [minlength]="config.nameLengthMin" [maxlength]="config.nameLengthMax" />
 				<mat-error *ngIf="nameFormControl.hasError('required') || nameFormControl.hasError('minlength')">

@@ -121,6 +121,7 @@ async fn rocket() -> _ {
            card::card_type::request::card_type_request_create_route,
            card::card_type::request::card_type_request_accept_route,
            card::card_type::request::card_type_request_decline_route,
+           card::config::card_config_route,
 
            trade::info::trade_route,
            trade::confirm::trade_confirm_route,

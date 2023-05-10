@@ -1,9 +1,10 @@
-<mat-form-field class="card-type-selector" appearance="fill">
+<mat-form-field [ngClass]="{'mat-form-field-invalid': !control?.valid}" class="card-type-selector" appearance="fill">
 	<mat-label>Card-Type</mat-label>
 	<input type="text"
 		placeholder=""
 		aria-label="Card-Type"
 		matInput
+		[disabled]="disabled"
 		[formControl]="formControl"
 		[matAutocomplete]="auto">
 	<mat-autocomplete

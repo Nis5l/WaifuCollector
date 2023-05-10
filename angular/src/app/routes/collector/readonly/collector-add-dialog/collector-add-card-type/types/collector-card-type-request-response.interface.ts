@@ -1,5 +1,5 @@
 import type { Id } from '../../../../../../shared/types';
 
-export interface CollectorTypeRequestResponse {
+export interface CollectorCardTypeRequestResponse {
 	id: Id
 }

@@ -8,8 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { HttpModule } from '../../../../../shared/services';
 import { NgVarModule } from '../../../../../shared/directives';
-import { CollectorAddTypeComponent } from './collector-add-type.component';
-import { CollectorAddTypeService } from './collector-add-type.service';
+import { CollectorAddCardTypeComponent } from './collector-add-card-type.component';
+import { CollectorAddCardTypeService } from './collector-add-card-type.service';
 
 const MATERIAL_MODULES = [
 	MatFormFieldModule,
@@ -27,8 +27,8 @@ const MATERIAL_MODULES = [
 		
 		...MATERIAL_MODULES,
 	],
-	providers: [ CollectorAddTypeService ],
-	declarations: [ CollectorAddTypeComponent ],
-	exports: [ CollectorAddTypeComponent ]
+	providers: [ CollectorAddCardTypeService ],
+	declarations: [ CollectorAddCardTypeComponent ],
+	exports: [ CollectorAddCardTypeComponent ]
 })
-export class CollectorAddTypeModule {}
+export class CollectorAddCardTypeModule {}

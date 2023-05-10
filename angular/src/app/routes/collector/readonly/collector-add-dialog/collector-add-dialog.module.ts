@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs'; 
 
 import { CollectorAddCardModule } from './collector-add-card';
-import { CollectorAddTypeModule } from './collector-add-type';
+import { CollectorAddCardTypeModule } from './collector-add-card-type';
 import { CollectorAddDialogComponent } from './collector-add-dialog.component';
 
 const MATERIAL_MODULES = [
@@ -12,7 +12,7 @@ const MATERIAL_MODULES = [
 @NgModule({
 	imports: [
 		CollectorAddCardModule,
-		CollectorAddTypeModule,
+		CollectorAddCardTypeModule,
 
 		...MATERIAL_MODULES,
 	],

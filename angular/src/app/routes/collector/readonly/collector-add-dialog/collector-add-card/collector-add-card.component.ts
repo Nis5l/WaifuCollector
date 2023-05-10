@@ -2,17 +2,19 @@ import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import type { SafeResourceUrl } from '@angular/platform-browser';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, share } from 'rxjs';
 
+import { CollectorAddCardService } from './collector-add-card.service';
 import type { CardData, CardType, Id } from '../../../../../shared/types';
 import { SubscriptionManagerComponent } from '../../../../../shared/abstract';
 import { HttpService } from '../../../../../shared/services';
 import { eventGetImage } from '../../../../../shared/utils';
+import type { CollectorAddCardConfig } from './types';
 
 @Component({
 	selector: "cc-collector-add-card",
 	templateUrl: "./collector-add-card.component.html",
-	styleUrls: [ "./collector-add-card.component.scss" ]
+	styleUrls: [ "./collector-add-card.component.scss" ],
 })
 export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 	private _collectorId: Id | null = null;
@@ -26,7 +28,6 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 		return this._collectorId;
 	}
 
-	private readonly imageSetErrorSubject: BehaviorSubject<true | null> = new BehaviorSubject<true | null>(true);
 	private readonly imageSubject: Subject<SafeResourceUrl> = new Subject<SafeResourceUrl>();
 	private readonly cardTypeDefault: CardType = {
 		id: "id",
@@ -55,19 +56,24 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 	});
 
 	public readonly card$: Observable<CardData>;
+	public readonly config$: Observable<CollectorAddCardConfig>;
 
 	public readonly formGroup;
 
 	constructor(
 		private readonly httpService: HttpService,
 		private readonly domSanitizer: DomSanitizer,
+		private readonly collectorAddCardService: CollectorAddCardService,
 	) {
 		super();
 		this.formGroup = new FormGroup({
 			name: new FormControl("", {
 				nonNullable: true,
 				validators: [ Validators.required ],
-			})
+			}),
+			type: new FormControl(null, {
+				validators: [ Validators.required ],
+			}),
 		});
 
 		this.registerSubscription(this.formGroup.valueChanges.subscribe(value => {
@@ -92,34 +98,9 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 					image
 				}
 			});
-			this.imageSetErrorSubject.next(null);
 		}));
 
-		this.registerSubscription(this.formGroup.valueChanges.subscribe(_value => {
-				this.formGroup.markAsDirty();
-				this.formGroup.markAsTouched();
-				this.formGroup.markAsPristine();
-				//this.formGroup.updateValueAndValidity()
-				this.formGroup.setErrors({ noImage: this.imageSetErrorSubject.getValue() });
-				this.formGroup.markAsDirty();
-				this.formGroup.markAsTouched();
-				this.formGroup.markAsPristine();
-				//this.formGroup.updateValueAndValidity()
-				console.log(this.formGroup.valid, this.formGroup.errors);
-		}));
-		this.registerSubscription(this.imageSetErrorSubject.asObservable().subscribe(value => {
-			setTimeout(() => {
-				this.formGroup.markAsDirty();
-				this.formGroup.markAsTouched();
-				this.formGroup.markAsPristine();
-				this.formGroup.updateValueAndValidity()
-				this.formGroup.setErrors({ noImage: value });
-				this.formGroup.markAsDirty();
-				this.formGroup.markAsTouched();
-				this.formGroup.markAsPristine();
-				this.formGroup.updateValueAndValidity()
-			}, 0);
-		}));
+		this.config$ = this.collectorAddCardService.getConfig().pipe(share());
 	}
 
 	public imageChange(target: EventTarget | null): void {

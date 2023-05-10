@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CollectorAddCardComponent } from './collector-add-card.component';
+import { CollectorAddCardService } from './collector-add-card.service';
 import { CardTypeSelectorModule } from './card-type-selector';
 import { HttpModule } from '../../../../../shared/services';
 import { CardModule } from '../../../../../shared/components';
@@ -32,6 +33,7 @@ const MATERIAL_MODULES = [
 
 		CardTypeSelectorModule,
 	],
+	providers: [ CollectorAddCardService ],
 	declarations: [ CollectorAddCardComponent ],
 	exports: [ CollectorAddCardComponent ],
 })

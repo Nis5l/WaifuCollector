@@ -1,25 +1,37 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { Component, Input, Output, EventEmitter, forwardRef, Injector, AfterViewInit } from '@angular/core'
 import { BehaviorSubject, Observable, filter, combineLatest as observableCombineLatest, switchMap, startWith, map, distinctUntilChanged } from 'rxjs'
 
 import { CardTypeSelectorService } from './card-type-selector.service';
 import { SubscriptionManagerComponent } from '../../../../../../shared/abstract';
 import type { Id, CardType } from '../../../../../../shared/types';
-import { FormControl } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-//TODO: some sort of validation something is set, and that the client cant put "invalid" values in the autocomplete text field
 @Component({
 	selector: 'cc-card-type-selector',
 	templateUrl: './card-type-selector.component.html',
-	styleUrls: [ './card-type-selector.component.scss' ]
+	styleUrls: [ './card-type-selector.component.scss' ],
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			multi: true,
+			useExisting: forwardRef(() => CardTypeSelectorComponent)
+		}
+	]
 })
-export class CardTypeSelectorComponent extends SubscriptionManagerComponent {
+export class CardTypeSelectorComponent extends SubscriptionManagerComponent implements ControlValueAccessor, AfterViewInit {
 	@Output()
 	public readonly cardType: EventEmitter<CardType | null> = new EventEmitter<CardType | null>();
 
 	public readonly formControl = new FormControl<string | CardType>('', {
 		nonNullable: true
 	});
+	public control: FormControl | null = null;
 	public readonly cardTypeOptions$: Observable<CardType[]>;
+
+	private onChange = (cardType: CardType | null) => {};
+	private onTouched = () => {};
+	private touched: boolean = false;
+	public disabled: boolean = false;
 
 	private readonly collectorIdSubject: BehaviorSubject<Id | null> = new BehaviorSubject<Id | null>(null);
 	private readonly collectorId$: Observable<Id>;
@@ -34,14 +46,8 @@ export class CardTypeSelectorComponent extends SubscriptionManagerComponent {
 		return collectorId;
 	}
 
-	constructor(private readonly cardTypeSelectorService: CardTypeSelectorService) {
+	constructor(private injector: Injector, private readonly cardTypeSelectorService: CardTypeSelectorService) {
 		super();
-		setTimeout(() => {
-			this.formControl.markAsDirty();
-			this.formControl.markAsTouched();
-			this.formControl.setErrors({ invalidName: true });
-		}, 0);
-
 		this.collectorId$ = this.collectorIdSubject.asObservable().pipe(
 			filter((collectorId): collectorId is Id => collectorId != null)
 		);
@@ -57,22 +63,21 @@ export class CardTypeSelectorComponent extends SubscriptionManagerComponent {
 			map(({ cardTypes }) => cardTypes)
 		);
 
-		//TODO: THIS IS BUGGY
 		this.registerSubscription(observableCombineLatest([formControlString, this.cardType.pipe(distinctUntilChanged())]).subscribe(([name, cardType]) => {
-			if(cardType != null && name === cardType.name) {
-				this.formControl.markAsDirty();
-				this.formControl.markAsTouched();
-				this.formControl.setErrors({ invalidName: null });
-				return;
+			if(cardType != null && name !== cardType.name) {
+				this.cardType.next(null);
 			}
-			console.log("ERR");
-			setTimeout(() => {
-				this.formControl.markAsDirty();
-				this.formControl.markAsTouched();
-				this.formControl.setErrors({ invalidName: true });
-			}, 1);
-			this.cardType.next(null);
 		}));
+		this.registerSubscription(this.cardType.pipe(distinctUntilChanged()).subscribe(cardType => {
+			this.onChange(cardType);
+		}));
+	}
+
+	ngAfterViewInit(): void {
+		const ngControl: NgControl | null = this.injector.get(NgControl, null);
+		if (ngControl) {
+			this.control = ngControl.control as FormControl;
+		}
 	}
 
 	public onSelectionChange(cardType: CardType): void {
@@ -81,5 +86,28 @@ export class CardTypeSelectorComponent extends SubscriptionManagerComponent {
 
 	public displayFn(cardType: CardType): string {
 		return cardType.name;
+	}
+
+	writeValue(cardType: CardType) {
+		this.cardType.next(cardType);
+	}
+
+	registerOnChange(onChange: any) {
+		this.onChange = onChange;
+	}
+
+	registerOnTouched(onTouched: any) {
+		this.onTouched = onTouched;
+	}
+
+	markAsTouched() {
+		if (!this.touched) {
+		  this.onTouched();
+		  this.touched = true;
+		}
+	}
+
+	setDisabledState(disabled: boolean) {
+		this.disabled = disabled;
 	}
 }

@@ -2,18 +2,18 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, share, BehaviorSubject } from 'rxjs';
 
-import { CollectorAddTypeService } from './collector-add-type.service';
-import type { CollectorTypeConfig } from './types';
+import { CollectorAddCardTypeService } from './collector-add-card-type.service';
+import type { CollectorCardTypeConfig } from './types';
 import type { Id } from '../../../../../shared/types';
 import { LoadingService } from '../../../../../shared/services';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-	selector: 'cc-collector-add-type',
-	templateUrl: './collector-add-type.component.html',
-	styleUrls: [ './collector-add-type.component.scss' ],
+	selector: 'cc-collector-add-card-type',
+	templateUrl: './collector-add-card-type.component.html',
+	styleUrls: [ './collector-add-card-type.component.scss' ],
 })
-export class CollectorAddTypeComponent {
+export class CollectorAddCardTypeComponent {
 	private _collectorId: Id | null = null;
 	@Input()
 	public set collectorId(id: Id) {
@@ -25,13 +25,13 @@ export class CollectorAddTypeComponent {
 		return this._collectorId;
 	}
 
-	public readonly config$: Observable<CollectorTypeConfig>;
+	public readonly config$: Observable<CollectorCardTypeConfig>;
 	public readonly formGroup;
 
 	private readonly errorSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 	public readonly error$: Observable<string | null>;
 
-	constructor(private readonly collectorAddTypeService: CollectorAddTypeService, private readonly loadingService: LoadingService) {
+	constructor(private readonly collectorAddCardTypeService: CollectorAddCardTypeService, private readonly loadingService: LoadingService) {
 		this.formGroup = new FormGroup({
 			name: new FormControl("", {
 				nonNullable: true,
@@ -39,13 +39,13 @@ export class CollectorAddTypeComponent {
 			})
 		});
 
-		this.config$ = this.collectorAddTypeService.getConfig().pipe(share());
+		this.config$ = this.collectorAddCardTypeService.getConfig().pipe(share());
 		this.error$ = this.errorSubject.asObservable();
 	}
 
-	public createTypeRequest(): void {
+	public createCardTypeRequest(): void {
 		console.log("TEST");
-		this.loadingService.waitFor(this.collectorAddTypeService.createCollectorRequest(this.collectorId, this.formGroup.getRawValue())).subscribe({
+		this.loadingService.waitFor(this.collectorAddCardTypeService.createCollectorRequest(this.collectorId, this.formGroup.getRawValue())).subscribe({
 			next: () => { /* TODO: goto created request */},
 			error: (err: HttpErrorResponse) => {
 				this.errorSubject.next(err.error?.error ?? "Creating type failed");
