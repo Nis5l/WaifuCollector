@@ -6,8 +6,8 @@
 		</mat-form-field>
 		<cc-card-type-selector (cardType)="cardTypeChange($event)" [collectorId]="collectorId"></cc-card-type-selector>
 		<input #imageInput hidden="true" type="file" (change)="imageChange($event.target)" accept="image/jpeg"/>
-		<button mat-button (click)="imageInput.click()">Image</button>
-		<button mat-button class="request">Submit</button>
+		<button mat-button (click)="imageInput.click()" [color]="formGroup.hasError('noImage') ? 'error' : 'text'"><mat-icon>add_a_photo</mat-icon>Image</button>
+		<button mat-button type="submit" [disabled]="!formGroup.valid" class="request">Submit</button>
 	</form>
 	<div class="card" *ngIf="card != null">
 		<cc-card [card]="card"></cc-card>

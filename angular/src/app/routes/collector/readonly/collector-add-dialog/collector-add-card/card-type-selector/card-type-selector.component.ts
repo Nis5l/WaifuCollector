@@ -37,8 +37,9 @@ export class CardTypeSelectorComponent extends SubscriptionManagerComponent {
 	constructor(private readonly cardTypeSelectorService: CardTypeSelectorService) {
 		super();
 		setTimeout(() => {
+			this.formControl.markAsDirty();
+			this.formControl.markAsTouched();
 			this.formControl.setErrors({ invalidName: true });
-			this.formControl.updateValueAndValidity();
 		}, 0);
 
 		this.collectorId$ = this.collectorIdSubject.asObservable().pipe(
@@ -56,11 +57,12 @@ export class CardTypeSelectorComponent extends SubscriptionManagerComponent {
 			map(({ cardTypes }) => cardTypes)
 		);
 
+		//TODO: THIS IS BUGGY
 		this.registerSubscription(observableCombineLatest([formControlString, this.cardType.pipe(distinctUntilChanged())]).subscribe(([name, cardType]) => {
 			if(cardType != null && name === cardType.name) {
-				console.log("NO ERR");
+				this.formControl.markAsDirty();
+				this.formControl.markAsTouched();
 				this.formControl.setErrors({ invalidName: null });
-				this.formControl.updateValueAndValidity();
 				return;
 			}
 			console.log("ERR");
@@ -68,10 +70,7 @@ export class CardTypeSelectorComponent extends SubscriptionManagerComponent {
 				this.formControl.markAsDirty();
 				this.formControl.markAsTouched();
 				this.formControl.setErrors({ invalidName: true });
-				//this.formControl.updateValueAndValidity();
 			}, 1);
-			/* this.formControl.setErrors({ invalidName: true });
-			this.formControl.updateValueAndValidity(); */
 			this.cardType.next(null);
 		}));
 	}

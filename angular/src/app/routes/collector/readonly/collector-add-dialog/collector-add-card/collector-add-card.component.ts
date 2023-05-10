@@ -5,6 +5,7 @@ import type { SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import type { CardData, CardType, Id } from '../../../../../shared/types';
+import { SubscriptionManagerComponent } from '../../../../../shared/abstract';
 import { HttpService } from '../../../../../shared/services';
 import { eventGetImage } from '../../../../../shared/utils';
 
@@ -13,7 +14,7 @@ import { eventGetImage } from '../../../../../shared/utils';
 	templateUrl: "./collector-add-card.component.html",
 	styleUrls: [ "./collector-add-card.component.scss" ]
 })
-export class CollectorAddCardComponent {
+export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 	private _collectorId: Id | null = null;
 	@Input()
 	public set collectorId(id: Id) {
@@ -25,6 +26,7 @@ export class CollectorAddCardComponent {
 		return this._collectorId;
 	}
 
+	private readonly imageSetErrorSubject: BehaviorSubject<true | null> = new BehaviorSubject<true | null>(true);
 	private readonly imageSubject: Subject<SafeResourceUrl> = new Subject<SafeResourceUrl>();
 	private readonly cardTypeDefault: CardType = {
 		id: "id",
@@ -60,6 +62,7 @@ export class CollectorAddCardComponent {
 		private readonly httpService: HttpService,
 		private readonly domSanitizer: DomSanitizer,
 	) {
+		super();
 		this.formGroup = new FormGroup({
 			name: new FormControl("", {
 				nonNullable: true,
@@ -67,7 +70,7 @@ export class CollectorAddCardComponent {
 			})
 		});
 
-		this.formGroup.valueChanges.subscribe(value => {
+		this.registerSubscription(this.formGroup.valueChanges.subscribe(value => {
 			const current = this.cardSubject.getValue();
 			this.cardSubject.next({
 				...current,
@@ -76,15 +79,54 @@ export class CollectorAddCardComponent {
 					name: value.name ?? current.cardInfo.name
 				}
 			});
-		});
+		}));
 
 		this.card$ = this.cardSubject.asObservable();
+
+		this.registerSubscription(this.imageSubject.asObservable().subscribe(image => {
+			const current = this.cardSubject.getValue();
+			this.cardSubject.next({
+				...current,
+				cardInfo: {
+					...current.cardInfo,
+					image
+				}
+			});
+			this.imageSetErrorSubject.next(null);
+		}));
+
+		this.registerSubscription(this.formGroup.valueChanges.subscribe(_value => {
+				this.formGroup.markAsDirty();
+				this.formGroup.markAsTouched();
+				this.formGroup.markAsPristine();
+				//this.formGroup.updateValueAndValidity()
+				this.formGroup.setErrors({ noImage: this.imageSetErrorSubject.getValue() });
+				this.formGroup.markAsDirty();
+				this.formGroup.markAsTouched();
+				this.formGroup.markAsPristine();
+				//this.formGroup.updateValueAndValidity()
+				console.log(this.formGroup.valid, this.formGroup.errors);
+		}));
+		this.registerSubscription(this.imageSetErrorSubject.asObservable().subscribe(value => {
+			setTimeout(() => {
+				this.formGroup.markAsDirty();
+				this.formGroup.markAsTouched();
+				this.formGroup.markAsPristine();
+				this.formGroup.updateValueAndValidity()
+				this.formGroup.setErrors({ noImage: value });
+				this.formGroup.markAsDirty();
+				this.formGroup.markAsTouched();
+				this.formGroup.markAsPristine();
+				this.formGroup.updateValueAndValidity()
+			}, 0);
+		}));
 	}
 
 	public imageChange(target: EventTarget | null): void {
 		const image = eventGetImage(target);
 
 		const blobUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(image));
+		//TODO: fix that smaller images resize card
 		this.imageSubject.next(blobUrl);
 	}
 
