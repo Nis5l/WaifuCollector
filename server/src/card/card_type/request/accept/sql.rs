@@ -2,7 +2,7 @@ use crate::sql::Sql;
 use crate::shared::Id;
 use crate::shared::card::data::CardState;
 
-pub async fn collector_type_request_accept(sql: &Sql, card_type_id: &Id) -> Result<(), sqlx::Error> {
+pub async fn card_type_request_accept(sql: &Sql, card_type_id: &Id) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query("UPDATE cardtypes
@@ -18,7 +18,7 @@ pub async fn collector_type_request_accept(sql: &Sql, card_type_id: &Id) -> Resu
     Ok(())
 }
 
-pub async fn collector_type_remove_duplicates(sql: &Sql, collector_id: &Id, card_type_id: &Id) -> Result<(), sqlx::Error> {
+pub async fn card_type_remove_duplicates(sql: &Sql, collector_id: &Id, card_type_id: &Id) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query(

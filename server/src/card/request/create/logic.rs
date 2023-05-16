@@ -11,7 +11,7 @@ use super::data::{CardRequestResponse, CardRequestRequest};
 use super::sql;
 
 #[post("/card/request", data="<data>")]
-pub async fn card_request_route(data: CardRequestRequest, token: JwtToken, config: &State<Config>, sql: &State<Sql>) -> ApiResponseErr<CardRequestResponse> {
+pub async fn card_request_create_route(data: CardRequestRequest, token: JwtToken, config: &State<Config>, sql: &State<Sql>) -> ApiResponseErr<CardRequestResponse> {
     let user_id = &token.id;
     verify_user!(sql, user_id, true);
 
