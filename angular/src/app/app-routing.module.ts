@@ -13,17 +13,18 @@ import {
 	CollectorEditComponent,
 	CardViewComponent,
 } from './routes';
+import { canActivateAuth, canActivateCollectorAdmin } from './shared/guards';
 
 const routes: Routes = [
 	{ path: "login", component: LoginComponent },
-	{ path: "logout", component: LogoutComponent },
+	{ path: "logout", component: LogoutComponent, canActivate: [ canActivateAuth ] },
 	{ path: "register", component: RegisterComponent },
 
 	{ path: "collectors", component: CollectorsComponent },
-	{ path: "collector/:collectorId/edit", component: CollectorEditComponent },
+	{ path: "collector/:collectorId/edit", component: CollectorEditComponent, canActivate: [ canActivateAuth, canActivateCollectorAdmin ] },
 	{ path: "collector/:collectorId", component: CollectorReadonlyComponent, children: CollectorReadonlyComponent.getRoutes() },
 
-	{ path: "user/:userId/edit", component: ProfileEditComponent },
+	{ path: "user/:userId/edit", component: ProfileEditComponent, canActivate: [ canActivateAuth ] },
 	{ path: "user/:userId", component: ProfileReadonlyComponent },
 
 	{ path: "card/:cardId", component: CardViewComponent },
