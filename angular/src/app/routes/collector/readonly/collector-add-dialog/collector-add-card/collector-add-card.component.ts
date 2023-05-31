@@ -1,15 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import type { SafeResourceUrl } from '@angular/platform-browser';
-import { BehaviorSubject, Observable, Subject, share } from 'rxjs';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BehaviorSubject, Observable, share, switchMap, filter, map, startWith } from 'rxjs';
+import type { HttpErrorResponse } from '@angular/common/http';
 
 import { CollectorAddCardService } from './collector-add-card.service';
-import type { CardData, CardType, Id } from '../../../../../shared/types';
+import type { UnlockedCard, CardType, Id } from '../../../../../shared/types';
 import { SubscriptionManagerComponent } from '../../../../../shared/abstract';
-import { HttpService } from '../../../../../shared/services';
+import { HttpService, LoadingService } from '../../../../../shared/services';
 import { eventGetImage } from '../../../../../shared/utils';
-import type { CollectorAddCardConfig } from './types';
+import type { CollectorAddCardConfig, CardRequestRequest } from './types';
 
 @Component({
 	selector: "cc-collector-add-card",
@@ -28,14 +28,28 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 		return this._collectorId;
 	}
 
-	private readonly imageSubject: Subject<SafeResourceUrl> = new Subject<SafeResourceUrl>();
+	private readonly imageSubject: BehaviorSubject<File | null> = new BehaviorSubject<File | null>(null);
+	public readonly cardImage$: Observable<string | SafeResourceUrl>;
 	private readonly cardTypeDefault: CardType = {
 		id: "id",
 		name: "",
 		userId: null
 	};
 
-	private readonly cardSubject: BehaviorSubject<CardData> = new BehaviorSubject<CardData>({
+	private readonly cardSubject: BehaviorSubject<UnlockedCard> = new BehaviorSubject<UnlockedCard>({
+		level: 1,
+		quality: 1,
+		id: "id",
+		userId: "userId",
+		card: {
+			cardInfo: {
+				id: "id",
+				userId: "userId",
+				name: "",
+				//image: ,
+			},
+			cardType: this.cardTypeDefault
+		},
 		cardEffect: {
 			id: 0,
 			image: this.httpService.apiUrl("/effect/Effect1.gif"),
@@ -47,23 +61,21 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 			front: this.httpService.apiUrl("/frame/Frame_Silver_Front.png"),
 			name: "frame"
 		},
-		cardInfo: {
-			id: "id",
-			name: "",
-			image: this.httpService.apiUrl("/card/card-image"),
-		},
-		cardType: this.cardTypeDefault
 	});
 
-	public readonly card$: Observable<CardData>;
+	public readonly card$: Observable<UnlockedCard>;
 	public readonly config$: Observable<CollectorAddCardConfig>;
 
 	public readonly formGroup;
+
+	private readonly errorSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+	public readonly error$: Observable<string | null>;
 
 	constructor(
 		private readonly httpService: HttpService,
 		private readonly domSanitizer: DomSanitizer,
 		private readonly collectorAddCardService: CollectorAddCardService,
+		private readonly loadingService: LoadingService,
 	) {
 		super();
 		this.formGroup = new FormGroup({
@@ -80,35 +92,33 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 			const current = this.cardSubject.getValue();
 			this.cardSubject.next({
 				...current,
-				cardInfo: {
-					...current.cardInfo,
-					name: value.name ?? current.cardInfo.name
+				card: {
+					...current.card,
+					cardInfo: {
+						...current.card.cardInfo,
+						name: value.name ?? current.card.cardInfo.name
+					}
 				}
 			});
 		}));
 
 		this.card$ = this.cardSubject.asObservable();
 
-		this.registerSubscription(this.imageSubject.asObservable().subscribe(image => {
-			const current = this.cardSubject.getValue();
-			this.cardSubject.next({
-				...current,
-				cardInfo: {
-					...current.cardInfo,
-					image
-				}
-			});
-		}));
+		this.cardImage$ = this.imageSubject.asObservable().pipe(
+			filter((image): image is File => image != null),
+			map(image => this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(image))),
+			startWith(this.httpService.apiUrl("/card/card-image")),
+		);
 
 		this.config$ = this.collectorAddCardService.getConfig().pipe(share());
+		
+		this.error$ = this.errorSubject.asObservable();
 	}
 
 	public imageChange(target: EventTarget | null): void {
 		const image = eventGetImage(target);
 
-		const blobUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(image));
-		//TODO: fix that smaller images resize card
-		this.imageSubject.next(blobUrl);
+		this.imageSubject.next(image);
 	}
 
 	public cardTypeChange(cardType: CardType | null): void {
@@ -116,13 +126,38 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 		if(cardType != null) {
 			this.cardSubject.next({
 				...current,
-				cardType
+				card: {
+					...current.card,
+					cardType
+				}
 			});
 		} else {
 			this.cardSubject.next({
 				...current,
-				cardType: this.cardTypeDefault
+				card: {
+					...current.card,
+					cardType: this.cardTypeDefault
+				}
 			});
 		}
+	}
+
+	public createCardRequest(): void {
+		const data = this.cardSubject.getValue();
+		const cardData: CardRequestRequest = {
+			cardType: data.card.cardType.id,
+			name: data.card.cardInfo.name,
+		};
+		const image = this.imageSubject.getValue();
+		if(image == null) throw new Error("image not set");
+
+		this.loadingService.waitFor(this.collectorAddCardService.createCardRequest(cardData).pipe(
+			switchMap(({ id }) => this.collectorAddCardService.setCardImage(id, image))
+		)).subscribe({
+			next: () => { /* TODO: goto created request */},
+			error: (err: HttpErrorResponse) => {
+				this.errorSubject.next(err.error?.error ?? "Creating card failed");
+			}
+		})
 	}
 }

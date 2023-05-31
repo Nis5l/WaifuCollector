@@ -1,10 +1,13 @@
 <ng-container *ngVar="(collector$ | async) as collector">
   <div class="request-container">
 	<cc-loading [observable]="loading$"></cc-loading>
-    <ng-container *ngVar="(cardTypeIndex$ | async) as res">
-		<ng-container *ngIf="res != null">
-		  <cc-request-card-type *ngFor="let cardType of res.cardTypes" (onRemove)="reloadCardTypes()" [cardType]="cardType" [collectorId]="collector.id"></cc-request-card-type>
-		  <mat-paginator [length]="res.cardTypeCount" [pageSize]="res.pageSize" (page)="changePage($event)"></mat-paginator>
+    <ng-container *ngVar="(cardTypeIndex$ | async) as cardTypeRes">
+		<ng-container *ngVar="(cardIndex$ | async) as cardRes">
+			<ng-container *ngIf="cardTypeRes != null && cardRes != null">
+				<cc-request-card-card-type *ngFor="let cardType of cardTypeRes.cardTypes" (onRemove)="reload()" [cardType]="cardType" [collectorId]="collector.id"></cc-request-card-card-type>
+				<cc-request-card-card *ngFor="let card of cardRes.cards" (onRemove)="reload()" [card]="card" [collectorId]="collector.id"></cc-request-card-card>
+				<mat-paginator [length]="cardTypeRes.cardTypeCount + cardRes.cardCount" [pageSize]="cardTypeRes.pageSize + cardRes.pageSize" (page)="changePage($event)"></mat-paginator>
+			</ng-container>
 		</ng-container>
 	</ng-container>
   </div>

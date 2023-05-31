@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import type { CardType, Id } from '../../../../../../shared/types';
-import { RequestCardTypeService } from './request-card-type.service';
+import { RequestCardCardTypeService } from './request-card-card-type.service';
 import { LoadingService } from '../../../../../../shared/services';
 import { SubscriptionManagerComponent } from '../../../../../../shared/abstract';
 
@@ -9,11 +9,11 @@ import { SubscriptionManagerComponent } from '../../../../../../shared/abstract'
 //TODO: CHAT
 
 @Component({
-	selector: 'cc-request-card-type',
-	templateUrl: './request-card-type.component.html',
-	styleUrls: [ './request-card-type.component.scss' ]
+	selector: 'cc-request-card-card-type',
+	templateUrl: './request-card-card-type.component.html',
+	styleUrls: [ './request-card-card-type.component.scss' ]
 })
-export class RequestCardTypeComponent extends SubscriptionManagerComponent {
+export class RequestCardCardTypeComponent extends SubscriptionManagerComponent {
 	@Output()
 	public readonly onRemove: EventEmitter<void> = new EventEmitter<void>();
 
@@ -38,21 +38,21 @@ export class RequestCardTypeComponent extends SubscriptionManagerComponent {
 	}
 
 	constructor(
-		private readonly requestCardTypeService: RequestCardTypeService,
+		private readonly requestCardCardTypeService: RequestCardCardTypeService,
 		private readonly loadingService: LoadingService
 	) {
 		super();
 	}
 
 	public accept(): void {
-		this.registerSubscription(this.loadingService.waitFor(this.requestCardTypeService.accept(this.cardType.id)).subscribe({
+		this.registerSubscription(this.loadingService.waitFor(this.requestCardCardTypeService.accept(this.cardType.id)).subscribe({
 			next: () => this.onRemove.next(),
 			error: () => console.error("Error accepting Card-Type Request")
 		}));
 	}
 
 	public decline(): void {
-		this.registerSubscription(this.loadingService.waitFor(this.requestCardTypeService.decline(this.cardType.id)).subscribe({
+		this.registerSubscription(this.loadingService.waitFor(this.requestCardCardTypeService.decline(this.cardType.id)).subscribe({
 			next: () => this.onRemove.next(),
 			error: () => console.error("Error declining Card-Type Request")
 		}));

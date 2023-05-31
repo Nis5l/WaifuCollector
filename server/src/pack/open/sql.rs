@@ -42,6 +42,7 @@ pub async fn get_random_card_data(sql: &Sql, card_amount: u32, collector_id: &Id
     let cards: Vec<CardCreateDataDb> = sqlx::query_as(
         "SELECT
          cards.cid AS cardId,
+         cards.uid AS cardUserId,
          cardframes.cfid AS frameId
          FROM
          cards, cardframes

@@ -1,5 +1,5 @@
-import type { Card } from '../../../../../shared/types';
+import type { UnlockedCard } from '../../../../../shared/types';
 
 export interface PackOpenResponse{
-	cards: Card[]
+	cards: UnlockedCard[]
 }

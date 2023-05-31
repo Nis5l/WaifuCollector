@@ -20,6 +20,12 @@
 
 		.request {
 			margin-top: auto;
+			.error {
+				text-align: center;
+			}
+			button {
+				width: 100%;
+			}
 		}
 	}
 

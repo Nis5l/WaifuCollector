@@ -9,7 +9,7 @@ import { CollectorRequestsService } from './collector-requests.service';
 import { CollectorAddDialogComponent } from '../collector-add-dialog';
 
 import type { Collector, Id } from '../../../../shared/types';
-import type { CardTypeIndexResponse } from '../types';
+import type { CardTypeIndexResponse, CardIndexResponse } from '../types';
 import type { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -23,9 +23,11 @@ export class CollectorRequestsComponent extends SubscriptionManagerComponent {
 
   private readonly pageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  private readonly reloadCardTypesSubject: Subject<void> = new Subject();
+  private readonly reloadSubject: Subject<void> = new Subject();
   private readonly cardTypeIndexSubject: ReplaySubject<CardTypeIndexResponse> = new ReplaySubject<CardTypeIndexResponse>(1);
   public readonly cardTypeIndex$: Observable<CardTypeIndexResponse>;
+  private readonly cardIndexSubject: ReplaySubject<CardIndexResponse> = new ReplaySubject<CardIndexResponse>(1);
+  public readonly cardIndex$: Observable<CardIndexResponse>;
 
   constructor(
     private readonly collectorService: CollectorService,
@@ -47,23 +49,30 @@ export class CollectorRequestsComponent extends SubscriptionManagerComponent {
 		})
 	);
 
-	const collectorTypes = observableCombineLatest([this.collector$, this.pageSubject.asObservable(), this.reloadCardTypesSubject.asObservable()]).pipe(
+	const cardTypes = observableCombineLatest([this.collector$, this.pageSubject.asObservable(), this.reloadSubject.asObservable()]).pipe(
 		switchMap(([{id}, page]) => this.collectorRequestsService.indexRequestedCardTypes(id, "", page)),
 		share()
 	);
-	this.loading$ = collectorTypes.pipe();
-    this.registerSubscription(collectorTypes.subscribe(cardTypeIndex => this.cardTypeIndexSubject.next(cardTypeIndex)));
+
+	const cards = observableCombineLatest([this.collector$, this.pageSubject.asObservable(), this.reloadSubject.asObservable()]).pipe(
+		switchMap(([{id}, page]) => this.collectorRequestsService.indexRequestedCards(id, "", page)),
+		share()
+	);
+	this.loading$ = observableCombineLatest([cardTypes, cards]).pipe();
+    this.registerSubscription(cardTypes.subscribe(cardTypeIndex => this.cardTypeIndexSubject.next(cardTypeIndex)));
+    this.registerSubscription(cards.subscribe(cardIndex => this.cardIndexSubject.next(cardIndex)));
 
     this.cardTypeIndex$ = this.cardTypeIndexSubject.asObservable();
-    this.reloadCardTypes();
+    this.cardIndex$ = this.cardIndexSubject.asObservable();
+    this.reload();
   }
 
-  public openAddDialog(collectorId: Id): void {
+	public openAddDialog(collectorId: Id): void {
 		CollectorAddDialogComponent.open(this.matDialog, collectorId);
 	}
-  public reloadCardTypes(): void {
-    this.reloadCardTypesSubject.next();
-  }
+	public reload(): void {
+		this.reloadSubject.next();
+	}
 
   public changePage(page: PageEvent): void {
     this.pageSubject.next(page.pageIndex);

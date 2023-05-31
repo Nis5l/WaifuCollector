@@ -22,13 +22,15 @@ pub async fn card_remove_duplicates(sql: &Sql, collector_id: &Id, card_id: &Id) 
     let mut con = sql.get_con().await?;
 
     sqlx::query(
-        "DELETE cards FROM cards, cardtypes
-         WHERE cards.ctid = cardtypes.ctid
-         AND cardtypes.coid = ?
-         AND cards.cid <> ?
-         AND cards.cname IN(
-             SELECT cname FROM cards
-             WHERE cid = ?
+        "DELETE FROM cards WHERE cards.cid IN (
+            SELECT cards.cid FROM cards, cardtypes
+            WHERE cards.ctid = cardtypes.ctid
+            AND cardtypes.coid = ?
+            AND cards.cid <> ?
+            AND cards.cname IN(
+                SELECT cname FROM cards
+                WHERE cid = ?
+            )
          );")
         .bind(collector_id)
         .bind(card_id)

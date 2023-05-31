@@ -1,21 +1,27 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import type { CardType, Id } from '../../../../../../shared/types';
+import { RequestCardCardService } from './request-card-card.service';
+import type { Card, Id } from '../../../../../../shared/types';
+import { SubscriptionManagerComponent } from '../../../../../../shared/abstract';
+import { LoadingService } from '../../../../../../shared/services';
 
 @Component({
-	selector: 'cc-request-card-type',
-	templateUrl: './request-card-type.component.html',
-	styleUrls: [ './request-card-type.component.scss' ]
+	selector: 'cc-request-card-card',
+	templateUrl: './request-card-card.component.html',
+	styleUrls: [ './request-card-card.component.scss' ]
 })
-export class RequestCardTypeComponent {
-	private _cardType: CardType | null = null;
+export class RequestCardCardComponent extends SubscriptionManagerComponent {
+	@Output()
+	public readonly onRemove: EventEmitter<void> = new EventEmitter<void>();
+
+	private _card: Card | null = null;
 	@Input()
-	public set cardType(cardType: CardType) {
-		this._cardType = cardType;
+	public set card(card: Card) {
+		this._card = card;
 	}
-	public get cardType(): CardType {
-		if(this._cardType == null) throw new Error("cardType not set");
-		return this._cardType;
+	public get card(): Card {
+		if(this._card == null) throw new Error("card not set");
+		return this._card;
 	}
 
 	private _collectorId: Id | null = null;
@@ -28,5 +34,24 @@ export class RequestCardTypeComponent {
 		return this._collectorId;
 	}
 
-	constructor() {}
+	constructor(
+		private readonly loadingService: LoadingService,
+		private readonly requestCardCardService: RequestCardCardService
+	) {
+		super();
+	}
+
+	public accept(): void {
+		this.registerSubscription(this.loadingService.waitFor(this.requestCardCardService.accept(this.card.cardInfo.id)).subscribe({
+			next: () => this.onRemove.next(),
+			error: () => console.error("Error accepting Card Request")
+		}));
+	}
+
+	public decline(): void {
+		this.registerSubscription(this.loadingService.waitFor(this.requestCardCardService.decline(this.card.cardInfo.id)).subscribe({
+			next: () => this.onRemove.next(),
+			error: () => console.error("Error declining Card Request")
+		}));
+	}
 }

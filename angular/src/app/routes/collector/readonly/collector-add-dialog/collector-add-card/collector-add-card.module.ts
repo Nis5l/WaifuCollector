@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CollectorAddCardComponent } from './collector-add-card.component';
 import { CollectorAddCardService } from './collector-add-card.service';
 import { CardTypeSelectorModule } from './card-type-selector';
-import { HttpModule } from '../../../../../shared/services';
+import { HttpModule, LoadingModule } from '../../../../../shared/services';
 import { CardModule } from '../../../../../shared/components';
 import { NgVarModule } from '../../../../../shared/directives';
 
@@ -30,6 +30,7 @@ const MATERIAL_MODULES = [
 		HttpModule,
 		CardModule,
 		NgVarModule,
+		LoadingModule,
 
 		CardTypeSelectorModule,
 	],

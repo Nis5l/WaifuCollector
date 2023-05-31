@@ -1,1 +1,1 @@
-export { RequestCardTypeModule } from './request-card-type.module';
+export { RequestCardCardModule } from './request-card-card.module';

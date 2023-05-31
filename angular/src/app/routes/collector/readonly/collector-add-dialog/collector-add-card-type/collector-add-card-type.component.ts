@@ -44,7 +44,6 @@ export class CollectorAddCardTypeComponent {
 	}
 
 	public createCardTypeRequest(): void {
-		console.log("TEST");
 		this.loadingService.waitFor(this.collectorAddCardTypeService.createCollectorRequest(this.collectorId, this.formGroup.getRawValue())).subscribe({
 			next: () => { /* TODO: goto created request */},
 			error: (err: HttpErrorResponse) => {

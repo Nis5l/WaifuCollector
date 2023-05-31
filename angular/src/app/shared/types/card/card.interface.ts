@@ -1,9 +1,7 @@
-import type { CardData } from './card-data.interface';
-import type { Id } from '../id.interface';
+import type { CardInfo } from './card-info.interface';
+import type { CardType } from './card-type.interface';
 
-export interface Card extends CardData {
-    id: Id,
-    userId: Id,
-    level: number,
-    quality: number,
+export interface Card {
+	cardInfo: CardInfo,
+	cardType: CardType,
 }

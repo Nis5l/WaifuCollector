@@ -6,7 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { RequestCardTypeModule } from './request-cards';
+import { RequestCardCardTypeModule } from './request-cards';
+import { RequestCardCardModule } from './request-cards';
 import { CollectorRequestsComponent } from './collector-requests.component';
 import { CollectorRequestsService } from './collector-requests.service';
 import { LoadingModule } from '../../../../shared/components';
@@ -25,7 +26,8 @@ const MATERIAL_MODULES = [
 
 	LoadingModule,
     NgVarModule,
-    RequestCardTypeModule
+    RequestCardCardTypeModule,
+	RequestCardCardModule,
   ],
   providers: [ CollectorRequestsService ],
 	declarations: [ CollectorRequestsComponent ],

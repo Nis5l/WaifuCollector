@@ -5,10 +5,10 @@ use rocketjson::JsonBody;
 use crate::shared::Id;
 
 #[derive(Debug, Deserialize, Validate, JsonBody)]
+#[serde(rename_all="camelCase")]
 pub struct CardRequestRequest {
     pub name: String,
     pub card_type: Id,
-    pub user_id: Id,
 }
 
 #[derive(Debug, Serialize)]

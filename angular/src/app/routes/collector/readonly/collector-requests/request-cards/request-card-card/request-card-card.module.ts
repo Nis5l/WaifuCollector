@@ -1,16 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { RequestCardTypeComponent } from './request-card-type.component';
-import { RequestCardModule } from '../../../shared';
+import { RequestCardCardComponent } from './request-card-card.component';
+import { RequestCardCardService } from './request-card-card.service';
+import { RequestCardModule } from '../shared';
+import { CardModule } from '../../../../../../shared/components';
+import { LoadingModule } from '../../../../../../shared/services';
 
 @NgModule({
 	imports: [
 		CommonModule,
 
 		RequestCardModule,
+
+		LoadingModule,
+		CardModule,
 	],
-	declarations: [ RequestCardTypeComponent ],
-	exports: [ RequestCardTypeComponent ]
+	providers: [ RequestCardCardService ],
+	declarations: [ RequestCardCardComponent ],
+	exports: [ RequestCardCardComponent ]
 })
-export class RequestCardTypeModule {}
+export class RequestCardCardModule {}

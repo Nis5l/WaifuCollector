@@ -3,7 +3,7 @@ use sqlx::FromRow;
 use chrono::{DateTime, Utc};
 
 use crate::shared::{Id, IdInt};
-use crate::shared::card::data::Card;
+use crate::shared::card::data::UnlockedCard;
 
 #[derive(Debug, Serialize, FromRow)]
 #[sqlx(rename_all="camelCase")]
@@ -14,7 +14,7 @@ pub struct CardCreateDataDb {
 
 #[derive(Debug, Serialize)]
 pub struct PackOpenResponse {
-    pub cards: Vec<Card>
+    pub cards: Vec<UnlockedCard>
 }
 
 pub enum CanOpenPack {

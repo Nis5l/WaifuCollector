@@ -45,7 +45,7 @@ pub async fn pack_open_route(collector_id: Id, sql: &State<Sql>, token: JwtToken
 
     rjtry!(sql::set_pack_time(&sql, &user_id, &collector_id, Utc::now()).await);
 
-    let cards = rjtry!(card::sql::get_cards(&sql, inserted_cards_uuids, None, config).await);
+    let cards = rjtry!(card::sql::get_unlocked_cards(&sql, inserted_cards_uuids, None, config).await);
 
     rjtry!(add_pack_stats(sql, &user_id, &collector_id, pack_amount as i32, &Utc::now()).await);
 

@@ -2,7 +2,7 @@ use rocketjson::{ApiResponseErr, rjtry, error::ApiErrorsCreate};
 use rocket::http::Status;
 use rocket::State;
 
-use crate::shared::card::data::Card;
+use crate::shared::card::data::UnlockedCard;
 use crate::shared::Id;
 use crate::sql::Sql;
 use crate::config::Config;
@@ -12,7 +12,7 @@ use super::data::InventoryRequest;
 use super::sql;
 
 #[post("/user/<user_id>/<collector_id>/inventory", data="<data>")]
-pub async fn inventory_route(user_id: Id, collector_id: Id, mut data: InventoryRequest, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<Card>> {
+pub async fn inventory_route(user_id: Id, collector_id: Id, mut data: InventoryRequest, sql: &State<Sql>, config: &State<Config>) -> ApiResponseErr<Vec<UnlockedCard>> {
     verify_user!(sql, &user_id, false);
     verify_collector!(sql, &collector_id);
 

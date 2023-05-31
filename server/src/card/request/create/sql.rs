@@ -21,12 +21,13 @@ pub async fn card_exists(sql: &Sql, name: &str, card_type: &Id, user_id: &Id) ->
     Ok(count != 0)
 }
 
-pub async fn create_card_request(sql: &Sql, name: &str, card_type: &Id, user_id: &Id) -> Result<(), sqlx::Error> {
+pub async fn create_card_request(sql: &Sql, card_id: &Id, name: &str, card_type: &Id, user_id: &Id) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query("INSERT INTO cards
-                 (cname, ctid, uid, cstate)
-                 VALUES (?, ?, ?, ?);")
+                 (cid, cname, ctid, uid, cstate)
+                 VALUES (?, ?, ?, ?, ?);")
+        .bind(card_id)
         .bind(name)
         .bind(card_type)
         .bind(user_id)

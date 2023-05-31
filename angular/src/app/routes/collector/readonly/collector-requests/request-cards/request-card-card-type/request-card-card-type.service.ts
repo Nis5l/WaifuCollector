@@ -5,7 +5,7 @@ import { HttpService } from '../../../../../../shared/services';
 import type { Id } from '../../../../../../shared/types';
 
 @Injectable()
-export class RequestCardTypeService {
+export class RequestCardCardTypeService {
 	constructor(private readonly httpService: HttpService) {}
 
 	public accept(cardTypeId: Id): Observable<undefined> {

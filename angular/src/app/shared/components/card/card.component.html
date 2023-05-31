@@ -2,14 +2,16 @@
 	<div class="card" *ngIf="c != null">
 		<div class="card-container">
 			<div class="card-inner">
-				<img class="card-effect" [src]="c.cardEffect.image" alt="Card Effect"/>
-				<img [src]="c.cardInfo.image" alt="Card Image"/>
+				<ng-container *ngVar="getCardEffectImage(c) as cardImage">
+					<img *ngIf="cardImage != null" class="card-effect" [src]="cardImage" alt="Card Effect"/>
+				</ng-container>
+				<img [src]="getCardImage(c)" alt="Card Image"/>
 			</div>
 			<div class="card-frame">
-				<span class="card-name card-text">{{c.cardInfo.name}}</span>
-				<span class="card-type-name card-text">{{c.cardType.name}}</span>
+				<span class="card-name card-text">{{getCardName(c)}}</span>
+				<span class="card-type-name card-text">{{getCardTypeName(c)}}</span>
 				
-				<img [src]="c.cardFrame.front" alt="Card Frame" />
+				<img [src]="getCardFrameFront(c)" alt="Card Frame" />
 			</div>
 		</div>
 	</div>

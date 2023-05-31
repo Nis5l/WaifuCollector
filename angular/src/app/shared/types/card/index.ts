@@ -4,6 +4,6 @@ export type { CardEffect } from './card-effect.interface';
 export type { CardType } from './card-type.interface';
 
 export type { Card } from './card.interface';
-export type { CardData } from './card-data.interface';
+export type { UnlockedCard } from './unlocked-card.interface';
 
 export { CardState } from './card-state.enum';
