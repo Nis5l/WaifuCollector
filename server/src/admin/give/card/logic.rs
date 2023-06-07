@@ -23,7 +23,7 @@ pub async fn give_card_route(collector_id: Id, data: GiveCardRequest, sql: &Stat
 
     let card_unlocked_id = Id::new(config.id_length);
 
-    rjtry!(card::sql::add_card(sql, &data.user_id, &card_unlocked_id, &collector_id, &card::data::CardCreateData {
+    rjtry!(card::sql::add_card(sql, &data.user_id, &card_unlocked_id, &collector_id, &card::data::UnlockedCardCreateData {
         card_id: data.card_id,
         frame_id: data.frame_id,
         quality: data.quality,

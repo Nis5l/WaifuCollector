@@ -11,7 +11,7 @@ use super::super::shared;
 use crate::shared::crypto::JwtToken;
 use crate::sql::Sql;
 use crate::config::Config;
-use crate::shared::card::{self, data::CardCreateData};
+use crate::shared::card::{self, data::UnlockedCardCreateData};
 use crate::shared::Id;
 use crate::{verify_user, verify_collector};
 use crate::shared::card::packstats::sql::add_pack_stats;
@@ -69,7 +69,7 @@ fn can_open_pack(last_opened: Option<DateTime<Utc>>, pack_cooldown: u32) -> CanO
     }
 }
 
-async fn get_random_cards(sql: &Sql, amount: u32, quality_range: RangeInclusive<i32>, collector_id: &Id) -> Result<Vec<CardCreateData>, sqlx::Error> {
+async fn get_random_cards(sql: &Sql, amount: u32, quality_range: RangeInclusive<i32>, collector_id: &Id) -> Result<Vec<UnlockedCardCreateData>, sqlx::Error> {
     let new_cards_create = sql::get_random_card_data(sql, amount, collector_id).await?;
 
 	//NOTE: maybe this could be smth for the future:
@@ -92,10 +92,10 @@ async fn get_random_cards(sql: &Sql, amount: u32, quality_range: RangeInclusive<
             }
         }
 
-        let card_create_data = CardCreateData {
+        let card_create_data = UnlockedCardCreateData {
             card_id: card.card_id.clone(),
-            frame_id: card.frame_id,
             level,
+            frame_id: None,
             quality
         };
 

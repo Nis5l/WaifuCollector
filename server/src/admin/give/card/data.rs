@@ -9,7 +9,7 @@ use crate::shared::{Id, IdInt};
 pub struct GiveCardRequest {
     pub user_id: Id,
     pub card_id: Id,
-    pub frame_id: IdInt,
+    pub frame_id: Option<IdInt>,
     pub quality: i32,
     pub level: i32
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import type { UnlockedCard, Id } from '../../types';
+import type { UnlockedCard, Id, IdInt } from '../../types';
 import { HttpService } from '../../services';
 
 @Injectable()
@@ -13,8 +13,12 @@ export class CardService {
 	}
 
 	public getDefaultCardFrameFront(): string {
-		return this.httpService.apiUrl("/card/card-frame-front-default");
+		return this.httpService.apiUrl("/card/card-frame-front");
 	}
+
+  public getCardFrameFront(id: IdInt): string {
+		return this.httpService.apiUrl(`/card/${id}/card-frame-front`);
+  }
 
 	public getCardImage(cardId: Id): string {
 		return this.httpService.apiUrl(`/card/${cardId}/card-image`);

@@ -69,7 +69,7 @@ export class CollectorOpenComponent implements OnInit, OnDestroy {
 				this.startCounter();
 			});
 			//TODO: change this if more than one card can be pulled
-			this.router.navigate(["card", res.cards[0].id]);
+			this.router.navigate(["card", res.cards[0].id], { queryParams: { unlocked: true } });
 		});
 	}
 

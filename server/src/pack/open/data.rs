@@ -9,7 +9,6 @@ use crate::shared::card::data::UnlockedCard;
 #[sqlx(rename_all="camelCase")]
 pub struct CardCreateDataDb {
     pub card_id: Id,
-    pub frame_id: IdInt
 }
 
 #[derive(Debug, Serialize)]

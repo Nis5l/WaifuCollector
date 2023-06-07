@@ -55,12 +55,7 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 			image: this.httpService.apiUrl("/effect/Effect1.gif"),
 			opacity: 1.0,
 		},
-		cardFrame: {
-			id: 0,
-			back: this.httpService.apiUrl("/frame/Frame_Silver_Back.png"),
-			front: this.httpService.apiUrl("/frame/Frame_Silver_Front.png"),
-			name: "frame"
-		},
+		cardFrame: null,
 	});
 
 	public readonly card$: Observable<UnlockedCard>;
@@ -111,7 +106,7 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 		);
 
 		this.config$ = this.collectorAddCardService.getConfig().pipe(share());
-		
+
 		this.error$ = this.errorSubject.asObservable();
 	}
 

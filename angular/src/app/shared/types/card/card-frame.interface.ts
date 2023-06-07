@@ -1,6 +1,6 @@
+import type { IdInt } from '../id-int.interface';
+
 export interface CardFrame {
-    id: number,
+    id: IdInt,
     name: string,
-    front: string,
-    back: string
 }

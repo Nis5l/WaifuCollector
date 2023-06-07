@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, map, combineLatest as observableCombineLatest } from 'rxjs';
 
-import type { Id } from '../../../shared/types';
+import type { CardOrUnlockedCardId } from '../../../shared/types';
 
 @Component({
 	selector: 'cc-card-view',
@@ -10,15 +10,22 @@ import type { Id } from '../../../shared/types';
 	styleUrls: [ "./card-view.component.scss" ],
 })
 export class CardViewComponent {
-	public readonly cardId$: Observable<Id>;
+	public readonly cardOrUnlockedCardId$: Observable<CardOrUnlockedCardId>;
 
 	public constructor(private readonly activatedRoute: ActivatedRoute) {
-		this.cardId$ = this.activatedRoute.params.pipe(
+		const cardId$ = this.activatedRoute.params.pipe(
 			map(params => {
 				const cardId: unknown = params["cardId"] as unknown;
 				if(typeof cardId !== "string") throw new Error("cardId not set");
 				return cardId;
 			})
 		);
+    const unlocked$ = this.activatedRoute.queryParams.pipe(
+      map(params => params["unlocked"] === true)
+    );
+
+		this.cardOrUnlockedCardId$ = observableCombineLatest([cardId$, unlocked$]).pipe(
+      map(([cardId, unlocked]) => ({ id: cardId, unlocked: unlocked })),
+    );
 	}
 }

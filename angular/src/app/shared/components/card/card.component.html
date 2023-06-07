@@ -1,16 +1,19 @@
 <ng-container *ngVar="(card$ | async) as c">
-	<div class="card" *ngIf="c != null">
+	<div class="card">
 		<div class="card-container">
 			<div class="card-inner">
-				<ng-container *ngVar="getCardEffectImage(c) as cardImage">
-					<img *ngIf="cardImage != null" class="card-effect" [src]="cardImage" alt="Card Effect"/>
+				<ng-container *ngVar="getCardEffectImage(c) as cardEffectImage">
+					<img *ngIf="cardEffectImage != null" class="card-effect" [src]="cardImage" alt="Card Effect"/>
 				</ng-container>
-				<img [src]="getCardImage(c)" alt="Card Image"/>
+        <ng-container *ngVar="getCardImage(c) as cardImage">
+          <img *ngIf="cardImage != null" [src]="cardImage" alt="Card Image"/>
+          <div *ngIf="cardImage == null" class="card-not-found">Card not found</div>
+        </ng-container>
 			</div>
 			<div class="card-frame">
 				<span class="card-name card-text">{{getCardName(c)}}</span>
 				<span class="card-type-name card-text">{{getCardTypeName(c)}}</span>
-				
+
 				<img [src]="getCardFrameFront(c)" alt="Card Frame" />
 			</div>
 		</div>

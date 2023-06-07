@@ -19,8 +19,6 @@ pub struct CardInfo {
 pub struct CardFrame {
     pub id: IdInt,
     pub name: String,
-    pub front: String,
-    pub back: String
 }
 
 #[derive(Debug, Serialize, FromRow)]
@@ -35,7 +33,6 @@ pub struct CardType {
 #[derive(Debug, Serialize)]
 pub struct CardEffect {
     pub id: IdInt,
-    pub image: String,
     pub opacity: f32
 }
 
@@ -54,8 +51,8 @@ pub struct UnlockedCard {
     pub level: i32,
     pub quality: i32,
 
-    pub card_frame: CardFrame,
-    pub card_effect: CardEffect,
+    pub card_frame: Option<CardFrame>,
+    pub card_effect: Option<CardEffect>,
 
     pub card: Card,
 }
@@ -67,16 +64,13 @@ impl UnlockedCard {
             user_id: card.user_id,
             level: card.level,
             quality: card.quality,
-            card_frame: CardFrame {
-                id: card.frame_id,
-                name: card.frame_name,
-                front: format!("{}/{}", &config.frame_image_base, card.frame_front),
-                back: format!("{}/{}", &config.frame_image_base, card.frame_back)
+            card_frame: match (card.frame_id, card.frame_name) {
+                (Some(id), Some(name)) => Some(CardFrame { id, name }),
+                _ => None
             },
-            card_effect: CardEffect {
-                id: card.effect_id,
-                image: format!("{}/{}", &config.effect_image_base, card.effect_image),
-                opacity: card.effect_opacity
+            card_effect: match (card.effect_id, card.effect_opacity) {
+                (Some(id), Some(opacity)) => Some(CardEffect { id, opacity }),
+                _ => None
             },
             card: Card::from_card_db(CardDb {
                 card_type_user_id: card.card_type_user_id,
@@ -125,14 +119,11 @@ pub struct UnlockedCardDb {
     pub type_id: Id,
     pub type_name: String,
 
-    pub frame_id: IdInt,
-    pub frame_name: String,
-    pub frame_front: String,
-    pub frame_back: String,
+    pub frame_id: Option<IdInt>,
+    pub frame_name: Option<String>,
 
-    pub effect_id: IdInt,
-    pub effect_image: String,
-    pub effect_opacity: f32
+    pub effect_id: Option<IdInt>,
+    pub effect_opacity: Option<f32>
 }
 
 #[derive(Debug, Serialize, FromRow)]
@@ -149,9 +140,9 @@ pub struct CardDb {
 }
 
 #[derive(Debug, Serialize)]
-pub struct CardCreateData {
+pub struct UnlockedCardCreateData {
     pub card_id: Id,
-    pub frame_id: IdInt,
+    pub frame_id: Option<IdInt>,
     pub quality: i32,
     pub level: i32
 }

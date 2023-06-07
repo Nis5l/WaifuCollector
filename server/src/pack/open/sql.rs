@@ -42,17 +42,16 @@ pub async fn get_random_card_data(sql: &Sql, card_amount: u32, collector_id: &Id
     let cards: Vec<CardCreateDataDb> = sqlx::query_as(
         "SELECT
          cards.cid AS cardId,
-         cards.uid AS cardUserId,
-         cardframes.cfid AS frameId
+         cards.uid AS cardUserId
          FROM
-         cards, cardframes
-         WHERE cards.coid=?
-         AND cardframes.coid=?
+         cards, cardtypes
+         WHERE 
+         cardtypes.ctid = cards.ctid
+         AND cardtypes.coid=?
          AND cards.cstate=?
          ORDER BY
          RAND()
          LIMIT ?;")
-        .bind(collector_id)
         .bind(collector_id)
         .bind(CardState::Created as u32)
         .bind(card_amount)

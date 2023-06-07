@@ -9,8 +9,8 @@ export interface UnlockedCard {
     level: number,
     quality: number,
 
-	cardFrame: CardFrame,
-	cardEffect: CardEffect
+	cardFrame: CardFrame | null | undefined,
+	cardEffect: CardEffect | null | undefined
 
 	card: Card,
 }

@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Observable,  ReplaySubject } from 'rxjs';
+import { Observable,  ReplaySubject, catchError, of as observableOf } from 'rxjs';
 import type { SafeResourceUrl } from '@angular/platform-browser';
 
-import type { UnlockedCard, Card } from '../../types';
+import type { UnlockedCard, Card, CardOrUnlockedCardId } from '../../types';
 import { CardService } from './card.service';
 
 function isCard(card: UnlockedCard | Card): card is Card {
@@ -15,20 +15,22 @@ function isCard(card: UnlockedCard | Card): card is Card {
 	styleUrls: [ './card.component.scss' ],
 })
 export class CardComponent {
-	private _card: string | UnlockedCard | Card | null = null;
-	private readonly cardSubject: ReplaySubject<UnlockedCard | Card> = new ReplaySubject(1);
-	public readonly card$: Observable<UnlockedCard | Card>;
+	private _card: CardOrUnlockedCardId | UnlockedCard | Card | null = null;
+	private readonly cardSubject: ReplaySubject<UnlockedCard | Card | null> = new ReplaySubject(1);
+	public readonly card$: Observable<UnlockedCard | Card | null>;
 
 	@Input()
-	public set card(card: string | UnlockedCard | Card) {
+	public set card(card: CardOrUnlockedCardId | UnlockedCard | Card | null) {
 		this._card = card;
-		if(typeof card === "string") {
-			this.cardService.getCard(card).subscribe(data => this.cardSubject.next(data));
+		if(card != null && "unlocked" in card) {
+			this.cardService.getCard(card.id).pipe(
+        catchError(_ => observableOf(null))
+      ).subscribe(data => this.cardSubject.next(data));
 		} else {
 			this.cardSubject.next(card);
 		}
 	}
-	public get card(): string | UnlockedCard | Card {
+	public get card(): CardOrUnlockedCardId | UnlockedCard | Card | null {
 		if(this._card == null) throw new Error("cardId not set");
 		return this._card;
 	}
@@ -40,26 +42,29 @@ export class CardComponent {
 		this.card$ = this.cardSubject.asObservable();
 	}
 
-	public getCardEffectImage(card: Card | UnlockedCard): string | null {
-		if(isCard(card)) return null;
-		return card.cardEffect.image;
+	public getCardEffectImage(card: Card | UnlockedCard | null): string | null {
+		if(card == null || isCard(card)) return null;
+		return card.cardEffect?.image ?? null;
 	}
 
-	public getCardImage(card: Card | UnlockedCard): string | SafeResourceUrl {
+	public getCardImage(card: Card | UnlockedCard | null): string | SafeResourceUrl | null {
+    if(card == null) return null;
 		if(this.cardImage) return this.cardImage;
 		return this.cardService.getCardImage((isCard(card) ? card : card.card).cardInfo.id);
 	}
 
-	public getCardName(card: Card | UnlockedCard): string {
+	public getCardName(card: Card | UnlockedCard | null): string {
+    if(card == null) return "";
 		return (isCard(card) ? card : card.card).cardInfo.name;
 	}
 
-	public getCardTypeName(card: Card | UnlockedCard): string {
+	public getCardTypeName(card: Card | UnlockedCard | null): string {
+    if(card == null) return "";
 		return (isCard(card) ? card : card.card).cardType.name;
 	}
 
-	public getCardFrameFront(card: Card | UnlockedCard): string {
-		if(isCard(card)) return this.cardService.getDefaultCardFrameFront();
-		return card.cardFrame.front;
+	public getCardFrameFront(card: Card | UnlockedCard | null): string {
+		if(card == null || isCard(card) || card.cardFrame == null) return this.cardService.getDefaultCardFrameFront();
+		return this.cardService.getCardFrameFront(card.cardFrame.id);
 	}
 }

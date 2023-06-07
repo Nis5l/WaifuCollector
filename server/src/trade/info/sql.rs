@@ -20,17 +20,14 @@ pub async fn trade_cards(sql: &Sql, user_id: &Id, trade_id: &Id, config: &Config
          cardtypes.ctname AS typeName,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,
-         cardframes.cfimagefront AS frameFront,
-         cardframes.cfimageback AS frameBack,
          cardeffects.ceid AS effectId,
-         cardeffects.ceimage AS effectImage,
          cardeffects.ceopacity AS effectOpacity
-         FROM tradecards, cardunlocks, cards, cardtypes, cardframes, cardeffects
+         FROM (tradecards, cardunlocks, cards, cardtypes)
+         LEFT JOIN cardframes ON cardframes.cfid = cardunlocks.cfid
+         LEFT JOIN cardeffects ON cardeffects.ceid = cardunlocks.culevel
          WHERE
          cardunlocks.cid = cards.cid AND
-         cardunlocks.cfid = cardframes.cfid AND
          cards.ctid = cardtypes.ctid AND
-         cardeffects.ceid = cardunlocks.culevel AND
          cardunlocks.cuid = tradecards.cuid AND
          tradecards.tid=? AND cardunlocks.uid<>?;")
          .bind(trade_id)
@@ -60,17 +57,14 @@ pub async fn trade_suggestions(sql: &Sql, user_id: &Id, trade_id: &Id, config: &
          cardtypes.ctname AS typeName,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,
-         cardframes.cfimagefront AS frameFront,
-         cardframes.cfimageback AS frameBack,
          cardeffects.ceid AS effectId,
-         cardeffects.ceimage AS effectImage,
          cardeffects.ceopacity AS effectOpacity
-         FROM tradesuggestions, cardunlocks, cards, cardtypes, cardframes, cardeffects
+         FROM (tradesuggestions, cardunlocks, cards, cardtypes)
+         LEFT JOIN cardframes ON cardframes.cfid = cardunlocks.cfid
+         LEFT JOIN cardeffects ON cardeffects.ceid = cardunlocks.culevel
          WHERE
          cardunlocks.cid = cards.cid AND
-         cardunlocks.cfid = cardframes.cfid AND
          cards.ctid = cardtypes.ctid AND
-         cardeffects.ceid = cardunlocks.culevel AND
          cardunlocks.cuid = tradesuggestions.cuid AND
          tradesuggestions.tid=? AND cardunlocks.uid<>?;")
          .bind(trade_id)

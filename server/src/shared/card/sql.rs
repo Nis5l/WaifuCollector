@@ -2,7 +2,7 @@ use sqlx::mysql::MySqlQueryResult;
 
 use crate::sql::Sql;
 use crate::config::Config;
-use super::data::{CardCreateData, UnlockedCard, UnlockedCardDb, CardDb, SortType, Card, InventoryOptions, CardState};
+use super::data::{UnlockedCardCreateData, UnlockedCard, UnlockedCardDb, CardDb, SortType, Card, InventoryOptions, CardState};
 use crate::shared::{Id, util};
 
 pub async fn get_card_type_collector_id(sql: &Sql, card_type_id: &Id) -> Result<Id, sqlx::Error> {
@@ -65,7 +65,7 @@ pub async fn card_exists(sql: &Sql, card_id: &Id) -> Result<bool, sqlx::Error> {
 }
 
 //TODO: Think if should also safe collector_id
-pub async fn add_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id, _collector_id: &Id, card: &CardCreateData) -> Result<(), sqlx::Error> {
+pub async fn add_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id, _collector_id: &Id, card: &UnlockedCardCreateData) -> Result<(), sqlx::Error> {
     let mut con = sql.get_con().await?;
 
     sqlx::query(
@@ -131,17 +131,14 @@ pub async fn get_unlocked_cards(sql: &Sql, card_unlocked_ids: Vec<Id>, user_id: 
          cardtypes.uid AS cardTypeUserId,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,
-         cardframes.cfimagefront AS frameFront,
-         cardframes.cfimageback AS frameBack,
          cardeffects.ceid AS effectId,
-         cardeffects.ceimage AS effectImage,
          cardeffects.ceopacity AS effectOpacity
-         FROM cardunlocks, cards, cardtypes, cardframes, cardeffects
+         FROM (cardunlocks, cards, cardtypes)
+         LEFT JOIN cardframes ON cardframes.cfid = cardunlocks.cfid
+         LEFT JOIN cardeffects ON cardeffects.ceid = cardunlocks.culevel
          WHERE
          cardunlocks.cid = cards.cid AND
-         cardunlocks.cfid = cardframes.cfid AND
          cards.ctid = cardtypes.ctid AND
-         cardeffects.ceid = cardunlocks.culevel AND
          cardunlocks.cuid IN({})
          {}",
          in_statement,
@@ -255,18 +252,15 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          cardtypes.uid AS cardTypeUserId,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,
-         cardframes.cfimagefront AS frameFront,
-         cardframes.cfimageback AS frameBack,
          cardeffects.ceid AS effectId,
-         cardeffects.ceimage AS effectImage,
          cardeffects.ceopacity AS effectOpacity
-         FROM cardunlocks, cards, cardtypes, cardframes, cardeffects
+         FROM (cardunlocks, cards, cardtypes)
+         LEFT JOIN cardframes ON cardframes.cfid = cardunlocks.cfid
+         LEFT JOIN cardeffects ON cardeffects.ceid = cardunlocks.culevel
          WHERE
          {}
          cardunlocks.cid = cards.cid
-         AND cardunlocks.cfid = cardframes.cfid
          AND cards.ctid = cardtypes.ctid
-         AND cardeffects.ceid = cardunlocks.culevel
          AND cards.coid=?
          AND cardunlocks.uid=?
          AND (cards.cname LIKE CONCAT('%', ?, '%') OR cardtypes.ctname LIKE CONCAT('%', ?, '%'))

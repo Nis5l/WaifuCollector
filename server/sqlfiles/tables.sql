@@ -108,8 +108,6 @@ CREATE TABLE cardframes (
 	cfid INT NOT NULL,
 	coid VARCHAR(13) NOT NULL,
 	cfname TINYTEXT NOT NULL,
-	cfimagefront TINYTEXT NOT NULL,
-	cfimageback TINYTEXT NOT NULL,
 	PRIMARY KEY (cfid),
 	FOREIGN KEY (coid) REFERENCES collectors(coid)
 	ON DELETE RESTRICT
@@ -118,7 +116,6 @@ CREATE TABLE cardframes (
 CREATE TABLE cardeffects (
 	ceid INT NOT NULL,
 	coid VARCHAR(13) NOT NULL,
-	ceimage TINYTEXT NOT NULL,
 	ceopacity FLOAT NOT NULL,
 	PRIMARY KEY (ceid),
 	FOREIGN KEY (coid) REFERENCES collectors(coid)
@@ -129,7 +126,7 @@ CREATE TABLE cardunlocks (
 	cuid VARCHAR(13) NOT NULL,
 	uid VARCHAR(13) NOT NULL,
 	cid VARCHAR(13) NOT NULL,
-	cfid INT NOT NULL,
+	cfid INT,
 	cuquality INT NOT NULL,
 	culevel INT NOT NULL,
 	PRIMARY KEY (cuid),

@@ -6,7 +6,7 @@ use rand::{thread_rng, Rng};
 use super::data::{UpgradeResponse, UpgradeRequest, UpgradeCardsResult};
 use crate::shared::crypto::JwtToken;
 use crate::sql::Sql;
-use crate::shared::card::{self, data::UnlockedCard, data::CardCreateData};
+use crate::shared::card::{self, data::{UnlockedCard, UnlockedCardCreateData, CardFrame}};
 use crate::config::Config;
 use crate::shared::Id;
 use crate::{verify_user, verify_collector};
@@ -82,10 +82,13 @@ fn upgrade_cards(card_one: &UnlockedCard, card_two: &UnlockedCard, config: &Conf
          }
     }
 
-    let create_card_data = CardCreateData {
+    let create_card_data = UnlockedCardCreateData {
             card_id: card_one.card.card_info.id.clone(),
             //TODO: if more frames are introduced change this
-            frame_id: card_one.card_frame.id,
+            frame_id: match card_one.card_frame {
+                Some(CardFrame { id, .. }) => Some(id),
+                None => None
+            },
             quality: new_quality,
             level: new_level
         };
