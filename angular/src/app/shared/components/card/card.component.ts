@@ -67,4 +67,19 @@ export class CardComponent {
 		if(card == null || isCard(card) || card.cardFrame == null) return this.cardService.getDefaultCardFrameFront();
 		return this.cardService.getCardFrameFront(card.cardFrame.id);
 	}
+
+	public getCardFrameBack(card: Card | UnlockedCard | null): string {
+		if(card == null || isCard(card) || card.cardFrame == null) return this.cardService.getDefaultCardFrameBack();
+		return this.cardService.getCardFrameBack(card.cardFrame.id);
+	}
+
+  public getCardLevel(card: Card | UnlockedCard | null): string | null {
+    if(card == null || isCard(card)) return null;
+    return card.level.toString();
+  }
+
+  public getCardQuality(card: Card | UnlockedCard | null): string | null {
+    if(card == null || isCard(card)) return null;
+    return card.quality.toString();
+  }
 }

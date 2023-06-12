@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { CollectorReadonlyComponent } from './collector-readonly.component';
 import { CollectorReadonlyService } from './collector-readonly.service';
@@ -21,7 +22,7 @@ import { CollectorAddDialogModule } from './collector-add-dialog';
 import { CollectorDashboardModule } from './collector-dashboard';
 import { CollectorRequestsModule } from './collector-requests';
 import { CollectorNavigationModule } from './collector-navigation';
-import { MatDialogModule } from '@angular/material/dialog';
+import { CollectorInventoryModule } from './collector-inventory';
 
 import { UserModule } from '../../../shared/components';
 
@@ -52,6 +53,7 @@ const MATERIAL_MODULES = [
     CollectorDashboardModule,
     CollectorRequestsModule,
     CollectorNavigationModule,
+    CollectorInventoryModule,
 
     UserModule,
 	],

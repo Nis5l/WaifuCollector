@@ -11,10 +11,17 @@
         </ng-container>
 			</div>
 			<div class="card-frame">
+        <ng-container *ngVar="getCardLevel(c) as level">
+          <div *ngIf="level != null" class="level">{{level}}</div>
+        </ng-container>
+        <ng-container *ngVar="getCardQuality(c) as quality">
+          <div *ngIf="quality != null" class="quality">{{quality}}</div>
+        </ng-container>
 				<span class="card-name card-text">{{getCardName(c)}}</span>
 				<span class="card-type-name card-text">{{getCardTypeName(c)}}</span>
 
-				<img [src]="getCardFrameFront(c)" alt="Card Frame" />
+				<img class="frame-front" [src]="getCardFrameFront(c)" alt="Card Frame Front" />
+				<img class="frame-back" [src]="getCardFrameBack(c)" alt="Card Frame Back" />
 			</div>
 		</div>
 	</div>

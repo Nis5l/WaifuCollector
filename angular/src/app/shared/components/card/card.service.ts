@@ -20,6 +20,14 @@ export class CardService {
 		return this.httpService.apiUrl(`/card/${id}/card-frame-front`);
   }
 
+	public getDefaultCardFrameBack(): string {
+		return this.httpService.apiUrl("/card/card-frame-back");
+	}
+
+  public getCardFrameBack(id: IdInt): string {
+		return this.httpService.apiUrl(`/card/${id}/card-frame-back`);
+  }
+
 	public getCardImage(cardId: Id): string {
 		return this.httpService.apiUrl(`/card/${cardId}/card-image`);
 	}

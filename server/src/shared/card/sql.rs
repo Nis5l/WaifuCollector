@@ -261,7 +261,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          {}
          cardunlocks.cid = cards.cid
          AND cards.ctid = cardtypes.ctid
-         AND cards.coid=?
+         AND cardtypes.coid=?
          AND cardunlocks.uid=?
          AND (cards.cname LIKE CONCAT('%', ?, '%') OR cardtypes.ctname LIKE CONCAT('%', ?, '%'))
          ORDER BY
@@ -281,6 +281,69 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
         .await?;
 
     Ok(cards_db.into_iter().map(|card_db| { UnlockedCard::from_card_db(card_db, config) }).collect())
+}
+
+//TODO: not sure if config should be passed
+//TODO: maybe replace InventoryOptions since page data is not used
+pub async fn get_inventory_count(sql: &Sql, config: &Config, options: &InventoryOptions) -> Result<u32, sqlx::Error> {
+    let mut con = sql.get_con().await?;
+
+    let search = util::escape_for_like(options.search.clone());
+
+    let order_by = match options.sort_type {
+        SortType::Name => 
+            "cards.cname,
+             cardtypes.ctname,
+             cardunlocks.culevel DESC,
+             cardunlocks.cuquality DESC",
+        SortType::Level => 
+            "cardunlocks.culevel DESC,
+             cardunlocks.cuquality DESC,
+             cards.cname,
+             cardtypes.ctname",
+        SortType::Recent => 
+            "cardunlocks.cuid DESC"
+    };
+
+    let mut extra_conditions = String::from("");
+
+    if let Some(level) = options.level {
+        extra_conditions += &format!("cardunlocks.culevel={} AND\n", level);
+    }
+    if let Some(card_id) = &options.card_id {
+        extra_conditions += &format!("cards.cid={} AND\n", card_id);
+    }
+
+    if !options.exclude_uuids.is_empty() {
+        extra_conditions += &format!("cardunlocks.cuid NOT IN ({}) AND\n", options.exclude_uuids.iter().map(|i| { i.to_string() }).collect::<Vec<String>>().join(","));
+    }
+
+    let query = format!(
+        "SELECT COUNT(*)
+         FROM (cardunlocks, cards, cardtypes)
+         LEFT JOIN cardframes ON cardframes.cfid = cardunlocks.cfid
+         LEFT JOIN cardeffects ON cardeffects.ceid = cardunlocks.culevel
+         WHERE
+         {}
+         cardunlocks.cid = cards.cid
+         AND cards.ctid = cardtypes.ctid
+         AND cardtypes.coid=?
+         AND cardunlocks.uid=?
+         AND (cards.cname LIKE CONCAT('%', ?, '%') OR cardtypes.ctname LIKE CONCAT('%', ?, '%'))
+         ORDER BY
+         {};",
+         extra_conditions,
+         order_by);
+
+    let (count, ): (i64, ) = sqlx::query_as(&query)
+        .bind(&options.collector_id)
+        .bind(&options.user_id)
+        .bind(&search)
+        .bind(&search)
+        .fetch_one(&mut con)
+        .await?;
+
+    Ok(count as u32)
 }
 
 pub async fn get_cards(sql: &Sql, config: &Config, collector_id: &Id, mut name: String, amount: u32, offset: u32, state: Option<CardState>) -> Result<Vec<Card>, sqlx::Error> {

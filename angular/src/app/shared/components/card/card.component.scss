@@ -22,6 +22,19 @@
 		left: -15%;
 		width: 130%;
 		height: 122%;
+
+    .frame-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+      backface-visibility: hidden;
+    }
+
+    .frame-front {
+      transform: rotateY(0deg);
+      backface-visibility: hidden;
+    }
 	}
 	.card-inner img, .card-frame img{
 		display: block;
@@ -41,6 +54,7 @@
 		position: absolute;
 		top: 3%;
 		left: 27%;
+    z-index: 1;
 	}
 	.card-type-name{
 		position: absolute;
@@ -52,5 +66,22 @@
 		height: 5%;
 		color: black;
 		text-align: center;
+    z-index: 1;
 	}
+  .level {
+    position: absolute;
+    color: #FFD700;
+    font-size: 25pt;
+    top: -3px;
+    left: -2px;
+    z-index: 1;
+  }
+  .quality {
+    position: absolute;
+    color: #C0C0C0;
+    font-size: 25pt;
+    top: -3px;
+    right: 2px;
+    z-index: 1;
+  }
 }

@@ -33,8 +33,8 @@ export class LoadingService {
 					this.setLoading(true);
 					this.observables.add(o);
 				},
-				finalize: () => console.log("finalize"),
-				complete: () => console.log("complete")
+				finalize: () => {},//console.log("finalize"),
+				complete: () => {}//console.log("complete")
 			})
 		);
 	}

@@ -31,4 +31,8 @@ export class CollectorNavigationComponent{
       }
     }
   }
+
+  public getLink(item: NavigationItem): string {
+    return typeof item.link === 'string' ? item.link : item.link();
+  }
 }

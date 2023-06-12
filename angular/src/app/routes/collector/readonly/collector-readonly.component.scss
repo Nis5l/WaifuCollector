@@ -1,6 +1,10 @@
 @import "../../../../theme.scss";
 @import "../../../../screen.scss";
 
+.collector {
+  overflow: hidden;
+}
+
 .banner {
 	width: 100%;
 	height: 200px;

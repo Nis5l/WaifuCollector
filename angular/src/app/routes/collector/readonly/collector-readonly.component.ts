@@ -11,6 +11,7 @@ import { SubscriptionManagerComponent } from '../../../shared/abstract';
 import type { Collector, Id } from '../../../shared/types';
 import type { CardTypeIndexResponse } from './types';
 import type { NavigationItem } from './collector-navigation';
+import { CollectorInventoryComponent } from './collector-inventory';
 
 import { CollectorAddDialogComponent } from './collector-add-dialog';
 
@@ -20,7 +21,8 @@ import { CollectorRequestsComponent } from './collector-requests';
 const ROUTES: Route[] = [
   { path: "", pathMatch: "full", redirectTo: "dashboard" },
   { path: "dashboard", component: CollectorDashboardComponent },
-  { path: "requests", component: CollectorRequestsComponent }
+  { path: "requests", component: CollectorRequestsComponent },
+  { path: ":userId/inventory", component: CollectorInventoryComponent },
 ];
 
 @Component({
@@ -41,6 +43,7 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
   public readonly navigationItems: NavigationItem[] = [
     { name: "Dashboard", link: "./dashboard", icon: "home" },
     { name: "Requests", link: "./requests", icon: "list_alt" },
+    { name: "Inventory", link: () => `./${this.authService.getUserId()}/inventory`, icon: "backpack" },
   ];
 
 	constructor(
@@ -94,6 +97,7 @@ export class CollectorReadonlyComponent extends SubscriptionManagerComponent {
 	public changePage(page: PageEvent): void {
 		this.pageSubject.next(page.pageIndex);
 	}
+
   public static getRoutes(){
     return ROUTES;
   }

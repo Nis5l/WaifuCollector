@@ -10,9 +10,10 @@
 // have to load a single css file for Angular Material in your app.
 
 // Fonts
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+//@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
-     
+
 $fontConfig: (
   display-4: mat.define-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
   display-3: mat.define-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
@@ -157,7 +158,7 @@ body {
   --text-primary-color: #{$dark-primary-text};
   --text-primary-lighter-color: #{$dark-primary-text};
   --text-primary-darker-color: #{$light-primary-text};
-}   
+}
 $mat-primary: (
   main: #8c96c6,
   lighter: #bccaff,
@@ -179,7 +180,7 @@ body {
   --text-accent-color: #{$dark-primary-text};
   --text-accent-lighter-color: #{$dark-primary-text};
   --text-accent-darker-color: #{$light-primary-text};
-}   
+}
 $mat-accent: (
   main: #9d81d0,
   lighter: #d1bafb,
@@ -201,7 +202,7 @@ body {
   --text-warn-color: #{$dark-primary-text};
   --text-warn-lighter-color: #{$dark-primary-text};
   --text-warn-darker-color: #{$dark-primary-text};
-}   
+}
 $mat-warn: (
   main: #f7768e,
   lighter: #fdd6dd,
@@ -257,7 +258,7 @@ $altTheme: (
 
 .material-icons {
   font-size: 24px;
-  font-family: 'Material Icons', 'Material Icons';  
+  font-family: 'Material Icons', 'Material Icons';
   .mat-badge-content {
     font-family: 'Roboto';
   }
