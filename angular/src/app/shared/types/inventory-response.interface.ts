@@ -1,4 +1,4 @@
-import type { UnlockedCard } from '../../../../../shared/types';
+import type { UnlockedCard } from './card';
 
 export interface InventoryResponse {
     pageSize: number,

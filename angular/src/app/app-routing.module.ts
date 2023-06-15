@@ -12,6 +12,7 @@ import {
 	CollectorReadonlyComponent,
 	CollectorEditComponent,
 	CardViewComponent,
+  CardUpgradeComponent,
 } from './routes';
 import { canActivateAuth, canActivateCollectorAdmin } from './shared/guards';
 
@@ -28,6 +29,7 @@ const routes: Routes = [
 	{ path: "user/:userId", component: ProfileReadonlyComponent },
 
 	{ path: "card/:cardId", component: CardViewComponent },
+	{ path: "card/:cardId/upgrade", component: CardUpgradeComponent },
 
 	{ path: "home", component: HomeComponent },
 ];

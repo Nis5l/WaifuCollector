@@ -21,7 +21,7 @@ export class CardViewComponent {
 			})
 		);
     const unlocked$ = this.activatedRoute.queryParams.pipe(
-      map(params => params["unlocked"] === true)
+      map(params => params["unlocked"] === "true")
     );
 
 		this.cardOrUnlockedCardId$ = observableCombineLatest([cardId$, unlocked$]).pipe(

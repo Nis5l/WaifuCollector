@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { HttpModule } from '../../services';
 import { NgVarModule } from '../../directives';
@@ -10,6 +11,7 @@ import { CardService } from './card.service';
 	imports: [
 		HttpModule,
 		CommonModule,
+    RouterModule,
 
 		NgVarModule,
 	],

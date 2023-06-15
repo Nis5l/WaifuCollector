@@ -129,6 +129,7 @@ pub async fn get_unlocked_cards(sql: &Sql, card_unlocked_ids: Vec<Id>, user_id: 
          cardtypes.ctid AS typeId,
          cardtypes.ctname AS typeName,
          cardtypes.uid AS cardTypeUserId,
+         cardtypes.coid AS collectorId,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,
          cardeffects.ceid AS effectId,
@@ -235,7 +236,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
     }
 
     if !options.exclude_uuids.is_empty() {
-        extra_conditions += &format!("cardunlocks.cuid NOT IN ({}) AND\n", options.exclude_uuids.iter().map(|i| { i.to_string() }).collect::<Vec<String>>().join(","));
+        extra_conditions += &format!("cardunlocks.cuid NOT IN ({}) AND\n", options.exclude_uuids.iter().map(|i| { format!("\"{}\"", i) }).collect::<Vec<String>>().join(","));
     }
 
     let query = format!(
@@ -250,6 +251,7 @@ pub async fn get_inventory(sql: &Sql, config: &Config, options: &InventoryOption
          cardtypes.ctid AS typeId,
          cardtypes.ctname AS typeName,
          cardtypes.uid AS cardTypeUserId,
+         cardtypes.coid AS collectorId,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,
          cardeffects.ceid AS effectId,
@@ -315,7 +317,7 @@ pub async fn get_inventory_count(sql: &Sql, config: &Config, options: &Inventory
     }
 
     if !options.exclude_uuids.is_empty() {
-        extra_conditions += &format!("cardunlocks.cuid NOT IN ({}) AND\n", options.exclude_uuids.iter().map(|i| { i.to_string() }).collect::<Vec<String>>().join(","));
+        extra_conditions += &format!("cardunlocks.cuid NOT IN ({}) AND\n", options.exclude_uuids.iter().map(|i| { format!("\"{}\"", i) }).collect::<Vec<String>>().join(","));
     }
 
     let query = format!(

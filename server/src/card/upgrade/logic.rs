@@ -9,15 +9,13 @@ use crate::sql::Sql;
 use crate::shared::card::{self, data::{UnlockedCard, UnlockedCardCreateData, CardFrame}};
 use crate::config::Config;
 use crate::shared::Id;
-use crate::{verify_user, verify_collector};
+use crate::verify_user;
 
-//TODO: pretty sure collector_id can be removed
-#[post("/<collector_id>/card/upgrade", data="<data>")]
-pub async fn upgrade_route(collector_id: Id, sql: &State<Sql>, token: JwtToken, data: UpgradeRequest, config: &State<Config>) -> ApiResponseErr<UpgradeResponse> {
+#[post("/card/upgrade", data="<data>")]
+pub async fn upgrade_route(sql: &State<Sql>, token: JwtToken, data: UpgradeRequest, config: &State<Config>) -> ApiResponseErr<UpgradeResponse> {
     let user_id = token.id;
     
     verify_user!(sql, &user_id, true);
-    verify_collector!(sql, &collector_id);
 
     let card_one: UnlockedCard = match rjtry!(card::sql::get_unlocked_card(sql, &data.card_one, Some(&user_id), config).await) {
         None => return ApiResponseErr::api_err(Status::NotFound, format!("Card not found: {}", data.card_one)),
@@ -33,6 +31,10 @@ pub async fn upgrade_route(collector_id: Id, sql: &State<Sql>, token: JwtToken, 
         return ApiResponseErr::api_err(Status::BadRequest, format!("Can not upgrade itself: {} {}", card_one.id, card_two.id));
     }
 
+    if card_one.card.collector_id != card_two.card.collector_id {
+        return ApiResponseErr::api_err(Status::BadRequest, format!("Cards are not from the same collector: {} {}", card_one.id, card_two.id));
+    }
+
     if card_one.card.card_info.id != card_two.card.card_info.id || card_one.level != card_two.level {
         return ApiResponseErr::api_err(Status::BadRequest,
                                            format!("Character and level have to match: {}:{} {}:{}",
@@ -46,7 +48,7 @@ pub async fn upgrade_route(collector_id: Id, sql: &State<Sql>, token: JwtToken, 
     let UpgradeCardsResult { create_card_data: new_card_data, success } = upgrade_cards(&card_one, &card_two, config);
 
     let new_card_uuid = Id::new(config.id_length);
-    rjtry!(card::sql::add_card(sql, &user_id, &new_card_uuid, &collector_id, &new_card_data).await);
+    rjtry!(card::sql::add_card(sql, &user_id, &new_card_uuid, &card_one.card.collector_id, &new_card_data).await);
 
     rjtry!(card::sql::delete_card(sql, &card_one.id).await);
     rjtry!(card::sql::delete_card(sql, &card_two.id).await);

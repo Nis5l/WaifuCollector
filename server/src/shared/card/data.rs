@@ -39,6 +39,7 @@ pub struct CardEffect {
 #[derive(Debug, Serialize)]
 #[serde(rename_all="camelCase")]
 pub struct Card {
+    pub collector_id: Id,
     pub card_info: CardInfo,
     pub card_type: CardType,
 }
@@ -75,6 +76,7 @@ impl UnlockedCard {
             card: Card::from_card_db(CardDb {
                 card_type_user_id: card.card_type_user_id,
                 card_id: card.card_id,
+                collector_id: card.collector_id,
                 card_name: card.card_name,
                 card_user_id: card.card_user_id,
 
@@ -88,6 +90,7 @@ impl UnlockedCard {
 impl Card {
     pub fn from_card_db(card: CardDb, config: &Config) -> Self {
         Card {
+            collector_id: card.collector_id,
             card_info: CardInfo {
                 id: card.card_id,
                 user_id: card.card_user_id,
@@ -108,6 +111,7 @@ impl Card {
 pub struct UnlockedCardDb {
     pub id: Id,
     pub user_id: Id,
+    pub collector_id: Id,
     pub level: i32,
     pub quality: i32,
 
@@ -133,6 +137,7 @@ pub struct CardDb {
     pub card_type_user_id: Id,
     pub card_id: Id,
     pub card_user_id: Id,
+    pub collector_id: Id,
     pub card_name: String,
 
     pub type_id: Id,

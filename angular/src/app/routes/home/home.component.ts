@@ -20,6 +20,7 @@ export class HomeComponent {
 			level: 1,
 			quality: 1,
 			card: {
+        collectorId: "collectorId",
 				cardInfo,
 				cardType
 			},

@@ -15,7 +15,7 @@
     </form>
     <cc-loading [observable]="loading$"></cc-loading>
     <div class="cards">
-      <cc-card *ngFor="let card of inventoryResponse.cards" [card]="card"></cc-card>
+      <cc-card *ngFor="let card of inventoryResponse.cards" [card]="card" click="upgrade"></cc-card>
     </div>
     <mat-paginator [length]="inventoryResponse.cardCount" [pageSize]="inventoryResponse.pageSize" (page)="changePage($event)"></mat-paginator>
   </ng-container>

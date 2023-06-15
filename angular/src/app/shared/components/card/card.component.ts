@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Observable,  ReplaySubject, catchError, of as observableOf } from 'rxjs';
 import type { SafeResourceUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 import type { UnlockedCard, Card, CardOrUnlockedCardId } from '../../types';
 import { CardService } from './card.service';
@@ -18,12 +19,15 @@ export class CardComponent {
 	private _card: CardOrUnlockedCardId | UnlockedCard | Card | null = null;
 	private readonly cardSubject: ReplaySubject<UnlockedCard | Card | null> = new ReplaySubject(1);
 	public readonly card$: Observable<UnlockedCard | Card | null>;
+  @Output()
+  public readonly clickEvent: EventEmitter<void> = new EventEmitter<void>();
 
 	@Input()
 	public set card(card: CardOrUnlockedCardId | UnlockedCard | Card | null) {
 		this._card = card;
 		if(card != null && "unlocked" in card) {
-			this.cardService.getCard(card.id).pipe(
+      const req: Observable<Card | UnlockedCard> = card.unlocked ? this.cardService.getUnlockedCard(card.id) : this.cardService.getCard(card.id);
+      req.pipe(
         catchError(_ => observableOf(null))
       ).subscribe(data => this.cardSubject.next(data));
 		} else {
@@ -31,14 +35,19 @@ export class CardComponent {
 		}
 	}
 	public get card(): CardOrUnlockedCardId | UnlockedCard | Card | null {
-		if(this._card == null) throw new Error("cardId not set");
 		return this._card;
 	}
 
 	@Input()
 	public cardImage: string | SafeResourceUrl | null = null;
 
-	constructor(private readonly cardService: CardService) {
+  @Input()
+  public click: "none" | "upgrade" | "event" = "none";
+
+	constructor(
+    private readonly cardService: CardService,
+    private readonly router: Router,
+  ) {
 		this.card$ = this.cardSubject.asObservable();
 	}
 
@@ -81,5 +90,19 @@ export class CardComponent {
   public getCardQuality(card: Card | UnlockedCard | null): string | null {
     if(card == null || isCard(card)) return null;
     return card.quality.toString();
+  }
+
+  public onClick(card: Card | UnlockedCard | null): void {
+    switch(this.click) {
+      case "none": {
+      } break;
+      case "upgrade": {
+        if(card == null || isCard(card)) throw new Error("card is not UnlockedCard");
+        this.router.navigate(["card", card.id, "upgrade"]);
+      } break;
+      case "event": {
+        this.clickEvent.emit();
+      } break;
+    }
   }
 }

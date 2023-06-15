@@ -5,9 +5,9 @@ import type { PageEvent } from '@angular/material/paginator';
 import { Observable, BehaviorSubject, map, of as observableOf, combineLatest as observableCombineLatest, switchMap, startWith, debounceTime, distinctUntilChanged, share, delay } from 'rxjs';
 
 import { CollectorInventoryService } from './collector-inventory.service';
-import type { InventoryResponse } from './types';
 import { SortType } from './types';
 import { SubscriptionManagerComponent } from '../../../../shared/abstract';
+import type { InventoryResponse } from '../../../../shared/types';
 
 @Component({
   selector: "cc-collector-inventory",

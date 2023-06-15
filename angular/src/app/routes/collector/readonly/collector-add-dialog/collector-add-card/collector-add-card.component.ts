@@ -42,6 +42,7 @@ export class CollectorAddCardComponent extends SubscriptionManagerComponent {
 		id: "id",
 		userId: "userId",
 		card: {
+      collectorId: "collectorId",
 			cardInfo: {
 				id: "id",
 				userId: "userId",

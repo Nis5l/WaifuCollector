@@ -1,2 +1,2 @@
-//TODO: finish this card or remove
 export { CardModule } from './card.module';
+export { CardService } from './card.service';
