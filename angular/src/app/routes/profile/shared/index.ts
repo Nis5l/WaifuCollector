@@ -1,1 +1,2 @@
-export type { Profile } from './types';
+export type { Profile, FriendStatusResponse } from './types';
+export { FriendStatus } from './types';

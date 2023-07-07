@@ -20,10 +20,26 @@
 			width: 200px;
 		}
 
-		.username {
-			margin: 0;
-			font-size: 50px;
-		}
+    .name {
+      display: flex;
+      gap: 10px;
+      flex-direction: row;
+
+      .actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        mat-icon {
+          transform: scale(1.4);
+        }
+      }
+
+      .username {
+        margin: 0;
+        font-size: 50px;
+      }
+    }
 
 		.stats {
 			margin: 0;

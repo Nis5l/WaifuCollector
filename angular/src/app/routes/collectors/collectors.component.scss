@@ -9,14 +9,13 @@
 		margin-left: 30px;
 	}
 
+  cc-loading {
+    margin: 30px;
+  }
+
 	.collectors {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-	}
-
-	mat-paginator {
-		justify-self: flex-end;
-		align-self: flex-end;
 	}
 }

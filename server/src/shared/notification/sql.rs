@@ -10,7 +10,7 @@ pub async fn add_notification(sql: &Sql, user_id: &Id, collector_id: Option<&Id>
         "INSERT INTO notifications
          (uid, coid, ntitle, nmessage, nurl, ntime)
          VALUES
-         (?, ?, ?, ?, ?);")
+         (?, ?, ?, ?, ?, ?);")
         .bind(user_id)
         .bind(collector_id)
         .bind(&notification_create.title)

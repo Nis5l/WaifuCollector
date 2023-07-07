@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ReplaySubject, Observable, debounceTime, distinctUntilChanged, BehaviorSubject, startWith, combineLatest as observableCombibeLatest } from 'rxjs';
+import { Observable, debounceTime, distinctUntilChanged, BehaviorSubject, startWith, combineLatest as observableCombibeLatest } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import type { PageEvent } from '@angular/material/paginator';
 
@@ -18,13 +18,15 @@ import { SubscriptionManagerComponent } from '../../shared/abstract';
 export class CollectorsComponent extends SubscriptionManagerComponent {
 	private readonly pageSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-	private readonly collectorIndexResponseSubject: ReplaySubject<CollectorsIndexResponse> = new ReplaySubject<CollectorsIndexResponse>(1);
+  private readonly collectorsIndexResponseDefault: CollectorsIndexResponse = { collectors: [], collectorCount: 0, page: 0, pageSize: 0 };
+
+	private readonly collectorIndexResponseSubject: BehaviorSubject<CollectorsIndexResponse> = new BehaviorSubject<CollectorsIndexResponse>(this.collectorsIndexResponseDefault);
 	public readonly collectorIndexResponse$: Observable<CollectorsIndexResponse>;
 
 	public readonly formGroup;
 	private readonly searchForm;
 
-	public readonly loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+	public readonly loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 	public readonly loading$: Observable<boolean>;
 
 	constructor(
@@ -38,7 +40,7 @@ export class CollectorsComponent extends SubscriptionManagerComponent {
 		this.searchForm = new FormControl("", { nonNullable: true });
 		this.registerSubscription(observableCombibeLatest([
 			this.searchForm.valueChanges.pipe(
-				startWith(""),
+				startWith(this.searchForm.value),
 				debounceTime(500),
 				distinctUntilChanged(),
 			),
@@ -64,6 +66,7 @@ export class CollectorsComponent extends SubscriptionManagerComponent {
 	private loadCollectors(search: string, page: number): void {
 		//TODO: rewrite if this can be solved using waitFor
 		this.loadingSubject.next(true);
+    this.collectorIndexResponseSubject.next(this.collectorsIndexResponseDefault);
 		this.registerSubscription(
 			this.collectorsService.getCollectors(search, page).subscribe(collectorIndexResponse => {
 				this.collectorIndexResponseSubject.next(collectorIndexResponse);

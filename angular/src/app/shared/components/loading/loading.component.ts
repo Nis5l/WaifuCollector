@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Observable, BehaviorSubject, tap, filter, share } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable, BehaviorSubject, tap, filter } from 'rxjs';
 
 import { SubscriptionManagerComponent } from '../../abstract';
 
@@ -8,7 +8,7 @@ import { SubscriptionManagerComponent } from '../../abstract';
 	templateUrl: './loading.component.html',
 	styleUrls: [ './loading.component.scss' ],
 })
-export class LoadingComponent<T> extends SubscriptionManagerComponent {
+export class LoadingComponent<T> extends SubscriptionManagerComponent implements OnInit {
 	private readonly observableSubject: BehaviorSubject<Observable<T> | null> = new BehaviorSubject<Observable<T> | null>(null);
 	private readonly loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	public readonly loading$: Observable<boolean>;
@@ -21,24 +21,29 @@ export class LoadingComponent<T> extends SubscriptionManagerComponent {
 		if(o == null) throw new Error("observable not set");
 		return o;
 	}
+  @Input()
+  public boolObservable: boolean = false;
 
 	public constructor() {
 		super();
 		this.loading$ = this.loadingSubject.asObservable();
+	}
 
-		this.observableSubject.pipe(
+  public ngOnInit(): void {
+		this.registerSubscription(this.observableSubject.pipe(
 			filter((obs): obs is Observable<T> => obs != null)
 		).subscribe(obs => {
-			this.waitFor(obs);
-		});
-	}
+			if(this.boolObservable === true) this.registerSubscription(obs.subscribe(b => this.loadingSubject.next(b === true)));
+      else this.waitFor(obs);
+		}));
+  }
 
 	//NOTE: this observable should be shared!!
 	public waitFor(o: Observable<T>): void {
 		const f = () => {
 			this.loadingSubject.next(false);
 		};
-		o.pipe(tap({
+		this.registerSubscription(o.pipe(tap({
 			next: () => f(),
 			error: () => f(),
 			subscribe:() => {
@@ -46,6 +51,6 @@ export class LoadingComponent<T> extends SubscriptionManagerComponent {
 			},
 			finalize: () => undefined,
 			complete: () => undefined
-		})).subscribe();
+		})).subscribe());
 	}
 }

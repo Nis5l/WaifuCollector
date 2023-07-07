@@ -19,6 +19,7 @@ import {
 	CollectorEditModule,
 	CardViewModule,
   CardUpgradeModule,
+  UsersModule,
 } from './routes';
 
 const MODULES = [
@@ -38,6 +39,7 @@ const MODULES = [
 	PopupModule,
 	CardViewModule,
   CardUpgradeModule,
+  UsersModule,
 ];
 
 @NgModule({

@@ -117,7 +117,7 @@ impl Default for Config {
             flex_cards_amount: 9,
             card_type_page_amount: 10,
 
-            max_friends: 50,
+            max_friends: 999,
             max_trades: 5,
 
             pack_cooldown: 30,

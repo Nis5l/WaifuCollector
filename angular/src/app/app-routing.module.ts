@@ -13,6 +13,7 @@ import {
 	CollectorEditComponent,
 	CardViewComponent,
   CardUpgradeComponent,
+  UsersComponent,
 } from './routes';
 import { canActivateAuth, canActivateCollectorAdmin } from './shared/guards';
 
@@ -32,6 +33,7 @@ const routes: Routes = [
 	{ path: "card/:cardId/upgrade", component: CardUpgradeComponent },
 
 	{ path: "home", component: HomeComponent },
+	{ path: "users", component: UsersComponent },
 ];
 
 @NgModule({

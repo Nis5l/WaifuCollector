@@ -4,12 +4,13 @@ use sqlx::FromRow;
 
 use crate::shared::Id;
 
-#[derive(Serialize_repr)]
+#[derive(Debug, Serialize_repr)]
 #[repr(i32)]
 pub enum FriendStatus {
-    Friend = 0,
-    Pending = 1,
-    Sent = 2
+    Nothing = 0,
+    Friend = 1,
+    Pending = 2,
+    Sent = 3
 }
 
 impl FriendStatus {

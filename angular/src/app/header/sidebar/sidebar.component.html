@@ -1,8 +1,13 @@
 <mat-drawer-container autosize *ngVar="(screenWidth$ | async) as screenWidth">
   <mat-drawer #drawer class="sidenav" *ngIf="screenWidth != null" [mode]="screenWidth > 600 ? 'side' : 'over'" [opened]="open">
-		<button mat-button routerLink="collectors">
-			<mat-icon>featured_play_list</mat-icon> Collectors
-		</button>
+    <div class="routes">
+      <button mat-button routerLink="collectors">
+        <div class="button-content"><mat-icon>featured_play_list</mat-icon> Collectors</div>
+      </button>
+      <button mat-button routerLink="users">
+        <div class="button-content"><mat-icon>group</mat-icon> Users</div>
+      </button>
+    </div>
 	</mat-drawer>
 	<div class="container">
 		<ng-content></ng-content>

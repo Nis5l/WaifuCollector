@@ -1,6 +1,5 @@
 #[macro_use]
 extern crate rocket;
-
 use rocket::fairing::AdHoc;
 //use rocket_cors::{AllowedHeaders, AllowedOrigins};
 //use rocket::http::Method;
@@ -111,6 +110,7 @@ async fn rocket() -> _ {
             friend::add::friend_add_route,
             friend::accept::friend_accept_route,
             friend::remove::friend_remove_route,
+            friend::status::friend_status_route,
 
             card::unlocked::card_unlocked_route,
             card::upgrade::upgrade_route,
