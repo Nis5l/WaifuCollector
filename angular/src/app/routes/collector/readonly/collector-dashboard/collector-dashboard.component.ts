@@ -17,11 +17,10 @@ export class CollectorDashboardComponent extends SubscriptionManagerComponent {
 
   constructor(
     private readonly collectorService: CollectorService,
-    private readonly activatedRoute: ActivatedRoute,
+    activatedRoute: ActivatedRoute,
   ){
     super();
-    let observe = this.activatedRoute.params;
-    if(this.activatedRoute.parent != null) observe = this.activatedRoute.parent.params
+    const observe = activatedRoute.parent == null ? activatedRoute.params : activatedRoute.parent.params;
     this.collector$ = observe.pipe(
 		switchMap(params => {
 			const collectorId = params["collectorId"] as unknown;

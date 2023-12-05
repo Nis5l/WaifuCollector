@@ -20,6 +20,7 @@ import {
 	CardViewModule,
   CardUpgradeModule,
   UsersModule,
+  ProfileReadonlyTradeModule,
 } from './routes';
 
 const MODULES = [
@@ -40,6 +41,7 @@ const MODULES = [
 	CardViewModule,
   CardUpgradeModule,
   UsersModule,
+  ProfileReadonlyTradeModule,
 ];
 
 @NgModule({
@@ -49,9 +51,9 @@ const MODULES = [
   imports: [
     BrowserModule,
     AppRoutingModule,
-	BrowserAnimationsModule,
+    BrowserAnimationsModule,
 
-	...MODULES
+    ...MODULES
   ],
   providers: [],
   bootstrap: [AppComponent]

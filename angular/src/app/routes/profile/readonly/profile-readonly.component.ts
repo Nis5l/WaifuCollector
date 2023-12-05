@@ -1,16 +1,23 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Route } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject, of as observableOf, catchError, map, switchMap, combineLatest as observableCombineLatest, startWith, filter } from 'rxjs';
 
 import { LoadingService, AuthService } from '../../../shared/services';
 import type { Id } from '../../../shared/types';
+import type { NavigationItem } from '../../../shared/components';
 import { SubscriptionManagerComponent } from '../../../shared/abstract';
 import { ConfirmationDialogComponent } from '../../../shared/dialogs';
 import { ProfileService } from '../profile.service';
 import { FriendStatus, Profile } from '../shared';
+import { CollectorFavoritesComponent } from './collector-favorites';
 
 type ProfileWithUserId = (Profile & { userId: Id });
+
+const ROUTES: Route[] = [
+  { path: "", pathMatch: "full", redirectTo: "favorites" },
+  { path: "favorites", component: CollectorFavoritesComponent },
+];
 
 @Component({
 	selector: "cc-profile-readonly",
@@ -23,6 +30,10 @@ export class ProfileReadonlyComponent extends SubscriptionManagerComponent {
 	public readonly canTrade$: Observable<boolean>;
 	public readonly isSelf$: Observable<boolean>;
   public readonly refreshFriendStatus: Subject<void> = new Subject<void>();
+
+  public readonly navigationItems: NavigationItem[] = [
+    { name: "Favorites", link: "./favorites", icon: "star" },
+  ];
 
   public get friendStatus(): typeof FriendStatus {
     return FriendStatus;
@@ -84,7 +95,7 @@ export class ProfileReadonlyComponent extends SubscriptionManagerComponent {
   }
 
   public trade(userId: Id): void {
-    this.router.navigate(["profile", userId.toString(), "trade"]);
+    this.router.navigate(["user", userId.toString(), "trade"]);
   }
 
   public removeFriend(userId: Id, confirmationDialog: boolean): void {
@@ -94,5 +105,9 @@ export class ProfileReadonlyComponent extends SubscriptionManagerComponent {
       filter(confirm => confirm === true),
       switchMap(() => this.profileService.removeFriend(userId))
     ).subscribe(() => this.refreshFriendStatus.next()));
+  }
+
+  public static getRoutes(){
+    return ROUTES;
   }
 }

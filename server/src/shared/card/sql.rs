@@ -360,6 +360,7 @@ pub async fn get_cards(sql: &Sql, config: &Config, collector_id: &Id, mut name: 
          cards.cname AS cardName,
          cardtypes.ctid AS typeId,
          cardtypes.ctname AS typeName,
+         cardtypes.coid AS collectorId,
          cardtypes.uid AS cardTypeUserId
          FROM cards, cardtypes
          WHERE

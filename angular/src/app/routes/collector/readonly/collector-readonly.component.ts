@@ -10,7 +10,7 @@ import { LoadingService, AuthService } from '../../../shared/services';
 import { SubscriptionManagerComponent } from '../../../shared/abstract';
 import type { Collector, Id } from '../../../shared/types';
 import type { CardTypeIndexResponse } from './types';
-import type { NavigationItem } from './collector-navigation';
+import type { NavigationItem } from '../../../shared/components';
 import { CollectorInventoryComponent } from './collector-inventory';
 
 import { CollectorAddDialogComponent } from './collector-add-dialog';

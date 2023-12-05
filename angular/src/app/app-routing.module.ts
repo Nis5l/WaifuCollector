@@ -14,6 +14,7 @@ import {
 	CardViewComponent,
   CardUpgradeComponent,
   UsersComponent,
+  ProfileReadonlyTradeComponent,
 } from './routes';
 import { canActivateAuth, canActivateCollectorAdmin } from './shared/guards';
 
@@ -27,7 +28,8 @@ const routes: Routes = [
 	{ path: "collector/:collectorId", component: CollectorReadonlyComponent, children: CollectorReadonlyComponent.getRoutes() },
 
 	{ path: "user/:userId/edit", component: ProfileEditComponent, canActivate: [ canActivateAuth ] },
-	{ path: "user/:userId", component: ProfileReadonlyComponent },
+	{ path: "user/:userId", component: ProfileReadonlyComponent, children: ProfileReadonlyComponent.getRoutes() },
+	{ path: "user/:userId/trade/:collectorId", component: ProfileReadonlyTradeComponent },
 
 	{ path: "card/:cardId", component: CardViewComponent },
 	{ path: "card/:cardId/upgrade", component: CardUpgradeComponent },

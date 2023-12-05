@@ -20,31 +20,35 @@
 			width: 200px;
 		}
 
-    .name {
+    .actions {
       display: flex;
-      gap: 10px;
-      flex-direction: row;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
 
-      .actions {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        mat-icon {
-          transform: scale(1.4);
-        }
+      mat-icon {
+        transform: scale(1.4);
       }
+    }
 
-      .username {
-        margin: 0;
-        font-size: 50px;
-      }
+    .username {
+      margin: 0;
+      font-size: 50px;
     }
 
 		.stats {
 			margin: 0;
+      margin-top: 10px;
 			font-size: 20px;
 			color: map-get(map-get($theme, foreground), hint-text);
 		}
+	}
+
+	.navigation {
+    margin-top: 30px;
+		display: flex;
+		flex-direction: column;
+    width: 100%;
+		gap: 10px;
 	}
 }

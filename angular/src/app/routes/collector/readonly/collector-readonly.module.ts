@@ -18,10 +18,11 @@ import {
 	CollectorBannerModule,
 	CollectorOpenModule
 } from '../shared';
+//TODO: why??????
+import { TabNavigationModule } from '../../../shared/components/tab-navigation';
 import { CollectorAddDialogModule } from './collector-add-dialog';
 import { CollectorDashboardModule } from './collector-dashboard';
 import { CollectorRequestsModule } from './collector-requests';
-import { CollectorNavigationModule } from './collector-navigation';
 import { CollectorInventoryModule } from './collector-inventory';
 
 import { UserModule } from '../../../shared/components';
@@ -52,7 +53,7 @@ const MATERIAL_MODULES = [
 		CollectorAddDialogModule,
     CollectorDashboardModule,
     CollectorRequestsModule,
-    CollectorNavigationModule,
+    TabNavigationModule,
     CollectorInventoryModule,
 
     UserModule,

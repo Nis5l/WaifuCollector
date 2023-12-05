@@ -146,6 +146,7 @@ async fn rocket() -> _ {
             collector::favorite::add::collector_favorite_add_route,
             collector::favorite::remove::collector_favorite_remove_route,
             collector::favorite::get::collector_favorite_get_route,
+            collector::favorite::index::collector_favorite_index_route,
             collector::index::collector_index_route,
             collector::get::collector_get_route,
             collector::collector_image::collector_image_default_route,

@@ -8,7 +8,7 @@
 	<cc-loading [observable]="loading$" [boolObservable]="true"></cc-loading>
 	<ng-container *ngVar="(collectorIndexResponse$ | async) as res">
     <div class="collectors" *ngIf="res != null">
-      <cc-collector *ngFor="let collector of res.collectors" [collector]="collector"></cc-collector>
+      <cc-collector-card *ngFor="let collector of res.collectors" [collector]="collector"></cc-collector-card>
       <mat-paginator [pageSize]="res.pageSize" [length]="res.collectorCount" (page)="changePage($event)"></mat-paginator>
     </div>
 	</ng-container>

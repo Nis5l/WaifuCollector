@@ -26,6 +26,14 @@ export class TradeComponent {
       }),
     );
 
+    const collectorId$ = activatedRoute.params.pipe(
+      map(params => {
+        const collectorId: unknown = params["collectorId"];
+        if(typeof collectorId !== "string") throw new Error("collectorId param not set");
+        return collectorId;
+      }),
+    );
+
     this.tradeInfo = userId$.pipe(
       switchMap(userId => this.tradeService.getTradeinfo(userId))
     );

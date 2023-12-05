@@ -1,4 +1,4 @@
-import type { Collector } from '../collector';
+import type { Collector } from '../../../shared/types';
 
 export interface CollectorsIndexResponse {
     pageSize: number,

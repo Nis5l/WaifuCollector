@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularResizeEventModule } from 'angular-resize-event';
 
-import { CollectorNavigationComponent } from './collector-navigation.component';
+import { TabNavigationComponent } from './tab-navigation.component';
 
 @NgModule({
 	imports: [
@@ -13,7 +13,7 @@ import { CollectorNavigationComponent } from './collector-navigation.component';
     MatIconModule,
     AngularResizeEventModule
   ],
-	declarations: [ CollectorNavigationComponent ],
-  exports: [ CollectorNavigationComponent ]
+	declarations: [ TabNavigationComponent ],
+  exports: [ TabNavigationComponent ]
 })
-export class CollectorNavigationModule {}
+export class TabNavigationModule {}

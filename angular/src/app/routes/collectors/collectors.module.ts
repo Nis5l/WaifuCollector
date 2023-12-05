@@ -10,8 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { HttpModule } from '../../shared/services';
 import { NgVarModule } from '../../shared/directives';
-import { LoadingModule } from '../../shared/components';
-import { CollectorModule } from './collector';
+import { LoadingModule, CollectorCardModule } from '../../shared/components';
 import { NewCollectorDialogModule } from './new-collector-dialog';
 
 import { CollectorsComponent } from './collectors.component';
@@ -35,7 +34,7 @@ const MATERIAL_MODULES = [
 		LoadingModule,
 		NgVarModule,
 		HttpModule,
-		CollectorModule,
+		CollectorCardModule,
 		NewCollectorDialogModule,
 	],
 	providers: [ CollectorsService ],

@@ -4,18 +4,21 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { HttpModule, AuthModule } from '../../../shared/services';
-import { ProfileImageModule } from '../../../shared/components';
+import { ProfileImageModule, TabNavigationModule } from '../../../shared/components';
 import { ConfirmationDialogModule } from '../../../shared/dialogs';
 import { NgVarModule } from '../../../shared/directives';
 import { ProfileReadonlyComponent } from './profile-readonly.component';
 import { ProfileService } from '../profile.service';
+import { CollectorFavoritesModule } from './collector-favorites';
 
 const MATERIAL_MODULES = [
 	MatButtonModule,
 	MatIconModule,
   MatDialogModule,
+  MatTooltipModule,
 ];
 
 @NgModule({
@@ -30,6 +33,8 @@ const MATERIAL_MODULES = [
 		AuthModule,
 		NgVarModule,
 		ProfileImageModule,
+    TabNavigationModule,
+    CollectorFavoritesModule,
 	],
 	declarations: [ ProfileReadonlyComponent ],
 	providers: [ ProfileService ],
