@@ -36,9 +36,9 @@ export class CollectorRequestsComponent extends SubscriptionManagerComponent {
     private readonly collectorRequestsService: CollectorRequestsService,
   ){
     super();
-    let observe = this.activatedRoute.params;
-    if(this.activatedRoute.parent != null) observe = this.activatedRoute.parent.params
-    this.collector$ = observe.pipe(
+    const params$ = this.activatedRoute.parent?.params ?? this.activatedRoute.params;
+
+    this.collector$ = params$.pipe(
 		switchMap(params => {
 			const collectorId = params["collectorId"] as unknown;
 			if(typeof collectorId !== "string") {

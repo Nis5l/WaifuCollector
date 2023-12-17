@@ -20,8 +20,8 @@ export class CollectorDashboardComponent extends SubscriptionManagerComponent {
     activatedRoute: ActivatedRoute,
   ){
     super();
-    const observe = activatedRoute.parent == null ? activatedRoute.params : activatedRoute.parent.params;
-    this.collector$ = observe.pipe(
+    const params$ = activatedRoute.parent?.params ?? activatedRoute.params;
+    this.collector$ = params$.pipe(
 		switchMap(params => {
 			const collectorId = params["collectorId"] as unknown;
 			if(typeof collectorId !== "string") {

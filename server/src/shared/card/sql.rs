@@ -184,11 +184,12 @@ pub async fn user_owns_card(sql: &Sql, user_id: &Id, card_unlocked_id: &Id, coll
              AND cuid=?;",
         Some(_) =>
             "SELECT COUNT(*)
-             FROM cardunlocks, cards
+             FROM cardunlocks, cards, cardtypes
              WHERE cards.cid=cardunlocks.cid
+             AND cardtypes.ctid = cards.ctid
              AND cardunlocks.uid=?
              AND cardunlocks.cuid=?
-             AND cards.coid=?;"
+             AND cardtypes.coid=?;"
     };
 
     let mut stmt = sqlx::query_as(query)

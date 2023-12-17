@@ -18,6 +18,7 @@ pub async fn trade_cards(sql: &Sql, user_id: &Id, trade_id: &Id, config: &Config
          cards.cname AS cardName,
          cardtypes.ctid AS typeId,
          cardtypes.ctname AS typeName,
+         cardtypes.uid AS cardTypeUserId,
          cardtypes.coid AS collectorId,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,
@@ -30,7 +31,7 @@ pub async fn trade_cards(sql: &Sql, user_id: &Id, trade_id: &Id, config: &Config
          cardunlocks.cid = cards.cid AND
          cards.ctid = cardtypes.ctid AND
          cardunlocks.cuid = tradecards.cuid AND
-         tradecards.tid=? AND cardunlocks.uid<>?;")
+         tradecards.tid=? AND cardunlocks.uid=?;")
          .bind(trade_id)
          .bind(user_id)
          .fetch_all(&mut con)
@@ -56,6 +57,7 @@ pub async fn trade_suggestions(sql: &Sql, user_id: &Id, trade_id: &Id, config: &
          cards.cname AS cardName,
          cardtypes.ctid AS typeId,
          cardtypes.ctname AS typeName,
+         cardtypes.uid AS cardTypeUserId,
          cardtypes.coid AS collectorId,
          cardframes.cfid AS frameId,
          cardframes.cfname AS frameName,

@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, map, switchMap } from 'rxjs';
+import { type Route } from '@angular/router';
 
-import { TradeService } from './trade.service';
-import type { TradeInfoResponse } from './types';
-import type { Id } from '../../../../shared/types';
+import type { NavigationItem } from '../../../../shared/components';
+import { TradeSelfComponent } from './trade-self';
+import { TradeFriendComponent } from './trade-friend';
+
+const ROUTES: Route[] = [
+  { path: "", pathMatch: "full", redirectTo: "you" },
+  { path: "you", component: TradeSelfComponent, children: TradeSelfComponent.getRoutes() },
+  { path: "friend", component: TradeFriendComponent },
+];
 
 @Component({
   selector: "cc-profile-trade",
@@ -12,30 +17,14 @@ import type { Id } from '../../../../shared/types';
   styleUrls: [ "./trade.component.scss" ],
 })
 export class TradeComponent {
-  private readonly tradeInfo: Observable<TradeInfoResponse>;
+  public readonly navigationItems: NavigationItem[] = [
+    { name: "You", link: "./you", icon: "person" },
+    { name: "Friend", link: "./friend", icon: "person" },
+  ];
 
-  constructor(
-    private readonly tradeService: TradeService,
-    activatedRoute: ActivatedRoute
-  ) {
-    const userId$ = activatedRoute.params.pipe(
-      map(params => {
-        const userId: unknown = params["userId"];
-        if(typeof userId !== "string") throw new Error("userId param not set");
-        return userId;
-      }),
-    );
+  constructor() {}
 
-    const collectorId$ = activatedRoute.params.pipe(
-      map(params => {
-        const collectorId: unknown = params["collectorId"];
-        if(typeof collectorId !== "string") throw new Error("collectorId param not set");
-        return collectorId;
-      }),
-    );
-
-    this.tradeInfo = userId$.pipe(
-      switchMap(userId => this.tradeService.getTradeinfo(userId))
-    );
+  public static getRoutes(): Route[] {
+    return ROUTES;
   }
 }

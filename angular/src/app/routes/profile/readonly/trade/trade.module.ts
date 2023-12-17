@@ -5,13 +5,19 @@ import { RouterModule } from '@angular/router';
 import { TradeService } from './trade.service';
 import { TradeComponent } from './trade.component';
 import { HttpModule } from '../../../../shared/services';
+import { TradeSelfModule } from './trade-self';
+import { TabNavigationModule } from '../../../../shared/components';
+import { NgVarModule } from '../../../../shared/directives';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
 
-    HttpModule
+    HttpModule,
+    TradeSelfModule,
+    TabNavigationModule,
+    NgVarModule,
   ],
   providers: [ TradeService ],
   declarations: [ TradeComponent ],

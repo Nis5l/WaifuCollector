@@ -14,9 +14,6 @@
           <button *ngIf="isSelf === false && fs === friendStatus.Friend" (click)="removeFriend(profile.userId, true)" mat-icon-button matTooltip="Remove as friend" aria-label="Remove as friend">
             <mat-icon>person_remove</mat-icon>
           </button>
-          <button *ngIf="isSelf === false && fs === friendStatus.Friend" (click)="trade(profile.userId)" mat-icon-button matTooltip="Trade" aria-label="Trade">
-            <mat-icon>compare_arrows</mat-icon>
-          </button>
         </div>
         <p class="stats">Friends: {{profile.friends}}/{{profile.maxFriends}}</p>
       </div>

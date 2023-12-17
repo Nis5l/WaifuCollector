@@ -9,7 +9,7 @@ import type { TradeInfoResponse } from './types';
 export class TradeService {
   constructor(private readonly httpService: HttpService) {}
 
-  public getTradeinfo(userId: Id): Observable<TradeInfoResponse> {
-    return this.httpService.get(`/trade/${userId}/<collector_id>`);
+  public getTradeinfo(userId: Id, collectorId: Id): Observable<TradeInfoResponse> {
+    return this.httpService.get(`/trade/${userId}/${collectorId}`);
   }
 }

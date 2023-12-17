@@ -9,6 +9,7 @@ import type { Notification } from './types';
 import { PopupService } from '../../shared/services';
 import { SubscriptionManagerComponent } from '../../shared/abstract';
 
+//TODO: fix if notification are too long you can sroll
 @Component({
   selector: 'cc-notifications',
   templateUrl: './notifications.component.html',

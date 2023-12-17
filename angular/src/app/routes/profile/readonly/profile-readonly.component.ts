@@ -94,10 +94,6 @@ export class ProfileReadonlyComponent extends SubscriptionManagerComponent {
     ));
   }
 
-  public trade(userId: Id): void {
-    this.router.navigate(["user", userId.toString(), "trade"]);
-  }
-
   public removeFriend(userId: Id, confirmationDialog: boolean): void {
     const dialog$: Observable<boolean | undefined> = confirmationDialog ? ConfirmationDialogComponent.open(this.matDialog, "Remove as Friend?") : observableOf(true);
 

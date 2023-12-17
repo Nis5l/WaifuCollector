@@ -29,7 +29,7 @@ const routes: Routes = [
 
 	{ path: "user/:userId/edit", component: ProfileEditComponent, canActivate: [ canActivateAuth ] },
 	{ path: "user/:userId", component: ProfileReadonlyComponent, children: ProfileReadonlyComponent.getRoutes() },
-	{ path: "user/:userId/trade/:collectorId", component: ProfileReadonlyTradeComponent },
+	{ path: "user/:userId/trade/:collectorId", component: ProfileReadonlyTradeComponent, children: ProfileReadonlyTradeComponent.getRoutes() },
 
 	{ path: "card/:cardId", component: CardViewComponent },
 	{ path: "card/:cardId/upgrade", component: CardUpgradeComponent },

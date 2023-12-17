@@ -6,3 +6,4 @@ export { LoadingSpinnerModule } from './loading-spinner';
 export { LoadingModule } from './loading';
 export { CollectorCardModule } from './collector-card';
 export { TabNavigationModule, type NavigationItem } from './tab-navigation';
+export { InventoryModule, InventoryComponent } from './inventory';

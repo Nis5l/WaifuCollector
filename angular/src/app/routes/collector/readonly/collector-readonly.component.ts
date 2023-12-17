@@ -10,13 +10,13 @@ import { LoadingService, AuthService } from '../../../shared/services';
 import { SubscriptionManagerComponent } from '../../../shared/abstract';
 import type { Collector, Id } from '../../../shared/types';
 import type { CardTypeIndexResponse } from './types';
-import type { NavigationItem } from '../../../shared/components';
-import { CollectorInventoryComponent } from './collector-inventory';
+import { type NavigationItem } from '../../../shared/components';
 
 import { CollectorAddDialogComponent } from './collector-add-dialog';
 
 import { CollectorDashboardComponent } from './collector-dashboard';
 import { CollectorRequestsComponent } from './collector-requests';
+import { CollectorInventoryComponent } from './collector-inventory';
 
 const ROUTES: Route[] = [
   { path: "", pathMatch: "full", redirectTo: "dashboard" },

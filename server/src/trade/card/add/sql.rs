@@ -10,7 +10,7 @@ pub async fn trade_card_count(sql: &Sql, user_id: &Id, trade_id: &Id) -> Result<
         "SELECT COUNT(*)
          FROM tradecards
          WHERE tid=?
-         AND uid<>?;")
+         AND cuid<>?;")
         .bind(trade_id)
         .bind(user_id)
         .fetch_one(&mut con)
