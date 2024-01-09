@@ -1,9 +1,3 @@
-<div *ngVar="tradeInfo$ | async as tradeInfo">
+<div>
   <router-outlet></router-outlet>
-  <cc-loading [observable]="tradeInfo$" class="loading"></cc-loading>
-  <ng-container *ngIf="tradeInfo != null">
-    <div class="wrap">
-      <cc-card *ngFor="let selfCard of tradeInfo.selfCards"></cc-card>
-    </div>
-  </ng-container>
 </div>

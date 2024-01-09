@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { TradeSelfComponent } from './trade-self.component';
-import { CardModule, LoadingModule } from '../../../../../shared/components';
-import { NgVarModule } from '../../../../../shared/directives';
 import { LoadingService } from '../../../../../shared/services';
 import { TradeSelfInventoryModule } from './trade-self-inventory';
 import { TradeSelfTradeModule } from './trade-self-trade';
@@ -14,9 +12,6 @@ import { TradeSelfTradeModule } from './trade-self-trade';
     CommonModule,
     RouterModule,
 
-    CardModule,
-    NgVarModule,
-    LoadingModule,
     TradeSelfInventoryModule,
     TradeSelfTradeModule,
   ],

@@ -1,4 +1,12 @@
 <div>
+  <div *ngVar="tradeInfo$ | async as tradeInfo">
+    <cc-loading [observable]="tradeInfo$" class="loading"></cc-loading>
+    <ng-container *ngIf="tradeInfo != null">
+      <div class="wrap cards">
+        <cc-card *ngFor="let selfCard of tradeInfo.selfCards" [card]="selfCard" click="event" (clickEvent)="removeCard(selfCard)"></cc-card>
+      </div>
+    </ng-container>
+  </div>
   <button class="floating-button-br" mat-fab aria-label="Add" (click)="openAddCard()">
     <mat-icon>add</mat-icon>
   </button>
